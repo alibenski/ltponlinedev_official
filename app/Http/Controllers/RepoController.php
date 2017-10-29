@@ -44,17 +44,25 @@ class RepoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        $courses = Course::all(['id', 'name']); // selected $key => $value
+    {  
+        //$courses = Course::all(['id', 'name']); // selected $key => $value
+        $courses = Course::all();
         $languages = DB::table('languages')->pluck("name","id")->all();
 
+        //get latest semester/term
         $terms = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->first();
+        //define user variable as user collection
         $user = Auth::user();
+        //define user index number for query 
         $current_user = Auth::user()->indexno;
+        //query latest CodeIndexID of current_user
         $repos = DB::table('LTP_PASHQTcur')->orderBy('Term_Code', 'desc')
-            ->where('INDEXID', '17942')->value('CodeIndexID');
-               dd($current_user);
-        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withUser($user);
+            ->where('INDEXID', $current_user)->value('CodeIndexID');
+        //query latest language course of current_user
+        $repos_lang = DB::table('LTP_PASHQTcur')->orderBy('Term_Code', 'desc')
+            ->where('INDEXID', $current_user)->value('Course_Code');
+            dd($repos_lang);
+        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
     /**

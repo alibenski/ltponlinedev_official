@@ -10,7 +10,7 @@
 
   <form method="POST" action="{{ route('myform.store') }}" class="well form-horizontal form-prevent-multi-submit">
       {{ csrf_field() }}
-      <input  name="user_id" type="input" value="{{ $user->indexno }}" readonly>
+      <input  name="user_id" type="input" value="{{ $repos }}" readonly>
       <input  name="term_id" type="input" value="{{ $terms->Term_Code }}" readonly>  
   
       <div class="form-group">
@@ -49,7 +49,7 @@
 
         <div class="col-md-6 inputGroupContainer">
               <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ 'language course '.'last '.$terms->Term_Name }}" readonly>                                    
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang.' last '.$terms->Term_Name }}" readonly>                            
               </div>
           </div>
       </div>
