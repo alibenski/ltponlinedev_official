@@ -9,13 +9,12 @@ class Course extends Model
     //name of table is case sensitive
     protected $table = 'LTP_CR_LIST';
 
-
     public function users() {
     return $this->hasMany('App\User'); 
     }
     
     public function language() {
-    return $this->belongsTo('App\Language', 'language_id'); 
+    return $this->belongsTo('App\Language', 'L', 'code'); 
     }
 
     public function schedule() {

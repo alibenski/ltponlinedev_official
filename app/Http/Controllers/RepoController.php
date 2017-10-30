@@ -45,9 +45,9 @@ class RepoController extends Controller
      */
     public function create()
     {  
-        //$courses = Course::all(['id', 'name']); // selected $key => $value
         $courses = Course::all();
-        $languages = DB::table('languages')->pluck("name","id")->all();
+        //$courses = Course::all(['id', 'name']); // selected $key => $value
+        $languages = DB::table('languages')->pluck("name","code")->all();
 
         //get latest semester/term
         $terms = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->first();
@@ -55,14 +55,13 @@ class RepoController extends Controller
         $user = Auth::user();
         //define user index number for query 
         $current_user = Auth::user()->indexno;
-        //query latest CodeIndexID of current_user
+        //using DB method to query latest CodeIndexID of current_user
         $repos = DB::table('LTP_PASHQTcur')->orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->value('CodeIndexID');
         //not using DB method to get latest language course of current_user
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
-
-        
+       
         return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
@@ -154,8 +153,13 @@ class RepoController extends Controller
     public function selectAjax(Request $request)
     {
         if($request->ajax()){
-            $courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
-            $data = view('ajax-select',compact('courses'))->render();
+            //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
+            $select_courses = DB::table('LTP_CR_LIST')
+            ->where('L', $request->L)
+            ->pluck("Description","Te_Code")
+            ->all();
+            
+            $data = view('ajax-select',compact('select_courses'))->render();
             return response()->json(['options'=>$data]);
         }
     }

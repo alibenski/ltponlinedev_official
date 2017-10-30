@@ -72,8 +72,8 @@
       </div>
 
       <div class="form-group">
-          <label name="language_id" class="col-md-4 control-label">Enrol to which language: </label>
-          <select class="col-md-6 form-control-static" name="language_id">
+          <label name="L" class="col-md-4 control-label">Enrol to which language: </label>
+          <select class="col-md-6 form-control-static" name="L">
               <option value="">Select</option>
               @foreach ($languages as $id => $name)
                   <option value="{{ $id }}"> {{ $name }}</option>
@@ -103,13 +103,13 @@
 <script src="{{ asset('js/submit.js') }}"></script>      
 
 <script type="text/javascript">
-  $("select[name='language_id']").change(function(){
-      var language_id = $(this).val();
+  $("select[name='L']").change(function(){
+      var L = $(this).val();
       var token = $("input[name='_token']").val();
       $.ajax({
           url: "{{ route('select-ajax') }}", 
           method: 'POST',
-          data: {language_id:language_id, _token:token},
+          data: {L:L, _token:token},
           success: function(data) {
             $("select[name='course_id'").html('');
             $("select[name='course_id'").html(data.options);

@@ -26,7 +26,7 @@
 					<th>#</th>
 					<th>Code</th>
 					<th>Course Name</th>
-
+					<th>Language</th>
 				</thead>
 
 				<tbody>
@@ -36,7 +36,7 @@
 							<th>{{ $course->ID }}</th>
 							<td>{{ $course->Te_Code }}</td>
 							<td>{{ $course->Description }}</td>
-
+							<td>{{ $course->language->name }}</td>
 							<td><a href="{{ route('courses.edit', $course->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach
