@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    protected $table = 'ltp_cr_list';
-    protected $primaryKey = 'Te_Code';
+    //name of table is case sensitive
+    protected $table = 'LTP_CR_LIST';
+
 
     public function users() {
     return $this->hasMany('App\User'); 

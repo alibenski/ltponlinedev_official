@@ -25,7 +25,7 @@
 				<thead>
 					<th>#</th>
 					<th>Code</th>
-					<th>Manager Email</th>
+					<th>Student Email</th>
 					<th>Language</th>
 					<th>Course</th>
 					<th>Term</th>
@@ -39,9 +39,21 @@
 							<th>{{ $repo->id }}</th>
 							<th>{{ $repo->CodeIndexID }}</th>
 							<th>{{ $repo->EMAIL }}</th>
-							<th>{{ $repo->Language_Code }}</th>
-							<th>{{ $repo->Course_Code }}</th>
-							<th>{{ $repo->Term_Code }}</th>
+							<th>
+                                    @if(empty ($repo->languages->name))
+                                    no value in database
+                                    @else
+                                    {{ $repo->languages->name }}
+                                    @endif
+							</th>
+							<th>
+                                    @if(empty ($repo->courses->Description))
+                                    no value in database
+                                    @else
+                                    {{ $repo->courses->Description }}
+                                    @endif
+							</th>
+							<th>{{ $repo->terms->Term_Name }}</th>
 							<td><a href="{{ route('myform.edit', $repo->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach

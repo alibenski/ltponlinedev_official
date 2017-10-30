@@ -57,10 +57,10 @@
 
                             <div class="col-md-4 form-control-static">
                                 <p>
-                                    @if(empty (Auth::user()->courses->name))
+                                    @if(empty (Auth::user()->courses->Description))
                                     none
                                     @else
-                                    {{ Auth::user()->courses->name }}
+                                    {{ Auth::user()->courses->Description }}
                                     @endif
                                 </p>
                             </div>

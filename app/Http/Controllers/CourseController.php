@@ -27,7 +27,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::paginate(15);
         $schedules = Schedule::all(['id', 'name']);
         //return a view and pass in the above variable
         return view('courses.index')->withCourses($courses)->withSchedules($schedules);

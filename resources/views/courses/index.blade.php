@@ -24,6 +24,7 @@
 			<table class="table">
 				<thead>
 					<th>#</th>
+					<th>Code</th>
 					<th>Course Name</th>
 
 				</thead>
@@ -32,7 +33,8 @@
 					@foreach($courses as $course)
 						
 						<tr>
-							<th>{{ $course->Te_Code }}</th>
+							<th>{{ $course->ID }}</th>
+							<td>{{ $course->Te_Code }}</td>
 							<td>{{ $course->Description }}</td>
 
 							<td><a href="{{ route('courses.edit', $course->id)}}" class="btn btn-default btn-sm">Edit</a></td>
@@ -41,8 +43,8 @@
 
 				</tbody>
 			</table>
-
-			</div>
+			{{ $courses->links() }}		
+		</div>
 	</div>
 </div>
 @endsection

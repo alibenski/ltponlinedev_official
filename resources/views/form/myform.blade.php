@@ -11,7 +11,7 @@
   <form method="POST" action="{{ route('myform.store') }}" class="well form-horizontal form-prevent-multi-submit">
       {{ csrf_field() }}
       <input  name="user_id" type="input" value="{{ $repos }}" readonly>
-      <input  name="term_id" type="input" value="{{ $terms->Term_Code }}" readonly>  
+      <label for="">(Hidden) Next Term: </label><input  name="term_id" type="input" value="{{ $terms->Term_Next }}" readonly>  
   
       <div class="form-group">
           <label for="" class="col-md-4 control-label">Index Number:</label>
@@ -49,7 +49,7 @@
 
         <div class="col-md-6 inputGroupContainer">
               <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang.' last '.$terms->Term_Name }}" readonly>                            
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->Description.' last '.$terms->Term_Name }}" readonly>                            
               </div>
           </div>
       </div>
