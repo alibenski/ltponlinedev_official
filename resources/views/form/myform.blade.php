@@ -88,6 +88,13 @@
           </select>
       </div>
 
+      <div class="form-group">
+          <label name="course_id" class="col-md-4 control-label">Pick class schedule: </label>
+          <select class="col-md-6 form-control-static" name="course_id">
+              <option value="">--- Select Course ---</option>
+          </select>
+      </div>
+
       <div class="col-sm-offset-5">
         <button type="submit" class="btn btn-default button-prevent-multi-submit">Send Enrolment</button>
         <input type="hidden" name="_token" value="{{ Session::token() }}">

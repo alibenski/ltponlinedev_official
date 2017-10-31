@@ -9,6 +9,7 @@ use App\Course;
 use App\User;
 use App\Repo;
 use App\Term;
+use App\Classroom;
 use Session;
 use DB;
 
@@ -56,12 +57,13 @@ class RepoController extends Controller
         //define user index number for query 
         $current_user = Auth::user()->indexno;
         //using DB method to query latest CodeIndexID of current_user
-        $repos = DB::table('LTP_PASHQTcur')->orderBy('Term', 'desc')
+        $repos = DB::table('tblLTP_Enrolment')->orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->value('CodeIndexID');
         //not using DB method to get latest language course of current_user
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
-       
+        //$classes = Class::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
+
         return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 

@@ -27,6 +27,7 @@
 					<th>Code</th>
 					<th>Course Name</th>
 					<th>Language</th>
+					<th>Schedule</th>
 				</thead>
 
 				<tbody>
@@ -37,6 +38,16 @@
 							<td>{{ $course->Te_Code }}</td>
 							<td>{{ $course->Description }}</td>
 							<td>{{ $course->language->name }}</td>
+							<td>
+					            @if(empty($exists))
+					            <span class="label label-danger">none</span>
+					            @else
+					            <!-- Variable course refers to schedule function defined as variable schedule -->
+					            @foreach($course->schedule as $schedule)
+					                <span class="label label-default">{{ $schedule->name }}</span>
+					            @endforeach
+					            @endif
+							</td>
 							<td><a href="{{ route('courses.edit', $course->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach

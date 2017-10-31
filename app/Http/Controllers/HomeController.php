@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Language;
 use App\Course;
 use App\User;
+use App\Repo;
 use Session;
 use DB;
 
@@ -28,7 +30,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $current_user = Auth::user()->indexno;
+        $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
+        
+        return view('home')->withRepos_lang($repos_lang);
     }
     /**
      * Show the form for creating a new resource.
