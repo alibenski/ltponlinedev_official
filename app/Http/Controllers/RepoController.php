@@ -62,7 +62,6 @@ class RepoController extends Controller
         //not using DB method to get latest language course of current_user
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
-        //$classes = Class::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
 
         return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
@@ -172,6 +171,7 @@ class RepoController extends Controller
             $select_schedules = DB::table('LTP_TEVENTCur')
             ->where('Te_Code', $request->course_id)
             ->where(function($q){ 
+                //get value directly not via blade view
                 $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term );
             })
