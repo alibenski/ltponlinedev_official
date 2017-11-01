@@ -89,9 +89,9 @@
       </div>
 
       <div class="form-group">
-          <label name="course_id" class="col-md-4 control-label">Pick class schedule: </label>
-          <select class="col-md-6 form-control-static" name="course_id">
-              <option value="">--- Select Course ---</option>
+          <label name="schedule_id" class="col-md-4 control-label">Pick class schedule: </label>
+          <select class="col-md-6 form-control-static" name="schedule_id">
+              <option value="">--- Select Schedule ---</option>
           </select>
       </div>
 
@@ -120,6 +120,22 @@
           success: function(data) {
             $("select[name='course_id'").html('');
             $("select[name='course_id'").html(data.options);
+          }
+      });
+  }); 
+</script>
+
+<script type="text/javascript">
+  $("select[name='course_id']").change(function(){
+      var course_id = $(this).val();
+      var token = $("input[name='_token']").val();
+      $.ajax({
+          url: "{{ route('select-ajax2') }}", 
+          method: 'POST',
+          data: {course_id:course_id, _token:token},
+          success: function(data) {
+            $("select[name='schedule_id'").html('');
+            $("select[name='schedule_id'").html(data.options);
           }
       });
   }); 

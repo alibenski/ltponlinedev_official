@@ -165,4 +165,21 @@ class RepoController extends Controller
             return response()->json(['options'=>$data]);
         }
     }
+    public function selectAjax2(Request $request)
+    {
+        if($request->ajax()){
+
+            $select_schedules = DB::table('LTP_TEVENTCur')
+            ->where('Te_Code', $request->course_id)
+            ->where(function($q){ 
+                $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
+                $q->where('Te_Term', $latest_term );
+            })
+            ->pluck("Te_Code","Code")
+            ->all();
+
+            $data = view('ajax-select2',compact('select_schedules'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
 }
