@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Day extends Model
 {
-    //public function courses() {
-    //return $this->hasMany('App\Course'); 
-    //}
+    protected $table = 'Week_Days';
+	protected $primaryKey = 'Week_Day_Number';
+
 }

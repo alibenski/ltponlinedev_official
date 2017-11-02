@@ -9,4 +9,6 @@ class Schedule extends Model
     public function course() {
     return $this->belongsToMany('App\Course', 'course_schedule', 'schedule_id', 'course_id'); 
     }
+
+    
 }
