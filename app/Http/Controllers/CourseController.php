@@ -30,6 +30,7 @@ class CourseController extends Controller
         $courses = Course::paginate(15);
         $schedules = Schedule::all(['id', 'name']);
         //return a view and pass in the above variable
+        //dd($schedules);
         return view('courses.index')->withCourses($courses)->withSchedules($schedules);
     }
 
