@@ -11,7 +11,6 @@
 |
 */
 Route::resource('data', 'DataController');
-
 Route::resource('myform', 'RepoController');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@selectAjax2']);
@@ -30,11 +29,8 @@ else
 {
     Route::get('/','WelcomeController@index');
 }
-
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
-
 // show routes in webpage
 Route::get('simpleroutes', function() {
     $routeCollection = Route::getRoutes();

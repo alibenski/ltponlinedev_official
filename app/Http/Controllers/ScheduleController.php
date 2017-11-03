@@ -41,7 +41,11 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-
+        $schedules = Schedule::all();
+        $days = Day::pluck("Week_Day_Name","Week_Day_Name")->all(); 
+        $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
+        $etimes = Time::pluck("End_Time","End_Time")->all(); 
+        return view('schedules.create')->withSchedules($schedules)->withDays($days)->withBtimes($btimes)->withEtimes($etimes);
     }
 
     /**
@@ -52,6 +56,25 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+            $this->validate($request, array(
+                'begin_day' => 'bail|required|',
+                'end_day' => 'bail|required|different:begin_day',
+                'begin_time' => 'required',
+                'end_time' => 'required',
+            )); 
+
+        // Save the data to db
+        $schedule = new Schedule;
+        $schedule->begin_day = $request->begin_day;
+        $schedule->end_day = $request->end_day;
+        $schedule->begin_time = $request->begin_time;
+        $schedule->end_time = $request->end_time;
+        $schedule->name = $request->begin_day. '  ' .$request->end_day. ': ' .date('h:i:sa', strtotime($request->begin_time)). ' - ' .date('h:i:sa', strtotime($request->end_time));
+        $schedule->save();         
+        // Set flash data with message
+        $request->session()->flash('success', 'New entry has been saved!');
+        // Redirect to flash data to posts.show
+        return redirect()->route('schedules.index'); 
 
     }
 
@@ -75,10 +98,11 @@ class ScheduleController extends Controller
     public function edit($id)
     {
         $schedule = Schedule::find($id);
-        $days = Day::pluck("Week_Day_Name","Week_Day_Number")->all(); 
-        $times = Time::pluck("Begin_Time","id")->all(); 
+        $days = Day::pluck("Week_Day_Name","Week_Day_Name")->all(); 
+        $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
+        $etimes = Time::pluck("End_Time","End_Time")->all(); 
         //$exists = $course->schedule->contains($schedule_id);
-        return view('schedules.edit')->withSchedule($schedule)->withDays($days)->withTimes($times);
+        return view('schedules.edit')->withSchedule($schedule)->withDays($days)->withBtimes($btimes)->withEtimes($etimes);
     }
 
     /**
@@ -94,20 +118,20 @@ class ScheduleController extends Controller
         $schedule = Schedule::find($id);
             $this->validate($request, array(
                 'sched_name' => 'required|max:255',
-
+                'begin_day' => 'required',
+                'end_day' => 'required',
+                'begin_time' => 'required',
+                'end_time' => 'required',
             )); 
-                //'begin_day' => 'required',
-                //'end_day' => 'required',
-                //'begin_time' => 'required',
-                //'end_time' => 'required',
+
         // Save the data to db
         $schedule = Schedule::find($id);
-        $schedule->name = $request->input('sched_name');
-        //$schedule->begin_day = $request->input('begin_day');
-        //$schedule->end_day = $request->input('end_day');
-        //$schedule->begin_time = $request->input('begin_time');
-        //$schedule->end_time = $request->input('end_time');
-        //$schedule->name = $request->input('begin_day'). '&' .$request->input('end_day'). ':' .$request->input('begin_time'). '-' .$request->input('end_time');
+        //$schedule->name = $request->input('sched_name');
+        $schedule->begin_day = $request->input('begin_day');
+        $schedule->end_day = $request->input('end_day');
+        $schedule->begin_time = $request->input('begin_time');
+        $schedule->end_time = $request->input('end_time');
+        $schedule->name = $request->input('begin_day'). ' & ' .$request->input('end_day'). ': ' .date('h:i:sa', strtotime($request->input('begin_time'))). ' - ' .date('h:i:sa', strtotime($request->input('end_time')));
         $schedule->save();         
         // Set flash data with message
         $request->session()->flash('success', 'Changes have been saved!');

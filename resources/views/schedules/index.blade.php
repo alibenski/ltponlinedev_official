@@ -11,7 +11,7 @@
 		</div>
 		
 		<div class="col-md-2">
-			<a href=" " class="btn btn-lg btn-block btn-primary btn-h1-spacing">Create</a>
+			<a href="{{ route('schedules.create') }}" class="btn btn-block btn-primary btn-h1-spacing" style="margin-top: 20px;">Create</a>
 
 		</div>
 		<div class="col-md-10">
@@ -23,7 +23,6 @@
 		<div class="col-md-10 class-md-offset-2">
 			<table class="table">
 				<thead>
-					<th>#</th>
 					<th>Description</th>
 					<th>Begin Day</th>
 					<th>End Day</th>
@@ -36,12 +35,29 @@
 					@foreach($schedules as $schedule)
 						
 						<tr>
-							<th>{{ $schedule->id }}</th>
 							<td>{{ $schedule->name }}</td>
 							<td>{{ $schedule->begin_day }}</td>
-							<td>{{ $schedule->end_day }}</td>
-							<td>{{ $schedule->begin_time }}</td>
-							<td>{{ $schedule->end_time }}</td>
+							<td>
+								@if(empty($schedule->end_day))
+					            <span>Only</span>
+					            @else
+					            	<span>{{ $schedule->end_day }}</span>
+					            @endif
+							</td>
+							<td>
+								@if(empty($schedule->begin_time))
+					            <span class="label label-danger">none</span>
+					            @else
+					            	<span class="label label-default">{{ date('h:i:sa', strtotime($schedule->begin_time)) }}</span>
+					            @endif
+							</td>
+							<td>
+								@if(empty($schedule->end_time))
+					            <span class="label label-danger">none</span>
+					            @else
+					            	<span class="label label-default">{{ date('h:i:sa', strtotime($schedule->end_time)) }}</span>
+					            @endif
+							</td>
 							<td><a href="{{ route('schedules.edit', $schedule->id) }} " class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach
