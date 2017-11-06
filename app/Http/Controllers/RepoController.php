@@ -168,14 +168,14 @@ class RepoController extends Controller
     {
         if($request->ajax()){
 
-            $select_schedules = DB::table('LTP_TEVENTCur')
-            ->where('Te_Code', $request->course_id)
+            //$select_schedules = DB::table('LTP_TEVENTCur')
+            $select_schedules = Classroom::where('Te_Code', $request->course_id)
             ->where(function($q){ 
                 //get value directly not via blade view
                 $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term );
             })
-            ->pluck("Te_Code","Code")
+            ->pluck("schedule_id","schedule_id")
             ->all();
 
             $data = view('ajax-select2',compact('select_schedules'))->render();
