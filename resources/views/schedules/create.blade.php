@@ -10,26 +10,20 @@
                 <label for="sched_name" class="control-label col-md-4">Schedule Description:</label>
                 <textarea type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none; border-color: red;" readonly>Description will automatically be generated based on the choices below.</textarea>
               </div>
-
-              <div class="form-group">
-                  <label name="begin_day" class="col-md-4 control-label">Begin Day: </label>
-                  <select class="col-md-6 form-control-static" name="begin_day">
-                      <option value="">Select Begin Day</option>
-                      @foreach ($days as $id => $name)
-                          <option value="{{ $id }}"> {{ $name }}</option>
-                      @endforeach
-                  </select>
-              </div>
-
-              <div class="form-group">
-                  <label name="end_day" class="col-md-4 control-label">End Day: </label>
-                  <select class="col-md-6 form-control-static" name="end_day">
-                      <option value="">Select End Day</option>
-                      @foreach ($days as $id => $name)
-                          <option value="{{ $id }}"> {{ $name }}</option>
-                      @endforeach
-                  </select>
-              </div>
+                <!-- array checkboxes -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Choose Days:</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label>
+                              @foreach ($days as $id => $name)
+                                <input type="checkbox" name="begin_day[]" value="{{ $id }}" /> {{ $name }}
+                                <br>
+                              @endforeach
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
               <div class="form-group">
                   <label name="begin_time" class="col-md-4 control-label">Begin Time: </label>
