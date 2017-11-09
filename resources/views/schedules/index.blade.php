@@ -23,6 +23,7 @@
 		<div class="col-md-10 class-md-offset-2">
 			<table class="table">
 				<thead>
+					<th>id</th>
 					<th>Description</th>
 					<th>Begin Day</th>
 					<th>End Day</th>
@@ -35,6 +36,7 @@
 					@foreach($schedules as $schedule)
 						
 						<tr>
+							<td>{{ $schedule->id }}</td>
 							<td>{{ $schedule->name }}</td>
 							<td>{{ $schedule->begin_day }}</td>
 							<td>

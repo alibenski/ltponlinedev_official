@@ -10,6 +10,7 @@ use App\User;
 use App\Repo;
 use App\Term;
 use App\Classroom;
+use App\Schedule;
 use Session;
 use DB;
 
@@ -63,6 +64,7 @@ class RepoController extends Controller
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
 
+
         return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
@@ -75,24 +77,28 @@ class RepoController extends Controller
     public function store(Request $request)
     {
            $this->validate($request, array(
-                'unique_code' => 'unique|max:255',
-                'user_id' => 'integer',
-                'name' => 'required|email',
-                'language_id' => 'required|integer',
-                'course_id' => 'required|integer',
-                'term_id' => 'integer',
+                //'unique_code' => 'unique|max:255',
+                //'user_id' => 'integer',
+                //'name' => 'required|email',
+                //'language_id' => 'required|integer',
+               // 'course_id' => 'required|integer',
+                //'term_id' => 'integer',
             ));
         
         //store in database
-        $data = new Repo;        
-        $data->unique_code = "";
-        $data->user_id = $request->user_id;
-        $data->name = $request->name;
-        $data->language_id = $request->language_id;
-        $data->course_id = $request->course_id;
-        $data->term_id = $request->term_id;
+        $data = new Repo;  
+        $data->L = $request->L;  
+        $data->course_id = $request->course_id;  
+        $data->schedule_id = $request->schedule_id;
+        dd($data);
+        //$data->unique_code = "";
+        //$data->user_id = $request->user_id;
+        //$data->name = $request->name;
+        //$data->language_id = $request->language_id;
+        //$data->course_id = $request->course_id;
+        //$data->term_id = $request->term_id;
                 
-        $data->unique_code = $request->term_id.'/'.$request->course_id.'/'.$request->user_id;
+        //$data->unique_code = $request->term_id.'/'.$request->course_id.'/'.$request->user_id;
         $data->save();    
 
         // variable course refers to schedule function in Course.php model
@@ -172,11 +178,12 @@ class RepoController extends Controller
             $select_schedules = Classroom::where('Te_Code', $request->course_id)
             ->where(function($q){ 
                 //get value directly not via blade view
+                //->pluck("schedule_id","schedule_id") removed
                 $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term );
             })
-            ->pluck("schedule_id","schedule_id")
-            ->all();
+            
+            ->get();
 
             $data = view('ajax-select2',compact('select_schedules'))->render();
             return response()->json(['options'=>$data]);

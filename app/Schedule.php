@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     public function course() {
-	//LTP_TEVENTCur as the pivot
-    return $this->belongsToMany('App\Course', 'LTP_TEVENTCur', 'schedule_id', 'Te_Code'); 
+    return $this->belongsToMany('App\Course', 'course_schedule', 'schedule_id', 'Te_Code'); 
     }
 
-    
+	public function classroom() {
+    return $this->hasMany('App\Classroom'); 
+    }
 }

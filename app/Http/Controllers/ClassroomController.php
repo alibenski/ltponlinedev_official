@@ -10,7 +10,7 @@ use App\Classroom;
 use App\Term;
 use DB;
 
-class CourseController extends Controller
+class ClassroomController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -29,11 +29,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::paginate(15);
-        $schedules = Schedule::all(['id', 'name']);
-        //return a view and pass in the above variable
-        //dd($schedules);
-        return view('courses.index')->withCourses($courses)->withSchedules($schedules);
+
+        return 'Index Page for Classrooms';
     }
 
     /**
@@ -46,11 +43,11 @@ class CourseController extends Controller
         $courses = Course::all();
         //$courses = Course::all(['id', 'name']); // selected $key => $value
         $languages = DB::table('languages')->pluck("name","code")->all();
-
+        $schedules = Schedule::pluck("name","id")->all();
         //get latest semester/term
-        $terms = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->first();
+        $terms = Term::orderBy('Term_Code', 'DESC')->first();
 
-        return view('courses.create')->withCourses($courses)->withLanguages($languages)->withTerms($terms);
+        return view('classrooms.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms);
     }
 
     /**
@@ -63,14 +60,17 @@ class CourseController extends Controller
     {
         //validate the data
         $this->validate($request, array(
-                'name' => 'required|max:255',
+                'term_id' => 'required|',
+                'schedule_id' => 'required|',
+                'course_id' => 'required|',
             ));
 
         //store in database
-        $course = new Course;
-        $course->name = $request->name;
-        $course->name = $request->name;
-        $course->save();
+        $courseclass = new Classroom;
+        $courseclass->term_id = $request->term_id;
+        $courseclass->course_id = $request->course_id;
+        $courseclass->schedule_id = $request->schedule_id;
+        $courseclass->save();
         // variable course refers to schedule function in Course.php model
         // then syncs the data to schedules MySQL table
         $course->schedule()->sync($request->schedules, false);
