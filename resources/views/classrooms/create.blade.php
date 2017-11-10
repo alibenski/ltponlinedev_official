@@ -10,7 +10,7 @@
     <h2>Create New Class for Term: {{ $terms->Term_Code.' - '.$terms->Term_Name.' - '.$terms->Comments }}</h2>
     <hr>
 
-    <form method="POST" action="{{ route('courses.store') }}">
+    <form method="POST" action="{{ route('classrooms.store') }}">
                 <div class="form-group">
                   <label name="term_id" class="control-label">Term: </label>
                   <input  name="term_id" type="input" value="{{ $terms->Term_Code }}" readonly> 
@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label name="L" class="col-md-3 control-label">Language: </label>
                     <select class="col-md-8 form-control" name="L">
-                        <option value="">Select</option>
+                        <option value="">--- Select Language ---</option>
                         @foreach ($languages as $id => $name)
                             <option value="{{ $id }}"> {{ $name }}</option>
                         @endforeach
@@ -42,9 +42,14 @@
                     </select>
                 </div>
 
-                <div class="col-sm-offset-5">
-                  <button type="submit" class="btn btn-success button-prevent-multi-submit">Save Classroom</button>
+                <div class="row">
+                <div class="col-md-5 col-md-offset-1">
+                  <a href="{{ route('classrooms.index') }}" class="btn btn-danger btn-block">Back</a>
+                </div>
+                <div class="col-md-5 ">  
+                  <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save Classroom</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
+                </div>
                 </div>
     </form>
   </div>

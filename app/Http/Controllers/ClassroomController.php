@@ -67,16 +67,19 @@ class ClassroomController extends Controller
 
         //store in database
         $courseclass = new Classroom;
-        $courseclass->term_id = $request->term_id;
-        $courseclass->course_id = $request->course_id;
+        //store data to Classroom model's column  = data from input attr. name
+        $courseclass->Te_Term = $request->term_id;
+        $courseclass->Te_Code = $request->course_id;
         $courseclass->schedule_id = $request->schedule_id;
+        $courseclass->Code = $request->course_id.'/'.$request->schedule_id.'/'.$request->term_id;
         $courseclass->save();
+        $course = new Course;
         // variable course refers to schedule function in Course.php model
         // then syncs the data to schedules MySQL table
         $course->schedule()->sync($request->schedules, false);
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
-        return redirect()->route('courses.index');
+        return redirect()->route('classrooms.index');
     }
 
     /**
@@ -118,7 +121,7 @@ class ClassroomController extends Controller
         // Validate data
         $course = Course::find($id);
             $this->validate($request, array(
-                'name' => 'required|max:255',
+                //'name' => 'required|max:255',
             )); 
 
         // Save the data to db
