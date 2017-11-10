@@ -16,6 +16,7 @@ Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAj
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@selectAjax2']);
 //Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'HomeController@selectAjax']);
 Route::resource('classrooms', 'ClassroomController');
+
 Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');
 Route::resource('courses', 'CourseController');

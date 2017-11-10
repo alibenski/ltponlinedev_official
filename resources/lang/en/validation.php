@@ -100,8 +100,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'Code' => [
+            'unique' => 'Course and Schedule combination already exists for this Term.',
         ],
     ],
 

@@ -119,8 +119,10 @@
 
 <script type="text/javascript">
   $("select[name='L']").change(function(){
+
       var L = $(this).val();
       var token = $("input[name='_token']").val();
+      
       $.ajax({
           url: "{{ route('select-ajax') }}", 
           method: 'POST',

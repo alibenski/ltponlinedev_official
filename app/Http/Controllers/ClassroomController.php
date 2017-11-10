@@ -58,11 +58,14 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
+      
         //validate the data
         $this->validate($request, array(
+                'Code' => 'unique:LTP_TEVENTCur,Code|',
                 'term_id' => 'required|',
-                'schedule_id' => 'required|',
+                'schedule_id' => 'required|integer',
                 'course_id' => 'required|',
+                
             ));
 
         //store in database
@@ -71,15 +74,13 @@ class ClassroomController extends Controller
         $courseclass->Te_Term = $request->term_id;
         $courseclass->Te_Code = $request->course_id;
         $courseclass->schedule_id = $request->schedule_id;
-        $courseclass->Code = $request->course_id.'/'.$request->schedule_id.'/'.$request->term_id;
+        $courseclass->Code = $request->Code;
+
         $courseclass->save();
-        $course = new Course;
-        // variable course refers to schedule function in Course.php model
-        // then syncs the data to schedules MySQL table
-        $course->schedule()->sync($request->schedules, false);
+
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
-        return redirect()->route('classrooms.index');
+        return redirect()->route('classrooms.create');
     }
 
     /**
