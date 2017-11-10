@@ -29,8 +29,8 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-
-        return 'Index Page for Classrooms';
+        $classrooms = Classroom::orderBy('id','DESC')->paginate(15);
+        return view('classrooms.index')->withClassrooms($classrooms);
     }
 
     /**
@@ -58,12 +58,12 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
-      
+        dd();
         //validate the data
         $this->validate($request, array(
                 'Code' => 'unique:LTP_TEVENTCur,Code|',
                 'term_id' => 'required|',
-                'schedule_id' => 'required|integer',
+                //'schedule_id' => 'required|integer',
                 'course_id' => 'required|',
                 
             ));
@@ -75,12 +75,12 @@ class ClassroomController extends Controller
         $courseclass->Te_Code = $request->course_id;
         $courseclass->schedule_id = $request->schedule_id;
         $courseclass->Code = $request->Code;
-
+    dd();
         $courseclass->save();
 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
-        return redirect()->route('classrooms.create');
+        return redirect()->route('classrooms.index');
     }
 
     /**
@@ -102,12 +102,8 @@ class ClassroomController extends Controller
      */
     public function edit($id)
     {
-        $course = Course::find($id);
-        // get first element in Schedule collection
-        $schedule_id = Schedule::first(); 
-        // variable "exists" returns a boolean for the specific course
-        $exists = $course->schedule->contains($schedule_id);
-        return view('courses.edit')->withCourse($course)->withExists($exists);
+
+        return 'edit classrooms page';
     }
 
     /**

@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| Create New Course')
+@section('tabtitle', '| Create New Class')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
@@ -31,7 +31,7 @@
 
                 <div class="form-group">
                     <label name="schedule_id" class="col-md-3 control-label">Assign Schedule: </label>
-                    <select class="combine col-md-8 form-control select2-multi" name="schedule_id" multiple="multiple">
+                    <select class="combine col-md-8 form-control select2-multi" name="schedule_id[]" multiple="multiple">
                         @foreach ($schedules as $id => $name)
                             <option value="{{ $id }}"> {{ $name }}</option>
                         @endforeach
@@ -39,9 +39,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label name="term_id" class="control-label">Term: </label>
-                  <input  name="term_id" class="combine" type="input" value="{{ $terms->Term_Code }}" readonly>
-                  <input  id="UniqueCode" name="Code" class="combine" type="input" value="" readonly> 
+                  <input  name="term_id" class="combine" type="hidden" value="{{ $terms->Term_Code }}" readonly>
+                  <input  id="UniqueCode" name="Code" class="combine" type="hidden" value="" readonly> 
                 </div>
 
                 <div class="row">
