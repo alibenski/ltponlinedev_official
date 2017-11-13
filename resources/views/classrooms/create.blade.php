@@ -29,6 +29,51 @@
                     </select>
                 </div>
 
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <th>Schedule</th>
+          <th>Room</th>
+          <th>Teacher</th>
+        </thead>
+
+        <tbody>
+            <tr>
+              <td>
+                    <select class="combine  form-control select2-multi" name="schedule_id[]">
+                            <option value=""> Select Schedule </option>
+                        @foreach ($schedules as $id => $name)
+                            <option value="{{ $id }}"> {{ $name }}</option>
+                        @endforeach
+                    </select>
+              </td>
+              <td>
+                    <select class="combine  form-control select2-multi" name="room_id[]">
+                            <option value=""> Select Room </option>
+                        @foreach ($rooms as $id => $name)
+                            <option value="{{ $id }}"> {{ $name }}</option>
+                        @endforeach
+                    </select>
+              </td>
+              <td>
+                    <select class="combine  form-control select2-multi" name="schedule_id[]">
+                            <option value=""> Select Teacher </option>
+                            <option value="1"> Teacher A </option>
+                            <option value="2"> Teacher B </option>
+                            <option value="3"> Teacher C </option>
+                            <option value="4"> Teacher D </option>
+                    </select>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
                 <div class="form-group">
                     <label name="schedule_id" class="col-md-3 control-label">Assign Schedule: </label>
                     <select class="combine col-md-8 form-control select2-multi" name="schedule_id[]" multiple="multiple">

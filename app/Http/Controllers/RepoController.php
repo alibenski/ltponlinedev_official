@@ -170,6 +170,7 @@ class RepoController extends Controller
             return response()->json(['options'=>$data]);
         }
     }
+
     public function selectAjax2(Request $request)
     {
         if($request->ajax()){
@@ -182,8 +183,9 @@ class RepoController extends Controller
                 $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term );
             })
-            
-            ->get();
+            //['CodeIndexID','schedule_id']
+            ->with('schedule_id');
+            //->get();
 
             $data = view('ajax-select2',compact('select_schedules'))->render();
             return response()->json(['options'=>$data]);

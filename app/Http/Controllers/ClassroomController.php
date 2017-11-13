@@ -8,7 +8,9 @@ use App\User;
 use App\Schedule;
 use App\Classroom;
 use App\Term;
+use App\Room;
 use DB;
+use Carbon;
 
 class ClassroomController extends Controller
 {
@@ -46,8 +48,8 @@ class ClassroomController extends Controller
         $schedules = Schedule::pluck("name","id")->all();
         //get latest semester/term
         $terms = Term::orderBy('Term_Code', 'DESC')->first();
-
-        return view('classrooms.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms);
+        $rooms = Room::pluck("Rl_Room","Rl_Room")->all();
+        return view('classrooms.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withRooms($rooms);
     }
 
     /**
@@ -66,18 +68,20 @@ class ClassroomController extends Controller
         $term_id = $request->input('term_id');
         
 
-        //$ingredients = [];
+        $ingredients = [];
             for ($i = 0; $i < count($schedule_id); $i++){
                     Classroom::insert(array(
                         array(
                             'schedule_id' => $schedule_id[$i],
                             'Te_Code' => $course_id,
                             'Te_Term' => $term_id,
-                            'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
+                            'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$ingredients[$i],
+                            "created_at" =>  \Carbon\Carbon::now(),
+                            "updated_at" =>  \Carbon\Carbon::now(),
                         ),
                     ));
                 }
-        dd();
+        
         //for ($i = 0; $i < count($schedule_id); $i++) {
         //    $ingredients[] = new  Classroom([
         //        'schedule_id' => $schedule_id[$i],
