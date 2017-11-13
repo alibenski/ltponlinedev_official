@@ -39,8 +39,8 @@
                 </div>
 
                 <div class="form-group">
-                  <input  name="term_id" class="combine" type="hidden" value="{{ $terms->Term_Code }}" readonly>
-                  <input  id="UniqueCode" name="Code" class="combine" type="hidden" value="" readonly> 
+                  <input  name="term_id" class="combine" type="text" value="{{ $terms->Term_Code }}" readonly>
+                  <input  id="UniqueCode" name="Code[]" class="combine" type="text" value="" readonly> 
                 </div>
 
                 <div class="row">
@@ -78,19 +78,6 @@
             }
         });
     }); 
-  </script>
-
-  <script type="text/javascript">
-      $(document).ready(function () {
-          $('#setVal').on('click', function () {
-              var form = $('.combine').not('#UniqueCode');
-              var vals = form.map(function () {
-                  var value = $.trim(this.value)
-                  return value ? value : undefined;
-              }).get();
-              $('#UniqueCode').val(vals.join('/'))
-          });
-      });
   </script>
 
 @stop

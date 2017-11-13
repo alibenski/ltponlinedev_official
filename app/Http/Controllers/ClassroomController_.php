@@ -57,43 +57,52 @@ class ClassroomController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-        //$sched = new Schedule;
-        //$meal->name = Input::get('name');
+    {
+        // Split a bunch of email addresses
+        // submitted from a textarea form input
+        // into an array, and replace the input email
+        // with this array, instead of the original string.
+        if ( empty( $request->input( 'Code' ) ) ) {
 
-        $course_id = $request->input('course_id');
-        $schedule_id = $request->input('schedule_id');
-        $term_id = $request->input('term_id');
+            $codex = array($request->input( 'course_id' ), $request->input( 'schedule_id' ), $request->input( 'term_id' ));
+            //loop for array schedule_id here
+
+            //implode the multiple results with 
+
+            //'Code' is array resulting to 2 records 
+            $codex = implode('/', $codex);
+            //$codex = preg_replace( '/\s+/m', ',', $codex );
+            //$codex = explode( ',', $codex );
+            
+            // THIS IS KEY!
+            // Replacing the old input string with
+            // with an array of emails.
+            $request->merge( array( 'Code' => $codex ) );
+var_dump($request->Code);
+        }
         
+        //validate the data
+        $this->validate($request, array(
+                'Code' => 'unique:LTP_TEVENTCur,Code|',
+                'term_id' => 'required|',
+                //'schedule_id' => 'required|integer',
+                'course_id' => 'required|',
+                
+            ));
 
-        //$ingredients = [];
-            for ($i = 0; $i < count($schedule_id); $i++){
-                    Classroom::insert(array(
-                        array(
-                            'schedule_id' => $schedule_id[$i],
-                            'Te_Code' => $course_id,
-                            'Te_Term' => $term_id,
-                            'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
-                        ),
-                    ));
-                }
-        dd();
-        //for ($i = 0; $i < count($schedule_id); $i++) {
-        //    $ingredients[] = new  Classroom([
-        //        'schedule_id' => $schedule_id[$i],
-        //        'Te_Code' => $course_id,
-        //        'Te_Term' => $term_id,
-        //  ]);
-        //}
+        //store in database
+        $courseclass = new Classroom;
+        //store data to Classroom model's column  = data from input attr. name
+        $courseclass->Te_Term = $request->term_id;
+        $courseclass->Te_Code = $request->course_id;
+        $courseclass->schedule_id = $request->schedule_id;
+        $courseclass->Code = $request->Code;
+    dd($courseclass);
+        $courseclass->save();
 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
         return redirect()->route('classrooms.index');
-        //var_dump($ingredients[0]);
-        //var_dump($ingredients[1]);
-        //dd($ingredients[1]);
-        //Classroom::insert($ingredients);
-        //DB::table('LTP_TEVENTCur')->insert($ingredients);
     }
 
     /**

@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Classroom extends Model
 {
     protected $table = 'LTP_TEVENTCur';
+    protected $fillable = [
+        'Code', 'Te_Code', 'schedule_id', 'Te_Term',  
+    ];
 
     //declare the foreign key on the 3rd parameter of the function
     //in this case, field Te_Code inside table PASH is associated to foreign key Te_Code
