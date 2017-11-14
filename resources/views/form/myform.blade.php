@@ -58,26 +58,60 @@
                     </div>
                 </div>
 
-                <!-- radio checks -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Continue current course?</label>
-                    <div class="col-md-3">
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="hosting" value="yes" /> Yes
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="hosting" value="no" /> No
-                            </label>
+                    <label for="name" class="col-md-3 control-label">Next UN Language Course:</label>
+
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->next_level_desc }}" readonly>                            
                         </div>
                     </div>
                 </div>
 
+<!-- MAKE A DECISION SECTION -->
+
                 <div class="form-group">
-                    <label name="L" class="col-md-3 control-label">Enrol to which language: </label>
-                    <select class="col-md-8 form-control-static" name="L">
+                    <label class="col-md-3 control-label">Continue current course?</label>
+                      <div class="col-md-2">
+                                <input type="button" name="dyes" class="btn btn-block btn-default" value="yes">
+                      </div>
+                      <div class="col-md-2">
+                                <input type="button" name="dno" class="btn btn-block btn-default" value="no">
+                      </div>
+                </div>
+
+<!-- YES DECISION SECTION -->
+            <div class="yes box" style="display:none">
+
+                <div class="form-group">
+                    <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
+                    <select class="col-md-8 form-control-static lang_select_yes" name="">
+                        <option value="{{ $repos_lang->L}}">{{ $repos_lang->languages->name }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
+                    <select class="col-md-8 form-control-static course_select_yes" name="">
+                        <option value="{{ $repos_lang->courses->next_level }}">{{ $repos_lang->courses->next_level_desc }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
+                    <select class="col-md-8 form-control-static schedule_select_yes" name="">
+                        <option value="">--- Select Schedule ---</option>
+                    </select>
+                </div>
+            </div>
+<!-- END OF YES DECISION SECTION -->   
+
+<!-- NO DECISION SECTION -->
+            <div class="no box" style="display:none">
+
+                <div class="form-group">
+                    <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
+                    <select class="col-md-8 form-control-static lang_select_no" name="">
                         <option value="">Select</option>
                         @foreach ($languages as $id => $name)
                             <option value="{{ $id }}"> {{ $name }}</option>
@@ -86,18 +120,20 @@
                 </div>
                 
                 <div class="form-group">
-                    <label name="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                    <select class="col-md-8 form-control-static" name="course_id">
+                    <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
+                    <select class="col-md-8 form-control-static course_select_no" name="">
                         <option value="">--- Select Course ---</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label name="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
-                    <select class="col-md-8 form-control-static" name="schedule_id">
+                    <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
+                    <select class="col-md-8 form-control-static schedule_select_no" name="">
                         <option value="">--- Select Schedule ---</option>
                     </select>
                 </div>
+            </div>
+<!-- END OF NO DECISION SECTION -->
 
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
@@ -117,6 +153,26 @@
 
 <script src="{{ asset('js/submit.js') }}"></script>      
 
+<script>
+$(document).ready(function(){
+    $('input[name="dno"]').click(function(){
+
+        $(".lang_select_no").attr("name", "L");
+       // $(".course_select_no").attr("name", "course_id");
+        //$(".schedule_select_no").attr("name", "schedule_id");        
+      
+    });
+});
+</script>
+
+<script>
+$(document).ready(function(){
+    $('input[name="dno"]').click(function(){
+        $(".course_select_no").attr("name", "course_id");
+    });
+});
+</script>
+
 <script type="text/javascript">
   $("select[name='L']").change(function(){
 
@@ -127,7 +183,7 @@
           url: "{{ route('select-ajax') }}", 
           method: 'POST',
           data: {L:L, _token:token},
-          success: function(data) {
+          success: function(data, status) {
             $("select[name='course_id'").html('');
             $("select[name='course_id'").html(data.options);
           }

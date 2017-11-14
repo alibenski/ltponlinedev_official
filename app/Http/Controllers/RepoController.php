@@ -47,13 +47,15 @@ class RepoController extends Controller
      */
     public function create()
     {  
+    
+        //query if user chooses not to continue course
+        //make collection values available
         $courses = Course::all();
-        //$courses = Course::all(['id', 'name']); // selected $key => $value
+        //get values directly from 'languages' table
         $languages = DB::table('languages')->pluck("name","code")->all();
-
         //get latest semester/term
         $terms = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->first();
-        //define user variable as user collection
+        //define user variable as User collection
         $user = Auth::user();
         //define user index number for query 
         $current_user = Auth::user()->indexno;
@@ -64,8 +66,10 @@ class RepoController extends Controller
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
 
-
-        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
+        //query if user chooses to continue course
+        $yeslanguages = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
+        
+        return view('form.myform')->withYeslanguages($yeslanguages)->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
     /**
@@ -75,7 +79,17 @@ class RepoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {     
+        if ($request->input('decision') == 'yes') {
+            $data = new Repo;  
+            $data->L = $request->L;  dd($request->L);
+            $data->course_id = $request->course_id;  
+            $data->schedule_id = $request->schedule_id;
+            
+        } else {
+            # code...
+        }
+        
            $this->validate($request, array(
                 //'unique_code' => 'unique|max:255',
                 //'user_id' => 'integer',
