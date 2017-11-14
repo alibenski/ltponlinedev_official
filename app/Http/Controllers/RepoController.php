@@ -183,9 +183,8 @@ class RepoController extends Controller
                 $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term );
             })
-            //['CodeIndexID','schedule_id']
-            ->with('schedule_id');
-            //->get();
+            //Eager Load scheduler function and pluck using "dot" 
+            ->with('scheduler')->get()->pluck('scheduler.name', 'Code');
 
             $data = view('ajax-select2',compact('select_schedules'))->render();
             return response()->json(['options'=>$data]);
