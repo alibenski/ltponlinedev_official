@@ -60,35 +60,50 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {   
-        //$sched = new Schedule;
-        //$meal->name = Input::get('name');
-
         $course_id = $request->input('course_id');
         $schedule_id = $request->input('schedule_id');
         $term_id = $request->input('term_id');
+        $room_id = $request->input('room_id');
+        $code = $request->input('Code');
+        $codex = [];       
         
+        if ( empty( $code ) ) {
+            for ($i=0; $i < count($room_id); $i++) { 
+            $codex[] = array($course_id, $schedule_id, $term_id, $room_id[$i]);
+            $codex[$i] = implode('/', $codex[$i]);
+            $request->merge( array( 'Code' => $codex[$i] ) );
+            }
+var_dump($request->Code);
+
+            dd($codex);
+            //$codex = preg_replace( '/\s+/m', ',', $codex );
+            //$codex = explode( ',', $codex );
+            
+            // THIS IS KEY!
+            // Replacing the old input string with
+            // with an array of emails.
+            $request->merge( array( 'Code' => $codex[$i] ) );
+var_dump($request->Code);
+
+            dd($request->Code);
+            
+
+
+
+        }dd($request->Code);
 
         $ingredients = [];
-            for ($i = 0; $i < count($schedule_id); $i++){
-                    Classroom::insert(array(
-                        array(
-                            'schedule_id' => $schedule_id[$i],
-                            'Te_Code' => $course_id,
-                            'Te_Term' => $term_id,
-                            'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$ingredients[$i],
-                            "created_at" =>  \Carbon\Carbon::now(),
-                            "updated_at" =>  \Carbon\Carbon::now(),
-                        ),
-                    ));
-                }
         
-        //for ($i = 0; $i < count($schedule_id); $i++) {
-        //    $ingredients[] = new  Classroom([
-        //        'schedule_id' => $schedule_id[$i],
-        //        'Te_Code' => $course_id,
-        //        'Te_Term' => $term_id,
-        //  ]);
-        //}
+        for ($i = 0; $i < count($room_id); $i++) {
+            $ingredients[] = new  Classroom([
+                'schedule_id' => $schedule_id,
+                'Te_Code' => $course_id,
+                'Te_Term' => $term_id,
+                'Code' => $course_id.'/'.$schedule_id.'/'.$term_id.'/'.$room_id[$i],
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+          ]);
+        }
 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 

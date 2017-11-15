@@ -73,14 +73,14 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">Continue current course?</label>
                       <div class="btn-group col-md-2" data-toggle="buttons">
-                        <label class="btn btn-default btn-block active">
-                                <input type="radio" name="decision" value="yes">YES
+                        <label class="">
+                                <input type="radio" name="decision" value="yes" >YES
                         </label>
                       </div>
 
                       <div class="btn-group col-md-2" data-toggle="buttons">
-                        <label class="btn btn-default btn-block active">
-                                <input type="radio" name="decision" value="no">NO
+                        <label class="">
+                                <input type="radio" name="decision" value="no" >NO
                         </label>
                       </div>
                 </div>
@@ -116,7 +116,7 @@
 
                 <div class="form-group">
                     <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
-                    <select class="col-md-8 form-control-static lang_select_no" name="">
+                    <select class="col-md-8 form-control-static lang_select_no" name="L" autocomplete="off">
                         <option value="">Select</option>
                         @foreach ($languages as $id => $name)
                             <option value="{{ $id }}"> {{ $name }}</option>
@@ -126,14 +126,14 @@
                 
                 <div class="form-group">
                     <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                    <select class="col-md-8 form-control-static course_select_no" name="">
+                    <select class="col-md-8 form-control-static course_select_no" name="course_id">
                         <option value="">--- Select Course ---</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
-                    <select class="col-md-8 form-control-static schedule_select_no" name="">
+                    <select class="col-md-8 form-control-static schedule_select_no" name="schedule_id">
                         <option value="">--- Select Schedule ---</option>
                     </select>
                 </div>
@@ -156,25 +156,60 @@
 
 @section('scripts_code')
 
-<script src="{{ asset('js/submit.js') }}"></script>      
+<script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
 $(document).ready(function(){
-    $('input[name="dno"]').click(function(){
-
-        $(".lang_select_no").attr("name", "L");
-       // $(".course_select_no").attr("name", "course_id");
-        //$(".schedule_select_no").attr("name", "schedule_id");        
-      
-    });
-});
+  $('input[type=radio]').attr('checked',false);
+  });
 </script>
 
 <script>
 $(document).ready(function(){
-    $('input[name="dno"]').click(function(){
-        $(".course_select_no").attr("name", "course_id");
+    $('input:radio[value="yes"]').click(function(){
+        $(".lang_select_yes").attr("name", "L");
+        $(".course_select_yes").attr("name", "course_id");
+        $(".schedule_select_yes").attr("name", "schedule_id");        
+        $(".lang_select_no").removeAttr("name");
+        $(".course_select_no").removeAttr("name");
+        $(".schedule_select_no").removeAttr("name");   
+        alert("Please select your preferred schedule.");             
     });
+        
+});
+</script>
+
+<script type="text/javascript">
+  $("input:radio[value='yes']").click(function(){
+    $(".course_select_yes").attr("name", "course_id");
+      var course_id = $("select[name='course_id']").val();
+      var token = $("input[name='_token']").val();
+      alert( course_id );
+      $.ajax({
+          url: "{{ route('select-ajax2') }}", 
+          method: 'POST',
+          data: {course_id:course_id, _token:token},
+          success: function(data) {
+            $("select[name='schedule_id'").html('');
+            $("select[name='schedule_id'").html(data.options);
+          
+          }
+      });
+  }); 
+</script>
+
+<script>
+$(document).ready(function(){
+    $('input:radio[value="no"]').click(function(){
+        $(".lang_select_no").attr("name", "L");
+        $(".course_select_no").attr("name", "course_id");
+        $(".schedule_select_no").attr("name", "schedule_id");
+        $(".lang_select_yes").removeAttr("name");
+        $(".course_select_yes").removeAttr("name");
+        $(".schedule_select_yes").removeAttr("name");  
+        alert("Please select your new Language Course.");   
+    });
+      
 });
 </script>
 
@@ -198,6 +233,7 @@ $(document).ready(function(){
 
 <script type="text/javascript">
   $("select[name='course_id']").change(function(){
+
       var course_id = $(this).val();
       var token = $("input[name='_token']").val();
       $.ajax({

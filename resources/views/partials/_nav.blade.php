@@ -39,6 +39,9 @@
                                 <a href="{{ route('students.edit', Auth::user()->id)}}">Edit Profile</a>
                             </li>
                             <li>
+                                <a href="{{ route('classrooms.index') }}">Course Classes</a>
+                            </li>
+                            <li>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">

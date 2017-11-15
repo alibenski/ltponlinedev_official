@@ -80,16 +80,6 @@ class RepoController extends Controller
      */
     public function store(Request $request)
     {     
-        if ($request->input('decision') == 'yes') {
-            $data = new Repo;  
-            $data->L = $request->L_yes;  
-            $data->course_id = $request->course_yes;  
-            $data->schedule_id = $request->schedule_yes;
-            dd($request);
-        } else {
-            # code...
-        }
-        
            $this->validate($request, array(
                 //'unique_code' => 'unique|max:255',
                 //'user_id' => 'integer',
@@ -99,18 +89,13 @@ class RepoController extends Controller
                 //'term_id' => 'integer',
             ));
         
-        //store in database
-    //    $data = new Repo;  
-      //  $data->L = $request->L;  
-        //$data->course_id = $request->course_id;  
-        //$data->schedule_id = $request->schedule_id;
-        //dd($data);
-        //$data->unique_code = "";
-        //$data->user_id = $request->user_id;
-        //$data->name = $request->name;
-        //$data->language_id = $request->language_id;
-        //$data->course_id = $request->course_id;
-        //$data->term_id = $request->term_id;
+
+        $data = new Repo;  
+        $data->L = $request->L;  
+        $data->course_id = $request->course_id;  
+        $data->schedule_id = $request->schedule_id;
+        dd($request);
+
                 
         //$data->unique_code = $request->term_id.'/'.$request->course_id.'/'.$request->user_id;
         //$data->save();    
