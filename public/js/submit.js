@@ -6,7 +6,7 @@
 })();
 //show and hide jquery
 $(document).ready(function(){
-    $('input[type="button"]').click(function(){
+    $('input:radio[name="decision"]').change(function(){
         var inputValue = $(this).attr("value");
         var targetBox = $("." + inputValue);
         $(".box").not(targetBox).hide(200);

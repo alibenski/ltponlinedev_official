@@ -82,10 +82,10 @@ class RepoController extends Controller
     {     
         if ($request->input('decision') == 'yes') {
             $data = new Repo;  
-            $data->L = $request->L;  dd($request->L);
-            $data->course_id = $request->course_id;  
-            $data->schedule_id = $request->schedule_id;
-            
+            $data->L = $request->L_yes;  
+            $data->course_id = $request->course_yes;  
+            $data->schedule_id = $request->schedule_yes;
+            dd($request);
         } else {
             # code...
         }
@@ -100,11 +100,11 @@ class RepoController extends Controller
             ));
         
         //store in database
-        $data = new Repo;  
-        $data->L = $request->L;  
-        $data->course_id = $request->course_id;  
-        $data->schedule_id = $request->schedule_id;
-        dd($data);
+    //    $data = new Repo;  
+      //  $data->L = $request->L;  
+        //$data->course_id = $request->course_id;  
+        //$data->schedule_id = $request->schedule_id;
+        //dd($data);
         //$data->unique_code = "";
         //$data->user_id = $request->user_id;
         //$data->name = $request->name;
@@ -113,7 +113,7 @@ class RepoController extends Controller
         //$data->term_id = $request->term_id;
                 
         //$data->unique_code = $request->term_id.'/'.$request->course_id.'/'.$request->user_id;
-        $data->save();    
+        //$data->save();    
 
         // variable course refers to schedule function in Course.php model
         // then syncs the data to schedules MySQL table

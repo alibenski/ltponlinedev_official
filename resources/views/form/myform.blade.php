@@ -42,7 +42,7 @@
                     
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="name" placeholder="Enter Manager's Email" class="form-control"  type="text">                                    
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="Enter Manager's Email" class="form-control"  type="text">                                    
                         </div>
                          <p class="small text-danger">Enter the correct email address of your manager because this form will be sent to this email address for approval.</p>
                     </div>
@@ -72,11 +72,16 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">Continue current course?</label>
-                      <div class="col-md-2">
-                                <input type="button" name="dyes" class="btn btn-block btn-default" value="yes">
+                      <div class="btn-group col-md-2" data-toggle="buttons">
+                        <label class="btn btn-default btn-block active">
+                                <input type="radio" name="decision" value="yes">YES
+                        </label>
                       </div>
-                      <div class="col-md-2">
-                                <input type="button" name="dno" class="btn btn-block btn-default" value="no">
+
+                      <div class="btn-group col-md-2" data-toggle="buttons">
+                        <label class="btn btn-default btn-block active">
+                                <input type="radio" name="decision" value="no">NO
+                        </label>
                       </div>
                 </div>
 
