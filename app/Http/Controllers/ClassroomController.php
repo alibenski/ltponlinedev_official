@@ -64,7 +64,7 @@ class ClassroomController extends Controller
         $schedule_id = $request->input('schedule_id');
         $term_id = $request->input('term_id');
         $room_id = $request->input('room_id');
-
+        $code = $request->input('Code');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input

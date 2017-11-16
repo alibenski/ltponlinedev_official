@@ -8,13 +8,14 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading">Enrolment Form for Semester: {{ $terms->Term_Next }}</div>
           <div class="panel-body">
             <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
+                <input  name="CodeIndexID" type="text" value="" readonly>
                 <input  name="user_id" type="input" value="{{ $repos }}" readonly>
                 <label for="">(Hidden) Next Term: </label><input  name="term_id" type="input" value="{{ $terms->Term_Next }}" readonly>  
                 </div>
@@ -23,7 +24,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span><input  name="" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                                    
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                                    
                         </div>
                     </div>
                 </div>
@@ -104,7 +105,7 @@
 
                 <div class="form-group">
                     <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
-                    <select class="col-md-8 form-control-static schedule_select_yes" name="" multiple="multiple">
+                    <select class="col-md-8 form-control-static schedule_select_yes select2-multi" multiple="multiple" style="width: 65%;" name="" >
                         <option value="">--- Select Schedule ---</option>
                     </select>
                 </div>
@@ -126,14 +127,14 @@
                 
                 <div class="form-group">
                     <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                    <select class="col-md-8 form-control-static course_select_no" name="course_id">
+                    <select class="col-md-8 form-control-static course_select_no" name="course_id" autocomplete="off">
                         <option value="">--- Select Course ---</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
-                    <select class="col-md-8 form-control-static schedule_select_no " name="schedule_id" multiple="multiple">
+                    <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%;" name="schedule_id[]" autocomplete="off">
                         <option value="">--- Select Schedule ---</option>
                     </select>
                 </div>
@@ -156,7 +157,9 @@
 
 @section('scripts_code')
 <script src="{{ asset('js/select2.min.js') }}"></script>
-<script type="text/javascript">$(".select2-multi").select2(); </script>
+<script type="text/javascript">$(".select2-multi").select2({
+    width: 'resolve' // need to override the changed default
+}); </script>
 <script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
@@ -170,7 +173,7 @@ $(document).ready(function(){
     $('input:radio[value="yes"]').click(function(){
         $(".lang_select_yes").attr("name", "L");
         $(".course_select_yes").attr("name", "course_id");
-        $(".schedule_select_yes").attr("name", "schedule_id");        
+        $(".schedule_select_yes").attr("name", "schedule_id[]");        
         $(".lang_select_no").removeAttr("name");
         $(".course_select_no").removeAttr("name");
         $(".schedule_select_no").removeAttr("name");   
@@ -191,8 +194,8 @@ $(document).ready(function(){
           method: 'POST',
           data: {course_id:course_id, _token:token},
           success: function(data) {
-            $("select[name='schedule_id'").html('');
-            $("select[name='schedule_id'").html(data.options);
+            $("select[name='schedule_id[]'").html('');
+            $("select[name='schedule_id[]'").html(data.options);
           
           }
       });
@@ -204,7 +207,6 @@ $(document).ready(function(){
     $('input:radio[value="no"]').click(function(){
         $(".lang_select_no").attr("name", "L");
         $(".course_select_no").attr("name", "course_id");
-        //$(".schedule_select_no").attr("name", "schedule_id[]");
         $(".lang_select_yes").removeAttr("name");
         $(".course_select_yes").removeAttr("name");
         $(".schedule_select_yes").removeAttr("name");  
@@ -225,8 +227,8 @@ $(document).ready(function(){
           method: 'POST',
           data: {L:L, _token:token},
           success: function(data, status) {
-            $("select[name='course_id'").html('');
-            $("select[name='course_id'").html(data.options);
+            $("select[name='course_id']").html('');
+            $("select[name='course_id']").html(data.options);
           }
       });
   }); 
@@ -242,8 +244,8 @@ $(document).ready(function(){
           method: 'POST',
           data: {course_id:course_id, _token:token},
           success: function(data) {
-            $("select[name='schedule_id'").html('');
-            $("select[name='schedule_id'").html(data.options);
+            $("select[name='schedule_id[]']").html('');
+            $("select[name='schedule_id[]']").html(data.options);
           }
       });
   }); 

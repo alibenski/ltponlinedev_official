@@ -47,8 +47,6 @@ class RepoController extends Controller
      */
     public function create()
     {  
-    
-        //query if user chooses not to continue course
         //make collection values available
         $courses = Course::all();
         //get values directly from 'languages' table
@@ -66,10 +64,9 @@ class RepoController extends Controller
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
 
-        //query if user chooses to continue course
-        $yeslanguages = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
-        
-        return view('form.myform')->withYeslanguages($yeslanguages)->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
+   
+
+        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
     /**
@@ -79,29 +76,58 @@ class RepoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {     
-           $this->validate($request, array(
-                //'unique_code' => 'unique|max:255',
-                //'user_id' => 'integer',
-                //'name' => 'required|email',
-                //'language_id' => 'required|integer',
-               // 'course_id' => 'required|integer',
-                //'term_id' => 'integer',
-            ));
-        
+    {   
+        $index_id = $request->input('index_id');
+        $language_id = $request->input('language_id');
+        $course_id = $request->input('course_id');
+        $term_id = $request->input('term_id');
+        //$schedule_id is an array 
+        $schedule_id = $request->input('schedule_id');
+        $uniquecode = $request->input('CodeIndexID');
+        $codex = [];     
+        //concatenate (implode) Code input before validation   
+        //check if $code has no input
+        if ( empty( $uniquecode ) ) {
+            //loop based on $room_id count and store in $codex array
+            for ($i=0; $i < count($schedule_id); $i++) { 
+                $codex[] = array( $course_id,$schedule_id[$i],$term_id,$index_id );
+                //implode array elements and pass imploded string value to $codex array as element
+                $codex[$i] = implode('/', $codex[$i]);
+                //for each $codex array element stored, loop array merge method
+                //and output each array element to a string via $request->Code
 
-        $data = new Repo;  
-        $data->L = $request->L;  
-        $data->course_id = $request->course_id;  
-        $data->schedule_id = $request->schedule_id;
-        dd($request);
+                foreach ($codex as $value) {
+                    $request->merge( [ 'CodeIndexID' => $value ] );
+                }
+                        var_dump($request->CodeIndexID);
+                        $this->validate($request, array(
+                            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+                            'term_id' => 'required|',
+                            'schedule_id' => 'required|',
+                            'course_id' => 'required|',       
+                        ));
+            }                              
+        }
 
-                
-        //$data->unique_code = $request->term_id.'/'.$request->course_id.'/'.$request->user_id;
-        //$data->save();    
+        //loop for storing Code value to database
+        $ingredients = [];        
+        for ($i = 0; $i < count($schedule_id); $i++) {
+            $ingredients[] = new  Repo([
+                'CodeIndexID' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$index_id,
+                'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
+                'Te_Code' => $course_id,
+                'Term' => $term_id,
+                'INDEXID' => $index_id,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                ]);
+                    foreach ($ingredients as $data) {
+                        $data->save();
+                    }
 
-        // variable course refers to schedule function in Course.php model
-        // then syncs the data to schedules MySQL table
+        }
+
+
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
         return redirect()->route('home');
     }
@@ -177,13 +203,12 @@ class RepoController extends Controller
             //$select_schedules = DB::table('LTP_TEVENTCur')
             $select_schedules = Classroom::where('Te_Code', $request->course_id)
             ->where(function($q){ 
-                //get value directly not via blade view
-                //->pluck("schedule_id","schedule_id") removed
                 $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term );
             })
+
             //Eager Load scheduler function and pluck using "dot" 
-            ->with('scheduler')->get()->pluck('scheduler.name', 'Code');
+            ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
 
             $data = view('ajax-select2',compact('select_schedules'))->render();
             return response()->json(['options'=>$data]);

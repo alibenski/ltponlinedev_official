@@ -6,13 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Term extends Model
 {
-    public function repos() {
-    return $this->hasMany('App\Repo'); 
-    }
-
     protected $table = 'LTP_Terms';
     
-
 	/**
 	 * primaryKey 
 	 * 
@@ -26,6 +21,10 @@ class Term extends Model
 	 *
 	 * @var bool
 	 */
-	public $incrementing = false;    
+	public $incrementing = false;
 
+
+    public function repos() {
+    return $this->hasMany('App\Repo'); 
+    }
 }

@@ -30,33 +30,30 @@
                     </select>
                 </div>
 
-              <div class="well col-md-12" style="margin-top: 20px;">
-                <div class="form-group">
-                    <label name="course_id" class="col-md-12 control-label">Schedule: </label>
-                    @foreach ($schedules as $id => $name)
-                    <div class="col-md-4">
-                        <div class="radio-inline">
-                            <label>
-                                <input type="radio" name="schedule_id" value="{{ $id }}" /> {{ $name }}
-                            </label>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-              </div>
-
+          <div class="well col-md-12" style="margin-top: 20px;">
               <div class="row">
                 <div class="col-md-12">
                   <table class="table">
                     <thead>
-                      <th>Room</th>
+                      <th>Pick a Schedule</th>
+                      <th>Assign Rooms to Schedule</th>
                       <th>Teacher</th>
                     </thead>
                     <tbody>
                         <tr>
                           <td>
+                                @foreach ($schedules as $id => $name)
+
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="schedule_id" value="{{ $id }}" /> {{ $name }}
+                                        </label>
+                                    </div>
+
+                                @endforeach
+                          </td>
+                          <td>
                                 <select class="combine  form-control select2-multi" name="room_id[]" autocomplete="off" multiple="multiple">
-                                        <option value=""> Select Room </option>
                                     @foreach ($rooms as $id => $name)
                                         <option value="{{ $id }}"> {{ $name }}</option>
                                     @endforeach
@@ -76,7 +73,7 @@
                   </table>
                 </div>
               </div>
-
+          </div>
               <div class="well col-md-6 col-md-offset-3">
                 <div class="form-group">
                   <input  name="term_id" class="combine" type="hidden" value="{{ $terms->Term_Code }}" readonly>

@@ -25,7 +25,7 @@
 				<thead>
 					<th>Term Code</th>
 					<th>Term Name</th>
-					<th></th>
+					<th>Next Term Code</th>
 					<th></th>
 					<th></th>
 					<th></th>
@@ -37,13 +37,14 @@
 						<tr>
 							<th>{{ $term->Term_Code }}</th>
 							<td>{{ $term->Term_Name }}</td>
+							<td>{{ $term->Term_Next }}</td>
 							<td><a href="{{ route('terms.index', $term->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach
 
 				</tbody>
 			</table>
-
+			{{ $terms->links() }}	
 			</div>
 	</div>
 </div>
