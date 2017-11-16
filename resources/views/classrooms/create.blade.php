@@ -2,6 +2,7 @@
 @section('tabtitle', '| Create New Class')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
@@ -100,8 +101,6 @@
 @section('scripts_code')
   <script src="{{ asset('js/select2.min.js') }}"></script>
   <script type="text/javascript">$(".select2-multi").select2(); </script>
-
-
   <script src="{{ asset('js/submit.js') }}"></script>      
 
   <script type="text/javascript">

@@ -3,6 +3,7 @@
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
 <div class="container">
@@ -87,7 +88,6 @@
 
 <!-- YES DECISION SECTION -->
             <div class="yes box" style="display:none">
-
                 <div class="form-group">
                     <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
                     <select class="col-md-8 form-control-static lang_select_yes" name="">
@@ -104,7 +104,7 @@
 
                 <div class="form-group">
                     <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
-                    <select class="col-md-8 form-control-static schedule_select_yes" name="">
+                    <select class="col-md-8 form-control-static schedule_select_yes" name="" multiple="multiple">
                         <option value="">--- Select Schedule ---</option>
                     </select>
                 </div>
@@ -133,7 +133,7 @@
 
                 <div class="form-group">
                     <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
-                    <select class="col-md-8 form-control-static schedule_select_no" name="schedule_id">
+                    <select class="col-md-8 form-control-static schedule_select_no " name="schedule_id" multiple="multiple">
                         <option value="">--- Select Schedule ---</option>
                     </select>
                 </div>
@@ -155,7 +155,8 @@
 @stop   
 
 @section('scripts_code')
-
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript">$(".select2-multi").select2(); </script>
 <script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
@@ -203,7 +204,7 @@ $(document).ready(function(){
     $('input:radio[value="no"]').click(function(){
         $(".lang_select_no").attr("name", "L");
         $(".course_select_no").attr("name", "course_id");
-        $(".schedule_select_no").attr("name", "schedule_id");
+        //$(".schedule_select_no").attr("name", "schedule_id[]");
         $(".lang_select_yes").removeAttr("name");
         $(".course_select_yes").removeAttr("name");
         $(".schedule_select_yes").removeAttr("name");  
