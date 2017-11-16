@@ -101,7 +101,7 @@ return [
 
     'custom' => [
         'Code' => [
-            'unique' => 'Course and Schedule combination already exists for this Term.',
+            'unique' => 'Course, Schedule, and Room combination already exists for this Term.',
         ],
     ],
 

@@ -29,66 +29,57 @@
                     </select>
                 </div>
 
-<div class="well col-md-12" style="margin-top: 20px;">
+              <div class="well col-md-12" style="margin-top: 20px;">
                 <div class="form-group">
                     <label name="course_id" class="col-md-12 control-label">Schedule: </label>
-
                     @foreach ($schedules as $id => $name)
-
                     <div class="col-md-4">
                         <div class="radio-inline">
                             <label>
-                              
                                 <input type="radio" name="schedule_id" value="{{ $id }}" /> {{ $name }}
-                                <br>
-                              
                             </label>
                         </div>
                     </div>
-
                     @endforeach
                 </div>
-</div>
+              </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <table class="table">
-        <thead>
-
-          <th>Room</th>
-          <th>Teacher</th>
-        </thead>
-
-        <tbody>
-            <tr>
-
-              <td>
-                    <select class="combine  form-control select2-multi" name="room_id[]" autocomplete="off" multiple="multiple">
-                            <option value=""> Select Room </option>
-                        @foreach ($rooms as $id => $name)
-                            <option value="{{ $id }}"> {{ $name }}</option>
-                        @endforeach
-                    </select>
-              </td>
-              <td>
-                    <select class="combine  form-control select2-multi" name="teacher_id" autocomplete="off">
-                            <option value=""> Select Teacher </option>
-                            <option value="1"> Teacher A </option>
-                            <option value="2"> Teacher B </option>
-                            <option value="3"> Teacher C </option>
-                            <option value="4"> Teacher D </option>
-                    </select>
-              </td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="table">
+                    <thead>
+                      <th>Room</th>
+                      <th>Teacher</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td>
+                                <select class="combine  form-control select2-multi" name="room_id[]" autocomplete="off" multiple="multiple">
+                                        <option value=""> Select Room </option>
+                                    @foreach ($rooms as $id => $name)
+                                        <option value="{{ $id }}"> {{ $name }}</option>
+                                    @endforeach
+                                </select>
+                          </td>
+                          <td>
+                                <select class="combine  form-control select2-multi" name="teacher_id" autocomplete="off">
+                                        <option value=""> Select Teacher </option>
+                                        <option value="1"> Teacher A </option>
+                                        <option value="2"> Teacher B </option>
+                                        <option value="3"> Teacher C </option>
+                                        <option value="4"> Teacher D </option>
+                                </select>
+                          </td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
 
               <div class="well col-md-6 col-md-offset-3">
                 <div class="form-group">
-                  <input  name="term_id" class="combine" type="text" value="{{ $terms->Term_Code }}" readonly>
-                  <input  name="Code[]" class="combine select2-multi" multiple="multiple" type="text" value="" readonly> 
+                  <input  name="term_id" class="combine" type="hidden" value="{{ $terms->Term_Code }}" readonly>
+                  <input  name="Code" class="combine select2-multi" multiple="multiple" type="hidden" value="" readonly> 
                 </div>
 
                 <div class="row">

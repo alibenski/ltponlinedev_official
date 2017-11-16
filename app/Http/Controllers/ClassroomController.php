@@ -64,36 +64,33 @@ class ClassroomController extends Controller
         $schedule_id = $request->input('schedule_id');
         $term_id = $request->input('term_id');
         $room_id = $request->input('room_id');
-        $code = $request->input('Code');
-        $codex = [];       
-        
+
+        $codex = [];     
+        //concatenate (implode) Code input before validation   
+        //check if $code has no input
         if ( empty( $code ) ) {
+            //loop based on $room_id count and store in $codex array
             for ($i=0; $i < count($room_id); $i++) { 
-            $codex[] = array($course_id, $schedule_id, $term_id, $room_id[$i]);
-            $codex[$i] = implode('/', $codex[$i]);
-            $request->merge( array( 'Code' => $codex[$i] ) );
+                $codex[] = array($course_id, $schedule_id, $term_id, $room_id[$i]);
+                //implode array elements and pass imploded string value to $codex array as element
+                $codex[$i] = implode('/', $codex[$i]);
+                //for each $codex array element stored, loop array merge method
+                //and output each array element to a string via $request->Code
+                foreach ($codex as $value) {
+                    $request->merge( [ 'Code' => $value ] );
+                }
+                        var_dump($request->Code);
+                        $this->validate($request, array(
+                            'Code' => 'unique:LTP_TEVENTCur,Code|',
+                            'term_id' => 'required|',
+                            'schedule_id' => 'required|',
+                            'course_id' => 'required|',
+                            'room_id' => 'required|',   
+                        ));
             }
-var_dump($request->Code);
-
-            dd($codex);
-            //$codex = preg_replace( '/\s+/m', ',', $codex );
-            //$codex = explode( ',', $codex );
-            
-            // THIS IS KEY!
-            // Replacing the old input string with
-            // with an array of emails.
-            $request->merge( array( 'Code' => $codex[$i] ) );
-var_dump($request->Code);
-
-            dd($request->Code);
-            
-
-
-
-        }dd($request->Code);
-
-        $ingredients = [];
-        
+        }
+        //loop for storing Code value to database
+        $ingredients = [];        
         for ($i = 0; $i < count($room_id); $i++) {
             $ingredients[] = new  Classroom([
                 'schedule_id' => $schedule_id,
@@ -102,17 +99,13 @@ var_dump($request->Code);
                 'Code' => $course_id.'/'.$schedule_id.'/'.$term_id.'/'.$room_id[$i],
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
-          ]);
+                ]);
+                    foreach ($ingredients as $data) {
+                        $data->save();
+                    }
         }
-
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
-
         return redirect()->route('classrooms.index');
-        //var_dump($ingredients[0]);
-        //var_dump($ingredients[1]);
-        //dd($ingredients[1]);
-        //Classroom::insert($ingredients);
-        //DB::table('LTP_TEVENTCur')->insert($ingredients);
     }
 
     /**
