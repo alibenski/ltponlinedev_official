@@ -11,6 +11,7 @@ use App\Repo;
 use App\Term;
 use App\Classroom;
 use App\Schedule;
+use App\Preenrolment;
 use Session;
 use DB;
 
@@ -58,7 +59,7 @@ class RepoController extends Controller
         //define user index number for query 
         $current_user = Auth::user()->indexno;
         //using DB method to query latest CodeIndexID of current_user
-        $repos = DB::table('tblLTP_Enrolment')->orderBy('Term', 'desc')
+        $repos = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->value('CodeIndexID');
         //not using DB method to get latest language course of current_user
         $repos_lang = Repo::orderBy('Term', 'desc')
@@ -78,7 +79,7 @@ class RepoController extends Controller
     public function store(Request $request)
     {   
         $index_id = $request->input('index_id');
-        $language_id = $request->input('language_id');
+        $language_id = $request->input('L'); 
         $course_id = $request->input('course_id');
         $term_id = $request->input('term_id');
         //$schedule_id is an array 
@@ -112,9 +113,10 @@ class RepoController extends Controller
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
-            $ingredients[] = new  Repo([
+            $ingredients[] = new  Preenrolment([
                 'CodeIndexID' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$index_id,
                 'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
+                'L' => $language_id,
                 'Te_Code' => $course_id,
                 'Term' => $term_id,
                 'INDEXID' => $index_id,

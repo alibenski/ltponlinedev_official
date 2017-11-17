@@ -55,7 +55,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->Description.' last '.$terms->Term_Name }}" readonly>                            
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription.' last '.$terms->Term_Name }}" readonly>                            
                         </div>
                     </div>
                 </div>
@@ -74,16 +74,15 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">Continue current course?</label>
-                      <div class="btn-group col-md-2" data-toggle="buttons">
-                        <label class="">
-                                <input type="radio" name="decision" value="yes" >YES
-                        </label>
+
+                      <div class="col-md-2">
+                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="yes" >
+                                <label for="decision1" class="form-control-static">YES</label>
                       </div>
 
-                      <div class="btn-group col-md-2" data-toggle="buttons">
-                        <label class="">
-                                <input type="radio" name="decision" value="no" >NO
-                        </label>
+                      <div class="col-md-2">
+                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="no">
+                                <label for="decision2" class="form-control-static">NO</label>
                       </div>
                 </div>
 
@@ -171,13 +170,14 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
     $('input:radio[value="yes"]').click(function(){
+      $(".dno").attr("disabled", true);
         $(".lang_select_yes").attr("name", "L");
         $(".course_select_yes").attr("name", "course_id");
         $(".schedule_select_yes").attr("name", "schedule_id[]");        
         $(".lang_select_no").removeAttr("name");
         $(".course_select_no").removeAttr("name");
         $(".schedule_select_no").removeAttr("name");   
-        alert("Please select your preferred schedule.");             
+          alert("Please select your preferred schedule.");             
     });
         
 });
@@ -188,7 +188,7 @@ $(document).ready(function(){
     $(".course_select_yes").attr("name", "course_id");
       var course_id = $("select[name='course_id']").val();
       var token = $("input[name='_token']").val();
-      alert( course_id );
+        alert( course_id );
       $.ajax({
           url: "{{ route('select-ajax2') }}", 
           method: 'POST',
@@ -205,6 +205,7 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
     $('input:radio[value="no"]').click(function(){
+      $(".dyes").attr("disabled", true);
         $(".lang_select_no").attr("name", "L");
         $(".course_select_no").attr("name", "course_id");
         $(".lang_select_yes").removeAttr("name");

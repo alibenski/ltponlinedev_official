@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Repo extends Model
+class Preenrolment extends Model
 {
-    protected $table = 'LTP_PASHQTcur';
+    protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
         'CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 
     ];

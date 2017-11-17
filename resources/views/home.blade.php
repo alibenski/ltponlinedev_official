@@ -60,7 +60,7 @@
                                     @if(empty ($repos_lang->courses->Description))
                                     none
                                     @else
-                                    {{ $repos_lang->courses->Description }}
+                                    {{ $repos_lang->courses->EDescription }}
                                     @endif
                                 </p>
                             </div>

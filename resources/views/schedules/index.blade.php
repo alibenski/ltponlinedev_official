@@ -25,8 +25,6 @@
 				<thead>
 					<th>id</th>
 					<th>Description</th>
-					<th>Begin Day</th>
-					<th>End Day</th>
 					<th>Begin Time</th>
 					<th>End Time</th>
 					<th>Operation</th>
@@ -38,14 +36,6 @@
 						<tr>
 							<td>{{ $schedule->id }}</td>
 							<td>{{ $schedule->name }}</td>
-							<td>{{ $schedule->begin_day }}</td>
-							<td>
-								@if(empty($schedule->end_day))
-					            <span>Only</span>
-					            @else
-					            	<span>{{ $schedule->end_day }}</span>
-					            @endif
-							</td>
 							<td>
 								@if(empty($schedule->begin_time))
 					            <span class="label label-danger">none</span>
