@@ -124,9 +124,7 @@ class RepoController extends Controller
                     foreach ($ingredients as $data) {
                         $data->save();
                     }
-
         }
-
 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
         return redirect()->route('home');
