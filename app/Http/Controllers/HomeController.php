@@ -80,7 +80,7 @@ class HomeController extends Controller
     {
         $student = User::find($id);
         
-        $courses = Course::all(['id', 'name']); // selected $key => $value
+        $courses = Course::all(); // selected $key => $value
         $languages = DB::table('languages')->pluck("name","id")->all();
         
         //$languages = Language::all(['id', 'name']);

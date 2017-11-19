@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailtoApprover;
 use App\Language;
 use App\Course;
 use App\User;
@@ -131,6 +133,8 @@ class RepoController extends Controller
         }
 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
+        $user = Auth::user();
+        Mail::to($user)->send(new MailtoApprover);
         return redirect()->route('home');
     }
 
