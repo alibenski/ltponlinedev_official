@@ -25,6 +25,7 @@ class RepoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('checksubmissioncount');
     }
 
     /**
@@ -40,7 +41,7 @@ class RepoController extends Controller
 
         return view('form.index')->withRepos($repos)->withTerms($terms);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -64,8 +65,6 @@ class RepoController extends Controller
         //not using DB method to get latest language course of current_user
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
-
-   
 
         return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
@@ -103,13 +102,16 @@ class RepoController extends Controller
                         var_dump($request->CodeIndexID);
                         $this->validate($request, array(
                             'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
-                            'term_id' => 'required|',
-                            'schedule_id' => 'required|',
-                            'course_id' => 'required|',       
                         ));
             }                              
         }
-
+                    //validate other input fields outside of above loop
+                        $this->validate($request, array(
+                            'term_id' => 'required|',
+                            'schedule_id' => 'required|',
+                            'course_id' => 'required|',
+                            'L' => 'required|',
+                        ));
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {

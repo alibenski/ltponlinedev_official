@@ -10,14 +10,14 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading">Enrolment Form for Semester: {{ $terms->Term_Next }}</div>
+        <div class="panel-heading">Enrolment Form for Semester: {{ $terms->Term_Next }} <--Change to Text</div>
           <div class="panel-body">
             <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
-                <input  name="CodeIndexID" type="text" value="" readonly>
-                <input  name="user_id" type="input" value="{{ $repos }}" readonly>
-                <label for="">(Hidden) Next Term: </label><input  name="term_id" type="input" value="{{ $terms->Term_Next }}" readonly>  
+                <input  name="CodeIndexID" type="hidden" value="" readonly>
+                <input  name="user_id" type="hidden" value="{{ $repos }}" readonly>
+                <input  name="term_id" type="hidden" value="{{ $terms->Term_Next }}" readonly>  
                 </div>
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Index Number:</label>
@@ -103,7 +103,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
+                    <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
                     <select class="col-md-8 form-control-static schedule_select_yes select2-multi" multiple="multiple" style="width: 65%;" name="" >
                         <option value="">--- Select Schedule ---</option>
                     </select>
@@ -117,7 +117,7 @@
                 <div class="form-group">
                     <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
                     <select class="col-md-8 form-control-static lang_select_no" name="L" autocomplete="off">
-                        <option value="">Select</option>
+                        <option value="">--- Select Language ---</option>
                         @foreach ($languages as $id => $name)
                             <option value="{{ $id }}"> {{ $name }}</option>
                         @endforeach
@@ -132,9 +132,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="schedule_id" class="col-md-3 control-label">Pick class schedule: </label>
+                    <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
                     <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%;" name="schedule_id[]" autocomplete="off">
-                        <option value="">--- Select Schedule ---</option>
+                        <option value="">Fill Out Language and Course Options</option>
                     </select>
                 </div>
             </div>
@@ -157,8 +157,11 @@
 @section('scripts_code')
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script type="text/javascript">$(".select2-multi").select2({
-    width: 'resolve' // need to override the changed default
-}); </script>
+    maximumSelectionLength: 2,
+    width: 'resolve', // need to override the changed default
+}); 
+</script>
+
 <script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
@@ -222,7 +225,7 @@ $(document).ready(function(){
 
       var L = $(this).val();
       var token = $("input[name='_token']").val();
-      
+
       $.ajax({
           url: "{{ route('select-ajax') }}", 
           method: 'POST',
@@ -240,6 +243,7 @@ $(document).ready(function(){
 
       var course_id = $(this).val();
       var token = $("input[name='_token']").val();
+
       $.ajax({
           url: "{{ route('select-ajax2') }}", 
           method: 'POST',

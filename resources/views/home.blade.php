@@ -4,6 +4,11 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @stop
 @section('content')
+@if (Session::has('overlimit')) 
+    <div class="alert alert-danger" role="alert">
+        <strong>Sorry: </strong> {{ Session::get('overlimit') }}
+    </div>
+@endif
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -65,7 +70,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="col-md-12"><a href="{{ route('myform.create')}}" class="btn btn-block btn-info btn-md">Click here to access the enrolment form</a>
+                        <div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">Click here to access the enrolment form</a>
                         </div>
                     </form>
                 </div>
