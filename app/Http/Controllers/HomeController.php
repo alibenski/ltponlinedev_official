@@ -33,8 +33,15 @@ class HomeController extends Controller
     {
         $current_user = Auth::user()->indexno;
         $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
+        $forms_submitted = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
+            ->where(function($q){ 
+                $latest_term = Preenrolment::orderBy('Term', 'DESC')->value('Term');
+                $q->where('Term', $latest_term );
+                })
+                ->get();
 
-        return view('home')->withRepos_lang($repos_lang);
+
+        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted);
     }
 
     /**

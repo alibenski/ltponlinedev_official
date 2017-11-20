@@ -70,6 +70,17 @@
                                 </p>
                             </div>
                         </div>
+                        <!-- show submitted forms -->
+                        <div class="form-group">
+                            <label for="course" class="col-md-4 control-label">Submitted Enrolment Forms:</label>
+
+                            <div class="col-md-4 form-control-static">
+                                <p>insert text from Preenrolment table
+
+                                </p>
+                            </div>
+                        </div>
+
                         <div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">Click here to access the enrolment form</a>
                         </div>
                     </form>
