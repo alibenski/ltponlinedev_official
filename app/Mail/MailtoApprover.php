@@ -28,6 +28,8 @@ class MailtoApprover extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.approval');
+        
+        return $this->from('clm_language@un.org')
+                    ->view('emails.approval');
     }
 }

@@ -40,7 +40,6 @@ class HomeController extends Controller
                 })
                 ->get();
 
-
         return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted);
     }
 

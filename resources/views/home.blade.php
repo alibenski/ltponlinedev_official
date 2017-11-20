@@ -62,7 +62,7 @@
 
                             <div class="col-md-4 form-control-static">
                                 <p>
-                                    @if(empty ($repos_lang->courses->Description))
+                                    @if(empty ($repos_lang->courses->EDescription))
                                     none
                                     @else
                                     {{ $repos_lang->courses->EDescription }}
@@ -75,9 +75,11 @@
                             <label for="course" class="col-md-4 control-label">Submitted Enrolment Forms:</label>
 
                             <div class="col-md-4 form-control-static">
-                                <p>insert text from Preenrolment table
-
-                                </p>
+                                
+                                    @foreach($forms_submitted as $form)
+                                    <li>{{ $form->CodeIndexID }}</li>
+                                    @endforeach
+                                
                             </div>
                         </div>
 
