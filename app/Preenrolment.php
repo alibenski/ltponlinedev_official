@@ -8,7 +8,7 @@ class Preenrolment extends Model
 {
     protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'EMAIL', 'L', 
     ];
     //declare the foreign key on the 3rd parameter of the function
     //in this case, field Te_Code inside table PASH is associated to foreign key Te_Code
@@ -16,6 +16,9 @@ class Preenrolment extends Model
     public function courses() {
     return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code'); 
 	}
+    public function schedule() {
+    return $this->belongsTo('App\Schedule', 'schedule_id'); 
+    }
 
     public function languages() {
     return $this->belongsTo('App\Language', 'L', 'code'); 

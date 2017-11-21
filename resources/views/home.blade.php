@@ -9,6 +9,11 @@
         <strong>Sorry: </strong> {{ Session::get('overlimit') }}
     </div>
 @endif
+@if (Session::has('enrolment_closed')) 
+    <div class="alert alert-danger" role="alert">
+        <strong>Sorry: </strong> {{ Session::get('enrolment_closed') }}
+    </div>
+@endif
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">

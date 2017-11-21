@@ -15,6 +15,7 @@ use App\Classroom;
 use App\Schedule;
 use App\Preenrolment;
 use Session;
+use Carbon\Carbon;
 use DB;
 
 class RepoController extends Controller
@@ -28,6 +29,7 @@ class RepoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('checksubmissioncount');
+        $this->middleware('opencloseenrolment');
     }
 
     /**
@@ -55,8 +57,20 @@ class RepoController extends Controller
         $courses = Course::all();
         //get values directly from 'languages' table
         $languages = DB::table('languages')->pluck("name","code")->all();
-        //get latest semester/term
-        $terms = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->first();
+        //get current year and date
+        $now_date = Carbon::now();
+        $now_year = Carbon::now()->year;
+
+        //query the current term based on year and Term_End column is greater than today's date  
+        $terms = Term::whereYear('Term_End', $now_year)
+                        ->orderBy('Term_Code', 'desc')
+                        ->where('Term_End', '>=', $now_date)
+                        ->first();
+
+        //query the next term based Term_Begin column is greater than today's date and then get min
+        $next_term = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_Begin', '>', $now_date)->get()->min();
+
         //define user variable as User collection
         $user = Auth::user();
         //define user index number for query 
@@ -68,7 +82,7 @@ class RepoController extends Controller
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
 
-        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
+        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
     /**
@@ -120,6 +134,7 @@ class RepoController extends Controller
             $ingredients[] = new  Preenrolment([
                 'CodeIndexID' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$index_id,
                 'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
+                'schedule_id' => $schedule_id[$i],
                 'L' => $language_id,
                 'Te_Code' => $course_id,
                 'Term' => $term_id,
@@ -133,8 +148,10 @@ class RepoController extends Controller
         }
 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
+        //call mail class before redirect 
         $user = Auth::user();
         Mail::to($user)->send(new MailtoApprover);
+        
         return redirect()->route('home');
     }
 

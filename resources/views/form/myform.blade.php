@@ -10,7 +10,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading">Enrolment Form for Semester: {{ $terms->Term_Next }} <--Change to Text</div>
+        <div class="panel-heading">Enrolment Form for Semester: <strong>{{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}</strong></div>
           <div class="panel-body">
             <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
