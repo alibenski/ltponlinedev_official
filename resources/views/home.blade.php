@@ -16,7 +16,7 @@
 @endif
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">Student Profile</div>
 
@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="course" class="col-md-4 control-label">Last UN Language Course</label>
+                            <label for="course" class="col-md-4 control-label">Last UN Language Course:</label>
 
                             <div class="col-md-4 form-control-static">
                                 <p>
@@ -75,22 +75,26 @@
                                 </p>
                             </div>
                         </div>
-                        <!-- show submitted forms -->
-                        <div class="form-group">
-                            <label for="course" class="col-md-4 control-label">Submitted Enrolment Forms:</label>
-
-                            <div class="col-md-4 form-control-static">
-                                
-                                    @foreach($forms_submitted as $form)
-                                    <li>{{ $form->CodeIndexID }}</li>
-                                    @endforeach
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">Click here to access the enrolment form</a>
+                        <div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">click here to enrol</a>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <!-- show submitted forms -->
+        <div class="col-md-4">
+            <div class="well">
+                <div class="form-group">
+                    <label for="course" class="control-label">Submitted Enrolment Forms for the {{ $next_term->Term_Name }} Term:</label>
+                    <div class="">
+                        <ul>
+                            <li>Example Entry A</li>
+                            <li>Example Entry B</li>                          
+                            @foreach($forms_submitted as $form)
+                            <li>{{ $form->CodeIndexID }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -9,7 +9,9 @@ use App\Course;
 use App\User;
 use App\Repo;
 use App\Preenrolment;
+use App\Term;
 use Session;
+use Carbon\Carbon;
 use DB;
 
 class HomeController extends Controller
@@ -32,15 +34,25 @@ class HomeController extends Controller
     public function index()
     {
         $current_user = Auth::user()->indexno;
+        //query last UN Language Course enrolled in the past based on PASHQ table
         $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
-        $forms_submitted = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
-            ->where(function($q){ 
-                $latest_term = Preenrolment::orderBy('Term', 'DESC')->value('Term');
-                $q->where('Term', $latest_term );
-                })
-                ->get();
 
-        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted);
+        //query submitted forms based from tblLTP_Enrolment table
+        $forms_submitted = Preenrolment::distinct('Te_Code')
+            ->where('INDEXID', '=', $current_user)
+            ->where(function($q){ 
+                        //$latest_term = Preenrolment::orderBy('Term', 'DESC')->value('Term');
+                $now_date = Carbon::now();
+                //query the next term based Term_Begin column is greater than today's date and then get min
+                $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Begin', '>', $now_date)->get()->min();
+                $q->where('Term', '$next_term' );
+                })
+            ->get();
+
+        $now_date = Carbon::now();
+        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Begin', '>', $now_date)->get()->min();
+
+        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
     }
 
     /**

@@ -41,8 +41,13 @@ class OpenCloseEnrolment
         if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {
             return $next($request);
         }
-        
-        $request->session()->flash('enrolment_closed', 'Enrolment Period is CLOSED');
+        //return string of NEXT term
+        $next_term = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_Begin', '>', $now_date)->get()->min();
+
+        $next_term_description =  $next_term->Comments;
+        $next_term_name =  $next_term->Term_Name;
+        $request->session()->flash('enrolment_closed', 'Enrolment Period for the '.$next_term_description.' season ('.$next_term_name.') is CLOSED');
         return redirect()->route('home');
     }
 }

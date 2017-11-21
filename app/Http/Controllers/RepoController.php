@@ -29,7 +29,7 @@ class RepoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('checksubmissioncount');
-        $this->middleware('opencloseenrolment');
+        //$this->middleware('opencloseenrolment');
     }
 
     /**
