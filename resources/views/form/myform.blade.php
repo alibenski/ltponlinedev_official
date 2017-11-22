@@ -10,15 +10,29 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading">Enrolment Form for Semester: <strong>{{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}</strong></div>
+        <div class="panel-heading">Enrolment Form for Semester: 
+          <strong>
+            @if(empty($next_term && $terms))
+            NO DB ENTRY
+            @else 
+            {{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
+            @endif
+          </strong></div>
           <div class="panel-body">
             <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
                 <input  name="user_id" type="hidden" value="{{ $repos }}" readonly>
-                <input  name="term_id" type="hidden" value="{{ $terms->Term_Next }}" readonly>  
+                <input  name="term_id" type="hidden" value="
+                  @if(empty($terms))
+                  NO DB ENTRY
+                  @else 
+                  {{ $terms->Term_Next }}
+                  @endif
+                " readonly>  
                 </div>
+                {{$terms->Term_Code}}
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Index Number:</label>
 
@@ -55,7 +69,10 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription.' last '.$terms->Term_Name }}" readonly>                            
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription}} last @if(empty($terms))NO DB ENTRY 
+                              @else{{ $terms->Term_Name }}
+                              @endif
+                              " readonly>                            
                         </div>
                     </div>
                 </div>

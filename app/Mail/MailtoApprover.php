@@ -6,19 +6,22 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\User;
 
 class MailtoApprover extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -28,8 +31,7 @@ class MailtoApprover extends Mailable
      */
     public function build()
     {
-        
-        return $this->from('clm_language@un.org')
-                    ->view('emails.approval');
+        return $this->markdown('emails.approval')->from('clm_language@un.org')
+                    ->subject('Approval Needed: Language Course');
     }
 }

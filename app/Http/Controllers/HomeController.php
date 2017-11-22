@@ -44,8 +44,8 @@ class HomeController extends Controller
                         //$latest_term = Preenrolment::orderBy('Term', 'DESC')->value('Term');
                 $now_date = Carbon::now();
                 //query the next term based Term_Begin column is greater than today's date and then get min
-                $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Begin', '>', $now_date)->get()->min();
-                $q->where('Term', '$next_term' );
+                $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Begin', '>', $now_date)->get()->min('Term_Code');
+                $q->where('Term', $next_term );
                 })
             ->get();
 

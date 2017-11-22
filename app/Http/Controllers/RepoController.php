@@ -57,6 +57,7 @@ class RepoController extends Controller
         $courses = Course::all();
         //get values directly from 'languages' table
         $languages = DB::table('languages')->pluck("name","code")->all();
+
         //get current year and date
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year;
@@ -150,7 +151,7 @@ class RepoController extends Controller
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
         //call mail class before redirect 
         $user = Auth::user();
-        Mail::to($user)->send(new MailtoApprover);
+        Mail::to($user)->send(new MailtoApprover($user));
         
         return redirect()->route('home');
     }
@@ -225,9 +226,18 @@ class RepoController extends Controller
 
             //$select_schedules = DB::table('LTP_TEVENTCur')
             $select_schedules = Classroom::where('Te_Code', $request->course_id)
-            ->where(function($q){ 
-                $latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
-                $q->where('Te_Term', $latest_term );
+            ->where(function($q){
+                //get current year and date
+                $now_date = Carbon::now();
+                $now_year = Carbon::now()->year;
+
+                //query the current term based on year and Term_End column is greater than today's date  
+                $latest_term = Term::whereYear('Term_End', $now_year)
+                                ->orderBy('Term_Code', 'desc')
+                                ->where('Term_End', '>=', $now_date)
+                                ->first();                 
+                //$latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
+                $q->where('Te_Term', $latest_term->Term_Code );
             })
 
             //Eager Load scheduler function and pluck using "dot" 

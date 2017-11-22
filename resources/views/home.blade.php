@@ -85,14 +85,20 @@
         <div class="col-md-4">
             <div class="well">
                 <div class="form-group">
-                    <label for="course" class="control-label">Submitted Enrolment Forms for the {{ $next_term->Term_Name }} Term:</label>
+                    <label for="course" class="control-label">Submitted Enrolment Forms for the 
+                        @if(empty($next_term->Term_Name))
+                        DB NO ENTRY
+                        @else
+                        {{ $next_term->Term_Name }} 
+                        @endif
+                    Term:</label>
                     <div class="">
                         <ul>
                             <li>Example Entry A</li>
-                            <li>Example Entry B</li>                          
-                            @foreach($forms_submitted as $form)
-                            <li>{{ $form->CodeIndexID }}</li>
-                            @endforeach
+                            <li>Example Entry B</li>
+                                @foreach($forms_submitted as $form)
+                                <li>{{ $form->CodeIndexID }}</li>
+                                @endforeach
                         </ul>
                     </div>
                 </div>
