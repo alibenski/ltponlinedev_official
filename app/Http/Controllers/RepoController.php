@@ -28,7 +28,7 @@ class RepoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('checksubmissioncount');
+        //$this->middleware('checksubmissioncount');
         //$this->middleware('opencloseenrolment');
     }
 
@@ -72,6 +72,9 @@ class RepoController extends Controller
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Begin', '>', $now_date)->get()->min();
 
+        $prev_term = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_End', '<', $now_date)->get()->max();
+
         //define user variable as User collection
         $user = Auth::user();
         //define user index number for query 
@@ -83,7 +86,7 @@ class RepoController extends Controller
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
 
-        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
+        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
     /**
@@ -100,6 +103,7 @@ class RepoController extends Controller
         $term_id = $request->input('term_id');
         //$schedule_id is an array 
         $schedule_id = $request->input('schedule_id');
+        $mgr_email = $request->input('mgr_email');
         $uniquecode = $request->input('CodeIndexID');
         $codex = [];     
         //concatenate (implode) Code input before validation   
@@ -128,6 +132,7 @@ class RepoController extends Controller
                             'schedule_id' => 'required|',
                             'course_id' => 'required|',
                             'L' => 'required|',
+                            'mgr_email' => 'required|email',
                         ));
         //loop for storing Code value to database
         $ingredients = [];        
@@ -142,6 +147,7 @@ class RepoController extends Controller
                 'INDEXID' => $index_id,
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
+                "mgr_email" =>  $mgr_email,                
                 ]);
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -149,9 +155,18 @@ class RepoController extends Controller
         }
 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
-        //call mail class before redirect 
-        $user = Auth::user();
-        Mail::to($user)->send(new MailtoApprover($user));
+        
+        //execute Mail class before redirect 
+        //query from Preenrolment table the needed information data to include in email
+        $mgr_email = $request->mgr_email;
+        $staff = Auth::user();
+        $current_user = Auth::user()->indexno;
+        $input = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $current_user)
+                                ->first();
+        
+
+        Mail::to('$mgr_email')->send(new MailtoApprover($input, $staff));
         
         return redirect()->route('home');
     }

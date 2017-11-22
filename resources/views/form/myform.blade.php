@@ -54,11 +54,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="name" class="col-md-3 control-label">Manager's Email Address:</label>
+                    <label for="mgr_email" class="col-md-3 control-label">Manager's Email Address:</label>
                     
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="Enter Manager's Email" class="form-control"  type="text">                                    
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text">                                    
                         </div>
                          <p class="small text-danger">Enter the correct email address of your manager because this form will be sent to this email address for approval.</p>
                     </div>

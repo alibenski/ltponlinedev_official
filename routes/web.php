@@ -68,4 +68,12 @@ Route::get('simpleroutes', function() {
             echo "</tr>";
         }
     echo "</table>";
-});
+    });
+//e-mail template preview on browser
+//use Illuminate\Mail\Markdown;
+
+//Route::get('mail-preview', function () {
+//    $markdown = new Markdown(view(), config('mail.markdown'));
+
+//    return $markdown->render('emails.approval');
+//});
