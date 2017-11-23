@@ -147,26 +147,35 @@ class RepoController extends Controller
                 'INDEXID' => $index_id,
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
-                "mgr_email" =>  $mgr_email,                
+                'mgr_email' =>  $mgr_email,                
                 ]);
                     foreach ($ingredients as $data) {
                         $data->save();
                     }
         }
-
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
         
-        //execute Mail class before redirect 
-        //query from Preenrolment table the needed information data to include in email
+        //execute Mail class before redirect         
         $mgr_email = $request->mgr_email;
         $staff = Auth::user();
         $current_user = Auth::user()->indexno;
-        $input = Preenrolment::orderBy('Term', 'desc')
+        $now_date = Carbon::now();
+        $next_term = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_Begin', '>', $now_date)->get()->min('Term_Code');
+        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $current_user)
+                                ->value('Te_Code');
+        //query from Preenrolment table the needed information data to include in email
+        $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $current_user)
                                 ->first();
-        
-
-        Mail::to('$mgr_email')->send(new MailtoApprover($input, $staff));
+        $input_schedules = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $current_user)
+                                ->where('Term', $next_term)
+                                ->where('Te_Code', $course)
+                                ->get();
+                                
+        Mail::to('allyson.frias@gmail.com')->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
         return redirect()->route('home');
     }

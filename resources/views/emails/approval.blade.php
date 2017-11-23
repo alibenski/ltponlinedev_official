@@ -1,7 +1,12 @@
 @component('mail::message')
  <p> Dear Manager, </p>
- <p> Staff Member would like to enrol to CLM language course:</p>
- <p>Course Schedule A {{ $input->courses->Description }}</p>
+ <p> Staff Member {{ $staff->name }} would like to enrol to CLM language course: {{ $input_course->courses->Description }}</p>
+ <p> with the following class schedule(s): </p>
+ <ul>
+ @foreach($input_schedules as $schedules)	
+ <li>{{ $schedules->schedule->name }}</li>
+ @endforeach
+ </ul>
  <p> Please click on the button link below to approve or not.</p>
 
 @component('mail::button', ['url' => ''])

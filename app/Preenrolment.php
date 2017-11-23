@@ -27,15 +27,12 @@ class Preenrolment extends Model
     public function schedule() {
     return $this->belongsTo('App\Schedule', 'schedule_id'); 
     }
-
     public function languages() {
     return $this->belongsTo('App\Language', 'L', 'code'); 
     }
-
     public function users() {
     return $this->belongsTo('App\User', 'INDEXID'); 
     }
-
 	public function terms() {
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
     }

@@ -11,17 +11,19 @@ class MailtoApprover extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $input;
+    public $input_course;
     public $staff;
+    public $input_schedules;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($input, $staff)
+    public function __construct($input_course, $input_schedules, $staff)
     {
-        $this->input = $input;
+        $this->input_course = $input_course;
+        $this->input_schedules = $input_schedules;
         $this->staff = $staff;
 
     }
@@ -35,6 +37,6 @@ class MailtoApprover extends Mailable
     {
         return $this->markdown('emails.approval')
                     ->from('clm_language@un.org')
-                    ->subject('Approval Needed: Language Course Enrolment '. $this->input->courses->Description  .' for '.$this->staff->name);
+                    ->subject('Approval Needed: Language Course Enrolment '. $this->input_course->courses->Description  .' for '.$this->staff->name);
     }
 }
