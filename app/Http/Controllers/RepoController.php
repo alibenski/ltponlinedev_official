@@ -17,6 +17,7 @@ use App\Preenrolment;
 use Session;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Facades\Crypt;
 
 class RepoController extends Controller
 {
@@ -175,7 +176,7 @@ class RepoController extends Controller
                                 ->where('Te_Code', $course)
                                 ->get();
                                 
-        Mail::to('allyson.frias@gmail.com')->send(new MailtoApprover($input_course, $input_schedules, $staff));
+        Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
         return redirect()->route('home');
     }
@@ -199,7 +200,10 @@ class RepoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $form = Preenrolment::find($id);
+        $encrypted = Crypt::encryptString($form->id);
+        $decrypted = Crypt::decryptString($encrypted);
+        return view('form.edit')->withForm($form)->withEncrypted($encrypted)->withDecrypted($decrypted);
     }
 
     /**

@@ -16,7 +16,7 @@
 @endif
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <div class="panel panel-default">
                 <div class="panel-heading">Student Profile</div>
 
@@ -31,7 +31,7 @@
                         
 
                         <div class="form-group">
-                            <label for="name" class="col-md-4 control-label">Full Name:</label>
+                            <label for="name" class="col-md-5 control-label">Full Name:</label>
 
                             <div class="col-md-4 form-control-static">
                                 <p>{{ Auth::user()->name }}</p>
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email" class="col-md-4 control-label">Email Address:</label>
+                            <label for="email" class="col-md-5 control-label">Email Address:</label>
 
                             <div class="col-md-4 form-control-static">
                                 <p>{{ Auth::user()->email }}</p>
@@ -47,7 +47,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-4 control-label">Type of Appointment:</label>
+                            <label for="job_appointment" class="col-md-5 control-label">Type of Appointment:</label>
 
                             <div class="col-md-4 form-control-static">
                                 <p>{{ Auth::user()->job_appointment }}</p>
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_category" class="col-md-4 control-label">Job Category:</label>
+                            <label for="job_category" class="col-md-5 control-label">Job Category:</label>
 
                             <div class="col-md-4 form-control-static">
                                 <p>{{ Auth::user()->job_category }}</p>
@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="course" class="col-md-4 control-label">Last UN Language Course:</label>
+                            <label for="course" class="col-md-5 control-label">Last UN Language Course:</label>
 
                             <div class="col-md-4 form-control-static">
                                 <p>
@@ -82,7 +82,7 @@
             </div>
         </div>
         <!-- show submitted forms -->
-        <div class="col-md-4">
+        <div class="col-md-7">
             <div class="well">
                 <div class="form-group">
                     <label for="course" class="control-label">Submitted Enrolment Forms for the 
@@ -94,10 +94,8 @@
                     Term:</label>
                     <div class="">
                         <ul>
-                            <li>Example Entry A</li>
-                            <li>Example Entry B</li>
                                 @foreach($forms_submitted as $form)
-                                <li>{{ $form->CodeIndexID }}</li>
+                                <span class="label label-success"><a href="{{ route('myform.edit', $form->id) }}" style="color: white;">{{ $form->courses->Description.' - '.$form->schedule->name}}</a></span>
                                 @endforeach
                         </ul>
                     </div>

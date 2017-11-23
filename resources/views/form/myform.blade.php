@@ -65,7 +65,7 @@
                 </div>
              
                 <div class="form-group">
-                    <label for="name" class="col-md-3 control-label">Last UN Language Course:</label>
+                    <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
 
-<!-- MAKE A DECISION SECTION -->
+                <!-- MAKE A DECISION SECTION -->
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">Continue current course?</label>
@@ -103,59 +103,59 @@
                       </div>
                 </div>
 
-<!-- YES DECISION SECTION -->
-            <div class="yes box" style="display:none">
-                <div class="form-group">
-                    <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
-                    <select class="col-md-8 form-control-static lang_select_yes" name="">
-                        <option value="{{ $repos_lang->L}}">{{ $repos_lang->languages->name }}</option>
-                    </select>
-                </div>
+                <!-- YES DECISION SECTION -->
+                <div class="yes box" style="display:none">
+                    <div class="form-group">
+                        <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
+                        <select class="col-md-8 form-control-static lang_select_yes" name="">
+                            <option value="{{ $repos_lang->L}}">{{ $repos_lang->languages->name }}</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                    <select class="col-md-8 form-control-static course_select_yes" name="">
-                        <option value="{{ $repos_lang->courses->next_level }}">{{ $repos_lang->courses->next_level_desc }}</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
+                        <select class="col-md-8 form-control-static course_select_yes" name="">
+                            <option value="{{ $repos_lang->courses->next_level }}">{{ $repos_lang->courses->next_level_desc }}</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
-                    <select class="col-md-8 form-control-static schedule_select_yes select2-multi" multiple="multiple" style="width: 65%;" name="" >
-                        <option value="">--- Select Schedule ---</option>
-                    </select>
+                    <div class="form-group">
+                        <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
+                        <select class="col-md-8 form-control-static schedule_select_yes select2-multi" multiple="multiple" style="width: 65%;" name="" >
+                            <option value="">--- Select Schedule ---</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-<!-- END OF YES DECISION SECTION -->   
+                <!-- END OF YES DECISION SECTION -->   
 
-<!-- NO DECISION SECTION -->
-            <div class="no box" style="display:none">
+                <!-- NO DECISION SECTION -->
+                <div class="no box" style="display:none">
 
-                <div class="form-group">
-                    <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
-                    <select class="col-md-8 form-control-static lang_select_no" name="L" autocomplete="off">
-                        <option value="">--- Select Language ---</option>
-                        @foreach ($languages as $id => $name)
-                            <option value="{{ $id }}"> {{ $name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                    <select class="col-md-8 form-control-static course_select_no" name="course_id" autocomplete="off">
-                        <option value="">--- Select Course ---</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
+                        <select class="col-md-8 form-control-static lang_select_no" name="L" autocomplete="off">
+                            <option value="">--- Select Language ---</option>
+                            @foreach ($languages as $id => $name)
+                                <option value="{{ $id }}"> {{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
+                        <select class="col-md-8 form-control-static course_select_no" name="course_id" autocomplete="off">
+                            <option value="">--- Select Course ---</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
-                    <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%;" name="schedule_id[]" autocomplete="off">
-                        <option value="">Fill Out Language and Course Options</option>
-                    </select>
+                    <div class="form-group">
+                        <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
+                        <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%;" name="schedule_id[]" autocomplete="off">
+                            <option value="">Fill Out Language and Course Options</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-<!-- END OF NO DECISION SECTION -->
+                <!-- END OF NO DECISION SECTION -->
 
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
@@ -168,7 +168,6 @@
     </div>
   </div>
 </div>
-
 @stop   
 
 @section('scripts_code')
