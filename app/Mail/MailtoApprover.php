@@ -7,6 +7,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+use Illuminate\Support\Facades\Crypt;
+
 class MailtoApprover extends Mailable
 {
     use Queueable, SerializesModels;
@@ -25,7 +27,7 @@ class MailtoApprover extends Mailable
         $this->input_course = $input_course;
         $this->input_schedules = $input_schedules;
         $this->staff = $staff;
-
+        
     }
 
     /**

@@ -11,8 +11,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         {{ $form->Code }} for {{ $form->INDEXID }}
-        {{ $encrypted }}
-        {{ $decrypted }}
+
       </div>
     </div>
   </div>

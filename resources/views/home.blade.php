@@ -95,7 +95,7 @@
                     <div class="">
                         <ul>
                                 @foreach($forms_submitted as $form)
-                                <span class="label label-success"><a href="{{ route('myform.edit', $form->id) }}" style="color: white;">{{ $form->courses->Description.' - '.$form->schedule->name}}</a></span>
+                                <span class="label label-success"><a href="{{ route('myform.edit', Crypt::encrypt($form->id)) }}" style="color: white;">{{ $form->courses->Description.' - '.$form->schedule->name}}</a></span>
                                 @endforeach
                         </ul>
                     </div>

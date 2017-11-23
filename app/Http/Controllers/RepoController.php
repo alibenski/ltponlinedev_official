@@ -175,7 +175,7 @@ class RepoController extends Controller
                                 ->where('Term', $next_term)
                                 ->where('Te_Code', $course)
                                 ->get();
-                                
+        
         Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
         return redirect()->route('home');
@@ -200,10 +200,10 @@ class RepoController extends Controller
      */
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $form = Preenrolment::find($id);
-        $encrypted = Crypt::encryptString($form->id);
-        $decrypted = Crypt::decryptString($encrypted);
-        return view('form.edit')->withForm($form)->withEncrypted($encrypted)->withDecrypted($decrypted);
+                
+        return view('form.edit')->withForm($form);
     }
 
     /**
