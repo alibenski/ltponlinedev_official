@@ -37,7 +37,7 @@ class MailtoApprover extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.approval')
+        return $this->view('emails.approval')
                     ->from('clm_language@un.org')
                     ->subject('Approval Needed: Language Course Enrolment '. $this->input_course->courses->Description  .' for '.$this->staff->name);
     }

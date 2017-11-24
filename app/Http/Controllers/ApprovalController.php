@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use App\Preenrolment;
 
 
@@ -14,15 +15,32 @@ class ApprovalController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function getForm($id)
+    public function getForm($staff)
     {
-        $form = Preenrolment::find($id);
-        return view('form.edit')->withForm($form);
+    	$staff = Crypt::decrypt($staff);
+        //execute Mail class before redirect     
+        //$staff = Auth::user();
+        //$current_user = Auth::user()->indexno;
+        //$now_date = Carbon::now();
+        //$next_term = Term::orderBy('Term_Code', 'desc')
+        //                ->where('Term_Begin', '>', $now_date)->get()->min('Term_Code');
+        //$course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+        //                        ->where('INDEXID', $current_user)
+          //                      ->value('Te_Code');
+        //query from Preenrolment table the needed information data to include in email
+        $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->get();
+        //$input_schedules = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+        //                        ->where('INDEXID', $current_user)
+        //                        ->where('Term', $next_term)
+          //                      ->where('Te_Code', $course)
+            //                    ->get();
+
+        return view('form.approval')->withInput_course($input_course);
     }
 
     /**

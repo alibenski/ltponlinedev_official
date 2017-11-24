@@ -10,7 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/approval/{resource}/edit', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
+//url routing for approval page
+Route::get('/approval/{staff}', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
 Route::put('/approval/{resource}',      ['as' => 'approval.updateform',     'uses' => 'ApprovalController@updateForm' ]);
 Route::resource('myform', 'RepoController');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);
