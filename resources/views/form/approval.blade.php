@@ -11,7 +11,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
 
-        <div class="panel-heading">Approval Page Enrolment Form for Semester: <strong>[ENTER TEXT HERE]</strong></div>
+        <div class="panel-heading">Approval Page Enrolment Form for Semester: <strong>{{ $next_term }}</strong></div>
           <div class="panel-body">
             <form method="PUT" action="" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
@@ -21,7 +21,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input  name="" class="form-control"  type="text" value="" readonly>                                    
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input  name="" class="form-control"  type="text" value="{{$input_staff->users->name}}" readonly>                                    
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                     
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="" class="form-control"  type="text" readonly="">                                    
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="" class="form-control"  type="text" value="{{$input_staff->users->email}}"readonly="">                                    
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                         <th>Title B</th>
                         <th>Title C</th>
                         <th>Title D</th>
-                        <th>Title E</th>
+                        <th>Approve?</th>
                       </thead>
 
                       <tbody>
@@ -53,8 +53,14 @@
                             <th>{{ $course->CodeIndexID }}</th>
                             <td>{{ $course->courses->Description }}</td>
                             <td>{{ $course->languages->name }}</td>
-                            <td>{{ $course->schedule->name }}</td>
-                            <td><a href="" class="btn btn-default btn-sm">button</a></td>
+                            <td>
+                              @if(empty($course->schedule))
+                              null
+                              @else
+                              {{ $course->schedule->name }}
+                              @endif
+                            </td>
+                            <td><a href="" class="btn btn-primary btn-sm">Yes</a></td>
                           </tr>
                         @endforeach
 
@@ -66,7 +72,7 @@
                 <!-- MAKE A DECISION SECTION -->
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Continue current course?</label>
+                    <label class="col-md-4 control-label">Approve the above course schedule(s)?</label>
 
                       <div class="col-md-2">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="yes" >

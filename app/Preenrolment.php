@@ -31,7 +31,7 @@ class Preenrolment extends Model
     return $this->belongsTo('App\Language', 'L', 'code'); 
     }
     public function users() {
-    return $this->belongsTo('App\User', 'INDEXID'); 
+    return $this->belongsTo('App\User', 'INDEXID', 'indexno'); 
     }
 	public function terms() {
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
