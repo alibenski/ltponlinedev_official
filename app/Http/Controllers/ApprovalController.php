@@ -20,28 +20,25 @@ class ApprovalController extends Controller
      * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
      */
-    public function getForm($staff)
+    public function getForm($staff, $tecode)
     {
-    	 $staff = Crypt::decrypt($staff);
-        //execute Mail class before redirect     
-        //$staff = Auth::user();
-        //$current_user = Auth::user()->indexno;
+        //get variables from URL to decrypt and pass to controller logic 
+    	$staff = Crypt::decrypt($staff);
+        $tecode = Crypt::decrypt($tecode);
+
         $now_date = Carbon::now();
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Begin', '>', $now_date)->get()->min('Term_Code');
-        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $staff)
-                                ->value('Te_Code');
-        //query from Preenrolment table the needed information data to include in email
-        $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+        //query from Preenrolment table the needed information data to include in the control logic and then pass to approval page
+        $input_course = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term)
-                                ->where('Te_Code', $course)
+                                ->where('Te_Code', $tecode)
                                 ->get();
         $input_staff = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term)
-                                ->where('Te_Code', $course)
+                                ->where('Te_Code', $tecode)
                                 ->first();
 
         return view('form.approval')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term($next_term);

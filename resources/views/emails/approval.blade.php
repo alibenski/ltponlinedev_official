@@ -210,8 +210,8 @@
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                                <a href="{{ route('approval.getform', Crypt::encrypt($input_course->INDEXID)) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;A Button&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                <a href="{{ route('approval.getform', [Crypt::encrypt($input_course->INDEXID), Crypt::encrypt($input_course->Te_Code)]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Approval Link&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -230,7 +230,7 @@
                 </tr>
                 <!-- 1 Column Text + Button : END -->
 
-                <!-- 2 Even Columns : BEGIN -->
+                <!-- 2 Even Columns : BEGIN 
                 <tr>
                     <td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding-bottom: 40px">
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:560px;">
@@ -296,7 +296,7 @@
             <!-- Email Body : END -->
 
             <!-- Email Footer : BEGIN -->
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: #888888; font-size: 12px; line-height: 140%;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: whitesmoke; font-size: 12px; line-height: 140%;">
                 <tr>
                     <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #888888;" class="x-gmail-data-detectors">
                         <webversion style="color: #cccccc; text-decoration: underline; font-weight: bold;"></webversion>
@@ -306,6 +306,8 @@
                         For all other languages Annex Bocage 2 - Room 108 (1st floor)<br>
                         Telephone: 00 41 22 917 44 09
                         <br><br>
+                        <hr>
+                        {{date("Y")}} All Rights Reserved. <br><br>
                         <unsubscribe style="color: #888888; text-decoration: underline;"></unsubscribe>
                     </td>
                 </tr>

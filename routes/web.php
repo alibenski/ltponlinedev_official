@@ -11,7 +11,7 @@
 |
 */
 //url routing for approval page
-Route::get('/approval/{staff}', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
+Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
 Route::put('/approval/{resource}',      ['as' => 'approval.updateform',     'uses' => 'ApprovalController@updateForm' ]);
 Route::resource('myform', 'RepoController');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);

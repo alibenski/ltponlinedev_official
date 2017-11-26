@@ -32,7 +32,7 @@
                   @endif
                 " readonly>  
                 </div>
-                {{$terms->Term_Code}}
+                current (hidden field) -> {{$terms->Term_Code}}
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Index Number:</label>
 
@@ -157,6 +157,18 @@
                 </div>
                 <!-- END OF NO DECISION SECTION -->
 
+                <!-- SHOW CHOICES REAL TIME -->
+                        <div class="form-group">
+                            <label for="firstchoice" class="col-md-3 control-label">1st:(not working)</label>
+
+                            <div class="col-md-4 form-control-static">
+                                <p id="firstchoice"></p>
+                            </div>
+                        </div>
+
+
+                <!-- END OF SHOW CHOICES REAL TIME -->
+
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -272,4 +284,10 @@ $(document).ready(function(){
   }); 
 </script>
 
+<script type="text/javascript">
+    $("select[name='schedule_id[]']").on('change', function () {
+        var input1 = $("select[name='schedule_id[]']").val();
+        $("#firstchoice").push($(this).val());
+    });
+</script>
 @stop

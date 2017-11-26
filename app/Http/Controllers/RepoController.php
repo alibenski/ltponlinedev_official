@@ -170,7 +170,7 @@ class RepoController extends Controller
         $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $current_user)
                                 ->first();
-        $input_schedules = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+        $input_schedules = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $current_user)
                                 ->where('Term', $next_term)
                                 ->where('Te_Code', $course)
