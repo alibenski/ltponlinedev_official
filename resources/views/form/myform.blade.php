@@ -159,9 +159,8 @@
 
                 <!-- SHOW CHOICES REAL TIME -->
                         <div class="form-group">
-                            <label for="firstchoice" class="col-md-3 control-label">1st:(not working)</label>
-
-                            <div class="col-md-4 form-control-static">
+                            <label for="firstchoice" class="col-md-3 control-label">1st choice:</label>
+                            <div class="col-md-8 form-control-static">
                                 <p id="firstchoice"></p>
                             </div>
                         </div>
@@ -184,34 +183,35 @@
 
 @section('scripts_code')
 <script src="{{ asset('js/select2.min.js') }}"></script>
-<script type="text/javascript">$(".select2-multi").select2({
+<script type="text/javascript">
+  $(".select2-multi").select2({
     maximumSelectionLength: 2,
     width: 'resolve', // need to override the changed default
-}); 
+  }); 
 </script>
 
 <script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
-$(document).ready(function(){
-  $('input[type=radio]').attr('checked',false);
-  });
+  $(document).ready(function(){
+    $('input[type=radio]').attr('checked',false);
+    });
 </script>
 
 <script>
-$(document).ready(function(){
-    $('input:radio[value="yes"]').click(function(){
-      $(".dno").attr("disabled", true);
-        $(".lang_select_yes").attr("name", "L");
-        $(".course_select_yes").attr("name", "course_id");
-        $(".schedule_select_yes").attr("name", "schedule_id[]");        
-        $(".lang_select_no").removeAttr("name");
-        $(".course_select_no").removeAttr("name");
-        $(".schedule_select_no").removeAttr("name");   
-          alert("Please select your preferred schedule.");             
-    });
-        
-});
+  $(document).ready(function(){
+      $('input:radio[value="yes"]').click(function(){
+        $(".dno").attr("disabled", true);
+          $(".lang_select_yes").attr("name", "L");
+          $(".course_select_yes").attr("name", "course_id");
+          $(".schedule_select_yes").attr("name", "schedule_id[]");        
+          $(".lang_select_no").removeAttr("name");
+          $(".course_select_no").removeAttr("name");
+          $(".schedule_select_no").removeAttr("name");   
+            alert("Please select your preferred schedule.");             
+      });
+          
+  });
 </script>
 
 <script type="text/javascript">
@@ -234,18 +234,18 @@ $(document).ready(function(){
 </script>
 
 <script>
-$(document).ready(function(){
-    $('input:radio[value="no"]').click(function(){
-      $(".dyes").attr("disabled", true);
-        $(".lang_select_no").attr("name", "L");
-        $(".course_select_no").attr("name", "course_id");
-        $(".lang_select_yes").removeAttr("name");
-        $(".course_select_yes").removeAttr("name");
-        $(".schedule_select_yes").removeAttr("name");  
-        alert("Please select your new Language Course.");   
-    });
-      
-});
+  $(document).ready(function(){
+      $('input:radio[value="no"]').click(function(){
+        $(".dyes").attr("disabled", true);
+          $(".lang_select_no").attr("name", "L");
+          $(".course_select_no").attr("name", "course_id");
+          $(".lang_select_yes").removeAttr("name");
+          $(".course_select_yes").removeAttr("name");
+          $(".schedule_select_yes").removeAttr("name");  
+          alert("Please select your new Language Course.");   
+      });
+        
+  });
 </script>
 
 <script type="text/javascript">
@@ -285,9 +285,27 @@ $(document).ready(function(){
 </script>
 
 <script type="text/javascript">
-    $("select[name='schedule_id[]']").on('change', function () {
-        var input1 = $("select[name='schedule_id[]']").val();
-        $("#firstchoice").push($(this).val());
+  var optVal = [];
+  var tempVal = [];
+
+    $("select[name='schedule_id[]']").change(function () {
+      $(".schedule_select_no option").each(function() {
+        var val = $(this).val();
+        var tempVal = $(".schedule_select_no").val();
+              alert('tempVal:' + tempVal);
+        if(tempVal.indexOf(val) >= 0 && optVal.indexOf(val) < 0) {
+          optVal.push(val);
+        } else if(tempVal.indexOf(val) < 0 && optVal.indexOf(val) >= 0) {
+          optVal.splice(optVal.indexOf(val) , 1);
+        }
+
+      })
+      var txtVal = optVal[0];
+          $("#firstchoice").text( txtVal );
+        
+
     });
 </script>
+
+
 @stop
