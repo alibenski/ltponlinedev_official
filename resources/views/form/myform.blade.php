@@ -160,12 +160,6 @@
                 <!-- END OF NO DECISION SECTION -->
 
                 <!-- SHOW CHOICES REAL TIME -->
-                        <div class="form-group">
-                            <label for="firstchoice" class="col-md-3 control-label">1st choice:</label>
-                            <div class="col-md-8 form-control-static">
-                                <p id="firstchoice"></p>
-                            </div>
-                        </div>
 
 
                 <!-- END OF SHOW CHOICES REAL TIME -->
@@ -194,16 +188,30 @@
         minimumResultsForSearch: -1,
         maximumSelectionLength: 2,
         width: 'resolve', // need to override the changed default
+
       }); 
+        function setCurrency (currency) {
+              if (!currency.id) { 
+                return currency.text; 
+              } 
+              console.log(currency);
+              var $currency = $('<span class="glyphicon glyphicon-ok">' + currency.text + '</span>');
+              return $currency;
+            };
+      $(".select2-multi").select2({
+              //templateResult: setCurrency,
+              templateSelection: setCurrency
+            });
 
       $(".select2-multi").on("select2:select", function (evt) {
-      var element = evt.params.data.element;
-      var $element = $(element);
-      
-      $element.detach();
-      $(this).append($element);
-      $(this).trigger("change");
+        var element = evt.params.data.element;
+        var $element = $(element);
+        
+        $element.detach();
+        $(this).append($element);
+        $(this).trigger("change");
       });
+
   });
 </script>
 
