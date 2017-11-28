@@ -150,11 +150,13 @@
 
                     <div class="form-group">
                         <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
-                        <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%;" name="schedule_id[]" autocomplete="off">
+                        <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%; display: none;" name="schedule_id[]" autocomplete="off">
                             <option value="">Fill Out Language and Course Options</option>
                         </select>
                     </div>
                 </div>
+
+
                 <!-- END OF NO DECISION SECTION -->
 
                 <!-- SHOW CHOICES REAL TIME -->
@@ -182,19 +184,34 @@
 @stop   
 
 @section('scripts_code')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
+
 <script type="text/javascript">
-  $(".select2-multi").select2({
-    maximumSelectionLength: 2,
-    width: 'resolve', // need to override the changed default
-  }); 
+  $(document).ready(function(){
+      $(".select2-multi").select2({
+        allowClear: true,
+        minimumResultsForSearch: -1,
+        maximumSelectionLength: 2,
+        width: 'resolve', // need to override the changed default
+      }); 
+
+      $(".select2-multi").on("select2:select", function (evt) {
+      var element = evt.params.data.element;
+      var $element = $(element);
+      
+      $element.detach();
+      $(this).append($element);
+      $(this).trigger("change");
+      });
+  });
 </script>
 
 <script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
   $(document).ready(function(){
-    $('input[type=radio]').attr('checked',false);
+    $('input[type=radio]').prop('checked',false);
     });
 </script>
 
@@ -283,29 +300,5 @@
       });
   }); 
 </script>
-
-<script type="text/javascript">
-  var optVal = [];
-  var tempVal = [];
-
-    $("select[name='schedule_id[]']").change(function () {
-      $(".schedule_select_no option").each(function() {
-        var val = $(this).val();
-        var tempVal = $(".schedule_select_no").val();
-              alert('tempVal:' + tempVal);
-        if(tempVal.indexOf(val) >= 0 && optVal.indexOf(val) < 0) {
-          optVal.push(val);
-        } else if(tempVal.indexOf(val) < 0 && optVal.indexOf(val) >= 0) {
-          optVal.splice(optVal.indexOf(val) , 1);
-        }
-
-      })
-      var txtVal = optVal[0];
-          $("#firstchoice").text( txtVal );
-        
-
-    });
-</script>
-
 
 @stop
