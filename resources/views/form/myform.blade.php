@@ -183,30 +183,37 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+      function setCurrency (currency) {
+        if (!currency.id) { 
+          return currency.text; 
+        } 
+
+        var $currency = $('<span class="glyphicon glyphicon-ok ">' + currency.text + '</span>');
+        return $currency;
+      };
+
       $(".select2-multi").select2({
         allowClear: true,
         minimumResultsForSearch: -1,
         maximumSelectionLength: 2,
         width: 'resolve', // need to override the changed default
-
+        placeholder: 'Select 2',
+        templateSelection: function (currency) {
+          // Add custom attributes to the <option> tag for the selected option
+        if (!currency.id) { 
+          return currency.text; 
+        } 
+        console.log(currency);
+        var $currency = $('<span class="cl glyphicon glyphicon-ok ">' + currency.text + '</span>');
+        return $currency;
+        },
+        
       }); 
-        function setCurrency (currency) {
-              if (!currency.id) { 
-                return currency.text; 
-              } 
-              console.log(currency);
-              var $currency = $('<span class="glyphicon glyphicon-ok">' + currency.text + '</span>');
-              return $currency;
-            };
-      $(".select2-multi").select2({
-              //templateResult: setCurrency,
-              templateSelection: setCurrency
-            });
 
       $(".select2-multi").on("select2:select", function (evt) {
         var element = evt.params.data.element;
         var $element = $(element);
-        
+
         $element.detach();
         $(this).append($element);
         $(this).trigger("change");
@@ -214,6 +221,38 @@
 
   });
 </script>
+
+<script>
+  $(document).ready(function(){
+      // multi values, with last selected
+      var old_values = [];
+      var test = $(".select2-multi");
+      
+      test.on("select2:select", function(event) {
+        var values = [];
+
+        // copy all option values from selected
+        $(event.currentTarget).find("option:selected").each(function(i, selected){ 
+          
+          values[i] = $(selected).text();
+
+        });
+        // doing a diff of old_values gives the new values selected
+        var last = $(values).not(old_values).get();
+        // update old_values for future use
+        old_values = values;
+        // output values (all current values selected)
+        //console.log("selected values: ", values);
+        // output last added value
+        //console.log("last added: ", last);
+        // first added value
+        //console.log("first added: ", values[0]);
+        });
+        
+  });
+</script>
+
+
 
 <script src="{{ asset('js/submit.js') }}"></script>     
 
