@@ -8,16 +8,17 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
       <div class="panel panel-default">
-        <div class="panel-heading">Enrolment Form for Semester: 
-          <strong>
-            @if(empty($next_term && $terms))
-            NO DB ENTRY
-            @else 
-            {{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
-            @endif
-          </strong></div>
+          <div class="panel-heading">Enrolment Form for Semester: 
+            <strong>
+              @if(empty($next_term && $terms))
+              NO DB ENTRY
+              @else 
+              {{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
+              @endif
+            </strong>
+          </div>
           <div class="panel-body">
             <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
@@ -93,30 +94,34 @@
                     <label class="col-md-3 control-label">Continue current course?</label>
 
                       <div class="col-md-2">
-                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="yes" >
+                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" >
                                 <label for="decision1" class="form-control-static">YES</label>
                       </div>
 
                       <div class="col-md-2">
-                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="no">
+                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="0">
                                 <label for="decision2" class="form-control-static">NO</label>
                       </div>
                 </div>
 
                 <!-- YES DECISION SECTION -->
-                <div class="yes box" style="display:none">
+                <div class="1 box" style="display:none">
                     <div class="form-group">
                         <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
-                        <select class="col-md-8 form-control-static lang_select_yes" name="">
-                            <option value="{{ $repos_lang->L}}">{{ $repos_lang->languages->name }}</option>
-                        </select>
+                        <div class="col-md-8">
+                          <div class="input-group col-md-9">
+                            <input id="{{ $repos_lang->languages->name }}" name="" class="with-font lang_select_yes" type="radio" value="{{ $repos_lang->L}}">
+                           
+                            <label for="{{ $repos_lang->languages->name }}" class=" form-control-static">{{ $repos_lang->languages->name }}</label>
+                          </div>
+                        </div>
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                        <select class="col-md-8 form-control-static course_select_yes" name="">
-                            <option value="{{ $repos_lang->courses->next_level }}">{{ $repos_lang->courses->next_level_desc }}</option>
-                        </select>
+                            <input id="{{ $repos_lang->courses->next_level_desc }}" name="" class="with-font course_select_yes" type="radio" value="{{ $repos_lang->courses->next_level }}">
+                            
+                            <label for="{{ $repos_lang->courses->next_level_desc }}" class=" form-control-static">{{ $repos_lang->courses->next_level_desc }}</label>
                     </div>
 
                     <div class="form-group">
@@ -129,21 +134,25 @@
                 <!-- END OF YES DECISION SECTION -->   
 
                 <!-- NO DECISION SECTION -->
-                <div class="no box" style="display:none">
+                <div class="0 box" style="display:none">
+                   
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Enrol to which language:</label>
+                              <div class="col-md-8">
+                                  @foreach ($languages as $id => $name)
+                                <div class="input-group col-md-9">
+                                          <span>
+                                          <input id="{{ $name }}" name="L" class="lang_select_no" type="radio" value="{{ $id }}">
+                                          </span>
+                                          <label for="{{ $name }}" class=" form-control-static">{{ $name }}</label>
+                                </div>
+                                  @endforeach
+                              </div>
+                    </div>
 
                     <div class="form-group">
-                        <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
-                        <select class="col-md-8 form-control-static lang_select_no" name="L" autocomplete="off">
-                            <option value="">--- Select Language ---</option>
-                            @foreach ($languages as $id => $name)
-                                <option value="{{ $id }}"> {{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
                         <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                        <select class="col-md-8 form-control-static course_select_no" name="course_id" autocomplete="off">
+                        <select class="col-md-8 wx form-control-static course_select_no" name="course_id" autocomplete="off">
                             <option value="">--- Select Course ---</option>
                         </select>
                     </div>
@@ -157,29 +166,6 @@
                 </div>
                 <!-- END OF NO DECISION SECTION -->
 
-                <!-- SHOW CHOICES REAL TIME -->
-                <!--<p id="first"></p>
-                <p id="second"></p> -->
-                <div class="form-group">
-                    <label for="first" class="col-md-3 control-label">First Choice:</label>
-
-                    <div class="col-md-8 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input  id="first" name="" class="form-control"  type="text" value="" readonly>                                    
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="second" class="col-md-3 control-label">Second Choice:</label>
-
-                    <div class="col-md-8 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input id="second"  name="" class="form-control"  type="text" value="" readonly>                                    
-                        </div>
-                    </div>
-                </div>
-                <!-- END OF SHOW CHOICES REAL TIME -->
-
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -187,7 +173,24 @@
             </form>
           </div>
         </div>
-      </div>
+    </div>
+            <!-- SHOW CHOICES REAL TIME -->
+    <div class="col-md-4">
+      <div class="well">
+        <div class="row">        
+            <div class="form-group">
+              <label for="first" class="col-md-12 control-label" style="color: green;">First Choice:</label>            
+              <div class="col-md-12 form-control-static"><p id="first" name=""></p></div>                                             
+            </div>
+
+            <div class="form-group">
+              <label for="second" class="col-md-12 control-label" style="color: #337ab7;">Second Choice:</label>
+              <div class="col-md-12 form-control-static"><p id="second"  name=""></p></div>                                    
+            </div>
+        </div>    
+      </div>  
+    </div>
+            <!-- END OF SHOW CHOICES REAL TIME -->   
     </div>
   </div>
 </div>
@@ -203,8 +206,7 @@
         if (!currency.id) { 
           return currency.text; 
         } 
-
-        var $currency = $('<span class="glyphicon glyphicon-ok ">' + currency.text + '</span>');
+        var $currency = $('<span class="glyphicon glyphicon-remove">' + currency.text + '</span>');
         return $currency;
       };
 
@@ -214,9 +216,9 @@
         maximumSelectionLength: 2,
         width: 'resolve', // need to override the changed default
         placeholder: 'Select 2',
-        //templateSelection: 
-        
+        //templateSelection: setCurrency,       
       }); 
+
 
       $(".select2-multi").on("select2:select", function (evt) {
         var element = evt.params.data.element;
@@ -235,7 +237,7 @@
       // multi values, with last selected
       var old_values = [];
       var test = $(".select2-multi");
-      
+
       test.on("select2:select", function(event) {
         var values = [];
         var values_index = [];
@@ -256,10 +258,10 @@
         var second_id =  values_id[1];
 
         if(first != null) {
-          $("#first").attr("value", first).css("color","green").attr("name",first_index).attr("data-id",first_id);
+          $("#first").text(first).css("color","green").attr("name",first_index).attr("data-id",first_id);
         }
         if(second != null) {
-          $("#second").attr("value", second).css("color","red").attr("name",second_index).attr("data-id",second_id);
+          $("#second").text(second).css("color","#337ab7").attr("name",second_index).attr("data-id",second_id);
         } else {
           $("#second").removeAttr("Second Choice: none");
         }
@@ -282,24 +284,22 @@
 
         var elem_dos = document.getElementById("second");
         var get_id_dos = elem_dos.getAttribute("data-id");
-        var get_text_dos = elem_dos.getAttribute("value");
+        var get_text_dos = elem_dos.innerHTML;
         var get_index_dos = elem_dos.getAttribute("name");
 
         if(values_id == get_id_una){
           //$("#first").removeAttr("value");
-          $("#first").attr("value",get_text_dos).attr("name",get_index_dos);
-          $("#second").removeAttr("value");
+          $("#first").text(get_text_dos).attr("name",get_index_dos);
+          $("#second").empty();
         } else if (values_id == get_id_dos){
-          $("#second").removeAttr("value");
-          $( 'input[name="1"]' ).removeAttr("value");
+          $("#second").empty();
+          $( 'input[name="1"]' ).empty();
         } 
 
         });
 
   });
 </script>
-
-
 
 <script src="{{ asset('js/submit.js') }}"></script>     
 
@@ -311,24 +311,23 @@
 
 <script>
   $(document).ready(function(){
-      $('input:radio[value="yes"]').click(function(){
-        $(".dno").attr("disabled", true);
-          $(".lang_select_yes").attr("name", "L");
-          $(".course_select_yes").attr("name", "course_id");
-          $(".schedule_select_yes").attr("name", "schedule_id[]");        
-          $(".lang_select_no").removeAttr("name");
-          $(".course_select_no").removeAttr("name");
-          $(".schedule_select_no").removeAttr("name");   
-            alert("Please select your preferred schedule.");             
-      });
-          
+      $('input:radio[value="1"]').click(function(){
+          $(".dno").attr("disabled", true);
+            $(".lang_select_yes").attr("name", "L").prop('checked', true);
+            $(".course_select_yes").attr("name", "course_id").prop('checked', true);;
+            $(".schedule_select_yes").attr("name", "schedule_id[]");        
+            $(".lang_select_no").removeAttr("name");
+            $(".course_select_no").removeAttr("name");
+            $(".schedule_select_no").removeAttr("name");   
+              alert("Please select your preferred schedule.");             
+          });          
   });
 </script>
 
 <script type="text/javascript">
-  $("input:radio[value='yes']").click(function(){
+  $('input:radio[value="1"]').click(function(){
     $(".course_select_yes").attr("name", "course_id");
-      var course_id = $("select[name='course_id']").val();
+      var course_id = $("input[name='course_id']").val();
       var token = $("input[name='_token']").val();
         alert( course_id );
       $.ajax({
@@ -346,7 +345,7 @@
 
 <script>
   $(document).ready(function(){
-      $('input:radio[value="no"]').click(function(){
+      $('input:radio[value="0"]').click(function(){
         $(".dyes").attr("disabled", true);
           $(".lang_select_no").attr("name", "L");
           $(".course_select_no").attr("name", "course_id");
@@ -360,8 +359,7 @@
 </script>
 
 <script type="text/javascript">
-  $("select[name='L']").change(function(){
-
+  $("input[name='L']").click(function(){
       var L = $(this).val();
       var token = $("input[name='_token']").val();
 

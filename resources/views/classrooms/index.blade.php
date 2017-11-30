@@ -35,7 +35,13 @@
 						<tr>
 							<th>{{ $classroom->Code }}</th>
 							<td>{{ $classroom->course->Description }}</td>
-							<td>{{ $classroom->scheduler->name }}</td>
+							<td>
+								@if(empty( $classroom->scheduler->name ))
+								null
+								@else 
+								{{ $classroom->scheduler->name }}
+								@endif
+							</td>
 							<td><a href="{{ route('classrooms.edit', $classroom->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach

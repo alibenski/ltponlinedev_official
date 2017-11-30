@@ -15,5 +15,7 @@
                 @yield('scripts_link')
                 @include('partials._js')
                 @yield('scripts_code')
+    
+
     </body>
 </html>

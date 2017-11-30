@@ -58,5 +58,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'checksubmissioncount' => \App\Http\Middleware\CheckSubmissionCount::class,
         'opencloseenrolment' => \App\Http\Middleware\OpenCloseEnrolment::class,
+
     ];
 }

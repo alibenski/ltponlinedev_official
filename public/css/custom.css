@@ -1,3 +1,14 @@
+.wx{width: 65%}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+    color: red;
+    transform: scale(2.75, 2.75);
+    margin: 0px 10px 5px 5px;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__clear{
+    color: red;
+    transform: scale(2.75, 2.75);
+    margin: 5px 5px 5px 10px;
+}
 /*** radio button styles ***/
 input[type=radio].with-font,
 input[type=checkbox].with-font {
