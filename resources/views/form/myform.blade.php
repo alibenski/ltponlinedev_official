@@ -155,13 +155,29 @@
                         </select>
                     </div>
                 </div>
-
-
                 <!-- END OF NO DECISION SECTION -->
 
                 <!-- SHOW CHOICES REAL TIME -->
+                <!--<p id="first"></p>
+                <p id="second"></p> -->
+                <div class="form-group">
+                    <label for="first" class="col-md-3 control-label">First Choice:</label>
 
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input  id="first" name="" class="form-control"  type="text" value="" readonly>                                    
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="second" class="col-md-3 control-label">Second Choice:</label>
 
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input id="second"  name="" class="form-control"  type="text" value="" readonly>                                    
+                        </div>
+                    </div>
+                </div>
                 <!-- END OF SHOW CHOICES REAL TIME -->
 
                 <div class="col-sm-offset-5">
@@ -198,15 +214,7 @@
         maximumSelectionLength: 2,
         width: 'resolve', // need to override the changed default
         placeholder: 'Select 2',
-        templateSelection: function (currency) {
-          // Add custom attributes to the <option> tag for the selected option
-        if (!currency.id) { 
-          return currency.text; 
-        } 
-        console.log(currency);
-        var $currency = $('<span class="cl glyphicon glyphicon-ok ">' + currency.text + '</span>');
-        return $currency;
-        },
+        //templateSelection: 
         
       }); 
 
@@ -230,13 +238,31 @@
       
       test.on("select2:select", function(event) {
         var values = [];
-
+        var values_index = [];
+        var values_id = []; 
+        //event.params.data.id; 
         // copy all option values from selected
-        $(event.currentTarget).find("option:selected").each(function(i, selected){ 
-          
+        $(event.currentTarget).find("option:selected").each(function(i, selected){          
           values[i] = $(selected).text();
-
+          values_index[i] = i;
+          values_id[i] = $(selected).val();
         });
+
+        var first =  values[0];
+        var second =  values[1];
+        var first_index =  values_index[0];
+        var second_index =  values_index[1];
+        var first_id =  values_id[0];
+        var second_id =  values_id[1];
+
+        if(first != null) {
+          $("#first").attr("value", first).css("color","green").attr("name",first_index).attr("data-id",first_id);
+        }
+        if(second != null) {
+          $("#second").attr("value", second).css("color","red").attr("name",second_index).attr("data-id",second_id);
+        } else {
+          $("#second").removeAttr("Second Choice: none");
+        }
         // doing a diff of old_values gives the new values selected
         var last = $(values).not(old_values).get();
         // update old_values for future use
@@ -245,10 +271,31 @@
         //console.log("selected values: ", values);
         // output last added value
         //console.log("last added: ", last);
-        // first added value
-        //console.log("first added: ", values[0]);
         });
+
+      test.on("select2:unselect", function(e){
+        //console.log(e);        console.log(e.params);         console.log(e.params.data);        
+        var values_id = e.params.data.id;
         
+        var elem_una = document.getElementById("first");
+        var get_id_una = elem_una.getAttribute("data-id");
+
+        var elem_dos = document.getElementById("second");
+        var get_id_dos = elem_dos.getAttribute("data-id");
+        var get_text_dos = elem_dos.getAttribute("value");
+        var get_index_dos = elem_dos.getAttribute("name");
+
+        if(values_id == get_id_una){
+          //$("#first").removeAttr("value");
+          $("#first").attr("value",get_text_dos).attr("name",get_index_dos);
+          $("#second").removeAttr("value");
+        } else if (values_id == get_id_dos){
+          $("#second").removeAttr("value");
+          $( 'input[name="1"]' ).removeAttr("value");
+        } 
+
+        });
+
   });
 </script>
 
