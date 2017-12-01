@@ -141,9 +141,9 @@
                               <div class="col-md-8">
                                   @foreach ($languages as $id => $name)
                                 <div class="input-group col-md-9">
-                                          <span>
+                                          
                                           <input id="{{ $name }}" name="L" class="lang_select_no" type="radio" value="{{ $id }}">
-                                          </span>
+                                          
                                           <label for="{{ $name }}" class=" form-control-static">{{ $name }}</label>
                                 </div>
                                   @endforeach

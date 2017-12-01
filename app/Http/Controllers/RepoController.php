@@ -30,6 +30,7 @@ class RepoController extends Controller
     {
         $this->middleware('auth');
         //$this->middleware('checksubmissioncount');
+        //$this->middleware('checkcontinue');
         //$this->middleware('opencloseenrolment');
     }
 
@@ -60,13 +61,13 @@ class RepoController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
 
         //get current year and date
-        $now_date = Carbon::now();
+        $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
 
         //query the current term based on year and Term_End column is greater than today's date  
         $terms = Term::whereYear('Term_End', $now_year)
                         ->orderBy('Term_Code', 'desc')
-                        ->where('Term_End', '>=', $now_date)
+                        ->whereDate('Term_End', '>=', $now_date)
                         ->first();
 
         //query the next term based Term_Begin column is greater than today's date and then get min
@@ -106,6 +107,7 @@ class RepoController extends Controller
         $schedule_id = $request->input('schedule_id');
         $mgr_email = $request->input('mgr_email');
         $uniquecode = $request->input('CodeIndexID');
+        $decision = $request->input('decision');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -134,7 +136,8 @@ class RepoController extends Controller
                             'course_id' => 'required|',
                             'L' => 'required|',
                             'mgr_email' => 'required|email',
-                        ));
+                            'decision' => 'required|',
+                        )); 
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
@@ -148,12 +151,13 @@ class RepoController extends Controller
                 'INDEXID' => $index_id,
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
-                'mgr_email' =>  $mgr_email,                
-                ]);
+                'mgr_email' =>  $mgr_email,
+                'continue_bool' => $decision,                
+                ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
                     }
-        }
+        } 
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
         
         //execute Mail class before redirect         
@@ -256,13 +260,13 @@ class RepoController extends Controller
             $select_schedules = Classroom::where('Te_Code', $request->course_id)
             ->where(function($q){
                 //get current year and date
-                $now_date = Carbon::now();
+                $now_date = Carbon::now()->toDateString();
                 $now_year = Carbon::now()->year;
 
                 //query the current term based on year and Term_End column is greater than today's date  
                 $latest_term = Term::whereYear('Term_End', $now_year)
                                 ->orderBy('Term_Code', 'desc')
-                                ->where('Term_End', '>=', $now_date)
+                                ->whereDate('Term_End', '>=', $now_date)
                                 ->first();                 
                 //$latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term->Term_Code );

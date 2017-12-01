@@ -82,13 +82,15 @@ class ClassroomController extends Controller
                         var_dump($request->Code);
                         $this->validate($request, array(
                             'Code' => 'unique:LTP_TEVENTCur,Code|',
+                        ));
+            }
+        }
+                        $this->validate($request, array(
                             'term_id' => 'required|',
                             'schedule_id' => 'required|',
                             'course_id' => 'required|',
                             'room_id' => 'required|',   
                         ));
-            }
-        }
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($room_id); $i++) {
