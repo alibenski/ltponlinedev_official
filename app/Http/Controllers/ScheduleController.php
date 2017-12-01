@@ -61,7 +61,7 @@ class ScheduleController extends Controller
                 'end_day' => 'nullable',
                 'begin_time' => 'required',
                 'end_time' => 'required',
-            )); 
+            ));  
 
         // Save the data to db
         $schedule = new Schedule;

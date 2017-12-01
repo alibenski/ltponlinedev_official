@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('genform', function () { return view('form.myform2'); })->name('genform');;
 //url routing for approval page
 Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
 Route::put('/approval/{resource}',      ['as' => 'approval.updateform',     'uses' => 'ApprovalController@updateForm' ]);
@@ -22,7 +23,7 @@ Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');
 Route::resource('courses', 'CourseController');
 Route::resource('students', 'HomeController');
-Route::get('eform', function () { return view('eform'); });
+Route::get('eform', function () { return view('myform'); });
 //Route::get('/', function () { return view('welcome'); });
 
 Auth::routes();

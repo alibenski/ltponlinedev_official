@@ -21,21 +21,19 @@ class CheckContinue
     public function handle($request, Closure $next)
     {
         // query for continue_bool in current term and current user
-
-        // if continue_bool is true, redirect to myform2
+        $current_user = Auth::user()->indexno;
+        $boolx = Preenrolment::where('INDEXID', '=', $current_user)
+                    ->where('continue_bool','=', '1' )->value('continue_bool');
+        // run only if there is already an entry in Preenrolment table
+        if (empty($boolx)){
+            return $next($request);
+        } else if ($boolx == '1') {
+            return redirect()->route('genform');
+        } 
+        // if continue_bool is true (1), redirect to myform2
 
         //else pass next 
-        $current_user = Auth::user()->indexno;
-        $grouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
-            ->where(function($q){ 
-                $latest_term = Preenrolment::orderBy('Term', 'DESC')->value('Term');
-                $q->where('Term', $latest_term );
-            })->count('Te_Code');
-        
-        if ($grouped == '2') {
-            $request->session()->flash('overlimit', 'You have reached submission form limit (2 Maximum Language Courses)');
-            return redirect()->route('home');
-        }
+
         return $next($request);
     }
 }

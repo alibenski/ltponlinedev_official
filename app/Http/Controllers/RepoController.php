@@ -30,7 +30,7 @@ class RepoController extends Controller
     {
         $this->middleware('auth');
         //$this->middleware('checksubmissioncount');
-        //$this->middleware('checkcontinue');
+        $this->middleware('checkcontinue');
         //$this->middleware('opencloseenrolment');
     }
 
@@ -136,7 +136,6 @@ class RepoController extends Controller
                             'course_id' => 'required|',
                             'L' => 'required|',
                             'mgr_email' => 'required|email',
-                            'decision' => 'required|',
                         )); 
         //loop for storing Code value to database
         $ingredients = [];        

@@ -14,9 +14,7 @@
           <label name="language_id" class="col-md-4 control-label">Enrol to which language: </label>
           <select class="col-md-4 form-control-static" name="language_id">
               <option value="">Select</option>
-              @foreach ($languages as $id => $name)
-                  <option value="{{ $id }}"> {{ $name }}</option>
-              @endforeach
+
           </select>
       </div>
       
