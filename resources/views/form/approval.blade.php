@@ -11,9 +11,9 @@
     <div class="col-md-12">
       <div class="panel panel-default">
 
-        <div class="panel-heading">Approval Page Enrolment Form for Semester: <strong>{{ $next_term }}</strong></div>
+        <div class="panel-heading">Approval Page Enrolment Form for Semester: <strong>{{ $next_term_code }}</strong></div>
           <div class="panel-body">
-            <form method="PUT" action="" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" action="{{ route('approval.updateform', [$input_staff->INDEXID, $input_staff->Te_Code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
 
                 <div class="form-group">
@@ -44,7 +44,7 @@
                         <th>Title B</th>
                         <th>Title C</th>
                         <th>Title D</th>
-                        <th>Approve?</th>
+                        
                       </thead>
 
                       <tbody>
@@ -60,7 +60,6 @@
                               {{ $course->schedule->name }}
                               @endif
                             </td>
-                            <td><a href="" class="btn btn-primary btn-sm">Yes</a></td>
                           </tr>
                         @endforeach
 
@@ -75,12 +74,12 @@
                     <label class="col-md-4 control-label">Approve the above course schedule(s)?</label>
 
                       <div class="col-md-2">
-                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="yes" >
+                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" >
                                 <label for="decision1" class="form-control-static">YES</label>
                       </div>
 
                       <div class="col-md-2">
-                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="no">
+                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="0">
                                 <label for="decision2" class="form-control-static">NO</label>
                       </div>
                 </div>
@@ -89,6 +88,7 @@
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Decision</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
+                  {{ method_field('PUT') }}
                 </div>
             </form>
           </div>
@@ -98,3 +98,12 @@
   </div>
 </div>
 @stop 
+@section('scripts_code')
+<script src="{{ asset('js/submit.js') }}"></script>     
+
+<script>
+  $(document).ready(function(){
+    $('input[type=radio]').prop('checked',false);
+  });
+</script>
+@stop

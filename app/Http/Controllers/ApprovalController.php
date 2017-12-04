@@ -26,22 +26,24 @@ class ApprovalController extends Controller
     	$staff = Crypt::decrypt($staff);
         $tecode = Crypt::decrypt($tecode);
 
-        $now_date = Carbon::now();
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Begin', '>', $now_date)->get()->min('Term_Code');
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
         //query from Preenrolment table the needed information data to include in the control logic and then pass to approval page
         $input_course = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
-                                ->where('Term', $next_term)
+                                ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->get();
         $input_staff = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
-                                ->where('Term', $next_term)
+                                ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->first();
 
-        return view('form.approval')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term($next_term);
+        return view('form.approval')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code);
     }
 
     /**
@@ -51,22 +53,38 @@ class ApprovalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateForm(Request $request, $id)
+    public function updateForm(Request $request, $staff, $tecode)
     {
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $forms = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->get();
+
+
+        $decision = $request->input('decision'); 
         // Validate data
-        $course = Course::find($id);
             $this->validate($request, array(
-                'name' => 'required|max:255',
+                'decision' => 'required|boolean',
             )); 
 
         // Save the data to db
-        $course = Course::find($id);
-
-        $course->name = $request->input('name');
-        $course->save();         
+        $enrol_form = [];
+        for ($i = 0; $i < count($forms); $i++) {
+            $enrol_form = $forms[$i]->id;
+            $course = Preenrolment::find($enrol_form);
+            $course->approval = $decision;
+            $course->save();
+        }
+    
         // Set flash data with message
-        $request->session()->flash('success', 'Changes have been saved!');
+        $request->session()->flash('success', 'Changes have been saved! Decision value is: '.$decision);
         // Redirect to flash data to posts.show
-        return redirect()->route('courses.index');
+        return redirect()->route('eform');
     }
 }

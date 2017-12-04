@@ -15,7 +15,7 @@ Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@sele
 Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
 //url routing for approval page
 Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
-Route::put('/approval/{resource}',      ['as' => 'approval.updateform',     'uses' => 'ApprovalController@updateForm' ]);
+Route::put('/approval/user/{staff}/course/{tecode}',      ['as' => 'approval.updateform',     'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 Route::resource('myform', 'RepoController');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@selectAjax2']);
@@ -25,7 +25,7 @@ Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');
 Route::resource('courses', 'CourseController');
 Route::resource('students', 'HomeController');
-Route::get('eform', function () { return view('myform'); });
+Route::get('eform', function () { return view('myform'); })->name('eform');
 //Route::get('/', function () { return view('welcome'); });
 
 Auth::routes();
