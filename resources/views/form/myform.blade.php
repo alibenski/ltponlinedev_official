@@ -3,8 +3,7 @@
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/select2.css') }}" rel="stylesheet">
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
 <div class="container">
@@ -120,7 +119,7 @@
                     
                     <div class="form-group">
                         <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                            <input id="{{ $repos_lang->courses->next_level_desc }}" name="" class="with-font course_select_yes" type="radio" value="{{ $repos_lang->courses->next_level }}">
+                        <input id="{{ $repos_lang->courses->next_level_desc }}" name="" class="with-font course_select_yes" type="radio" value="{{ $repos_lang->courses->next_level }}">
                             
                             <label for="{{ $repos_lang->courses->next_level_desc }}" class=" form-control-static">{{ $repos_lang->courses->next_level_desc }}</label>
                     </div>
@@ -128,7 +127,7 @@
                     <div class="form-group">
                         <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
                         <button type="button" class="multi-clear button" aria-label="Programmatically clear Select2 options">Clear All</button>
-                        <select class="col-md-8 form-control-static schedule_select_yes select2-multi" multiple="multiple" style="width: 65%;" name="" >
+                        <select class="col-md-8 form-control-static schedule_select_yes select2-multi" multiple="multiple" style="width: 65%;" name="" autocomplete="off" >
                             <option value="">--- Select Schedule ---</option>
                         </select>
                     </div>
@@ -200,24 +199,25 @@
 @stop   
 
 @section('scripts_code')
-<script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM="
-  crossorigin="anonymous"></script>
-<script src="{{ asset('js/select2.full.js') }}"></script>
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM=" crossorigin="anonymous"></script>
+
+<script src="{{ asset('js/select2.min.js') }}"></script>
 
 <script type="text/javascript">
   $(document).ready(function(){
       $(".select2-multi").select2({
-        theme: "bootstrap",
+        // theme: "bootstrap",
         allowClear: true,
         minimumResultsForSearch: -1,
         maximumSelectionLength: 2,
-        width: 'resolve', // need to override the changed default
+        //width: 'resolve', // need to override the changed default
         closeOnSelect: false,
         templateResult: formatResult,
         //templateSelection: formatResult, 
         placeholder: 'Choose Here',    
       }); 
-            function formatResult (schedule) {
+      function formatResult (schedule) {
         if (!schedule.id) { return schedule.text; }
         
         var $schedule = $(
@@ -330,30 +330,30 @@
 <script>
   $(document).ready(function(){
     $('input[type=radio]').prop('checked',false);
-    });
-</script>
-
-<script>
-  $(document).ready(function(){
-      $('input:radio[value="1"]').click(function(){
-          $(".dno").attr("disabled", true);
-            $(".lang_select_yes").attr("name", "L").prop('checked', true);
-            $(".course_select_yes").attr("name", "course_id").prop('checked', true);;
-            $(".schedule_select_yes").attr("name", "schedule_id[]");        
-            $(".lang_select_no").removeAttr("name");
-            $(".course_select_no").removeAttr("name");
-            $(".schedule_select_no").removeAttr("name");   
-              alert("Please select your preferred schedule.");             
-          });          
   });
 </script>
 
-<script type="text/javascript">
+<script>
   $('input:radio[value="1"]').click(function(){
+      $(".dno").attr("disabled", true);
+        $(".lang_select_yes").attr("name", "L").prop('checked', true);
+        $(".course_select_yes").attr("name", "course_id").prop('checked', true);
+        $(".schedule_select_yes").attr("name", "schedule_id[]");        
+        $(".lang_select_no").removeAttr("name");
+        $(".course_select_no").removeAttr("name");
+        $(".schedule_select_no").removeAttr("name");   
+          alert("Please select your preferred schedule.");             
+  });          
+</script>
+
+<script>
+  $('input:radio[value="1"]').on('click',function(){
     $(".course_select_yes").attr("name", "course_id");
+    $(".schedule_select_yes").attr("name", "schedule_id[]"); 
       var course_id = $("input[name='course_id']").val();
       var token = $("input[name='_token']").val();
-        alert( course_id );
+        alert("The course id input is: " + course_id );
+
       $.ajax({
           url: "{{ route('select-ajax2') }}", 
           method: 'POST',
@@ -361,7 +361,6 @@
           success: function(data) {
             $("select[name='schedule_id[]'").html('');
             $("select[name='schedule_id[]'").html(data.options);
-          
           }
       });
   }); 

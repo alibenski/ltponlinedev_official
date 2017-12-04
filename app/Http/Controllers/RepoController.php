@@ -164,9 +164,11 @@ class RepoController extends Controller
         $mgr_email = $request->mgr_email;
         $staff = Auth::user();
         $current_user = Auth::user()->indexno;
-        $now_date = Carbon::now();
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Begin', '>', $now_date)->get()->min('Term_Code');
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
         $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $current_user)
                                 ->value('Te_Code');
@@ -176,7 +178,7 @@ class RepoController extends Controller
                                 ->first();
         $input_schedules = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $current_user)
-                                ->where('Term', $next_term)
+                                ->where('Term', $next_term_code)
                                 ->where('Te_Code', $course)
                                 ->get();
         
