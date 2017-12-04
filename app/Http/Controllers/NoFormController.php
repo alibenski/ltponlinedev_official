@@ -19,7 +19,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Crypt;
 
-class RepoController extends Controller
+class NoFormController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -31,7 +31,7 @@ class RepoController extends Controller
         $this->middleware('auth');
         //$this->middleware('opencloseenrolment');
         //$this->middleware('checksubmissioncount');
-        $this->middleware('checkcontinue');
+        //$this->middleware('checkcontinue');
     }
 
     /**
@@ -89,7 +89,7 @@ class RepoController extends Controller
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
 
-        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
+        return view('form.myform2')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
     }
 
     /**
@@ -108,7 +108,6 @@ class RepoController extends Controller
         $schedule_id = $request->input('schedule_id');
         $mgr_email = $request->input('mgr_email');
         $uniquecode = $request->input('CodeIndexID');
-        $decision = $request->input('decision');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -152,7 +151,7 @@ class RepoController extends Controller
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'mgr_email' =>  $mgr_email,
-                'continue_bool' => $decision,                
+                'continue_bool' => 0,                
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -238,7 +237,7 @@ class RepoController extends Controller
      *
      * @return \Illuminate\Http\response
      */
-    public function selectAjax(Request $request)
+    public function selectAjax3(Request $request)
     {
         if($request->ajax()){
             //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
@@ -247,12 +246,12 @@ class RepoController extends Controller
             ->pluck("Description","Te_Code")
             ->all();
             
-            $data = view('ajax-select',compact('select_courses'))->render();
+            $data = view('ajax-select3',compact('select_courses'))->render();
             return response()->json(['options'=>$data]);
         }
     }
 
-    public function selectAjax2(Request $request)
+    public function selectAjax4(Request $request)
     {
         if($request->ajax()){
 
@@ -263,10 +262,10 @@ class RepoController extends Controller
                 $now_date = Carbon::now()->toDateString();
                 $now_year = Carbon::now()->year;
 
-                //query the current term based on Term_End column is greater than today's date  
+                //query the current term based on year and Term_End column is greater than today's date  
                 $latest_term = Term::orderBy('Term_Code', 'desc')
                                 ->whereDate('Term_End', '>=', $now_date)
-                                ->get()->min();            
+                                ->get()->min();                
                 //$latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
                 $q->where('Te_Term', $latest_term->Term_Code );
             })
@@ -274,8 +273,9 @@ class RepoController extends Controller
             //Eager Load scheduler function and pluck using "dot" 
             ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
 
-            $data = view('ajax-select2',compact('select_schedules'))->render();
+            $data = view('ajax-select4',compact('select_schedules'))->render();
             return response()->json(['options'=>$data]);
         }
     }
+
 }

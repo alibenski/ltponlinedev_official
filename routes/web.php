@@ -10,7 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('genform', function () { return view('form.myform2'); })->name('genform');;
+Route::resource('noform', 'NoFormController', ['only' => ['create', 'store']]);
+Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@selectAjax3']);
+Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
 //url routing for approval page
 Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
 Route::put('/approval/{resource}',      ['as' => 'approval.updateform',     'uses' => 'ApprovalController@updateForm' ]);

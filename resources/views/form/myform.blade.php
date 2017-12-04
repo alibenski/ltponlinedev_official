@@ -3,12 +3,13 @@
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.css') }}" rel="stylesheet">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet">
 @stop
 @section('content')
 <div class="container">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
       <div class="panel panel-default">
           <div class="panel-heading">Enrolment Form for Semester: 
             <strong>
@@ -126,6 +127,7 @@
 
                     <div class="form-group">
                         <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
+                        <button type="button" class="multi-clear button" aria-label="Programmatically clear Select2 options">Clear All</button>
                         <select class="col-md-8 form-control-static schedule_select_yes select2-multi" multiple="multiple" style="width: 65%;" name="" >
                             <option value="">--- Select Schedule ---</option>
                         </select>
@@ -159,12 +161,30 @@
 
                     <div class="form-group">
                         <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
+                        <button type="button" class="multi-clear button" aria-label="Programmatically clear Select2 options">Clear All</button>
                         <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%; display: none;" name="schedule_id[]" autocomplete="off">
                             <option value="">Fill Out Language and Course Options</option>
                         </select>
                     </div>
                 </div>
                 <!-- END OF NO DECISION SECTION -->
+                        <!-- SHOW CHOICES REAL TIME -->
+                <div class="col-md-12">
+                  <div class="well">
+                    <div class="row">        
+                        <div class="form-group">
+                          <label for="first" class="col-md-2 control-label" style="color: green;">First Choice:</label>
+                          <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Second Choice:</label>
+                          <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>        
+                        </div>
+                    </div>    
+                  </div>  
+                </div>
+                        <!-- END OF SHOW CHOICES REAL TIME -->   
 
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
@@ -174,55 +194,38 @@
           </div>
         </div>
     </div>
-            <!-- SHOW CHOICES REAL TIME -->
-    <div class="col-md-4">
-      <div class="well">
-        <div class="row">        
-            <div class="form-group">
-              <label for="first" class="col-md-12 control-label" style="color: green;">First Choice:</label>            
-              <div class="col-md-12 form-control-static"><p id="first" name=""></p></div>                                             
-            </div>
-
-            <div class="form-group">
-              <label for="second" class="col-md-12 control-label" style="color: #337ab7;">Second Choice:</label>
-              <div class="col-md-12 form-control-static"><p id="second"  name=""></p></div>                                    
-            </div>
-        </div>    
-      </div>  
-    </div>
-            <!-- END OF SHOW CHOICES REAL TIME -->   
     </div>
   </div>
 </div>
 @stop   
 
 @section('scripts_code')
-<script
-  src="https://code.jquery.com/jquery-2.1.3.min.js"
-  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM="
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM="
   crossorigin="anonymous"></script>
-<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/select2.full.js') }}"></script>
 
 <script type="text/javascript">
   $(document).ready(function(){
-      function setCurrency (currency) {
-        if (!currency.id) { 
-          return currency.text; 
-        } 
-        var $currency = $('<span class="glyphicon glyphicon-remove">' + currency.text + '</span>');
-        return $currency;
-      };
-
       $(".select2-multi").select2({
+        theme: "bootstrap",
         allowClear: true,
         minimumResultsForSearch: -1,
         maximumSelectionLength: 2,
         width: 'resolve', // need to override the changed default
-        placeholder: 'Select 2',
-        //templateSelection: setCurrency,       
+        closeOnSelect: false,
+        templateResult: formatResult,
+        //templateSelection: formatResult, 
+        placeholder: 'Choose Here',    
       }); 
-
-
+            function formatResult (schedule) {
+        if (!schedule.id) { return schedule.text; }
+        
+        var $schedule = $(
+          '<i class="fa fa-plus-circle" aria-hidden="true"></i><span style="font-style:inherit; margin-left:10px;">'  + schedule.text + '</span>'
+        );
+        return $schedule;
+      };
+      // arrange in order of of being selected
       $(".select2-multi").on("select2:select", function (evt) {
         var element = evt.params.data.element;
         var $element = $(element);
@@ -230,6 +233,24 @@
         $element.detach();
         $(this).append($element);
         $(this).trigger("change");
+      });
+
+      $('.multi-clear').click(function() {
+        $(".select2-multi").val(null).trigger("change"); 
+        $("#first").empty();
+        $("#second").empty();
+      });
+      // close dropdown list after 2 selections to override "closeOnSelect: false" param 
+      $('.select2-multi').change(function(){
+        var ele = $(this);
+        if(ele.val()==null)
+        {
+          ele.select2('open');
+        }
+        else if(ele.val().length==2)
+        {
+          ele.select2('close');
+        }
       });
 
   });
@@ -266,7 +287,7 @@
         if(second != null) {
           $("#second").text(second).css("color","#337ab7").attr("name",second_index).attr("data-id",second_id);
         } else {
-          $("#second").removeAttr("Second Choice: none");
+          $("#second").text("none");
         }
         // doing a diff of old_values gives the new values selected
         var last = $(values).not(old_values).get();
@@ -296,7 +317,7 @@
           $("#second").empty();
         } else if (values_id == get_id_dos){
           $("#second").empty();
-          $( 'input[name="1"]' ).empty();
+          $( 'p[name="1"]' ).empty();
         } 
 
         });

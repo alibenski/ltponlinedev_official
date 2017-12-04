@@ -28,7 +28,7 @@ class CheckContinue
         if (empty($boolx)){
             return $next($request);
         } else if ($boolx == '1') {
-            return redirect()->route('genform');
+            return redirect()->route('noform.create');
         } 
         // if continue_bool is true (1), redirect to myform2
 
