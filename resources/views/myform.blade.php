@@ -5,7 +5,7 @@
 @stop
 @section('content')
 <div class="container">
-  <h1>Thank you for your decision, dawg!!!</h1>
+  <h1>Thank you for your decision. Have a great day!</h1>
 
 </div>
 @stop   

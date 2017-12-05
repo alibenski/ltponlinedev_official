@@ -203,7 +203,11 @@
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM=" crossorigin="anonymous"></script>
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-
+<script>
+  $(document).ready(function(){
+    $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
+  });
+</script>
 <script type="text/javascript">
   $(document).ready(function(){
       $(".select2-multi").select2({
@@ -357,6 +361,8 @@
       $.ajax({
           url: "{{ route('select-ajax2') }}", 
           method: 'POST',
+          cache: false,
+          headers: { "cache-control": "no-cache" },
           data: {course_id:course_id, _token:token},
           success: function(data) {
             $("select[name='schedule_id[]'").html('');

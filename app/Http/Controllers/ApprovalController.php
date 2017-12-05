@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\Preenrolment;
 use App\Term;
+use App\User;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailtoStudent;
 
 class ApprovalController extends Controller
 {
@@ -65,12 +67,11 @@ class ApprovalController extends Controller
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->get();
-
-
+        $index = $staff;                       
         $decision = $request->input('decision'); 
         // Validate data
             $this->validate($request, array(
-                'decision' => 'required|boolean',
+                'decision' => 'required|boolean|not_equal_to_existing:$index',
             )); 
 
         // Save the data to db
@@ -84,6 +85,33 @@ class ApprovalController extends Controller
     
         // Set flash data with message
         $request->session()->flash('success', 'Changes have been saved! Decision value is: '.$decision);
+
+        // execute Mail class before redirect
+        $formfirst = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->first();    
+        // query student email from users model via index nmber in preenrolment model
+        $staff_name = $formfirst->users->name;
+        $staff_email = $formfirst->users->email;
+        $staff_index = $formfirst->INDEXID;   
+        $mgr_email = $formfirst->mgr_email;
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $staff_index)
+                                ->value('Te_Code');
+        //query from Preenrolment table the needed information data to include in email
+        $input_course = $formfirst;
+
+       //var_dump($staff_email);dd($staff_email);
+        Mail::to($staff_email)
+                ->cc($mgr_email)
+                ->send(new MailtoStudent($input_course, $staff_name));
         // Redirect to flash data to posts.show
         return redirect()->route('eform');
     }

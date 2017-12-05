@@ -9,24 +9,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Illuminate\Support\Facades\Crypt;
 
-class MailtoApprover extends Mailable
+class MailtoStudent extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $input_course;
-    public $staff;
-    public $input_schedules;
+    public $staff_name;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($input_course, $input_schedules, $staff)
+    public function __construct($input_course, $staff_name)
     {
         $this->input_course = $input_course;
-        $this->input_schedules = $input_schedules;
-        $this->staff = $staff;
+        $this->staff_name = $staff_name;
         
     }
 
@@ -37,9 +35,9 @@ class MailtoApprover extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.approval')
+        return $this->view('emails.notifystudent')
                     ->from('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Approval Needed: Language Course Enrolment '. $this->input_course->courses->Description  .' for '.$this->staff->name);
+                    ->subject('Notification: Decision Made for CLM Language Course Enrolment '. $this->input_course->courses->Description);
     }
 }

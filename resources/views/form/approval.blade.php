@@ -6,6 +6,15 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
+      @if (count($errors) > 0)
+          <div class="alert alert-danger">
+              <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+          </div>
+      @endif
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -99,6 +108,7 @@
 </div>
 @stop 
 @section('scripts_code')
+
 <script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
