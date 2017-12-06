@@ -70,7 +70,9 @@
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-
+                <div class="alert alert-warning" style="text-align: center">
+                  <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once a decision has been submitted. Thank you for your kind attention. 
+                </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label">Approve the above course schedule(s)?</label>
 
@@ -87,6 +89,15 @@
 
 
                 <div class="col-sm-offset-5">
+                  @component('form.modal')
+                    @slot('title')
+                      Confirmation
+                    @endslot
+                    @slot('body')
+                      <p>Once you submit your decision, you agree to the STI policy that...</p>
+                      <p>Please double check your decision. It never hurts to be sure. Thank you for your kind attention.</p>
+                    @endslot
+                  @endcomponent
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Decision</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
                   {{ method_field('PUT') }}

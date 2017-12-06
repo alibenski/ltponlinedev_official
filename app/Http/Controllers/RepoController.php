@@ -29,6 +29,7 @@ class RepoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('prevent-back-history');
         //$this->middleware('opencloseenrolment');
         //$this->middleware('checksubmissioncount');
         $this->middleware('checkcontinue');

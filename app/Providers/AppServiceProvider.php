@@ -35,7 +35,6 @@ class AppServiceProvider extends ServiceProvider
                                 ->where('Te_Code', $tecode)
                                 ->first(); 
             $existing_appr_value = $query_form->approval;
-
             if($value != $existing_appr_value){
                 return true;
             } 

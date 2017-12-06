@@ -61,6 +61,7 @@ class Kernel extends HttpKernel
         'checksubmissioncount' => \App\Http\Middleware\CheckSubmissionCount::class,
         'opencloseenrolment' => \App\Http\Middleware\OpenCloseEnrolment::class,
         'checkcontinue' => \App\Http\Middleware\CheckContinue::class,
+        'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
 
     ];
 }

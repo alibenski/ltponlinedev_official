@@ -13,6 +13,11 @@ use App\Mail\MailtoStudent;
 
 class ApprovalController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('prevent-back-history');
+    }
+
     public function show($id)
     {
         //
@@ -44,7 +49,13 @@ class ApprovalController extends Controller
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->first();
-
+        //check if decision has already been made
+        $existing_appr_value = $input_staff->approval; 
+        if (isset($existing_appr_value)) {
+            
+            return redirect()->route('eform');
+        } 
+        
         return view('form.approval')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code);
     }
 

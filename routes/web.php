@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['middleware' => 'prevent-back-history'],function(){
+    Auth::routes();
+    Route::get('/','WelcomeController@index');
+});
 Route::resource('noform', 'NoFormController', ['only' => ['create', 'store']]);
 Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@selectAjax3']);
 Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
