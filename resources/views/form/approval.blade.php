@@ -6,15 +6,6 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
-      @if (count($errors) > 0)
-          <div class="alert alert-danger">
-              <ul>
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-          </div>
-      @endif
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -24,7 +15,8 @@
           <div class="panel-body">
             <form method="POST" action="{{ route('approval.updateform', [$input_staff->INDEXID, $input_staff->Te_Code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
-
+                <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>
+                <input  name="Te_Code" type="hidden" value="{{$input_staff->Te_Code}}" readonly>
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Staff Member Name:</label>
 

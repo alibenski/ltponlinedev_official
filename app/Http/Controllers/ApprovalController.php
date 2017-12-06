@@ -67,11 +67,13 @@ class ApprovalController extends Controller
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->get();
-        $index = $staff;                       
+                      
         $decision = $request->input('decision'); 
         // Validate data
             $this->validate($request, array(
-                'decision' => 'required|boolean|not_equal_to_existing:$index',
+                'decision' => 'required|boolean|not_equal_to_existing',
+                'INDEXID' => 'required',
+                'Te_Code' => 'required',
             )); 
 
         // Save the data to db

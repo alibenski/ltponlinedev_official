@@ -19,9 +19,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        
         Validator::extend('not_equal_to_existing', function($attribute, $value, $parameters, $validator) {
-            $now_date = Carbon::now()->toDateString(); dd($parameters[0]);
+            // get array values from $validator param
+            $data = $validator->getData();
+            $staff = $data['INDEXID'];
+            $tecode = $data['Te_Code'];
+            $now_date = Carbon::now()->toDateString(); 
             $terms = Term::orderBy('Term_Code', 'desc')
                     ->whereDate('Term_End', '>=', $now_date)
                     ->get()->min();
@@ -33,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
                                 ->first(); 
             $existing_appr_value = $query_form->approval;
 
-            if(!empty($value) && $value != $existing_appr_value){
+            if($value != $existing_appr_value){
                 return true;
             } 
                 return false;
