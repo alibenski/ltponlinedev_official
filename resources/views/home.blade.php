@@ -16,7 +16,7 @@
 @endif
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="panel panel-default">
                 <div class="panel-heading">Student Profile</div>
 
@@ -47,10 +47,26 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="job_appointment" class="col-md-5 control-label">Organization:</label>
+
+                            <div class="col-md-4 form-control-static">
+                                <p>{{ Auth::user()->sddextr->DEPT }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="job_appointment" class="col-md-5 control-label">Type of Appointment:</label>
 
                             <div class="col-md-4 form-control-static">
-                                <p>{{ Auth::user()->job_appointment }}</p>
+                                <p>{{ Auth::user()->sddextr->CATEGORY }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="job_appointment" class="col-md-5 control-label">Contract Expiration:</label>
+
+                            <div class="col-md-4 form-control-static">
+                                <p>{{ Auth::user()->sddextr->CONEXP }}</p>
                             </div>
                         </div>
 
@@ -82,8 +98,8 @@
             </div>
         </div>
         <!-- show submitted forms -->
-        <div class="col-md-6">
-            <div class="well">
+        <div class="col-md-5">
+            <div class="well row">
                 <div class="form-group">
                     <label for="course" class="control-label">Submitted Enrolment Forms for the 
                         @if(empty($next_term->Term_Name))
@@ -91,14 +107,18 @@
                         @else
                         {{ $next_term->Term_Name }} 
                         @endif
-                    Term:</label>
-                    <div class="">
+                        Term:
+                    </label>
                         <ul>
-                                @foreach($forms_submitted as $form)
-                                <span class="label label-success"><a href="{{ route('myform.edit', Crypt::encrypt($form->id)) }}" style="color: white;">{{ $form->courses->Description.' - '.$form->schedule->name}}</a></span>
-                                @endforeach
+                            @foreach($forms_submitted as $form)
+                            <div class="col-sm-10">
+                            <p><small>{{ $form->courses->Description.' - '.$form->schedule->name}}</small></p>
+                            </div>
+                            <div class="col-sm-2">
+                            <a href="{{ route('myform.edit', Crypt::encrypt($form->id)) }}" class="btn btn-default btn-sm">View</a>
+                            </div>
+                            @endforeach
                         </ul>
-                    </div>
                 </div>
             </div>
         </div>

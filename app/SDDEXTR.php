@@ -22,4 +22,8 @@ class SDDEXTR extends Model
 	 * @var bool
 	 */
 	public $incrementing = false;
+
+    public function users() {
+    return $this->belongsTo('App\User'); 
+    }
 }

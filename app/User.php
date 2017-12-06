@@ -38,4 +38,8 @@ class User extends Authenticatable
     public function repos() {
     return $this->hasMany('App\Repo'); 
     }
+
+    public function sddextr() {
+    return $this->hasOne('App\SDDEXTR', 'INDEXNO', 'indexno'); 
+    }
 }
