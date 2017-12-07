@@ -7,6 +7,7 @@
         <div id="app">
             @include('partials._nav')
             @include('partials._messages')
+            @include('partials._nav2')
             @yield('content')
         
             <!-- Footer Section -->

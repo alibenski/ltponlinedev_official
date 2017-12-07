@@ -14,7 +14,7 @@
         <strong>Sorry: </strong> {{ Session::get('enrolment_closed') }}
     </div>
 @endif
-<div class="container">
+
     <div class="row">
         <div class="col-md-7">
             <div class="panel panel-default">
@@ -91,8 +91,8 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">click here to enrol</a>
-                        </div>
+                        <!--<div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">click here to enrol</a>
+                        </div>-->
                     </form>
                 </div>
             </div>
@@ -101,14 +101,14 @@
         <div class="col-md-5">
             <div class="well row">
                 <div class="form-group">
-                    <label for="course" class="control-label">Submitted Enrolment Forms for the 
+                    <p style="text-align: center;"><strong>Submitted Enrolment Forms for the 
                         @if(empty($next_term->Term_Name))
                         DB NO ENTRY
                         @else
                         {{ $next_term->Term_Name }} 
                         @endif
-                        Term:
-                    </label>
+                        Term
+                    </strong></p>
                         <ul>
                             @foreach($forms_submitted as $form)
                             <div class="col-sm-10">
