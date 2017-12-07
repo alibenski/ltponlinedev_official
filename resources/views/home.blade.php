@@ -16,7 +16,7 @@
 @endif
 
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">Student Profile</div>
 
@@ -31,57 +31,57 @@
                         
 
                         <div class="form-group">
-                            <label for="name" class="col-md-5 control-label">Full Name:</label>
+                            <label for="name" class="col-md-4 control-label">Full Name:</label>
 
-                            <div class="col-md-4 form-control-static">
+                            <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->name }}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="email" class="col-md-5 control-label">Email Address:</label>
+                            <label for="email" class="col-md-4 control-label">Email Address:</label>
 
-                            <div class="col-md-4 form-control-static">
+                            <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->email }}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-5 control-label">Organization:</label>
+                            <label for="job_appointment" class="col-md-4 control-label">Organization:</label>
 
-                            <div class="col-md-4 form-control-static">
+                            <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->DEPT }}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-5 control-label">Type of Appointment:</label>
+                            <label for="job_appointment" class="col-md-4 control-label">Type of Appointment:</label>
 
-                            <div class="col-md-4 form-control-static">
+                            <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->CATEGORY }}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-5 control-label">Contract Expiration:</label>
+                            <label for="job_appointment" class="col-md-4 control-label">Contract Expiration:</label>
 
-                            <div class="col-md-4 form-control-static">
+                            <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->CONEXP }}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="job_category" class="col-md-5 control-label">Job Category:</label>
+                            <label for="job_category" class="col-md-4 control-label">Job Category:</label>
 
-                            <div class="col-md-4 form-control-static">
+                            <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->job_category }}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="course" class="col-md-5 control-label">Last UN Language Course:</label>
+                            <label for="course" class="col-md-4 control-label">Last UN Language Course:</label>
 
-                            <div class="col-md-4 form-control-static">
+                            <div class="col-md-8 form-control-static">
                                 <p>
                                     @if(empty ($repos_lang->courses->EDescription))
                                     none
@@ -97,31 +97,12 @@
                 </div>
             </div>
         </div>
-        <!-- show submitted forms -->
-        <div class="col-md-5">
-            <div class="well row">
-                <div class="form-group">
-                    <p style="text-align: center;"><strong>Submitted Enrolment Forms for the 
-                        @if(empty($next_term->Term_Name))
-                        DB NO ENTRY
-                        @else
-                        {{ $next_term->Term_Name }} 
-                        @endif
-                        Term
-                    </strong></p>
-                        <ul>
-                            @foreach($forms_submitted as $form)
-                            <div class="col-sm-10">
-                            <p><small>{{ $form->courses->Description.' - '.$form->schedule->name}}</small></p>
-                            </div>
-                            <div class="col-sm-2">
-                            <a href="{{ route('myform.edit', Crypt::encrypt($form->id)) }}" class="btn btn-default btn-sm">View</a>
-                            </div>
-                            @endforeach
-                        </ul>
+        
+        <div class="col-md-4">
+                <div class="well row">
+                    <h5>Operation Block</h3>
                 </div>
-            </div>
-        </div>
+        </div>    
     </div>
 </div>
 @endsection

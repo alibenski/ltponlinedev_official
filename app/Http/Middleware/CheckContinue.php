@@ -32,6 +32,7 @@ class CheckContinue
         $current_user = Auth::user()->indexno;
         $boolx = Preenrolment::where('INDEXID', '=', $current_user)->where('Term','=', $next_term_code )
                     ->where('continue_bool','=', '1' )->value('continue_bool');
+
         // run only if there is already an entry in Preenrolment table
         if (empty($boolx)){
             return $next($request);

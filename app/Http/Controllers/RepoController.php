@@ -14,6 +14,7 @@ use App\Term;
 use App\Classroom;
 use App\Schedule;
 use App\Preenrolment;
+use App\Torgan;
 use Session;
 use Carbon\Carbon;
 use DB;
@@ -89,8 +90,9 @@ class RepoController extends Controller
         //not using DB method to get latest language course of current_user
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
+        $org = Torgan::get()->pluck('Org name','Org name');
 
-        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user);
+        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
     }
 
     /**
@@ -110,6 +112,7 @@ class RepoController extends Controller
         $mgr_email = $request->input('mgr_email');
         $uniquecode = $request->input('CodeIndexID');
         $decision = $request->input('decision');
+        $org = $request->input('org');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -138,6 +141,7 @@ class RepoController extends Controller
                             'course_id' => 'required|',
                             'L' => 'required|',
                             'mgr_email' => 'required|email',
+                            'org' => 'required'
                         )); 
         //loop for storing Code value to database
         $ingredients = [];        
@@ -153,7 +157,8 @@ class RepoController extends Controller
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'mgr_email' =>  $mgr_email,
-                'continue_bool' => $decision,                
+                'continue_bool' => $decision,
+                'DEPT' => $org,                
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -207,10 +212,7 @@ class RepoController extends Controller
      */
     public function edit($id)
     {
-        $id = Crypt::decrypt($id);
-        $form = Preenrolment::find($id);
-                
-        return view('form.edit')->withForm($form);
+        //
     }
 
     /**

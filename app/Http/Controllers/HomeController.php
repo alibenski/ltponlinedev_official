@@ -50,7 +50,30 @@ class HomeController extends Controller
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )->get();
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        
         return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
+    }
+
+    public function index2()
+    {
+        $current_user = Auth::user()->indexno;
+        //query last UN Language Course enrolled in the past based on PASHQ table
+        $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
+        //query the current term based on year and Term_End column is greater than today's date
+        //whereYear('Term_End', $now_year)  
+                        //->first();
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        //query submitted forms based from tblLTP_Enrolment table
+        $forms_submitted = Preenrolment::distinct('Te_Code')
+            ->where('INDEXID', '=', $current_user)
+            ->where('Term', $next_term_code )->get();
+        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        
+        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
     }
 
     /**

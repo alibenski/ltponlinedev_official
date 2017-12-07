@@ -1,4 +1,4 @@
-@extends('main')
+@extends('public')
 @section('tabtitle', '| Approval Page')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -34,6 +34,17 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="" class="form-control"  type="text" value="{{$input_staff->users->email}}"readonly="">                                    
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Organization:</label>
+
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span><input  name="" class="form-control"  type="text" value="{{$input_staff->DEPT}}" readonly>                                    
+                        </div>
+                        <p class="small text-danger"><strong>Please check the organization indicated in this field. Kindly take note that the organization in this field will be billed for this course (when necessary). Please refer to <a href="#">STI Policy blah blah</a> for more details.</strong></p>
                     </div>
                 </div>
              

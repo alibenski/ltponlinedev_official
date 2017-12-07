@@ -26,4 +26,7 @@ class SDDEXTR extends Model
     public function users() {
     return $this->belongsTo('App\User'); 
     }
+	public function torgan() {
+    return $this->hasOne('App\Torgan', 'Org name', 'DEPT'); 
+    }
 }

@@ -14,7 +14,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
     Auth::routes();
     Route::get('/','WelcomeController@index');
 });
-Route::resource('noform', 'NoFormController', ['only' => ['create', 'store']]);
+Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'edit']]);
 Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@selectAjax3']);
 Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
 //url routing for approval page
@@ -31,23 +31,19 @@ Route::resource('courses', 'CourseController');
 Route::resource('students', 'HomeController');
 Route::get('eform', function () { return view('myform'); })->name('eform');
 //Route::get('/', function () { return view('welcome'); });
-
 Auth::routes();
     // Authentication Routes...
 //    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 //    Route::post('login', 'Auth\LoginController@login');
 //    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-
     // Registration Routes...
 //    Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 //    Route::post('register', 'Auth\RegisterController@register');
-
     // Password Reset Routes...
 //    Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 //    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 //    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 //    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-
 if ( Auth::check())
 {
     Route::get('/','LoginController@index');
@@ -57,6 +53,8 @@ else
     Route::get('/','WelcomeController@index');
 }
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/submitted', ['as'=>'submmitted','uses'=>'HomeController@index2']);
+
 // show routes in webpage
 Route::get('simpleroutes', function() {
     $routeCollection = Route::getRoutes();

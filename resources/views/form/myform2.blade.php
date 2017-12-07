@@ -55,13 +55,29 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="org" class="col-md-3 control-label">Organization:</label>
+                  <div class="col-md-8">
+                    <div class="dropdown">
+                      <select name="org" id="input" class="col-md-8 form-control" required="required">
+                        @if(!empty($org))
+                          @foreach($org as $key => $value)
+                            <option value="{{ $key }}" {{ ($user->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
+                          @endforeach
+                        @endif
+                      </select>
+                    </div>
+                    <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
+                  </div>
+                </div>
+
+                <div class="form-group">
                     <label for="mgr_email" class="col-md-3 control-label">Manager's Email Address:</label>
                     
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text">                                    
                         </div>
-                         <p class="small text-danger">Enter the correct email address of your manager because this form will be sent to this email address for approval.</p>
+                         <p class="small text-danger"><strong>Enter the correct email address of your manager because this form will be sent to this email address for approval.</strong></p>
                     </div>
                 </div>
              
@@ -97,16 +113,25 @@
 
                     <div class="form-group">
                         <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
-                        <select class="col-md-8 wx form-control-static course_select_no" name="course_id" autocomplete="off">
-                            <option value="">--- Select Course ---</option>
-                        </select>
+                        <div class="col-md-8">
+                          <div class="dropdown">
+                            <select class="col-md-8 form-control course_select_no" name="course_id" autocomplete="off">
+                                <option value="">--- Select Course ---</option>
+                            </select>
+                          </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
-                        <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 65%; display: none;" name="schedule_id[]" autocomplete="off">
-                            <option value="">Fill Out Language and Course Options</option>
-                        </select>
+                        <button type="button" class="multi-clear button btn btn-danger" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
+                        <div class="col-md-8">
+                          <div class="dropdown">
+                            <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
+                                <option value="">Fill Out Language and Course Options</option>
+                            </select>
+                          </div>
+                        </div>
                     </div>
                 </div>
                 <!-- END OF NO DECISION SECTION -->

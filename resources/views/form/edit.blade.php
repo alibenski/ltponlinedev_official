@@ -1,4 +1,4 @@
-@extends('main')
+@extends('public')
 @section('tabtitle', '| Edit')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
