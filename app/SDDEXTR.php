@@ -23,6 +23,13 @@ class SDDEXTR extends Model
 	 */
 	public $incrementing = false;
 
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'UPDATED';
+
     public function users() {
     return $this->belongsTo('App\User'); 
     }

@@ -29,7 +29,8 @@ Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');
 Route::resource('courses', 'CourseController');
 Route::resource('students', 'HomeController');
-Route::get('eform', function () { return view('myform'); })->name('eform');
+Route::get('eform', function () { return view('confirmation_page_unog'); })->name('eform');
+Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();
     // Authentication Routes...

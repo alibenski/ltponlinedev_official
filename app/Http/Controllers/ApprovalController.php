@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Preenrolment;
 use App\Term;
 use App\User;
+use App\Torgan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailtoStudent;
@@ -120,12 +121,21 @@ class ApprovalController extends Controller
                                 ->value('Te_Code');
         //query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst;
+        //check the organization of the student to know which email process is followed by the system
+        $org = $formfirst->DEPT; 
 
-       //var_dump($staff_email);dd($staff_email);
-        Mail::to($staff_email)
-                ->cc($mgr_email)
-                ->send(new MailtoStudent($input_course, $staff_name));
-        // Redirect to flash data to posts.show
-        return redirect()->route('eform');
+        if ($org !== 'UNOG') {
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->select('Org name', 'Org Full Name', 'Org Contact')->get();
+            dd($other_org);
+        } else {
+
+            Mail::to($staff_email)
+                    ->cc($mgr_email)
+                    ->send(new MailtoStudent($input_course, $staff_name));
+            
+            return redirect()->route('eform');
+        }
+
     }
 }

@@ -14,6 +14,7 @@ use App\Term;
 use App\Classroom;
 use App\Schedule;
 use App\Preenrolment;
+use App\SDDEXTR;
 use App\Torgan;
 use Session;
 use Carbon\Carbon;
@@ -163,9 +164,8 @@ class RepoController extends Controller
                     foreach ($ingredients as $data) {
                         $data->save();
                     }
-        } 
-        $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
-        
+        }
+       
         //execute Mail class before redirect         
         $mgr_email = $request->mgr_email;
         $staff = Auth::user();
@@ -190,7 +190,17 @@ class RepoController extends Controller
         
         Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
-        return redirect()->route('home');
+        $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
+        $sddextr_org = $sddextr_query->DEPT;
+        if ($org == $sddextr_org){
+            //flash session success or errorBags 
+            $request->session()->flash('success', 'Enrolment Form has been submitted for approval'); //laravel 5.4 version
+
+            return redirect()->route('home');
+        }else{
+            
+            return $this->update($request, $org, $current_user);
+        }
     }
 
     /**
@@ -222,9 +232,17 @@ class RepoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $org, $current_user)
     {
-        //
+        //update SDDEXTR table with new organization of the user after submit
+        $sddextr_org = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
+
+        $sddextr_org->DEPT = $org;
+        $sddextr_org->save();  
+
+        $request->session()->flash('success', 'Enrolment Form has been submitted for approval'); //laravel 5.4 version
+        $request->session()->flash('org_change_success', 'Organization has been updated'); 
+        return redirect()->route('home');
     }
 
     /**
