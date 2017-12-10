@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Decision for the enrolment to a CLM language course of Staff Member, {{ $staff_name }}.
+            Staff Member, {{ $staff_name }} , would like to enrol to a CLM language course and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -192,30 +192,31 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
-                                     <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. Your <strong> manager</strong> (with email address: {{ $input_course->mgr_email }}) has <strong>  
-                                        @if( $input_course->approval == 1)
-                                                approved 
-                                        @else
-                                                disapproved
-                                        @endif
-                                      </strong> your enrolment.</p>
-                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member, your enrolment has now been sent to your HR Learning Section for further review and approval. You will receive another email which will include the decision of your HR Learning Section.</p>
+                                     <p> Dear CLM Learning Partner, </p>
+                                     <p> Staff Member, {{ $staff_name }}, would like to enrol to CLM language course: <strong> {{ $input_course->courses->Description }} </strong></p>
+                                     <p> The staff member chose the following options for class schedule(s):</p>
+                                     <ol>
+                                     @foreach($forms as $form)   
+                                     <li><strong>{{ $form->schedule->name }}</strong></li>
+                                     @endforeach
+                                     </ol>
+                                     <p>Please note that the enrolment above has initially been approved by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>
+                                     <p>Please click on the button below to access the approval page.</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <!-- Button : BEGIN
+                                    <!-- Button : BEGIN -->
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                                <a href="" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                                                <a href="{{ route('approval.getform2hr', [Crypt::encrypt($input_course->INDEXID), Crypt::encrypt($input_course->Te_Code)]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
                                                     <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Approval Link&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>
                                     </table>
-                                    Button : END -->
+                                    <!-- Button : END -->
                                 </td>
                             </tr>
                             <tr>

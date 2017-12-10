@@ -8,7 +8,7 @@ class Preenrolment extends Model
 {
     protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','DEPT'
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT'
     ];
 
     /**

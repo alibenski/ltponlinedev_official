@@ -7,9 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use Illuminate\Support\Facades\Crypt;
-
-class MailtoStudent extends Mailable
+class MailtoStudentHR extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -25,7 +23,6 @@ class MailtoStudent extends Mailable
     {
         $this->input_course = $input_course;
         $this->staff_name = $staff_name;
-        
     }
 
     /**
@@ -35,9 +32,9 @@ class MailtoStudent extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.notifystudent')
+        return $this->view('emails.notifystudenthr')
                     ->from('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Notification: Manager/Supervisor Decision Made for CLM Language Course Enrolment '. $this->input_course->courses->Description);
+                    ->subject('Notification: CLM Learning Partner Decision Made for CLM Language Course Enrolment '. $this->input_course->courses->Description);
     }
 }

@@ -193,14 +193,14 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. Your <strong> manager</strong> (with email address: {{ $input_course->mgr_email }}) has <strong>  
+                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. Your organization's<strong> HR Staff and Development Section</strong> has <strong>  
                                         @if( $input_course->approval == 1)
                                                 approved 
                                         @else
                                                 disapproved
                                         @endif
                                       </strong> your enrolment.</p>
-                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member, your enrolment has now been sent to your HR Learning Section for further review and approval. You will receive another email which will include the decision of your HR Learning Section.</p>
+                                      <p><strong>NOTE:</strong>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure ullam dicta sed, asperiores eos quo sint quibusdam ad, impedit qui dolore repellat, error repellendus laborum unde. Enim voluptatum totam maiores.</p>
                                 </td>
                             </tr>
                             <tr>

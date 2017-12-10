@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         Validator::extend('not_equal_to_existing', function($attribute, $value, $parameters, $validator) {
+            
             // get array values from $validator param
             $data = $validator->getData();
             $staff = $data['INDEXID'];
@@ -34,11 +35,22 @@ class AppServiceProvider extends ServiceProvider
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->first(); 
-            $existing_appr_value = $query_form->approval;
-            if($value != $existing_appr_value){
-                return true;
-            } 
-                return false;
+            
+            if ($attribute == 'decision') {
+                $existing_appr_value = $query_form->approval;
+
+                if($value != $existing_appr_value){
+                    return true;
+                } 
+                    return false;
+            } else if ($attribute == 'decisionhr') {
+                $existing_appr_value_hr = $query_form->approval_hr;
+
+                if($value != $existing_appr_value_hr){
+                    return true;
+                } 
+                    return false;
+            }
         });
     }
 

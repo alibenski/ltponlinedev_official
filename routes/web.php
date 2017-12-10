@@ -10,20 +10,33 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
+Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'SelfPayController@selectAjax']);
+Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'SelfPayController@selectAjax2']);
+
+//middleware to prevent back button and access cache
 Route::group(['middleware' => 'prevent-back-history'],function(){
     Auth::routes();
     Route::get('/','WelcomeController@index');
 });
+
 Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'edit']]);
 Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@selectAjax3']);
 Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
+
 //url routing for approval page
-Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform',       'uses' => 'ApprovalController@getForm' ]);
-Route::put('/approval/user/{staff}/course/{tecode}',      ['as' => 'approval.updateform',     'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
+Route::put('/approval/user/{staff}/course/{tecode}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+
+Route::get('/approvalhr/{staff}/{tecode}', ['as' => 'approval.getform2hr','uses' => 'ApprovalController@getForm2hr' ]);
+Route::put('/approvalhr/user/{staff}/course/{tecode}',      ['as' => 'approval.updateform2hr','uses' => 'ApprovalController@updateForm2hr' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+
+//controller for main form
 Route::resource('myform', 'RepoController');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@selectAjax2']);
-//Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'HomeController@selectAjax']);
+
 Route::resource('classrooms', 'ClassroomController');
 Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');

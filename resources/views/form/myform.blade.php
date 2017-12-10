@@ -71,6 +71,23 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="mgr_email" class="col-md-3 control-label">Manager's Name:</label>
+                    
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                            </span><input  name="mgr_fname" placeholder="Manager's First Name" class="form-control"  type="text" required="required">
+                        </div>
+                    </div>    
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                            </span><input  name="mgr_lname" placeholder="Manager's Last Name" class="form-control"  type="text" required="required">                                    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="mgr_email" class="col-md-3 control-label">Manager's Email Address:</label>
                     
                     <div class="col-md-8 inputGroupContainer">
@@ -224,18 +241,27 @@
     </div>
   </div>
 </div>
+
+  </div>
+</div>
 @stop   
 
 @section('scripts_code')
 
-<script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM=" crossorigin="anonymous"></script>
-
 <script src="{{ asset('js/select2.min.js') }}"></script>
+
+<script>  
+  $(document).ready(function () {
+      $('#modal-check').modal('show');
+  });
+</script>
+
 <script>
   $(document).ready(function(){
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
   });
 </script>
+
 <script type="text/javascript">
   $(document).ready(function(){
       $(".select2-multi").select2({
