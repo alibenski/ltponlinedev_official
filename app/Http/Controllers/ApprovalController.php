@@ -134,7 +134,7 @@ class ApprovalController extends Controller
 
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->select('Org name', 'Org Full Name', 'Org Contact')->get();
-            $org_email = 'abc@other_un.org';//should be $other_org->email
+            $org_email = 'allyson.frias@un.org';//should be $other_org->email
             Mail::to($org_email)
                     ->send(new MailtoApproverHR($forms, $input_course, $staff_name, $mgr_email));
             

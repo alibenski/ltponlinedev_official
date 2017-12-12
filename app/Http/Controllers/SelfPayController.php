@@ -16,10 +16,12 @@ use App\Schedule;
 use App\Preenrolment;
 use App\SDDEXTR;
 use App\Torgan;
+use App\File;
 use Session;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class SelfPayController extends Controller
 {
@@ -106,10 +108,8 @@ class SelfPayController extends Controller
         $term_id = $request->input('term_id');
         //$schedule_id is an array 
         $schedule_id = $request->input('schedule_id');
-        $mgr_email = $request->input('mgr_email');
         $uniquecode = $request->input('CodeIndexID');
         $decision = $request->input('decision');
-        $org = $request->input('org');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -125,7 +125,7 @@ class SelfPayController extends Controller
                 foreach ($codex as $value) {
                     $request->merge( [ 'CodeIndexID' => $value ] );
                 }
-                        var_dump($request->CodeIndexID);
+                        //var_dump($request->CodeIndexID);
                         $this->validate($request, array(
                             'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
                         ));
@@ -137,9 +137,21 @@ class SelfPayController extends Controller
                             'schedule_id' => 'required|',
                             'course_id' => 'required|',
                             'L' => 'required|',
-                            //'mgr_email' => 'required|email',
-                            //'org' => 'required'
+                            'payfile' => "required|mimes:pdf|max:20000",
                         )); 
+        //Store the attachment to storage path and save in db table
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension();
+            //Store attachment
+            Storage::putFileAs('public/pdf', $request->file('payfile'), $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension());
+            //Create new record in db table
+            $attachment = new File([
+                    'filename' => $filename,
+                    'size' => $request->payfile->getClientSize(),
+                            ]); 
+            $attachment->save();
+        } 
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
@@ -153,14 +165,15 @@ class SelfPayController extends Controller
                 'INDEXID' => $index_id,
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
-                'mgr_email' =>  $mgr_email,
                 'continue_bool' => $decision,
-                'DEPT' => $org,                
+                'attachment_id' => $attachment->id,
                 ]); 
+
                     foreach ($ingredients as $data) {
-                        $data->save();
+                        $data->save();                    
                     }
         }
+        
         
         //execute Mail class before redirect         
         $mgr_email = $request->mgr_email;
@@ -184,7 +197,7 @@ class SelfPayController extends Controller
                                 ->where('Te_Code', $course)
                                 ->get();
         
-        Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
+        //Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
 

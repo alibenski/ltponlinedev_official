@@ -8,7 +8,7 @@ class Preenrolment extends Model
 {
     protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT'
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id'
     ];
 
     /**
@@ -35,6 +35,9 @@ class Preenrolment extends Model
     }
 	public function terms() {
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
+    }
+   public function files() {
+    return $this->belongsTo('App\Files'); 
     }
 
 }

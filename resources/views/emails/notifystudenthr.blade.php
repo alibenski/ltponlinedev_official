@@ -194,7 +194,7 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear {{ $staff_name }}, </p>
                                      <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. Your organization's<strong> HR Staff and Development Section</strong> has <strong>  
-                                        @if( $input_course->approval == 1)
+                                        @if( $input_course->approval_hr == 1)
                                                 approved 
                                         @else
                                                 disapproved

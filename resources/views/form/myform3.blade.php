@@ -57,8 +57,8 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="" class="col-md-3 control-label">Upload Proof of Payment: </label>
-                  <input type="file" class="col-md-8 form-control-static" required="required">
+                  <label for="payfile" class="col-md-3 control-label">Upload Proof of Payment: </label>
+                  <input name="payfile" type="file" class="col-md-8 form-control-static" required="required">
                 </div>
              
                 <div class="form-group">
