@@ -1,5 +1,5 @@
 @extends('public')
-@section('tabtitle', '| Approval Page')
+@section('tabtitle', '| Manager Approval Page')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
@@ -85,19 +85,25 @@
                   <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once a decision has been submitted. Thank you for your kind attention. 
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">Approve the above course schedule(s)?</label>
+                    <label class="col-md-4 control-label">Do you approve the above enrolment?</label>
 
                       <div class="col-md-2">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" >
                                 <label for="decision1" class="form-control-static">YES</label>
                       </div>
-
+                      
                       <div class="col-md-2">
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0">
                                 <label for="decision2" class="form-control-static">NO</label>
                       </div>
                 </div>
-
+                
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                  <div class="col-md-8 ">
+                  <textarea class="form-control"></textarea>
+                  </div>
+                </div>
 
                 <div class="col-sm-offset-5">
                   @component('form.modal')
@@ -109,9 +115,6 @@
                       <p>Please double check your decision. It never hurts to be sure. Thank you for your kind attention.</p>
                     @endslot
                   @endcomponent
-                  <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Decision</button>
-                  <input type="hidden" name="_token" value="{{ Session::token() }}">
-                  {{ method_field('PUT') }}
                 </div>
             </form>
           </div>

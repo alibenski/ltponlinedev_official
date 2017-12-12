@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', "| Edit Schedule $schedule->name")
+@section('tabtitle', "| Edit Schedule")
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @stop

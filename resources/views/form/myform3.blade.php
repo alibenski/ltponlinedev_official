@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| MyForm')
+@section('tabtitle', '| Self-Pay Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-          <div class="panel-heading"><strong>Self Payment</strong> Enrolment Form for Semester: 
+          <div class="panel-heading"><strong>Self Payment</strong> Enrolment Form for Next Semester: 
             <strong>
               @if(empty($next_term && $terms))
               NO DB ENTRY

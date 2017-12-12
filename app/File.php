@@ -8,7 +8,7 @@ class File extends Model
 {
     protected $table = 'tblLTP_Files';
     protected $fillable = [
-        'filename', 'size',
+        'filename', 'size','path'
     ];
 
 }

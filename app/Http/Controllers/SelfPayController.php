@@ -144,11 +144,12 @@ class SelfPayController extends Controller
             $request->file('payfile');
             $filename = $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension();
             //Store attachment
-            Storage::putFileAs('public/pdf', $request->file('payfile'), $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf', $request->file('payfile'), $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension());
             //Create new record in db table
             $attachment = new File([
                     'filename' => $filename,
                     'size' => $request->payfile->getClientSize(),
+                    'path' => $filestore,
                             ]); 
             $attachment->save();
         } 
@@ -249,5 +250,45 @@ class SelfPayController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function selectAjax(Request $request)
+    {
+        if($request->ajax()){
+            //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
+            $select_courses = DB::table('LTP_CR_LIST')
+            ->where('L', $request->L)
+            ->pluck("Description","Te_Code")
+            ->all();
+            
+            $data = view('ajax-select',compact('select_courses'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
+
+    public function selectAjax2(Request $request)
+    {
+        if($request->ajax()){
+
+            //$select_schedules = DB::table('LTP_TEVENTCur')
+            $select_schedules = Classroom::where('Te_Code', $request->course_id)
+            ->where(function($q){
+                //get current year and date
+                $now_date = Carbon::now()->toDateString();
+                $now_year = Carbon::now()->year;
+
+                //query the current term based on Term_End column is greater than today's date  
+                $latest_term = Term::orderBy('Term_Code', 'desc')
+                                ->whereDate('Term_End', '>=', $now_date)
+                                ->get()->min();            
+                //$latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
+                $q->where('Te_Term', $latest_term->Term_Code );
+            })
+
+            //Eager Load scheduler function and pluck using "dot" 
+            ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
+
+            $data = view('ajax-select2',compact('select_schedules'))->render();
+            return response()->json(['options'=>$data]);
+        }
     }
 }

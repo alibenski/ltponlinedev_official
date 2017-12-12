@@ -1,5 +1,6 @@
 @extends('main')
-@section('tabtitle', "| Edit Course $course->name")
+<?php $tabtitle = htmlspecialchars($course->name); ?>
+@section('tabtitle', "| Edit $tabtitle")
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @stop

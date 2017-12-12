@@ -1,5 +1,5 @@
 @extends('public')
-@section('tabtitle', '| Approval Page')
+@section('tabtitle', '| Learning Partner Approval Page')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
@@ -109,6 +109,12 @@
                       </div>
                 </div>
 
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                  <div class="col-md-8 ">
+                  <textarea class="form-control" ></textarea>
+                  </div>
+                </div>
 
                 <div class="col-sm-offset-5">
                   @component('form.modal')

@@ -1,4 +1,4 @@
-<a class="btn btn-primary" data-toggle="modal" href='#modal-id'>Submit via Modal</a>
+<a class="btn btn-primary" data-toggle="modal" href='#modal-id'>Submit Decision</a>
 <div class="modal fade" id="modal-id">
 	<div class="modal-dialog">
 		<div class="modal-content">
