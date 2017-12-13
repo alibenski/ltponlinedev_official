@@ -201,7 +201,7 @@
                                      @endforeach
                                      </ol>
 
-                                     <p> Please click on the button below to approve.</p>
+                                     <p> Please click on the button below to access the approval page.</p>
                                 </td>
                             </tr>
                             <tr>

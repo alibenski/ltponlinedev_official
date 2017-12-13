@@ -13,16 +13,18 @@ class MailtoStudentHR extends Mailable
 
     public $input_course;
     public $staff_name;
+    public $request;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($input_course, $staff_name)
+    public function __construct($input_course, $staff_name, $request)
     {
         $this->input_course = $input_course;
         $this->staff_name = $staff_name;
+        $this->request = $request;
     }
 
     /**

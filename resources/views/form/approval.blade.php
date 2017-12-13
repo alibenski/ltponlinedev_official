@@ -32,7 +32,7 @@
                     
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="" class="form-control"  type="text" value="{{$input_staff->users->email}}"readonly="">                                    
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="" class="form-control"  type="text" value="{{$input_staff->users->email}}" readonly="">                                    
                         </div>
                     </div>
                 </div>
@@ -42,9 +42,9 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span><input  name="" class="form-control"  type="text" value="{{$input_staff->DEPT}}" readonly>                                    
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{$input_staff->DEPT}}" readonly>                                    
                         </div>
-                        <p class="small text-danger"><strong>Please check the organization indicated in this field. Kindly take note that the organization in this field will be billed for this course (when necessary). Please refer to <a href="#">STI Policy blah blah</a> for more details.</strong></p>
+                        <p class="small text-danger"><strong>Please check the organization indicated in this field. Kindly take note that the organization in this field will be billed for this course (when necessary). Please refer to <a href="#">ST/AI Policy xxx</a> for more details.</strong></p>
                     </div>
                 </div>
              
@@ -99,9 +99,10 @@
                 </div>
                 
                 <div class="form-group">
-                  <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                  <label class="col-md-3 control-label">Comment/Reason: <i>(optional)</i></label>
                   <div class="col-md-8 ">
-                  <textarea class="form-control"></textarea>
+                  <textarea name="mgr_comment" class="form-control"></textarea>
+                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the staff member.</strong></p>
                   </div>
                 </div>
 
@@ -111,7 +112,7 @@
                       Confirmation
                     @endslot
                     @slot('body')
-                      <p>Once you submit your decision, you agree to the STI policy that...</p>
+                      <p>Once you submit your decision, you agree to the ST/AI policy that...</p>
                       <p>Please double check your decision. It never hurts to be sure. Thank you for your kind attention.</p>
                     @endslot
                   @endcomponent

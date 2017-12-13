@@ -200,7 +200,15 @@
                                                 disapproved
                                         @endif
                                       </strong> your enrolment.</p>
-                                      <p><strong>NOTE:</strong>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure ullam dicta sed, asperiores eos quo sint quibusdam ad, impedit qui dolore repellat, error repellendus laborum unde. Enim voluptatum totam maiores.</p>
+                                      <p><strong>Comment/Reason:</strong>
+                                        <br>                                      
+                                        @if( empty($request->hr_comment))
+                                            None
+                                        @else 
+                                            {{$request->hr_comment}}
+                                        @endif
+                                      </p>
+                                      <p><strong>NOTE: </strong>Please contact your organization's HR Learning Department for any questions regarding the decision above.</p>
                                 </td>
                             </tr>
                             <tr>

@@ -200,6 +200,14 @@
                                                 disapproved
                                         @endif
                                       </strong> your enrolment.</p>
+                                      <p><strong>Comment/Reason:</strong>
+                                        <br>
+                                        @if( empty($mgr_comment))
+                                            None
+                                        @else 
+                                            {{$mgr_comment}}
+                                        @endif
+                                      </p>
                                       <p><strong>NOTE:</strong> If you are a non-UNOG staff member, your enrolment has now been sent to your HR Learning Section for further review and approval. You will receive another email which will include the decision of your HR Learning Section.</p>
                                 </td>
                             </tr>

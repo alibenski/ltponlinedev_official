@@ -96,7 +96,7 @@
                   <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once a decision has been submitted. Thank you for your kind attention. 
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">Approve the above course schedule(s)?</label>
+                    <label class="col-md-4 control-label">Do you approve the above enrolment?</label>
 
                       <div class="col-md-2">
                                 <input id="decision1" name="decisionhr" class="with-font dyes" type="radio" value="1" >
@@ -110,9 +110,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                  <label class="col-md-3 control-label">Comment/Reason: <i>(optional)</i></label>
                   <div class="col-md-8 ">
-                  <textarea class="form-control" ></textarea>
+                  <textarea name="hr_comment" class="form-control"></textarea>
+                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the staff member.</strong></p>
                   </div>
                 </div>
 
@@ -126,9 +127,6 @@
                       <p>Please double check your decision as this implicates possible billing to your organization. It never hurts to be sure. Thank you for your kind attention.</p>
                     @endslot
                   @endcomponent
-                  <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Decision</button>
-                  <input type="hidden" name="_token" value="{{ Session::token() }}">
-                  {{ method_field('PUT') }}
                 </div>
             </form>
           </div>

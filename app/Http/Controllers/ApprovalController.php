@@ -8,6 +8,7 @@ use App\Preenrolment;
 use App\Term;
 use App\User;
 use App\Torgan;
+use App\FocalPoints;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailtoStudent;
@@ -81,7 +82,8 @@ class ApprovalController extends Controller
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->get();
-                    
+        
+        $mgr_comment =  $request->input('mgr_comment');            
         $decision = $request->input('decision'); 
         // Validate data
             $this->validate($request, array(
@@ -96,11 +98,18 @@ class ApprovalController extends Controller
             $enrol_form = $forms[$i]->id;
             $course = Preenrolment::find($enrol_form);
             $course->approval = $decision;
-            $course->save();
+            $course->mgr_comments = $mgr_comment;
+            //$course->save();
         }
-    
+
+        if($decision == 1){
+            $decision_text = 'Yes, you approved the enrolment.';
+        } else {
+            $decision_text = 'No, you did not approved the enrolment.';
+        }
+
         // Set flash data with message
-        $request->session()->flash('success', 'Changes have been saved! Decision value is: '.$decision);
+        $request->session()->flash('success', 'Manager Decision has been saved! Decision is: '.$decision_text);
 
         // execute Mail class before redirect
         $formfirst = Preenrolment::orderBy('Term', 'desc')
@@ -128,13 +137,22 @@ class ApprovalController extends Controller
 
         if ($org !== 'UNOG' && $decision !== '0') {
 
-            Mail::to($staff_email)
-                    ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $staff_name));
+            //Mail::to($staff_email)
+            //        ->cc($mgr_email)
+            //        ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
 
             //if not UNOG, email to HR Learning Partner of $other_org
-            $other_org = Torgan::where('Org name', $org)->select('Org name', 'Org Full Name', 'Org Contact')->get();
-            $org_email = 'allyson.frias@un.org';//should be $other_org->email
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::with('torgan')->where('org_id', $other_org->OrgCode)->get(); 
+            $org_email = [];
+            foreach ($org_query as $org_q) {
+                $org_email = $org_q->email;
+                $org_grp = implode(',', $org_email[count($org_q)]);
+                var_dump($org_email);
+            }
+            var_dump($org_grp);
+            dd($org_email);
+
             Mail::to($org_email)
                     ->send(new MailtoApproverHR($forms, $input_course, $staff_name, $mgr_email));
             
@@ -143,7 +161,7 @@ class ApprovalController extends Controller
 
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $staff_name));
+                    ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
             
             return redirect()->route('eform');
         }
@@ -199,6 +217,7 @@ class ApprovalController extends Controller
                                 ->where('Te_Code', $tecode)
                                 ->get();
                     
+        $hr_comment =  $request->input('hr_comment');
         $decision = $request->input('decisionhr'); 
         // Validate data
             $this->validate($request, array(
@@ -213,11 +232,18 @@ class ApprovalController extends Controller
             $enrol_form = $forms[$i]->id;
             $course = Preenrolment::find($enrol_form);
             $course->approval_hr = $decision;
+            $course->hr_comments = $hr_comment;
             $course->save();
+        }
+
+        if($decision == 1){
+            $decision_text = 'Yes, you approved the enrolment.';
+        } else {
+            $decision_text = 'No, you did not approved the enrolment.';
         }
     
         // Set flash data with message
-        $request->session()->flash('success', 'CLM Learning Partner Decision has been saved! Decision value is: '.$decision);
+        $request->session()->flash('success', 'CLM Learning Partner Decision has been saved! Decision is: '.$decision_text);
 
         // execute Mail class before redirect
         $formfirst = Preenrolment::orderBy('Term', 'desc')
@@ -243,7 +269,7 @@ class ApprovalController extends Controller
 
         Mail::to($staff_email)
                 ->cc($mgr_email)
-                ->send(new MailtoStudentHR($input_course, $staff_name));
+                ->send(new MailtoStudentHR($input_course, $staff_name, $request));
         
         return redirect()->route('eform2');
         

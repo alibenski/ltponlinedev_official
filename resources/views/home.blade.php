@@ -16,7 +16,7 @@
 @endif
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-primary">
                 <div class="panel-heading">Student Profile</div>
 
@@ -96,13 +96,7 @@
                     </form>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-4">
-                <div class="well row">
-                    <h5>Operation Block</h3>
-                </div>
-        </div>    
+        </div>   
     </div>
 </div>
 @endsection

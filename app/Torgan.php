@@ -14,7 +14,7 @@ class TORGAN extends Model
 	 * @var integer
 	 * @access protected
 	 */
-	protected $primaryKey = 'Org Code';
+	protected $primaryKey = 'OrgCode';
 
 	/**
 	 * Indicates if the IDs are auto-incrementing.
@@ -25,5 +25,9 @@ class TORGAN extends Model
 
     public function sddextr() {
     return $this->belongsTo('App\SDDEXTR'); 
+    }
+
+    public function focalpoints() {
+    return $this->hasMany('App\FocalPoints'); 
     }
 }
