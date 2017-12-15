@@ -99,7 +99,7 @@ class ApprovalController extends Controller
             $course = Preenrolment::find($enrol_form);
             $course->approval = $decision;
             $course->mgr_comments = $mgr_comment;
-            //$course->save();
+            $course->save();
         }
 
         if($decision == 1){
@@ -132,18 +132,20 @@ class ApprovalController extends Controller
                                 ->value('Te_Code');
         //query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst;
+
         //check the organization of the student to know which email process is followed by the system
         $org = $formfirst->DEPT; 
 
         if ($org !== 'UNOG' && $decision !== '0') {
 
-            //Mail::to($staff_email)
-            //        ->cc($mgr_email)
-            //        ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
+            Mail::to($staff_email)
+                    ->cc($mgr_email)
+                    ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
 
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
             $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
             //use map function to iterate through the collection and store value of email to var $org_email
             //subjects each value to a callback function
             $org_email = $org_query->map(function ($val, $key) {
@@ -151,9 +153,7 @@ class ApprovalController extends Controller
             });
             //make collection to array
             $org_email_arr = $org_email->toArray(); 
-
-            var_dump($org_email_arr);
-dd();
+            //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
                     ->send(new MailtoApproverHR($forms, $input_course, $staff_name, $mgr_email));
             

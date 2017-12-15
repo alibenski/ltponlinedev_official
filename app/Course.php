@@ -26,6 +26,10 @@ class Course extends Model
     return $this->hasMany('App\Repo'); 
     }
 
+    public function preenrol() {
+    return $this->hasMany('App\Preenrolment',  'Te_Code', 'Te_Code'); 
+    }
+
     public function schedule() {
     return $this->belongsToMany('App\Schedule'); 
     }

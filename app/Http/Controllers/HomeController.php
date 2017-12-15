@@ -70,10 +70,18 @@ class HomeController extends Controller
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )->get();
+            ->where('Term', $next_term_code )->get(['Te_Code']);
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+
+        //query for modal
+        $collection_query = Preenrolment::where('INDEXID', '=', $current_user)->where('Term', $next_term_code )->with('courses','schedule')->get();
+        $collection = $collection_query->groupBy('Te_Code');
+
+        $schedbycourse = $collection;
+        //EOF query for modal
+
         
-        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
+        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withSchedbycourse($schedbycourse)->withCollection($collection);
     }
 
     /**
