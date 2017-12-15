@@ -143,17 +143,18 @@ class ApprovalController extends Controller
 
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
-            $org_query = FocalPoints::with('torgan')->where('org_id', $other_org->OrgCode)->get(); 
-            $org_email = [];
-            foreach ($org_query as $org_q) {
-                $org_email = $org_q->email;
-                $org_grp = implode(',', $org_email[count($org_q)]);
-                var_dump($org_email);
-            }
-            var_dump($org_grp);
-            dd($org_email);
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
 
-            Mail::to($org_email)
+            var_dump($org_email_arr);
+dd();
+            Mail::to($org_email_arr)
                     ->send(new MailtoApproverHR($forms, $input_course, $staff_name, $mgr_email));
             
             return redirect()->route('eform');            
