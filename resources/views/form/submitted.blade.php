@@ -42,11 +42,29 @@
                                         <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-tecode="{{ $form->Te_Code }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>
                                     </div>
                                     <div class="col-sm-6">
-                                        <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code]) }}">
-                                            <input type="submit" value="Cancel Enrolment" class="btn btn-sm btn-danger btn-block btn-space">
-                                            <input type="hidden" name="_token" value="{{ Session::token() }}">
-                                           {{ method_field('DELETE') }}
-                                        </form>﻿
+                                      @component('form.modal')
+                                        @slot('buttonclass')
+                                          btn-sm btn-danger btn-block btn-space
+                                        @endslot
+                                        @slot('buttonlabel')
+                                          Cancel Enrolment
+                                        @endslot
+                                        @slot('title')
+                                          <span><i class="fa fa-lg fa-warning btn-space"></i>Cancellation Warning</span>
+                                        @endslot
+                                        @slot('body')
+                                          <p>Your Manager and/or HR Learning Department will be notified via e-mail.</p>
+                                          <p>Please double check your decision. It never hurts to be sure. Thank you for your kind attention.</p>
+                                        @endslot
+                                        @slot('buttonoperation')
+                                          <button type="button" class="btn btn-default btn-space" data-dismiss="modal">Back</button>
+                                          <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code]) }}">
+                                              <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
+                                              <input type="hidden" name="_token" value="{{ Session::token() }}">
+                                             {{ method_field('DELETE') }}
+                                          </form>
+                                        @endslot
+                                      @endcomponent
                                     </div>
                             </div>
                             </div>
@@ -71,7 +89,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-schedule">
             </div>
             <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
@@ -82,6 +100,9 @@
 @stop 
 
 @section('scripts_code')
+
+<script src="{{ asset('js/submit.js') }}"></script>
+
 <script>  
   $(document).ready(function () {
 
@@ -97,7 +118,7 @@
 
           $.post('{{ route('submitted.show') }}', {'tecode':dtecode, '_token':token}, function(data) {
               console.log(data);
-              $('.modal-body').html(data)
+              $('.modal-body-schedule').html(data)
           });
         });
   });

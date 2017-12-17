@@ -1,4 +1,4 @@
-<a class="btn btn-primary" data-toggle="modal" href='#modal-id'>Submit Decision</a>
+<a class="btn {{$buttonclass}}" data-toggle="modal" href='#modal-id'>{{ $buttonlabel }}</a>
 <div class="modal fade" id="modal-id">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -10,10 +10,7 @@
 				{{ $body }}
 			</div>
 			<div class="modal-footer">
-				  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
-	              <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Decision</button>
-	              <input type="hidden" name="_token" value="{{ Session::token() }}">
-	              {{ method_field('PUT') }}
+				{{ $buttonoperation }}
 			</div>
 		</div>
 	</div>

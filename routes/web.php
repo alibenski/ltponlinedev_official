@@ -10,33 +10,41 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
-Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'SelfPayController@selectAjax']);
-Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'SelfPayController@selectAjax2']);
-
 //middleware to prevent back button and access cache
 Route::group(['middleware' => 'prevent-back-history'],function(){
     Auth::routes();
     Route::get('/','WelcomeController@index');
 });
 
+//home page routes
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
+Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
+Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+
+//fee-paying form route
+Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
+Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'SelfPayController@selectAjax']);
+Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'SelfPayController@selectAjax2']);
+
+//if already selected YES to continue course, go to these routes
 Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'edit']]);
 Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@selectAjax3']);
 Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
-
-//url routing for approval page
-Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
-Route::put('/approval/user/{staff}/course/{tecode}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
-
-Route::get('/approvalhr/{staff}/{tecode}', ['as' => 'approval.getform2hr','uses' => 'ApprovalController@getForm2hr' ]);
-Route::put('/approvalhr/user/{staff}/course/{tecode}',      ['as' => 'approval.updateform2hr','uses' => 'ApprovalController@updateForm2hr' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
 //controller for main form
 Route::resource('myform', 'RepoController');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@selectAjax2']);
 
+//url routing for manager approval page
+Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
+Route::put('/approval/user/{staff}/course/{tecode}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+//url routing for hr partner approval page
+Route::get('/approvalhr/{staff}/{tecode}', ['as' => 'approval.getform2hr','uses' => 'ApprovalController@getForm2hr' ]);
+Route::put('/approvalhr/user/{staff}/course/{tecode}',      ['as' => 'approval.updateform2hr','uses' => 'ApprovalController@updateForm2hr' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+
+//admin routes
 Route::resource('classrooms', 'ClassroomController');
 Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');
@@ -44,6 +52,7 @@ Route::resource('courses', 'CourseController');
 Route::resource('students', 'StudentController');
 Route::get('eform', function () { return view('confirmation_page_unog'); })->name('eform');
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
+
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();
     // Authentication Routes...
@@ -66,11 +75,8 @@ else
 {
     Route::get('/','WelcomeController@index');
 }
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
-Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
-Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
-// show routes in webpage
+
+// show list routes in webpage
 Route::get('simpleroutes', function() {
     $routeCollection = Route::getRoutes();
     echo "<table style='width:100%'>";

@@ -85,14 +85,13 @@ class HomeController extends Controller
                     ->get()->min();
             $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
             //query submitted forms based from tblLTP_Enrolment table
-            //$schedules = Preenrolment::all();
             $schedules = Preenrolment::where('Te_Code', $request->tecode)
                 ->where('INDEXID', '=', $current_user)
                 ->where('Term', $next_term_code )->get(['schedule_id'])->pluck('schedule.name');
 
+            //render and return data values via AJAX
                 $data = view('form.modalshowinfo',compact('schedules'))->render();
             return response()->json([$data]);
-            //return $request->tecode;
     }
 
     /**
@@ -120,6 +119,35 @@ class HomeController extends Controller
 
     public function destroy(Request $request, $staff, $tecode)
     {
-        return 'delete';
+        $current_user = $staff;
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()
+                ->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')
+                ->where('Term_Code', '=', $terms->Term_Next)
+                ->get()
+                ->min('Term_Code');
+        //query submitted forms based from tblLTP_Enrolment table
+        $forms = Preenrolment::orderBy('Term', 'desc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $next_term_code )
+                ->get();
+        $display_language = Preenrolment::orderBy('Term', 'desc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $next_term_code )
+                ->first();
+
+        $enrol_form = [];
+        for ($i = 0; $i < count($forms); $i++) {
+            $enrol_form = $forms[$i]->id;
+            $delform = Preenrolment::find($enrol_form);
+            $delform->delete();
+        }
+        session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
+        return redirect()->back();
     }
 }

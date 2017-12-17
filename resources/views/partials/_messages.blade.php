@@ -12,6 +12,13 @@
 
 @endif
 
+@if (Session::has('cancel_success')) 
+	<div class="alert alert-warning alert-block" role="alert">
+		<strong>Cancelled: </strong> {{ Session::get('cancel_success') }}
+	</div>
+
+@endif
+
 @if (count($errors) > 0)
 	<div class="alert alert-danger alert-block" role="alert">
 		<strong>Errors:</strong>

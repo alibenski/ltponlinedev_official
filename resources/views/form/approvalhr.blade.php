@@ -119,12 +119,24 @@
 
                 <div class="col-sm-offset-5">
                   @component('form.modal')
+                    @slot('buttonclass')
+                      btn-primary
+                    @endslot
+                    @slot('buttonlabel')
+                      Submit Decision
+                    @endslot
                     @slot('title')
                       Confirmation
                     @endslot
                     @slot('body')
                       <p>Once you submit your decision, you agree to the ST/AI/ policy that...</p>
                       <p>Please double check your decision as this implicates possible billing to your organization. It never hurts to be sure. Thank you for your kind attention.</p>
+                    @endslot
+                    @slot('buttonoperation')
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                      <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Decision</button>
+                      <input type="hidden" name="_token" value="{{ Session::token() }}">
+                      {{ method_field('PUT') }}
                     @endslot
                   @endcomponent
                 </div>
