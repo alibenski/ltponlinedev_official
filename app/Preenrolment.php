@@ -3,13 +3,22 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Preenrolment extends Model
 {
+        use SoftDeletes;
+
     protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
         'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id'
     ];
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     /**
      * The name of the "updated at" column.

@@ -41,7 +41,7 @@ Route::resource('classrooms', 'ClassroomController');
 Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');
 Route::resource('courses', 'CourseController');
-Route::resource('students', 'HomeController');
+Route::resource('students', 'StudentController');
 Route::get('eform', function () { return view('confirmation_page_unog'); })->name('eform');
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
 //Route::get('/', function () { return view('welcome'); });
@@ -67,8 +67,9 @@ else
     Route::get('/','WelcomeController@index');
 }
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/submitted', ['as'=>'submmitted','uses'=>'HomeController@index2']);
-
+Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
+Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
+Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
 // show routes in webpage
 Route::get('simpleroutes', function() {
     $routeCollection = Route::getRoutes();

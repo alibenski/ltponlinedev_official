@@ -70,51 +70,29 @@ class HomeController extends Controller
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )->get(['Te_Code']);
+            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr']);
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-
-        //query for modal
-        $collection_query = Preenrolment::where('INDEXID', '=', $current_user)->where('Term', $next_term_code )->with('courses','schedule')->get();
-        $collection = $collection_query->groupBy('Te_Code');
-
-        $schedbycourse = $collection;
-        //EOF query for modal
-
-        
-        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withSchedbycourse($schedbycourse)->withCollection($collection);
+ 
+        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function showMod(Request $request)
     {
-        //
-    }
+            $current_user = Auth::user()->indexno;
+            $now_date = Carbon::now()->toDateString();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                    ->whereDate('Term_End', '>=', $now_date)
+                    ->get()->min();
+            $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+            //query submitted forms based from tblLTP_Enrolment table
+            //$schedules = Preenrolment::all();
+            $schedules = Preenrolment::where('Te_Code', $request->tecode)
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $next_term_code )->get(['schedule_id'])->pluck('schedule.name');
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $student = User::find($id); //find function specifically checks primary id
-        return view('students.profile')->withStudent($student);
+                $data = view('form.modalshowinfo',compact('schedules'))->render();
+            return response()->json([$data]);
+            //return $request->tecode;
     }
 
     /**
@@ -125,20 +103,7 @@ class HomeController extends Controller
      */
     public function edit($id)
     {
-        $student = User::find($id);
-        
-        $courses = Course::all(); // selected $key => $value
-        $languages = DB::table('languages')->pluck("name","id")->all();
-        
-        //$languages = Language::all(['id', 'name']);
-        // $selectedcategory = $post->category_id; // this is directly called in the view
-        // $tags = Tag::all(['id', 'name']);
-        //$cats = [];
-        //foreach ($categories as $category) {
-        //    $cats[$category->id] = $category->name;
-        //}
-        // return the view and pass the variable to the prviously created one
-        return view('students.edit')->withStudent($student)->withCourses($courses)->withLanguages($languages);
+
     }
 
     /**
@@ -150,47 +115,11 @@ class HomeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validate data
-        $student = User::find($id);
-        $this->validate($request, array(
-                'course_id' => 'required|integer'
-            ));        
-        
-        // Save the data to db
-        $student = User::find($id);
 
-        $student->language_id = $request->input('language_id');
-        $student->course_id = $request->input('course_id');
-        $student->save();         
-
-        // Set flash data with message
-        $request->session()->flash('success', 'Enrolment has been submitted.');
-        // Redirect to flash data to posts.show
-        return redirect()->route('students.show', $student->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request, $staff, $tecode)
     {
-        //
-    }
-
-    /**
-     * Show the application selectAjax.
-     *
-     * @return \Illuminate\Http\response
-     */
-    public function selectAjax(Request $request)
-    {
-        if($request->ajax()){
-            $courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
-            $data = view('ajax-select',compact('courses'))->render();
-            return response()->json(['options'=>$data]);
-        }
+        return 'delete';
     }
 }
