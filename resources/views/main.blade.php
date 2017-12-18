@@ -13,7 +13,7 @@
             <!-- Footer Section -->
                 @include('partials._foot')
             <!-- Scripts -->
-                @yield('scripts_link')
+                @yield('scripts_link')<!-- use only for override -->
                 @include('partials._js')
                 @yield('scripts_code')
     

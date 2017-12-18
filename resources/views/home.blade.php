@@ -116,5 +116,7 @@
 </div>
 @endsection
 @section('scripts_link')
+
 <script src="{{ asset('js/app.js') }}"></script>
+
 @stop

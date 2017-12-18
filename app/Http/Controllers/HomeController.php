@@ -94,6 +94,12 @@ class HomeController extends Controller
             return response()->json([$data]);
     }
 
+    public function history()
+    {
+        $current_user = Auth::user()->indexno;
+        $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->get();
+        return view('form.history')->withHistorical_data($historical_data);
+    }
     /**
      * Show the form for editing the specified resource.
      *

@@ -34,7 +34,7 @@ class RepoController extends Controller
         $this->middleware('prevent-back-history');
         //$this->middleware('opencloseenrolment');
         //$this->middleware('checksubmissioncount');
-        $this->middleware('checkcontinue');
+        //$this->middleware('checkcontinue');
     }
 
     /**
@@ -91,7 +91,7 @@ class RepoController extends Controller
         //not using DB method to get latest language course of current_user
         $repos_lang = Repo::orderBy('Term', 'desc')
             ->where('INDEXID', $current_user)->first();
-        $org = Torgan::get()->pluck('Org name','Org name');
+        $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
 
         return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
     }

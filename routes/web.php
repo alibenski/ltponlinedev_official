@@ -19,6 +19,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 //home page routes
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
+Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
 Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
 Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
 

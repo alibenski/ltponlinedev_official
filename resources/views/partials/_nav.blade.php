@@ -30,16 +30,13 @@
                     <li><a href="{{ route('register') }}">Register</a></li>
                 @else
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span><i class="fa fa-lg fa-user-circle btn-space" aria-hidden="true"></i></span>
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 <a href="{{ route('students.edit', Auth::user()->id)}}">Edit Profile</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('classrooms.index') }}">Course Classes</a>
                             </li>
                             <li>
                                 <a href="{{ route('logout') }}"

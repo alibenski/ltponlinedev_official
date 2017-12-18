@@ -1,7 +1,8 @@
 <div class="container">
 <ul class="nav nav-tabs">
 	<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Home</a></li>
-	<li role="presentation" class="{{ Request::is('submitted') ? "active" : ""}}"><a href="/submitted">Submitted Forms</a></li>
+	<li role="presentation" class="{{ Request::is('submitted') ? "active" : ""}}"><a href="/submitted">Current Submitted Forms</a></li>
+	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">History</a></li>
 	<li class="dropdown">
 		<button type="button" href="#" id="BtnDropdown" class="btn btn-info dropdown-toggle" data-toggle="dropdown"> Enrolment Forms <b class="caret"></b></button>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="BtnDropdown">

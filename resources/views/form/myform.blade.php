@@ -39,7 +39,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                                    
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input  name="" class="form-control"  type="text" value="{{ Auth::user()->name }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="" class="form-control"  type="text" value="{{ Auth::user()->name }}" readonly>                                    
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text" required="required">                                    
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text" required="required">                                    
                         </div>
                          <p class="small text-danger"><strong>Enter the <u>correct email address</u> of your manager because this form will be sent to this email address for approval.</strong></p>
                     </div>
@@ -103,7 +103,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription}} last @if(empty($terms))NO DB ENTRY 
+                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription}} last @if(empty($terms))NO DB ENTRY 
                               @else{{ $terms->Term_Name }}
                               @endif
                               " readonly>                            
@@ -116,7 +116,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->next_level_desc }}" readonly>                            
+                            <span class="input-group-addon"><i class="fa fa-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->next_level_desc }}" readonly>                            
                         </div>
                     </div>
                 </div>
@@ -230,6 +230,14 @@
                 </div>
                         <!-- END OF SHOW CHOICES REAL TIME -->   
 
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Comment/Reason: <i>(optional)</i></label>
+                  <div class="col-md-8 ">
+                  <textarea name="comment" class="form-control" readonly="">Not yet available</textarea>
+                  <p class="small text-danger"><strong>Specify above if you have any particular time constraints (e.g. I can never attend courses on Tuesdays due to weekly meetings) or any comments you may have concerning your enrolment.</strong></p>
+                  </div>
+                </div>
+
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -242,8 +250,6 @@
   </div>
 </div>
 
-  </div>
-</div>
 @stop   
 
 @section('scripts_code')

@@ -69,10 +69,7 @@
                             </div>
                             </div>
                             <hr>
-                            @endforeach
-                            <div class="col-sm-2">
-                            <!--<a href="{{ route('noform.edit', Crypt::encrypt($form->id)) }}" class="btn btn-default btn-sm">View</a>-->
-                            </div>    
+                            @endforeach  
                         </div>
             </div>
         </div>
