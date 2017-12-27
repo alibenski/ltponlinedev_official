@@ -58,10 +58,11 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        //custom middleware classes
         'checksubmissioncount' => \App\Http\Middleware\CheckSubmissionCount::class,
         'opencloseenrolment' => \App\Http\Middleware\OpenCloseEnrolment::class,
         'checkcontinue' => \App\Http\Middleware\CheckContinue::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
-
+        'redirect-if-not-profile' => \App\Http\Middleware\RedirectIfNotYourProfile::class,
     ];
 }

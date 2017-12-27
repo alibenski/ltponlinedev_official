@@ -1,12 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+@if (Session::has('expired')) 
+    <div class="alert alert-danger alert-block" role="alert">
+        <strong>Session Expired: </strong> {{ Session::get('expired') }}
+    </div>
+
+@endif
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
-
                 <div class="panel-body">
                     <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
@@ -22,6 +27,7 @@
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
+
                             </div>
                         </div>
 
@@ -35,6 +41,18 @@
                                     <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
+                                @endif
+                                @if (count($errors) > 0)
+                                    <div class="alert alert-danger alert-block" role="alert">
+                                        <strong>Errors:</strong>
+                                        <ul>
+                                        @foreach ($errors->all() as $error)
+                                            
+                                            <li>{{ $error }}</li>
+                                            
+                                        @endforeach
+                                        </ul>
+                                    </div>
                                 @endif
                             </div>
                         </div>

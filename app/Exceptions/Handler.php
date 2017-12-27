@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,6 +45,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof TokenMismatchException) {
+            $request->session()->flash('expired', 'Enrolment form has expired. Please log in and try again.');
+
+            return redirect()
+                ->route('login')
+                ->withInput($request->except('password', 'password_confirmation', '_token'));
+        }
         return parent::render($request, $exception);
     }
 

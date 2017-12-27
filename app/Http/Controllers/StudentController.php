@@ -4,18 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Language;
-use App\Course;
 use App\User;
-use App\Repo;
-use App\Preenrolment;
-use App\Term;
+use App\SDDEXTR;
 use Session;
-use Carbon\Carbon;
-use DB;
 
 class StudentController extends Controller
 {
+    /**
+     * Call Middleware instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('prevent-back-history');
+        $this->middleware('redirect-if-not-profile');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -68,18 +74,7 @@ class StudentController extends Controller
     {
         $student = User::find($id);
         
-        $courses = Course::all(); // selected $key => $value
-        $languages = DB::table('languages')->pluck("name","id")->all();
-        
-        //$languages = Language::all(['id', 'name']);
-        // $selectedcategory = $post->category_id; // this is directly called in the view
-        // $tags = Tag::all(['id', 'name']);
-        //$cats = [];
-        //foreach ($categories as $category) {
-        //    $cats[$category->id] = $category->name;
-        //}
-        // return the view and pass the variable to the prviously created one
-        return view('students.edit')->withStudent($student)->withCourses($courses)->withLanguages($languages);
+        return view('students.edit')->withStudent($student);
     }
 
     /**

@@ -34,8 +34,9 @@
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="email" placeholder="{{ $student->email }}" class="form-control"  type="text" readonly>                                    
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="email" placeholder="{{ $student->email }}" class="form-control"  type="text">                                    
                                 </div>
+                                <p class="small text-danger"><strong>Warning:</strong> Once you change your e-mail address, this will become <strong>your login and your official e-mail address</strong> to which we will be sending notifications and other future correspondences.</p>
                             </div>
                         </div>
 

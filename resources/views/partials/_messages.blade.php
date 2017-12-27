@@ -19,6 +19,13 @@
 
 @endif
 
+@if (Session::has('redirect_back_to_own_profile')) 
+	<div class="alert alert-danger alert-block" role="alert">
+		<span><i class="fa fa-lg fa-warning btn-space"></i><strong>Warning: </strong></span> {{ Session::get('redirect_back_to_own_profile') }}
+	</div>
+
+@endif
+
 @if (count($errors) > 0)
 	<div class="alert alert-danger alert-block" role="alert">
 		<strong>Errors:</strong>
