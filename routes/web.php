@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/admin', function () { return view('admin.admin'); })->name('admin');
 //middleware to prevent back button and access cache
 Route::group(['middleware' => 'prevent-back-history'],function(){
     Auth::routes();
