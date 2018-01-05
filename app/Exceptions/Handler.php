@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof TokenMismatchException) {
-            $request->session()->flash('expired', 'Enrolment form has expired. Please log in and try again.');
+            $request->session()->flash('expired', 'Enrolment form session has expired. Please log in and try again.');
 
             return redirect()
                 ->route('login')

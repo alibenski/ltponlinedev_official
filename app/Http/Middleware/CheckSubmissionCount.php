@@ -28,7 +28,7 @@ class CheckSubmissionCount
             })->count('Te_Code');
         
         if ($grouped == '2') {
-            $request->session()->flash('overlimit', 'You have reached submission form limit (2 Maximum Language Courses)');
+            $request->session()->flash('overlimit', 'You have reached the enrolment form submission limit (2 Maximum Language Courses)');
             return redirect()->route('home');
         }
         return $next($request);

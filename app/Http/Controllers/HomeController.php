@@ -147,12 +147,22 @@ class HomeController extends Controller
                 ->where('Term', $next_term_code )
                 ->first();
 
+        //email notification to Manager and CLM Partner
+        $mgr_email = $forms->pluck('mgr_email')->first();
+        
+        
+
         $enrol_form = [];
         for ($i = 0; $i < count($forms); $i++) {
             $enrol_form = $forms[$i]->id;
             $delform = Preenrolment::find($enrol_form);
-            $delform->delete();
+            //$delform->delete();
         }
+
+        
+
+
+
         session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
         return redirect()->back();
     }

@@ -1,3 +1,7 @@
+.bg-img{
+    background-image: url("/img/bg-enrolment.jpg");
+    background-size: cover;
+}
 .btn-space{
     margin:5px 5px;
 }

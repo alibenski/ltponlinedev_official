@@ -25,14 +25,15 @@ class OpenCloseEnrolment
         
         //get current year and date
         $now_date = Carbon::now();
-        $now_year = Carbon::now()->year;       
+        $now_year = Carbon::now()->year;
+
         //return string of Term_Begin of CURRENT term
-        $current_term_begin = Term::whereYear('Term_End', $now_year)
-                        ->orderBy('Term_Code', 'desc')
-                        ->where('Term_End', '>=', $now_date)
-                        ->min('Term_Begin');
+        //refactored code to \App\Helpers\GlobalFunction::instance()->currentTerm()
+        $current_term_begin = \App\Helpers\GlobalFunction::instance()->currentTerm();
+        
         //Carbon parse string value
         $carbon_current_term_begin = Carbon::parse($current_term_begin);
+        
         //add weeks to Carbon date value to get beginning and end dates of enrolment
         $start_enrolment_date = $carbon_current_term_begin->addWeeks(4);
         $end_enrolment_date = $carbon_current_term_begin->addWeeks(7);
@@ -41,6 +42,7 @@ class OpenCloseEnrolment
         if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {
             return $next($request);
         }
+        
         //return string of NEXT term
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Begin', '>', $now_date)->get()->min();
