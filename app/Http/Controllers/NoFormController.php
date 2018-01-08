@@ -33,7 +33,8 @@ class NoFormController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
         //$this->middleware('opencloseenrolment');
-        //$this->middleware('checksubmissioncount');
+        $this->middleware('checksubmissioncount');
+        //comment out checkcontinue beccause it causes ping-pong
         //$this->middleware('checkcontinue');
     }
 

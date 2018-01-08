@@ -38,11 +38,16 @@
                                 Disapproved
                                 @endif
                                 </span><strong>{{ $form->courses->EDescription}}</strong></p>
+                                    
                                     <div class="col-sm-6">
                                         <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-tecode="{{ $form->Te_Code }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>
                                     </div>
+                                    
                                     <div class="col-sm-6">
-                                      @component('form.modal')
+                                      @component('form.modaldelete')
+                                        @slot('course')
+                                          {{ $form->courses->Te_Code_New }}
+                                        @endslot
                                         @slot('buttonclass')
                                           btn-sm btn-danger btn-block btn-space
                                         @endslot
@@ -53,6 +58,7 @@
                                           <span><i class="fa fa-lg fa-warning btn-space"></i>Cancellation Warning</span>
                                         @endslot
                                         @slot('body')
+                                          <p>Cancel enrolment for <strong>{{ $form->courses->EDescription }}</strong></p>
                                           <p>Your Manager and/or HR Learning Department will be notified via e-mail.</p>
                                           <p>Please double check your decision. It never hurts to be sure. Thank you for your kind attention.</p>
                                         @endslot

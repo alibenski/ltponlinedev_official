@@ -8,8 +8,8 @@
     <form class="well form-horizontal" method="POST" action="{{ route('schedules.store') }}">
               {{ csrf_field() }}
               <div class="form-group">
-                <label for="sched_name" class="control-label col-md-4">Schedule Description:</label>
-                <textarea type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none; border-color: red;" readonly>Description will automatically be generated based on the choices below.</textarea>
+                <label for="sched_name" class="control-label col-md-4">Schedule Instructions:</label>
+                <textarea type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" disabled="">Choose the appropriate day(s) with the corresponding begin and end times.</textarea>
               </div>
                 <!-- array checkboxes -->
                 <div class="form-group">

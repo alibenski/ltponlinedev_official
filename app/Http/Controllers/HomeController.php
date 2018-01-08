@@ -71,9 +71,15 @@ class HomeController extends Controller
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr']);
+        $str = $forms_submitted->pluck('Te_Code');
+        $str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
+        $array_codes = explode(',', $str_codes);
+        //var_dump($str);
+        //var_dump($str_codes);
+        //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
  
-        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
+        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withArray_codes($array_codes);
     }
 
     public function showMod(Request $request)
@@ -156,7 +162,7 @@ class HomeController extends Controller
         for ($i = 0; $i < count($forms); $i++) {
             $enrol_form = $forms[$i]->id;
             $delform = Preenrolment::find($enrol_form);
-            //$delform->delete();
+            $delform->delete();
         }
 
         
