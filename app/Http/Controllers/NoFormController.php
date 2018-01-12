@@ -272,7 +272,7 @@ class NoFormController extends Controller
             //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
             $select_courses = DB::table('LTP_CR_LIST')
             ->where('L', $request->L)
-            ->pluck("Description","Te_Code")
+            ->pluck("EDescription","Te_Code")
             ->all();
             
             $data = view('ajax-select3',compact('select_courses'))->render();

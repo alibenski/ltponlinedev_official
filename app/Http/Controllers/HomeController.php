@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailaboutCancel;
 use App\Language;
 use App\Course;
 use App\User;
@@ -155,20 +157,17 @@ class HomeController extends Controller
 
         //email notification to Manager and CLM Partner
         $mgr_email = $forms->pluck('mgr_email')->first();
-        
-        
+        $staff_member_name = Auth::user()->name;
+        Mail::to($mgr_email)->send(new MailaboutCancel($display_language, $staff_member_name));
+        dd('Mail Sent sent.');
 
         $enrol_form = [];
         for ($i = 0; $i < count($forms); $i++) {
             $enrol_form = $forms[$i]->id;
             $delform = Preenrolment::find($enrol_form);
-            $delform->delete();
+            //$delform->delete();
         }
-
         
-
-
-
         session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
         return redirect()->back();
     }

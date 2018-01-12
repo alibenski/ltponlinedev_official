@@ -33,8 +33,8 @@ class RepoController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
         //$this->middleware('opencloseenrolment');
-        $this->middleware('checksubmissioncount');
-        $this->middleware('checkcontinue');
+        //$this->middleware('checksubmissioncount');
+        //$this->middleware('checkcontinue');
     }
 
     /**
@@ -265,8 +265,9 @@ class RepoController extends Controller
     {
         if($request->ajax()){
             //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
-            $select_courses = DB::table('LTP_CR_LIST')
-            ->where('L', $request->L)
+            $select_courses = Course::where('L', $request->L)
+            ->whereNotNull('Te_Code_New')
+            ->orderBy('id', 'asc')
             ->pluck("Description","Te_Code")
             ->all();
             

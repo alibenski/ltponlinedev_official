@@ -236,7 +236,15 @@
         closeOnSelect: false,
         templateResult: formatResult,
         //templateSelection: formatResult, 
-        placeholder: 'Choose Here',    
+        placeholder: 'Choose Here',
+        "language": {
+            "noResults": function(){
+                return "<strong class='text-danger'>Sorry No Classes Offered for this Course this Semester. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the availability of courses and classes</a>";
+                }
+        },
+        escapeMarkup: function (markup) {
+        return markup;
+        }
       }); 
       function formatResult (schedule) {
         if (!schedule.id) { return schedule.text; }
