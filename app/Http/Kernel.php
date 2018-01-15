@@ -64,5 +64,7 @@ class Kernel extends HttpKernel
         'checkcontinue' => \App\Http\Middleware\CheckContinue::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         'redirect-if-not-profile' => \App\Http\Middleware\RedirectIfNotYourProfile::class,
+        'isAdmin' => \App\Http\Middleware\AdminMiddleware::class,
+        'clearance' => \App\Http\Middleware\ClearanceMiddleware::class,
     ];
 }

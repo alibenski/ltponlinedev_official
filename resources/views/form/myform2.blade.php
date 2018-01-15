@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="mgr_email" class="col-md-3 control-label">Manager's Name:</label>
+                    <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
                     
                     <div class="col-md-4">
                         <div class="input-group">

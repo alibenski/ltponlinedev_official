@@ -43,7 +43,7 @@
                                     </span>
                                 @endif
                                 @if (count($errors) > 0)
-                                    <div class="alert alert-danger alert-block" role="alert">
+                                    <div class="alert alert-danger alert-block" role="alert" style="margin-top: 10px;">
                                         <strong>Errors:</strong>
                                         <ul>
                                         @foreach ($errors->all() as $error)
