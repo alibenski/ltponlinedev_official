@@ -12,6 +12,6 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'login'
+        'login' //exempted from middleware so it does not give error if login page is idle beyond the limit
     ];
 }

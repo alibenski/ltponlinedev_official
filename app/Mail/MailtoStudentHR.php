@@ -35,7 +35,7 @@ class MailtoStudentHR extends Mailable
     public function build()
     {
         return $this->view('emails.notifystudenthr')
-                    ->from('clm_language@un.org')
+                    ->from('clm_language@un.org', 'CLM Language')
                     ->priority(1)
                     ->subject('Notification: CLM Learning Partner Decision Made for CLM Language Course Enrolment '. $this->input_course->courses->Description);
     }

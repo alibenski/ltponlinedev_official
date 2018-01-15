@@ -257,7 +257,8 @@ class SelfPayController extends Controller
             //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
             $select_courses = DB::table('LTP_CR_LIST')
             ->where('L', $request->L)
-            ->pluck("EDescription","Te_Code")
+            ->orderBy('id', 'asc')
+            ->pluck("Description","Te_Code_New")
             ->all();
             
             $data = view('ajax-select',compact('select_courses'))->render();
@@ -270,7 +271,7 @@ class SelfPayController extends Controller
         if($request->ajax()){
 
             //$select_schedules = DB::table('LTP_TEVENTCur')
-            $select_schedules = Classroom::where('Te_Code', $request->course_id)
+            $select_schedules = Classroom::where('Te_Code_New', $request->course_id)
             ->where(function($q){
                 //get current year and date
                 $now_date = Carbon::now()->toDateString();

@@ -20,6 +20,7 @@ class CreatePermissionTables extends Migration
             $table->string('name');
             $table->string('guard_name');
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
 
         Schema::create($tableNames['roles'], function (Blueprint $table) {
@@ -27,6 +28,7 @@ class CreatePermissionTables extends Migration
             $table->string('name');
             $table->string('guard_name');
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
 
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames) {
@@ -39,6 +41,7 @@ class CreatePermissionTables extends Migration
                 ->onDelete('cascade');
 
             $table->primary(['permission_id', 'model_id', 'model_type']);
+            $table->engine = 'InnoDB';
         });
 
         Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames) {
@@ -51,6 +54,7 @@ class CreatePermissionTables extends Migration
                 ->onDelete('cascade');
 
             $table->primary(['role_id', 'model_id', 'model_type']);
+            $table->engine = 'InnoDB';
         });
 
         Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
@@ -70,6 +74,7 @@ class CreatePermissionTables extends Migration
             $table->primary(['permission_id', 'role_id']);
 
             app('cache')->forget('spatie.permission.cache');
+            $table->engine = 'InnoDB';
         });
     }
 

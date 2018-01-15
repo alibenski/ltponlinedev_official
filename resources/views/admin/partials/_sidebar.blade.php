@@ -33,7 +33,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">OPERATIONS</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="#"><i class="fa fa-home"></i> <span>Home</span></a></li>
+        <li class="active"><a href="#"><i class="fa fa-users"></i> <span>User Admin</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-book"></i> <span>Courses</span>
             <span class="pull-right-container">

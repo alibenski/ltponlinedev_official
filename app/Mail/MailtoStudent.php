@@ -40,7 +40,7 @@ class MailtoStudent extends Mailable
     public function build()
     {
         return $this->view('emails.notifystudent')
-                    ->from('clm_language@un.org')
+                    ->from('clm_language@un.org', 'CLM Language')
                     ->priority(1)
                     ->subject('Notification: Manager/Supervisor Decision Made for CLM Language Course Enrolment '. $this->input_course->courses->Description);
     }

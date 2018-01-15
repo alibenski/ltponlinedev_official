@@ -41,6 +41,16 @@
                 <div class="site-wrapper-inner">
                     <div class="cover-container">
                         <div class="inner cover">
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger alert-block" role="alert">
+                                    <strong>Errors:</strong>
+                                    <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <p>{{ $error }}</p>
+                                    @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <h1 class="cover-heading">Welcome to the UNOG CLM Online Enrolment Website</h1>
                             <p class="lead">If you are an existing student, please click the log-in button to enrol.</p>
                             <p class="lead">

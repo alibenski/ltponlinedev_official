@@ -16,6 +16,7 @@ use Session;
 class UserController extends Controller
 {
     public function __construct() {
+        $this->middleware('auth');
         //$this->middleware(['auth', 'isAdmin']); //isAdmin middleware lets only users with a specific permission to access these resources
     }
 

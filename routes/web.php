@@ -10,9 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::resource('users', 'UserController');
-Route::resource('roles', 'RoleController');
-Route::resource('permissions', 'PermissionController');
 
 Route::get('/admin', function () { return view('admin.admin'); })->name('admin');
 //middleware to prevent back button and access cache
@@ -51,6 +48,9 @@ Route::get('/approvalhr/{staff}/{tecode}', ['as' => 'approval.getform2hr','uses'
 Route::put('/approvalhr/user/{staff}/course/{tecode}',      ['as' => 'approval.updateform2hr','uses' => 'ApprovalController@updateForm2hr' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
 //admin routes
+Route::resource('users', 'UserController');
+Route::resource('roles', 'RoleController');
+Route::resource('permissions', 'PermissionController');
 Route::resource('classrooms', 'ClassroomController');
 Route::resource('schedules', 'ScheduleController');
 Route::resource('terms', 'TermController');
@@ -58,7 +58,6 @@ Route::resource('courses', 'CourseController');
 Route::resource('students', 'StudentController');
 Route::get('eform', function () { return view('confirmation_page_unog'); })->name('eform');
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
-
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();
     // Authentication Routes...
@@ -73,14 +72,14 @@ Auth::routes();
 //    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 //    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 //    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-if ( Auth::check())
-{
-    Route::get('/','LoginController@index');
-}
-else
-{
-    Route::get('/','WelcomeController@index');
-}
+//if ( Auth::check())
+//{
+    //Route::get('/','DashboardController@index');
+//}
+//else
+//{
+    //Route::get('/','WelcomeController@index');
+//}
 
 // show list routes in webpage
 Route::get('simpleroutes', function() {
