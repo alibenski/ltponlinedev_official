@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::resource('users', 'UserController');
+Route::resource('roles', 'RoleController');
+Route::resource('permissions', 'PermissionController');
 
 Route::get('/admin', function () { return view('admin.admin'); })->name('admin');
 //middleware to prevent back button and access cache
