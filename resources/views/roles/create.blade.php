@@ -7,32 +7,37 @@
     <h1><i class='fa fa-key'></i> Add Role</h1>
     <hr>
     {{-- @include ('errors.list') --}}
+    <form method="POST" action="{{ route('roles.store') }}">
+        {{ csrf_field() }}
+        <div class="form-group">
+            <label class="control-label">Name: </label>
+            <input name="name" type="text" class="form-control" value="">
+        </div>
 
-    {{ Form::open(array('url' => 'roles')) }}
-	<form method="POST" action="{{ route('roles.store') }}">
-		<div class="form-group">
-			<label class="control-label">Name: </label>
-			<input name="name" type="text" class="form-control" value="">
-		</div>		
-	</form>
-    <div class="form-group">
-        {{ Form::label('name', 'Name') }}
-        {{ Form::text('name', null, array('class' => 'form-control')) }}
-    </div>
+        <h5><b>Assign Permissions</b></h5>
 
-    <h5><b>Assign Permissions</b></h5>
+        <div class='form-group'>
+            <div class="checkbox">
+              <label>
+                @foreach ($permissions as $permmission)
+                  <input type="checkbox" name="permissions[]" value="{{ $permmission->id }}" /> {{ ucfirst($permmission->name) }}
+                  <br>
+                @endforeach
+              </label>
+            <div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-4 col-md-offset-2">
+              <a href="{{ route('roles.index') }}" class="btn btn-danger btn-block">Back</a>
+            </div>
+            <div class="col-sm-4">
+              <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Add Role</button>
+              <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </div>
+        </div>
+    </form>
 
-    <div class='form-group'>
-        @foreach ($permissions as $permission)
-            {{ Form::checkbox('permissions[]',  $permission->id ) }}
-            {{ Form::label($permission->name, ucfirst($permission->name)) }}<br>
-
-        @endforeach
-    </div>
-
-    {{ Form::submit('Add', array('class' => 'btn btn-primary')) }}
-
-    {{ Form::close() }}
 
 </div>
 

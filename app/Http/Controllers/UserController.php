@@ -13,6 +13,9 @@ use Spatie\Permission\Models\Permission;
 //Enables us to output flash messaging
 use Session;
 
+//Enables BCrypt for password encyption
+use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     public function __construct() {
@@ -59,7 +62,11 @@ class UserController extends Controller
             'password'=>'required|min:6|confirmed'
         ]);
 
-        $user = User::create($request->only('email', 'name', 'password')); //Retrieving only the email and password data
+        $user = User::create([ 
+            'email' => $request->email, 
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+        ]); 
 
         $roles = $request['roles']; //Retrieving the roles field
     //Checking if a role was selected
@@ -118,7 +125,11 @@ class UserController extends Controller
             'email'=>'required|email|unique:users,email,'.$id,
             'password'=>'required|min:6|confirmed'
         ]);
-        $input = $request->only(['name', 'email', 'password']); //Retreive the name, email and password fields
+        $input = ([ 
+            'email' => $request->email, 
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+        ]); //Retreive the name, email and password fields
         $roles = $request['roles']; //Retreive all roles
         $user->fill($input)->save();
 

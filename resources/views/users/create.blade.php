@@ -7,6 +7,7 @@
     <h1><i class='fa fa-user-plus'></i> Add User</h1>
     <hr>
 	    <form method="POST" action="{{ route('users.store') }}">
+        {{ csrf_field() }}
           <div class="form-group">
             <label class="control-label">Name: </label>
   				  <input name="name" type="text" class="form-control" value="">
@@ -14,7 +15,7 @@
 
           <div class="form-group">
             <label class="control-label">Email: </label>
-  				  <input name="email" type="text" class="form-control" value="">
+  				  <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');">
           </div>
 
 			    <div class='form-group'>
@@ -28,7 +29,7 @@
                   </label>
 						  </div>
 			    </div>
-
+          
           <div class="form-group">
             <label class="control-label">Password: </label>
     				<input name="password" type="password" class="form-control" value="">
@@ -38,7 +39,7 @@
             <label class="control-label">Confirm Password: </label>
     				<input name="password_confirmation" type="password" class="form-control" value="">
           </div>
-
+          
           <div class="row">
             <div class="col-sm-4 col-md-offset-2">
               <a href="{{ route('users.index') }}" class="btn btn-danger btn-block">Back</a>

@@ -231,7 +231,19 @@ desired effect
 
     <!-- Main content -->
     <section class="content container-fluid">
-      
+      @if(Session::has('flash_message'))
+          <div class="container">      
+              <div class="alert alert-success"><em> {!! session('flash_message') !!}</em>
+              </div>
+          </div>
+      @endif 
+
+      <div class="row">
+          <div class="col-md-8 col-md-offset-2">              
+              @include ('partials._messages') {{-- Include session error messages --}}
+          </div>
+      </div>
+
       @yield('content')
 
     </section>

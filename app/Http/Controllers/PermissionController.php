@@ -9,7 +9,7 @@ class PermissionController extends Controller
 {
     public function __construct() 
     {
-        $this->middleware(['auth', 'isAdmin']);
+        //$this->middleware(['auth', 'isAdmin']);
     }
     /**
      * Display a listing of the resource.
@@ -58,7 +58,7 @@ class PermissionController extends Controller
         }
         return redirect()->route('permissions.index')
             ->with('flash_message',
-             'Permission'. $permission->name.' added!');
+             'Permission: '. $permission->name.' added!');
     }
     /**
      * Display the specified resource.
