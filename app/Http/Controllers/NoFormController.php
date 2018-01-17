@@ -34,7 +34,7 @@ class NoFormController extends Controller
         $this->middleware('prevent-back-history');
         //$this->middleware('opencloseenrolment');
         $this->middleware('checksubmissioncount');
-        //comment out checkcontinue beccause it causes ping-pong
+        //comment out checkcontinue beccause it causes ping-pong rerouting
         //$this->middleware('checkcontinue');
     }
 
@@ -122,7 +122,7 @@ class NoFormController extends Controller
             for ($i=0; $i < count($schedule_id); $i++) { 
                 $codex[] = array( $course_id,$schedule_id[$i],$term_id,$index_id );
                 //implode array elements and pass imploded string value to $codex array as element
-                $codex[$i] = implode('/', $codex[$i]);
+                $codex[$i] = implode('-', $codex[$i]);
                 //for each $codex array element stored, loop array merge method
                 //and output each array element to a string via $request->Code
 
@@ -148,8 +148,8 @@ class NoFormController extends Controller
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
             $ingredients[] = new  Preenrolment([
-                'CodeIndexID' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$index_id,
-                'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
+                'CodeIndexID' => $course_id.'-'.$schedule_id[$i].'-'.$term_id.'-'.$index_id,
+                'Code' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'schedule_id' => $schedule_id[$i],
                 'L' => $language_id,
                 'Te_Code' => $course_id,

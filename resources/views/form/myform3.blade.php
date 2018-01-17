@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Name:</label>
 
@@ -55,12 +55,25 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="form-group">
-                  <label for="payfile" class="col-md-3 control-label">Upload Proof of Payment: </label>
-                  <input name="payfile" type="file" class="col-md-8 form-control-static" required="required">
+                    <div class="alert alert-default alert-block">
+                      <div class="small text-danger col-md-offset-3">
+                        <strong>Note: accepts pdf, doc, and docx files only</strong>
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="identityfile" class="col-md-3 control-label">Upload Proof of Identity: </label>
+                        <input name="identityfile" type="file" class="col-md-9 form-control-static" required="required">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="payfile" class="col-md-3 control-label">Upload Proof of Payment: </label>
+                        <input name="payfile" type="file" class="col-md-8 form-control-static" required="required">
+                      </div>
+                    </div>
                 </div>
-             
+
                 <div class="form-group">
                     <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 

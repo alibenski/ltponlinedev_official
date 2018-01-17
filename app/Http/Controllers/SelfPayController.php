@@ -118,7 +118,7 @@ class SelfPayController extends Controller
             for ($i=0; $i < count($schedule_id); $i++) { 
                 $codex[] = array( $course_id,$schedule_id[$i],$term_id,$index_id );
                 //implode array elements and pass imploded string value to $codex array as element
-                $codex[$i] = implode('/', $codex[$i]);
+                $codex[$i] = implode('-', $codex[$i]);
                 //for each $codex array element stored, loop array merge method
                 //and output each array element to a string via $request->Code
 
@@ -137,28 +137,42 @@ class SelfPayController extends Controller
                             'schedule_id' => 'required|',
                             'course_id' => 'required|',
                             'L' => 'required|',
-                            'payfile' => "required|mimes:pdf|max:20000",
+                            'identityfile' => 'required|mimes:pdf,doc,docx|max:20000',
+                            'payfile' => 'required|mimes:pdf,doc,docx|max:20000',
                         )); 
-        //Store the attachment to storage path and save in db table
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            //Create new record in db table
+            $attachment_identity_file = new File([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_identity_file->save();
+        }
         if ($request->hasFile('payfile')){
             $request->file('payfile');
             $filename = $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf', $request->file('payfile'), $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension());
             //Create new record in db table
-            $attachment = new File([
+            $attachment_pay_file = new File([
                     'filename' => $filename,
                     'size' => $request->payfile->getClientSize(),
                     'path' => $filestore,
                             ]); 
-            $attachment->save();
-        } 
+            $attachment_pay_file->save();
+        }  
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
             $ingredients[] = new  Preenrolment([
-                'CodeIndexID' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$index_id,
-                'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
+                'CodeIndexID' => $course_id.'-'.$schedule_id[$i].'-'.$term_id.'-'.$index_id,
+                'Code' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'schedule_id' => $schedule_id[$i],
                 'L' => $language_id,
                 'Te_Code' => $course_id,
@@ -167,7 +181,8 @@ class SelfPayController extends Controller
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => $decision,
-                'attachment_id' => $attachment->id,
+                'attachment_id' => $attachment_identity_file->id,
+                'attachment_pay' => $attachment_pay_file->id,
                 ]); 
 
                     foreach ($ingredients as $data) {

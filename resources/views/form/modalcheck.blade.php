@@ -5,10 +5,14 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                 <h4 class="modal-title" id="memberModalLabel">A kind reminder from CLM...</h4>
+                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>A kind reminder from CLM</h4></span>
             </div>
             <div class="modal-body">
-                <p>This enrolment form is on a fee-paying basis. Please have your proof of payment ready.</p>
+                <p>This enrolment form is on a fee-paying basis. Please have the following documents ready:</p>
+                <ul>
+                    <li>Copy of proof of payment</li>
+                    <li>Copy of your carte de légitimation or employee attestation</li>
+                </ul>
                 <p>You are eligible to this enrolment form if you are a member of:</p>
                 <ul>
                     <li>Staff of permanent Missions, including observer Missions

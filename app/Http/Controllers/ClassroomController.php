@@ -73,7 +73,7 @@ class ClassroomController extends Controller
             for ($i=0; $i < count($room_id); $i++) { 
                 $codex[] = array($course_id, $schedule_id, $term_id, $room_id[$i]);
                 //implode array elements and pass imploded string value to $codex array as element
-                $codex[$i] = implode('/', $codex[$i]);
+                $codex[$i] = implode('-', $codex[$i]);
                 //for each $codex array element stored, loop array merge method
                 //and output each array element to a string via $request->Code
                 foreach ($codex as $value) {
@@ -98,7 +98,7 @@ class ClassroomController extends Controller
                 'schedule_id' => $schedule_id,
                 'Te_Code' => $course_id,
                 'Te_Term' => $term_id,
-                'Code' => $course_id.'/'.$schedule_id.'/'.$term_id.'/'.$room_id[$i],
+                'Code' => $course_id.'-'.$schedule_id.'-'.$term_id.'-'.$room_id[$i],
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
                 ]);

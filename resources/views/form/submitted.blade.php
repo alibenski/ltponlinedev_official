@@ -23,18 +23,26 @@
                             @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
+                                @if(is_null($form->DEPT))
+                                <p><span id="status" class="label label-default" style="margin-right: 10px;">
+                                Self Payment
+                                @elseif(is_null($form->approval) && is_null($form->approval_hr))
                                 <p><span id="status" class="label label-warning" style="margin-right: 10px;">
-                                @if(is_null($form->approval) && is_null($form->approval_hr))
                                 Pending Approval
                                 @elseif(in_array(Auth::user()->sddextr->DEPT, ["UNOG", "JIU"]) && $form->approval == 1 && is_null($form->approval_hr))
+                                <p><span id="status" class="label label-success" style="margin-right: 10px;">
                                 Approved
                                 @elseif($form->approval == 1 && is_null($form->approval_hr))
+                                <p><span id="status" class="label label-warning" style="margin-right: 10px;">
                                 Pending Approval
                                 @elseif($form->approval == 1 && $form->approval_hr == 1)
+                                <p><span id="status" class="label label-success" style="margin-right: 10px;">
                                 Approved
                                 @elseif($form->approval == 0 && is_null($form->approval_hr))
+                                <p><span id="status" class="label label-danger" style="margin-right: 10px;">
                                 Disapproved
-                                @elseif($form->approval == 0 && $form->approval_hr == 0)
+                                @elseif($form->approval == 1 && $form->approval_hr == 0)
+                                <p><span id="status" class="label label-danger" style="margin-right: 10px;">
                                 Disapproved
                                 @endif
                                 </span><strong>{{ $form->courses->EDescription}}</strong></p>

@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Decision for the enrolment to a CLM language course of Staff Member, {{ $staff_name }}.
+            Decision for the enrolment to a CLM language course of {{ $staff_name }}.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 

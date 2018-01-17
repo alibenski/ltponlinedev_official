@@ -37,11 +37,12 @@
                 </div>
             </div>
         </nav>
-        @include('partials._messages')
-	        <div class="site-wrapper">
+        
+            <div class="site-wrapper">
                 <div class="site-wrapper-inner">
                     <div class="cover-container">
                         <div class="inner cover">
+                        @include('partials._messages')
                             <h1 class="cover-heading">Thank you very much</h1>
                             <p class="lead">You are brought to this page either because... <br>(1) you are a <strong>manager</strong> and have made a decision to approve or disapprove an enrolment course, if that is the case, thank you for your decision and have a great day,</p>
                             <p class="lead">or (2) you have already made a decision and unfortunately, you cannot change it anymore.</p>

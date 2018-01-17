@@ -63,18 +63,18 @@
                   <div class="col-md-12">
                     <table class="table">
                       <thead>
-                        <th>Title A</th>
-                        <th>Title B</th>
-                        <th>Title C</th>
-                        <th>Title D</th>
+                        
+                        <th>Course</th>
+                        <th>Language</th>
+                        <th>Schedule</th>
                         
                       </thead>
 
                       <tbody>
                         @foreach($input_course as $course)                         
                           <tr>
-                            <th>{{ $course->CodeIndexID }}</th>
-                            <td>{{ $course->courses->Description }}</td>
+                            
+                            <th>{{ $course->courses->Description }}</th>
                             <td>{{ $course->languages->name }}</td>
                             <td>
                               @if(empty($course->schedule))

@@ -103,6 +103,9 @@ return [
         'Code' => [
             'unique' => 'Course, Schedule, and Room combination already exists for this Term.',
         ],
+        'CodeIndexID' => [
+            'unique' => 'You have already submitted an enrolment form for this language course.',
+        ],
     ],
 
     /*

@@ -27,7 +27,7 @@ class MailtoApprover extends Mailable
         $this->input_course = $input_course;
         $this->input_schedules = $input_schedules;
         $this->staff = $staff;
-        
+         
     }
 
     /**
@@ -40,6 +40,6 @@ class MailtoApprover extends Mailable
         return $this->view('emails.approval')
                     ->from('clm_language@un.org', 'CLM Language')
                     ->priority(1)
-                    ->subject('Manager/Supervisor Approval Needed: Language Course Enrolment '. $this->input_course->courses->Description  .' for '.$this->staff->name);
+                    ->subject('Manager/Supervisor Approval Needed: Language Course Enrolment '.$this->input_course->courses->Description .' for '.$this->staff->name);
     }
 }

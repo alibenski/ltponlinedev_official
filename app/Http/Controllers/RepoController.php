@@ -122,7 +122,7 @@ class RepoController extends Controller
             for ($i=0; $i < count($schedule_id); $i++) { 
                 $codex[] = array( $course_id,$schedule_id[$i],$term_id,$index_id );
                 //implode array elements and pass imploded string value to $codex array as element
-                $codex[$i] = implode('/', $codex[$i]);
+                $codex[$i] = implode('-', $codex[$i]);
                 //for each $codex array element stored, loop array merge method
                 //and output each array element to a string via $request->Code
 
@@ -148,8 +148,8 @@ class RepoController extends Controller
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
             $ingredients[] = new  Preenrolment([
-                'CodeIndexID' => $course_id.'/'.$schedule_id[$i].'/'.$term_id.'/'.$index_id,
-                'Code' => $course_id.'/'.$schedule_id[$i].'/'.$term_id,
+                'CodeIndexID' => $course_id.'-'.$schedule_id[$i].'-'.$term_id.'-'.$index_id,
+                'Code' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'schedule_id' => $schedule_id[$i],
                 'L' => $language_id,
                 'Te_Code' => $course_id,
@@ -187,7 +187,7 @@ class RepoController extends Controller
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $course)
                                 ->get();
-        
+
         Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();

@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Decision for the enrolment to a CLM language course of Staff Member, {{ $staff_name }}.
+            Decision for the enrolment to a CLM language course of {{ $staff_name }}.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -208,7 +208,7 @@
                                             {{$mgr_comment}}
                                         @endif
                                       </p>
-                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member, your enrolment has now been sent to your HR Learning Section for further review and approval. You will receive another email which will include the decision of your HR Learning Section.</p>
+                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and your enrolment has been approved by your manager, please note that your enrolment has now been sent to your HR Learning Section for further review and approval. You will receive another email which will include the decision of your HR Learning Section.</p>
                                 </td>
                             </tr>
                             <tr>

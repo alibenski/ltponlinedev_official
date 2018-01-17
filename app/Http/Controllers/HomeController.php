@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailaboutCancel;
+use App\Torgan;
+use App\FocalPoints;
 use App\Language;
 use App\Course;
 use App\User;
@@ -69,19 +71,21 @@ class HomeController extends Controller
                 ->whereDate('Term_End', '>=', $now_date)
                 ->get()->min();
         $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr']);
-        $str = $forms_submitted->pluck('Te_Code');
-        $str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
-        $array_codes = explode(',', $str_codes);
+        
+        //$str = $forms_submitted->pluck('Te_Code');
+        //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
+        //$array_codes = explode(',', $str_codes);
         //var_dump($str);
         //var_dump($str_codes);
         //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
  
-        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withArray_codes($array_codes);
+        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
     }
 
     public function showMod(Request $request)
@@ -154,18 +158,52 @@ class HomeController extends Controller
                 ->where('INDEXID', '=', $current_user)
                 ->where('Term', $next_term_code )
                 ->first();
-
-        //email notification to Manager and CLM Partner
+        
+        //get email address of the Manager
         $mgr_email = $forms->pluck('mgr_email')->first();
+
+        //if self-paying student
+        if (is_null($mgr_email)){
+            $enrol_form = [];
+            for ($i = 0; $i < count($forms); $i++) {
+                $enrol_form = $forms[$i]->id;
+                $delform = Preenrolment::find($enrol_form);
+                $delform->delete();
+            }
+            session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
+            return redirect()->back();
+        }
+
+        //email notification to Manager    
         $staff_member_name = Auth::user()->name;
-        Mail::to($mgr_email)->send(new MailaboutCancel($display_language, $staff_member_name));
-        dd('Mail Sent sent.');
+            Mail::to($mgr_email)->send(new MailaboutCancel($display_language, $staff_member_name));
+        
+        //email notification to CLM Partner
+        $org = $display_language->DEPT;
+        if ($org !== 'UNOG'){
+            
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailaboutCancel($display_language, $staff_member_name));
+
+        }
 
         $enrol_form = [];
         for ($i = 0; $i < count($forms); $i++) {
             $enrol_form = $forms[$i]->id;
             $delform = Preenrolment::find($enrol_form);
-            //$delform->delete();
+            $delform->delete();
         }
         
         session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');

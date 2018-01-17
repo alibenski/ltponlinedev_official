@@ -192,8 +192,8 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
-                                     <p> Dear Manager, </p>
-                                     <p> You are receiving this message to notify you that staff member, {{ $staff_member_name }}, has cancelled the enrolment for CLM language course: {{ $display_language->courses->EDescription }}</p>
+                                     <p> Dear Manager/CLM Learning Partner, </p>
+                                     <p> You are receiving this message to notify you that staff member, <strong>{{ $staff_member_name }}</strong>, has cancelled the enrolment for CLM language course: <strong>{{ $display_language->courses->EDescription }}</strong></p>
 
                                      <p> Thank you very much for your kind attention.</p>
                                 </td>
@@ -213,12 +213,12 @@
                                     <!-- Button : END
                                 </td>
                             </tr> -->
-                            <tr>
+                            <!-- <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Important Reminder</h2>
                                     <p style="margin: 0;">Please note that the class schedules are not absolute and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
                                 </td>
-                            </tr>
+                            </tr> -->
                         </table>
                     </td>
                 </tr>

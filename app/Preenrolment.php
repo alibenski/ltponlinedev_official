@@ -11,7 +11,7 @@ class Preenrolment extends Model
 
     protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id'
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay'
     ];
     /**
      * The attributes that should be mutated to dates.
@@ -28,10 +28,10 @@ class Preenrolment extends Model
     const UPDATED_AT = 'UpdatedOn';
 
     //declare the foreign key on the 3rd parameter of the function
-    //in this case, field Te_Code inside table PASH is associated to foreign key Te_Code
+    //in this case, field Te_Code inside tblLTP_Enrolment table is associated to foreign key Te_Code
     //which is a field in table LTP_Terms (Model: Term) 
     public function courses() {
-    return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code'); 
+    return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code_New'); 
 	}
     public function schedule() {
     return $this->belongsTo('App\Schedule', 'schedule_id'); 
