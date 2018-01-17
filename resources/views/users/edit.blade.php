@@ -32,6 +32,7 @@
             </div>
         </div>
         
+        <!-- remove password fields
         <div class="form-group">
         <label class="control-label">Password: </label>
         <input name="password" type="password" class="form-control" value="{{ old('password', $user->password) }}">
@@ -41,6 +42,7 @@
         <label class="control-label">Confirm Password: </label>
         <input name="password_confirmation" type="password" class="form-control" value="{{ old('password', $user->password) }}">
         </div>
+        EOF remove fields -->
         
         <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
         <input type="hidden" name="_token" value="{{ Session::token() }}">

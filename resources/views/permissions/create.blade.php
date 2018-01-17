@@ -12,7 +12,7 @@
         	<label class="control-label">Name: </label>
 			<input name="name" type="text" class="form-control" value="">
       	</div>
-	    @if(!$roles->isEmpty()) //If no roles exist yet
+	    @if(!$roles->isEmpty())
 	    
 		    <h4>Assign Permission to Roles</h4>
 

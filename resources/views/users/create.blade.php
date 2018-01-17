@@ -29,7 +29,9 @@
                   </label>
 						  </div>
 			    </div>
-          
+
+          <!-- remove password fields
+
           <div class="form-group">
             <label class="control-label">Password: </label>
     				<input name="password" type="password" class="form-control" value="">
@@ -40,6 +42,8 @@
     				<input name="password_confirmation" type="password" class="form-control" value="">
           </div>
           
+          EOF remove fields -->
+
           <div class="row">
             <div class="col-sm-4 col-md-offset-2">
               <a href="{{ route('users.index') }}" class="btn btn-danger btn-block">Back</a>

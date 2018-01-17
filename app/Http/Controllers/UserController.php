@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth');
-        //$this->middleware(['auth', 'isAdmin']); //isAdmin middleware lets only users with a specific permission to access these resources
+        
+        $this->middleware(['auth', 'isAdmin']); //isAdmin middleware lets only users with a specific permission to access these resources
     }
 
     /**
@@ -59,13 +59,13 @@ class UserController extends Controller
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users',
-            'password'=>'required|min:6|confirmed'
+            //'password'=>'required|min:6|confirmed'
         ]);
 
         $user = User::create([ 
             'email' => $request->email, 
             'name' => $request->name,
-            'password' => Hash::make($request->password),
+            //'password' => Hash::make($request->password),
         ]); 
 
         $roles = $request['roles']; //Retrieving the roles field
@@ -123,12 +123,12 @@ class UserController extends Controller
         $this->validate($request, [
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users,email,'.$id,
-            'password'=>'required|min:6|confirmed'
+            //'password'=>'required|min:6|confirmed'
         ]);
         $input = ([ 
             'email' => $request->email, 
             'name' => $request->name,
-            'password' => Hash::make($request->password),
+            //'password' => Hash::make($request->password),
         ]); //Retreive the name, email and password fields
         $roles = $request['roles']; //Retreive all roles
         $user->fill($input)->save();
