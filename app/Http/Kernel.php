@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'redirect-if-not-profile' => \App\Http\Middleware\RedirectIfNotYourProfile::class,
         'isAdmin' => \App\Http\Middleware\AdminMiddleware::class,
         'clearance' => \App\Http\Middleware\ClearanceMiddleware::class,
+        'limit-cancel' => \App\Http\Middleware\LimitCancelPeriod::class,
     ];
 }

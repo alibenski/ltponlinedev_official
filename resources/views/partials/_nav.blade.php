@@ -37,16 +37,16 @@
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 @role('Admin') {{-- Laravel-permission blade helper --}}
-                                        <a href="{{ route('users.index') }}"><i class="fa fa-btn fa-unlock"></i> Admin Page</a>
+                                        <a href="{{ route('users.index') }}"><i class="fa fa-btn fa-unlock btn-space" aria-hidden="true"></i>Admin Page</a>
                                 @endrole
                             </li>
                             <li>
-                                <a href="{{ route('students.edit', Auth::user()->id)}}">Edit Profile</a>
+                                <a href="{{ route('students.edit', Auth::user()->id)}}"><i class="fa fa-btn fa-edit btn-space" aria-hidden="true"></i>Edit Profile</a>
                             </li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
+                                             document.getElementById('logout-form').submit();"><i class="fa fa-btn fa-sign-out btn-space" aria-hidden="true"></i>
                                     Logout
                                 </a>
 

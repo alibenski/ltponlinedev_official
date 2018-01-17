@@ -23,7 +23,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
 Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
 Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
-Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+//Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+Route::delete('/delete/user/{staff}/course/{tecode}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
 
 //fee-paying form route
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
