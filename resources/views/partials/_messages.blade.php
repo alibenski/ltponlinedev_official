@@ -26,9 +26,9 @@
 
 @endif
 
-@if (Session::has('limit-cancel')) 
+@if (Session::has('interdire-msg')) 
 	<div class="alert alert-danger alert-block" role="alert">
-		<span><i class="fa fa-lg fa-warning btn-space"></i><strong>Sorry: </strong></span> {{ Session::get('limit-cancel') }}
+		<span><i class="fa fa-lg fa-warning btn-space"></i><strong>Sorry: </strong></span> {{ Session::get('interdire-msg') }}
 	</div>
 
 @endif

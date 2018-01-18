@@ -10,8 +10,18 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
+    //admin routes
+    Route::get('/admin_dashboard', function () { return view('admin.index'); })->name('admin_dashboard');
+    Route::resource('users', 'UserController');
+    Route::resource('roles', 'RoleController');
+    Route::resource('permissions', 'PermissionController');
+    Route::resource('classrooms', 'ClassroomController');
+    Route::resource('schedules', 'ScheduleController');
+    Route::resource('terms', 'TermController');
+    Route::resource('courses', 'CourseController');
+});
 
-Route::get('/admin', function () { return view('admin.admin'); })->name('admin');
 //middleware to prevent back button and access cache
 Route::group(['middleware' => 'prevent-back-history'],function(){
     Auth::routes();
@@ -25,6 +35,8 @@ Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
 Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
 //Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
 Route::delete('/delete/user/{staff}/course/{tecode}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+//apply auth middleware only so students could edit their profile
+Route::resource('students', 'StudentController');
 
 //fee-paying form route
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
@@ -44,19 +56,12 @@ Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@select
 //url routing for manager approval page
 Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
 Route::put('/approval/user/{staff}/course/{tecode}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+
 //url routing for hr partner approval page
 Route::get('/approvalhr/{staff}/{tecode}', ['as' => 'approval.getform2hr','uses' => 'ApprovalController@getForm2hr' ]);
 Route::put('/approvalhr/user/{staff}/course/{tecode}',      ['as' => 'approval.updateform2hr','uses' => 'ApprovalController@updateForm2hr' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
-//admin routes
-Route::resource('users', 'UserController');
-Route::resource('roles', 'RoleController');
-Route::resource('permissions', 'PermissionController');
-Route::resource('classrooms', 'ClassroomController');
-Route::resource('schedules', 'ScheduleController');
-Route::resource('terms', 'TermController');
-Route::resource('courses', 'CourseController');
-Route::resource('students', 'StudentController');
+//public pages
 Route::get('eform', function () { return view('confirmation_page_unog'); })->name('eform');
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
 //Route::get('/', function () { return view('welcome'); });
@@ -103,7 +108,7 @@ Route::get('simpleroutes', function() {
             echo "</tr>";
         }
     echo "</table>";
-    });
+})->middleware(['auth','isAdmin']);
 //e-mail template preview on browser
 //use Illuminate\Mail\Markdown;
 

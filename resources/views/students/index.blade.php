@@ -17,8 +17,8 @@
 
     <div class="row">
         <div class="col-md-9">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><strong>Dashboard</strong></div>
+            <div class="panel panel-success">
+                <div class="panel-heading"><strong>Student Profile</strong></div>
 
                 <div class="panel-body">
                     @if (session('status'))
@@ -55,6 +55,22 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="job_appointment" class="col-md-4 control-label">Contact Number:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p>{{ Auth::user()->sddextr->PHONE }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="job_appointment" class="col-md-4 control-label">Gender:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p>{{ Auth::user()->sddextr->SEX }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="job_appointment" class="col-md-4 control-label">Type of Appointment:</label>
 
                             <div class="col-md-8 form-control-static">
@@ -63,18 +79,18 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-4 control-label">Contract Expiration:</label>
-
-                            <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->CONEXP }}</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label for="job_category" class="col-md-4 control-label">Job Category:</label>
 
                             <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->job_category }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="job_appointment" class="col-md-4 control-label">Contract Expiration:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p>{{ Auth::user()->sddextr->CONEXP }}</p>
                             </div>
                         </div>
 
@@ -97,7 +113,6 @@
                 </div>
             </div>
         </div>  
-
         <div class="col-md-3">
             <div class="panel panel-info">
                 <div class="panel-heading text-center"><strong>UN Language Courses</strong></div>

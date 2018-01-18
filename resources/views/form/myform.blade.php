@@ -58,7 +58,7 @@
                     <label for="org" class="col-md-3 control-label">Organization:</label>
                   <div class="col-md-8">
                     <div class="dropdown">
-                      <select name="org" id="input" class="col-md-8 form-control" required="required">
+                      <select name="org" id="input" class="col-md-8 form-control select2-basic-single" required="required">
                         @if(!empty($org))
                           @foreach($org as $key => $value)
                             <option value="{{ $key }}" {{ ($user->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
@@ -269,6 +269,10 @@
 </script>
 
 <script type="text/javascript">
+  $(document).ready(function() {
+    $('.select2-basic-single').select2();
+  });
+
   $(document).ready(function(){
       $(".select2-multi").select2({
         // theme: "bootstrap",

@@ -33,7 +33,8 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">OPERATIONS</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>User Admin</span></a></li>
+        <li class="active"><a href="{{ route('admin_dashboard') }}"><i class="fa fa-tachometer"></i> <span>Admin Dashboard</span></a></li>
+        <li class=""><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>User Admin</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-book"></i> <span>Courses</span>
             <span class="pull-right-container">
@@ -41,7 +42,8 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Create</a></li>
+            <li><a href="{{ route('courses.index') }}">View All</a></li>
+            <li><a href="{{ route('courses.create') }}">Create</a></li>
             <li><a href="#">Edit</a></li>
           </ul>
         </li>

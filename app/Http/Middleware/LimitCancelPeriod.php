@@ -17,7 +17,7 @@ class LimitCancelPeriod
     {
         
         return redirect()->route('home')
-            ->with('limit-cancel','Cancellation period expired.');
+            ->with('interdire-msg','Cancellation period expired.');
         //return $next($request);
     }
 }
