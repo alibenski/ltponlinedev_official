@@ -26,6 +26,18 @@
 
 @endif
 
+@if (Session::has('overlimit')) 
+    <div class="alert alert-danger" role="alert">
+        <strong>Sorry: </strong> {{ Session::get('overlimit') }}
+    </div>
+@endif
+
+@if (Session::has('enrolment_closed')) 
+    <div class="alert alert-danger" role="alert">
+        <strong>Sorry: </strong> {{ Session::get('enrolment_closed') }}
+    </div>
+@endif
+
 @if (Session::has('interdire-msg')) 
 	<div class="alert alert-danger alert-block" role="alert">
 		<span><i class="fa fa-lg fa-warning btn-space"></i><strong>Sorry: </strong></span> {{ Session::get('interdire-msg') }}

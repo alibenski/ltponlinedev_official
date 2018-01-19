@@ -4,17 +4,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @stop
 @section('content')
-@if (Session::has('overlimit')) 
-    <div class="alert alert-danger" role="alert">
-        <strong>Sorry: </strong> {{ Session::get('overlimit') }}
-    </div>
-@endif
-@if (Session::has('enrolment_closed')) 
-    <div class="alert alert-danger" role="alert">
-        <strong>Sorry: </strong> {{ Session::get('enrolment_closed') }}
-    </div>
-@endif
-
     <div class="row">
         <div class="col-md-9">
             <div class="panel panel-primary">

@@ -36,6 +36,7 @@ class NoFormController extends Controller
         $this->middleware('checksubmissioncount');
         //comment out checkcontinue beccause it causes ping-pong rerouting
         //$this->middleware('checkcontinue');
+        $this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**

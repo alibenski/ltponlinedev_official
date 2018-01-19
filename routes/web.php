@@ -40,7 +40,7 @@ Route::delete('/delete/user/{staff}/course/{tecode}', ['middleware' => 'limit-ca
 //apply auth middleware only so students could edit their profile
 Route::resource('students', 'StudentController');
 
-//fee-paying form route
+//fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'SelfPayController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'SelfPayController@selectAjax2']);
@@ -50,7 +50,7 @@ Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'ed
 Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@selectAjax3']);
 Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
 
-//controller for main form
+//main UN staff form routes
 Route::resource('myform', 'RepoController');
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@selectAjax2']);

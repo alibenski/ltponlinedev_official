@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'isAdmin' => \App\Http\Middleware\AdminMiddleware::class,
         'clearance' => \App\Http\Middleware\ClearanceMiddleware::class,
         'limit-cancel' => \App\Http\Middleware\LimitCancelPeriod::class,
+        'check-prev-url' => \App\Http\Middleware\CheckPrevURL::class,
     ];
 }

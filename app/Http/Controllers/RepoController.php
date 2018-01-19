@@ -32,9 +32,10 @@ class RepoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        //$this->middleware('opencloseenrolment');
+        $this->middleware('opencloseenrolment');
         //$this->middleware('checksubmissioncount');
-        //$this->middleware('checkcontinue');
+        $this->middleware('checkcontinue');
+        //$this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**

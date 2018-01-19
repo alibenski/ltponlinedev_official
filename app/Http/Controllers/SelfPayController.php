@@ -37,6 +37,7 @@ class SelfPayController extends Controller
         //$this->middleware('opencloseenrolment');
         //$this->middleware('checksubmissioncount');
         //$this->middleware('checkcontinue');
+        $this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**

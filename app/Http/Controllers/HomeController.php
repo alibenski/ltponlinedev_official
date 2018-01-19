@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use App\Mail\MailaboutCancel;
 use App\Torgan;
 use App\FocalPoints;
@@ -137,6 +138,16 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
+        //query Torgan table if $request->org is selfpaying or not
+        $org_status = Torgan::where('Org name', '=', $request->org)
+            ->value('Org Billed');
+                
+        //save organization to sddextr table
+        
+        if ($org_status == 0) {
+            return redirect(route('myform.create'));
+        }
+        
         return redirect(route('selfpayform.create'));
     }
 

@@ -8,8 +8,8 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-default">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-info">
           <div class="panel-heading">Enrolment Form for Semester: 
             <strong>
               @if(empty($next_term && $terms))
@@ -24,14 +24,14 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
-                  <p>Welcome to the CLM Online Language Training Programme (LTP) Enrolment page. First of all, we would need to know which organization you are working for. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1"><strong>here</strong></a> to read the FAQ's regarding enrolment eligibility.</p>
-                  <p>Please select your organization below. You could search your organization or scroll down from the dropdown box. Please click the Next button to continue.</p>
+                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. First of all, we would need to know which organization you are working for. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQ's regarding enrolment eligibility.</p>
+                  <p class="text-justify">Please select your organization below. From the <strong>Organization</strong> dropdown below, you can directly search your organization or scroll through box. When done, click the Next button to continue.</p>
                   <p>Thank you.</p><br>
                 </div>
 
                 <div class="form-group">
-                    <label for="org" class="col-md-1 control-label">Organization:</label>
-                  <div class="col-md-8">
+                    <label for="org" class="col-md-2 control-label">Organization:</label>
+                  <div class="col-md-9">
                     <div class="dropdown">
                       <select name="org" id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
                         @if(!empty($org))
