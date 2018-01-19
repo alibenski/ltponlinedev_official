@@ -66,7 +66,7 @@
                             <label for="job_appointment" class="col-md-4 control-label">Gender:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->SEX }}</p>
+                                <p>{{ ucfirst(Auth::user()->sddextr->SEX) }}</p>
                             </div>
                         </div>
 

@@ -112,27 +112,32 @@ class HomeController extends Controller
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->get();
         return view('form.history')->withHistorical_data($historical_data);
     }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
 
+    public function whatorg()
+    {
+        //get current year and date
+        $now_date = Carbon::now()->toDateString();
+        $now_year = Carbon::now()->year;
+
+        //query the current term based on year and Term_End column is greater than today's date
+        //whereYear('Term_End', $now_year)  
+        $terms = Term::orderBy('Term_Code', 'desc')
+                        ->whereDate('Term_End', '>=', $now_date)
+                        //->first();
+                        ->get()->min();
+
+        //query the next term based Term_Begin column is greater than today's date and then get min
+        $next_term = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+
+        $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+        
+        return view('form.whatorg')->withTerms($terms)->withNext_term($next_term)->withOrg($org);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    
+    public function whatform(Request $request)
     {
-
+        return redirect(route('selfpayform.create'));
     }
 
     public function destroy(Request $request, $staff, $tecode)
