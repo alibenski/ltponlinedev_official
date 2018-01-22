@@ -1,10 +1,8 @@
-@extends('main')
-@section('tabtitle', "| Create New Schedule")
-@section('customcss')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-@stop
+@extends('admin.admin')
+
 @section('content')
 <div class="container">
+  <div class="col-md-11">
     <form class="well form-horizontal" method="POST" action="{{ route('schedules.store') }}">
               {{ csrf_field() }}
               <div class="form-group">
@@ -60,6 +58,7 @@
               </div> 
             </div>
     </form>﻿
+  </div>
 </div>
 </div>
 </div>

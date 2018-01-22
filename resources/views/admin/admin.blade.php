@@ -262,5 +262,6 @@ desired effect
 </div>
 <!-- ./wrapper -->
 
+  @yield('java_script')
 </body>
 </html>

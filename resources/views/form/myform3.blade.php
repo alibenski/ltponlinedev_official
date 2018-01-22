@@ -431,7 +431,7 @@
       var token = $("input[name='_token']").val();
 
       $.ajax({
-          url: "{{ route('select-ajax') }}", 
+          url: "{{ route('select-ajax5') }}", 
           method: 'POST',
           data: {L:L, _token:token},
           success: function(data, status) {
@@ -449,7 +449,7 @@
       var token = $("input[name='_token']").val();
 
       $.ajax({
-          url: "{{ route('select-ajax2') }}", 
+          url: "{{ route('select-ajax6') }}", 
           method: 'POST',
           data: {course_id:course_id, _token:token},
           success: function(data) {

@@ -12,11 +12,12 @@
 */
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
     //admin routes
-    Route::get('/admin_dashboard', function () { return view('admin.index'); })->name('admin_dashboard');
+    Route::get('/', function () { return view('admin.index'); })->name('admin_dashboard');
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
     Route::resource('classrooms', 'ClassroomController');
+    Route::resource('course-schedule', 'CourseSchedController');
     Route::resource('schedules', 'ScheduleController');
     Route::resource('terms', 'TermController');
     Route::resource('courses', 'CourseController');
@@ -42,8 +43,8 @@ Route::resource('students', 'StudentController');
 
 //fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
-Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'SelfPayController@selectAjax']);
-Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'SelfPayController@selectAjax2']);
+Route::post('select-ajax5', ['as'=>'select-ajax5','uses'=>'SelfPayController@selectAjax5']);
+Route::post('select-ajax6', ['as'=>'select-ajax6','uses'=>'SelfPayController@selectAjax6']);
 
 //if already selected YES to continue course, go to these routes
 Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'edit']]);

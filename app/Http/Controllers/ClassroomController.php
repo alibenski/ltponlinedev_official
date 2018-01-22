@@ -31,7 +31,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        $classrooms = Classroom::orderBy('Te_Code','ASC')->paginate(15);
+        $classrooms = Classroom::orderBy('Te_Code','ASC')->paginate(10);
         return view('classrooms.index')->withClassrooms($classrooms);
     }
 

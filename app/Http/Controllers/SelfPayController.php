@@ -267,7 +267,7 @@ class SelfPayController extends Controller
     {
         //
     }
-    public function selectAjax(Request $request)
+    public function selectAjax5(Request $request)
     {
         if($request->ajax()){
             //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
@@ -277,12 +277,12 @@ class SelfPayController extends Controller
             ->pluck("Description","Te_Code_New")
             ->all();
             
-            $data = view('ajax-select',compact('select_courses'))->render();
+            $data = view('ajax-select5',compact('select_courses'))->render();
             return response()->json(['options'=>$data]);
         }
     }
 
-    public function selectAjax2(Request $request)
+    public function selectAjax6(Request $request)
     {
         if($request->ajax()){
 
@@ -304,7 +304,7 @@ class SelfPayController extends Controller
             //Eager Load scheduler function and pluck using "dot" 
             ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
 
-            $data = view('ajax-select2',compact('select_schedules'))->render();
+            $data = view('ajax-select6',compact('select_schedules'))->render();
             return response()->json(['options'=>$data]);
         }
     }

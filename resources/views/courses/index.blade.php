@@ -1,12 +1,9 @@
-@extends('main')
-@section('tabtitle', '| All Courses')
-@section('customcss')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-@stop
+@extends('admin.admin')
+
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-10">
+		<div class="col-md-12">
 			<h1>All Language Courses</h1>
 		</div>
 		
@@ -14,7 +11,7 @@
 			<a href="{{ route('courses.create') }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Create Course</a>
 
 		</div>
-		<div class="col-md-10">
+		<div class="col-md-12">
 			<hr>
 		</div>
 	</div>
@@ -35,7 +32,7 @@
 						
 						<tr>
 							<th>{{ $course->id }}</th>
-							<td>{{ $course->Te_Code }}</td>
+							<td>{{ $course->Te_Code_New }}</td>
 							<td>{{ $course->Description }}</td>
 							<td>{{ $course->language->name }}</td>
 							<td>

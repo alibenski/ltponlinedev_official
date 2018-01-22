@@ -35,6 +35,7 @@
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="{{ route('admin_dashboard') }}"><i class="fa fa-tachometer"></i> <span>Admin Dashboard</span></a></li>
         <li class=""><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>User Admin</span></a></li>
+        <li class=""><a href="#"><i class="fa fa-calendar"></i> <span>Pre-enrolment Schedule</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-book"></i> <span>Courses</span>
             <span class="pull-right-container">

@@ -1,12 +1,13 @@
 @extends('admin.admin')
 
 @section('content')
+
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
     <h2>Create New Class for Term: {{ $terms->Term_Code.' - '.$terms->Term_Name.' - '.$terms->Comments }}</h2>
     <hr>
 
-    <form method="POST" action="{{ route('classrooms.store') }}">
+    <form method="POST" action="{{ route('course-schedule.store') }}">
                
                 <div class="form-group">
                     <label name="L" class="col-md-3 control-label">Language: </label>
@@ -19,10 +20,12 @@
                 </div>
                 
                 <div class="form-group">
-                    <label name="course_id" class="col-md-3 control-label">Course & Level: </label>
-                    <select class="combine col-md-8 form-control" name="course_id">
-                        <option value="">--- Select Course ---</option>
-                    </select>
+                    <label for="course_id" class="col-md-3 control-label">Course & Level: </label>
+                      <div class="dropdown">
+                        <select class="col-md-8 form-control" name="course_id" autocomplete="off">
+                            <option value="">--- Select Course ---</option>
+                        </select>
+                      </div>
                 </div>
 
           <div class="well col-md-12" style="margin-top: 20px;">
@@ -31,8 +34,6 @@
                   <table class="table">
                     <thead>
                       <th>Pick a Schedule</th>
-                      <th>Assign Rooms to Schedule</th>
-                      <th>Teacher</th>
                     </thead>
                     <tbody>
                         <tr>
@@ -46,22 +47,6 @@
                                     </div>
 
                                 @endforeach
-                          </td>
-                          <td>
-                                <select class="combine  form-control select2-multi" name="room_id[]" autocomplete="off" multiple="multiple">
-                                    @foreach ($rooms as $id => $name)
-                                        <option value="{{ $id }}"> {{ $name }}</option>
-                                    @endforeach
-                                </select>
-                          </td>
-                          <td>
-                                <select class="combine  form-control select2-multi" name="teacher_id" autocomplete="off">
-                                        <option value=""> Select Teacher </option>
-                                        <option value="1"> Teacher A </option>
-                                        <option value="2"> Teacher B </option>
-                                        <option value="3"> Teacher C </option>
-                                        <option value="4"> Teacher D </option>
-                                </select>
                           </td>
                         </tr>
                     </tbody>
@@ -88,27 +73,26 @@
     </form>
   </div>
 </div>﻿
-@endsection
 
-@section('scripts_code')
-  <script src="{{ asset('js/select2.min.js') }}"></script>
-  <script type="text/javascript">$(".select2-multi").select2(); </script>
-  <script src="{{ asset('js/submit.js') }}"></script>      
+@stop
 
-  <script type="text/javascript">
-    $("select[name='L']").change(function(){
-        var L = $(this).val();
-        var token = $("input[name='_token']").val();
-        $.ajax({
-            url: "{{ route('select-ajax') }}", 
-            method: 'POST',
-            data: {L:L, _token:token},
-            success: function(data) {
-              $("select[name='course_id'").html('');
-              $("select[name='course_id'").html(data.options);
-            }
-        });
-    }); 
-  </script>
+@section('java_script')
+
+<script type="text/javascript">
+  $("select[name='L']").change(function(){
+      var L = $(this).val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax5') }}", 
+          method: 'POST',
+          data: {L:L, _token:token},
+          success: function(data, status) {
+            $("select[name='course_id']").html('');
+            $("select[name='course_id']").html(data.options);
+          }
+      });
+  }); 
+</script>
 
 @stop
