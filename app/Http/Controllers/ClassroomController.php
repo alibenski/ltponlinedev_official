@@ -10,7 +10,7 @@ use App\Classroom;
 use App\Term;
 use App\Room;
 use DB;
-use Carbon;
+use Carbon\Carbon;
 
 class ClassroomController extends Controller
 {
@@ -21,7 +21,7 @@ class ClassroomController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**

@@ -43,18 +43,16 @@ Route::resource('students', 'StudentController');
 
 //fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
-Route::post('select-ajax5', ['as'=>'select-ajax5','uses'=>'SelfPayController@selectAjax5']);
-Route::post('select-ajax6', ['as'=>'select-ajax6','uses'=>'SelfPayController@selectAjax6']);
 
 //if already selected YES to continue course, go to these routes
 Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'edit']]);
-Route::post('select-ajax3', ['as'=>'select-ajax3','uses'=>'NoFormController@selectAjax3']);
-Route::post('select-ajax4', ['as'=>'select-ajax4','uses'=>'NoFormController@selectAjax4']);
 
 //main UN staff form routes
 Route::resource('myform', 'RepoController');
-Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'RepoController@selectAjax']);
-Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'RepoController@selectAjax2']);
+
+//main controller used for ajax jquery on all forms - myform, noform, selfpayform
+Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'AjaxController@selectAjax']);
+Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'AjaxController@selectAjax2']);
 
 //url routing for manager approval page
 Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);

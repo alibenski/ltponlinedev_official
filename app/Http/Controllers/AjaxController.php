@@ -3,6 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Language;
+use App\Course;
+use App\User;
+use App\Repo;
+use App\Term;
+use App\Classroom;
+use App\Schedule;
+use App\Preenrolment;
+use App\SDDEXTR;
+use App\Torgan;
+use Session;
+use Carbon\Carbon;
+use DB;
+
 
 class AjaxController extends Controller
 {
@@ -41,8 +56,9 @@ class AjaxController extends Controller
                 $latest_term = Term::orderBy('Term_Code', 'desc')
                                 ->whereDate('Term_End', '>=', $now_date)
                                 ->get()->min();            
-                //$latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
-                $q->where('Te_Term', $latest_term->Term_Code );
+                //QUERY THE SCHEDULE BASED ON THE NEXT TERM 'Term_Next' of the CURRENT TERM RECORD/ROW in TERMS TABLE
+                //NEXT TERM CODE MUST BE ENTERED IN TEVENTCUR TABLE
+                $q->where('Te_Term', $latest_term->Term_Next );
             })
 
             //Eager Load scheduler function and pluck using "dot" 

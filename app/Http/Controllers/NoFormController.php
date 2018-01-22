@@ -34,8 +34,7 @@ class NoFormController extends Controller
         $this->middleware('prevent-back-history');
         //$this->middleware('opencloseenrolment');
         $this->middleware('checksubmissioncount');
-        //comment out checkcontinue beccause it causes ping-pong rerouting
-        //$this->middleware('checkcontinue');
+        //$this->middleware('checkcontinue'); //comment out checkcontinue beccause it causes ping-pong rerouting
         $this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
