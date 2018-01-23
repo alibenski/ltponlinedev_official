@@ -8,7 +8,7 @@ class Classroom extends Model
 {
     protected $table = 'LTP_TEVENTCur';
     protected $fillable = [
-        'Code', 'Te_Code', 'schedule_id', 'Te_Term',  
+        'Code', 'cs_unique','Te_Code_New', 'schedule_id', 'Te_Term',  
     ];
 
     /**
@@ -23,7 +23,7 @@ class Classroom extends Model
     //in this case, field Te_Code inside table PASH is associated to foreign key Te_Code
     //which is a field in table LTP_Terms (Model: Term) 
     public function course() {
-    return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code'); 
+    return $this->belongsTo('App\Course', 'Te_Code_New', 'Te_Code_New'); 
     }
 
     public function scheduler() {

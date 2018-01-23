@@ -8,6 +8,7 @@ use App\Language;
 use App\User;
 use App\Schedule;
 use App\Classroom;
+use App\CourseSchedule;
 use App\Term;
 use App\Room;
 use DB;
@@ -22,7 +23,10 @@ class CourseSchedController extends Controller
      */
     public function index()
     {
-        //
+        //query NEXT term
+
+        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->where('Te_Term', '184')->paginate(10);
+        return view('courses_schedules.index')->withCourse_schedule($course_schedule);
     }
 
     /**
@@ -70,7 +74,7 @@ class CourseSchedController extends Controller
         if ( empty( $code ) ) {
             //loop based on $room_id count and store in $codex array
             for ($i=0; $i < count($schedule_id); $i++) { 
-                $codex[] = array($course_id, $schedule_id[$i]);
+                $codex[] = array($course_id, $term_id, $schedule_id[$i]);
                 //implode array elements and pass imploded string value to $codex array as element
                 $codex[$i] = implode('-', $codex[$i]);
                 //for each $codex array element stored, loop array merge method
@@ -89,7 +93,61 @@ class CourseSchedController extends Controller
                             'term_id' => 'required|integer|',
                             'schedule_id' => 'required|array',
                         ));
-        dd($request);
+        //loop for storing Code value to database
+        $ingredients = [];        
+        for ($i = 0; $i < count($schedule_id); $i++) {
+            $ingredients[] = new  Classroom([
+                'Te_Code_New' => $course_id,
+                'Te_Term' => $term_id,
+                'schedule_id' => $schedule_id[$i],
+                'cs_unique' => $course_id.'-'.$term_id.'-'.$schedule_id[$i],
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                ]);
+                    foreach ($ingredients as $data) {
+                        $data->save();
+                    }
+        }
+        //query newly saved course+schedule entries to produce needed csv extract
+        $get_courses = Classroom::where('Te_Code_New', $request->course_id)
+            ->where('Te_Term', '184' )->get();
+        $get_courses_first = Classroom::where('Te_Code_New', $request->course_id)
+            ->where('Te_Term', '184' )->first();
+        $get_course_name = $get_courses_first->course->Description;
+        
+        $days_arr = [];
+        for ($i = 0; $i < count($get_courses); $i++) {
+            $days_arr[] = [$get_courses[$i]->scheduler->begin_day]; 
+            $days_arr[$i] = implode('>', $days_arr[$i]);
+        }
+            $implode_days = implode('>', $days_arr);
+            var_dump($implode_days);
+
+        
+        $times_arr = [];
+        for ($i = 0; $i < count($get_courses); $i++) {
+            $times_arr[] = [$get_courses[$i]->scheduler->time_combination];
+            $times_arr[$i] = implode('>', $times_arr[$i]);
+        }
+            $implode_times = implode('>', $times_arr);
+            var_dump($implode_times);
+
+        $ingredients_csv = [];        
+        for ($i = 0; $i < count($get_courses); $i++) {
+            $ingredients_csv[] = new  CourseSchedule([
+                'course' => $get_course_name,
+                'day' => $implode_days,
+                'time' => $implode_times,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                ]);
+                    foreach ($ingredients_csv as $data) {
+                        $data->save();
+                    }
+        }
+
+        $request->session()->flash('success', 'Course + Schedule saved!'); //laravel 5.4 version
+        return redirect()->back();
 
     }
 

@@ -21,30 +21,37 @@
 				<thead>
 					<th>Code</th>
 					<th>Course Name</th>
-					<th>Schedule</th>
+					<th>Day</th>
+					<th>Time</th>
 					<th>Operation</th>
 				</thead>
 
 				<tbody>
-					@foreach($classrooms as $classroom)
-						
+					@foreach($course_schedule as $class)
 						<tr>
-							<th>{{ $classroom->Code }}</th>
-							<td>{{ $classroom->course->Description }}</td>
+							<th>{{ $class->cs_unique }}</th>
+							<td>{{ $class->Te_Code_New}} - {{ $class->course->Description }}</td>
 							<td>
-								@if(empty( $classroom->scheduler->name ))
+								@if(empty( $class->schedule_id ))
 								null
 								@else 
-								{{ $classroom->scheduler->name }}
+								{{ $class->scheduler->begin_day }}
 								@endif
 							</td>
-							<td><a href="{{ route('classrooms.edit', $classroom->id)}}" class="btn btn-default btn-sm">Edit</a></td>
+							<td>
+								@if(empty( $class->schedule_id ))
+								null
+								@else 
+								{{ $class->scheduler->time_combination }}
+								@endif
+							</td>
+							<td><a href="{{ route('course-schedule.edit', $class->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach
 
 				</tbody>
 			</table>
-			{{ $classrooms->links() }}		
+			{{ $course_schedule->links() }}		
 		</div>
 	</div>
 </div>
