@@ -1,34 +1,26 @@
-@extends('main')
-@section('tabtitle', "| Edit Schedule")
-@section('customcss')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-@stop
+@extends('admin.admin')
+
 @section('content')
 <div class="container">
     <form class="well form-horizontal" method="POST" action="{{ route('schedules.update', $schedule->id) }}">
           <div class="form-group">
-            <label for="sched_name" class="control-label col-md-4">Schedule Description:</label>
+            <label for="sched_name" class="control-label col-md-4">Edit Schedule Description:</label>
             <textarea type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" readonly>{{ $schedule->name }}</textarea>
           </div>
 
+              <!-- array checkboxes -->
               <div class="form-group">
-                  <label name="begin_day" class="col-md-4 control-label">Begin Day: </label>
-                  <select class="col-md-6 form-control-static" name="begin_day">
-                      <option value="">Select Begin Day</option>
-                      @foreach ($days as $id => $name)
-                          <option value="{{ $id }}"> {{ $name }}</option>
-                      @endforeach
-                  </select>
-              </div>
-
-              <div class="form-group">
-                  <label name="end_day" class="col-md-4 control-label">End Day: </label>
-                  <select class="col-md-6 form-control-static" name="end_day">
-                      <option value="">Select End Day</option>
-                      @foreach ($days as $id => $name)
-                          <option value="{{ $id }}"> {{ $name }}</option>
-                      @endforeach
-                  </select>
+                  <label class="col-md-4 control-label">Choose Days:</label>
+                  <div class="col-md-4">
+                      <div class="checkbox">
+                          <label>
+                            @foreach ($days as $id => $name)
+                              <input type="checkbox" name="begin_day[]" value="{{ $id }}" /> {{ $name }}
+                              <br>
+                            @endforeach
+                          </label>
+                      </div>
+                  </div>
               </div>
 
               <div class="form-group">

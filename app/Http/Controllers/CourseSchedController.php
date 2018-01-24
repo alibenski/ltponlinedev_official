@@ -23,10 +23,22 @@ class CourseSchedController extends Controller
      */
     public function index()
     {
-        //query NEXT term
+        //get current year and date
+        $now_date = Carbon::now()->toDateString();
+        $now_year = Carbon::now()->year;
+
+        //query the current term based on year and Term_End column is greater than today's date
+        //whereYear('Term_End', $now_year)  
+        $terms = Term::orderBy('Term_Code', 'desc')
+                        ->whereDate('Term_End', '>=', $now_date)
+                        ->get()->min();
+        //query the next term based Term_Begin column is greater than today's date and then get min
+        $next_term = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
 
         $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->where('Te_Term', '184')->paginate(10);
-        return view('courses_schedules.index')->withCourse_schedule($course_schedule);
+
+        return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms)->withNext_term($next_term);
     }
 
     /**
@@ -40,6 +52,9 @@ class CourseSchedController extends Controller
         $languages = Language::pluck("name","code")->all();
         $schedules = Schedule::pluck("name","id")->all();
         
+        //need to include fields from the csv extract here
+        
+
         //get current year and date
         $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
@@ -170,7 +185,7 @@ class CourseSchedController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('courses_schedules.edit');
     }
 
     /**

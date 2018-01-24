@@ -58,7 +58,6 @@ class ScheduleController extends Controller
     {
             $this->validate($request, array(
                 'begin_day' => 'bail|required|',
-                'end_day' => 'nullable',
                 'begin_time' => 'required',
                 'end_time' => 'required',
             ));  
@@ -66,10 +65,11 @@ class ScheduleController extends Controller
         // Save the data to db
         $schedule = new Schedule;
         $schedule->begin_day = implode(' ', $request->begin_day);
-        $schedule->end_day = $request->end_day;
+        //$schedule->end_day = $request->end_day;
         $schedule->begin_time = $request->begin_time;
         $schedule->end_time = $request->end_time;
-        $schedule->name = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:i:sa', strtotime($request->begin_time)). ' - ' .date('h:i:sa', strtotime($request->end_time));
+        $schedule->name = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
+        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
         $schedule->save();         
         // Set flash data with message
         $request->session()->flash('success', 'New entry has been saved!');
@@ -117,9 +117,7 @@ class ScheduleController extends Controller
         // Validate data
         $schedule = Schedule::find($id);
             $this->validate($request, array(
-                'sched_name' => 'required|max:255',
                 'begin_day' => 'required',
-                'end_day' => 'nullable',
                 'begin_time' => 'required',
                 'end_time' => 'required',
             )); 
@@ -127,11 +125,11 @@ class ScheduleController extends Controller
         // Save the data to db
         $schedule = Schedule::find($id);
         //$schedule->name = $request->input('sched_name');
-        $schedule->begin_day = $request->input('begin_day');
-        $schedule->end_day = $request->input('end_day');
+        $schedule->begin_day = implode(' ', $request->begin_day);
         $schedule->begin_time = $request->input('begin_time');
         $schedule->end_time = $request->input('end_time');
-        $schedule->name = $request->input('begin_day'). '  ' .$request->input('end_day'). ': ' .date('h:i:sa', strtotime($request->input('begin_time'))). ' - ' .date('h:i:sa', strtotime($request->input('end_time')));
+        $schedule->name = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
+        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
         $schedule->save();         
         // Set flash data with message
         $request->session()->flash('success', 'Changes have been saved!');

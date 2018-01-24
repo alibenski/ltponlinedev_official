@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h1>Course + Schedule Before Enrolment</h1>
+			<span><h2><i class="fa fa-calendar"></i> Course + Schedule Before Enrolment: {{ $next_term->Term_Code.' - '.$next_term->Term_Name.' - '.$next_term->Comments }}</h2></span>
 		</div>
 		
 		<div class="col-md-2">
@@ -19,7 +19,7 @@
 		<div class="col-md-10 class-md-offset-2">
 			<table class="table">
 				<thead>
-					<th>Code</th>
+					<th>CS Code</th>
 					<th>Course Name</th>
 					<th>Day</th>
 					<th>Time</th>

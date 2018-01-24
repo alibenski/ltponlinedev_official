@@ -1,20 +1,17 @@
-@extends('main')
-@section('tabtitle', '| All Terms')
-@section('customcss')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-@stop
+@extends('admin.admin')
+
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-10">
-			<h1>All Semester Terms</h1>
+		<div class="col-md-12">
+			<span><h2><i class="fa fa-lg fa-snowflake-o"></i> All Semester Terms</h2></span>
 		</div>
 		
 		<div class="col-md-2">
-			<a href="" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Button</a>
+			<a href="" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Create</a>
 
 		</div>
-		<div class="col-md-10">
+		<div class="col-md-12">
 			<hr>
 		</div>
 	</div>

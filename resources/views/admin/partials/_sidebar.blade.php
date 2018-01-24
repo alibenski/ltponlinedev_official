@@ -35,7 +35,7 @@
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="{{ route('admin_dashboard') }}"><i class="fa fa-tachometer"></i> <span>Admin Dashboard</span></a></li>
         <li class=""><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>User Admin</span></a></li>
-        <li class=""><a href="#"><i class="fa fa-calendar"></i> <span>Pre-enrolment Schedule</span></a></li>
+        <li class=""><a href="{{ route('course-schedule.index') }}"><i class="fa fa-calendar"></i> <span>Pre-enrolment Schedule</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-book"></i> <span>Courses</span>
             <span class="pull-right-container">
@@ -45,18 +45,17 @@
           <ul class="treeview-menu">
             <li><a href="{{ route('courses.index') }}">View All</a></li>
             <li><a href="{{ route('courses.create') }}">Create</a></li>
-            <li><a href="#">Edit</a></li>
           </ul>
         </li>
         <li class="treeview">
-          <a href="#"><i class="fa fa-snowflake-o"></i> <span>Term</span>
+          <a href="#"><i class="fa fa-snowflake-o"></i> <span>Terms</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="{{ route('terms.index') }}">View All</a></li>
             <li><a href="#">Create</a></li>
-            <li><a href="#">Edit</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -66,8 +65,8 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Create</a></li>
-            <li><a href="#">Edit</a></li>
+            <li><a href="{{ route('schedules.index') }}">View All</a></li>
+            <li><a href="{{ route('schedules.create') }}">Create</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -77,8 +76,8 @@
               </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="#">View All</a></li>
             <li><a href="#">Create</a></li>
-            <li><a href="#">Edit</a></li>
           </ul>
         </li>
         <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-btn fa-sign-out btn-space" aria-hidden="true"></i>
