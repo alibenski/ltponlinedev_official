@@ -19,6 +19,23 @@ class GlobalFunction
         
         return "$current_term_begin";
       }
+      public function nextTermCode()
+      {
+        //get current year and date
+        $now_date = Carbon::now()->toDateString();
+        $now_year = Carbon::now()->year;
+
+        //query the current term based on year and Term_End column is greater than today's date
+        //whereYear('Term_End', $now_year)  
+        $terms = Term::orderBy('Term_Code', 'desc')
+                        ->whereDate('Term_End', '>=', $now_date)
+                        ->get()->min();
+        //query the next term based Term_Begin column is greater than today's date and then get min
+        $next_term = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+
+        return "$next_term";                
+      }
       public function startQueryLog()
       {
         \DB::enableQueryLog();

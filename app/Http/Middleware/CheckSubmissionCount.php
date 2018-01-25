@@ -23,10 +23,9 @@ class CheckSubmissionCount
         $current_user = Auth::user()->indexno;
         $grouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
             ->where(function($q){ 
-                $latest_term = Preenrolment::orderBy('Term', 'DESC')->value('Term');
+                $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
                 $q->where('Term', $latest_term );
             })->count('Te_Code');
-        
         if ($grouped == '2') {
             $request->session()->flash('overlimit', 'You have reached the enrolment form submission limit (2 Maximum Language Courses)');
             return redirect()->route('home');
