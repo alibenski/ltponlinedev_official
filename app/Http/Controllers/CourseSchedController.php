@@ -137,7 +137,6 @@ class CourseSchedController extends Controller
         }
             $implode_days = implode('>', $days_arr);
             var_dump($implode_days);
-
         
         $times_arr = [];
         for ($i = 0; $i < count($get_courses); $i++) {
@@ -147,19 +146,14 @@ class CourseSchedController extends Controller
             $implode_times = implode('>', $times_arr);
             var_dump($implode_times);
 
-        $ingredients_csv = [];        
-        for ($i = 0; $i < count($get_courses); $i++) {
-            $ingredients_csv[] = new  CourseSchedule([
-                'course' => $get_course_name,
-                'day' => $implode_days,
+        //updateOrCreate method used to update record or insert new record
+            $ingredients_csv = CourseSchedule::updateOrCreate(
+                ['course' => $get_course_name],
+                ['day' => $implode_days,
                 'time' => $implode_times,
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" =>  \Carbon\Carbon::now(),
                 ]);
-                    foreach ($ingredients_csv as $data) {
-                        $data->save();
-                    }
-        }
+            $ingredients_csv->save();
+
 
         $request->session()->flash('success', 'Course + Schedule saved!'); //laravel 5.4 version
         return redirect()->back();
