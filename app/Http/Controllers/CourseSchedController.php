@@ -52,9 +52,6 @@ class CourseSchedController extends Controller
         $languages = Language::pluck("name","code")->all();
         $schedules = Schedule::pluck("name","id")->all();
         
-        //need to include fields from the csv extract here
-        
-
         //get current year and date
         $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
@@ -68,7 +65,14 @@ class CourseSchedController extends Controller
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
 
-        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withNext_term($next_term);
+        //need to include fields from the csv extract here
+        $next_season = $next_term->Comments;
+        $format = DB::table('tblLTP_course_format')->pluck("format_name_en","id")->all();
+        $duration = DB::table('tblLTP_course_duration')->pluck("duration_name_en","id")->all();
+        //dd($next_season);
+
+
+        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withNext_term($next_term)->withNext_season($next_season)->withFormat($format)->withDuration($duration);
     }
 
     /**

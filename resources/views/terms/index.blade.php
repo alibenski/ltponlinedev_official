@@ -23,7 +23,7 @@
 					<th>Term Code</th>
 					<th>Term Name</th>
 					<th>Next Term Code</th>
-					<th></th>
+					<th>Enrolment Duration</th>
 					<th></th>
 					<th></th>
 				</thead>
@@ -35,6 +35,7 @@
 							<th>{{ $term->Term_Code }}</th>
 							<td>{{ $term->Term_Name }}</td>
 							<td>{{ $term->Term_Next }}</td>
+							<td>{{ $term->Enrol_Duration }}</td>
 							<td><a href="{{ route('terms.index', $term->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach

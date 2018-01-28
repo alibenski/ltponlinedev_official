@@ -9,9 +9,13 @@
     <hr>
 
     <form method="POST" action="{{ route('course-schedule.store') }}">
-               
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <strong>Basic Info</strong>
+            </div>
+              <div class="panel-body">
                 <div class="form-group">
-                    <label name="L" class="col-md-3 control-label">Language: </label>
+                    <label name="L" class="col-md-3 control-label" style="margin: 5px 5px;">Language: </label>
                     <select class="col-md-8 form-control" name="L" autocomplete="off" required="required">
                         <option value="">--- Select Language ---</option>
                         @foreach ($languages as $id => $name)
@@ -19,15 +23,91 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="course_id" class="col-md-3 control-label">Course & Level: </label>
+                  <label for="language_css" class="col-md-10 control-label" style="margin: 5px 5px;">Language CSS (via JQuery): </label>
+                  <div class="col-md-12 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="language_css" class="form-control"  type="text" value="" readonly>                                    
+                        </div>
+                  </div>
+                </div> 
+
+                <div class="form-group">
+                  <label for="availability_css" class="col-md-10 control-label" style="margin: 5px 5px;">Availability CSS (Automatically Rendered via Controller): </label>
+                  <div class="col-md-12 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="availability_css" class="form-control"  type="text" value="" readonly>                                    
+                        </div>
+                  </div>
+                </div> 
+
+                <div class="form-group">
+                  <label for="website_language" class="col-md-10 control-label" style="margin: 5px 5px;">Website Language (Automatically Rendered via static HTML): </label>
+                  <div class="col-md-12 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="website_language" class="form-control"  type="text" value="" readonly>                                    
+                        </div>
+                  </div>
+                </div> 
+
+                <div class="form-group">
+                    <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course & Level: </label>
                       <div class="dropdown">
                         <select class="col-md-8 form-control" name="course_id" autocomplete="off" required="required">
                             <option value="">--- Select Course ---</option>
                         </select>
                       </div>
                 </div>
+
+                <div class="form-group">
+                  <label for="enrolment_duration" class="col-md-10 control-label" style="margin: 5px 5px;">Enrolment Duration: </label>
+                  <div class="col-md-12 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input  name="enrolment_duration" class="form-control"  type="text" value="{{ $next_term->Enrol_Duration }}" readonly>                                    
+                        </div>
+                  </div>
+                </div>  
+              </div>
+          </div>     
+          <div class="well col-md-12" style="margin-top: 20px;">
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="table">
+                    <thead>
+                      <th>Format</th>
+                      <th>Duration</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td>
+                                @foreach ($format as $id => $name)
+
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="format_id" value="{{ $id }}" /> {{ $name }}
+                                        </label>
+                                    </div>
+
+                                @endforeach
+                          </td>
+                          <td>
+                                @foreach ($duration as $id => $name)
+
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="duration_id" value="{{ $id }}" /> {{ $name }}
+                                        </label>
+                                    </div>
+
+                                @endforeach
+                          </td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
 
           <div class="well col-md-12" style="margin-top: 20px;">
               <div class="row">
