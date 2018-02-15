@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="language_css" class="col-md-10 control-label" style="margin: 5px 5px;">Language CSS (via JQuery): </label>
+                  <label for="language_css" class="col-md-10 control-label" style="margin: 5px 5px;">Language CSS (Automatically Rendered based on Language selection above via JQuery): </label>
                   <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="language_css" class="form-control"  type="text" value="" readonly>                                    
@@ -162,7 +162,25 @@
 <script>
   $(document).ready(function(){
     $('input[type=checkbox]').prop('checked',false);
+    $('input[type=radio]').prop('checked',false);
   });
+</script>
+
+<script type="text/javascript">
+  $("select[name='L']").change(function(){
+      var L = $(this).val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax') }}", 
+          method: 'POST',
+          data: {L:L, _token:token},
+          success: function(data, status) {
+            $("select[name='course_id']").html('');
+            $("select[name='course_id']").html(data.options);
+          }
+      });
+  }); 
 </script>
 
 <script type="text/javascript">

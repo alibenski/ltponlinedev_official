@@ -67,8 +67,8 @@ class CourseSchedController extends Controller
 
         //need to include fields from the csv extract here
         $next_season = $next_term->Comments;
-        $format = DB::table('tblLTP_course_format')->pluck("format_name_en","id")->all();
-        $duration = DB::table('tblLTP_course_duration')->pluck("duration_name_en","id")->all();
+        $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en","id")->all();
+        $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en","id")->all();
         //dd($next_season);
 
 
