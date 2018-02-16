@@ -57,44 +57,50 @@ class RepoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {  
-        //make collection values available
-        $courses = Course::all();
-        //get values directly from 'languages' table
-        $languages = DB::table('languages')->pluck("name","code")->all();
+    public function create(Request $request)
+    {   
+        // check if session flash msg exists, else re-route 
+        if ($request->session()->has('success')){
 
-        //get current year and date
-        $now_date = Carbon::now()->toDateString();
-        $now_year = Carbon::now()->year;
+            //make collection values available
+            $courses = Course::all();
+            //get values directly from 'languages' table
+            $languages = DB::table('languages')->pluck("name","code")->all();
 
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        //->first();
-                        ->get()->min();
+            //get current year and date
+            $now_date = Carbon::now()->toDateString();
+            $now_year = Carbon::now()->year;
 
-        //query the next term based Term_Begin column is greater than today's date and then get min
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+            //query the current term based on year and Term_End column is greater than today's date
+            //whereYear('Term_End', $now_year)  
+            $terms = Term::orderBy('Term_Code', 'desc')
+                            ->whereDate('Term_End', '>=', $now_date)
+                            //->first();
+                            ->get()->min();
 
-        $prev_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_End', '<', $now_date)->get()->max();
+            //query the next term based Term_Begin column is greater than today's date and then get min
+            $next_term = Term::orderBy('Term_Code', 'desc')
+                            ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
 
-        //define user variable as User collection
-        $user = Auth::user();
-        //define user index number for query 
-        $current_user = Auth::user()->indexno;
-        //using DB method to query latest CodeIndexID of current_user
-        $repos = Repo::orderBy('Term', 'desc')
-            ->where('INDEXID', $current_user)->value('CodeIndexID');
-        //not using DB method to get latest language course of current_user
-        $repos_lang = Repo::orderBy('Term', 'desc')
-            ->where('INDEXID', $current_user)->first();
-        $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+            $prev_term = Term::orderBy('Term_Code', 'desc')
+                            ->where('Term_End', '<', $now_date)->get()->max();
 
-        return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
+            //define user variable as User collection
+            $user = Auth::user();
+            //define user index number for query 
+            $current_user = Auth::user()->indexno;
+            //using DB method to query latest CodeIndexID of current_user
+            $repos = Repo::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)->value('CodeIndexID');
+            //not using DB method to get latest language course of current_user
+            $repos_lang = Repo::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)->first();
+            $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+
+            return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
+        } else {
+            return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. First visit: < '. route('whatorg') .' >');
+        }
     }
 
     /**

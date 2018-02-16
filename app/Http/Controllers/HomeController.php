@@ -138,6 +138,7 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
+        
         //query Torgan table if $request->org is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->org)
             ->value('Org Billed');
@@ -145,9 +146,10 @@ class HomeController extends Controller
         //save organization to sddextr table
         
         if ($org_status == 0) {
+            session()->flash('success','Please fill up the enrolment form');
             return redirect(route('myform.create'));
         }
-        
+        session()->flash('success','Please fill up the payment-based enrolment form');
         return redirect(route('selfpayform.create'));
     }
 

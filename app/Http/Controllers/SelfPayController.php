@@ -55,8 +55,10 @@ class SelfPayController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {  
+        if ($request->session()->has('success')) {
+
         //make collection values available
         $courses = Course::all();
         //get values directly from 'languages' table
@@ -93,6 +95,9 @@ class SelfPayController extends Controller
         $org = Torgan::get()->pluck('Org name','Org name');
 
         return view('form.myform3')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
+        } else {
+        return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. First visit: < '. route('whatorg') .' >');
+        }
     }
 
     /**

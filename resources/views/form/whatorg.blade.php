@@ -30,10 +30,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="org" class="col-md-2 control-label">Organization:</label>
+                    <label for="organization" class="col-md-2 control-label">Organization:</label>
                   <div class="col-md-9">
                     <div class="dropdown">
-                      <select name="org" id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+                      <select name="organization" id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
                         @if(!empty($org))
                           @foreach($org as $key => $value)
                             <option value="{{ $key }}" {{ (Auth::user()->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
