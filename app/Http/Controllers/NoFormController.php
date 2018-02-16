@@ -35,7 +35,7 @@ class NoFormController extends Controller
         //$this->middleware('opencloseenrolment');
         $this->middleware('checksubmissioncount');
         //$this->middleware('checkcontinue'); //comment out checkcontinue beccause it causes ping-pong rerouting
-        $this->middleware('check-prev-url', ['only' => ['create']]);
+        //$this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**
@@ -59,7 +59,14 @@ class NoFormController extends Controller
      */
     public function create(Request $request)
     {  
-        if ($request->session()->has('success')) {
+        $sess = $request->session()->get('_previous');
+        $result = array();
+            foreach($sess as $val)
+            {
+              $result = $val;
+            }
+            
+        if ($result == route('myform.create')) {
 
         //make collection values available
         $courses = Course::all();

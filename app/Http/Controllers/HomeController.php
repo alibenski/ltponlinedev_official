@@ -138,19 +138,34 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
-        
-        //query Torgan table if $request->org is selfpaying or not
-        $org_status = Torgan::where('Org name', '=', $request->org)
+        //query Torgan table if $request->organization is selfpaying or not
+        $org_status = Torgan::where('Org name', '=', $request->organization)
             ->value('Org Billed');
-                
+        
         //save organization to sddextr table
         
-        if ($org_status == 0) {
+        // if ($org_status == 0) {
+        //     session()->flash('success','Please fill up the enrolment form');
+        //     return redirect(route('myform.create'));
+        // }
+        // session()->flash('success','Please fill up the payment-based enrolment form');
+        // return redirect(route('selfpayform.create'));
+        // if ($request->decision == null) {
+        //     session()->flash('interdire-msg','Please make a decision');
+        //     return redirect(route('whatorg'));
+        // } else
+        if ($request->decision == 1) {
+            session()->flash('success','Please fill up the payment-based enrolment form');
+            return redirect(route('selfpayform.create'));
+        } elseif ($request->decision == 0 && $org_status == 1) {
+            session()->flash('success','Please fill up the payment-based enrolment form');
+            return redirect(route('selfpayform.create'));
+        } elseif ($request->decision == 0 && $org_status == 0) {
             session()->flash('success','Please fill up the enrolment form');
             return redirect(route('myform.create'));
-        }
-        session()->flash('success','Please fill up the payment-based enrolment form');
-        return redirect(route('selfpayform.create'));
+        } else 
+        return redirect(route('whatorg'));
+
     }
 
     public function destroy(Request $request, $staff, $tecode)

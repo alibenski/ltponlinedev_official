@@ -23,7 +23,7 @@
                             @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
-                                @if(is_null($form->DEPT))
+{{--                                 @if(is_null($form->DEPT))
                                 <p><span id="status" class="label label-default" style="margin-right: 10px;">
                                 Self Payment
                                 @elseif(is_null($form->approval) && is_null($form->approval_hr))
@@ -44,7 +44,7 @@
                                 @elseif($form->approval == 1 && $form->approval_hr == 0)
                                 <p><span id="status" class="label label-danger" style="margin-right: 10px;">
                                 Disapproved
-                                @endif
+                                @endif --}}
                                 </span><strong>{{ $form->courses->EDescription}}</strong></p>
                                     
                                     <div class="col-sm-6">
