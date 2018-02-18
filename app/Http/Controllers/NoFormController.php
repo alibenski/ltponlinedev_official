@@ -66,7 +66,7 @@ class NoFormController extends Controller
               $result = $val;
             }
             
-        if ($result == route('myform.create')) {
+        if ($result == route('myform.create') || $result == route('noform.create')) {
 
         //make collection values available
         $courses = Course::all();

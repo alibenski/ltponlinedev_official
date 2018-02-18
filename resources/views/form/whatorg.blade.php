@@ -31,7 +31,7 @@
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-
+                <div id="secretMsg" class="col-md-12"></div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">Self-paying student?</label>
 
@@ -46,7 +46,7 @@
                       </div>
                 </div>
 
-                <div class="form-group" style="display: hidden">
+                <div id="orgSelect" class="form-group 0 box" style="display: none">
                     <label for="organization" class="col-md-2 control-label">Organization:</label>
                   <div class="col-md-9">
                     <div class="dropdown">
@@ -80,7 +80,7 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-
+<script src="{{ asset('js/submit.js') }}"></script>
 <script>
   $(document).ready(function(){
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
@@ -93,4 +93,11 @@
   });
 </script>
 
+<script>
+  $("input[name='decision']").click(function(){
+    $('button').css('font-weight', '700');
+
+    $('#secretMsg').html("<p>Are you sure?</p>");
+  });
+</script>
 @stop
