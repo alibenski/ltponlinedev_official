@@ -82,7 +82,7 @@
                             <label for="job_category" class="col-md-4 control-label">Job Category:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->job_category }}</p>
+                                <p>{{ Auth::user()->sddextr->CATEGORY }} - {{ Auth::user()->sddextr->LEVEL }}</p>
                             </div>
                         </div>
 

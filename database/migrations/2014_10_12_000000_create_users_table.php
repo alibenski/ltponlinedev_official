@@ -19,9 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('job_appointment')->nullable();
-            $table->string('job_category')->nullable();
-            $table->integer('course_id')->nullable()->unsigned();
             $table->boolean('approved')->nullable();
             $table->rememberToken();
             $table->timestamps();

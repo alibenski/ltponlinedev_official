@@ -24,14 +24,11 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
-                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. First of all, we would need to know if you are a self-paying student or if you are working for a UN organization. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQ's regarding enrolment eligibility.</p>
-                  <p>If you are a <em>self-paying student</em>, please select <strong>YES</strong>, and click the Next button to continue. </p>
-                  <p class="text-justify">If you are working for a UN organization, please select <strong>NO</strong> and select your organization below. From the <strong>Organization</strong> dropdown below, you can directly search your organization or scroll through box. When done, click the Next button to continue.</p>
-                  <p>Thank you.</p><br>
+                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQ's regarding enrolment eligibility.</p>                  
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-                <div id="secretMsg" class="col-md-12"></div>
+                
                 <div class="form-group">
                     <label class="col-md-2 control-label">Self-paying student?</label>
 
@@ -45,6 +42,8 @@
                                 <label for="decision2" class="form-control-static">NO</label>
                       </div>
                 </div>
+
+                <div id="secretMsg" class="col-md-12"></div>
 
                 <div id="orgSelect" class="form-group 0 box" style="display: none">
                     <label for="organization" class="col-md-2 control-label">Organization:</label>
@@ -96,8 +95,12 @@
 <script>
   $("input[name='decision']").click(function(){
     $('button').css('font-weight', '700');
-
-    $('#secretMsg').html("<p>Are you sure?</p>");
+      if($('#decision1').is(':checked')) { 
+        $('#secretMsg').html("<p>You confirmed that you are a <em>self-paying student</em>, please click the Next button to continue. </p>");
+      } else if ($('#decision2').is(':checked')) { 
+        $('#secretMsg').html("<p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>");
+      }
   });
 </script>
+
 @stop

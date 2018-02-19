@@ -13,6 +13,8 @@
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
     //admin routes
     Route::get('/', function () { return view('admin.index'); })->name('admin_dashboard');
+    Route::get('user/import', 'AdminController@importUser')->name('import-user');
+    Route::post('user/import', 'AdminController@handleImportUser')->name('bulk-import-user');
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
