@@ -104,39 +104,45 @@ class UserImport
         try {
             DB::beginTransaction();
             foreach ($rows as $row) {
+            if (count($header) != count($row)) {
+                // var_dump(count($header), count($row));
+                continue;
+                }
                 $row = array_combine($header, $row);
                 User::create([
                     'name' => $row['name'],
                     'email' => $row['email'],
                     'password' => bcrypt(uniqid()),
-                    'active' => 1,
+                    'approved' => 1,
                 ]);
             }
             DB::commit();
-        } catch (\Exception $exception) {
+        } 
+        catch (\Exception $exception) {
+            dd($exception->message);
             DB::rollBack();
             Log::info($exception->getMessage());
         }
     }
 
-    public function getValidRowId()
-    {
-        $errorRows = TempTable::where('uuid', $this->errorRowId)->first();
-        $errorRows = unserialize($errorRows->data);
-        $validUsers = [];
-        $emails = array_column($errorRows, 'email');
-        foreach ($this->rows as $row) {
-            if (!in_array($row['email'], $emails)) {
-                $validUsers[] = $row;
-            }
-        }
-        $row = TempTable::create([
-            'uuid' => Uuid::generate(),
-            'user_id' => Auth::user()->id,
-            'data' => serialize($validUsers),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
-        return $row->uuid;
-    }
+    // public function getValidRowId()
+    // {
+    //     $errorRows = TempTable::where('uuid', $this->errorRowId)->first();
+    //     $errorRows = unserialize($errorRows->data);
+    //     $validUsers = [];
+    //     $emails = array_column($errorRows, 'email');
+    //     foreach ($this->rows as $row) {
+    //         if (!in_array($row['email'], $emails)) {
+    //             $validUsers[] = $row;
+    //         }
+    //     }
+    //     $row = TempTable::create([
+    //         'uuid' => Uuid::generate(),
+    //         'user_id' => Auth::user()->id,
+    //         'data' => serialize($validUsers),
+    //         'created_at' => Carbon::now(),
+    //         'updated_at' => Carbon::now(),
+    //     ]);
+    //     return $row->uuid;
+    // }
 }

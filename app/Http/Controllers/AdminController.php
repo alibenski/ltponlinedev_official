@@ -46,7 +46,7 @@ class AdminController extends Controller
                 return redirect()->back();
             }   
 
-            // $userImport->createUsers($header, $rows);
+            $userImport->createUsers($header, $rows);
             
             session()->flash('success','Users imported');
             return redirect()->back(); 

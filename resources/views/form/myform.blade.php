@@ -56,8 +56,11 @@
 
                 <div class="form-group">
                     <label for="org" class="col-md-3 control-label">Organization:</label>
-                  <div class="col-md-8">
-                    <div class="dropdown">
+                  <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>                                    
+                        </div>
+                      {{-- <div class="dropdown">
                       <select name="org" id="input" class="col-md-8 form-control select2-basic-single" required="required">
                         @if(!empty($org))
                           @foreach($org as $key => $value)
@@ -66,7 +69,7 @@
                         @endif
                       </select>
                     </div>
-                    <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
+                    <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p> --}}
                   </div>
                 </div>
 

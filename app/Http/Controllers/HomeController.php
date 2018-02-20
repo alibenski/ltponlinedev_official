@@ -154,6 +154,7 @@ class HomeController extends Controller
         //     session()->flash('interdire-msg','Please make a decision');
         //     return redirect(route('whatorg'));
         // } else
+        
         if ($request->decision == 1) {
             session()->flash('success','Please fill up the payment-based enrolment form');
             return redirect(route('selfpayform.create'));

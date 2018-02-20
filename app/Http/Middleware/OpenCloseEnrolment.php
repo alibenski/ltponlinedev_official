@@ -33,10 +33,14 @@ class OpenCloseEnrolment
         
         //Carbon parse string value
         $carbon_current_term_begin = Carbon::parse($current_term_begin);
-        
+        //we needed to have 2 separate variable for Carbon parsing of $current_term_begin 
+        //since $start_enrolment_date is affected by $end_enrolment_date
+        //addWeeks gets added from $start_enrolment_date and NOT from $current_term_begin
+        $carbon_current_term_begin_for_end = Carbon::parse($current_term_begin);
+
         //add weeks to Carbon date value to get beginning and end dates of enrolment
         $start_enrolment_date = $carbon_current_term_begin->addWeeks(4);
-        $end_enrolment_date = $carbon_current_term_begin->addWeeks(7);
+        $end_enrolment_date = $carbon_current_term_begin_for_end->addWeeks(7);
 
         //check if $now_date is between start and end enrol dates
         if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {

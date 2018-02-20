@@ -52,6 +52,7 @@
                       <select name="organization" id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
                         @if(!empty($org))
                           @foreach($org as $key => $value)
+                            <option></option>
                             {{-- <option value="{{ $key }}" {{ (Auth::user()->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option> --}}
                             <option value="{{ $key }}">{{ $value }}</option>
                           @endforeach
@@ -88,16 +89,21 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
-    $('.select2-basic-single').select2();
+    $('.select2-basic-single').select2({
+    placeholder: "Select Organization",
+    allowClear: true
+    });
   });
 </script>
 
 <script>
   $("input[name='decision']").click(function(){
     $('button').css('font-weight', '700');
-      if($('#decision1').is(':checked')) { 
+      if($('#decision1').is(':checked')) {
+        $('.select2-basic-single').removeAttr('required');
         $('#secretMsg').html("<p>You confirmed that you are a <em>self-paying student</em>, please click the Next button to continue. </p>");
       } else if ($('#decision2').is(':checked')) { 
+        $('.select2-basic-single').attr('required', 'required');
         $('#secretMsg').html("<p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>");
       }
   });

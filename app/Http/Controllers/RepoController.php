@@ -32,10 +32,10 @@ class RepoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        //$this->middleware('opencloseenrolment');
+        $this->middleware('opencloseenrolment');
         $this->middleware('checksubmissioncount');
         $this->middleware('checkcontinue');
-        $this->middleware('check-prev-url', ['only' => ['create']]);
+        // $this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**
@@ -60,7 +60,13 @@ class RepoController extends Controller
     public function create(Request $request)
     {   
         // check if session flash msg exists, else re-route 
-        if ($request->session()->has('success')){
+        $sess = $request->session()->get('_previous');
+        $result = array();
+            foreach($sess as $val)
+            {
+              $result = $val;
+            }
+        if ($request->session()->has('success') || $result == route('myform.create')){
 
             //make collection values available
             $courses = Course::all();

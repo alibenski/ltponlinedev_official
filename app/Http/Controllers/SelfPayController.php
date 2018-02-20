@@ -34,10 +34,10 @@ class SelfPayController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        //$this->middleware('opencloseenrolment');
+        $this->middleware('opencloseenrolment');
         $this->middleware('checksubmissioncount');
-        //$this->middleware('checkcontinue');
-        $this->middleware('check-prev-url', ['only' => ['create']]);
+        // $this->middleware('checkcontinue');
+        // $this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**
@@ -57,7 +57,14 @@ class SelfPayController extends Controller
      */
     public function create(Request $request)
     {  
-        if ($request->session()->has('success')) {
+        $sess = $request->session()->get('_previous');
+        $result = array();
+            foreach($sess as $val)
+            {
+              $result = $val;
+            }
+        // 'success' flash Session attribute comes from whatform() method @Homecontroller  
+        if ($request->session()->has('success') || $result == route('selfpayform.create')) {
 
         //make collection values available
         $courses = Course::all();
