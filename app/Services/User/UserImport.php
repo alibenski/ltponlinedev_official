@@ -23,16 +23,22 @@ class UserImport
     {
         $emails = [];
         foreach ($rows as $key => $row) {
-            $row = array_combine($header, $row);
-            $this->rows[] = $row;
-            // check for correct email
-            if (!$this->checkValidEmail($row['email'])) {
-                $row['message'] = 'Invalid email';
-                $this->errorRows[$key] = $row;
-                $this->valid = false;
-            } else {
-                $emails[] = $row['email'];
+            if (count($header) != count($row)) {
+                // var_dump(count($header), count($row));
+                continue;
             }
+            // var_dump(count($header), count($row));
+                $row = array_combine($header, $row);
+                // $this->rows[] = $row;
+
+                // check for correct email
+                if (!$this->checkValidEmail($row['email'])) {
+                    $row['message'] = 'Invalid email';
+                    $this->errorRows[$key] = $row;
+                    $this->valid = false;
+                } else {
+                    $emails[] = $row['email'];
+                }           
         }
 
         $exist = $this->checkUserExist($emails);
@@ -44,19 +50,24 @@ class UserImport
         return $this->valid;
     }
 
-    public function getErrorRowId()
+    public function getErrorRows()
     {
-        ksort($this->errorRows);
-        $row = TempTable::create([
-            'uuid' => Uuid::generate(),
-            'user_id' => Auth::user()->id,
-            'data' => serialize($this->errorRows),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
-        $this->errorRowId = $row->uuid->string;
-        return $row->uuid;
+        return $this->errorRows;
     }
+
+    // public function getErrorRowId()
+    // {
+    //     ksort($this->errorRows);
+    //     $row = TempTable::create([
+    //         'uuid' => Uuid::generate(),
+    //         'user_id' => Auth::user()->id,
+    //         'data' => serialize($this->errorRows),
+    //         'created_at' => Carbon::now(),
+    //         'updated_at' => Carbon::now(),
+    //     ]);
+    //     $this->errorRowId = $row->uuid->string;
+    //     return $row->uuid;
+    // }
 
     private function checkValidEmail($email)
     {
@@ -75,6 +86,10 @@ class UserImport
     private function addUserExistErrorMessage($exist, $header, $rows)
     {
         foreach ($rows as $key => $row) {
+            if (count($header) != count($row)) {
+                // var_dump(count($header), count($row));
+                continue;
+                }
             $row = array_combine($header, $row);
             if (in_array($row['email'], $exist)) {
                 $row['message'] = 'Email exists.';

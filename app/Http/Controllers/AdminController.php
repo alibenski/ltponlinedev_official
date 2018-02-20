@@ -37,17 +37,18 @@ class AdminController extends Controller
             $csvData = file_get_contents($file);
             $rows = array_map("str_getcsv", explode("\n", $csvData));
             $header = array_shift($rows);
-            
+            // dd($rows);
             if (!$userImport->checkImportData($rows, $header)) {
-                $request->session()->flash('error_row_id', $userImport->getErrorRowId());
-                $request->session()->flash('valid_row_id', $userImport->getValidRowId());
-                flash()->error('Error in data. Correct and re-upload');
+                $request->session()->flash('error_rows', $userImport->getErrorRows());
+                // $request->session()->flash('error_row_id', $userImport->getErrorRowId());
+                // $request->session()->flash('valid_row_id', $userImport->getValidRowId());
+                Session::flash('interdire-msg','Error in data. Correct and re-upload');
                 return redirect()->back();
             }   
 
-            $userImport->createUsers($header, $rows);
-
-            flash('Users imported');
+            // $userImport->createUsers($header, $rows);
+            
+            session()->flash('success','Users imported');
             return redirect()->back(); 
         } else
         return 'no file';

@@ -44,7 +44,7 @@
     </div>
 
     <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
-
+    <a href="{{ route('import-user') }}" class="btn btn-primary">Bulk Import User</a>
 </div>
 
 
