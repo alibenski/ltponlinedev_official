@@ -18,6 +18,7 @@ use App\Term;
 use Session;
 use Carbon\Carbon;
 use DB;
+use App\SDDEXTR;
 
 class HomeController extends Controller
 {
@@ -141,9 +142,9 @@ class HomeController extends Controller
         //query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)
             ->value('Org Billed');
-        
+
         //save organization to sddextr table
-        
+
         // if ($org_status == 0) {
         //     session()->flash('success','Please fill up the enrolment form');
         //     return redirect(route('myform.create'));
