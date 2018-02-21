@@ -29,12 +29,19 @@
 
                     <form class="form-horizontal">
                         
-
                         <div class="form-group">
-                            <label for="name" class="col-md-4 control-label">Full Name:</label>
+                            <label for="title" class="col-md-4 control-label">Title:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->name }}</p>
+                                <p>{{ Auth::user()->sddextr->TITLE }}</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fullName" class="col-md-4 control-label">Full Name:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p>{{ Auth::user()->sddextr->LASTNAME }}, {{ Auth::user()->sddextr->FIRSTNAME }}</p>
                             </div>
                         </div>
 
@@ -47,7 +54,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-4 control-label">Organization:</label>
+                            <label for="org" class="col-md-4 control-label">Organization:</label>
 
                             <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->DEPT }}</p>
@@ -55,7 +62,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-4 control-label">Contact Number:</label>
+                            <label for="contactNo" class="col-md-4 control-label">Contact Number:</label>
 
                             <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->PHONE }}</p>
@@ -63,15 +70,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-4 control-label">Gender:</label>
-
-                            <div class="col-md-8 form-control-static">
-                                <p>{{ ucfirst(Auth::user()->sddextr->SEX) }}</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="job_appointment" class="col-md-4 control-label">Type of Appointment:</label>
+                            <label for="jobAppointment" class="col-md-4 control-label">Type of Appointment:</label>
 
                             <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->CATEGORY }}</p>
@@ -79,15 +78,15 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_category" class="col-md-4 control-label">Job Category:</label>
+                            <label for="gradeLevel" class="col-md-4 control-label">Grade Level:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->CATEGORY }} - {{ Auth::user()->sddextr->LEVEL }}</p>
+                                <p>{{ Auth::user()->sddextr->LEVEL }}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-4 control-label">Contract Expiration:</label>
+                            <label for="contractExp" class="col-md-4 control-label">Contract Expiration:</label>
 
                             <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->CONEXP }}</p>
@@ -107,8 +106,8 @@
                                 </p>
                             </div>
                         </div>
-                        <!--<div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">click here to enrol</a>
-                        </div>-->
+                        {{-- <div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">click here to enrol</a>
+                        </div> --}}
                     </form>
                 </div>
             </div>

@@ -16,6 +16,7 @@ use App\Term;
 use Session;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -115,18 +116,26 @@ class StudentController extends Controller
         // Validate data
         $student = User::find($id);
         $this->validate($request, array(
-                'course_id' => 'required|integer'
+                // 'title' => 'required|',
+                // 'lastName' => 'required|string',
+                // 'firstName' => 'required|string',
+                'email' => 'required|email',
+                // 'org' => 'required|',
+                // 'contactNo' => 'required|integer',
+                // 'jobAppointment' => 'required|string',
+                // 'gradeLevel' => 'required|string',
+
             ));        
         
         // Save the data to db
         $student = User::find($id);
 
-        $student->language_id = $request->input('language_id');
-        $student->course_id = $request->input('course_id');
+        $student->temp_email = $request->input('email');
+        $student->update_token = Str::random(40);
         $student->save();         
 
         // Set flash data with message
-        $request->session()->flash('success', 'Enrolment has been submitted.');
+        $request->session()->flash('success', 'Verification sent to your email address.');
         // Redirect to flash data to posts.show
         return redirect()->route('students.show', $student->id);
     }

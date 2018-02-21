@@ -15,9 +15,11 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    <h1>Instructions, LTP Announcements Here</h1>
-                    <h4>Under Construction</h4>
+                    <div class="col-md-12">
+                    <h2>Enrolment Instructions and LTP Announcements</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus, iste. Sed, ab. Quod, molestiae! Repellendus cum, aliquid. Sit architecto fuga amet, tempore commodi, inventore voluptate quasi, qui nemo, voluptatem fugiat.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero voluptatum tempore dicta reiciendis accusamus, quod quaerat facilis nostrum sapiente inventore porro itaque nam, aut alias molestiae sed, nisi quos doloribus.</p>
+                    </div>
                 </div>
             </div>
         </div>  

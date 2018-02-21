@@ -20,15 +20,35 @@
                         {{ csrf_field() }}
 
                         <div class="form-group">
-                            <label for="name" class="col-md-2 control-label">Full Name:</label>
+                            <label for="title" class="col-md-2 control-label">Title:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
+                            <div class="col-md-2 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="name" placeholder="{{ $student->name }}" class="form-control"  type="text" readonly>
+                                    <span class="input-group-addon"><i class="fa fa-user-o"></i></span><input  name="title" placeholder="{{ $student->sddextr->TITLE }}" class="form-control"  type="text">
                                 </div>
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="lastName" class="col-md-2 control-label">Last Name:</label>
+
+                            <div class="col-md-8 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="lastName" placeholder="{{ $student->sddextr->LASTNAME }}" class="form-control"  type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstName" class="col-md-2 control-label">First Name:</label>
+
+                            <div class="col-md-8 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="firstName" placeholder="{{ $student->sddextr->FIRSTNAME }}" class="form-control"  type="text">
+                                </div>
+                            </div>
+                        </div>
+                            
                         <div class="form-group">
                             <label for="email" class="col-md-2 control-label">Email Address:</label>
 
@@ -41,33 +61,58 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email" class="col-md-2 control-label">Contact Number:</label>
+                            <label for="org" class="col-md-2 control-label">Organization:</label>
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-phone"></i></span><input  name="email" placeholder="{{ $student->sddextr->PHONE }}" class="form-control"  type="text" readonly>                                    
+                                    <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" placeholder="{{ $student->sddextr->DEPT }}" class="form-control"  type="text">                                    
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="job_appointment" class="col-md-2 control-label">Type of Appointment:</label>
+                            <label for="contactNo" class="col-md-2 control-label">Contact Number:</label>
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="job_appointment" placeholder="{{ $student->job_appointment }}" class="form-control"  type="text" readonly="">
+                                    <span class="input-group-addon"><i class="fa fa-phone"></i></span><input  name="contactNo" placeholder="{{ $student->sddextr->PHONE }}" class="form-control"  type="text">                                    
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="job_category" class="col-md-2 control-label">Job Category:</label>
+                            <label for="jobAppointment" class="col-md-2 control-label">Type of Appointment:</label>
 
-                            <div class="col-md-8">
-                                <p class="form-control-static">{{ $student->job_category }}</p>
+                            <div class="col-md-8 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="jobAppointment" placeholder="{{ $student->job_appointment }}" class="form-control"  type="text">
+                                </div>
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="gradeLevel" class="col-md-2 control-label">Professional Grade Level:</label>
+
+                            <div class="col-md-8 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="gradeLevel" placeholder="{{ $student->job_appointment }}" class="form-control"  type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contractExp" class="col-md-2 control-label">Contract Expiration:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p>{{ Auth::user()->sddextr->CONEXP }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 col-md-offset-4">
+                              <button type="submit" class="btn btn-success btn-block">Save</button>
+                              <input type="hidden" name="_token" value="{{ Session::token() }}">
+                              {{ method_field('PUT') }}
+                        </div>
                     </form>
                 </div>
             </div>

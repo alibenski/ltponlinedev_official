@@ -7,6 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+// import classes from RegisterUsers trait for custom methods
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+
 class RegisterController extends Controller
 {
     /*
@@ -21,6 +26,30 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+
+    /**
+     * Prevent public from accesssing the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    // public function showRegistrationForm()
+    // {
+    //     return redirect('home');
+    // }
+
+    // public function register(Request $request)
+    // {
+    //     $this->validator($request->all())->validate();
+
+    //     event(new Registered($user = $this->create($request->all())));
+
+    //     // $this->guard()->login($user); // override so after registration, 
+    //     // user is not automatically logged in to the application
+    //     return 'Verify Email First';
+
+    //     return $this->registered($request, $user)
+    //                     ?: redirect($this->redirectPath());
+    // }
 
     /**
      * Where to redirect users after registration.
