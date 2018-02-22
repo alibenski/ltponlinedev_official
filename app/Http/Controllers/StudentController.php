@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use App\Torgan;
 use App\FocalPoints;
 use App\Language;
 use App\Course;
 use App\User;
+use App\SDDEXTR;
 use App\Repo;
 use App\Preenrolment;
 use App\Term;
 use Session;
 use Carbon\Carbon;
 use DB;
-use Illuminate\Support\Str;
+use App\Mail\updateEmail;
 
 class StudentController extends Controller
 {
@@ -114,12 +116,11 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         // Validate data
-        $student = User::find($id);
         $this->validate($request, array(
                 // 'title' => 'required|',
                 // 'lastName' => 'required|string',
                 // 'firstName' => 'required|string',
-                'email' => 'required|email',
+                'email' => 'required_without_all:title,lastName,firstName,org,contactNo,jobAppointment,gradeLevel|email',
                 // 'org' => 'required|',
                 // 'contactNo' => 'required|integer',
                 // 'jobAppointment' => 'required|string',
@@ -128,16 +129,40 @@ class StudentController extends Controller
             ));        
         
         // Save the data to db
-        $student = User::find($id);
+        $student = User::findOrFail($id);
 
-        $student->temp_email = $request->input('email');
-        $student->update_token = Str::random(40);
-        $student->save();         
+        if (is_null($request->input('email'))) {
+            $student->sddextr->FIRSTNAME = $request->input('firstName');
+            $student->sddextr->save();
 
-        // Set flash data with message
-        $request->session()->flash('success', 'Verification sent to your email address.');
-        // Redirect to flash data to posts.show
-        return redirect()->route('students.show', $student->id);
+            // Set flash data with message
+            $request->session()->flash('success', 'Update successful.');
+        } else {
+            $input = $request->except('email', '_token', '_method');
+            $filter_input = array_filter($input, 'strlen');
+            $sddextr_data = SDDEXTR::updateOrCreate($filter_input);
+            $sddextr_data->save();
+            dd($filter_input);
+
+            $student->temp_email = $request->input('email');
+            $student->update_token = Str::random(60);
+            $student->save();         
+
+            $this->sendUpdateEmail($student);
+
+            // Set flash data with message
+            $request->session()->flash('success', 'Update Confirmation Email sent to your email address.');
+        }
+
+        return redirect()->route('home');
+    }
+
+    public function sendUpdateEmail($student)
+    {
+        // handle invalid email by catching error of Mail method
+
+        // send confirmation e-mail
+        Mail::to($student['temp_email'])->send(new updateEmail($student));
     }
 
     /**

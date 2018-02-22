@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class SDDEXTR extends Model
 {
     protected $table = 'SDDEXTR';
-    
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'FIRSTNAME', 'LASTNAME', 
+    ];
+
 	/**
 	 * primaryKey 
 	 * 

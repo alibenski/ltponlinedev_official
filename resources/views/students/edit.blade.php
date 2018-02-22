@@ -16,7 +16,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('students.update', $student->id) }}" class="form-horizontal">
+                    <form id="updateProfileForm" method="POST" action="{{ route('students.update', $student->id) }}" class="form-horizontal">
                         {{ csrf_field() }}
 
                         <div class="form-group">
@@ -120,3 +120,30 @@
     </div>
         <!-- no further div -->
 @endsection
+
+@section('scripts_code')
+
+<script>
+    // Check if at least one input field is filled 
+    $(function(){
+        $("#updateProfileForm").submit(function(){
+
+            var valid=0;
+            $(this).find('input[type=text]').each(function(){
+                if($(this).val() != "") valid+=1;
+            });
+
+            if(valid){
+                alert(valid + " input(s) filled. Thank you.");
+                return true;
+            }
+            else {
+                alert("Error: you must fill in at least one field.");
+                return false;
+            }
+    });
+});
+</script>
+
+
+@stop

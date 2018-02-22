@@ -109,6 +109,9 @@ return [
         'cs_unique' => [
             'unique' => 'Course + Schedule combination already exists.',
         ],
+        'email' => [
+            'required_without_all' => 'Nothing to update. Fill up at least one field to update.',
+                ],
     ],
 
     /*
