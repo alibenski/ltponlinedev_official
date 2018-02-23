@@ -2,6 +2,7 @@
 @section('tabtitle', '| Profile')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
     <div class="row">
@@ -54,6 +55,7 @@
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
+                                    {{-- apply jS or HTML preferred characters for this field --}}
                                     <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="email" placeholder="{{ $student->email }}" class="form-control"  type="text">                                    
                                 </div>
                                 <p class="small text-danger"><strong>Warning:</strong> Once you change your e-mail address, this will become <strong>your login and your official e-mail address</strong> to which we will be sending notifications and other future correspondences.</p>
@@ -62,10 +64,17 @@
 
                         <div class="form-group">
                             <label for="org" class="col-md-2 control-label">Organization:</label>
+                            <div class="col-md-8">
+                                <div class="dropdown">
+                                  <select name="org" id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" placeholder="{{ $student->sddextr->DEPT }}" class="form-control"  type="text">                                    
+                                    @if(!empty($org))
+                                      @foreach($org as $key => $value)
+                                        <option value="{{ $key }}" {{ ($student->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
+                                      @endforeach
+                                    @endif
+
+                                  </select>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +94,7 @@
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="jobAppointment" placeholder="{{ $student->job_appointment }}" class="form-control"  type="text">
+                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="jobAppointment" placeholder="{{ $student->sddextr->CATEGORY }}" class="form-control"  type="text">
                                 </div>
                             </div>
                         </div>
@@ -95,7 +104,7 @@
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="gradeLevel" placeholder="{{ $student->job_appointment }}" class="form-control"  type="text">
+                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="gradeLevel" placeholder="{{ $student->sddextr->LEVEL }}" class="form-control"  type="text">
                                 </div>
                             </div>
                         </div>
@@ -123,10 +132,12 @@
 
 @section('scripts_code')
 
+<script src="{{ asset('js/select2.min.js') }}"></script>
+
 <script>
     // Check if at least one input field is filled 
     $(function(){
-        $("#updateProfileForm").submit(function(){
+        $("#updateProfileForm", "select").submit(function(){
 
             var valid=0;
             $(this).find('input[type=text]').each(function(){
@@ -145,5 +156,10 @@
 });
 </script>
 
+<script>
+    $(document).ready(function() {
+        $('.select2-basic-single').select2();
+        });
+</script>
 
 @stop

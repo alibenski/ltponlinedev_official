@@ -42,6 +42,7 @@ Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod
 Route::delete('/delete/user/{staff}/course/{tecode}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
 //apply auth middleware only so students could edit their profile
 Route::resource('students', 'StudentController');
+Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
 
 //fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);

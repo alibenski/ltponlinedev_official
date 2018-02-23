@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
 use App\Torgan;
 use App\FocalPoints;
 use App\Language;
@@ -29,9 +30,9 @@ class StudentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('updateProfileConfirmed');
         $this->middleware('prevent-back-history');
-        $this->middleware('redirect-if-not-profile')->except('index');
+        $this->middleware('redirect-if-not-profile')->except('index','updateProfileConfirmed');
     }
 
     /**
@@ -102,8 +103,8 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = User::find($id);
-        
-        return view('students.edit')->withStudent($student);
+        $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+        return view('students.edit')->withStudent($student)->withOrg($org);
     }
 
     /**
@@ -120,9 +121,10 @@ class StudentController extends Controller
                 // 'title' => 'required|',
                 // 'lastName' => 'required|string',
                 // 'firstName' => 'required|string',
-                'email' => 'required_without_all:title,lastName,firstName,org,contactNo,jobAppointment,gradeLevel|email',
+                // validate if email is unique 
+                'email' => 'required_without_all:title,lastName,firstName,org,contactNo,jobAppointment,gradeLevel|unique:users,email',
                 // 'org' => 'required|',
-                // 'contactNo' => 'required|integer',
+                'contactNo' => 'integer|nullable',
                 // 'jobAppointment' => 'required|string',
                 // 'gradeLevel' => 'required|string',
 
@@ -132,37 +134,82 @@ class StudentController extends Controller
         $student = User::findOrFail($id);
 
         if (is_null($request->input('email'))) {
-            $student->sddextr->FIRSTNAME = $request->input('firstName');
-            $student->sddextr->save();
-
-            // Set flash data with message
+            $this->updateNoEmail($student, $request);
             $request->session()->flash('success', 'Update successful.');
         } else {
-            $input = $request->except('email', '_token', '_method');
-            $filter_input = array_filter($input, 'strlen');
-            $sddextr_data = SDDEXTR::updateOrCreate($filter_input);
-            $sddextr_data->save();
-            dd($filter_input);
-
-            $student->temp_email = $request->input('email');
-            $student->update_token = Str::random(60);
-            $student->save();         
-
-            $this->sendUpdateEmail($student);
-
-            // Set flash data with message
+            $this->updateWithEmail($student, $request);
             $request->session()->flash('success', 'Update Confirmation Email sent to your email address.');
         }
 
         return redirect()->route('home');
     }
 
+    public function updateNoEmail($student, $request)
+    {
+            if (!is_null($request->input('firstName'))) {
+                $student->sddextr->FIRSTNAME = $request->input('firstName');
+            }
+            if (!is_null($request->input('lastName'))) {
+                $student->sddextr->LASTNAME = $request->input('lastName');
+            }
+            if (!is_null($request->input('org'))) {
+                        $student->sddextr->DEPT = $request->input('org');
+                    }
+            if (!is_null($request->input('contactNo'))) {
+                        $student->sddextr->PHONE = $request->input('contactNo');
+                    }
+            if (!is_null($request->input('jobAppointment'))) {
+                        $student->sddextr->CATEGORY = $request->input('jobAppointment');
+                    }
+            if (!is_null($request->input('gradeLevel'))) {
+                        $student->sddextr->LEVEL = $request->input('gradeLevel');
+                    }
+
+            $student->sddextr->save();
+    }
+
+    public function updateWithEmail($student, $request)
+    {
+            $this->updateNoEmail($student, $request);
+
+            $student->temp_email = $request->input('email');
+            $student->approved_update = '0';
+            $student->update_token = Str::random(60);
+            $student->save();         
+
+            $this->sendUpdateEmail($student);
+    }
+
     public function sendUpdateEmail($student)
     {
         // handle invalid email by catching error of Mail method
-
+        
+        // pass data to e-mail 
+        
         // send confirmation e-mail
         Mail::to($student['temp_email'])->send(new updateEmail($student));
+    }
+
+    public function updateProfileConfirmed($id, $temp_email, $update_token)
+    {
+        //get variables from URL to decrypt and pass to controller logic 
+        $temp_email = Crypt::decrypt($temp_email);
+        $id = Crypt::decrypt($id);
+
+        $student = User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->first();
+        if ($student) {
+            // change data in the User table
+            User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->update(['email'=>$temp_email, 'temp_email'=>NULL, 'approved_update'=>'1', 'update_token'=>NULL]);
+
+            // log the user out of application 
+            
+            // redirect to login page to use new email as username 
+
+            return 'Email address has been changed. Please log back in with your new e-mail address';
+        } else {
+            
+            return 'Link has already been used for e-mail confirmation update.';
+        }
     }
 
     /**
