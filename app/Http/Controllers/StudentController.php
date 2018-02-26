@@ -136,12 +136,11 @@ class StudentController extends Controller
         if (is_null($request->input('email'))) {
             $this->updateNoEmail($student, $request);
             $request->session()->flash('success', 'Update successful.');
+            return redirect()->route('home');
         } else {
             $this->updateWithEmail($student, $request);
-            $request->session()->flash('success', 'Update Confirmation Email sent to your email address.');
+            return redirect('login');
         }
-
-        return redirect()->route('home');
     }
 
     public function updateNoEmail($student, $request)
@@ -178,13 +177,17 @@ class StudentController extends Controller
             $student->save();         
 
             $this->sendUpdateEmail($student);
+
+            $request->session()->flash('success', 'You have been logged out. Update Confirmation Email sent to your email address.');
+
+            // log the user out of application
+            Auth::logout();
+
     }
 
     public function sendUpdateEmail($student)
     {
         // handle invalid email by catching error of Mail method
-        
-        // pass data to e-mail 
         
         // send confirmation e-mail
         Mail::to($student['temp_email'])->send(new updateEmail($student));
@@ -200,9 +203,7 @@ class StudentController extends Controller
         if ($student) {
             // change data in the User table
             User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->update(['email'=>$temp_email, 'temp_email'=>NULL, 'approved_update'=>'1', 'update_token'=>NULL]);
-
-            // log the user out of application 
-            
+          
             // redirect to login page to use new email as username 
 
             return 'Email address has been changed. Please log back in with your new e-mail address';

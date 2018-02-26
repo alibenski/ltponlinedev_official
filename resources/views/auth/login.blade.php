@@ -5,7 +5,11 @@
     <div class="alert alert-danger alert-block" role="alert">
         <strong>Session Expired: </strong> {{ Session::get('expired') }}
     </div>
-
+@endif
+@if (Session::has('success')) 
+    <div class="alert alert-success alert-block" role="alert">
+        <strong>Note: </strong> {{ Session::get('success') }}
+    </div>
 @endif
 <div class="container">
     <div class="row">
