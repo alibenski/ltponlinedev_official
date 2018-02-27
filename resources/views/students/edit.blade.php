@@ -5,6 +5,26 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
+    {{-- Modal Dialog Box --}}
+    <div class="modal fade" id="modalshow">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-danger btn-space"></i>Changing your CLM Online E-mail Address</h4></span>
+            </div>
+            <div class="modal-body">
+                <p>Once you change your e-mail address, this will become your <strong>login</strong> and your <strong>official</strong> e-mail address to which we will be sending notifications and other future correspondences. Please be careful and sure when updating the e-mail address field.</p>
+                <p>For your security, we will send a verification e-mail to the <strong>new e-mail address</strong> you will set here. The update will not take effect until you confirm. Please note that the confirmation is only valid for 24 hours upon receipt of request.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Continue</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-info">
@@ -56,9 +76,9 @@
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
                                     {{-- apply jS or HTML preferred characters for this field --}}
-                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="email" placeholder="{{ $student->email }}" class="form-control"  type="text">                                    
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input id="email" name="email" placeholder="{{ $student->email }}" class="form-control"  type="text">                                    
                                 </div>
-                                <p class="small text-danger"><strong>Warning:</strong> Once you change your e-mail address, this will become <strong>your login and your official e-mail address</strong> to which we will be sending notifications and other future correspondences.</p>
+                                <p class="small text-danger"><strong>IMPORTANT NOTE:</strong> Once you change your e-mail address, this will become <strong>your login and your official e-mail address</strong> to which we will be sending notifications and other future correspondences.</p>
                             </div>
                         </div>
 
@@ -154,6 +174,14 @@
             }
     });
 });
+</script>
+
+<script>  
+  $(document).ready(function () {
+        $('#email').one('click', function () {
+            $('#modalshow').modal('show');
+        });
+  });
 </script>
 
 <script>

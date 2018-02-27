@@ -4,13 +4,19 @@
     @include('partials._head')
     </head>
     <body>
-        <div id="app">
-            @include('partials._nav')
-            @include('partials._messages')
-            @yield('content')
+            <!-- navBar Section -->
+            @include('partials._navNoRegister')
+            <div class="site-wrapper">
+                <div class="site-wrapper-inner">
+                    <div class="cover-container">
+                        @include('partials._messages')
+                        @yield('content')
         
-            <!-- Footer Section -->
-                @include('partials._foot')
+                        <!-- Footer Section -->
+                        @include('partials._foot')
+                    </div>
+                </div>
+            </div>
             <!-- Scripts -->
                 @yield('scripts_link')
                 @include('partials._js')

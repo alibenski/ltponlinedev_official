@@ -68,6 +68,9 @@ Route::put('/approvalhr/user/{staff}/course/{tecode}',      ['as' => 'approval.u
 //public pages
 Route::get('eform', function () { return view('confirmation_page_unog'); })->name('eform');
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
+Route::get('confirmationLinkUsed', function () { return view('confirmationLinkUsed'); })->name('confirmationLinkUsed');
+Route::get('confirmationLinkExpired', function () { return view('confirmationLinkExpired'); })->name('confirmationLinkExpired');
+
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();
     // Authentication Routes...

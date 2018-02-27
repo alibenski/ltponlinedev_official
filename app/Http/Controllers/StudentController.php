@@ -193,23 +193,48 @@ class StudentController extends Controller
         Mail::to($student['temp_email'])->send(new updateEmail($student));
     }
 
-    public function updateProfileConfirmed($id, $temp_email, $update_token)
+    /**
+     * Update the specified resource in Users table after e-mail confirmation.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfileConfirmed(Request $request, $id, $temp_email, $update_token)
     {
-        //get variables from URL to decrypt and pass to controller logic 
+        // get variables from URL to decrypt and pass to controller logic 
         $temp_email = Crypt::decrypt($temp_email);
         $id = Crypt::decrypt($id);
 
+        $nullCheck = User::where(['id'=>$id])->first();
+        if ($nullCheck->temp_email == NULL && $nullCheck->update_token == NULL) {
+            return view('confirmationLinkExpired');
+        }
+        
+        // query the user from the Users table
         $student = User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->first();
-        if ($student) {
-            // change data in the User table
-            User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->update(['email'=>$temp_email, 'temp_email'=>NULL, 'approved_update'=>'1', 'update_token'=>NULL]);
-          
-            // redirect to login page to use new email as username 
 
-            return 'Email address has been changed. Please log back in with your new e-mail address';
+        // check for token expiration after 24 hours
+        $timeOfRequest = $student->updated_at;
+        $expiration = $timeOfRequest->addHours(24);
+        // if more than 24 hours have passed, reset values to NULL
+        if ($student->updated_at->lt($expiration)) {
+            if ($student) {
+                // change data in the User table
+                User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->update(['email'=>$temp_email, 'temp_email'=>NULL, 'approved_update'=>'1', 'update_token'=>NULL]);
+                // change e-mail address in the sddextr
+                SDDEXTR::where(['INDEXNO'=>$student->indexno])->update(['EMAIL'=>$temp_email]);
+                // redirect to login page to use new email as username 
+                $request->session()->flash('success', 'E-mail address has been updated. Please log back in with your new e-mail address');
+                return redirect('login');
+            } else {
+                
+                return view('confirmationLinkUsed');
+            }
         } else {
-            
-            return 'Link has already been used for e-mail confirmation update.';
+            // set data in the User table to NULL
+            User::where(['id'=>$id])->update(['temp_email'=>NULL, 'update_token'=>NULL]);
+            return view('confirmationLinkExpired');
         }
     }
 

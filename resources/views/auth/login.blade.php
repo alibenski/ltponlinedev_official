@@ -2,12 +2,12 @@
 
 @section('content')
 @if (Session::has('expired')) 
-    <div class="alert alert-danger alert-block" role="alert">
+    <div class="alert alert-danger alert-block text-center" role="alert">
         <strong>Session Expired: </strong> {{ Session::get('expired') }}
     </div>
 @endif
 @if (Session::has('success')) 
-    <div class="alert alert-success alert-block" role="alert">
+    <div class="alert alert-success alert-block text-center" role="alert">
         <strong>Note: </strong> {{ Session::get('success') }}
     </div>
 @endif

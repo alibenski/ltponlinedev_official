@@ -193,9 +193,9 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Profile Update</h1>
                                      <p> Dear {{$student->name}}, </p>
-                                     <p> You recently changed your e-mail address and consequently your login for the CLM Online Enrolment website. Please click on the button below to confirm this update.
-                                     </p>
-                                      <p><strong>NOTE: </strong>Please contact the CLM Language Secretariat if you have any questions.</p>
+                                     <p style="text-align: justify;"> You recently changed your e-mail address and consequently your login for the CLM Online Enrolment website. Your new login e-mail address is <em>{{ $student->temp_email }}</em></p>
+                                     <p style="text-align: justify;">Please click on the button below to confirm this update.</p>
+                                      <p><strong>NOTE: </strong>The confirmation link button will expire in 24 hours. Please contact the CLM Language Secretariat if you have any questions.</p>
                                 </td>
                             </tr>
                             <tr>
