@@ -2,6 +2,9 @@
     background-image: url("/img/bg-enrolment.jpg");
     background-size: cover;
 }
+.list-margin {
+    margin: 22px auto;
+}
 .btn-space{
     margin:5px 5px;
 }

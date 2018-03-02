@@ -103,8 +103,10 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = User::find($id);
+        $gender = DB::table('SEX')->limit(4)->pluck('Title', 'Title');
         $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
-        return view('students.edit')->withStudent($student)->withOrg($org);
+        
+        return view('students.edit')->withStudent($student)->withGender($gender)->withOrg($org);
     }
 
     /**
@@ -124,7 +126,7 @@ class StudentController extends Controller
                 // validate if email is unique 
                 'email' => 'required_without_all:title,lastName,firstName,org,contactNo,jobAppointment,gradeLevel|unique:users,email',
                 // 'org' => 'required|',
-                'contactNo' => 'integer|nullable',
+                'contactNo' => 'regex:/^[0-9\-+]+$/|nullable',
                 // 'jobAppointment' => 'required|string',
                 // 'gradeLevel' => 'required|string',
 

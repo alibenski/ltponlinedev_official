@@ -15,11 +15,12 @@
                 <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-danger btn-space"></i>Changing your CLM Online E-mail Address</h4></span>
             </div>
             <div class="modal-body">
-                <p>Once you change your e-mail address, this will become your <strong>login</strong> and your <strong>official</strong> e-mail address to which we will be sending notifications and other future correspondences. Please be careful and sure when updating the e-mail address field.</p>
-                <p>For your security, we will send a verification e-mail to the <strong>new e-mail address</strong> you will set here. The update will not take effect until you confirm. Please note that the confirmation is only valid for 24 hours upon receipt of request.</p>
+                <p>Once you change your e-mail address, this will become your <strong>login</strong> and your <strong>official</strong> e-mail address to which we will be sending notifications and other future correspondences. Thus, please be careful when updating the e-mail address field.</p>
+                <p>For your security,  after submitting the changes, you will be automatically logged out from the application and  we will send a verification e-mail to the <strong>new e-mail address</strong> you will set here. <strong><em>The e-mail update will not take effect until you confirm.</em></strong></p> 
+                <p>Please note that the confirmation is only valid for <strong>24 hours</strong> upon submission of your request.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Continue</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
             </div>
         </div>
         </div>
@@ -45,7 +46,7 @@
 
                             <div class="col-md-2 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user-o"></i></span><input  name="title" placeholder="{{ $student->sddextr->TITLE }}" class="form-control"  type="text">
+                                    <span class="input-group-addon"><i class="fa fa-venus-mars"></i></span><input  name="title" placeholder="{{ $student->sddextr->TITLE }}" class="form-control"  type="text">
                                 </div>
                             </div>
                         </div>
@@ -83,6 +84,34 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="currentOrg" class="col-md-2 control-label">Current Organization:</label>
+
+                            <div class="col-md-8 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="currentOrg" placeholder="{{ $student->sddextr->DEPT }}" class="form-control"  type="text" readonly="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MAKE A DECISION SECTION -->
+                
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Change Organization?</label>
+
+                              <div class="col-md-2">
+                                        <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
+                                        <label for="decision1" class="form-control-static">YES</label>
+                              </div>
+
+{{--                               <div class="col-md-2">
+                                        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
+                                        <label for="decision2" class="form-control-static">NO</label>
+                              </div> --}}
+                        </div>
+
+                        <div id="orgSelect"></div>
+
+{{--                         <div class="form-group">
                             <label for="org" class="col-md-2 control-label">Organization:</label>
                             <div class="col-md-8">
                                 <div class="dropdown">
@@ -97,7 +126,7 @@
                                   </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <label for="contactNo" class="col-md-2 control-label">Contact Number:</label>
@@ -138,7 +167,7 @@
                         </div>
                         
                         <div class="col-md-4 col-md-offset-4">
-                              <button type="submit" class="btn btn-success btn-block">Save</button>
+                              <button type="submit" class="btn btn-success btn-block">Submit Changes</button>
                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                               {{ method_field('PUT') }}
                         </div>
@@ -157,7 +186,7 @@
 <script>
     // Check if at least one input field is filled 
     $(function(){
-        $("#updateProfileForm", "select").submit(function(){
+        $("#updateProfileForm").submit(function(){
 
             var valid=0;
             $(this).find('input[type=text]').each(function(){
@@ -176,18 +205,33 @@
 });
 </script>
 
+<script>
+$(document).ready(function () {
+    $("input[name='decision']").click(function(){
+        console.log('clicked');
+                
+                $.get({url: "https://ltponlinedev.unog.ch/org-select-ajax", function(data, status) {
+                    //$('#orgSelect').html(data);
+                    alert( "Load was performed." + status); }
+                    // $("select[name='organization']").html('');
+                    // $("select[name='organization']").html(data);
+                    });
+    });
+});
+</script>
+
 <script>  
-  $(document).ready(function () {
+    $(document).ready(function () {
         $('#email').one('click', function () {
             $('#modalshow').modal('show');
         });
-  });
-</script>
 
-<script>
+    });
+
     $(document).ready(function() {
         $('.select2-basic-single').select2();
         });
 </script>
+
 
 @stop

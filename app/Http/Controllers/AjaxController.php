@@ -21,7 +21,17 @@ use DB;
 
 class AjaxController extends Controller
 {
-        /**
+    public function ajaxOrgSelect()
+    {
+            $select_org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+            
+            $data = view('ajax-org-select',compact('select_org'))->render();
+            
+            return response()->json([$data]);
+        
+    }
+    
+    /**
      * Show the application selectAjax.
      *
      * @return \Illuminate\Http\response
