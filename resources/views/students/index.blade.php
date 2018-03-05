@@ -106,8 +106,8 @@
                                 </p>
                             </div>
                         </div>
-                        {{-- <div class="col-md-12"><a href="{{ route('myform.create') }}" class="btn btn-block btn-info btn-md">click here to enrol</a>
-                        </div> --}}
+                        <div class="col-md-4 col-md-offset-4"><a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-block btn-info btn-md">Edit my CLM Online Profile</a>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -27,8 +27,7 @@ class AjaxController extends Controller
             
             $data = view('ajax-org-select',compact('select_org'))->render();
             
-            return response()->json([$data]);
-        
+            return response()->json([$data]);  
     }
     
     /**

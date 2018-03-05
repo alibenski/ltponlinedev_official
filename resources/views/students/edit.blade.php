@@ -98,35 +98,13 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Change Organization?</label>
 
-                              <div class="col-md-2">
+                              <div class="col-md-8">
                                         <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
-                                        <label for="decision1" class="form-control-static">YES</label>
+                                        <label for="decision1" class="form-control-static">YES</label> 
                               </div>
-
-{{--                               <div class="col-md-2">
-                                        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-                                        <label for="decision2" class="form-control-static">NO</label>
-                              </div> --}}
                         </div>
-
+                        {{-- insert org dropdown if decision is YES --}}
                         <div id="orgSelect"></div>
-
-{{--                         <div class="form-group">
-                            <label for="org" class="col-md-2 control-label">Organization:</label>
-                            <div class="col-md-8">
-                                <div class="dropdown">
-                                  <select name="org" id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
-
-                                    @if(!empty($org))
-                                      @foreach($org as $key => $value)
-                                        <option value="{{ $key }}" {{ ($student->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
-                                      @endforeach
-                                    @endif
-
-                                  </select>
-                                </div>
-                            </div>
-                        </div> --}}
 
                         <div class="form-group">
                             <label for="contactNo" class="col-md-2 control-label">Contact Number:</label>
@@ -182,6 +160,11 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2-basic-single').select2();
+        });   
+</script>
 
 <script>
     // Check if at least one input field is filled 
@@ -207,31 +190,21 @@
 
 <script>
 $(document).ready(function () {
-    $("input[name='decision']").click(function(){
-        console.log('clicked');
-                
-                $.get({url: "https://ltponlinedev.unog.ch/org-select-ajax", function(data, status) {
-                    //$('#orgSelect').html(data);
-                    alert( "Load was performed." + status); }
-                    // $("select[name='organization']").html('');
-                    // $("select[name='organization']").html(data);
-                    });
+    $("input[name='decision']").on("click", function(){
+        if ($("input[name='decision']").is(':checked')) {
+            $.get("/org-select-ajax", function(data) {
+                $('#orgSelect').html(data);
+                 });        
+        } else {
+                console.log('hide it');
+                $('#orgSelect').html("");
+            }                
     });
-});
-</script>
-
-<script>  
-    $(document).ready(function () {
-        $('#email').one('click', function () {
+    $('#email').one('click', function () {
             $('#modalshow').modal('show');
         });
+});
 
-    });
-
-    $(document).ready(function() {
-        $('.select2-basic-single').select2();
-        });
 </script>
-
 
 @stop

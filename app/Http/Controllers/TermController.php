@@ -25,7 +25,7 @@ class TermController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
