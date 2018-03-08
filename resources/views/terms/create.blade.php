@@ -1,60 +1,91 @@
 @extends('admin.admin')
 
 @section('customcss')
-	<link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+	{{-- <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen"> --}}
 	<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 @stop
 
 @section('content')
-<div class='col-lg-4 col-lg-offset-4'>
-
+<div class='col-lg-10 col-lg-offset-1'>
     <h1><i class='fa fa-snowflake-o'></i> Create Semester Term </h1>
     <hr>
 	    <form method="POST" action="{{ route('terms.store') }}">
         {{ csrf_field() }}
+        <div class="col-md-4">
           <div class="form-group">
-            <label class="control-label">Term Code: </label>
-  				  <input name="" type="text" class="form-control" value="">
-          </div>
-		  
-		  <div class="form-group">
-            <label class="control-label">Term Name: </label>
-  				  <input name="" type="text" class="form-control" value="">
+            <label for="termCode" class="control-label">Term Code: </label>
+  				  <input name="termCode" type="text" class="form-control" value="" required="">
           </div>
 
           <div class="form-group">
-            <label class="control-label">Next Term Code: </label>
-  				  <input name="" type="text" class="form-control" value="">
+            <label for="termBeginDate" class="control-label">Term Begin Date: </label>
+            <div class="input-group date form_datetime col-md-12" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="termBeginDate">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="termBeginDate" id="termBeginDate" value="" />
           </div>
 
-		<div class="form-group">
-            <label class="control-label">Enrolment Date Begin: </label>
-  				  <input name="" type="text" class="form-control" value="">
+          <div class="form-group">
+            <label for="termEndDate" class="control-label">Term End Date: </label>
+  				  <div class="input-group date form_datetime col-md-12" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="termEndDate">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="termEndDate" id="termEndDate" value="" />
+          </div>
         </div>
 
-		<div class="form-group">
-            <label class="control-label">Enrolment Date End: </label>
-  				  <input name="" type="text" class="form-control" value="">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="control-label">Season: </label>
+            <input name="" type="text" class="form-control" value="">
+          </div>
         </div>
 
-    <div class="form-group">
-                    <label for="dtp_input1" class="control-label">DateTime Picking</label>
-                    <div class="input-group date form_datetime col-md-12" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-                        <input class="form-control" size="16" type="text" value="" readonly>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-              <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                    </div>
-            <input type="hidden" id="dtp_input1" value="" /><br/>
+        <div class="col-md-4">
+      		<div class="form-group">
+                  <label for="enrolBeginInput" class="control-label">Enrolment Date Begin: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="enrolBeginInput">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="enrolBeginInput" id="enrolBeginInput" value="" />
           </div>
 
+      		<div class="form-group">
+                  <label for="enrolEndInput" class="control-label">Enrolment Date End: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="enrolEndInput">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="enrolEndInput" id="enrolEndInput" value="" />
+          </div>
+
+          <div class="form-group">
+                  <label for="cancelDateInput" class="control-label">Cancellation Date Limit: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="cancelDateInput">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="cancelDateInput" id="cancelDateInput" value="" />
+          </div>  
+        </div>
 
           <div class="row">
-            <div class="col-sm-4 col-md-offset-2">
-              <a href="{{ route('terms.index') }}" class="btn btn-danger btn-block">Back</a>
-            </div>
-            <div class="col-sm-4">
-              <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
-              <input type="hidden" name="_token" value="{{ Session::token() }}">
+            <div class="col-md-12">            
+              <div class="col-md-4 col-md-offset-2">
+                <a href="{{ route('terms.index') }}" class="btn btn-danger btn-block">Back</a>
+              </div>
+              <div class="col-md-4">
+                <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+              </div>
             </div>
           </div>
       </form>

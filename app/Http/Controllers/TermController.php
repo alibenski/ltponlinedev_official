@@ -37,7 +37,32 @@ class TermController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate the data 
+        // validate date to be greater that now()
+        $this->validate($request, array(
+                // 'name' => 'required|max:255',
+            ));
+        // manipulate before storing
+        $termBeginStr = date('d F', strtotime($request->termBeginDate));
+        $termEndStr = date('d F Y', strtotime($request->termEndDate));
+        $termNameStr = $termBeginStr.' - '.$termEndStr;
+
+        // store in database
+        $term = new Term;
+        $term->Term_Code = $request->termCode;
+        $term->Term_Name = $termNameStr;
+        $term->Term_Begin = $request->termBeginDate;
+        $term->Term_End = $request->termEndDate;
+        $term->Enrol_Date_Begin = $request->enrolBeginInput;
+        $term->Enrol_Date_End = $request->enrolEndInput;
+        $term->Cancel_Date_Limit = $request->cancelDateInput;
+        $term->Activ = 0;
+
+        $term->save();
+
+        $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
+
+        return redirect()->route('terms.index');
     }
 
     /**

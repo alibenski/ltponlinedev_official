@@ -9,11 +9,11 @@
 				<thead>
 					<th>Term Code</th>
 					<th>Term Name</th>
-					<th>Next Term Code</th>
+					{{-- <th>Next Term Code</th> --}}
 					<th>Enrolment Date Begin</th>
 					<th>Enrolment Date End</th>
 					<th>Cancellation Date Limit</th>
-					<th></th>
+					<th>Operation</th>
 				</thead>
 
 				<tbody>
@@ -22,10 +22,28 @@
 						<tr>
 							<th>{{ $term->Term_Code }}</th>
 							<td>{{ $term->Term_Name }}</td>
-							<td>{{ $term->Term_Next }}</td>
-							<td>{{ $term->Enrol_Date_Begin }}</td>
-							<td>{{ $term->Enrol_Date_End }}</td>
-							<td>{{ $term->Cancel_Date_Limit }}</td>
+							{{-- <td>{{ $term->Term_Next }}</td> --}}
+							<td>
+							@if(empty($term->Enrol_Date_Begin))
+					            <span class="label label-danger">NONE</span>
+							@else
+								{{ date('d M Y - H:ia', strtotime($term->Enrol_Date_Begin)) }}
+							@endif
+							</td> 
+							<td>
+							@if(empty($term->Enrol_Date_End))
+					            <span class="label label-danger">NONE</span>
+							@else
+								{{ date('d M Y - H:ia', strtotime($term->Enrol_Date_End)) }}
+							@endif
+							</td>
+							<td>
+							@if(empty($term->Cancel_Date_Limit))
+					            <span class="label label-danger">NONE</span>
+							@else
+								{{ date('d M Y - H:ia', strtotime($term->Cancel_Date_Limit)) }}
+							@endif
+							</td>
 							<td><a href="{{ route('terms.index', $term->id)}}" class="btn btn-info pull-left">Edit</a></td>
 						</tr>
 					@endforeach
