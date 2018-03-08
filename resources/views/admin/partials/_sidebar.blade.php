@@ -55,7 +55,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{ route('terms.index') }}">View All</a></li>
-            <li><a href="#">Create</a></li>
+            <li><a href="{{ route('terms.create') }}">Create</a></li>
           </ul>
         </li>
         <li class="treeview">

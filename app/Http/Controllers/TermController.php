@@ -25,7 +25,8 @@ class TermController extends Controller
      */
     public function create()
     {
-        
+        $terms = Term::orderBy('Term_Code', 'desc')->paginate(10);
+        return view('terms.create')->withTerms($terms);
     }
 
     /**
