@@ -1,4 +1,4 @@
-<a class="btn {{$buttonclass}}" data-toggle="modal" href='#modal-id-{{$course}}'>{{ $buttonlabel }}</a>
+<a class="cancel-btn btn {{$buttonclass}}" data-toggle="modal" href='#modal-id-{{$course}}'>{{ $buttonlabel }}</a>
 <div class="modal fade" id="modal-id-{{$course}}">
 	<div class="modal-dialog">
 		<div class="modal-content">

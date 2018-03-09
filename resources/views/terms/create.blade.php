@@ -6,7 +6,7 @@
 @stop
 
 @section('content')
-<div class='col-lg-10 col-lg-offset-1'>
+<div class='col-lg-12'>
     <h1><i class='fa fa-snowflake-o'></i> Create Semester Term </h1>
     <hr>
 	    <form method="POST" action="{{ route('terms.store') }}">

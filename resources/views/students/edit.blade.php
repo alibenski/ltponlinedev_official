@@ -192,6 +192,7 @@
 $(document).ready(function () {
     $("input[name='decision']").on("click", function(){
         if ($("input[name='decision']").is(':checked')) {
+            // ajax call
             $.get("/org-select-ajax", function(data) {
                 $('#orgSelect').html(data);
                  });        

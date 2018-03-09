@@ -1,7 +1,7 @@
 @extends('admin.admin')
 
 @section('content')
-<div class="col-lg-10 col-lg-offset-1">
+<div class="col-lg-12">
 	<h1><i class="fa fa-lg fa-snowflake-o"></i> All Semester Terms <a href="{{ route('terms.create') }}" class="btn btn-success btn-h1-spacing pull-right" style="margin: 1px;">Create</a></h1>
     <hr>
 		<div class="table-responsive">
@@ -9,7 +9,8 @@
 				<thead>
 					<th>Term Code</th>
 					<th>Term Name</th>
-					{{-- <th>Next Term Code</th> --}}
+					<th>Term Begin Date</th>
+					<th>Term End Date</th>
 					<th>Enrolment Date Begin</th>
 					<th>Enrolment Date End</th>
 					<th>Cancellation Date Limit</th>
@@ -22,7 +23,8 @@
 						<tr>
 							<th>{{ $term->Term_Code }}</th>
 							<td>{{ $term->Term_Name }}</td>
-							{{-- <td>{{ $term->Term_Next }}</td> --}}
+							<td>{{ date('d M Y', strtotime($term->Term_Begin)) }}</td>
+							<td>{{ date('d M Y', strtotime($term->Term_End)) }}</td>
 							<td>
 							@if(empty($term->Enrol_Date_Begin))
 					            <span class="label label-danger">NONE</span>

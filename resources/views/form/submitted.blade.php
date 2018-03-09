@@ -74,7 +74,7 @@
                                         @slot('buttonoperation')
                                           <button type="button" class="btn btn-default btn-space" data-dismiss="modal">Back</button>
                                           <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code]) }}">
-                                              <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
+                                              <input id="cancelBtn" type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
                                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                                              {{ method_field('DELETE') }}
                                           </form>
@@ -115,24 +115,37 @@
 
 <script src="{{ asset('js/submit.js') }}"></script>
 
+<script>
+  $(document).ready(function () {
+    $('.cancel-btn').on('click', function () {
+      console.log('clicked');
+      $.get("/get-date-ajax", function(data) {
+            console.log(data);
+            if (data === 'disabled') {
+              $('#cancelBtn').prop('disabled', true);  
+            }
+          });     
+    })
+  });  
+</script>
+
 <script>  
   $(document).ready(function () {
+    $('#modalshow').on('show.bs.modal', function (event) {
+      var link = $(event.relatedTarget); // Link that triggered the modal
+      var dtitle = link.data('mtitle');
+      var dtecode = link.data('tecode');
+      var token = $("input[name='_token']").val();
+      var modal = $(this);
+      modal.find('.modal-title').text(dtitle);
 
-        $('#modalshow').on('show.bs.modal', function (event) {
-          var link = $(event.relatedTarget); // Link that triggered the modal
-          var dtitle = link.data('mtitle');
-          var dtecode = link.data('tecode');
-          var token = $("input[name='_token']").val();
-          var modal = $(this);
-          modal.find('.modal-title').text(dtitle);
+      var token = $("input[name='_token']").val();      
 
-          var token = $("input[name='_token']").val();      
-
-          $.post('{{ route('submitted.show') }}', {'tecode':dtecode, '_token':token}, function(data) {
-              console.log(data);
-              $('.modal-body-schedule').html(data)
-          });
-        });
+      $.post('{{ route('submitted.show') }}', {'tecode':dtecode, '_token':token}, function(data) {
+          console.log(data);
+          $('.modal-body-schedule').html(data)
+      });
+    });
   });
 </script>
 

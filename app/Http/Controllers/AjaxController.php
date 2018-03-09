@@ -29,6 +29,25 @@ class AjaxController extends Controller
             
             return response()->json([$data]);  
     }
+
+    public function ajaxGetDate()
+    {
+        //get current year and date
+        $now_date = Carbon::now();
+        $now_year = Carbon::now()->year;       
+        //return string of Cancel_Date_Limit of CURRENT term
+        $cancel_date_limit = Term::whereYear('Term_End', $now_year)
+                        ->orderBy('Term_Code', 'desc')
+                        ->where('Term_End', '>=', $now_date)
+                        ->min('Cancel_Date_Limit');
+        
+        if ($now_date > $cancel_date_limit) {
+            $data = 'disabled';
+        } else {
+            $data = 'enabled';
+        }
+        return response()->json($data);
+    }
     
     /**
      * Show the application selectAjax.

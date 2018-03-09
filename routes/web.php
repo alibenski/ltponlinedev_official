@@ -45,6 +45,8 @@ Route::resource('students', 'StudentController');
 Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
 //route for ajax jquery on organization
 Route::get('org-select-ajax', ['as'=>'org-select-ajax','uses'=>'AjaxController@ajaxOrgSelect']);
+// route for ajax jquery on certain dates
+Route::get('get-date-ajax', ['as'=>'get-date-ajax','uses'=>'AjaxController@ajaxGetDate']);
 
 //fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
