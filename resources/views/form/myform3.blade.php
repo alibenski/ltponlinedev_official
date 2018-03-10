@@ -27,6 +27,7 @@
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
                 <input  name="user_id" type="hidden" value="{{ $repos }}" readonly>
+                <input  type="hidden" value="{{$terms->Term_Code}}">
                 <input  name="term_id" type="hidden" value="
                   @if(empty($terms))
                   NO DB ENTRY
@@ -35,7 +36,7 @@
                   @endif
                 " readonly>  
                 </div>
-                current (hidden field) -> {{$terms->Term_Code}}
+
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Index Number:</label>
 

@@ -4,6 +4,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('jquery-ui-1.12.1/jquery-ui.css') }}" rel="stylesheet">
 @stop
 @section('content')
 <div class="container">
@@ -23,8 +24,8 @@
                             @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
-{{--                                 @if(is_null($form->DEPT))
-                                <p><span id="status" class="label label-default" style="margin-right: 10px;">
+                                @if(is_null($form->DEPT))
+                                <p><span id="status" class="label label-success" style="margin-right: 10px;">
                                 Self Payment
                                 @elseif(is_null($form->approval) && is_null($form->approval_hr))
                                 <p><span id="status" class="label label-warning" style="margin-right: 10px;">
@@ -44,7 +45,7 @@
                                 @elseif($form->approval == 1 && $form->approval_hr == 0)
                                 <p><span id="status" class="label label-danger" style="margin-right: 10px;">
                                 Disapproved
-                                @endif --}}
+                                @endif 
                                 </span><strong>{{ $form->courses->EDescription}}</strong></p>
                                     
                                     <div class="col-sm-6">
@@ -74,7 +75,7 @@
                                         @slot('buttonoperation')
                                           <button type="button" class="btn btn-default btn-space" data-dismiss="modal">Back</button>
                                           <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code]) }}">
-                                              <input id="cancelBtn" type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
+                                              <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
                                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                                              {{ method_field('DELETE') }}
                                           </form>
@@ -109,23 +110,39 @@
         </div>
     </div>
 </div>
+
+<div id="dialog" title="Over Cancellation Deadline">
+  <p>Cancellation of enrolment forms has been disabled. Please contact the Language Secretariat if you really want to cancel. NOTE: If you cancel your enrolment at any time after the deadline, the fees of the course will not be reimbursed.</p>
+</div>  
 @stop 
 
 @section('scripts_code')
 
 <script src="{{ asset('js/submit.js') }}"></script>
+<script src="{{ asset('jquery-ui-1.12.1/jquery-ui.js') }}"></script>
 
 <script>
   $(document).ready(function () {
-    $('.cancel-btn').on('click', function () {
-      console.log('clicked');
       $.get("/get-date-ajax", function(data) {
             console.log(data);
             if (data === 'disabled') {
-              $('#cancelBtn').prop('disabled', true);  
+              $('a.cancel-btn').removeAttr("href").css("cursor","not-allowed");  
+              $('a.cancel-btn').on('click', function () {
+                $( "#dialog" ).dialog( "open" );
+              });
             }
-          });     
-    })
+          });   
+      $( "#dialog" ).dialog({
+        autoOpen: false,
+        show: {
+          effect: "blind",
+          duration: 1000
+        },
+        hide: {
+          effect: "explode",
+          duration: 1000
+        }
+      });  
   });  
 </script>
 

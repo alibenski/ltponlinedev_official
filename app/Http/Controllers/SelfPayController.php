@@ -34,10 +34,10 @@ class SelfPayController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        $this->middleware('opencloseenrolment');
-        $this->middleware('checksubmissioncount');
+        // $this->middleware('opencloseenrolment');
+        // $this->middleware('checksubmissioncount');
         // $this->middleware('checkcontinue');
-        // $this->middleware('check-prev-url', ['only' => ['create']]);
+        $this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**
@@ -230,7 +230,7 @@ class SelfPayController extends Controller
         
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
 
-        $request->session()->flash('success', 'Enrolment Form has been submitted for approval'); 
+        $request->session()->flash('success', 'Thank you. The enrolment form has been submitted to the Language Secretariat for processing.'); 
 
         return redirect()->route('home');   
     }

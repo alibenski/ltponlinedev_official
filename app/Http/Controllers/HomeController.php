@@ -77,7 +77,7 @@ class HomeController extends Controller
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr']);
+            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT']);
         
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
@@ -139,22 +139,13 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
-        //query Torgan table if $request->organization is selfpaying or not
+        // validate if organization is billed or not
+        // query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)
             ->value('Org Billed');
 
-        //save organization to sddextr table
+        // save organization to sddextr table
 
-        // if ($org_status == 0) {
-        //     session()->flash('success','Please fill up the enrolment form');
-        //     return redirect(route('myform.create'));
-        // }
-        // session()->flash('success','Please fill up the payment-based enrolment form');
-        // return redirect(route('selfpayform.create'));
-        // if ($request->decision == null) {
-        //     session()->flash('interdire-msg','Please make a decision');
-        //     return redirect(route('whatorg'));
-        // } else
         
         if ($request->decision == 1) {
             session()->flash('success','Please fill up the payment-based enrolment form');
