@@ -24,7 +24,7 @@
                             @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
-                                @if(is_null($form->DEPT))
+                                @if($form->is_self_pay_form == 1)
                                 <p><span id="status" class="label label-success" style="margin-right: 10px;">
                                 Self Payment
                                 @elseif(is_null($form->approval) && is_null($form->approval_hr))

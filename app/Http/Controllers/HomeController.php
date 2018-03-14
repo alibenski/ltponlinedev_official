@@ -77,7 +77,7 @@ class HomeController extends Controller
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT']);
+            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form']);
         
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);

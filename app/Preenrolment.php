@@ -11,7 +11,7 @@ class Preenrolment extends Model
 
     protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay'
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form',
     ];
     /**
      * The attributes that should be mutated to dates.

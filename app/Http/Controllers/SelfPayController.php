@@ -196,6 +196,7 @@ class SelfPayController extends Controller
                 'continue_bool' => $decision,
                 'attachment_id' => $attachment_identity_file->id,
                 'attachment_pay' => $attachment_pay_file->id,
+                'is_self_pay_form' => 1,
                 ]); 
 
                     foreach ($ingredients as $data) {

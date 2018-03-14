@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('schedules', 'ScheduleController');
     Route::resource('terms', 'TermController');
     Route::resource('courses', 'CourseController');
+    Route::resource('organizations', 'OrgController');
 });
 
 //middleware to prevent back button and access cache
