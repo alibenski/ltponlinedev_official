@@ -27,12 +27,11 @@ class CheckPrevURL
             {
               $result = $val;
             }
-        
         //middleware to check previous URL based on Session  
         if ($result == route('whatorg')) {
             return $next($request);
         } else {
-            return redirect('home')->with('interdire-msg', 'Sorry, you cannot go directly to that link. First visit: < '. route('whatorg') .' >');
+            return redirect('home')->with('interdire-msg', 'Sorry, you cannot go directly to that link. First visit: < '. route('whatorg') .' > ');
         }
 
     }

@@ -37,7 +37,6 @@ class SelfPayController extends Controller
         // $this->middleware('opencloseenrolment');
         // $this->middleware('checksubmissioncount');
         // $this->middleware('checkcontinue');
-        $this->middleware('check-prev-url', ['only' => ['create']]);
     }
 
     /**
@@ -64,6 +63,7 @@ class SelfPayController extends Controller
               $result = $val;
             }
         // 'success' flash Session attribute comes from whatform() method @Homecontroller  
+        // check if user did not directly access link   
         if ($request->session()->has('success') || $result == route('selfpayform.create')) {
 
         //make collection values available
@@ -103,7 +103,7 @@ class SelfPayController extends Controller
 
         return view('form.myform3')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
         } else {
-        return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. First visit: < '. route('whatorg') .' >');
+        return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. First visit: < '. route('whatorg') .' > and answer the mandatory question.');
         }
     }
 

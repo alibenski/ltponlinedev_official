@@ -30,6 +30,13 @@ class AjaxController extends Controller
             return response()->json([$data]);  
     }
 
+    public function ajaxOrgCompare(Request $request)
+    {
+        $zoro = $request->organization;
+        $data = $zoro;
+        return response()->json($data);
+    }
+
     public function ajaxGetDate()
     {
         //get current year and date

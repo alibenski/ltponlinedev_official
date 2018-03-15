@@ -93,6 +93,16 @@
     placeholder: "Select Organization",
     allowClear: true
     });
+    $('select[id="input"]').change(function() {
+      var dOrg = $('select[id="input"]').val();
+      console.log(dOrg);
+      $.post("org-compare-ajax", { 'organization':dOrg }, function(success, data) {
+              
+              if (success) {
+                console.log('yessir');
+              }
+      });
+    });
   });
 </script>
 

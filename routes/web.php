@@ -49,7 +49,8 @@ Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.upd
 Route::get('org-select-ajax', ['as'=>'org-select-ajax','uses'=>'AjaxController@ajaxOrgSelect']);
 // route for ajax jquery on certain dates
 Route::get('get-date-ajax', ['as'=>'get-date-ajax','uses'=>'AjaxController@ajaxGetDate']);
-
+// route for ajax jquery to compare organization in whatorg page
+Route::post('org-compare-ajax', ['as'=>'org-compare-ajax','uses'=>'AjaxController@ajaxOrgCompare']);
 //fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
 

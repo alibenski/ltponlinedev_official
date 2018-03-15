@@ -139,14 +139,17 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
+        // save organization to sddextr table
+        $id = Auth::id();
+        $student = User::findOrFail($id);
+        $student->sddextr->DEPT = $request->input('organization');
+        $student->sddextr->save();
+        
         // validate if organization is billed or not
         // query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)
             ->value('Org Billed');
 
-        // save organization to sddextr table
-
-        
         if ($request->decision == 1) {
             session()->flash('success','Please fill up the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
