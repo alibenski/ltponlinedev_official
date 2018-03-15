@@ -124,7 +124,7 @@ class StudentController extends Controller
                 // 'lastName' => 'required|string',
                 // 'firstName' => 'required|string',
                 // validate if email is unique 
-                'email' => 'required_without_all:title,lastName,firstName,org,contactNo,jobAppointment,gradeLevel|unique:users,email',
+                'email' => 'required_without_all:title,lastName,firstName,org,contactNo,jobAppointment,gradeLevel,organization|unique:users,email',
                 // 'org' => 'required|',
                 'contactNo' => 'regex:/^[0-9\-+]+$/|nullable',
                 // 'jobAppointment' => 'required|string',
@@ -153,8 +153,8 @@ class StudentController extends Controller
             if (!is_null($request->input('lastName'))) {
                 $student->sddextr->LASTNAME = $request->input('lastName');
             }
-            if (!is_null($request->input('org'))) {
-                        $student->sddextr->DEPT = $request->input('org');
+            if (!is_null($request->input('organization'))) {
+                        $student->sddextr->DEPT = $request->input('organization');
                     }
             if (!is_null($request->input('contactNo'))) {
                         $student->sddextr->PHONE = $request->input('contactNo');

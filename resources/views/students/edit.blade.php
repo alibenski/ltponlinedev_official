@@ -105,7 +105,7 @@
                         </div>
                         {{-- insert org dropdown if decision is YES --}}
                         <div id="orgSelect"></div>
-
+                        <input id="selectInput" type="hidden">
                         <div class="form-group">
                             <label for="contactNo" class="col-md-2 control-label">Contact Number:</label>
 
@@ -160,24 +160,18 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-<script>
-    $(document).ready(function() {
-        $('.select2-basic-single').select2();
-        });   
-</script>
 
 <script>
     // Check if at least one input field is filled 
     $(function(){
         $("#updateProfileForm").submit(function(){
-
             var valid=0;
-            $(this).find('input[type=text]').each(function(){
+            $(this).find('input[type=text], #selectInput').each(function(){
                 if($(this).val() != "") valid+=1;
             });
-
+                        
             if(valid){
-                alert(valid + " input(s) filled. Thank you.");
+                // alert(valid + " input(s) filled. Thank you.");
                 return true;
             }
             else {
@@ -195,7 +189,10 @@ $(document).ready(function () {
             // ajax call
             $.get("/org-select-ajax", function(data) {
                 $('#orgSelect').html(data);
-                 });        
+                $(document).find('.select2-basic-single').select2();
+                $('#selectInput').val('1');
+                console.log($('#selectInput').val());
+                });        
         } else {
                 console.log('hide it');
                 $('#orgSelect').html("");

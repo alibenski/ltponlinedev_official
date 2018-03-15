@@ -4,8 +4,8 @@
                                 
                                 <div class="col-md-8">
                                   <div class="dropdown">
-                                    <select class="col-md-8 form-control" style="width: 100%;" name="organization" autocomplete="off" >
-                                        <option>--- Please Select Organization ---</option>
+                                    <select class="col-md-8 form-control select2-basic-single" style="width: 100%;" name="organization" autocomplete="off" >
+                                        <option value="">--- Please Select Organization ---</option>
 											@if(!empty($select_org))
 											  @foreach($select_org as $key => $value)
 											    <option class="col-md-8 wx" value="{{ $key }}">{{ $value }}</option>
@@ -13,7 +13,7 @@
 											@endif
                                     </select>
                                   </div>
-                                  <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
+                                  <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field. A wrong input may nullify your enrolment.</strong></p>
                                 </div>
                             </div>
                             </div>
