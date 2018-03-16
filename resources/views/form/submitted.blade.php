@@ -119,7 +119,7 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/submit.js') }}"></script>
-<script src="{{ asset('jquery-ui-1.12.1/jquery-ui.js') }}"></script>
+
 
 <script>
   $(document).ready(function () {

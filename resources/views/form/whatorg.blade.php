@@ -49,7 +49,7 @@
                     <label for="organization" class="col-md-2 control-label">Organization:</label>
                   <div class="col-md-9">
                     <div class="dropdown">
-                      <select id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+                      <select id="input" name="" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
                         @if(!empty($org))
                           @foreach($org as $key => $value)
                             <option></option>
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="pull-right col-md-2">
-                  <a class="btn next-btn btn-success btn-block button-prevent-multi-submit">Next</a>
+                  <a class="btn next-link btn-default btn-block button-prevent-multi-submit">Next</a>
                 </div>
             </form>
           </div>
@@ -83,12 +83,12 @@
             </div>
             <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">{{ csrf_field() }}
               <div class="modal-body">
-                <p>It looks like you have changed organizations.</p>
-                <label for="organization">NEW:</label> <input id="inputOrg" name="organization" type="text" value="">
+                <p>It looks like you have changed organizations from your last enrolment. Please confirm and click the Next button.</p>
+                <label for="organization">New Organization:</label> <input id="inputOrg" name="organization" type="text" value="" readonly="">
               </div>
               <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
-                    <button type="submit" class="btn btn-success button-prevent-multi-submit">Next</button>
+                    <button id="modalBtn" type="submit" class="btn btn-success button-prevent-multi-submit">Next</button>
                     <input type="hidden" name="_token" value="{{ Session::token() }}">
               </div>
             </form>
@@ -109,12 +109,28 @@
   });
 </script>
 
+<script>
+  $("input[name='decision']").click(function(){
+    $('a.next-btn').css('font-weight', '700');
+      if($('#decision1').is(':checked')) {
+        $('.select2-basic-single').removeAttr('required');
+        $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
+        $('button[type="submit"]').addClass( "btn-success", 800);
+        $('#secretMsg').html("<p>You confirmed that you are a <em>self-paying student</em>, please click the Next button to continue. </p>");
+      } else if ($('#decision2').is(':checked')) {
+        $('button[id="formBtn"]').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit">Next</a>');
+        $('a.next-link').removeClass( "btn-success", 800);
+        $('.select2-basic-single').attr('required', 'required');
+        $('#secretMsg').html("<p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>");
+      }
+  });
+</script>
+
 <script type="text/javascript">
   $(document).ready(function() {
     // select2 dropdown init
     $('.select2-basic-single').select2({
     placeholder: "Select Organization",
-    allowClear: true
     });
     // ajax post on change event
     $('select[id="input"]').change(function() {
@@ -122,30 +138,18 @@
       var token = $('meta[name=csrf-token]').attr('content');
 
       $.post("/org-compare-ajax", { 'organization':dOrg, '_token':token }, function(data) {
-          console.log(data);
-          $('a.next-btn').on('click', function () {
             if (data === false) {
               $('#modalshow').modal('show');
               $('input[name="organization"]').attr('value', dOrg);
-            } else if (data === true) {
-
+            } 
+            if (data === true) {
+              $('select[id="input"]').attr('name','organization');
+              $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn  button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
+              $('button[type="submit"]').addClass( "btn-success", 800);
             }
-          });
+          
       });
     });
-  });
-</script>
-
-<script>
-  $("input[name='decision']").click(function(){
-    $('a.next-btn').css('font-weight', '700');
-      if($('#decision1').is(':checked')) {
-        $('.select2-basic-single').removeAttr('required');
-        $('#secretMsg').html("<p>You confirmed that you are a <em>self-paying student</em>, please click the Next button to continue. </p>");
-      } else if ($('#decision2').is(':checked')) { 
-        $('.select2-basic-single').attr('required', 'required');
-        $('#secretMsg').html("<p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>");
-      }
   });
 </script>
 

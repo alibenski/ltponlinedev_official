@@ -38,7 +38,7 @@ class AjaxController extends Controller
         } else {
             $data = true;
         }
-        return response()->json([$data]);  
+        return response()->json($data);  
     }
 
     public function ajaxGetDate()
