@@ -113,14 +113,15 @@
   $("input[name='decision']").click(function(){
     $('a.next-btn').css('font-weight', '700');
       if($('#decision1').is(':checked')) {
-        $('.select2-basic-single').removeAttr('required');
-        $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
+        $('.select2-basic-single').removeAttr('required').val(null);
+        $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
         $('button[type="submit"]').addClass( "btn-success", 800);
         $('#secretMsg').html("<p>You confirmed that you are a <em>self-paying student</em>, please click the Next button to continue. </p>");
       } else if ($('#decision2').is(':checked')) {
         $('button[id="formBtn"]').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit">Next</a>');
         $('a.next-link').removeClass( "btn-success", 800);
         $('.select2-basic-single').attr('required', 'required');
+
         $('#secretMsg').html("<p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>");
       }
   });
@@ -144,7 +145,7 @@
             } 
             if (data === true) {
               $('select[id="input"]').attr('name','organization');
-              $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn  button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
+              $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
               $('button[type="submit"]').addClass( "btn-success", 800);
             }
           
