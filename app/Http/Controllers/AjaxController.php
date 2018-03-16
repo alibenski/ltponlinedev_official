@@ -23,18 +23,22 @@ class AjaxController extends Controller
 {
     public function ajaxOrgSelect()
     {
-            $select_org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
-            
-            $data = view('ajax-org-select',compact('select_org'))->render();
-            
-            return response()->json([$data]);  
+        $select_org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+        $data = view('ajax-org-select',compact('select_org'))->render();
+        return response()->json([$data]);  
     }
 
     public function ajaxOrgCompare(Request $request)
     {
-        $zoro = $request->organization;
-        $data = $zoro;
-        return response()->json($data);
+        $ajaxOrg = $request->organization;
+        $id = Auth::user()->id;
+        $studentOrg = User::findOrFail($id)->sddextr->DEPT;
+        if ($ajaxOrg != $studentOrg) {
+            $data = false;
+        } else {
+            $data = true;
+        }
+        return response()->json([$data]);  
     }
 
     public function ajaxGetDate()

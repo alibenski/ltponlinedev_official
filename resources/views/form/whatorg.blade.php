@@ -49,7 +49,7 @@
                     <label for="organization" class="col-md-2 control-label">Organization:</label>
                   <div class="col-md-9">
                     <div class="dropdown">
-                      <select name="organization" id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+                      <select id="input" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
                         @if(!empty($org))
                           @foreach($org as $key => $value)
                             <option></option>
@@ -64,8 +64,7 @@
                 </div>
 
                 <div class="pull-right col-md-2">
-                  <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Next</button>
-                  <input type="hidden" name="_token" value="{{ Session::token() }}">
+                  <a class="btn next-btn btn-success btn-block button-prevent-multi-submit">Next</a>
                 </div>
             </form>
           </div>
@@ -75,12 +74,35 @@
   </div>
 </div>
 
+<div class="modal fade" id="modalshow">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Ooops! Just a moment...</h4>
+            </div>
+            <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">{{ csrf_field() }}
+              <div class="modal-body">
+                <p>It looks like you have changed organizations.</p>
+                <label for="organization">NEW:</label> <input id="inputOrg" name="organization" type="text" value="">
+              </div>
+              <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                    <button type="submit" class="btn btn-success button-prevent-multi-submit">Next</button>
+                    <input type="hidden" name="_token" value="{{ Session::token() }}">
+              </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @stop   
 
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script src="{{ asset('js/submit.js') }}"></script>
+
 <script>
   $(document).ready(function(){
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
@@ -89,18 +111,26 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+    // select2 dropdown init
     $('.select2-basic-single').select2({
     placeholder: "Select Organization",
     allowClear: true
     });
+    // ajax post on change event
     $('select[id="input"]').change(function() {
       var dOrg = $('select[id="input"]').val();
-      console.log(dOrg);
-      $.post("org-compare-ajax", { 'organization':dOrg }, function(success, data) {
-              
-              if (success) {
-                console.log('yessir');
-              }
+      var token = $('meta[name=csrf-token]').attr('content');
+
+      $.post("/org-compare-ajax", { 'organization':dOrg, '_token':token }, function(data) {
+          console.log(data);
+          $('a.next-btn').on('click', function () {
+            if (data === false) {
+              $('#modalshow').modal('show');
+              $('input[name="organization"]').attr('value', dOrg);
+            } else if (data === true) {
+
+            }
+          });
       });
     });
   });
@@ -108,7 +138,7 @@
 
 <script>
   $("input[name='decision']").click(function(){
-    $('button').css('font-weight', '700');
+    $('a.next-btn').css('font-weight', '700');
       if($('#decision1').is(':checked')) {
         $('.select2-basic-single').removeAttr('required');
         $('#secretMsg').html("<p>You confirmed that you are a <em>self-paying student</em>, please click the Next button to continue. </p>");
