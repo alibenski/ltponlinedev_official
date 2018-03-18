@@ -44,7 +44,14 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{$input_staff->DEPT}}" readonly>                                    
                         </div>
-                        <p class="small text-danger"><strong>Please check the organization indicated in this field. Kindly take note that the organization in this field will be billed for this course (when necessary). Please refer to <a href="#">ST/AI Policy xxx</a> for more details.</strong></p>
+                        <p class="small text-danger"><strong>Please check the organization indicated in this field.</strong></p>
+                        <div class="form-group">
+{{--                           <div class="col-md-12">
+                              <input id="confirmOrg" name="confirmOrg" class="with-font dyes" type="checkbox" value="1" required="required">
+                              <label for="confirmOrg" class="form-control-static">YES, I confirm that the organization indicated above is correct. (required)</label>
+                          </div> --}}
+                          {{-- insert dropdown here call ajax-org-select.blade.php from student->edit --}}
+                        </div>
                     </div>
                 </div>
              
@@ -79,11 +86,11 @@
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-                <div class="alert alert-warning" style="text-align: center">
+                <div class="alert alert-warning col-md-6 col-md-offset-3 text-center">
                   <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once a decision has been submitted. Thank you for your kind attention. 
                 </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Do you approve the above enrolment?</label>
+                <div class="form-group col-md-12">
+                    <label class="col-md-3   control-label">Do you approve the above enrolment?</label>
 
                       <div class="col-md-2">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" >

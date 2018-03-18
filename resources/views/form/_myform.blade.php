@@ -9,11 +9,11 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="alert alert-warning alert-block">
-        <p class="text-center"><strong>Second Choice Enrolment Form</strong></p>
+      <div class="alert alert-info alert-block">
+        <p class="text-center"><strong>First Choice Enrolment Form</strong></p>
       </div>
-    </div>  
-
+    </div>    
+ 
     <div class="col-md-12">
       <div class="panel panel-default">
           <div class="panel-heading">Enrolment Form for Semester: 
@@ -26,7 +26,7 @@
             </strong>
           </div>
           <div class="panel-body">
-            <form method="POST" action="{{ route('noform.store') }}" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
@@ -46,7 +46,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                                    
                         </div>
                     </div>
                 </div>
@@ -63,12 +63,12 @@
 
                 <div class="form-group">
                     <label for="org" class="col-md-3 control-label">Organization:</label>
-                  <div class="col-md-8">
+                  <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>                                    
                         </div>
-                    {{-- <div class="dropdown">
-                      <select name="org" id="input" class="col-md-8 form-control" required="required">
+                      {{-- <div class="dropdown">
+                      <select name="org" id="input" class="col-md-8 form-control select2-basic-single" required="required">
                         @if(!empty($org))
                           @foreach($org as $key => $value)
                             <option value="{{ $key }}" {{ ($user->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
@@ -119,10 +119,70 @@
                               " readonly>                            
                         </div>
                     </div>
-                </div> 
+                </div>
+
+{{--                 <div class="form-group">
+                    <label for="name" class="col-md-3 control-label">Next UN Language Course:</label>
+
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->next_level_desc }}" readonly>                            
+                        </div>
+                    </div>
+                </div> --}}
+
+                <!-- MAKE A DECISION SECTION -->
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Continue current course?</label>
+
+                      <div class="col-md-2">
+                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" >
+                                <label for="decision1" class="form-control-static">YES</label>
+                      </div>
+
+                      <div class="col-md-2">
+                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="0">
+                                <label for="decision2" class="form-control-static">NO</label>
+                      </div>
+                </div>
+
+                <!-- YES DECISION SECTION -->
+                <div class="1 box" style="display:none">
+                    <div class="form-group">
+                        <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
+                        <div class="col-md-8">
+                          <div class="input-group col-md-9">
+                            <input id="{{ $repos_lang->languages->name }}" name="" class="with-font lang_select_yes" type="radio" value="{{ $repos_lang->L}}">
+                           
+                            <label for="{{ $repos_lang->languages->name }}" class=" form-control-static">{{ $repos_lang->languages->name }}</label>
+                          </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
+                        <input id="{{ $repos_lang->courses->next_level_desc }}" name="" class="with-font course_select_yes" type="radio" value="{{ $repos_lang->courses->next_level }}">
+                            
+                            <label for="{{ $repos_lang->courses->next_level_desc }}" class=" form-control-static">{{ $repos_lang->courses->next_level_desc }}</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
+                        <button type="button" class="multi-clear button btn btn-danger" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
+                        <div class="col-md-8">
+                          <div class="dropdown">
+                            <select class="col-md-8 form-control schedule_select_yes select2-multi" multiple="multiple" style="width: 100%; display: none;" name="" autocomplete="off" >
+                                <option value="">--- Select Schedule ---</option>
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF YES DECISION SECTION -->   
 
                 <!-- NO DECISION SECTION -->
-                <div class="0 box">
+                <div class="0 box" style="display:none">
                    
                     <div class="form-group">
                         <label class="col-md-3 control-label">Enrol to which language:</label>
@@ -162,24 +222,32 @@
                     </div>
                 </div>
                 <!-- END OF NO DECISION SECTION -->
-
                         <!-- SHOW CHOICES REAL TIME -->
                 <div class="col-md-12">
                   <div class="well">
                     <div class="row">        
                         <div class="form-group">
-                          <label for="first" class="col-md-2 control-label" style="color: green;">Schedule Choice A:</label> 
+                          <label for="first" class="col-md-2 control-label" style="color: green;">Schedule Choice A:</label>
                           <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
                         </div>
 
                         <div class="form-group">
                           <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Schedule Choice B:</label>
-                          <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>
+                          <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>        
                         </div>
                     </div>    
                   </div>  
                 </div>
                         <!-- END OF SHOW CHOICES REAL TIME -->   
+
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Comment/Reason: <i>(optional)</i></label>
+                  <div class="col-md-8 ">
+                  <textarea name="comment" class="form-control" readonly="">Not yet available</textarea>
+                  <p class="small text-danger"><strong>Specify above if you have any particular time constraints (e.g. I can never attend courses on Tuesdays due to weekly meetings) or any comments you may have concerning your enrolment.</strong></p>
+                  </div>
+                </div>
+
                 <div class="col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -191,25 +259,33 @@
     </div>
   </div>
 </div>
+
 @stop   
 
 @section('scripts_code')
-<script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM="
-  crossorigin="anonymous"></script>
-<script src="{{ asset('js/select2.full.js') }}"></script>
+
+<script src="{{ asset('js/select2.min.js') }}"></script>
+
+<script>  
+  $(document).ready(function () {
+      $('#modal-check').modal('show');
+  });
+</script>
+
 <script>
   $(document).ready(function(){
-      $(".wx").select2({
-        //theme: "bootstrap",   
-        minimumResultsForSearch: -1,
-        placeholder: 'Choose Here',
-      });
-  }); 
+    $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
+  });
 </script>
+
 <script type="text/javascript">
+  $(document).ready(function() {
+    $('.select2-basic-single').select2();
+  });
+
   $(document).ready(function(){
       $(".select2-multi").select2({
-        //theme: "bootstrap",
+        // theme: "bootstrap",
         allowClear: true,
         minimumResultsForSearch: -1,
         maximumSelectionLength: 2,
@@ -217,7 +293,7 @@
         closeOnSelect: false,
         templateResult: formatResult,
         //templateSelection: formatResult, 
-        placeholder: 'Choose Here',
+        placeholder: 'Choose Here',    
         "language": {
             "noResults": function(){
                 return "<strong class='text-danger'>Sorry No Classes Offered for this Course this Semester. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the availability of courses and classes</a>";
@@ -227,7 +303,7 @@
         return markup;
         }
       }); 
-            function formatResult (schedule) {
+      function formatResult (schedule) {
         if (!schedule.id) { return schedule.text; }
         
         var $schedule = $(
@@ -340,12 +416,61 @@
 <script>
   $(document).ready(function(){
     $('input[type=radio]').prop('checked',false);
-    });
+  });
+</script>
+
+<script>
+  $('input:radio[value="1"]').click(function(){
+      $(".dno").attr("disabled", true);
+        $(".lang_select_yes").attr("name", "L").prop('checked', true);
+        $(".course_select_yes").attr("name", "course_id").prop('checked', true);
+        $(".schedule_select_yes").attr("name", "schedule_id[]");        
+        $(".lang_select_no").removeAttr("name");
+        $(".course_select_no").removeAttr("name");
+        $(".schedule_select_no").removeAttr("name");   
+          alert("Please select your preferred schedule.");             
+  });          
+</script>
+
+<script>
+  $('input:radio[value="1"]').on('click',function(){
+    $(".course_select_yes").attr("name", "course_id");
+    $(".schedule_select_yes").attr("name", "schedule_id[]"); 
+      var course_id = $("input[name='course_id']").val();
+      var token = $("input[name='_token']").val();
+        alert("The course id input is: " + course_id );
+
+      $.ajax({
+          url: "{{ route('select-ajax2') }}", 
+          method: 'POST',
+          cache: false,
+          headers: { "cache-control": "no-cache" },
+          data: {course_id:course_id, _token:token},
+          success: function(data) {
+            $("select[name='schedule_id[]'").html('');
+            $("select[name='schedule_id[]'").html(data.options);
+          }
+      });
+  }); 
+</script>
+
+<script>
+  $(document).ready(function(){
+      $('input:radio[value="0"]').click(function(){
+        $(".dyes").attr("disabled", true);
+          $(".lang_select_no").attr("name", "L");
+          $(".course_select_no").attr("name", "course_id");
+          $(".lang_select_yes").removeAttr("name");
+          $(".course_select_yes").removeAttr("name");
+          $(".schedule_select_yes").removeAttr("name");  
+          alert("Please select your new Language Course.");   
+      });
+        
+  });
 </script>
 
 <script type="text/javascript">
   $("input[name='L']").click(function(){
-
       var L = $(this).val();
       var token = $("input[name='_token']").val();
 
@@ -362,7 +487,7 @@
 </script>
 
 <script type="text/javascript">
-  $("select[name='course_id']").on('change',function(){
+  $("select[name='course_id']").change(function(){
 
       var course_id = $(this).val();
       var token = $("input[name='_token']").val();

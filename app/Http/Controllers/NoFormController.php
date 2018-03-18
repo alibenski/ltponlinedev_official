@@ -20,6 +20,7 @@ use Session;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\Rule;
 
 class NoFormController extends Controller
 {
@@ -140,8 +141,15 @@ class NoFormController extends Controller
                     $request->merge( [ 'CodeIndexID' => $value ] );
                 }
                         var_dump($request->CodeIndexID);
+                        // validate using custom validator based on unique validation helper
+                        // with where clauses to specify customized validation 
                         $this->validate($request, array(
-                            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+                            'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
+                                    $uniqueCodex = $request->CodeIndexID;
+                                    $query->where('CodeIndexID', $uniqueCodex)
+                                        ->where('deleted_at', NULL);
+                                })
+                            // 'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|', // basic unique validator 
                         ));
             }                              
         }

@@ -63,8 +63,7 @@ class HomeController extends Controller
     public function index2()
     {
         $current_user = Auth::user()->indexno;
-        //query last UN Language Course enrolled in the past based on PASHQ table
-        $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
+
         //query the current term based on year and Term_End column is greater than today's date
         //whereYear('Term_End', $now_year)  
                         //->first();
@@ -77,7 +76,7 @@ class HomeController extends Controller
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form']);
+            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool']);
         
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
@@ -87,7 +86,7 @@ class HomeController extends Controller
         //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
  
-        return view('form.submitted')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
+        return view('form.submitted')->withForms_submitted($forms_submitted)->withNext_term($next_term);
     }
 
     public function showMod(Request $request)
@@ -139,11 +138,15 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
-        // save organization to sddextr table
-        $id = Auth::id();
-        $student = User::findOrFail($id);
-        $student->sddextr->DEPT = $request->input('organization');
-        $student->sddextr->save();
+        // if part of new organization, then save the new organization to sddextr
+        // same organization and self-pay does not update sddextr
+        if ($request->decision === null) {
+            // save organization to sddextr table
+            $id = Auth::id();
+            $student = User::findOrFail($id);
+            $student->sddextr->DEPT = $request->input('organization');
+            $student->sddextr->save();
+        }
         
         // validate if organization is billed or not
         // query Torgan table if $request->organization is selfpaying or not

@@ -22,6 +22,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class SelfPayController extends Controller
 {
@@ -140,7 +141,12 @@ class SelfPayController extends Controller
                 }
                         //var_dump($request->CodeIndexID);
                         $this->validate($request, array(
-                            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+                            'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
+                                    $uniqueCodex = $request->CodeIndexID;
+                                    $query->where('CodeIndexID', $uniqueCodex)
+                                        ->where('deleted_at', NULL)
+                                        ->where('is_self_pay_form', 1);
+                                })
                         ));
             }                              
         }

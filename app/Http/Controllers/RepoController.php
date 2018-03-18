@@ -20,6 +20,7 @@ use Session;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\Rule;
 
 class RepoController extends Controller
 {
@@ -34,7 +35,7 @@ class RepoController extends Controller
         $this->middleware('prevent-back-history');
         // $this->middleware('opencloseenrolment');
         // $this->middleware('checksubmissioncount');
-        // $this->middleware('checkcontinue');
+        $this->middleware('checkcontinue');
     }
 
     /**
@@ -116,7 +117,7 @@ class RepoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {    
         $index_id = $request->input('index_id');
         $language_id = $request->input('L'); 
         $course_id = $request->input('course_id');
@@ -143,8 +144,15 @@ class RepoController extends Controller
                     $request->merge( [ 'CodeIndexID' => $value ] );
                 }
                         var_dump($request->CodeIndexID);
+                        // validate using custom validator based on unique validation helper
+                        // with where clauses to specify customized validation 
                         $this->validate($request, array(
-                            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+                            'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
+                                    $uniqueCodex = $request->CodeIndexID;
+                                    $query->where('CodeIndexID', $uniqueCodex)
+                                        ->where('deleted_at', NULL);
+                                })
+                            // 'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
                         ));
             }                              
         }
@@ -171,7 +179,7 @@ class RepoController extends Controller
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'mgr_email' =>  $mgr_email,
-                'continue_bool' => $decision,
+                'continue_bool' => 1,
                 'DEPT' => $org,                
                 ]); 
                     foreach ($ingredients as $data) {

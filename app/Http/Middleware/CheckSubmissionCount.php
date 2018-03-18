@@ -26,7 +26,7 @@ class CheckSubmissionCount
                 $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
                 $q->where('Term', $latest_term );
             })->count('Te_Code');
-        if ($grouped == '2') {
+        if ($grouped >= '2') {
             $request->session()->flash('overlimit', 'You have reached the enrolment form submission limit (2 Maximum Language Courses)');
             return redirect()->route('home');
         }

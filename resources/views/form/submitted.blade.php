@@ -2,6 +2,7 @@
 @section('tabtitle', '| Submitted Forms')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('jquery-ui-1.12.1/jquery-ui.css') }}" rel="stylesheet">
@@ -24,29 +25,38 @@
                             @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
+                                <div>
+                                @if( $form->continue_bool == 1 )
+                                  <span class="label label-primary margin-label">First Choice
+                                @else 
+                                  <span class="label label-default margin-label">Second Choice
+                                @endif  
+                                </div>
+                                <div>
                                 @if($form->is_self_pay_form == 1)
-                                <p><span id="status" class="label label-success" style="margin-right: 10px;">
+                                  <span id="status" class="label label-success margin-label">
                                 Self Payment
                                 @elseif(is_null($form->approval) && is_null($form->approval_hr))
-                                <p><span id="status" class="label label-warning" style="margin-right: 10px;">
+                                  <span id="status" class="label label-warning margin-label">
                                 Pending Approval
                                 @elseif(in_array(Auth::user()->sddextr->DEPT, ["UNOG", "JIU"]) && $form->approval == 1 && is_null($form->approval_hr))
-                                <p><span id="status" class="label label-success" style="margin-right: 10px;">
+                                  <span id="status" class="label label-success margin-label">
                                 Approved
                                 @elseif($form->approval == 1 && is_null($form->approval_hr))
-                                <p><span id="status" class="label label-warning" style="margin-right: 10px;">
+                                  <span id="status" class="label label-warning margin-label">
                                 Pending Approval
                                 @elseif($form->approval == 1 && $form->approval_hr == 1)
-                                <p><span id="status" class="label label-success" style="margin-right: 10px;">
+                                  <span id="status" class="label label-success margin-label">
                                 Approved
                                 @elseif($form->approval == 0 && is_null($form->approval_hr))
-                                <p><span id="status" class="label label-danger" style="margin-right: 10px;">
+                                  <span id="status" class="label label-danger margin-label">
                                 Disapproved
                                 @elseif($form->approval == 1 && $form->approval_hr == 0)
-                                <p><span id="status" class="label label-danger" style="margin-right: 10px;">
+                                  <span id="status" class="label label-danger margin-label">
                                 Disapproved
                                 @endif 
-                                </span><strong>{{ $form->courses->EDescription}}</strong></p>
+                                </div>
+                                <h4><strong>{{ $form->courses->EDescription}}</strong></h4>
                                     
                                     <div class="col-sm-6">
                                         <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-tecode="{{ $form->Te_Code }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>
@@ -125,12 +135,13 @@
   $(document).ready(function () {
       $.get("/get-date-ajax", function(data) {
             console.log(data);
-            if (data === 'disabled') {
-              $('a.cancel-btn').removeAttr("href").css("cursor","not-allowed");  
-              $('a.cancel-btn').on('click', function () {
-                $( "#dialog" ).dialog( "open" );
-              });
-            }
+            // temporary disable for demo
+            // if (data === 'disabled') {
+            //   $('a.cancel-btn').removeAttr("href").css("cursor","not-allowed");  
+            //   $('a.cancel-btn').on('click', function () {
+            //     $( "#dialog" ).dialog( "open" );
+            //   });
+            // }
           });   
       $( "#dialog" ).dialog({
         autoOpen: false,

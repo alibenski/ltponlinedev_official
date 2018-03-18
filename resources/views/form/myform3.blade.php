@@ -52,7 +52,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="" class="form-control"  type="text" value="{{ Auth::user()->name }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="" class="form-control"  type="text" value="{{ Auth::user()->sddextr->FIRSTNAME }} {{ Auth::user()->sddextr->LASTNAME }}" readonly>                                    
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+{{--                 <div class="form-group">
                     <label for="name" class="col-md-3 control-label">Next UN Language Course:</label>
 
                     <div class="col-md-8 inputGroupContainer">
@@ -96,11 +96,11 @@
                             <span class="input-group-addon"><i class="fa fa-book"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->next_level_desc }}" readonly>                            
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- MAKE A DECISION SECTION -->
 
-                <div class="form-group">
+{{--                 <div class="form-group">
                     <label class="col-md-3 control-label">Continue current course?</label>
 
                       <div class="col-md-2">
@@ -112,10 +112,10 @@
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0">
                                 <label for="decision2" class="form-control-static">NO</label>
                       </div>
-                </div>
+                </div> --}}
 
                 <!-- YES DECISION SECTION -->
-                <div class="1 box" style="display:none">
+{{--                 <div class="1 box" style="display:none">
                     <div class="form-group">
                         <label for="L" class="col-md-3 control-label">Enrol to which language: </label>
                         <div class="col-md-8">
@@ -145,11 +145,11 @@
                           </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- END OF YES DECISION SECTION -->   
 
                 <!-- NO DECISION SECTION -->
-                <div class="0 box" style="display:none">
+                <div class="0 box">
                    
                     <div class="form-group">
                         <label class="col-md-3 control-label">Enrol to which language:</label>

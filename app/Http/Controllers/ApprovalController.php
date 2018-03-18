@@ -105,7 +105,7 @@ class ApprovalController extends Controller
         if($decision == 1){
             $decision_text = 'Yes, you approved the enrolment.';
         } else {
-            $decision_text = 'No, you did not approved the enrolment.';
+            $decision_text = 'No, you did not approve the enrolment.';
         }
 
         // Set flash data with message
