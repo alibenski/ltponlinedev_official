@@ -36,7 +36,7 @@ class SelfPayController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
         // $this->middleware('opencloseenrolment');
-        // $this->middleware('checksubmissioncount');
+        $this->middleware('checksubmissioncount');
         // $this->middleware('checkcontinue');
     }
 
@@ -140,6 +140,9 @@ class SelfPayController extends Controller
                     $request->merge( [ 'CodeIndexID' => $value ] );
                 }
                         //var_dump($request->CodeIndexID);
+                        // the validation below fails when CodeIndexID is already taken AND 
+                        // deleted_at column is NULL which means it has not been cancelled AND
+                        // there is an existing self-pay form
                         $this->validate($request, array(
                             'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
                                     $uniqueCodex = $request->CodeIndexID;

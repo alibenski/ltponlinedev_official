@@ -56,7 +56,16 @@
                         </div>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="org" class="col-md-3 control-label">Organization:</label>
+                  <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>
+                        </div>
+                  </div>
+                </div>
+
                 <div class="form-group">
                     <div class="alert alert-default alert-block">
                       <div class="small text-danger col-md-offset-3">

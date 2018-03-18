@@ -25,13 +25,15 @@
                             @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
-                                <div>
+                              {{-- show if course is 1st or 2nd choice --}}
+                                {{-- <div>
                                 @if( $form->continue_bool == 1 )
                                   <span class="label label-primary margin-label">First Choice
                                 @else 
                                   <span class="label label-default margin-label">Second Choice
                                 @endif  
-                                </div>
+                                </div> --}}
+                              {{-- show decision labels --}}
                                 <div>
                                 @if($form->is_self_pay_form == 1)
                                   <span id="status" class="label label-success margin-label">
@@ -59,7 +61,7 @@
                                 <h4><strong>{{ $form->courses->EDescription}}</strong></h4>
                                     
                                     <div class="col-sm-6">
-                                        <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-tecode="{{ $form->Te_Code }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>
+                                        <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>
                                     </div>
                                     
                                     <div class="col-sm-6">
@@ -163,13 +165,14 @@
       var link = $(event.relatedTarget); // Link that triggered the modal
       var dtitle = link.data('mtitle');
       var dtecode = link.data('tecode');
+      var dapproval = link.data('approval');
       var token = $("input[name='_token']").val();
       var modal = $(this);
       modal.find('.modal-title').text(dtitle);
 
       var token = $("input[name='_token']").val();      
 
-      $.post('{{ route('submitted.show') }}', {'tecode':dtecode, '_token':token}, function(data) {
+      $.post('{{ route('submitted.show') }}', {'tecode':dtecode, 'approval':dapproval, '_token':token}, function(data) {
           console.log(data);
           $('.modal-body-schedule').html(data)
       });

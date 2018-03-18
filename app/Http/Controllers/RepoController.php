@@ -34,7 +34,7 @@ class RepoController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
         // $this->middleware('opencloseenrolment');
-        // $this->middleware('checksubmissioncount');
+        $this->middleware('checksubmissioncount');
         $this->middleware('checkcontinue');
     }
 
@@ -146,11 +146,16 @@ class RepoController extends Controller
                         var_dump($request->CodeIndexID);
                         // validate using custom validator based on unique validation helper
                         // with where clauses to specify customized validation 
+                        // the validation below fails when CodeIndexID is already taken AND 
+                        // deleted_at column is NULL which means it has not been cancelled AND
+                        // not disapproved by manager or HR learning partner
                         $this->validate($request, array(
                             'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
                                     $uniqueCodex = $request->CodeIndexID;
                                     $query->where('CodeIndexID', $uniqueCodex)
-                                        ->where('deleted_at', NULL);
+                                        ->where('deleted_at', NULL)
+                                        ->where('approval', '!=', 0)
+                                        ->where('approval_hr', '!=' , 0);
                                 })
                             // 'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
                         ));

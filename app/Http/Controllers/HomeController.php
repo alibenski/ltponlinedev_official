@@ -74,9 +74,11 @@ class HomeController extends Controller
         $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
         
         //query submitted forms based from tblLTP_Enrolment table
-        $forms_submitted = Preenrolment::distinct('Te_Code')
+        $forms_submitted = Preenrolment::withTrashed()
+            ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool']);
+            ->where('Term', $next_term_code )
+            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool']);
         
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
@@ -91,20 +93,21 @@ class HomeController extends Controller
 
     public function showMod(Request $request)
     {
-            $current_user = Auth::user()->indexno;
-            $now_date = Carbon::now()->toDateString();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
-            $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-            //query submitted forms based from tblLTP_Enrolment table
-            $schedules = Preenrolment::where('Te_Code', $request->tecode)
-                ->where('INDEXID', '=', $current_user)
-                ->where('Term', $next_term_code )->get(['schedule_id'])->pluck('schedule.name');
+        $current_user = Auth::user()->indexno;
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        // query submitted forms based from tblLTP_Enrolment table
+        $schedules = Preenrolment::where('Te_Code', $request->tecode)
+            ->where('INDEXID', '=', $current_user)
+            ->where('approval', '=', $request->approval)
+            ->where('Term', $next_term_code )->get(['schedule_id'])->pluck('schedule.name');
 
-            //render and return data values via AJAX
-                $data = view('form.modalshowinfo',compact('schedules'))->render();
-            return response()->json([$data]);
+        // render and return data values via AJAX
+            $data = view('form.modalshowinfo',compact('schedules'))->render();
+        return response()->json([$data]);
     }
 
     public function history()

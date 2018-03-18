@@ -8,11 +8,11 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    {{-- <div class="col-md-12">
       <div class="alert alert-info alert-block">
         <p class="text-center"><strong>First Choice Enrolment Form</strong></p>
       </div>
-    </div>   
+    </div>   --}} 
     
     <div class="col-md-12">
       <div class="panel panel-default">
