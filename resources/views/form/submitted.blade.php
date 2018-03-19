@@ -75,6 +75,9 @@
                                         @slot('buttonlabel')
                                           Cancel Enrolment
                                         @endslot
+                                        @slot('classApproval')
+                                          stat-{{ $form->approval }}
+                                        @endslot
                                         @slot('title')
                                           <span><i class="fa fa-lg fa-warning btn-space"></i>Cancellation Warning</span>
                                         @endslot
@@ -126,6 +129,7 @@
 <div id="dialog" title="Over Cancellation Deadline">
   <p>Cancellation of enrolment forms has been disabled. Please contact the Language Secretariat if you really want to cancel. NOTE: If you cancel your enrolment at any time after the deadline, the fees of the course will not be reimbursed.</p>
 </div>  
+
 @stop 
 
 @section('scripts_code')
@@ -135,6 +139,10 @@
 
 <script>
   $(document).ready(function () {
+    $('a.stat-0').removeAttr("href").css("cursor","not-allowed");
+    $('a.stat-0').delay(800).fadeOut('slow', function() {
+                      $(this).remove(); 
+                      }); 
       $.get("/get-date-ajax", function(data) {
             console.log(data);
             // temporary disable for demo
@@ -145,6 +153,17 @@
             //   });
             // }
           });   
+      $.get("/is-cancelled-ajax", function(data) {
+            $.each(data, function (index, value) {
+                  // if (value.deleted_at) {
+                  //   $('a.cancel-btn').removeAttr("href").css("cursor","not-allowed");
+                  //   $('a.cancel-btn').addClass('stat-' + v);
+                  //   $('a.cancel-btn').fadeOut('slow', function() {
+                  //     $('a.cancel-btn').remove(); 
+                  //   });  
+                  // } 
+            });
+          }); 
       $( "#dialog" ).dialog({
         autoOpen: false,
         show: {

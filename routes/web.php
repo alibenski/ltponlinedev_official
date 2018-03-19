@@ -45,12 +45,16 @@ Route::delete('/delete/user/{staff}/course/{tecode}', ['middleware' => 'limit-ca
 //apply auth middleware only so students could edit their profile
 Route::resource('students', 'StudentController');
 Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
+
 //route for ajax jquery on organization
 Route::get('org-select-ajax', ['as'=>'org-select-ajax','uses'=>'AjaxController@ajaxOrgSelect']);
 // route for ajax jquery on certain dates
 Route::get('get-date-ajax', ['as'=>'get-date-ajax','uses'=>'AjaxController@ajaxGetDate']);
 // route for ajax jquery to compare organization in whatorg page
 Route::post('org-compare-ajax', ['as'=>'org-compare-ajax','uses'=>'AjaxController@ajaxOrgCompare']);
+// route for ajax jquery if forms have been cancelled or deleted
+Route::get('is-cancelled-ajax', ['as'=>'is-cancelled-ajax','uses'=>'AjaxController@ajaxIsCancelled']);
+
 //fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
 
@@ -65,7 +69,7 @@ Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'AjaxController@selectAj
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'AjaxController@selectAjax2']);
 
 //url routing for manager approval page
-Route::get('/approval/{staff}/{tecode}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
+Route::get('/approval/{staff}/{tecode}/{id}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
 Route::put('/approval/user/{staff}/course/{tecode}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
 //url routing for hr partner approval page

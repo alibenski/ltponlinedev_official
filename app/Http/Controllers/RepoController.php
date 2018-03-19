@@ -185,7 +185,8 @@ class RepoController extends Controller
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'mgr_email' =>  $mgr_email,
                 'continue_bool' => 1,
-                'DEPT' => $org,                
+                'DEPT' => $org, 
+                'form_counter' => $org,                
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();

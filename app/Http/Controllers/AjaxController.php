@@ -21,6 +21,30 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxIsCancelled()
+    {
+        $current_user = Auth::user()->indexno;
+
+        //query the current term based on year and Term_End column is greater than today's date
+        //whereYear('Term_End', $now_year)  
+                        //->first();
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        
+        //query submitted forms based from tblLTP_Enrolment table
+        $forms_submitted = Preenrolment::withTrashed()
+            ->distinct('Te_Code')
+            ->where('INDEXID', '=', $current_user)
+            ->where('Term', $next_term_code )
+            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'deleted_at']);
+        
+        $data = $forms_submitted;
+
+        return response()->json($data); 
+    }
     public function ajaxOrgSelect()
     {
         $select_org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');

@@ -79,7 +79,7 @@ class HomeController extends Controller
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )
             ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool']);
-        
+
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
         //$array_codes = explode(',', $str_codes);
@@ -100,7 +100,8 @@ class HomeController extends Controller
                 ->get()->min();
         $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
         // query submitted forms based from tblLTP_Enrolment table
-        $schedules = Preenrolment::where('Te_Code', $request->tecode)
+        $schedules = Preenrolment::withTrashed()
+            ->where('Te_Code', $request->tecode)
             ->where('INDEXID', '=', $current_user)
             ->where('approval', '=', $request->approval)
             ->where('Term', $next_term_code )->get(['schedule_id'])->pluck('schedule.name');

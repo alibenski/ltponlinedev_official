@@ -31,11 +31,12 @@ class ApprovalController extends Controller
      * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
      */
-    public function getForm($staff, $tecode)
+    public function getForm($staff, $tecode, $id)
     {
         //get variables from URL to decrypt and pass to controller logic 
     	$staff = Crypt::decrypt($staff);
         $tecode = Crypt::decrypt($tecode);
+        $id = Crypt::decrypt($id);
 
         $now_date = Carbon::now()->toDateString();
         $terms = Term::orderBy('Term_Code', 'desc')
@@ -48,15 +49,18 @@ class ApprovalController extends Controller
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->get();
-        $input_staff = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+        $input_staff = Preenrolment::withTrashed()->orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
+                                ->where('id', $id)
                                 ->first();
-        //check if decision has already been made
-        $existing_appr_value = $input_staff->approval; 
-        if (isset($existing_appr_value)) {
-            
+
+        //check if decision has already been made or self-paid form
+        $existing_appr_value = $input_staff->approval;
+        $is_self_pay = $input_staff->is_self_pay_form;
+        $is_deleted = $input_staff->deleted_at;
+        if (isset($existing_appr_value) || isset($is_self_pay) || isset($is_deleted)) {
             return redirect()->route('eform');
         } 
         
@@ -101,15 +105,6 @@ class ApprovalController extends Controller
             $course->mgr_comments = $mgr_comment;
             $course->save();
         }
-
-        if($decision == 1){
-            $decision_text = 'Yes, you approved the enrolment.';
-        } else {
-            $decision_text = 'No, you did not approve the enrolment.';
-        }
-
-        // Set flash data with message
-        $request->session()->flash('success', 'Manager Decision has been saved! Decision is: '.$decision_text);
 
         // execute Mail class before redirect
         $formfirst = Preenrolment::orderBy('Term', 'desc')
@@ -163,8 +158,24 @@ class ApprovalController extends Controller
             Mail::to($staff_email)
                     ->cc($mgr_email)
                     ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
-            
-            return redirect()->route('eform');
+        
+        if($decision == 1){
+            $decision_text = 'Yes, you approved the enrolment.';
+        } else {
+            $decision_text = 'No, you did not approve the enrolment.';
+
+            $enrol_form_d = [];
+            for ($i = 0; $i < count($forms); $i++) {
+                $enrol_form_d = $forms[$i]->id;
+                $course = Preenrolment::find($enrol_form_d);
+                $course->delete();
+            }
+        }
+
+        // Set flash data with message
+        $request->session()->flash('success', 'Manager Decision has been saved! Decision is: '.$decision_text);
+
+        return redirect()->route('eform');
         }
 
     }
