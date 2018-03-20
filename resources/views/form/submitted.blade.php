@@ -22,7 +22,7 @@
                       </strong>
                     </div>
                         <div class="panel-body">
-                            @foreach($forms_submitted as $form)
+                          @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
                               {{-- show if course is 1st or 2nd choice --}}
@@ -38,6 +38,9 @@
                                 @if($form->is_self_pay_form == 1)
                                   <span id="status" class="label label-success margin-label">
                                 Self Payment
+                                {{--  @elseif(isset($form->deleted_at))
+                                  <span id="status" class="label label-danger margin-label">
+                                Cancelled --}}
                                 @elseif(is_null($form->approval) && is_null($form->approval_hr))
                                   <span id="status" class="label label-warning margin-label">
                                 Pending Approval
@@ -69,6 +72,9 @@
                                         @slot('course')
                                           {{ $form->courses->Te_Code_New }}
                                         @endslot
+                                        @slot('formCount')
+                                          {{ $form->form_counter }}
+                                        @endslot
                                         @slot('buttonclass')
                                           btn-sm btn-danger btn-block btn-space
                                         @endslot
@@ -77,6 +83,13 @@
                                         @endslot
                                         @slot('classApproval')
                                           stat-{{ $form->approval }}
+                                        @endslot
+                                        @slot('deleteSet')
+                                          @if(isset($form->deleted_at))
+                                          delete-is-set
+                                          @else
+                                          delete-is-not-set
+                                          @endif
                                         @endslot
                                         @slot('title')
                                           <span><i class="fa fa-lg fa-warning btn-space"></i>Cancellation Warning</span>
@@ -89,7 +102,7 @@
                                         @endslot
                                         @slot('buttonoperation')
                                           <button type="button" class="btn btn-default btn-space" data-dismiss="modal">Back</button>
-                                          <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code]) }}">
+                                          <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->form_counter]) }}">
                                               <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
                                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                                              {{ method_field('DELETE') }}
@@ -97,10 +110,10 @@
                                         @endslot
                                       @endcomponent
                                     </div>
-                            </div>
-                            </div>
-                            <hr>
-                            @endforeach  
+                              </div>
+                              </div>
+                              <hr>
+                          @endforeach  
                         </div>
             </div>
         </div>
@@ -139,6 +152,7 @@
 
 <script>
   $(document).ready(function () {
+    $('a.delete-is-set').removeAttr("href").css("cursor","not-allowed");
     $('a.stat-0').removeAttr("href").css("cursor","not-allowed");
     $('a.stat-0').delay(800).fadeOut('slow', function() {
                       $(this).remove(); 
@@ -154,14 +168,11 @@
             // }
           });   
       $.get("/is-cancelled-ajax", function(data) {
-            $.each(data, function (index, value) {
-                  // if (value.deleted_at) {
-                  //   $('a.cancel-btn').removeAttr("href").css("cursor","not-allowed");
-                  //   $('a.cancel-btn').addClass('stat-' + v);
-                  //   $('a.cancel-btn').fadeOut('slow', function() {
-                  //     $('a.cancel-btn').remove(); 
-                  //   });  
-                  // } 
+            $.each(data, function (index, value) {                
+                $('a.delete-is-set').text('Cancelled').animate({
+                  backgroundColor: "#fff", color: "#000"}, 800, function() {
+                  /* stuff to do after animation is complete */
+                });;
             });
           }); 
       $( "#dialog" ).dialog({

@@ -14,12 +14,23 @@ class Preenrolment extends Model
         'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'L', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form', 'form_counter',
     ];
     /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    // protected $dateFormat = 'Y-m-d H:i';
+
+    // public function getDateFormat()
+    // {
+    //   return 'Y-m-d H:i';
+    // }
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = ['deleted_at'];
-
     /**
      * The name of the "updated at" column.
      *

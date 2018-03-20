@@ -41,7 +41,7 @@ Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
 Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
 Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
 //Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
-Route::delete('/delete/user/{staff}/course/{tecode}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+Route::delete('/delete/user/{staff}/course/{tecode}/{form}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
 //apply auth middleware only so students could edit their profile
 Route::resource('students', 'StudentController');
 Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);

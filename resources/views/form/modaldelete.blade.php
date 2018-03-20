@@ -1,6 +1,6 @@
-<a class="cancel-btn btn {{$buttonclass}} {{$classApproval}}" data-toggle="modal" href='#modal-id-{{$course}}'>{{ $buttonlabel }}</a>
+<a class="cancel-btn btn {{$buttonclass}} {{$classApproval}} {{$deleteSet}}" data-toggle="modal" href='#modal-id-{{$course}}-{{$formCount}}'>{{ $buttonlabel }}</a>
 
-<div class="modal fade" id="modal-id-{{$course}}">
+<div class="modal fade" id="modal-id-{{$course}}-{{$formCount}}">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">

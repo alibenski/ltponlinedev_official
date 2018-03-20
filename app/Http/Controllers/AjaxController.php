@@ -39,8 +39,8 @@ class AjaxController extends Controller
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )
-            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'deleted_at']);
-        
+            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'deleted_at', 'form_counter']);
+
         $data = $forms_submitted;
 
         return response()->json($data); 

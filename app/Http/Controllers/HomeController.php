@@ -78,7 +78,7 @@ class HomeController extends Controller
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )
-            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter']);
+            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at']);
 
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
@@ -172,7 +172,7 @@ class HomeController extends Controller
 
     }
 
-    public function destroy(Request $request, $staff, $tecode)
+    public function destroy(Request $request, $staff, $tecode, $form)
     {
         $current_user = $staff;
         $now_date = Carbon::now()->toDateString();
@@ -189,11 +189,13 @@ class HomeController extends Controller
                 ->where('Te_Code', $tecode)
                 ->where('INDEXID', '=', $current_user)
                 ->where('Term', $next_term_code )
+                ->where('form_counter', $form )
                 ->get();
         $display_language = Preenrolment::orderBy('Term', 'desc')
                 ->where('Te_Code', $tecode)
                 ->where('INDEXID', '=', $current_user)
                 ->where('Term', $next_term_code )
+                ->where('form_counter', $form )
                 ->first();
         
         //get email address of the Manager
