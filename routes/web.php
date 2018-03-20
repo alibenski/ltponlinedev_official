@@ -69,8 +69,8 @@ Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'AjaxController@selectAj
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'AjaxController@selectAjax2']);
 
 //url routing for manager approval page
-Route::get('/approval/{staff}/{tecode}/{id}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
-Route::put('/approval/user/{staff}/course/{tecode}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+Route::get('/approval/{staff}/{tecode}/{id}/{form}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
+Route::put('/approval/user/{staff}/course/{tecode}/{formcount}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
 //url routing for hr partner approval page
 Route::get('/approvalhr/{staff}/{tecode}', ['as' => 'approval.getform2hr','uses' => 'ApprovalController@getForm2hr' ]);

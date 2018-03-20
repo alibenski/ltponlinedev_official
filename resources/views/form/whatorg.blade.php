@@ -121,7 +121,7 @@
         // reset select2 (4.0.3) value to NULL and show placeholder  
         $('.select2-basic-single').removeAttr('required').val([]).trigger('change');
         $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
-        $('button[type="submit"]').addClass( "btn-success", 800);
+        $('button[type="submit"]').addClass( "btn-success", 500);
         $('#secretMsg2, #orgSelect').fadeOut(500);
         $('#secretMsg1').fadeIn(800);
       } else if ($('#decision2').is(':checked')) {

@@ -31,29 +31,34 @@ class ApprovalController extends Controller
      * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
      */
-    public function getForm($staff, $tecode, $id)
+    public function getForm($staff, $tecode, $id, $form)
     {
         //get variables from URL to decrypt and pass to controller logic 
     	$staff = Crypt::decrypt($staff);
         $tecode = Crypt::decrypt($tecode);
         $id = Crypt::decrypt($id);
+        $form_counter = Crypt::decrypt($form);
 
         $now_date = Carbon::now()->toDateString();
         $terms = Term::orderBy('Term_Code', 'desc')
                 ->whereDate('Term_End', '>=', $now_date)
                 ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code'); 
+        $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
+
         //query from Preenrolment table the needed information data to include in the control logic and then pass to approval page
         $input_course = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
+                                ->where('form_counter', $form_counter)
                                 ->get();
         $input_staff = Preenrolment::withTrashed()->orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->where('id', $id)
+                                ->where('form_counter', $form_counter)
                                 ->first();
 
         //check if decision has already been made or self-paid form
@@ -64,7 +69,7 @@ class ApprovalController extends Controller
             return redirect()->route('eform');
         } 
         
-        return view('form.approval')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code);
+        return view('form.approval')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
     }
 
     /**
@@ -74,7 +79,7 @@ class ApprovalController extends Controller
      * @param  string  $staff $tecode
      * @return \Illuminate\Http\Response
      */
-    public function updateForm(Request $request, $staff, $tecode)
+    public function updateForm(Request $request, $staff, $tecode, $formcount)
     {
         $now_date = Carbon::now()->toDateString();
         $terms = Term::orderBy('Term_Code', 'desc')
@@ -85,8 +90,9 @@ class ApprovalController extends Controller
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
                                 ->get();
-        
+
         $mgr_comment =  $request->input('mgr_comment');            
         $decision = $request->input('decision'); 
         // Validate data
@@ -111,7 +117,9 @@ class ApprovalController extends Controller
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
                                 ->first();    
+
         // query student email from users model via index nmber in preenrolment model
         $staff_name = $formfirst->users->name;
         $staff_email = $formfirst->users->email;
@@ -127,7 +135,13 @@ class ApprovalController extends Controller
                                 ->value('Te_Code');
         //query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst;
-
+        // $input_schedules = Preenrolment::orderBy('Term', 'desc')
+        //                         ->where('INDEXID', $staff)
+        //                         ->where('Term', $next_term_code)
+        //                         ->where('Te_Code', $tecode)
+        //                         ->where('form_counter', $formcount)
+        //                         ->get();
+           $input_schedules = [1, 2, 3, 4];                             
         //check the organization of the student to know which email process is followed by the system
         $org = $formfirst->DEPT; 
 
@@ -135,7 +149,7 @@ class ApprovalController extends Controller
 
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
+                    ->send(new MailtoStudent($input_schedules, $input_course, $staff_name, $mgr_comment, $request));
 
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
@@ -157,7 +171,7 @@ class ApprovalController extends Controller
 
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
+                    ->send(new MailtoStudent($input_schedules, $input_course, $staff_name, $mgr_comment, $request));
         
         if($decision == 1){
             $decision_text = 'Yes, you approved the enrolment.';

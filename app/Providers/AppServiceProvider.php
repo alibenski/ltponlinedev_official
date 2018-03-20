@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
             $data = $validator->getData();
             $staff = $data['INDEXID'];
             $tecode = $data['Te_Code'];
+            $form_counter = $data['form_counter'];
             $now_date = Carbon::now()->toDateString(); 
             $terms = Term::orderBy('Term_Code', 'desc')
                     ->whereDate('Term_End', '>=', $now_date)
@@ -34,8 +35,9 @@ class AppServiceProvider extends ServiceProvider
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
+                                ->where('form_counter', $form_counter)
                                 ->first(); 
-            
+
             if ($attribute == 'decision') {
                 $existing_appr_value = $query_form->approval;
 

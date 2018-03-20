@@ -78,7 +78,7 @@ class HomeController extends Controller
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )
-            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool']);
+            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter']);
 
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
@@ -104,6 +104,7 @@ class HomeController extends Controller
             ->where('Te_Code', $request->tecode)
             ->where('INDEXID', '=', $current_user)
             ->where('approval', '=', $request->approval)
+            ->where('form_counter', $request->form_counter)
             ->where('Term', $next_term_code )->get(['schedule_id'])->pluck('schedule.name');
 
         // render and return data values via AJAX

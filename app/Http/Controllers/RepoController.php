@@ -153,9 +153,7 @@ class RepoController extends Controller
                             'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
                                     $uniqueCodex = $request->CodeIndexID;
                                     $query->where('CodeIndexID', $uniqueCodex)
-                                        ->where('deleted_at', NULL)
-                                        ->where('approval', '!=', 0)
-                                        ->where('approval_hr', '!=' , 0);
+                                        ->where('deleted_at', NULL);
                                 })
                             // 'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
                         ));
@@ -170,6 +168,18 @@ class RepoController extends Controller
                             'mgr_email' => 'required|email',
                             'org' => 'required'
                         )); 
+        // set default value of $form_counter to 1 and then add succeeding
+        $lastValueCollection = Preenrolment::withTrashed()
+            ->where('Te_Code', $course_id)
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('form_counter', 'desc')->first();
+            
+        $form_counter = 1;
+        if(isset($lastValueCollection->form_counter)){
+            $form_counter = $lastValueCollection->form_counter + 1;    
+        }
+
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
@@ -186,7 +196,7 @@ class RepoController extends Controller
                 'mgr_email' =>  $mgr_email,
                 'continue_bool' => 1,
                 'DEPT' => $org, 
-                'form_counter' => $org,                
+                'form_counter' => $form_counter,                
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -213,6 +223,7 @@ class RepoController extends Controller
                                 ->where('INDEXID', $current_user)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $course)
+                                ->where('form_counter', $form_counter)
                                 ->get();
 
         Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));

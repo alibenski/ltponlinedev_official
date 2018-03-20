@@ -11,12 +11,13 @@
     <div class="col-md-12">
       <div class="panel panel-default">
 
-        <div class="panel-heading">Manager/Supervisor Approval Page Enrolment Form for Semester: <strong>{{ $next_term_code }}</strong></div>
+        <div class="panel-heading">Manager/Supervisor Approval Page Enrolment Form for Semester: <strong>{{ $next_term_code }} : {{ $next_term_name }}</strong></div>
           <div class="panel-body">
-            <form method="POST" action="{{ route('approval.updateform', [$input_staff->INDEXID, $input_staff->Te_Code]) }}" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" action="{{ route('approval.updateform', [$input_staff->INDEXID, $input_staff->Te_Code, $input_staff->form_counter]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>
                 <input  name="Te_Code" type="hidden" value="{{$input_staff->Te_Code}}" readonly>
+                <input  name="form_counter" type="hidden" value="{{$input_staff->form_counter}}" readonly>
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Staff Member Name:</label>
 

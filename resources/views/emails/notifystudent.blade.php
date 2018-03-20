@@ -200,6 +200,15 @@
                                                 disapproved
                                         @endif
                                       </strong> your enrolment.</p>
+
+                                     <ol>
+                                     @foreach($input_schedules as $sub) 
+                                          
+                                            <li>{{ $sub }}</li>
+                                        
+                                     @endforeach
+                                     </ol>
+
                                       <p><strong>Comment/Reason:</strong>
                                         <br>
                                         @if( empty($mgr_comment))
