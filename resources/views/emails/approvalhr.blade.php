@@ -210,7 +210,7 @@
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                                <a href="{{ route('approval.getform2hr', [Crypt::encrypt($input_course->INDEXID), Crypt::encrypt($input_course->Te_Code)]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                                                <a href="{{ route('approval.getform2hr', [Crypt::encrypt($input_course->INDEXID), Crypt::encrypt($input_course->Te_Code), Crypt::encrypt($input_course->id), Crypt::encrypt($input_course->form_counter)]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
                                                     <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Approval Link&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>

@@ -18,6 +18,9 @@
                 <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>
                 <input  name="Te_Code" type="hidden" value="{{$input_staff->Te_Code}}" readonly>
                 <input  name="form_counter" type="hidden" value="{{$input_staff->form_counter}}" readonly>
+                @foreach($input_course as $course)
+                  <input  name="schedule_id[]" type="hidden" value="{{$course->schedule->name}}" readonly>
+                @endforeach
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Staff Member Name:</label>
 
