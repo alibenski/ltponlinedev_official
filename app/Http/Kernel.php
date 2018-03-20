@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         //custom middleware classes
         'checksubmissioncount' => \App\Http\Middleware\CheckSubmissionCount::class,
+        'checksubmissionselfpay' => \App\Http\Middleware\CheckSubmissionSelfPay::class,
         'opencloseenrolment' => \App\Http\Middleware\OpenCloseEnrolment::class,
         'checkcontinue' => \App\Http\Middleware\CheckContinue::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,

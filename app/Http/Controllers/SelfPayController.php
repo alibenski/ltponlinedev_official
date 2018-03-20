@@ -36,7 +36,7 @@ class SelfPayController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
         // $this->middleware('opencloseenrolment');
-        $this->middleware('checksubmissioncount');
+        $this->middleware('checksubmissionselfpay');
         // $this->middleware('checkcontinue');
     }
 
@@ -162,6 +162,18 @@ class SelfPayController extends Controller
                             'identityfile' => 'required|mimes:pdf,doc,docx|max:20000',
                             'payfile' => 'required|mimes:pdf,doc,docx|max:20000',
                         )); 
+        // set default value of $form_counter to 1 and then add succeeding
+        $lastValueCollection = Preenrolment::withTrashed()
+            ->where('Te_Code', $course_id)
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('form_counter', 'desc')->first();
+            
+        $form_counter = 1;
+        if(isset($lastValueCollection->form_counter)){
+            $form_counter = $lastValueCollection->form_counter + 1;    
+        }
+
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')){
             $request->file('identityfile');
@@ -206,13 +218,13 @@ class SelfPayController extends Controller
                 'attachment_id' => $attachment_identity_file->id,
                 'attachment_pay' => $attachment_pay_file->id,
                 'is_self_pay_form' => 1,
+                'form_counter' => $form_counter, 
                 ]); 
 
                     foreach ($ingredients as $data) {
                         $data->save();                    
                     }
         }
-        
         
         //execute Mail class before redirect         
         $mgr_email = $request->mgr_email;
@@ -234,11 +246,11 @@ class SelfPayController extends Controller
                                 ->where('INDEXID', $current_user)
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $course)
+                                ->where('form_counter', $form_counter)
                                 ->get();
-        
-        //Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
-        
-        $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
+
+        // email confirmation message to student enrolment form has been received 
+        // Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
 
         $request->session()->flash('success', 'Thank you. The enrolment form has been submitted to the Language Secretariat for processing.'); 
 
@@ -288,46 +300,5 @@ class SelfPayController extends Controller
     public function destroy($id)
     {
         //
-    }
-    public function selectAjax5(Request $request)
-    {
-        if($request->ajax()){
-            //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
-            $select_courses = DB::table('LTP_CR_LIST')
-            ->where('L', $request->L)
-            ->orderBy('id', 'asc')
-            ->pluck("Description","Te_Code_New")
-            ->all();
-            
-            $data = view('ajax-select5',compact('select_courses'))->render();
-            return response()->json(['options'=>$data]);
-        }
-    }
-
-    public function selectAjax6(Request $request)
-    {
-        if($request->ajax()){
-
-            //$select_schedules = DB::table('LTP_TEVENTCur')
-            $select_schedules = Classroom::where('Te_Code_New', $request->course_id)
-            ->where(function($q){
-                //get current year and date
-                $now_date = Carbon::now()->toDateString();
-                $now_year = Carbon::now()->year;
-
-                //query the current term based on Term_End column is greater than today's date  
-                $latest_term = Term::orderBy('Term_Code', 'desc')
-                                ->whereDate('Term_End', '>=', $now_date)
-                                ->get()->min();            
-                //$latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
-                $q->where('Te_Term', $latest_term->Term_Code );
-            })
-
-            //Eager Load scheduler function and pluck using "dot" 
-            ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
-
-            $data = view('ajax-select6',compact('select_schedules'))->render();
-            return response()->json(['options'=>$data]);
-        }
     }
 }

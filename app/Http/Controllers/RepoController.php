@@ -231,7 +231,7 @@ class RepoController extends Controller
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
         $sddextr_org = $sddextr_query->DEPT;
         if ($org == $sddextr_org){
-            //flash session success or errorBags 
+            // flash session success or errorBags 
             $request->session()->flash('success', 'Enrolment Form has been submitted for approval'); //laravel 5.4 version
 
             return redirect()->route('home');

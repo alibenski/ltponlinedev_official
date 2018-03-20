@@ -90,6 +90,17 @@
             <li><a href="#">View All</a></li>
             <li><a href="#">Create</a></li>
           </ul>
+        </li>        
+        <li class="treeview">
+          <a href="#"><i class="fa fa-handshake-o"></i> <span>Focal Points</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#">View All</a></li>
+            <li><a href="#">Create</a></li>
+          </ul>
         </li>
         <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-btn fa-sign-out btn-space" aria-hidden="true"></i>
               <span>Logout</span>
