@@ -6,6 +6,26 @@
     background-image: url("/img/bg-enrolment.jpg");
     background-size: cover;
 }
+/*.btn-bg-img{
+    background-image: url("/img/bg-enrolment-min.jpg");
+    background-size: cover;
+}*/
+.btn-bg-img{
+    background-image: linear-gradient(to bottom right,rgba(0,47,75,.9), rgba(20,19,18,.8)), url("/img/bg-enrolment-min.jpg");
+    background-size: cover;
+}
+.btn-welcome-img{
+    background-image: linear-gradient(to bottom right,rgba(0,47,75,.9), rgba(20,19,18,.8)), url("/img/btn-welcome-min.jpg");
+    background-size: cover;
+}
+.b1{ min-height:270px; }
+.btn-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 35px;
+}
 .list-margin {
     margin: 22px auto;
 }

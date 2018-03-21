@@ -234,7 +234,7 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
-                                      <p><strong>NOTE: </strong>Please contact your organization's HR Learning Department for any questions regarding the decision above.</p>
+                                      <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
                                 </td>
                             </tr>
                             <tr>
