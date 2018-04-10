@@ -92,25 +92,27 @@ class ApprovalController extends Controller
                                 ->where('Te_Code', $tecode)
                                 ->where('form_counter', $formcount)
                                 ->get();
-
+        
         $mgr_comment =  $request->input('mgr_comment');            
-        $decision = $request->input('decision'); 
         // Validate data
             $this->validate($request, array(
-                'decision' => 'required|boolean|not_equal_to_existing',
+                // 'decision' => 'required|boolean|not_equal_to_existing',
                 'INDEXID' => 'required',
                 'Te_Code' => 'required',
             )); 
 
-        // Save the data to db
+        // Save the data to db 
         $enrol_form = [];
         for ($i = 0; $i < count($forms); $i++) {
-            $enrol_form = $forms[$i]->id;
-            $course = Preenrolment::find($enrol_form);
-            $course->approval = $decision;
+            $enrol_form = $forms[$i]->CodeIndexID;
+            $course = Preenrolment::where('CodeIndexID', $enrol_form)->first();
+                $dataDecision =  []; 
+                $dataDecision = $request->input('decision-'.$forms[$i]->CodeIndexID);
+            $course->approval = $dataDecision;
             $course->mgr_comments = $mgr_comment;
-            $course->save();
+            // $course->save();
         }
+dd($course);
 
         // execute Mail class before redirect
         $formfirst = Preenrolment::orderBy('Term', 'desc')

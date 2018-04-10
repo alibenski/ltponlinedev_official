@@ -20,9 +20,9 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         Validator::extend('not_equal_to_existing', function($attribute, $value, $parameters, $validator) {
-            
             // get array values from $validator param
             $data = $validator->getData();
+            dd($data);
             $staff = $data['INDEXID'];
             $tecode = $data['Te_Code'];
             $form_counter = $data['form_counter'];

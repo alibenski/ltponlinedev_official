@@ -84,7 +84,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="currentOrg" class="col-md-2 control-label">Current Organization:</label>
+                            <label for="currentOrg" class="col-md-2 control-label">Organization:</label>
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">

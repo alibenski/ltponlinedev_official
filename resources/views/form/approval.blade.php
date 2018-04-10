@@ -66,6 +66,7 @@
                         <th>Course</th>
                         <th>Language</th>
                         <th>Schedule</th>
+                        <th>Do You Approve?</th>
                         
                       </thead>
 
@@ -81,6 +82,17 @@
                               {{ $course->schedule->name }}
                               @endif
                             </td>
+                            <td>
+                              <div class="col-md-4">
+                                <input id="decision1-{{ $course->CodeIndexID }}" name="decision-{{ $course->CodeIndexID }}" class="with-font dyes" type="radio" value="1" >
+                                <label for="decision1-{{ $course->CodeIndexID }}" class="form-control-static">YES</label>
+                              </div>
+                              
+                              <div class="col-md-4">
+                                <input id="decision2-{{ $course->CodeIndexID }}" name="decision-{{ $course->CodeIndexID }}" class="with-font dno" type="radio" value="0">
+                                <label for="decision2-{{ $course->CodeIndexID }}" class="form-control-static">NO</label>
+                              </div>
+                            </td>
                           </tr>
                         @endforeach
 
@@ -93,7 +105,7 @@
                 <div class="alert alert-warning col-md-6 col-md-offset-3 text-center">
                   <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once a decision has been submitted. Thank you for your kind attention. 
                 </div>
-                <div class="form-group col-md-12">
+{{--                 <div class="form-group col-md-12">
                     <label class="col-md-3   control-label">Do you approve the above enrolment?</label>
 
                       <div class="col-md-2">
@@ -105,9 +117,9 @@
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0">
                                 <label for="decision2" class="form-control-static">NO</label>
                       </div>
-                </div>
+                </div> --}}
                 
-                <div class="form-group">
+                <div class="col-md-12 form-group">
                   <label class="col-md-3 control-label">Comment/Reason: <i>(optional)</i></label>
                   <div class="col-md-8 ">
                   <textarea name="mgr_comment" class="form-control"></textarea>
@@ -115,7 +127,7 @@
                   </div>
                 </div>
 
-                <div class="col-sm-offset-5">
+                <div class="col-sm-5 col-sm-offset-5">
                   @component('form.modal')
                     @slot('buttonclass')
                       btn-primary
