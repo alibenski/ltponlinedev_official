@@ -61,7 +61,7 @@ class ApprovalController extends Controller
                                 ->where('form_counter', $form_counter)
                                 ->first();
 
-        //check if decision has already been made or self-paid form
+        // check if decision has already been made or self-paid form
         $existing_appr_value = $input_staff->approval;
         $is_self_pay = $input_staff->is_self_pay_form;
         $is_deleted = $input_staff->deleted_at;
@@ -93,8 +93,19 @@ class ApprovalController extends Controller
                                 ->where('form_counter', $formcount)
                                 ->get();
         
-        $mgr_comment =  $request->input('mgr_comment');            
-        // Validate data
+        $mgr_comment =  $request->input('mgr_comment');
+
+        // Validate decision input array
+        for ($i = 0; $i < count($forms); $i++) {
+                $dataDecision =  []; 
+                $dataDecision = $request->input('decision-'.$forms[$i]->CodeIndexID);
+                
+                $this->validate($request, array(
+                    'decision-'.$forms[$i]->CodeIndexID => 'required|boolean|',
+                )); 
+        }
+
+        // Validate other data
             $this->validate($request, array(
                 // 'decision' => 'required|boolean|not_equal_to_existing',
                 'INDEXID' => 'required',
@@ -112,7 +123,6 @@ class ApprovalController extends Controller
             $course->mgr_comments = $mgr_comment;
             // $course->save();
         }
-dd($course);
 
         // execute Mail class before redirect
         $formfirst = Preenrolment::orderBy('Term', 'desc')
@@ -121,7 +131,7 @@ dd($course);
                                 ->where('Te_Code', $tecode)
                                 ->where('form_counter', $formcount)
                                 ->first();    
-
+dd($formfirst);
         // query student email from users model via index nmber in preenrolment model
         $staff_name = $formfirst->users->name;
         $staff_email = $formfirst->users->email;

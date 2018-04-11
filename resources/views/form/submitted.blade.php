@@ -61,11 +61,12 @@
                                 Disapproved
                                 @endif 
                                 </div>
+                                
                                 <h4><strong>{{ $form->courses->EDescription}}</strong></h4>
-                                    
+                                
                                     <div class="col-sm-6">
                                         <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}"" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>
-                                    </div>
+                                    </div> 
                                     
                                     <div class="col-sm-6">
                                       @component('form.modaldelete')
@@ -211,4 +212,23 @@
   });
 </script>
 
+<script>  
+  $(document).ready(function () {
+      var link = $(event.relatedTarget); // Link that triggered the modal
+      var dtitle = link.data('mtitle');
+      var dtecode = link.data('tecode');
+      var dapproval = link.data('approval');
+      var dFormCounter = link.data('formx');
+      var token = $("input[name='_token']").val();
+      var modal = $(this);
+      modal.find('.modal-title').text(dtitle);
+
+      var token = $("input[name='_token']").val();      
+
+      $.post('{{ route('submitted.show') }}', {'tecode':dtecode, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
+          console.log(data);
+          $('.modal-body-schedule').html(data)
+      });
+  });
+</script>
 @stop

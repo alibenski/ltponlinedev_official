@@ -84,12 +84,12 @@
                             </td>
                             <td>
                               <div class="col-md-4">
-                                <input id="decision1-{{ $course->CodeIndexID }}" name="decision-{{ $course->CodeIndexID }}" class="with-font dyes" type="radio" value="1" >
+                                <input id="decision1-{{ $course->CodeIndexID }}" name="decision-{{ $course->CodeIndexID }}" class="with-font dyes" type="radio" value="1" required="">
                                 <label for="decision1-{{ $course->CodeIndexID }}" class="form-control-static">YES</label>
                               </div>
                               
                               <div class="col-md-4">
-                                <input id="decision2-{{ $course->CodeIndexID }}" name="decision-{{ $course->CodeIndexID }}" class="with-font dno" type="radio" value="0">
+                                <input id="decision2-{{ $course->CodeIndexID }}" name="decision-{{ $course->CodeIndexID }}" class="with-font dno" type="radio" value="0" required="">
                                 <label for="decision2-{{ $course->CodeIndexID }}" class="form-control-static">NO</label>
                               </div>
                             </td>

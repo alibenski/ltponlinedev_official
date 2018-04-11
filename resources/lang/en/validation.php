@@ -112,6 +112,11 @@ return [
         'email' => [
             'required_without_all' => 'Nothing to update. Fill up at least one field to update.',
                 ],
+        // Validation message on manager's approval page
+        'decision-*' => [
+            'required' => 'Decision required. Please make a decision for each of the chosen schedules.',
+            'boolean' => 'Decision must only be true or false.',
+                ],
     ],
 
     /*
