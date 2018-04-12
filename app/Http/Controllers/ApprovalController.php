@@ -124,6 +124,7 @@ class ApprovalController extends Controller
             $course->save();
         }
 
+        // query from the table with the saved data and then
         // execute Mail class before redirect
         $formfirst = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
@@ -152,18 +153,31 @@ class ApprovalController extends Controller
         $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff_index)
                                 ->value('Te_Code');
-        //query from Preenrolment table the needed information data to include in email
+        // query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst; 
-        $input_items = $formItems; 
-        //check the organization of the student to know which email process is followed by the system
+
+        // check the organization of the student to know which email process is followed by the system
         $org = $formfirst->DEPT; 
 
-        if ($org !== 'UNOG' && $decision !== '0') {
+        // store decision values in array and then compare the values to define $decision variable
+        $getDecision = [];
+        $decision = null;
+        foreach ($formItems as $value) {
+            $getDecision[] = $value->approval;
+        }
+        if ($getDecision[0] == 1 || $getDecision[1] == 1) {
+            $decision = 1; 
+        } else {
+            $decision = 0;
+        }
 
+dd($decision);
+        if ($org !== 'UNOG' && $decision !== '0') {
+            // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
                     ->send(new MailtoStudent($input_course, $input_items, $staff_name, $mgr_comment, $request));
-dd($input_items);
+
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
             $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
@@ -178,18 +192,18 @@ dd($input_items);
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
                     ->send(new MailtoApproverHR($forms, $input_course, $staff_name, $mgr_email));
-            
+           
             return redirect()->route('eform');            
         } else {
-
+            // mail to UNOG staff members or staff which do not have CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $input_items, $staff_name, $mgr_comment, $request));
+                    ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
         
         if($decision == 1){
-            $decision_text = 'Yes, you approved the enrolment.';
+            $decision_text = 'Yes, you approved at least one of the chosen schedules.';
         } else {
-            $decision_text = 'No, you did not approve the enrolment.';
+            $decision_text = 'No, you did not approve any of the chosen schedules.';
 
             $enrol_form_d = [];
             for ($i = 0; $i < count($forms); $i++) {

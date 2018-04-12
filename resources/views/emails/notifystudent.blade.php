@@ -194,52 +194,23 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear {{ $staff_name }}, </p>
                                      <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided.</p>
+                                     <p> Please refer to your <strong> manager's</strong> (with email address: {{ $input_course->mgr_email }}) decision(s) below.</p>
 
-                                        <div class="row">
-                                          <div class="col-md-12">
-                                            <table class="table">
-                                              <thead>
-                                                <th>Chosen Course Schedule(s)</th>
-                                                <th>Decision</th>
-                                              </thead>
+                                        <p><strong>Your chosen schedule(s):</strong></p>
+                                            @foreach($formItems as $value)
+                                        <p>
+                                                {{ $value->schedule->name }} - Decision: 
+                                                    <strong>
+                                                    @if( $value->approval == 1)
+                                                            Approved 
+                                                    @else
+                                                            Disapproved
+                                                    @endif   
+                                                    </strong>
+                                        </p>
+                                            @endforeach
 
-                                              <tbody>
-                                                @foreach($request->schedule_id as $array)                         
-                                                  <tr>
-                                                    <td>
-                                                      @if(empty($array))
-                                                      null
-                                                      @else
-                                                      {{ $array }}
-                                                      @endif
-                                                    </td>
-                                                  </tr>
-                                                @endforeach
-                                                @foreach($input_items as $value)
-                                                    @foreach($value as $value2)
-                                                      <tr>
-                                                        <td>
-                                                          @if(empty($value2))
-                                                          null
-                                                          @else
-                                                          {{ $value2->approval }}
-                                                          @endif
-                                                        </td>
-                                                      </tr>
-                                                    @endforeach
-                                                @endforeach
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                        </div>
 
-                                     <p> Your <strong> manager</strong> (with email address: {{ $input_course->mgr_email }}) has <strong>  
-                                        @if( $input_course->approval == 1)
-                                                approved 
-                                        @else
-                                                disapproved
-                                        @endif
-                                      </strong> your enrolment.</p>
                                       <p><strong>Comment/Reason:</strong>
                                         <br>
                                         @if( empty($mgr_comment))
