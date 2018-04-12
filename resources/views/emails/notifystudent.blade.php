@@ -200,6 +200,7 @@
                                             <table class="table">
                                               <thead>
                                                 <th>Chosen Course Schedule(s)</th>
+                                                <th>Decision</th>
                                               </thead>
 
                                               <tbody>
@@ -213,6 +214,19 @@
                                                       @endif
                                                     </td>
                                                   </tr>
+                                                @endforeach
+                                                @foreach($input_items as $value)
+                                                    @foreach($value as $value2)
+                                                      <tr>
+                                                        <td>
+                                                          @if(empty($value2))
+                                                          null
+                                                          @else
+                                                          {{ $value2->approval }}
+                                                          @endif
+                                                        </td>
+                                                      </tr>
+                                                    @endforeach
                                                 @endforeach
                                               </tbody>
                                             </table>

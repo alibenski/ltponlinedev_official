@@ -121,7 +121,7 @@ class ApprovalController extends Controller
                 $dataDecision = $request->input('decision-'.$forms[$i]->CodeIndexID);
             $course->approval = $dataDecision;
             $course->mgr_comments = $mgr_comment;
-            // $course->save();
+            $course->save();
         }
 
         // execute Mail class before redirect
@@ -130,8 +130,15 @@ class ApprovalController extends Controller
                                 ->where('Term', $next_term_code)
                                 ->where('Te_Code', $tecode)
                                 ->where('form_counter', $formcount)
-                                ->first();    
-dd($formfirst);
+                                ->first();
+
+        $formItems = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
+                                ->get();
+
         // query student email from users model via index nmber in preenrolment model
         $staff_name = $formfirst->users->name;
         $staff_email = $formfirst->users->email;
@@ -147,7 +154,7 @@ dd($formfirst);
                                 ->value('Te_Code');
         //query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst; 
-         
+        $input_items = $formItems; 
         //check the organization of the student to know which email process is followed by the system
         $org = $formfirst->DEPT; 
 
@@ -155,8 +162,8 @@ dd($formfirst);
 
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
-
+                    ->send(new MailtoStudent($input_course, $input_items, $staff_name, $mgr_comment, $request));
+dd($input_items);
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
             $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
@@ -177,7 +184,7 @@ dd($formfirst);
 
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $staff_name, $mgr_comment, $request));
+                    ->send(new MailtoStudent($input_course, $input_items, $staff_name, $mgr_comment, $request));
         
         if($decision == 1){
             $decision_text = 'Yes, you approved the enrolment.';
