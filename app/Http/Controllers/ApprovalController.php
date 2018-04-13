@@ -171,7 +171,6 @@ class ApprovalController extends Controller
             $decision = 0;
         }
 
-dd($decision);
         if ($org !== 'UNOG' && $decision !== '0') {
             // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)

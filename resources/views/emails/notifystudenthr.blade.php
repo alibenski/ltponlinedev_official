@@ -168,7 +168,7 @@
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
                 <tr>
                     <td style="padding: 20px 0; text-align: center">
-                        <img src="http://placehold.it/200x50" width="200" height="50" alt="alt_text" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                        <img src="https://learning.unog.ch/sites/all/themes/sdlstheme/images/CLM-TextRight_En.jpg" width="260" height="93" alt="alt_text" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                     </td>
                 </tr>
             </table>
@@ -178,11 +178,11 @@
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
 
                 <!-- Hero Image, Flush : BEGIN -->
-                <tr>
+{{--                 <tr>
                     <td bgcolor="#ffffff" align="center">
                         <img src="http://placehold.it/1200x600" width="600" height="" alt="alt_text" border="0" align="center" style="width: 100%; max-width: 600px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; margin: auto;" class="g-img">
                     </td>
-                </tr>
+                </tr> --}}
                 <!-- Hero Image, Flush : END -->
 
                 <!-- 1 Column Text + Button : BEGIN -->

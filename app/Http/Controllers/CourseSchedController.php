@@ -36,7 +36,7 @@ class CourseSchedController extends Controller
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
 
-        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->where('Te_Term', '184')->paginate(10);
+        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->where('Te_Term', $next_term->Term_Code)->paginate(10);
 
         return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms)->withNext_term($next_term);
     }
@@ -129,9 +129,9 @@ class CourseSchedController extends Controller
         }
         //query newly saved course+schedule entries to produce needed csv extract
         $get_courses = Classroom::where('Te_Code_New', $request->course_id)
-            ->where('Te_Term', '184' )->get();
+            ->where('Te_Term', $term_id )->get();
         $get_courses_first = Classroom::where('Te_Code_New', $request->course_id)
-            ->where('Te_Term', '184' )->first();
+            ->where('Te_Term', $term_id )->first();
         $get_course_name = $get_courses_first->course->Description;
         
         $days_arr = [];

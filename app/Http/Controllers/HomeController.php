@@ -78,7 +78,7 @@ class HomeController extends Controller
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )
-            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at']);
+            ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at']);
 
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);

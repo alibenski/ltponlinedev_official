@@ -10,6 +10,29 @@
 @section('content')
 <div class="container">
   <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-info">
+        <div class="panel-heading"><strong>Submitted Enrolment Forms for the 
+            @if(empty($next_term->Term_Name))
+            DB NO ENTRY
+            @else
+            {{ $next_term->Term_Name }} 
+            @endif
+            Term
+          </strong>
+        </div>
+        <div class="panel-body">
+          @foreach($forms_submitted as $form)
+            <p>
+              {{ $form->courses->Description }} - {{ $form->schedule->name }} - {{ $form->approval }}
+              
+            </p>
+          @endforeach
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-info">
                     <div class="panel-heading"><strong>Submitted Enrolment Forms for the 
@@ -62,7 +85,7 @@
                                 @endif 
                                 </div>
                                 
-                                <h4><strong>{{ $form->courses->EDescription}}</strong></h4>
+                                <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
                                 
                                     <div class="col-sm-6">
                                         <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}"" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>

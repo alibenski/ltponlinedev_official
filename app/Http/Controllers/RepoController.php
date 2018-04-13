@@ -168,6 +168,18 @@ class RepoController extends Controller
                             'mgr_email' => 'required|email',
                             'org' => 'required'
                         )); 
+        // control the number of submitted enrolment forms
+        $qryEformCount = Preenrolment::withTrashed()
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('eform_submit_count', 'desc')->first();
+           
+        $eform_submit_count = 1;
+        if(isset($qryEformCount->eform_submit_count)){
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+        }
+
+        // control the number of submitted courses per enrolment form submission
         // set default value of $form_counter to 1 and then add succeeding
         $lastValueCollection = Preenrolment::withTrashed()
             ->where('Te_Code', $course_id)
@@ -196,7 +208,8 @@ class RepoController extends Controller
                 'mgr_email' =>  $mgr_email,
                 'continue_bool' => 1,
                 'DEPT' => $org, 
-                'form_counter' => $form_counter,                
+                'eform_submit_count' => $eform_submit_count,              
+                'form_counter' => $form_counter,  
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
