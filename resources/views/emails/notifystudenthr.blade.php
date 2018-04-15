@@ -203,14 +203,19 @@
                                               </thead>
 
                                               <tbody>
-                                                @foreach($request->schedule_id as $array)                         
+                                                @foreach($formItems as $array)                         
                                                   <tr>
                                                     <td>
                                                       @if(empty($array))
                                                       null
                                                       @else
-                                                      {{ $array }}
-                                                      @endif
+                                                      {{ $array->schedule->name }} - 
+                                                          @if($array->approval)
+                                                          Approved
+                                                          @else
+                                                          Disapproved
+                                                          @endif
+                                                        @endif
                                                     </td>
                                                   </tr>
                                                 @endforeach

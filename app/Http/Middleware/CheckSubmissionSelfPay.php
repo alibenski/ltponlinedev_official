@@ -26,11 +26,12 @@ class CheckSubmissionSelfPay
                 $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
                 // do NOT count number of submitted forms disapproved by manager or HR learning partner  
                 $q->where('Term', $latest_term )->where('deleted_at', NULL)
-                    ->where('is_self_pay_form', 1);
+                    // ->where('is_self_pay_form', 1)
+                    ;
             })->count('form_counter');
 
         if ($grouped >= '2') {
-            $request->session()->flash('overlimit', 'You have reached the enrolment form submission limit (maximum of 2 enrolment forms)');
+            $request->session()->flash('overlimit', 'You have reached the enrolment form (self-payment) submission limit (maximum of 2 enrolment forms)');
             return redirect()->route('home');
         }
         return $next($request);

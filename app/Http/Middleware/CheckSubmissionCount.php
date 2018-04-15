@@ -26,7 +26,7 @@ class CheckSubmissionCount
                 $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
                 // do NOT count number of submitted forms disapproved by manager or HR learning partner  
                 $q->where('Term', $latest_term )->where('deleted_at', NULL)
-                    // ->where('is_self_pay_form', 1)
+                    ->where('is_self_pay_form', NULL)
                     ;
             })->count('eform_submit_count');
 
@@ -35,19 +35,6 @@ class CheckSubmissionCount
             return redirect()->route('home');
         }
 
-        $grouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
-            ->where(function($q){ 
-                $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
-                // do NOT count number of submitted forms disapproved by manager or HR learning partner  
-                $q->where('Term', $latest_term )->where('deleted_at', NULL)
-                    // ->where('is_self_pay_form', 1)
-                    ;
-            })->count('form_counter');
-
-        if ($grouped >= '2') {
-            $request->session()->flash('overlimit', 'You can only submit a maximum of 2 enrolment forms');
-            return redirect()->route('home');
-        }
         return $next($request);
     }
 }

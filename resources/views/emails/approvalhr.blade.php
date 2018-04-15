@@ -196,8 +196,16 @@
                                      <p> Staff Member, {{ $staff_name }}, would like to enrol to CLM language course: <strong> {{ $input_course->courses->Description }} </strong></p>
                                      <p> The staff member chose the following options for class schedule(s):</p>
                                      <ol>
-                                     @foreach($forms as $form)   
-                                     <li><strong>{{ $form->schedule->name }}</strong></li>
+                                     @foreach($formItems as $form)   
+                                     <li><strong>{{ $form->schedule->name }}</strong> -  Manager's Decision: 
+                                        <strong>
+                                        @if( $form->approval == 1)
+                                                Approved 
+                                        @else
+                                                Disapproved
+                                        @endif   
+                                        </strong>
+                                     </li>
                                      @endforeach
                                      </ol>
                                      <p>Please note that the enrolment above has initially been approved by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>

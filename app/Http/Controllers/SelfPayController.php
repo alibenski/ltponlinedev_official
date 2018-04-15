@@ -162,6 +162,17 @@ class SelfPayController extends Controller
                             'identityfile' => 'required|mimes:pdf,doc,docx|max:20000',
                             'payfile' => 'required|mimes:pdf,doc,docx|max:20000',
                         )); 
+        // control the number of submitted enrolment forms
+        $qryEformCount = Preenrolment::withTrashed()
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('eform_submit_count', 'desc')->first();
+           
+        $eform_submit_count = 1;
+        if(isset($qryEformCount->eform_submit_count)){
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+        }
+
         // set default value of $form_counter to 1 and then add succeeding
         $lastValueCollection = Preenrolment::withTrashed()
             ->where('Te_Code', $course_id)
@@ -218,6 +229,7 @@ class SelfPayController extends Controller
                 'attachment_id' => $attachment_identity_file->id,
                 'attachment_pay' => $attachment_pay_file->id,
                 'is_self_pay_form' => 1,
+                'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter, 
                 ]); 
 

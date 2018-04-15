@@ -78,7 +78,8 @@ class HomeController extends Controller
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )
-            ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at']);
+            ->get(['Te_Code', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
+            // ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count']);
 
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
@@ -103,9 +104,10 @@ class HomeController extends Controller
         $schedules = Preenrolment::withTrashed()
             ->where('Te_Code', $request->tecode)
             ->where('INDEXID', '=', $current_user)
-            ->where('approval', '=', $request->approval)
+            // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)
-            ->where('Term', $next_term_code )->get(['schedule_id'])->pluck('schedule.name');
+            ->where('Term', $next_term_code )->get(['schedule_id', 'approval', 'approval_hr', 'is_self_pay_form',]);
+            // ->pluck('schedule.name', 'approval');
 
         // render and return data values via AJAX
             $data = view('form.modalshowinfo',compact('schedules'))->render();
@@ -201,12 +203,14 @@ class HomeController extends Controller
         //get email address of the Manager
         $mgr_email = $forms->pluck('mgr_email')->first();
 
-        //if self-paying student
+        //if self-paying enrolment form
         if (is_null($mgr_email)){
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
                 $delform = Preenrolment::find($enrol_form);
+                $delform->cancelled_by_student = 1;
+                $delform->save();
                 $delform->delete();
             }
             session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
@@ -215,10 +219,11 @@ class HomeController extends Controller
 
         //email notification to Manager    
         $staff_member_name = Auth::user()->name;
-            Mail::to($mgr_email)->send(new MailaboutCancel($display_language, $staff_member_name));
+            Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
         
         //email notification to CLM Partner
         $org = $display_language->DEPT;
+        // Add more organizations in the IF statement below
         if ($org !== 'UNOG'){
             
             //if not UNOG, email to HR Learning Partner of $other_org
@@ -234,7 +239,7 @@ class HomeController extends Controller
             $org_email_arr = $org_email->toArray(); 
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailaboutCancel($display_language, $staff_member_name));
+                    ->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
 
         }
 
@@ -242,9 +247,11 @@ class HomeController extends Controller
         for ($i = 0; $i < count($forms); $i++) {
             $enrol_form = $forms[$i]->id;
             $delform = Preenrolment::find($enrol_form);
+            $delform->cancelled_by_student = 1;
+            $delform->save();
             $delform->delete();
         }
-        
+
         session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
         return redirect()->back();
     }

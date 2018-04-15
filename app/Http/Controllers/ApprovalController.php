@@ -164,18 +164,23 @@ class ApprovalController extends Controller
         $decision = null;
         foreach ($formItems as $value) {
             $getDecision[] = $value->approval;
+            var_dump($getDecision);
         }
-        if ($getDecision[0] == 1 || $getDecision[1] == 1) {
+
+        if ($getDecision[0] == 1 && !isset($getDecision[1])) {
             $decision = 1; 
+        } elseif (isset($getDecision[1]) && ($getDecision[0] == 1 || $getDecision[1] == 1 )) {
+            $decision = 1;
         } else {
             $decision = 0;
         }
 
+        // Add more organizations in the IF statement below
         if ($org !== 'UNOG' && $decision !== '0') {
             // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($input_course, $input_items, $staff_name, $mgr_comment, $request));
+                    ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
 
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
@@ -190,7 +195,7 @@ class ApprovalController extends Controller
             $org_email_arr = $org_email->toArray(); 
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailtoApproverHR($forms, $input_course, $staff_name, $mgr_email));
+                    ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
            
             return redirect()->route('eform');            
         } else {
@@ -200,7 +205,7 @@ class ApprovalController extends Controller
                     ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
         
         if($decision == 1){
-            $decision_text = 'Yes, you approved at least one of the chosen schedules.';
+            $decision_text = 'Yes, you have approved at least one of the chosen schedules.';
         } else {
             $decision_text = 'No, you did not approve any of the chosen schedules.';
 
@@ -304,6 +309,13 @@ class ApprovalController extends Controller
                                 ->where('form_counter', $formcount)
                                 ->first();    
 
+        $formItems = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
+                                ->get();
+
         // query student email from users model via index nmber in preenrolment model
         $staff_name = $formfirst->users->name;
         $staff_email = $formfirst->users->email;
@@ -334,7 +346,7 @@ class ApprovalController extends Controller
         Mail::to($staff_email)
                 ->cc($mgr_email)
                 ->bcc($org_email_arr)
-                ->send(new MailtoStudentHR($input_course, $staff_name, $request));
+                ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request));
         
         if($decision == 1){
             $decision_text = 'Yes, you approved the enrolment.';

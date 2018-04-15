@@ -11,6 +11,7 @@ class MailtoStudentHR extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $formItems;
     public $input_course;
     public $staff_name;
     public $request;
@@ -20,8 +21,9 @@ class MailtoStudentHR extends Mailable
      *
      * @return void
      */
-    public function __construct($input_course, $staff_name, $request)
+    public function __construct($formItems, $input_course, $staff_name, $request)
     {
+        $this->formItems = $formItems;
         $this->input_course = $input_course;
         $this->staff_name = $staff_name;
         $this->request = $request;

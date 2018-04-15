@@ -13,7 +13,7 @@ class MailtoApproverHR extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $forms; 
+    public $formItems; 
     public $input_course; 
     public $staff_name; 
     public $mgr_email;
@@ -23,9 +23,9 @@ class MailtoApproverHR extends Mailable
      *
      * @return void
      */
-    public function __construct($forms, $input_course, $staff_name, $mgr_email)
+    public function __construct($formItems, $input_course, $staff_name, $mgr_email)
     {
-        $this->forms = $forms; 
+        $this->formItems = $formItems; 
         $this->input_course = $input_course; 
         $this->staff_name = $staff_name; 
         $this->mgr_email = $mgr_email; 

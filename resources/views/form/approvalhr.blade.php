@@ -71,6 +71,7 @@
                         <th>Course</th>
                         <th>Language</th>
                         <th>Schedule</th>
+                        <th>Approved?</th>
                         
                       </thead>
 
@@ -85,6 +86,13 @@
                               null
                               @else
                               {{ $course->schedule->name }}
+                              @endif
+                            </td>
+                            <td>
+                              @if($course->approval == 1)
+                              <h4><span class="label label-success">Yes</span></h4>
+                              @else
+                              <h4><span class="label label-danger">No</span></h4>
                               @endif
                             </td>
                           </tr>

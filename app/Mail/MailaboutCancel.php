@@ -13,6 +13,7 @@ class MailaboutCancel extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $forms;
     public $display_language;
     public $staff_member_name;
 
@@ -21,8 +22,9 @@ class MailaboutCancel extends Mailable
      *
      * @return void
      */
-    public function __construct($display_language, $staff_member_name)
+    public function __construct($forms, $display_language, $staff_member_name)
     {
+        $this->forms = $forms;
         $this->display_language = $display_language;
         $this->staff_member_name = $staff_member_name;
         
