@@ -40,7 +40,7 @@
 
 @if (Session::has('interdire-msg')) 
 	<div class="alert alert-danger alert-block" role="alert">
-		<span><i class="fa fa-lg fa-warning btn-space"></i><strong>Sorry: </strong></span> {{ Session::get('interdire-msg') }}
+		<span><i class="fa fa-lg fa-warning btn-space"></i><strong> Sorry: </strong></span> {{ Session::get('interdire-msg') }}
 	</div>
 
 @endif

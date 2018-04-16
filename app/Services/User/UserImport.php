@@ -52,6 +52,7 @@ class UserImport
 
     public function getErrorRows()
     {
+        ksort($this->errorRows);
         return $this->errorRows;
     }
 

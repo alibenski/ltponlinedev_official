@@ -24,13 +24,14 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
-                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQ's regarding enrolment eligibility.</p>                  
+                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQ's regarding enrolment eligibility.</p>
+                  <p>Please find and choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank"><strong>HERE</strong></a> before proceeding below. </p>                  
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
                 
                 <div class="form-group">
-                    <label class="col-md-2 control-label">Self-paying student?</label>
+                    <label class="col-md-4 control-label">Are you a self-paying student?</label>
 
                       <div class="col-md-2">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
@@ -55,10 +56,10 @@
                     <div class="dropdown">
                       <select id="input" name="" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
                         @if(!empty($org))
-                          @foreach($org as $key => $value)
+                          @foreach($org as $value)
                             <option></option>
                             {{-- <option value="{{ $key }}" {{ (Auth::user()->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option> --}}
-                            <option value="{{ $key }}">{{ $value }}</option>
+                            <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
                           @endforeach
                         @endif
                       </select>

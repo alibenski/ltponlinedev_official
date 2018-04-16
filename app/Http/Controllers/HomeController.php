@@ -138,8 +138,9 @@ class HomeController extends Controller
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
 
-        $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
-        
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        // ->pluck('Org name','Org name', 'Org Full Name');
+
         return view('form.whatorg')->withTerms($terms)->withNext_term($next_term)->withOrg($org);
     }
     
