@@ -17,8 +17,9 @@
                     @endif
                     <div class="col-md-12">
                     <h2>Enrolment Instructions and LTP Announcements</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus, iste. Sed, ab. Quod, molestiae! Repellendus cum, aliquid. Sit architecto fuga amet, tempore commodi, inventore voluptate quasi, qui nemo, voluptatem fugiat.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero voluptatum tempore dicta reiciendis accusamus, quod quaerat facilis nostrum sapiente inventore porro itaque nam, aut alias molestiae sed, nisi quos doloribus.</p>
+                    <p>Last semester enrolled: {{ $repos_lang->Term }}</p>
+                    <p>Next semester: {{$next_term->Term_Code}}</p>
+                    
                     </div>
                 </div>
             </div>
