@@ -8,7 +8,7 @@
         {{-- <link href="{{ asset('textillate/assets/style.css') }}" rel="stylesheet"> --}}
 </head>
     <body>
-        <nav class="navbar navbar-default navbar-static-top">
+{{--         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
 
@@ -38,7 +38,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav> --}}
             <div class="site-wrapper">
                 <div class="site-wrapper-inner">
                     <div class="cover-container">
@@ -88,7 +88,9 @@
                         </div>
 
                         <!-- Footer Section -->
+                        <div style="">
                         @include('partials._foot')
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,13 +102,13 @@
             <script src="{{ asset('textillate/jquery.textillate.js') }}"></script>
 
             <script>
-                $(function () {
-                    $('.tlt').textillate({ 
-                        in: { effect: 'fadeInUp' }, 
-                        out: { effect: 'swing', shuffle: true},
-                        loop: true
-                    });
-                })
+                // $(function () {
+                //     $('.tlt').textillate({ 
+                //         in: { effect: 'fadeInUp' }, 
+                //         out: { effect: 'swing', shuffle: true},
+                //         loop: true
+                //     });
+                // })
             </script>
     </body>
 </html>

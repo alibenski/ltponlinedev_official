@@ -113,7 +113,8 @@ class UserImport
                 User::create([
                     'name' => $row['name'],
                     'email' => $row['email'],
-                    'password' => bcrypt(uniqid()),
+                    'password' => bcrypt('Welcome2u'.$row['email']),
+                    // 'password' => bcrypt(uniqid()),
                     'approved' => 1,
                 ]);
             }
