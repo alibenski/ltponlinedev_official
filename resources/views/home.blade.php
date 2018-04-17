@@ -17,9 +17,9 @@
                     @endif
                     <div class="col-md-12">
                     <h2>Enrolment Instructions and LTP Announcements</h2>
-                    <p>Last semester enrolled: {{ $repos_lang->Term }}</p>
-                    <p>Next semester: {{$next_term->Term_Code}}</p>
-                    
+                        <ul>
+                            <li>Click...</li>
+                        </ul>                    
                     </div>
                 </div>
             </div>

@@ -34,6 +34,8 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
 //home page routes
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/placementinfo', ['as'=>'placementinfo','uses'=>'HomeController@getPlacementInfo']);
+Route::post('/postplacementinfo', ['as'=>'postplacementinfo','uses'=>'HomeController@postPlacementInfo']);
 Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg']);
 // Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg'])->middleware('opencloseenrolment');
 Route::post('/whatform', ['as'=>'whatform','uses'=>'HomeController@whatform'])->middleware('check-prev-url');

@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'clearance' => \App\Http\Middleware\ClearanceMiddleware::class,
         'limit-cancel' => \App\Http\Middleware\LimitCancelPeriod::class,
         'check-prev-url' => \App\Http\Middleware\CheckPrevURL::class,
+        'check-placement-exam' => \App\Http\Middleware\CheckPlacementExam::class,
     ];
 }

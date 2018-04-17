@@ -88,9 +88,9 @@
                         </div>
 
                         <!-- Footer Section -->
-                        <div style="">
+
                         @include('partials._foot')
-                        </div>
+
                     </div>
                 </div>
             </div>

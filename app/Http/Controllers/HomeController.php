@@ -31,6 +31,7 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
+        $this->middleware('check-placement-exam', ['except' => ['getPlacementInfo', 'postPlacementInfo']]);
     }
 
     /**
@@ -51,13 +52,30 @@ class HomeController extends Controller
                 ->whereDate('Term_End', '>=', $now_date)
                 ->get()->min();
         $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )->get();
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
         
-        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
+        $difference =  $next_term->Term_Code - $repos_lang->Term;
+        if ($repos_lang->Term == null || $difference >= 9) {
+            // return 'Take the placement test';
+        }
+        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withDifference($difference);
+    }
+
+    public function getPlacementInfo()
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+
+        return view('form.myformplacement')->withLanguages($languages);
+    }
+
+    public function postPlacementInfo(Request $request)
+    {
+        
     }
 
     public function index2()
