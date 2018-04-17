@@ -18,24 +18,19 @@ use Carbon\Carbon;
 use DB;
 use App\SDDEXTR;
 
-class CheckPlacementExam
+class PreventAccessPlacement
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  $guard
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $current_user = Auth::user()->indexno;
-        //query last UN Language Course enrolled in the past based on PASHQ table
         $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-                        //->first();
         $now_date = Carbon::now()->toDateString();
         $terms = Term::orderBy('Term_Code', 'desc')
                 ->whereDate('Term_End', '>=', $now_date)
@@ -47,13 +42,14 @@ class CheckPlacementExam
             ->where('Term', $next_term_code )->get();
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
         // query placement exam table if data exists or not
-        $placementData = null; 
+        $placementData = 1; 
 
         $difference =  $next_term->Term_Code - $repos_lang->Term;
 
-        if (($repos_lang->Term == null || $difference >= 9) && $placementData == null) {
-            return redirect()->route('placementinfo');
+        if ($repos_lang->Term != null && $difference < 9 && $placementData != null) {
+            $request->session()->flash('interdire-msg', 'You are not authorized to access that page.');
+            return redirect()->route('home');
         }
-       return $next($request);
+        return $next($request);
     }
 }
