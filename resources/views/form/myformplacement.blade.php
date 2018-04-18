@@ -40,7 +40,7 @@
                       </div>
 
                       <div class="row panel panel-default col-md-10 col-md-offset-1">
-                        <div class="form-group">
+{{--                         <div class="form-group">
                             <label class="col-md-4 control-label">Have you already taken a placement test with us?</label>
 
                               <div class="col-md-4">
@@ -52,17 +52,17 @@
                                         <input id="placementDecision2" name="placementDecisionA" class="with-font" type="radio" value="0" required="required">
                                         <label for="placementDecision2" class="form-control-static">NO</label>
                               </div>
-                        </div>
+                        </div> --}}
                       
                         <div class="otherQuestions col-md-offset-1 col-md-10" style="display: none">
                           <div class="form-group">
                             <label for="whenInput" class="control-label">When? </label>
-                            <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="whenInput">
-                              <input class="form-control" size="16" type="text" value="" readonly>
+                            <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="whenInput">
+                              <input class="form-control whenInputText" size="16" type="text" value="" readonly>
                               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                               <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                             </div>
-                            <input type="hidden" name="whenInput" id="whenInput" value="" />
+                            <input type="hidden" name="whenInput" id="whenInput" value="" required="" />
                           </div>
 
                           <div class="form-group">
@@ -82,16 +82,16 @@
 
                       <div class="row panel panel-default col-md-10 col-md-offset-1">
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Are you taking the placement test?</label>
+                            <label class="col-md-4 control-label">Are you enrolling for a beginner course?</label>
 
                               <div class="col-md-4">
                                         <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1" required="required">
-                                        <label for="placementDecision3" class="form-control-static">YES, I will attend a placement test.</label>
+                                        <label for="placementDecision3" class="form-control-static">YES</label>
                               </div>
 
                               <div class="col-md-4">
                                         <input id="placementDecision4" name="placementDecisionB" class="with-font" type="radio" value="0" required="required">
-                                        <label for="placementDecision4" class="form-control-static">NO, I will not attend a placement test. </label>
+                                        <label for="placementDecision4" class="form-control-static">NO</label>
                               </div>
                         </div>
 
@@ -99,28 +99,28 @@
                             <div class="form-group">
                               <label for="">Choose one of the following dates:</label>
                               <div class="col-md-12">
-                              <input id="placementLang" name="placementLangA" class="with-font" type="radio" value="1" required="required">
-                              <label for="placementLang" class="form-control-static">Arabic 12 March</label>
+                              <input id="placementLangA" name="placementLangA" class="with-font" type="radio" value="A" required="required">
+                              <label for="placementLangA" class="form-control-static">Arabic 12 March</label>
                               </div>
                               <div class="col-md-12">
-                              <input id="placementLang" name="placementLangA" class="with-font" type="radio" value="1" required="required">
-                              <label for="placementLang" class="form-control-static">Chinese 12 March</label>
+                              <input id="placementLangC" name="placementLangA" class="with-font" type="radio" value="C" required="required">
+                              <label for="placementLangC" class="form-control-static">Chinese 12 March</label>
                               </div>
                               <div class="col-md-12">
-                              <input id="placementLang" name="placementLangA" class="with-font" type="radio" value="1" required="required">
-                              <label for="placementLang" class="form-control-static">English 12 March</label>
+                              <input id="placementLangE" name="placementLangA" class="with-font" type="radio" value="E" required="required">
+                              <label for="placementLangE" class="form-control-static">English 12 March</label>
                               </div>
                               <div class="col-md-12">
-                              <input id="placementLang" name="placementLangA" class="with-font" type="radio" value="1" required="required">
-                              <label for="placementLang" class="form-control-static">French 12 March</label>
+                              <input id="placementLangF" name="placementLangA" class="with-font" type="radio" value="F" required="required">
+                              <label for="placementLangF" class="form-control-static">French 12 March</label>
                               </div>
                               <div class="col-md-12">
-                              <input id="placementLang" name="placementLangA" class="with-font" type="radio" value="1" required="required">
-                              <label for="placementLang" class="form-control-static">Russian 12 March</label>
+                              <input id="placementLangR" name="placementLangA" class="with-font" type="radio" value="R" required="required">
+                              <label for="placementLangR" class="form-control-static">Russian 12 March</label>
                               </div>
                               <div class="col-md-12">
-                              <input id="placementLang" name="placementLangA" class="with-font" type="radio" value="1" required="required">
-                              <label for="placementLang" class="form-control-static">Spanish 12 March</label>
+                              <input id="placementLangS" name="placementLangA" class="with-font" type="radio" value="S" required="required">
+                              <label for="placementLangS" class="form-control-static">Spanish 12 March</label>
                               </div>
                             </div>
                         </div>    
@@ -129,17 +129,17 @@
                             <div class="form-group">
                               <label for="">Choose one of the following:</label>
                               <div class="col-md-12">
-                              <input id="noTakingPlacement" name="noTakingPlacementA" class="with-font" type="radio" value="1" required="required">
-                              <label for="noTakingPlacement" class="form-control-static">I am a complete beginner </label>
+                              <input id="noTakingPlacement1" name="noTakingPlacementA" class="with-font" type="radio" value="1" required="required">
+                              <label for="noTakingPlacement1" class="form-control-static">I have completed level 9 </label>
                               </div>
                               <div class="col-md-12">
-                              <input id="noTakingPlacement" name="noTakingPlacementA" class="with-font" type="radio" value="1" required="required">
-                              <label for="noTakingPlacement" class="form-control-static">I have completed level 9 </label>
+                              <input id="noTakingPlacement2" name="noTakingPlacementA" class="with-font" type="radio" value="2" required="required">
+                              <label for="noTakingPlacement2" class="form-control-static">I am enrolling in a post–level 9 course </label>
                               </div>
-                              <div class="col-md-12">
-                              <input id="noTakingPlacement" name="noTakingPlacementA" class="with-font" type="radio" value="1" required="required">
-                              <label for="noTakingPlacement" class="form-control-static">I am enrolling in a post –level 9 course</label>
-                              </div>
+                              {{-- <div class="col-md-12">
+                              <input id="noTakingPlacement3" name="noTakingPlacementA" class="with-font" type="radio" value="3" required="required">
+                              <label for="noTakingPlacement3" class="form-control-static">I am enrolling in a post–level 9 course</label>
+                              </div> --}}
                             </div>
                         </div>
                       </div>
@@ -181,14 +181,22 @@
     });
     $("#placementDecision2").on('click', function() {
       $(".otherQuestions").attr('style', 'display: none');;
+      $("input[name='whenInput']").val('')
+      $(".whenInputText").val('')
+      $("input[name='langInput']").val('')
+      $("input[name='langInput']").prop('checked', false);
     });
     $("#placementDecision3").on('click', function() {
       $(".otherQuestions2").removeAttr('style');
       $(".otherQuestions3").attr('style', 'display: none');
+      $("input[name='noTakingPlacementA']").val('');
+      $("input[name='noTakingPlacementA']").prop('checked', false);
     });
     $("#placementDecision4").on('click', function() {
       $(".otherQuestions3").removeAttr('style');
       $(".otherQuestions2").attr('style', 'display: none');
+      $("input[name='placementLangA']").val('');
+      $("input[name='placementLangA']").prop('checked', false);
     });
     $("input[name='agreementBtn']").on('click',function(){
       $(".disclaimer").addClass('alert-success', 500);
@@ -206,7 +214,11 @@
       todayHighlight: 1,
       startView: 2,
       forceParse: 0,
-      showMeridian: 1
+      showMeridian: 1,
+      format: "dd MM yyyy",
+      minView: 2, // force to pick date only 
+      pickerPosition: "bottom-left",
+
   });
 </script>
 

@@ -100,8 +100,11 @@ class RepoController extends Controller
             $repos = Repo::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)->value('CodeIndexID');
             //not using DB method to get latest language course of current_user
-            $repos_lang = Repo::orderBy('Term', 'desc')
-                ->where('INDEXID', $current_user)->first();
+            $student_last_term = Repo::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)->first(['Term']);
+
+            $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
+                ->where('INDEXID', $current_user)->get();
             $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
 
             return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);

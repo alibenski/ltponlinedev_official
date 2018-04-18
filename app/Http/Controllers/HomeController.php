@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        $this->middleware('check-placement-exam', ['except' => ['getPlacementInfo', 'postPlacementInfo']]);
+        // $this->middleware('check-placement-exam', ['except' => ['getPlacementInfo', 'postPlacementInfo']]);
     }
 
     /**

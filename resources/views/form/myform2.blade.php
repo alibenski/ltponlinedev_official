@@ -194,9 +194,19 @@
 @stop   
 
 @section('scripts_code')
-<script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM="
-  crossorigin="anonymous"></script>
+
 <script src="{{ asset('js/select2.full.js') }}"></script>
+
+<script>
+  $("input[name='L']").on('click', function(){
+
+      var L = $(this).val();
+      var token = $("input[name='_token']").val();
+      console.log(L);
+
+      });
+</script>
+
 <script>
   $(document).ready(function(){
       $(".wx").select2({

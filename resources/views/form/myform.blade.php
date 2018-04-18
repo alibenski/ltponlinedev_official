@@ -112,12 +112,14 @@
                     <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 
                     <div class="col-md-8 inputGroupContainer">
+                      @foreach( $repos_lang as $value )
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription}} last @if(empty($terms))NO DB ENTRY 
-                              @else{{ $terms->Term_Name }}
+                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $value->courses->EDescription}} last @if(empty($value))NO DB ENTRY 
+                              @else{{ $value->terms->Term_Name }}
                               @endif
                               " readonly>                            
                         </div>
+                      @endforeach
                     </div>
                 </div> 
 
@@ -194,9 +196,19 @@
 @stop   
 
 @section('scripts_code')
-<script src="https://code.jquery.com/jquery-2.1.3.min.js"  integrity="sha256-ivk71nXhz9nsyFDoYoGf2sbjrR9ddh+XDkCcfZxjvcM="
-  crossorigin="anonymous"></script>
+
 <script src="{{ asset('js/select2.full.js') }}"></script>
+
+<script>
+  $("input[name='L']").on('click', function(){
+
+      var L = $(this).val();
+      var token = $("input[name='_token']").val();
+      console.log(L);
+
+      });
+</script>
+
 <script>
   $(document).ready(function(){
       $(".wx").select2({
