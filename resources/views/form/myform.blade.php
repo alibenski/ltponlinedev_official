@@ -203,10 +203,19 @@
   $("input[name='L']").on('click', function(){
 
       var L = $(this).val();
+      var index = $("input[name='index_id']").val();
       var token = $("input[name='_token']").val();
-      console.log(L);
-
+console.log(L);
+      $.ajax({
+          url: "{{ route('check-placement-course-ajax') }}", 
+          method: 'POST',
+          data: {L:L, index:index, _token:token},
+          success: function(data) {
+            console.log(data);
+            if (data.length == undefined) {console.log(data); alert('go to');}
+          }
       });
+  });
 </script>
 
 <script>

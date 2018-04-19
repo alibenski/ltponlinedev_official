@@ -131,4 +131,15 @@ class AjaxController extends Controller
             return response()->json(['options'=>$data]);
         }
     }
+
+    public function ajaxCheckPlacementCourse(Request $request)
+    {
+        if($request->ajax()){
+
+            $repos_lang = Repo::orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
+
+            $data = $repos_lang;
+            return response()->json($data);
+        }
+    }
 }
