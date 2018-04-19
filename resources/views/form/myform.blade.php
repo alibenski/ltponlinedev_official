@@ -65,18 +65,9 @@
                     <label for="org" class="col-md-3 control-label">Organization:</label>
                   <div class="col-md-8">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>
                         </div>
-                    {{-- <div class="dropdown">
-                      <select name="org" id="input" class="col-md-8 form-control" required="required">
-                        @if(!empty($org))
-                          @foreach($org as $key => $value)
-                            <option value="{{ $key }}" {{ ($user->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
-                          @endforeach
-                        @endif
-                      </select>
-                    </div>
-                    <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p> --}}
+                        <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
                   </div>
                 </div>
 
@@ -131,13 +122,31 @@
                               <div class="col-md-8">
                                   @foreach ($languages as $id => $name)
                                 <div class="input-group col-md-9">
-                                          
-                                          <input id="{{ $name }}" name="L" class="lang_select_no" type="radio" value="{{ $id }}">
-                                          
+                                          <input id="{{ $name }}" name="L" class="lang_select_no with-font" type="radio" value="{{ $id }}">
                                           <label for="{{ $name }}" class=" form-control-static">{{ $name }}</label>
                                 </div>
                                   @endforeach
                               </div>
+                    </div>
+                    <div class="placementTestMsg " style="display: none">
+                      <div class="alert alert-warning alert-dismissible" >
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
+                        <p>Our records show that you are a new student or you have not been enrolled in this language course during the past 2 terms.</p>
+                        <p>You are required to fill in the <strong>Placement Test</strong> questionnaire form below before proceeding further to the enrolment process.</p>
+                      </div>
+                      <div class="form-group">
+                            <label class="col-md-4 control-label">Are you enrolling for a beginner course?</label>
+                              <div class="col-md-4">
+                                        <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
+                                        <label for="placementDecision3" class="form-control-static">YES</label>
+                              </div>
+
+                              <div class="col-md-4">
+                                        <input id="placementDecision4" name="placementDecisionB" class="with-font" type="radio" value="0">
+                                        <label for="placementDecision4" class="form-control-static">NO</label>
+                              </div>
+                      </div>
                     </div>
 
                     <div class="form-group">
@@ -182,7 +191,15 @@
                   </div>  
                 </div>
                         <!-- END OF SHOW CHOICES REAL TIME -->   
-                <div class="col-sm-offset-5">
+
+                <div class="form-group col-md-12">
+                      <div class="disclaimer alert col-md-8 col-md-offset-2">
+                                <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="0" required="required">
+                                <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
+                      </div>
+                </div>
+
+                <div class="col-sm-2 col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
                 </div>
@@ -201,21 +218,59 @@
 
 <script>
   $("input[name='L']").on('click', function(){
-
       var L = $(this).val();
       var index = $("input[name='index_id']").val();
       var token = $("input[name='_token']").val();
-console.log(L);
+      console.log(L);
       $.ajax({
           url: "{{ route('check-placement-course-ajax') }}", 
           method: 'POST',
           data: {L:L, index:index, _token:token},
           success: function(data) {
             console.log(data);
-            if (data.length == undefined) {console.log(data); alert('go to');}
+            // if ($.isEmptyObject(data)) {
+            if (data == true) {
+              $(".placementTestMsg").removeAttr('style');
+              $("input[name='placementDecisionB']").attr('required', 'required');
+            }
+            else {
+              $("input[name='placementDecisionB']").removeAttr('required');
+              $(".placementTestMsg").attr('style', 'display:none');
+              return false;
+            }
           }
       });
+      $("#placementDecision3").prop('checked', false);
+      $("select[name='course_id']").prop('disabled', false);
   });
+  $("#placementDecision3").on('click', function() {
+      var L = $("input[name='L']:checked").val();
+      console.log(L);
+      $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
+      $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
+      console.log($("select[name='course_id']").val());
+
+      var course_id = $("select[name='course_id']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax2') }}", 
+          method: 'POST',
+          data: {course_id:course_id, _token:token},
+          success: function(data) {
+            $("select[name='schedule_id[]']").html('');
+            $("select[name='schedule_id[]']").html(data.options);
+          }
+      });
+
+  });
+  $("#placementDecision4").on('click', function() {
+    var redirUrl = "{{ route('placementinfo') }}";
+    $(location).attr('href',redirUrl);
+  });
+  $("input[name='agreementBtn']").on('click',function(){
+      $(".disclaimer").addClass('alert-success', 500);
+  }); 
 </script>
 
 <script>

@@ -137,8 +137,29 @@ class AjaxController extends Controller
         if($request->ajax()){
 
             $repos_lang = Repo::orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
+            
+            if (is_null($repos_lang)) {
+                $repos_value = 0;
+            } else {
+                $repos_value = $repos_lang->Term;
+            }
 
-            $data = $repos_lang;
+            $now_date = Carbon::now()->toDateString();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                    ->whereDate('Term_End', '>=', $now_date)
+                    ->get()->min();
+
+            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+            // // query placement exam table if student placement enrolment data exists or not
+            $placementData = null; 
+
+            $difference =  $next_term->Term_Code - $repos_value;
+            if (($repos_value == 0 || $difference > 9) && $placementData == null) {
+                $data = true;
+            } else {
+                $data = false;
+            }
+            
             return response()->json($data);
         }
     }
