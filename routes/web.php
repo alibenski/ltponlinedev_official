@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('terms', 'TermController');
     Route::resource('courses', 'CourseController');
     Route::resource('organizations', 'OrgController');
+    Route::resource('placement-schedule', 'PlacementScheduleController');
 });
 
 //middleware to prevent back button and access cache
@@ -34,8 +35,6 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
 //home page routes
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/placementinfo', ['as'=>'placementinfo','uses'=>'HomeController@getPlacementInfo'])->middleware('prevent-access-placement');
-Route::post('/postplacementinfo', ['as'=>'postplacementinfo','uses'=>'HomeController@postPlacementInfo']);
 Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg']);
 // Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg'])->middleware('opencloseenrolment');
 Route::post('/whatform', ['as'=>'whatform','uses'=>'HomeController@whatform'])->middleware('check-prev-url');
@@ -57,6 +56,11 @@ Route::post('org-compare-ajax', ['as'=>'org-compare-ajax','uses'=>'AjaxControlle
 // route for ajax jquery if forms have been cancelled or deleted
 Route::get('is-cancelled-ajax', ['as'=>'is-cancelled-ajax','uses'=>'AjaxController@ajaxIsCancelled']);
 
+//placement form routes
+Route::get('/placementinfo', ['as'=>'placementinfo','uses'=>'PlacementFormController@getPlacementInfo']); // ->middleware('prevent-access-placement');
+Route::post('check-placement-sched-ajax', ['as'=>'check-placement-sched-ajax','uses'=>'AjaxController@ajaxCheckPlacementSched']);
+Route::post('/postplacementinfo', ['as'=>'postplacementinfo','uses'=>'PlacementFormController@postPlacementInfo']);
+
 //fee-paying form routes
 Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
 
@@ -65,7 +69,6 @@ Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'ed
 
 //main UN staff form routes
 Route::resource('myform', 'RepoController');
-
 Route::post('check-placement-course-ajax', ['as'=>'check-placement-course-ajax','uses'=>'AjaxController@ajaxCheckPlacementCourse']);
 
 //main controller used for ajax jquery on all forms - myform, noform, selfpayform

@@ -66,18 +66,6 @@ class HomeController extends Controller
         return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withDifference($difference);
     }
 
-    public function getPlacementInfo()
-    {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-
-        return view('form.myformplacement')->withLanguages($languages);
-    }
-
-    public function postPlacementInfo(Request $request)
-    {
-        
-    }
-
     public function index2()
     {
         $current_user = Auth::user()->indexno;

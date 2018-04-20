@@ -14,6 +14,7 @@ use App\Schedule;
 use App\Preenrolment;
 use App\SDDEXTR;
 use App\Torgan;
+use App\PlacementSchedule;
 use Session;
 use Carbon\Carbon;
 use DB;
@@ -161,6 +162,22 @@ class AjaxController extends Controller
             }
             
             return response()->json($data);
+        }
+    }
+
+    public function ajaxCheckPlacementSched(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $now_date = Carbon::now()->toDateString();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                    ->whereDate('Term_End', '>=', $now_date)
+                    ->get()->min();
+
+            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+            $placement_schedule = PlacementSchedule::where('language_id', $request->L)->where('term', $next_term->Term_Code)->get();
+            $data = $placement_schedule;
+            return response()->json($data);            
         }
     }
 }
