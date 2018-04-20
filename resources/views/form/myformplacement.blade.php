@@ -11,9 +11,8 @@
         <div class="col-md-8 col-md-offset-2">
           <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
-            <p>Our records show that you are a new student or you have not been enrolled in a UNOG language course during the past 2 terms.</p>
-            <p>You are required to fill in the <strong>Placement Test</strong> questionnaire form below before proceeding further to the enrolment process.</p>
+            <p>Hello {{Auth::user()->sddextr->FIRSTNAME}},</p>
+            <p>You have answered <strong>NO</strong>, you are not a beginner on your selected language. You have been redirected to this page to choose the <strong>Placement Test</strong> schedule of your preferred language.</p>
           </div>
             <div class="panel panel-info">
               <div class="panel-heading"><strong>Placement Test Questionnaire</div>
