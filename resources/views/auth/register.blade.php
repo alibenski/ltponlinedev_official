@@ -11,15 +11,43 @@
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
+                        <div class="form-group{{ $errors->has('indexno') ? ' has-error' : '' }}">
+                            <label for="indexno" class="col-md-4 control-label">Index # <span class="small text-danger">(Leave blank if you are not in the Umoja system)</span></label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                                <input id="indexno" type="text" class="form-control" name="indexno" value="{{ old('indexno') }}" autofocus>
 
-                                @if ($errors->has('name'))
+                                @if ($errors->has('indexno'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('indexno') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('nameLast') ? ' has-error' : '' }}">
+                            <label for="nameLast" class="col-md-4 control-label">Last Name</label>
+
+                            <div class="col-md-6">
+                                <input id="nameLast" type="text" class="form-control" name="nameLast" value="{{ old('nameLast') }}" required autofocus>
+
+                                @if ($errors->has('nameLast'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('nameLast') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('nameFirst') ? ' has-error' : '' }}">
+                            <label for="nameFirst" class="col-md-4 control-label">First Name</label>
+
+                            <div class="col-md-6">
+                                <input id="nameFirst" type="text" class="form-control" name="nameFirst" value="{{ old('nameFirst') }}" required autofocus>
+
+                                @if ($errors->has('nameFirst'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('nameFirst') }}</strong>
                                     </span>
                                 @endif
                             </div>

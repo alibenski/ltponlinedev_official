@@ -59,9 +59,9 @@
                                     <div class="panel panel-primary">
                                       <div class="panel-heading">New Student?</div>
                                       <div class="panel-body btn-welcome-img b1">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus ex, sequi debitis.</p>
+                                        <p>If you have not received an e-mail concerning your credentials from the CLM Language Secretariat, please click the sign-up button to register.</p>
                                         <p class="lead btn-bottom">
-                                        <a href="/register" class="btn btn-lg btn-primary">Sign up</a>
+                                        <a href="/register" class="btn btn-lg btn-primary">Sign-up</a>
                                         </p>
                                       </div>
                                     </div>
@@ -71,7 +71,7 @@
                                     <div class="panel panel-success">
                                       <div class="panel-heading">Existing Student?</div>
                                       <div class="panel-body btn-bg-img b1">
-                                        <p>If you received an e-mail concerning your credentials from CLM Language Secretariat, please click the log-in button to access the platform.</p>
+                                        <p>If you received an e-mail concerning your credentials from the CLM Language Secretariat, please click the log-in button to access the platform.</p>
                                         <p class="lead btn-bottom">
                                         <a href="{{ url('/login') }}" class="btn btn-lg btn-success">Log-in</a>
                                         </p>

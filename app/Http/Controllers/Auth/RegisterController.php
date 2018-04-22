@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
+use App\SDDEXTR;
 
 class RegisterController extends Controller
 {
@@ -92,11 +93,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        if (is_null($data['indexno'])) {
+            $qryLatestIndex = User::orderBy('id', 'desc')->first();
+            $qryLatestIndexID = $qryLatestIndex->id;
+            
+            $indexGenerate = 'Z'.$qryLatestIndexID;
+            $data['indexno'] = $indexGenerate;
+        }
+        $user = User::create([
+            'indexno' => $data['indexno'],
+            'nameFirst' => $data['nameFirst'],
+            'nameLast' => $data['nameLast'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        $user->sddextr()->create([
+            'INDEXNO' => $data['indexno'],
+            'LASTNAME' => $data['name'],
+            'EMAIL' => $data['email'],
+        ]);
+        // whatever else you need to do - send email, etc
+
+        return $user;
     }
 
 }

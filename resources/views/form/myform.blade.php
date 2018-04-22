@@ -100,15 +100,23 @@
                     <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 
                     <div class="col-md-8 inputGroupContainer">
-                      @foreach( $repos_lang as $value )
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $value->courses->EDescription}} last @if(empty($value))NO DB ENTRY 
-                              @else
-                              {{ $value->terms->Term_Name }}
-                              @endif
-                              " readonly>                            
-                        </div>
-                      @endforeach
+                      @if(is_null($repos_lang)) None
+                      @else
+                        @foreach( $repos_lang as $value )
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="@if(empty($value) || is_null($value))NO DB ENTRY 
+                                @else 
+                                {{ $value->courses->EDescription}}
+                                @endif 
+                                last 
+                                @if(empty($value) || is_null($value))NO DB ENTRY 
+                                @else
+                                {{ $value->terms->Term_Name }}
+                                @endif
+                                " readonly>                            
+                          </div>
+                        @endforeach
+                      @endif
                     </div>
                 </div> 
 

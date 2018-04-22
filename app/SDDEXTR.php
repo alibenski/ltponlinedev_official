@@ -13,9 +13,13 @@ class SDDEXTR extends Model
      *
      * @var array
      */
+    // protected $fillable = [
+    //     'TITLE','FIRSTNAME', 'LASTNAME', 'CATEGORY', 'DEPT', 'PHONE', 'LEVEL', 'EMAIL', 'UPDATED'
+    // ];
+
     protected $fillable = [
-        'TITLE','FIRSTNAME', 'LASTNAME', 'CATEGORY', 'DEPT', 'PHONE', 'LEVEL', 'EMAIL', 'UPDATED'
-    ];
+       'LASTNAME','EMAIL','INDEXNO'
+    ];    
 
 	/**
 	 * primaryKey 
@@ -30,7 +34,7 @@ class SDDEXTR extends Model
 	 *
 	 * @var bool
 	 */
-	public $incrementing = false;
+	// public $incrementing = false;
 
     /**
      * The name of the "updated at" column.
