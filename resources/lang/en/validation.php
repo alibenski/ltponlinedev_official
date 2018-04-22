@@ -117,6 +117,10 @@ return [
             'required' => 'Decision required. Please make a decision for each of the chosen schedules.',
             'boolean' => 'Decision must only be true or false.',
                 ],
+        'g-recaptcha-response' => [
+            'required' => 'Please verify that you are not a robot.',
+            'captcha' => 'Captcha error! try again later or contact site admin.',
+                ],
     ],
 
     /*

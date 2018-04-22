@@ -120,7 +120,7 @@ class RepoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {    
+    {   
         $index_id = $request->input('index_id');
         $language_id = $request->input('L'); 
         $course_id = $request->input('course_id');

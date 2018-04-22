@@ -15,6 +15,7 @@ use App\Preenrolment;
 use App\SDDEXTR;
 use App\Torgan;
 use App\PlacementSchedule;
+use App\PlacementForm;
 use Session;
 use Carbon\Carbon;
 use DB;
@@ -131,6 +132,29 @@ class AjaxController extends Controller
             $data = view('ajax-select2',compact('select_schedules'))->render();
             return response()->json(['options'=>$data]);
         }
+    }
+
+    public function ajaxCheckPlacementForm()
+    {
+            $current_user = Auth::user()->indexno;
+            $now_date = Carbon::now()->toDateString();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                    ->whereDate('Term_End', '>=', $now_date)
+                    ->get()->min();
+
+            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+
+            $placementData = PlacementForm::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)
+                ->where('Term', $next_term->Term_Code)
+                ->get();
+            // if (isset($placementData)) {
+            //     $data = true;
+            // } else {
+            //     $data = false;
+            // }
+                $data = $placementData;
+            return response()->json($data);
     }
 
     public function ajaxCheckPlacementCourse(Request $request)

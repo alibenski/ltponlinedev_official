@@ -2,18 +2,15 @@
 @section('tabtitle', '| UN Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
+<div id="loader">
+</div>
 <div class="container">
-  <div class="row">
-    {{-- <div class="col-md-12">
-      <div class="alert alert-info alert-block">
-        <p class="text-center"><strong>First Choice Enrolment Form</strong></p>
-      </div>
-    </div>   --}} 
-    
+  <div class="row">   
     <div class="col-md-12">
       <div class="panel panel-default">
           <div class="panel-heading">Enrolment Form for Semester: 
@@ -46,7 +43,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                              
                         </div>
                     </div>
                 </div>
@@ -106,7 +103,8 @@
                       @foreach( $repos_lang as $value )
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $value->courses->EDescription}} last @if(empty($value))NO DB ENTRY 
-                              @else{{ $value->terms->Term_Name }}
+                              @else
+                              {{ $value->terms->Term_Name }}
                               @endif
                               " readonly>                            
                         </div>
@@ -191,7 +189,6 @@
                   </div>  
                 </div>
                         <!-- END OF SHOW CHOICES REAL TIME -->   
-
                 <div class="form-group col-md-12">
                       <div class="disclaimer alert col-md-8 col-md-offset-2">
                                 <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="0" required="required">
@@ -215,6 +212,23 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.full.js') }}"></script>
+
+<script>
+ $(window).load(function(){
+ $("#loader").fadeOut(500);
+ });
+</script>
+
+<script>
+  $(document).ready(function() {
+    $.get("/check-placement-form-ajax", function(data) {
+      $.each(data, function(index, val) {
+        console.log('placementFormLang = ' + val.L);
+        $("input[name='L'][value='"+ val.L +"']").attr('disabled', true);    
+      });
+    }); 
+  });
+</script>
 
 <script>
   $("input[name='L']").on('click', function(){
@@ -265,6 +279,8 @@
 
   });
   $("#placementDecision4").on('click', function() {
+    $("#loader").fadeIn(500);
+    alert('You will now be redirected to the Placement Test Schedule Form');
     var redirUrl = "{{ route('placementinfo') }}";
     $(location).attr('href',redirUrl);
   });

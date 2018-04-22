@@ -2,10 +2,13 @@
 @section('tabtitle', '| Placement Test Form')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 @stop
 @section('content')
+<div id="loader">
+</div>
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -22,6 +25,7 @@
                     {{ csrf_field() }}
                     <div class="form-group">
                         <input type="hidden" name="indexno" value="{{ Auth::user()->indexno }}">
+                        <input type="hidden" name="term" value="{{ $next_term->Term_Code }}">
                         <label for="" class="col-md-3 control-label">Name:</label>
 
                         <div class="col-md-8 inputGroupContainer">
@@ -97,6 +101,23 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/submit.js') }}"></script>    
+
+<script>
+ $(window).load(function(){
+ $("#loader").fadeOut(2000);
+ });
+ </script>
+
+<script>
+  $(document).ready(function() {
+    $.get("/check-placement-form-ajax", function(data) {
+      $.each(data, function(index, val) {
+        console.log('placementFormLang = ' + val.L);
+        $("input[name='langInput'][value='"+ val.L +"']").attr('disabled', true);    
+      });
+    }); 
+  });
+</script>
 
 <script>
   $(document).ready(function() {

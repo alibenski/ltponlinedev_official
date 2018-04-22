@@ -21,7 +21,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Crypt;
 
-class RepoController extends Controller
+class OrgController extends Controller
 {
     /**
      * Create a new controller instance.

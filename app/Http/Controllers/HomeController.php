@@ -59,13 +59,12 @@ class HomeController extends Controller
             ->where('Term', $next_term_code )->get();
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
         
-        $difference =  $next_term->Term_Code - $repos_lang->Term;
-        if ($repos_lang->Term == null || $difference >= 9) {
-            // return 'Take the placement test';
-        }
-        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withDifference($difference);
+        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
     }
-
+    
+    /*
+    *    Shows submitted forms @ route{{"/submitted"}}
+    */
     public function index2()
     {
         $current_user = Auth::user()->indexno;

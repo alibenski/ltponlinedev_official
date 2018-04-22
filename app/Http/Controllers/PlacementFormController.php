@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 
 use App\PlacementSchedule;
+use App\PlacementForm;
+
 class PlacementFormController extends Controller
 {
     /**
@@ -42,11 +44,36 @@ class PlacementFormController extends Controller
     public function getPlacementInfo()
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
-        return view('form.myformplacement')->withLanguages($languages);
+        $now_date = Carbon::now()->toDateString();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                    ->whereDate('Term_End', '>=', $now_date)
+                    ->get()->min();
+
+        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        return view('form.myformplacement')->withLanguages($languages)->withNext_term($next_term);
     }
 
     public function postPlacementInfo(Request $request)
     {
-        dd($request);
+        $this->validate($request, array(
+            'indexno' => 'required|',
+            'org' => 'required|',
+            'term' => 'required|',
+            'langInput' => 'required|',
+            'placementLang' => 'required|',
+            'agreementBtn' => 'required|',
+        ));
+
+        $placementForm = new PlacementForm;
+        $placementForm->INDEXID = $request->indexno;
+        $placementForm->Term = $request->term;
+        $placementForm->DEPT = $request->org;
+        $placementForm->L = $request->langInput;
+        $placementForm->schedule_id = $request->placementLang;
+        $placementForm->save();
+        
+        $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+
+            return redirect()->route('home');
     }
 }

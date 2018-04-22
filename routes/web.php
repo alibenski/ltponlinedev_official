@@ -74,6 +74,7 @@ Route::post('check-placement-course-ajax', ['as'=>'check-placement-course-ajax',
 //main controller used for ajax jquery on all forms - myform, noform, selfpayform
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'AjaxController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'AjaxController@selectAjax2']);
+Route::get('check-placement-form-ajax', ['as'=>'check-placement-form-ajax','uses'=>'AjaxController@ajaxCheckPlacementForm']);
 
 //url routing for manager approval page
 Route::get('/approval/{staff}/{tecode}/{id}/{form}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);

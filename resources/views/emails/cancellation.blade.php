@@ -194,7 +194,7 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear Manager/CLM Learning Partner, </p>
                                      <p> You are receiving this message to notify you that staff member, <strong>{{ $staff_member_name }}</strong>, has <strong>cancelled</strong> the enrolment for CLM language course: <strong>{{ $display_language->courses->EDescription }}</strong></p>
-                                     <p>Chosen Schedule(s):</p>
+                                     <p>Cancelled Schedule(s):</p>
                                      @foreach($forms as $value)
                                      <ul>
                                          {{ $value->schedule->name }}

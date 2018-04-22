@@ -171,12 +171,14 @@ class ApprovalController extends Controller
             $decision = 1; 
         } elseif (isset($getDecision[1]) && ($getDecision[0] == 1 || $getDecision[1] == 1 )) {
             $decision = 1;
+        } elseif ($getDecision[0] == 0 && !isset($getDecision[1])) {
+            $decision = 0;
         } else {
             $decision = 0;
         }
 
         // Add more organizations in the IF statement below
-        if ($org !== 'UNOG' && $decision !== '0') {
+        if ($org != 'UNOG' && $decision != '0') {
             // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
@@ -197,16 +199,17 @@ class ApprovalController extends Controller
             Mail::to($org_email_arr)
                     ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
            
-            return redirect()->route('eform');            
+            // return redirect()->route('eform');            
         } else {
             // mail to UNOG staff members or staff which do not have CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
                     ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
+        }
         
-        if($decision == 1){
+        if($decision == '1'){
             $decision_text = 'Yes, you have approved at least one of the chosen schedules.';
-        } else {
+            } else {
             $decision_text = 'No, you did not approve any of the chosen schedules.';
 
             $enrol_form_d = [];
@@ -214,14 +217,12 @@ class ApprovalController extends Controller
                 $enrol_form_d = $forms[$i]->id;
                 $course = Preenrolment::find($enrol_form_d);
                 $course->delete();
+                }
             }
-        }
-
         // Set flash data with message
         $request->session()->flash('success', 'Manager Decision has been saved! Decision is: '.$decision_text);
 
         return redirect()->route('eform');
-        }
 
     }
 
@@ -345,7 +346,7 @@ class ApprovalController extends Controller
 
         Mail::to($staff_email)
                 ->cc($mgr_email)
-                ->bcc($org_email_arr)
+                ->bcc($org_email_arr, 'clm_language@un.org')
                 ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request));
         
         if($decision == 1){

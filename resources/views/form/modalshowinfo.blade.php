@@ -20,7 +20,7 @@
 					Disapproved
 					@endif
                 </p>
-                <p>CLM HR Partner's Approval:
+                <p>HR Staff and Development Section Approval:
 					@if($value->is_self_pay_form == 1)
 					<span id="status" class="label label-success margin-label">
 					N/A - Self Payment

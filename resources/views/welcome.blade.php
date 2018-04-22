@@ -61,7 +61,7 @@
                                       <div class="panel-body btn-welcome-img b1">
                                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus ex, sequi debitis.</p>
                                         <p class="lead btn-bottom">
-                                        <a href="#" class="btn btn-lg btn-primary">Sign up</a>
+                                        <a href="/register" class="btn btn-lg btn-primary">Sign up</a>
                                         </p>
                                       </div>
                                     </div>

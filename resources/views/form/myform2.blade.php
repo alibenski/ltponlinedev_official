@@ -2,18 +2,15 @@
 @section('tabtitle', '| UN Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
+<div id="loader">
+</div>
 <div class="container">
   <div class="row">
-    {{-- <div class="col-md-12">
-      <div class="alert alert-warning alert-block">
-        <p class="text-center"><strong>Second Choice Enrolment Form</strong></p>
-      </div>
-    </div>  --}} 
-
     <div class="col-md-12">
       <div class="panel panel-default">
           <div class="panel-heading">Enrolment Form for Semester: 
@@ -46,7 +43,7 @@
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>                   
                         </div>
                     </div>
                 </div>
@@ -67,16 +64,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>                                    
                         </div>
-                    {{-- <div class="dropdown">
-                      <select name="org" id="input" class="col-md-8 form-control" required="required">
-                        @if(!empty($org))
-                          @foreach($org as $key => $value)
-                            <option value="{{ $key }}" {{ ($user->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option>
-                          @endforeach
-                        @endif
-                      </select>
-                    </div>
-                    <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p> --}}
+                        <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
                   </div>
                 </div>
 
@@ -112,12 +100,15 @@
                     <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 
                     <div class="col-md-8 inputGroupContainer">
+                      @foreach( $repos_lang as $value )
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription}} last @if(empty($terms))NO DB ENTRY 
-                              @else{{ $terms->Term_Name }}
+                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $value->courses->EDescription}} last @if(empty($value))NO DB ENTRY 
+                              @else
+                              {{ $value->terms->Term_Name }}
                               @endif
                               " readonly>                            
                         </div>
+                      @endforeach
                     </div>
                 </div> 
 
@@ -128,14 +119,32 @@
                         <label class="col-md-3 control-label">Enrol to which language:</label>
                               <div class="col-md-8">
                                   @foreach ($languages as $id => $name)
-                                <div class="input-group col-md-9">
-                                          
-                                          <input id="{{ $name }}" name="L" class="lang_select_no" type="radio" value="{{ $id }}">
-                                          
+                                <div class="input-group col-md-9">        
+                                          <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
                                           <label for="{{ $name }}" class=" form-control-static">{{ $name }}</label>
                                 </div>
                                   @endforeach
                               </div>
+                    </div>
+                    <div class="placementTestMsg " style="display: none">
+                      <div class="alert alert-warning">
+                        <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
+                        <p>Our records show that either you are a new student or you have not been enrolled on the selected language course during the past 2 terms.</p>
+                        <p>You are required to answer the <strong>Placement Test</strong> question below before proceeding further to the enrolment process.</p>
+                        
+                        <div class="form-group">
+                              <label class="col-md-4 control-label">Are you enrolling for a beginner course?</label>
+                                <div class="col-md-4">
+                                          <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
+                                          <label for="placementDecision3" class="form-control-static">YES</label>
+                                </div>
+
+                                <div class="col-md-4">
+                                          <input id="placementDecision4" name="placementDecisionB" class="with-font" type="radio" value="0">
+                                          <label for="placementDecision4" class="form-control-static">NO</label>
+                                </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="form-group">
@@ -180,7 +189,14 @@
                   </div>  
                 </div>
                         <!-- END OF SHOW CHOICES REAL TIME -->   
-                <div class="col-sm-offset-5">
+                <div class="form-group col-md-12">
+                      <div class="disclaimer alert col-md-8 col-md-offset-2">
+                                <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="0" required="required">
+                                <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
+                      </div>
+                </div>
+
+                <div class="col-sm-2 col-sm-offset-5">
                   <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
                 </div>
@@ -196,6 +212,23 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.full.js') }}"></script>
+
+<script>
+ $(window).load(function(){
+ $("#loader").fadeOut(500);
+ });
+</script>
+
+<script>
+  $(document).ready(function() {
+    $.get("/check-placement-form-ajax", function(data) {
+      $.each(data, function(index, val) {
+        console.log('placementFormLang = ' + val.L);
+        $("input[name='L'][value='"+ val.L +"']").attr('disabled', true);    
+      });
+    }); 
+  });
+</script>
 
 <script>
   $("input[name='L']").on('click', function(){
@@ -246,6 +279,8 @@
 
   });
   $("#placementDecision4").on('click', function() {
+    $("#loader").fadeIn(500);
+    alert('You will now be redirected to the Placement Test Schedule Form');
     var redirUrl = "{{ route('placementinfo') }}";
     $(location).attr('href',redirUrl);
   });

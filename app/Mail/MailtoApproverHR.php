@@ -40,6 +40,7 @@ class MailtoApproverHR extends Mailable
     {
         return $this->view('emails.approvalhr')
                     ->from('clm_language@un.org', 'CLM Language')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('CLM Learning Partner Approval Needed: Language Course Enrolment '.$this->input_course->courses->Description  .' for '.$this->staff_name);
     }
