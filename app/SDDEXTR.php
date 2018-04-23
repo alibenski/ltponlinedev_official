@@ -18,7 +18,7 @@ class SDDEXTR extends Model
     // ];
 
     protected $fillable = [
-       'LASTNAME','EMAIL','INDEXNO'
+       'LASTNAME', 'FIRSTNAME', 'EMAIL','INDEXNO'
     ];    
 
 	/**

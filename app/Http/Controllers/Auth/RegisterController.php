@@ -78,7 +78,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'nameFirst' => 'required|string|max:255',
+            'nameLast' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'g-recaptcha-response' => 'required|captcha',
@@ -93,13 +94,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if (is_null($data['indexno'])) {
-            $qryLatestIndex = User::orderBy('id', 'desc')->first();
-            $qryLatestIndexID = $qryLatestIndex->id;
-            
-            $indexGenerate = 'Z'.$qryLatestIndexID;
-            $data['indexno'] = $indexGenerate;
-        }
+        // if (is_null($data['indexno'])) {
+        //     $qryLatestIndex = User::orderBy('id', 'desc')->first();
+        //     $qryLatestIndexID = $qryLatestIndex->id;
+
+        //     $indexGenerate = 'Z'.$qryLatestIndexID;
+        //     $data['indexno'] = $indexGenerate;
+        // }
         $user = User::create([
             'indexno' => $data['indexno'],
             'nameFirst' => $data['nameFirst'],
@@ -110,7 +111,8 @@ class RegisterController extends Controller
 
         $user->sddextr()->create([
             'INDEXNO' => $data['indexno'],
-            'LASTNAME' => $data['name'],
+            'LASTNAME' => $data['nameLast'],
+            'FIRSTNAME' => $data['nameFirst'],
             'EMAIL' => $data['email'],
         ]);
         // whatever else you need to do - send email, etc

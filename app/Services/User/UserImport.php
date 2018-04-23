@@ -103,6 +103,7 @@ class UserImport
     public function createUsers($header, $rows)
     {
         try {
+            DB::connection()->disableQueryLog();
             DB::beginTransaction();
             foreach ($rows as $row) {
             if (count($header) != count($row)) {
@@ -111,9 +112,12 @@ class UserImport
                 }
                 $row = array_combine($header, $row);
                 User::create([
+                    'indexno' => $row['indexno'],
                     'name' => $row['name'],
+                    'nameFirst' => $row['nameFirst'],
+                    'nameLast' => $row['nameLast'],
                     'email' => $row['email'],
-                    'password' => bcrypt('Welcome2u'.$row['email']),
+                    'password' => bcrypt('Welcome2u'),
                     // 'password' => bcrypt(uniqid()),
                     'approved' => 1,
                 ]);
@@ -121,7 +125,7 @@ class UserImport
             DB::commit();
         } 
         catch (\Exception $exception) {
-            dd($exception->message);
+            dd($exception);
             DB::rollBack();
             Log::info($exception->getMessage());
         }

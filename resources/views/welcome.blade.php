@@ -57,11 +57,11 @@
                             <div class="col-md-12">
                                 <div class="col-md-6 b1">
                                     <div class="panel panel-primary">
-                                      <div class="panel-heading">New Student?</div>
+                                      <div class="panel-heading"></div>
                                       <div class="panel-body btn-welcome-img b1">
                                         <p>If you have not received an e-mail concerning your credentials from the CLM Language Secretariat, please click the sign-up button to register.</p>
                                         <p class="lead btn-bottom">
-                                        <a href="/register" class="btn btn-lg btn-primary">Sign-up</a>
+                                        <a href="/register" class="btn btn-lg btn-primary">Join</a>
                                         </p>
                                       </div>
                                     </div>
@@ -69,7 +69,7 @@
 
                                 <div class="col-md-6 b1">
                                     <div class="panel panel-success">
-                                      <div class="panel-heading">Existing Student?</div>
+                                      <div class="panel-heading"></div>
                                       <div class="panel-body btn-bg-img b1">
                                         <p>If you received an e-mail concerning your credentials from the CLM Language Secretariat, please click the log-in button to access the platform.</p>
                                         <p class="lead btn-bottom">

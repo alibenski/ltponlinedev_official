@@ -29,13 +29,13 @@
 		</div>
 		<div class="box-body">
 			<table class="table table-hover table-striped">
-				<thead>
+{{-- 				<thead>
 					<tr>
 					@foreach ($errors_arr[0] as $key => $value)
 					<th>{{ ucfirst($key) }}</th>
 					@endforeach
 					</tr>
-				</thead>
+				</thead> --}}
 				<tbody>
 					@foreach($errors_arr as $key => $value)
 					<tr>
