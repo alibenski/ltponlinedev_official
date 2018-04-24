@@ -2,17 +2,20 @@
 @section('tabtitle', '| Self-Pay Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
+<div id="loader">
+</div>
       @component('form.modalcheck')
       @endcomponent
 <div class="container">
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-          <div class="panel-heading"><strong>Self Payment</strong> Enrolment Form for Next Semester: 
+          <div class="panel-heading"><strong>Self Payment</strong> Enrolment Form for Semester: 
             <strong>
               @if(empty($next_term && $terms))
               NO DB ENTRY
@@ -37,15 +40,16 @@
                 " readonly>  
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="" class="col-md-3 control-label">Index Number:</label>
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                                    
-                        </div>
+                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span> --}}
+                            <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>                                    
+                        {{-- </div>
                     </div>
-                </div>
+                </div> --}}
                 
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Name:</label>
@@ -61,7 +65,7 @@
                     <label for="org" class="col-md-3 control-label">Organization:</label>
                   <div class="col-md-8">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
                         </div>
                   </div>
                 </div>
@@ -84,18 +88,20 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
+                  <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
+                      <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 
-                    <div class="col-md-8 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $repos_lang->courses->EDescription}} last @if(empty($terms))NO DB ENTRY 
-                              @else{{ $terms->Term_Name }}
-                              @endif
-                              " readonly>                            
-                        </div>
-                    </div>
-                </div>
+                      <div class="col-md-8 inputGroupContainer">
+                        @if(is_null($repos_lang)) None
+                        @else
+                          @foreach( $repos_lang as $value )
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="@if(empty($value) || is_null($value))NO DB ENTRY @else {{ $value->courses->EDescription}} @endif last @if(empty($value) || is_null($value))NO DB ENTRY @else {{ $value->terms->Term_Name }} @endif" readonly>                           
+                            </div>
+                          @endforeach
+                        @endif
+                      </div>
+                  </div>
 
 {{--                 <div class="form-group">
                     <label for="name" class="col-md-3 control-label">Next UN Language Course:</label>
@@ -166,13 +172,36 @@
                                   @foreach ($languages as $id => $name)
                                 <div class="input-group col-md-9">
                                           
-                                          <input id="{{ $name }}" name="L" class="lang_select_no" type="radio" value="{{ $id }}">
+                                          <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
                                           
                                           <label for="{{ $name }}" class=" form-control-static">{{ $name }}</label>
                                 </div>
                                   @endforeach
                               </div>
                     </div>
+
+                    <div class="placementTestMsg " style="display: none">
+                      <div class="alert alert-warning">
+                        <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
+                        <p>Our records show that either you are a new student or you have not been enrolled on the selected language course during the past 2 terms.</p>
+                        <p>You are required to take a <strong>Placement Test</strong> unless you are a complete beginner.</p>
+                        
+                        <div class="form-group">
+                              <label class="col-md-4 control-label">Are you enrolling for a beginner course?</label>
+                                <div class="col-md-4">
+                                          <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
+                                          <label for="placementDecision3" class="form-control-static">YES</label>
+                                </div>
+
+                                <div class="col-md-4">
+                                          <input id="placementDecision4" name="placementDecisionB" class="with-font" type="radio" value="0">
+                                          <label for="placementDecision4" class="form-control-static">NO</label>
+                                </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
                     <div class="form-group">
                         <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
@@ -196,30 +225,38 @@
                           </div>
                         </div>
                     </div>
-                </div>
+
+                          <!-- SHOW CHOICES REAL TIME -->
+                    <div class="col-md-12">
+                      <div class="well">
+                        <div class="row">        
+                            <div class="form-group">
+                              <label for="first" class="col-md-2 control-label" style="color: green;">Schedule First Choice:</label>
+                              <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
+                            </div>
+
+                            <div class="form-group">
+                              <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Schedule Second Choice:</label>
+                              <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>        
+                            </div>
+                        </div>    
+                      </div>  
+                    </div>
+                          <!-- END OF SHOW CHOICES REAL TIME -->   
+                    <div class="form-group col-md-12">
+                          <div class="disclaimer alert col-md-8 col-md-offset-2">
+                                    <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
+                                    <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
+                          </div>
+                    </div>
+
+                    <div class="col-sm-2 col-sm-offset-5">
+                      <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
+                      <input type="hidden" name="_token" value="{{ Session::token() }}">
+                    </div>
+                  </div> {{-- end of hidden fields --}}  
+              </div>
                 <!-- END OF NO DECISION SECTION -->
-                        <!-- SHOW CHOICES REAL TIME -->
-                <div class="col-md-12">
-                  <div class="well">
-                    <div class="row">        
-                        <div class="form-group">
-                          <label for="first" class="col-md-2 control-label" style="color: green;">First Choice:</label>
-                          <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Second Choice:</label>
-                          <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>        
-                        </div>
-                    </div>    
-                  </div>  
-                </div>
-                        <!-- END OF SHOW CHOICES REAL TIME -->   
-
-                <div class="col-sm-offset-5">
-                  <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
-                  <input type="hidden" name="_token" value="{{ Session::token() }}">
-                </div>
             </form>
           </div>
         </div>
@@ -236,6 +273,12 @@
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
 
+<script>
+ $(window).load(function(){
+ $("#loader").fadeOut(500);
+ });
+</script>
+
 <script>  
   $(document).ready(function () {
       $('#modal-check').modal('show');
@@ -248,190 +291,87 @@
   });
 </script>
 
-<script type="text/javascript">
-  $(document).ready(function(){
-      $(".select2-multi").select2({
-        // theme: "bootstrap",
-        allowClear: true,
-        minimumResultsForSearch: -1,
-        maximumSelectionLength: 2,
-        width: 'resolve', // need to override the changed default
-        closeOnSelect: false,
-        templateResult: formatResult,
-        //templateSelection: formatResult, 
-        placeholder: 'Choose Here',
-        "language": {
-            "noResults": function(){
-                return "<strong class='text-danger'>Sorry No Classes Offered for this Course this Semester. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the availability of courses and classes</a>";
-                }
-        },
-        escapeMarkup: function (markup) {
-        return markup;
-        }
-      }); 
-      function formatResult (schedule) {
-        if (!schedule.id) { return schedule.text; }
-        
-        var $schedule = $(
-          '<i class="fa fa-plus-circle" aria-hidden="true"></i><span style="font-style:inherit; margin-left:10px;">'  + schedule.text + '</span>'
-        );
-        return $schedule;
-      };
-      // arrange in order of of being selected
-      $(".select2-multi").on("select2:select", function (evt) {
-        var element = evt.params.data.element;
-        var $element = $(element);
-
-        $element.detach();
-        $(this).append($element);
-        $(this).trigger("change");
+<script>
+  $(document).ready(function() {
+    $.get("/check-placement-form-ajax", function(data) {
+      $.each(data, function(index, val) {
+        console.log('placementFormLang = ' + val.L);
+        $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form
       });
-
-      $('.multi-clear').click(function() {
-        $(".select2-multi").val(null).trigger("change"); 
-        $("#first").empty();
-        $("#second").empty();
-      });
-      // close dropdown list after 2 selections to override "closeOnSelect: false" param 
-      $('.select2-multi').change(function(){
-        var ele = $(this);
-        if(ele.val()==null)
-        {
-          ele.select2('open');
-        }
-        else if(ele.val().length==2)
-        {
-          ele.select2('close');
-        }
-      });
-
+    }); 
   });
 </script>
 
 <script>
-  $(document).ready(function(){
-      // multi values, with last selected
-      var old_values = [];
-      var test = $(".select2-multi");
+  $("input[name='L']").on('click', function(){
+      $(".regular-enrol").attr('style', 'display: none'); // initiate hidden div 
+      var L = $(this).val();
+      var index = $("input[name='index_id']").val();
+      var token = $("input[name='_token']").val();
+      console.log(L);
+      $.ajax({
+          url: "{{ route('check-placement-course-ajax') }}", 
+          method: 'POST',
+          data: {L:L, index:index, _token:token},
+          success: function(data) {
+            console.log(data);
+            // if ($.isEmptyObject(data)) {
+            if (data == true) { // check if student is new or missed 2 terms
+              $(".placementTestMsg").removeAttr('style');
+              $("input[name='placementDecisionB']").attr('required', 'required');
+            }
+            else {
+              $("input[name='placementDecisionB']").removeAttr('required');
+              $(".placementTestMsg").attr('style', 'display:none');
+              $(".regular-enrol").removeAttr('style');
+              return false;
+            }
+          }
+      });
+      $("#placementDecision3").prop('checked', false);
+      $("select[name='course_id']").prop('disabled', false);
+  });
+  $("#placementDecision3").on('click', function() {
+      var L = $("input[name='L']:checked").val();
+      console.log(L);
+      $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
+      $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
+      console.log($("select[name='course_id']").val());
 
-      test.on("select2:select", function(event) {
-        var values = [];
-        var values_index = [];
-        var values_id = []; 
-        //event.params.data.id; 
-        // copy all option values from selected
-        $(event.currentTarget).find("option:selected").each(function(i, selected){          
-          values[i] = $(selected).text();
-          values_index[i] = i;
-          values_id[i] = $(selected).val();
-        });
+      $(".regular-enrol").removeAttr('style'); // show div with select dropdown
 
-        var first =  values[0];
-        var second =  values[1];
-        var first_index =  values_index[0];
-        var second_index =  values_index[1];
-        var first_id =  values_id[0];
-        var second_id =  values_id[1];
+      var course_id = $("select[name='course_id']").val();
+      var token = $("input[name='_token']").val();
 
-        if(first != null) {
-          $("#first").text(first).css("color","green").attr("name",first_index).attr("data-id",first_id);
-        }
-        if(second != null) {
-          $("#second").text(second).css("color","#337ab7").attr("name",second_index).attr("data-id",second_id);
-        } else {
-          $("#second").text("none");
-        }
-        // doing a diff of old_values gives the new values selected
-        var last = $(values).not(old_values).get();
-        // update old_values for future use
-        old_values = values;
-        // output values (all current values selected)
-        //console.log("selected values: ", values);
-        // output last added value
-        //console.log("last added: ", last);
-        });
-
-      test.on("select2:unselect", function(e){
-        //console.log(e);        console.log(e.params);         console.log(e.params.data);        
-        var values_id = e.params.data.id;
-        
-        var elem_una = document.getElementById("first");
-        var get_id_una = elem_una.getAttribute("data-id");
-
-        var elem_dos = document.getElementById("second");
-        var get_id_dos = elem_dos.getAttribute("data-id");
-        var get_text_dos = elem_dos.innerHTML;
-        var get_index_dos = elem_dos.getAttribute("name");
-
-        if(values_id == get_id_una){
-          //$("#first").removeAttr("value");
-          $("#first").text(get_text_dos).attr("name",get_index_dos);
-          $("#second").empty();
-        } else if (values_id == get_id_dos){
-          $("#second").empty();
-          $( 'p[name="1"]' ).empty();
-        } 
-
-        });
+      $.ajax({
+          url: "{{ route('select-ajax2') }}", 
+          method: 'POST',
+          data: {course_id:course_id, _token:token},
+          success: function(data) {
+            $("select[name='schedule_id[]']").html('');
+            $("select[name='schedule_id[]']").html(data.options);
+          }
+      });
 
   });
+  $("#placementDecision4").on('click', function() {
+    $("#loader").fadeIn(500);
+    alert('You will now be redirected to the Placement Test Schedule Form');
+    var redirUrl = "{{ route('placementinfo') }}";
+    $(location).attr('href',redirUrl);
+  });
+  $("input[name='agreementBtn']").on('click',function(){
+      $(".disclaimer").addClass('alert-success', 500);
+  }); 
 </script>
+
+<script src="{{ asset('js/customSelect2.js') }}"></script>
 
 <script src="{{ asset('js/submit.js') }}"></script>     
 
 <script>
   $(document).ready(function(){
     $('input[type=radio]').prop('checked',false);
-  });
-</script>
-
-<script>
-  $('input:radio[value="1"]').click(function(){
-      $(".dno").attr("disabled", true);
-        $(".lang_select_yes").attr("name", "L").prop('checked', true);
-        $(".course_select_yes").attr("name", "course_id").prop('checked', true);
-        $(".schedule_select_yes").attr("name", "schedule_id[]");        
-        $(".lang_select_no").removeAttr("name");
-        $(".course_select_no").removeAttr("name");
-        $(".schedule_select_no").removeAttr("name");   
-          alert("Please select your preferred schedule.");             
-  });          
-</script>
-
-<script>
-  $('input:radio[value="1"]').on('click',function(){
-    $(".course_select_yes").attr("name", "course_id");
-    $(".schedule_select_yes").attr("name", "schedule_id[]"); 
-      var course_id = $("input[name='course_id']").val();
-      var token = $("input[name='_token']").val();
-        alert("The course id input is: " + course_id );
-
-      $.ajax({
-          url: "{{ route('select-ajax2') }}", 
-          method: 'POST',
-          cache: false,
-          headers: { "cache-control": "no-cache" },
-          data: {course_id:course_id, _token:token},
-          success: function(data) {
-            $("select[name='schedule_id[]'").html('');
-            $("select[name='schedule_id[]'").html(data.options);
-          }
-      });
-  }); 
-</script>
-
-<script>
-  $(document).ready(function(){
-      $('input:radio[value="0"]').click(function(){
-        $(".dyes").attr("disabled", true);
-          $(".lang_select_no").attr("name", "L");
-          $(".course_select_no").attr("name", "course_id");
-          $(".lang_select_yes").removeAttr("name");
-          $(".course_select_yes").removeAttr("name");
-          $(".schedule_select_yes").removeAttr("name");  
-          alert("Please select your new Language Course.");   
-      });
-        
   });
 </script>
 

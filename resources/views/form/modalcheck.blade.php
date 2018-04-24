@@ -5,11 +5,12 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>A kind reminder from CLM</h4></span>
+                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>A kind reminder to Self Paying Students</h4></span>
             </div>
             <div class="modal-body">
-                <p>This enrolment form is on a fee-paying basis. Please have the following documents ready:</p>
+                <p>This enrolment form is on a fee-paying basis. Please have the following ready:</p>
                 <ul>
+                    <li>Course and schedule of your choice</li>
                     <li>Copy of proof of payment</li>
                     <li>Copy of your carte de légitimation or employee attestation</li>
                 </ul>
@@ -26,7 +27,7 @@
                     <li>UN Secretariat retirees</li>
                     <li>Interns (only considered if their internship covers the term. Interns have no priority over the above categories)</li>
                 </ul>
-                <p>Thank you for your cooperation.</p>
+                <p>Read more about <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>eligibility</strong> HERE</a>. Thank you for your cooperation.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Continue</button>

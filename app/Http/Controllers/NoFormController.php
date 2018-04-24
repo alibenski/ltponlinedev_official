@@ -133,6 +133,8 @@ class NoFormController extends Controller
         //$schedule_id is an array 
         $schedule_id = $request->input('schedule_id');
         $mgr_email = $request->input('mgr_email');
+        $mgr_fname = $request->input('mgr_fname');
+        $mgr_lname = $request->input('mgr_lname');
         $uniquecode = $request->input('CodeIndexID');
         $org = $request->input('org');
         $codex = [];     
@@ -213,6 +215,8 @@ class NoFormController extends Controller
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'mgr_email' =>  $mgr_email,
+                'mgr_lname' => $mgr_lname,
+                'mgr_fname' => $mgr_fname,
                 'continue_bool' => 0,
                 'DEPT' => $org,    
                 'eform_submit_count' => $eform_submit_count, 

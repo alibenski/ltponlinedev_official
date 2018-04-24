@@ -41,7 +41,7 @@
                             <label for="fullName" class="col-md-4 control-label">Full Name:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->INDEXNO }} {{ Auth::user()->sddextr->LASTNAME }}, {{ Auth::user()->sddextr->FIRSTNAME }}</p>
+                                <p>{{ Auth::user()->sddextr->LASTNAME }}, {{ Auth::user()->sddextr->FIRSTNAME }}</p>
                             </div>
                         </div>
 

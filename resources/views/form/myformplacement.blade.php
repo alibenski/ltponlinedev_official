@@ -61,8 +61,8 @@
                       <div class="otherQuestions2 row col-md-7">
                         <div class="col-md-12">
                             <div class="form-group">
-                              <label for="">Choose one of the following dates:</label>
                               <div class="place-here">
+                              <label for="scheduleChoices"></label>
                                 <div class="scheduleChoices col-md-12">
                                 {{-- insert jquery schedules here --}}
                                 </div>
@@ -122,7 +122,15 @@
 <script>
   $(document).ready(function() {
     $("input[name='langInput']").on('click', function() {
+      $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
+
+      if ($(this).val() == 'F') {
+        $(".place-here").hide().append('<label for="scheduleChoices">French Placement Test is Online:</label>').fadeIn('fast');
+      } else {
+        $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
+      }
+
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
 
       var L = $(this).val();
@@ -134,11 +142,12 @@
           data: {L:L, _token:token},
           success: function(data) {
               $.each(data, function(index, val) {
-              console.log(val.id);
-                $(".scheduleChoices").append('<input id="placementLang'+val.id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">' + '<label for="placementLang'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +' - '+ val.time_of_plexam +'</label>'+'<br>');
+              console.log(val);
+                $(".scheduleChoices").append('<input id="placementLang'+val.id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">' + '<label for="placementLang'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>');
               });
             }
       });
+      // insert here - message that student will receive a convocation email
     });
   });
 </script>

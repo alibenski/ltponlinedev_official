@@ -38,15 +38,16 @@
                 " readonly>  
                 </div>
                 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="" class="col-md-3 control-label">Index Number:</label>
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span><input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->indexno }}" readonly>                              
-                        </div>
+                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span> --}}
+                            <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>                              
+                        {{-- </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="form-group">
                     <label for="" class="col-md-3 control-label">Name:</label>
@@ -62,7 +63,7 @@
                     <label for="org" class="col-md-3 control-label">Organization:</label>
                   <div class="col-md-8">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->DEPT }}" readonly>
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
                         </div>
                         <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
                   </div>
@@ -125,6 +126,7 @@
                                   @endforeach
                               </div>
                     </div>
+
                     <div class="placementTestMsg " style="display: none">
                       <div class="alert alert-warning">
                         <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
@@ -146,7 +148,8 @@
                       </div>
                     </div>
 
-                    {{-- start of hidden fields --}}
+                  <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
+                    
                     <div class="form-group">
                         <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
                         <div class="col-md-8">
@@ -169,37 +172,38 @@
                           </div>
                         </div>
                     </div>
+                  
+                            <!-- SHOW CHOICES REAL TIME -->
+                    <div class="col-md-12">
+                      <div class="well">
+                        <div class="row">        
+                            <div class="form-group">
+                              <label for="first" class="col-md-2 control-label" style="color: green;">Schedule 1st Choice:</label> 
+                              <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
+                            </div>
+
+                            <div class="form-group">
+                              <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Schedule 2nd Choice:</label>
+                              <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>
+                            </div>
+                        </div>    
+                      </div>  
+                    </div>
+                            <!-- END OF SHOW CHOICES REAL TIME -->   
+                    <div class="form-group col-md-12">
+                          <div class="disclaimer alert col-md-8 col-md-offset-2">
+                                    <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
+                                    <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
+                          </div>
+                    </div>
+
+                    <div class="col-sm-2 col-sm-offset-5">
+                      <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
+                      <input type="hidden" name="_token" value="{{ Session::token() }}">
+                    </div>
+                  </div> {{-- end of hidden fields --}}
                 </div>
                 <!-- END OF NO DECISION SECTION -->
-
-                        <!-- SHOW CHOICES REAL TIME -->
-                <div class="col-md-12">
-                  <div class="well">
-                    <div class="row">        
-                        <div class="form-group">
-                          <label for="first" class="col-md-2 control-label" style="color: green;">Schedule Choice A:</label> 
-                          <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Schedule Choice B:</label>
-                          <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>
-                        </div>
-                    </div>    
-                  </div>  
-                </div>
-                        <!-- END OF SHOW CHOICES REAL TIME -->   
-                <div class="form-group col-md-12">
-                      <div class="disclaimer alert col-md-8 col-md-offset-2">
-                                <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="0" required="required">
-                                <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
-                      </div>
-                </div>
-
-                <div class="col-sm-2 col-sm-offset-5">
-                  <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
-                  <input type="hidden" name="_token" value="{{ Session::token() }}">
-                </div>
             </form>
           </div>
         </div>
@@ -224,7 +228,7 @@
     $.get("/check-placement-form-ajax", function(data) {
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
-        $("input[name='L'][value='"+ val.L +"']").attr('disabled', true);    
+        $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form
       });
     }); 
   });
@@ -232,6 +236,7 @@
 
 <script>
   $("input[name='L']").on('click', function(){
+      $(".regular-enrol").attr('style', 'display: none'); // initiate hidden div 
       var L = $(this).val();
       var index = $("input[name='index_id']").val();
       var token = $("input[name='_token']").val();
@@ -243,13 +248,14 @@
           success: function(data) {
             console.log(data);
             // if ($.isEmptyObject(data)) {
-            if (data == true) {
+            if (data == true) { // check if student is new or missed 2 terms
               $(".placementTestMsg").removeAttr('style');
               $("input[name='placementDecisionB']").attr('required', 'required');
             }
             else {
               $("input[name='placementDecisionB']").removeAttr('required');
               $(".placementTestMsg").attr('style', 'display:none');
+              $(".regular-enrol").removeAttr('style');
               return false;
             }
           }
@@ -263,6 +269,8 @@
       $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
       $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
       console.log($("select[name='course_id']").val());
+
+      $(".regular-enrol").removeAttr('style'); // show div with select dropdown
 
       var course_id = $("select[name='course_id']").val();
       var token = $("input[name='_token']").val();

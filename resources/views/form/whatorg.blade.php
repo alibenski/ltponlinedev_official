@@ -45,7 +45,13 @@
                 </div>
 
                 <div id="secretMsg1" class="col-md-12" style="display: none">
-                  <p>You confirmed that you are a <em>self-paying student</em>, please click the Next button to continue. </p>
+                  <p>You confirmed that you are a <em>self-paying student</em>, please follow the instructions below:</p>
+                  <ol>
+                    <li>Choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank">HERE</a></li>
+                    <li>Prepare a copy of proof of payment</li>
+                    <li>Prepare a copy of your carte de légitimation or employee attestation</li>
+                  </ol>
+                  <p>After doing the instructions, click the Next button to continue</p>
                 </div>
                 <div id="secretMsg2" class="col-md-12" style="display: none">
                   <p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>

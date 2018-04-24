@@ -94,15 +94,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // if (is_null($data['indexno'])) {
-        //     $qryLatestIndex = User::orderBy('id', 'desc')->first();
-        //     $qryLatestIndexID = $qryLatestIndex->id;
+        if (is_null($data['indexno'])) {
+            $qryLatestIndex = User::orderBy('id', 'desc')->first();
+            $qryLatestIndexID = $qryLatestIndex->id;
 
-        //     $indexGenerate = 'Z'.$qryLatestIndexID;
-        //     $data['indexno'] = $indexGenerate;
-        // }
+            $indexGenerate = 'Z'.$qryLatestIndexID;
+            $data['indexno'] = $indexGenerate;
+        }
         $user = User::create([
             'indexno' => $data['indexno'],
+            'name' => $data['nameFirst'].' '.$data['nameLast'],
             'nameFirst' => $data['nameFirst'],
             'nameLast' => $data['nameLast'],
             'email' => $data['email'],
