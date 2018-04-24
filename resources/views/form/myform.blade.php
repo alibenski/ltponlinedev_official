@@ -96,7 +96,7 @@
                     </div>
                 </div>
              
-                <div class="form-group">
+                <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
                     <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 
                     <div class="col-md-8 inputGroupContainer">
@@ -129,10 +129,10 @@
                       <div class="alert alert-warning">
                         <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
                         <p>Our records show that either you are a new student or you have not been enrolled on the selected language course during the past 2 terms.</p>
-                        <p>You are required to answer the <strong>Placement Test</strong> question below before proceeding further to the enrolment process.</p>
+                        <p>You are required to take a <strong>Placement Test</strong> unless you are a complete beginner.</p>
                         
                         <div class="form-group">
-                              <label class="col-md-4 control-label">Are you enrolling for a beginner course?</label>
+                              <label class="col-md-4 control-label">Are you a complete beginner?</label>
                                 <div class="col-md-4">
                                           <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
                                           <label for="placementDecision3" class="form-control-static">YES</label>
@@ -146,6 +146,7 @@
                       </div>
                     </div>
 
+                    {{-- start of hidden fields --}}
                     <div class="form-group">
                         <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
                         <div class="col-md-8">

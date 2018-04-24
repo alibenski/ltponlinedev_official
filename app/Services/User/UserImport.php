@@ -105,21 +105,25 @@ class UserImport
         try {
             DB::connection()->disableQueryLog();
             DB::beginTransaction();
+            $pwd = bcrypt('Welcome2u');
             foreach ($rows as $row) {
             if (count($header) != count($row)) {
                 // var_dump(count($header), count($row));
                 continue;
                 }
                 $row = array_combine($header, $row);
+                // var_dump($header);
+                // var_dump($row['name']);
+                // var_dump(isset($row['indexno']));
                 User::create([
                     'indexno' => $row['indexno'],
                     'name' => $row['name'],
                     'nameFirst' => $row['nameFirst'],
                     'nameLast' => $row['nameLast'],
                     'email' => $row['email'],
-                    'password' => bcrypt('Welcome2u'),
+                    'password' => $pwd,
                     // 'password' => bcrypt(uniqid()),
-                    'approved' => 1,
+                    'approved_account' => 1,
                 ]);
             }
             DB::commit();

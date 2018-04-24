@@ -102,11 +102,7 @@
                     <div class="col-md-8 inputGroupContainer">
                       @foreach( $repos_lang as $value )
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $value->courses->EDescription}} last @if(empty($value))NO DB ENTRY 
-                              @else
-                              {{ $value->terms->Term_Name }}
-                              @endif
-                              " readonly>                            
+                            <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $value->courses->EDescription}} last @if(empty($value))NO DB ENTRY @else {{ $value->terms->Term_Name }} @endif " readonly>                            
                         </div>
                       @endforeach
                     </div>

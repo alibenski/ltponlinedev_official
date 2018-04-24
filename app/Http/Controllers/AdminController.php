@@ -35,6 +35,14 @@ class AdminController extends Controller
              # code...
             $file = $request->file('file');
             $csvData = file_get_contents($file);
+            
+            // check utf8 BOM and remove BOM characters
+            $bom = pack("CCC", 0xef, 0xbb, 0xbf);
+                if (0 === strncmp($csvData, $bom, 3)) {
+                    echo "BOM detected - file is UTF-8\n";
+                    $csvData = substr($csvData, 3);
+                }
+
             $rows = array_map("str_getcsv", explode("\n", $csvData));
             $header = array_shift($rows);
             // dd($rows);

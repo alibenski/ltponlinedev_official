@@ -42,7 +42,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $current_user = Auth::user()->indexno;
+        $current_user = Auth::user()->indexno; 
         //query last UN Language Course enrolled in the past based on PASHQ table
         $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
         //query the current term based on year and Term_End column is greater than today's date
