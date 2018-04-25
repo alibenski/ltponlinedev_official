@@ -126,13 +126,13 @@
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
                       <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. Please choose the schedule for your placement test if available. If none, then please come back next semester.</p> 
-                      <p>At the end of this form, you should be able to choose your preferred course and schedule should you pass the <strong>Placement Test</strong>.</p>
+                      <p>At the end of this form, you will be able to choose your preferred course and schedule should you pass the <strong>Placement Test</strong>. However, there are no guarantees. Thank you for your understanding.</p>
                     </div>
                     
-                    <div class="otherQuestions2 row col-md-7">
+                    <div class="otherQuestions2 row col-md-12">
                       <div class="insert-container col-md-12">
                           <div class="form-group">
-                            <div class="place-here">
+                            <div class="place-here col-md-6 col-md-offset-3">
                             <label for="scheduleChoices"></label>
                               <div class="scheduleChoices col-md-12">
                               {{-- insert jquery schedules here --}}
@@ -150,7 +150,7 @@
                     <div class="alert alert-info alert-dismissible">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
-                      <p>You have answered <strong>YES</strong>, you are a complete beginner on your selected language. Please continue below.</p>
+                      <p>You have answered <strong>YES</strong> and the beginner course for your selected language has been automatically filled in. Please continue below.</p>
                     </div>
                   </div>
 
@@ -272,7 +272,7 @@
   $("input[name='L']").on('click', function(){
       $(".regular-enrol").attr('style', 'display: none'); // initiate hidden div 
 
-// populate placement schedules
+  // populate placement schedules
       $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
       $('.insert-msg').remove();
@@ -280,7 +280,6 @@
 
       if ($(this).val() == 'F') {
         $(".place-here").hide().append('<label for="scheduleChoices">The French Placement Test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
-
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
       }
@@ -296,21 +295,29 @@
           data: {L:L, _token:token},
           success: function(data) {
               $.each(data, function(index, val) {
-              console.log(val);
+                  console.log(val);
                   $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
                   if ($("input[name='L']:checked").val() == 'F') {
                     $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ val.date_of_plexam +' to ' + val.date_of_plexam_end + '</label>'+'<br>').fadeIn();
                   } else {
                     $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>').fadeIn();
                   }
+              }); // end of $.each
+              // if no schedule, tell student there is none
+              if (!$("input[name='placementLang']").length){
+                console.log('no input');
+                $("label[for='scheduleChoices']").html("<div class='alert alert-danger'>Sorry no placement test schedule available for this language</div>");
+              } 
+
+              // insert message of convocation email
+              $('input[name="placementLang"]').on('click', function() {
+                $('.insert-msg').hide();
+                $('.insert-msg').addClass('col-md-6 col-md-offset-3');     
+                $('.insert-msg').html("<div class='alert alert-info'>You will receive a convocation email from the Language Secretariat regarding the time and place of the placement test.</div>").fadeIn();
               });
-                $('input[name="placementLang"]').on('click', function() {
-                  $('.insert-msg').hide();
-                  $('.insert-msg').html("<div class='alert alert-info'>You will receive a convocation email from the Language Secretariat to confirm the time and place of the placement test.</div>").fadeIn();
-                });
             }
       });
-// check if student is new or missed 2 terms 
+  // check if student is new or missed 2 terms 
       var L = $(this).val();
       var index = $("input[name='index_id']").val();
       var token = $("input[name='_token']").val();
@@ -343,7 +350,7 @@
       $("#placementDecision3").prop('checked', false);
       $("select[name='course_id']").prop('disabled', false);
   });
-
+  // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
       var L = $("input[name='L']:checked").val();
       console.log(L);
@@ -369,6 +376,7 @@
       });
 
   });
+  // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
     // $("#loader").fadeIn(500);
     // alert('You will now be redirected to the Placement Test Schedule Form');
@@ -376,6 +384,11 @@
     // $(location).attr('href',redirUrl);
     $(".placement-enrol").removeAttr('style');
     $(".placementTestMsg").hide();
+    // if no schedule, tell student there is none
+    if ($("input[name='placementLang']").length){
+      console.log('there is input');
+      $(".regular-enrol").removeAttr('style'); // show div with select dropdown
+    }
   });
   $("input[name='agreementBtn']").on('click',function(){
       $(".disclaimer").addClass('alert-success', 500);
