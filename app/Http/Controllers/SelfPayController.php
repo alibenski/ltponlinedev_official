@@ -132,6 +132,9 @@ class SelfPayController extends Controller
         $schedule_id = $request->input('schedule_id');
         $uniquecode = $request->input('CodeIndexID');
         $decision = $request->input('decision');
+        $org = $request->input('org');
+        $agreementBtn = $request->input('agreementBtn');
+        $consentBtn = $request->input('consentBtn');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -239,6 +242,9 @@ class SelfPayController extends Controller
                 'is_self_pay_form' => 1,
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter, 
+                'DEPT' => $org,
+                'agreementBtn' => $agreementBtn,
+                'consentBtn' => $consentBtn,
                 ]); 
 
                     foreach ($ingredients as $data) {

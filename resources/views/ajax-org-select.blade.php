@@ -7,8 +7,8 @@
                                     <select class="col-md-8 form-control select2-basic-single" style="width: 100%;" name="organization" autocomplete="off" >
                                         <option value="">--- Please Select Organization ---</option>
 											@if(!empty($select_org))
-											  @foreach($select_org as $key => $value)
-											    <option class="col-md-8 wx" value="{{ $key }}">{{ $value }}</option>
+											  @foreach($select_org as $value)
+											    <option class="col-md-8 wx" value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
 											  @endforeach
 											@endif
                                     </select>

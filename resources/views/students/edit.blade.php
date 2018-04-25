@@ -88,7 +88,7 @@
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="currentOrg" placeholder="{{ $student->sddextr->DEPT }}" class="form-control"  type="text" readonly="">
+                                    <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="currentOrg" placeholder="{{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }}" class="form-control"  type="text" readonly="">
                                 </div>
                             </div>
                         </div>

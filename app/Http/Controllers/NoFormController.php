@@ -125,7 +125,7 @@ class NoFormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {   dd($request);
         $index_id = $request->input('index_id');
         $language_id = $request->input('L'); 
         $course_id = $request->input('course_id');
@@ -137,6 +137,7 @@ class NoFormController extends Controller
         $mgr_lname = $request->input('mgr_lname');
         $uniquecode = $request->input('CodeIndexID');
         $org = $request->input('org');
+        $agreementBtn = $request->input('agreementBtn');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -220,7 +221,8 @@ class NoFormController extends Controller
                 'continue_bool' => 0,
                 'DEPT' => $org,    
                 'eform_submit_count' => $eform_submit_count, 
-                'form_counter' => $form_counter,                  
+                'form_counter' => $form_counter,  
+                'agreementBtn' => $agreementBtn,                
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();

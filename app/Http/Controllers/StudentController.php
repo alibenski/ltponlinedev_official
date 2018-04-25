@@ -104,7 +104,7 @@ class StudentController extends Controller
     {
         $student = User::find($id);
         $gender = DB::table('SEX')->limit(4)->pluck('Title', 'Title');
-        $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         
         return view('students.edit')->withStudent($student)->withGender($gender)->withOrg($org);
     }

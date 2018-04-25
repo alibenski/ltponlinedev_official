@@ -147,12 +147,12 @@
           success: function(data) {
               $.each(data, function(index, val) {
               console.log(val);
-                $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
-                if ($("input[name='langInput']:checked").val() == 'F') {
-                  $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ val.date_of_plexam +' to ' + val.date_of_plexam_end + '</label>'+'<br>').fadeIn();
-                } else {
-                  $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>').fadeIn();
-                }
+                  $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
+                  if ($("input[name='langInput']:checked").val() == 'F') {
+                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ val.date_of_plexam +' to ' + val.date_of_plexam_end + '</label>'+'<br>').fadeIn();
+                  } else {
+                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>').fadeIn();
+                  }
               });
                 $('input[name="placementLang"]').on('click', function() {
                   $('.insert-msg').hide();
@@ -160,7 +160,6 @@
                 });
             }
       });
-      // insert here - message that student will receive a convocation email
     });
   });
 </script>

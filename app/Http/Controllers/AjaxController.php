@@ -49,7 +49,7 @@ class AjaxController extends Controller
     }
     public function ajaxOrgSelect()
     {
-        $select_org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+        $select_org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $data = view('ajax-org-select',compact('select_org'))->render();
         return response()->json([$data]);  
     }
@@ -153,7 +153,7 @@ class AjaxController extends Controller
             // } else {
             //     $data = false;
             // }
-                $data = $placementData;
+                $data = var_dump($placementData);
             return response()->json($data);
     }
 

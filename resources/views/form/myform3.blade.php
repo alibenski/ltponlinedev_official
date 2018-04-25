@@ -65,7 +65,8 @@
                     <label for="org" class="col-md-3 control-label">Organization:</label>
                   <div class="col-md-8">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
+                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
                         </div>
                   </div>
                 </div>
@@ -87,6 +88,14 @@
                       </div>
                     </div>
                 </div>
+                
+                    <div class="form-group col-md-12">
+                          <div class="disclaimer-consent alert col-md-10 col-md-offset-1">
+                            <input id="consentBtn" name="consentBtn" class="with-font" type="radio" value="1" required="required">
+                            <label for="consentBtn" class="form-control-static">@if($user->sddextr->torgan['Org name'] != '999') By attaching the proof of payment and checking this option, I confirm and assure that my manager and/or HR Staff and Development office approved this payment-based enrolment. @else By attaching the proof of payment and checking this option, I confirm and assure that I am a spouse of a UN staff member. @endif
+                            </label>
+                          </div>
+                    </div>  
 
                   <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
                       <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
@@ -187,7 +196,7 @@
                         <p>You are required to take a <strong>Placement Test</strong> unless you are a complete beginner.</p>
                         
                         <div class="form-group">
-                              <label class="col-md-4 control-label">Are you enrolling for a beginner course?</label>
+                              <label class="col-md-4 control-label">Are you a complete beginner?</label>
                                 <div class="col-md-4">
                                           <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
                                           <label for="placementDecision3" class="form-control-static">YES</label>
@@ -362,6 +371,9 @@
   });
   $("input[name='agreementBtn']").on('click',function(){
       $(".disclaimer").addClass('alert-success', 500);
+  });   
+  $("input[name='consentBtn']").on('click',function(){
+      $(".disclaimer-consent").addClass('alert-success', 500);
   }); 
 </script>
 

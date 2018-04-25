@@ -57,7 +57,7 @@
                             <label for="org" class="col-md-4 control-label">Organization:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->DEPT }}</p>
+                                <p>{{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }}</p>
                             </div>
                         </div>
 

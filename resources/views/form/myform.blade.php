@@ -63,38 +63,11 @@
                     <label for="org" class="col-md-3 control-label">Organization:</label>
                   <div class="col-md-8">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
+                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
                         </div>
                         <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
                   </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
-                    
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
-                            </span><input  name="mgr_fname" placeholder="Manager's First Name" class="form-control"  type="text" required="required">
-                        </div>
-                    </div>    
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
-                            </span><input  name="mgr_lname" placeholder="Manager's Last Name" class="form-control"  type="text" required="required">                                    
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="mgr_email" class="col-md-3 control-label">Manager's Email Address:</label>
-                    
-                    <div class="col-md-8 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text" required="required">                                    
-                        </div>
-                         <p class="small text-danger"><strong>Enter the <u>correct email address</u> of your manager because this form will be sent to this email address for approval.</strong></p>
-                    </div>
                 </div>
              
                 <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
@@ -190,6 +163,34 @@
                       </div>  
                     </div>
                             <!-- END OF SHOW CHOICES REAL TIME -->   
+                    <div class="form-group">
+                        <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
+                        
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                                </span><input  name="mgr_fname" placeholder="Manager's First Name" class="form-control"  type="text" required="required">
+                            </div>
+                        </div>    
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                                </span><input  name="mgr_lname" placeholder="Manager's Last Name" class="form-control"  type="text" required="required">                                    
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mgr_email" class="col-md-3 control-label">Manager's Email Address:</label>
+                        
+                        <div class="col-md-8 inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text" required="required">                                    
+                            </div>
+                             <p class="small text-danger"><strong>Enter the <u>correct email address</u> of your manager because this form will be sent to this email address for approval.</strong></p>
+                        </div>
+                    </div>
+                
                     <div class="form-group col-md-12">
                           <div class="disclaimer alert col-md-8 col-md-offset-2">
                                     <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
@@ -287,10 +288,10 @@
 
   });
   $("#placementDecision4").on('click', function() {
-    $("#loader").fadeIn(500);
-    alert('You will now be redirected to the Placement Test Schedule Form');
-    var redirUrl = "{{ route('placementinfo') }}";
-    $(location).attr('href',redirUrl);
+    // $("#loader").fadeIn(500);
+    // alert('You will now be redirected to the Placement Test Schedule Form');
+    // var redirUrl = "{{ route('placementinfo') }}";
+    // $(location).attr('href',redirUrl);
   });
   $("input[name='agreementBtn']").on('click',function(){
       $(".disclaimer").addClass('alert-success', 500);

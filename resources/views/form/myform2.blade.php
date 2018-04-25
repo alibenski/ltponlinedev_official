@@ -44,7 +44,7 @@
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-qrcode"></i></span> --}}
-                            <input  name="index_id" class="form-control"  type="text" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>                   
+                            <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>                   
                         {{-- </div>
                     </div>
                 </div> --}}
@@ -63,40 +63,13 @@
                     <label for="org" class="col-md-3 control-label">Organization:</label>
                   <div class="col-md-8">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
+                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>                                    
                         </div>
                         <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
                   </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
-                    
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
-                            </span><input  name="mgr_fname" placeholder="Manager's First Name" class="form-control"  type="text" required="required">
-                        </div>
-                    </div>    
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
-                            </span><input  name="mgr_lname" placeholder="Manager's Last Name" class="form-control"  type="text" required="required">                                    
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="mgr_email" class="col-md-3 control-label">Manager's Email Address:</label>
-                    
-                    <div class="col-md-8 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text" required="required">                                    
-                        </div>
-                         <p class="small text-danger"><strong>Enter the <u>correct email address</u> of your manager because this form will be sent to this email address for approval.</strong></p>
-                    </div>
-                </div>
-             
                 <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
                     <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
 
@@ -134,7 +107,7 @@
                         <p>You are required to take a <strong>Placement Test</strong> unless you are a complete beginner.</p>
                         
                         <div class="form-group">
-                              <label class="col-md-4 control-label">Are you enrolling for a beginner course?</label>
+                              <label class="col-md-4 control-label">Are you a complete beginner?</label>
                                 <div class="col-md-4">
                                           <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
                                           <label for="placementDecision3" class="form-control-static">YES</label>
@@ -147,6 +120,39 @@
                         </div>
                       </div>
                     </div>
+
+                  <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
+                    <div class="alert alert-info alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
+                      <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. Please choose the schedule for your placement test if available. If none, then please come back next semester.</p> 
+                      <p>At the end of this form, you should be able to choose your preferred course and schedule should you pass the <strong>Placement Test</strong>.</p>
+                    </div>
+                    
+                    <div class="otherQuestions2 row col-md-7">
+                      <div class="insert-container col-md-12">
+                          <div class="form-group">
+                            <div class="place-here">
+                            <label for="scheduleChoices"></label>
+                              <div class="scheduleChoices col-md-12">
+                              {{-- insert jquery schedules here --}}
+                              </div>
+                            </div>
+                          </div>
+                        <div class="insert-msg"></div>
+                      </div>    
+                    </div>
+
+
+                  </div> {{-- end of placement test enrolment part --}}
+
+                  <div class="placement-beginner-msg" style="display: none">
+                    <div class="alert alert-info alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
+                      <p>You have answered <strong>YES</strong>, you are a complete beginner on your selected language. Please continue below.</p>
+                    </div>
+                  </div>
 
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
@@ -190,6 +196,34 @@
                       </div>  
                     </div>
                         <!-- END OF SHOW CHOICES REAL TIME -->   
+                    <div class="form-group">
+                        <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
+                        
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                                </span><input  name="mgr_fname" placeholder="Manager's First Name" class="form-control"  type="text" required="required">
+                            </div>
+                        </div>    
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                                </span><input  name="mgr_lname" placeholder="Manager's Last Name" class="form-control"  type="text" required="required">                                    
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mgr_email" class="col-md-3 control-label">Manager's Email Address:</label>
+                        
+                        <div class="col-md-8 inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input  name="mgr_email" placeholder="Enter Manager's Email" class="form-control"  type="text" required="required">                                    
+                            </div>
+                             <p class="small text-danger"><strong>Enter the <u>correct email address</u> of your manager because this form will be sent to this email address for approval.</strong></p>
+                        </div>
+                    </div>
+
                     <div class="form-group col-md-12">
                           <div class="disclaimer alert col-md-8 col-md-offset-2">
                                     <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
@@ -237,6 +271,46 @@
 <script>
   $("input[name='L']").on('click', function(){
       $(".regular-enrol").attr('style', 'display: none'); // initiate hidden div 
+
+// populate placement schedules
+      $("label[for='scheduleChoices']").remove();
+      $(".scheduleChoices").remove();
+      $('.insert-msg').remove();
+      $('.insert-container').append('<div class="insert-msg"></div>')
+
+      if ($(this).val() == 'F') {
+        $(".place-here").hide().append('<label for="scheduleChoices">The French Placement Test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
+
+      } else {
+        $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
+      }
+
+      $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
+
+      var L = $(this).val();
+      var token = $("input[name='_token']").val();
+      console.log(L);
+      $.ajax({
+          url: "{{ route('check-placement-sched-ajax') }}", 
+          method: 'POST',
+          data: {L:L, _token:token},
+          success: function(data) {
+              $.each(data, function(index, val) {
+              console.log(val);
+                  $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
+                  if ($("input[name='L']:checked").val() == 'F') {
+                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ val.date_of_plexam +' to ' + val.date_of_plexam_end + '</label>'+'<br>').fadeIn();
+                  } else {
+                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>').fadeIn();
+                  }
+              });
+                $('input[name="placementLang"]').on('click', function() {
+                  $('.insert-msg').hide();
+                  $('.insert-msg').html("<div class='alert alert-info'>You will receive a convocation email from the Language Secretariat to confirm the time and place of the placement test.</div>").fadeIn();
+                });
+            }
+      });
+// check if student is new or missed 2 terms 
       var L = $(this).val();
       var index = $("input[name='index_id']").val();
       var token = $("input[name='_token']").val();
@@ -249,13 +323,19 @@
             console.log(data);
             // if ($.isEmptyObject(data)) {
             if (data == true) { // check if student is new or missed 2 terms
-              $(".placementTestMsg").removeAttr('style');
+              $("input[name='placementDecisionB']").prop('checked', false);
               $("input[name='placementDecisionB']").attr('required', 'required');
+              $(".placementTestMsg").removeAttr('style');
+              $(".placement-enrol").attr('style', 'display:none');
+              $(".placement-beginner-msg").attr('style', 'display:none');
             }
             else {
               $("input[name='placementDecisionB']").removeAttr('required');
-              $(".placementTestMsg").attr('style', 'display:none');
+              $("input[name='placementLang']").removeAttr('required');
               $(".regular-enrol").removeAttr('style');
+              $(".placementTestMsg").attr('style', 'display:none');
+              $(".placement-enrol").attr('style', 'display:none');
+              $(".placement-beginner-msg").attr('style', 'display:none');
               return false;
             }
           }
@@ -263,6 +343,7 @@
       $("#placementDecision3").prop('checked', false);
       $("select[name='course_id']").prop('disabled', false);
   });
+
   $("#placementDecision3").on('click', function() {
       var L = $("input[name='L']:checked").val();
       console.log(L);
@@ -270,6 +351,8 @@
       $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
       console.log($("select[name='course_id']").val());
 
+      $(".placementTestMsg").attr('style', 'display:none');
+      $(".placement-beginner-msg").removeAttr('style');
       $(".regular-enrol").removeAttr('style'); // show div with select dropdown
 
       var course_id = $("select[name='course_id']").val();
@@ -287,10 +370,12 @@
 
   });
   $("#placementDecision4").on('click', function() {
-    $("#loader").fadeIn(500);
-    alert('You will now be redirected to the Placement Test Schedule Form');
-    var redirUrl = "{{ route('placementinfo') }}";
-    $(location).attr('href',redirUrl);
+    // $("#loader").fadeIn(500);
+    // alert('You will now be redirected to the Placement Test Schedule Form');
+    // var redirUrl = "{{ route('placementinfo') }}";
+    // $(location).attr('href',redirUrl);
+    $(".placement-enrol").removeAttr('style');
+    $(".placementTestMsg").hide();
   });
   $("input[name='agreementBtn']").on('click',function(){
       $(".disclaimer").addClass('alert-success', 500);
