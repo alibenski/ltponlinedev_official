@@ -15,7 +15,7 @@
           <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p>Hello {{Auth::user()->sddextr->FIRSTNAME}},</p>
-            <p>You have answered <strong>NO</strong>, you are not a beginner on your selected language. You have been redirected to this page to choose the <strong>Placement Test</strong> schedule of your preferred language.</p>
+            <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. You have been redirected to this page to choose the <strong>Placement Test</strong> schedule of your preferred language.</p>
           </div>
 
           <div class="panel panel-default col-md-12">
@@ -59,7 +59,7 @@
                         </div>
                       </div>
                       <div class="otherQuestions2 row col-md-7">
-                        <div class="col-md-12">
+                        <div class="insert-container col-md-12">
                             <div class="form-group">
                               <div class="place-here">
                               <label for="scheduleChoices"></label>
@@ -68,6 +68,7 @@
                                 </div>
                               </div>
                             </div>
+                          <div class="insert-msg"></div>
                         </div>    
                       </div>
                     </div>
@@ -124,9 +125,12 @@
     $("input[name='langInput']").on('click', function() {
       $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
+      $('.insert-msg').remove();
+      $('.insert-container').append('<div class="insert-msg"></div>')
 
       if ($(this).val() == 'F') {
-        $(".place-here").hide().append('<label for="scheduleChoices">French Placement Test is Online:</label>').fadeIn('fast');
+        $(".place-here").hide().append('<label for="scheduleChoices">The French Placement Test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
+
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
       }
@@ -143,8 +147,17 @@
           success: function(data) {
               $.each(data, function(index, val) {
               console.log(val);
-                $(".scheduleChoices").append('<input id="placementLang'+val.id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">' + '<label for="placementLang'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>');
+                $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
+                if ($("input[name='langInput']:checked").val() == 'F') {
+                  $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ val.date_of_plexam +' to ' + val.date_of_plexam_end + '</label>'+'<br>').fadeIn();
+                } else {
+                  $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>').fadeIn();
+                }
               });
+                $('input[name="placementLang"]').on('click', function() {
+                  $('.insert-msg').hide();
+                  $('.insert-msg').html("<div class='alert alert-info'>You will receive a convocation email from the Language Secretariat to confirm the time and place of the placement test.</div>").fadeIn();
+                });
             }
       });
       // insert here - message that student will receive a convocation email

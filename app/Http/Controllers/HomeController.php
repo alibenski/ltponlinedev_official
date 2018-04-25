@@ -164,7 +164,7 @@ class HomeController extends Controller
         // validate if organization is billed or not
         // query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)
-            ->value('Org Billed'); // change to appropriate field name 'is_self_pay'
+            ->value('Org Billed'); // change to appropriate field name 'is_self_pay' or 'is_billed'
 
         if ($request->decision == 1) {
             session()->flash('success','Please fill up the payment-based enrolment form');

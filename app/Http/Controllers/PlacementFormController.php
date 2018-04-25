@@ -72,8 +72,9 @@ class PlacementFormController extends Controller
         $placementForm->schedule_id = $request->placementLang;
         $placementForm->save();
         
-        $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+        // mail student regarding placement form information
 
-            return redirect()->route('home');
+        $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+        return redirect()->route('home');
     }
 }

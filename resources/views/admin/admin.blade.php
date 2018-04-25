@@ -261,7 +261,7 @@ desired effect
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
+  @include('partials._js')
   @yield('java_script')
 </body>
 </html>
