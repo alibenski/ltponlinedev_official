@@ -139,7 +139,7 @@
                       Confirmation
                     @endslot
                     @slot('body')
-                      <p>Once you submit your decision, you agree to the ST/AI policy that...</p>
+                      <p>Once you submit your decision, you agree that this is final and cannot be revoked.</p>
                       <p>Please double check your comment and decision before submitting. Thank you for your kind attention.</p>
                     @endslot
                     @slot('buttonoperation')

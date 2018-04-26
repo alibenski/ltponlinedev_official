@@ -64,7 +64,7 @@
                   <div class="col-md-8">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
-                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>                                    
+                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>   
                         </div>
                         <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
                   </div>
@@ -78,7 +78,7 @@
                       @else
                         @foreach( $repos_lang as $value )
                           <div class="input-group">
-                              <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="{{ $value->courses->EDescription}} last @if(empty($value))NO DB ENTRY @else {{ $value->terms->Term_Name }} @endif " readonly>                            
+                              <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="@if(empty($value) || is_null($value))NO DB ENTRY @else {{ $value->courses->EDescription}} @endif last @if(empty($value) || is_null($value))NO DB ENTRY @else {{ $value->terms->Term_Name }} @endif" readonly>                            
                           </div>
                         @endforeach
                       @endif
@@ -92,9 +92,9 @@
                         <label class="col-md-3 control-label">Enrol to which language:</label>
                               <div class="col-md-8">
                                   @foreach ($languages as $id => $name)
-                                <div class="input-group col-md-9">        
+                                <div class="input-group col-md-9">
                                           <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
-                                          <label for="{{ $name }}" class=" form-control-static">{{ $name }}</label>
+                                          <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
                                 </div>
                                   @endforeach
                               </div>
@@ -157,7 +157,7 @@
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
                     <div class="form-group">
-                        <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
+                        <label for="course_id" class="col-md-3 control-label">Preferred course: </label>
                         <div class="col-md-8">
                           <div class="dropdown">
                             <select class="col-md-8 form-control course_select_no" name="course_id" autocomplete="off">
@@ -168,7 +168,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
+                        <label for="schedule_id" class="col-md-3 control-label">Preferred class schedule (2 max): </label>
                         <button type="button" class="multi-clear button btn btn-danger" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
                         <div class="col-md-8">
                           <div class="dropdown">
@@ -263,6 +263,7 @@
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
         $("input[name='L'][value='"+ val.L +"']").attr('disabled', true);    // check if the student already submitted placement form
+        $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='label label-danger'>Scheduled for Placement Test");
       });
     }); 
   });
@@ -293,7 +294,7 @@
           url: "{{ route('check-placement-sched-ajax') }}", 
           method: 'POST',
           data: {L:L, _token:token},
-          success: function(data) {
+          success: function(data) { // get the placement test schedules 
               $.each(data, function(index, val) {
                   console.log(val);
                   $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
@@ -397,7 +398,7 @@
 
 <script src="{{ asset('js/customSelect2.js') }}"></script>
 
-<script src="{{ asset('js/submit.js') }}"></script>     
+<script src="{{ asset('js/submit.js') }}"></script>
 
 <script>
   $(document).ready(function(){

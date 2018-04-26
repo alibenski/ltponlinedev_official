@@ -209,13 +209,15 @@
                                                       @if(empty($array))
                                                       null
                                                       @else
-                                                      {{ $array->schedule->name }} - 
+                                                      <strong>{{ $array->schedule->name }}</strong> - Manager's decision:
+                                                        <strong>
                                                           @if($array->approval)
                                                           Approved
                                                           @else
                                                           Disapproved
                                                           @endif
-                                                        @endif
+                                                        </strong>
+                                                       @endif
                                                     </td>
                                                   </tr>
                                                 @endforeach
@@ -230,7 +232,7 @@
                                         @else
                                                 disapproved
                                         @endif
-                                      </strong> your enrolment.</p>
+                                      </strong> your enrolment based on your Manager's decision above.</p>
                                       <p><strong>Comment/Reason:</strong>
                                         <br>                                      
                                         @if( empty($request->hr_comment))

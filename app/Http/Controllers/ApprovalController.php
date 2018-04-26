@@ -346,7 +346,7 @@ class ApprovalController extends Controller
 
         Mail::to($staff_email)
                 ->cc($mgr_email)
-                ->bcc($org_email_arr, 'clm_language@un.org')
+                ->bcc($org_email_arr)
                 ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request));
         
         if($decision == 1){

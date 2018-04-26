@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\PlacementFormController;
 
 class NoFormController extends Controller
 {
@@ -125,7 +126,7 @@ class NoFormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   dd($request);
+    {   
         $index_id = $request->input('index_id');
         $language_id = $request->input('L'); 
         $course_id = $request->input('course_id');
@@ -176,7 +177,8 @@ class NoFormController extends Controller
                             'course_id' => 'required|',
                             'L' => 'required|',
                             'mgr_email' => 'required|email',
-                            'org' => 'required'
+                            'org' => 'required',
+                            'agreementBtn' => 'required|',
                         ));
         // control the number of submitted enrolment forms
         $qryEformCount = Preenrolment::withTrashed()
@@ -200,6 +202,14 @@ class NoFormController extends Controller
         $form_counter = 1;
         if(isset($lastValueCollection->form_counter)){
             $form_counter = $lastValueCollection->form_counter + 1;    
+        }
+
+        // check if placement test form
+        // if so, call method from PlacementFormController
+        if ($request->placementDecisionB === '0') {
+            app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request, $form_counter, $eform_submit_count);
+            $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+            return redirect()->route('home');
         }
 
         //loop for storing Code value to database

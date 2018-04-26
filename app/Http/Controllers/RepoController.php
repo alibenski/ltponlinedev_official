@@ -177,7 +177,8 @@ class RepoController extends Controller
                             'course_id' => 'required|',
                             'L' => 'required|',
                             'mgr_email' => 'required|email',
-                            'org' => 'required'
+                            'org' => 'required',
+                            'agreementBtn' => 'required|',
                         )); 
         // control the number of submitted enrolment forms
         $qryEformCount = Preenrolment::withTrashed()
@@ -203,6 +204,14 @@ class RepoController extends Controller
             $form_counter = $lastValueCollection->form_counter + 1;    
         }
 
+        // check if placement test form
+        // if so, call method from PlacementFormController
+        if ($request->placementDecisionB === '0') {
+            app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request, $form_counter, $eform_submit_count);
+            $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+            return redirect()->route('home');
+        }
+        
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {

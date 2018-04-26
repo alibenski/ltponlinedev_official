@@ -183,7 +183,7 @@
                                           
                                           <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
                                           
-                                          <label for="{{ $name }}" class=" form-control-static">{{ $name }}</label>
+                                          <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
                                 </div>
                                   @endforeach
                               </div>

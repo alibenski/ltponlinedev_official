@@ -71,7 +71,7 @@
                         <th>Course</th>
                         <th>Language</th>
                         <th>Schedule</th>
-                        <th>Approved?</th>
+                        <th>Manager's Approval</th>
                         
                       </thead>
 
@@ -141,8 +141,8 @@
                       Confirmation
                     @endslot
                     @slot('body')
-                      <p>Once you submit your decision, you agree to the ST/AI/ policy that...</p>
-                      <p>Please double check your decision as this implicates possible billing to your organization. It never hurts to be sure. Thank you for your kind attention.</p>
+                      <p>Once you submit your decision, you agree that this is final and cannot be revoked. You are also responsible for any financial implications this may have for your organization.</p>
+                      <p>Please double check your decision as this may implicate possible billing to your organization. Thank you for your kind attention.</p>
                     @endslot
                     @slot('buttonoperation')
                       <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>

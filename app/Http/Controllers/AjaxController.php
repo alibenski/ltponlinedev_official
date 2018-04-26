@@ -148,12 +148,12 @@ class AjaxController extends Controller
                 ->where('INDEXID', $current_user)
                 ->where('Term', $next_term->Term_Code)
                 ->get();
-            // if (isset($placementData)) {
-            //     $data = true;
-            // } else {
-            //     $data = false;
-            // }
-                $data = var_dump($placementData);
+            if (isset($placementData)) {
+                $data = true;
+            } else {
+                $data = false;
+            }
+                $data = $placementData;
             return response()->json($data);
     }
 
