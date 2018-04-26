@@ -15,10 +15,14 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <div class="col-md-12">
-                    <h2>Enrolment Instructions and LTP Announcements</h2>
-                        <ul>
-                            <li>Click...</li>
+                    <div class="col-sm-12">
+                    <h2 class="text-center">Enrolment Instructions and LTP Announcements</h2>
+                        <ul class="col-sm-10 col-sm-offset-1">
+                            <li>2 approved enrolment forms means you agree to attend 2 courses in the same semester</li>
+                            <li>The system will automatically identify if you have not attended any courses with CLM for more than 2 terms prior to this semester.</li>
+                            <li>You can submit a maximum of 2 enrolment forms</li>
+                            <li>You can submit a maximum of 2 placement test forms</li>
+                            <li>If you have any questions, please contact the Language Secretariat via e-mail: <strong> clm_language@un.org</strong></li>
                         </ul>                    
                     </div>
                 </div>

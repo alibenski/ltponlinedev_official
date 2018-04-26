@@ -93,7 +93,7 @@
                               <div class="col-md-8">
                                   @foreach ($languages as $id => $name)
                                 <div class="input-group col-md-9">
-                                          <input id="{{ $name }}" name="L" class="lang_select_no with-font" type="radio" value="{{ $id }}">
+                                          <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
                                           <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
                                 </div>
                                   @endforeach
@@ -126,7 +126,7 @@
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
                       <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. Please choose the schedule for your placement test if available. If none, then please come back next semester.</p> 
-                      <p>At the end of this form, you will be able to choose your preferred course and schedule should you pass the <strong>Placement Test</strong>. However, there are no guarantees. Thank you for your understanding.</p>
+                      <p>At the end of this form, you have the option to fill out a comment box to express your concerns <strong>(e.g. preferred specialized course, time contraints, etc.)</strong>. Thank you for your cooperation.</p>
                     </div>
                     
                     <div class="otherQuestions2 row col-md-12">
@@ -140,6 +140,14 @@
                             </div>
                           </div>
                         <div class="insert-msg"></div>
+
+                        <div class="col-md-12 form-group">
+                          <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                          <div class="col-md-8 ">
+                          <textarea name="std_comment" class="form-control"></textarea>
+                          </div>
+                        </div>
+
                       </div>    
                     </div>
 
@@ -196,6 +204,9 @@
                       </div>  
                     </div>
                             <!-- END OF SHOW CHOICES REAL TIME -->   
+                  </div> {{-- end of hidden fields --}}
+                    
+                  <div class="submission-part" style="display: none">
                     <div class="form-group">
                         <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
                         
@@ -235,7 +246,7 @@
                       <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                       <input type="hidden" name="_token" value="{{ Session::token() }}">
                     </div>
-                  </div> {{-- end of hidden fields --}}
+                  </div>
                 </div>
                 <!-- END OF NO DECISION SECTION -->
             </form>
@@ -272,7 +283,8 @@
 <script>
   $("input[name='L']").on('click', function(){
       $(".regular-enrol").attr('style', 'display: none'); // initiate hidden div 
-
+      $(".submission-part").attr('style', 'display: none');
+      $("input[name='placementDecisionB']").val("");
   // populate placement schedules
       $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
@@ -341,9 +353,22 @@
               $("input[name='placementDecisionB']").removeAttr('required');
               $("input[name='placementLang']").removeAttr('required');
               $(".regular-enrol").removeAttr('style');
+              $(".submission-part").removeAttr('style');
               $(".placementTestMsg").attr('style', 'display:none');
               $(".placement-enrol").attr('style', 'display:none');
               $(".placement-beginner-msg").attr('style', 'display:none');
+                $.get("{{ route('check-enrolment-entries-ajax') }}", function(data) {
+                      console.log('regular enrol form count:' + data);
+                      if (data >= 2) {
+                        alert('You are not allowed to submit more than 2 enrolment forms. You will now be redirected to the submitted forms page.');
+                        $("#loader").fadeIn(500);
+                        var delay = 2000;
+                        setTimeout(function() {
+                        var redirUrl = "{{ route('submitted') }}";
+                        $(location).attr('href',redirUrl);
+                        }, delay);
+                      }
+                    }); 
               return false;
             }
           }
@@ -351,8 +376,19 @@
       $("#placementDecision3").prop('checked', false);
       $("select[name='course_id']").prop('disabled', false);
   });
-// when clicks YES I am a beginner
+  // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
+      $.get("{{ route('check-enrolment-entries-ajax') }}", function(data) {
+            console.log('regular enrol form count:' + data);
+            if (data >= 2) {
+              alert('You are not allowed to submit more than 2 enrolment forms. However, if you are not a complete beginner, you could submit a placement test form. The page will now reload.');
+              $("#loader").fadeIn(500);
+              // var redirUrl = "{{ route('submitted') }}";
+              // $(location).attr('href',redirUrl);
+              location.reload(true);
+                
+            }
+          }); 
       var L = $("input[name='L']:checked").val();
       console.log(L);
       $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
@@ -362,7 +398,7 @@
       $(".placementTestMsg").attr('style', 'display:none');
       $(".placement-beginner-msg").removeAttr('style');
       $(".regular-enrol").removeAttr('style'); // show div with select dropdown
-
+      $(".submission-part").removeAttr('style');
       var course_id = $("select[name='course_id']").val();
       var token = $("input[name='_token']").val();
 
@@ -379,16 +415,22 @@
   });
   // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
-    // $("#loader").fadeIn(500);
-    // alert('You will now be redirected to the Placement Test Schedule Form');
-    // var redirUrl = "{{ route('placementinfo') }}";
-    // $(location).attr('href',redirUrl);
+    $("input[name='placementDecisionB']").val("0");
+      $.get("{{ route('check-placement-entries-ajax') }}", function(data) {
+            console.log(data.length);
+            if (data.length >= 2) {
+              alert('You are not allowed to submit more than 2 placement test forms. You will now be redirected.');
+              $("#loader").fadeIn(500);
+              var redirUrl = "{{ route('whatorg') }}";
+              $(location).attr('href',redirUrl);
+            }
+          }); 
     $(".placement-enrol").removeAttr('style');
     $(".placementTestMsg").hide();
     // if no schedule, tell student there is none
     if ($("input[name='placementLang']").length){
       console.log('there is input');
-      $(".regular-enrol").removeAttr('style'); // show div with select dropdown
+      $(".submission-part").removeAttr('style');
     }
   });
   $("input[name='agreementBtn']").on('click',function(){

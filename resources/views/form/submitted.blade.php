@@ -8,6 +8,8 @@
     <link href="{{ asset('jquery-ui-1.12.1/jquery-ui.css') }}" rel="stylesheet">
 @stop
 @section('content')
+<div id="loader">
+</div>
 <div class="container">
   <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -152,6 +154,12 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/submit.js') }}"></script>
+
+<script>
+ $(window).load(function(){
+ $("#loader").fadeOut(800);
+ });
+</script>
 
 <script>
   $(document).ready(function($) {

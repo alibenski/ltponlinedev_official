@@ -170,16 +170,7 @@ class RepoController extends Controller
                         ));
             }                              
         }
-                    //validate other input fields outside of above loop
-                        $this->validate($request, array(
-                            'term_id' => 'required|',
-                            'schedule_id' => 'required|',
-                            'course_id' => 'required|',
-                            'L' => 'required|',
-                            'mgr_email' => 'required|email',
-                            'org' => 'required',
-                            'agreementBtn' => 'required|',
-                        )); 
+
         // control the number of submitted enrolment forms
         $qryEformCount = Preenrolment::withTrashed()
             ->where('INDEXID', $index_id)
@@ -207,10 +198,21 @@ class RepoController extends Controller
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
-            app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request, $form_counter, $eform_submit_count);
+            app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request);
             $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
             return redirect()->route('home');
         }
+
+                    //validate other input fields outside of above loop
+                        $this->validate($request, array(
+                            'term_id' => 'required|',
+                            'schedule_id' => 'required|',
+                            'course_id' => 'required|',
+                            'L' => 'required|',
+                            'mgr_email' => 'required|email',
+                            'org' => 'required',
+                            'agreementBtn' => 'required|',
+                        )); 
         
         //loop for storing Code value to database
         $ingredients = [];        

@@ -53,7 +53,7 @@ class PlacementFormController extends Controller
         return view('form.myformplacement')->withLanguages($languages)->withNext_term($next_term);
     }
 
-    public function postPlacementInfo(Request $request, $form_counter, $eform_submit_count)
+    public function postPlacementInfo(Request $request)
     {   
         $index_id = $request->input('index_id');
         $language_id = $request->input('L'); 
@@ -69,42 +69,33 @@ class PlacementFormController extends Controller
         $agreementBtn = $request->input('agreementBtn');
 
         $this->validate($request, array(
-            'CodeIndexID' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use($request) {
-                                    $uniqueCodex = $request->CodeIndexID;
-                                    $query->where('CodeIndexID', $uniqueCodex)
-                                        ->where('deleted_at', NULL);
-                                }),
             'placementLang' => 'required|integer',
             'agreementBtn' => 'required|',
         ));
-        
-        //loop for storing Code value to database
-        $ingredients = [];        
-        for ($i = 0; $i < count($schedule_id); $i++) {
-            $ingredients[] = new  PlacementForm([
-                'CodeIndexID' => $course_id.'-'.$schedule_id[$i].'-'.$term_id.'-'.$index_id,
-                'Code' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
-                'schedule_id' => $schedule_id[$i],
-                'L' => $language_id,
-                'Te_Code' => $course_id,
-                'Term' => $term_id,
-                'INDEXID' => $index_id,
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" =>  \Carbon\Carbon::now(),
-                'mgr_email' =>  $mgr_email,
-                'mgr_lname' => $mgr_lname,
-                'mgr_fname' => $mgr_fname,
-                'continue_bool' => 0,
-                'DEPT' => $org,    
-                'eform_submit_count' => $eform_submit_count, 
-                'form_counter' => $form_counter,  
-                'agreementBtn' => $agreementBtn,
-                'placement_schedule_id' => $request->placementLang,                
-                ]); 
-                    foreach ($ingredients as $data) {
-                        $data->save();
-                    }
-        } 
+
+        $qryEformCount = PlacementForm::withTrashed()
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('eform_submit_count', 'desc')->first();
+           
+        $eform_submit_count = 1;
+        if(isset($qryEformCount->eform_submit_count)){
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+        }
+
+        $placementForm = new PlacementForm;
+        $placementForm->L = $language_id;
+        $placementForm->Term = $term_id;
+        $placementForm->INDEXID = $index_id;
+        $placementForm->DEPT = $org;
+        $placementForm->eform_submit_count = $eform_submit_count;
+        $placementForm->mgr_email = $mgr_email;
+        $placementForm->mgr_fname = $mgr_fname;
+        $placementForm->mgr_lname = $mgr_lname;        
+        $placementForm->placement_schedule_id = $request->placementLang;
+        $placementForm->std_comments = $request->std_comment;
+        $placementForm->agreementBtn = $request->agreementBtn;
+        $placementForm->save();
         
         // mail student regarding placement form information
 

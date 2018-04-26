@@ -134,6 +134,23 @@ class AjaxController extends Controller
         }
     }
 
+    public function ajaxCheckEnrolmentEntries()
+    {
+        $current_user = Auth::user()->indexno;
+        $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
+            ->where(function($q){ 
+                $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+                // do NOT count number of submitted forms disapproved by manager or HR learning partner  
+                $q->where('Term', $latest_term )->where('deleted_at', NULL)
+                    ->where('is_self_pay_form', NULL)
+                    ;
+            })->count('eform_submit_count');
+
+            $data = $eformGrouped;
+            return response()->json($data);
+            
+    }
+
     public function ajaxCheckPlacementForm()
     {
             $current_user = Auth::user()->indexno;
@@ -154,6 +171,24 @@ class AjaxController extends Controller
                 $data = false;
             }
                 $data = $placementData;
+            return response()->json($data);
+    }
+
+    public function ajaxCheckPlacementEntries()
+    {
+        $current_user = Auth::user()->indexno;
+        $now_date = Carbon::now()->toDateString();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                    ->whereDate('Term_End', '>=', $now_date)
+                    ->get()->min();
+
+            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        $placementFromCount = PlacementForm::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)
+                ->where('Term', $next_term->Term_Code)
+                ->get();
+
+        $data = $placementFromCount;
             return response()->json($data);
     }
 
