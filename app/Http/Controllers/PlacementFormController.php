@@ -24,6 +24,7 @@ use Illuminate\Validation\Rule;
 
 use App\PlacementSchedule;
 use App\PlacementForm;
+use App\Mail\MailPlacementTesttoApprover;
 
 class PlacementFormController extends Controller
 {
@@ -98,8 +99,19 @@ class PlacementFormController extends Controller
         $placementForm->save();
         
         // mail student regarding placement form information
+        $staff = Auth::user();
+        $current_user = Auth::user()->indexno;
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
 
-        $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+        $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $term_id)->where('INDEXID', $current_user)->where('L', $language_id)->first();
+
+        Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
+
+        $request->session()->flash('success', 'Your Placement Test request has been submitted for approval.'); //laravel 5.4 version
         return redirect()->route('home');
     }
 

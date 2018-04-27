@@ -22,6 +22,13 @@ class PlacementForm extends Model
     const UPDATED_AT = 'UpdatedOn';
 
     public function placementSchedule() {
-    return $this->belongsTo('App\PlacementSchedule'); 
+    return $this->belongsTo('App\PlacementSchedule'); }
+
+    public function languages() {
+    return $this->belongsTo('App\Language', 'L', 'code'); }
+
+    public function users() {
+    return $this->belongsTo('App\User', 'INDEXID', 'indexno'); 
     }
+
 }

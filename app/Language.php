@@ -17,4 +17,8 @@ class Language extends Model
     public function repos() {
     return $this->hasMany('App\Repo'); 
     }
+
+    public function placements() {
+    return $this->hasMany('App\PlacementForm', 'code', 'L'); 
+    }
 }

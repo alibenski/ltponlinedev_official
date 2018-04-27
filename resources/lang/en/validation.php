@@ -100,6 +100,9 @@ return [
     */
 
     'custom' => [
+        'schedule_id' => [
+            'required' => 'Schedule is required. Please check if schedule is available on the "Preferred schedules (2 max)" field.',
+        ],
         'Code' => [
             'unique' => 'Course, Schedule, and Room combination already exists for this Term.',
         ],

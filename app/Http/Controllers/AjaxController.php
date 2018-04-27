@@ -69,15 +69,6 @@ class AjaxController extends Controller
 
     public function ajaxGetDate()
     {
-            // $select_courses = Course::with('classes')
-            // ->where('L', 'F')
-            // ->whereNotNull('Te_Code_New')
-            // ->get()
-            // ->pluck('classes');
-
-            // dd($select_courses);
-            // $data = $select_courses;
-            // return response()->json($data);
         //get current year and date
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year;       
@@ -103,8 +94,30 @@ class AjaxController extends Controller
     public function selectAjax(Request $request)
     {
         if($request->ajax()){
-            //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
-            $select_course = Course::where('L', $request->L)
+            $now_date = Carbon::now()->toDateString();
+                        $terms = Term::orderBy('Term_Code', 'desc')
+                                ->whereDate('Term_End', '>=', $now_date)
+                                ->get()->min();
+
+                        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+            
+            $select_courses = Classroom::where('L', $request->L)
+            ->where('Te_Term', $next_term->Term_Code)
+            ->orderBy('id', 'asc')
+            ->with('course')
+            ->get()
+            ->pluck("course.Description","Te_Code_New")
+            ;
+
+            $data = view('ajax-select',compact('select_courses'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
+
+    public function selectAjaxLevelOne(Request $request)
+    {
+        if($request->ajax()){
+            $select_courses = Course::where('L', $request->L)
             ->whereNotNull('Te_Code_New')
             ->orderBy('id', 'asc')
             ->pluck("Description","Te_Code_New")

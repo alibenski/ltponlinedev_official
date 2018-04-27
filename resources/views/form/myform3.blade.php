@@ -196,7 +196,7 @@
                         <label for="course_id" class="col-md-3 control-label">Preferred course: </label>
                         <div class="col-md-8">
                           <div class="dropdown">
-                            <select class="col-md-8 form-control course_select_no" name="course_id" autocomplete="off">
+                            <select class="col-md-8 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
                                 <option value="">--- Select Course ---</option>
                             </select>
                           </div>
@@ -404,11 +404,23 @@
                 
             }
           }); 
+      $("input[name='placementLang']").removeAttr('required');
       var L = $("input[name='L']:checked").val();
+      var token = $("input[name='_token']").val();
       console.log(L);
-      $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
-      $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
-      console.log($("select[name='course_id']").val());
+      $.ajax({
+                url: "{{ route('select-ajax-level-one') }}", 
+                method: 'POST',
+                data: {L:L, _token:token},
+                success: function(data, status) {
+                  console.log(data);
+                  $("select[name='course_id']").html('');
+                  $("select[name='course_id']").html(data.options);
+                  $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
+                  $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
+                  console.log($("select[name='course_id']").val());
+                }
+            });
 
       $(".placementTestMsg").attr('style', 'display:none');
       $(".placement-beginner-msg").removeAttr('style');
@@ -476,8 +488,10 @@
           method: 'POST',
           data: {L:L, _token:token},
           success: function(data, status) {
+            console.log(data.options[61]);
             $("select[name='course_id']").html('');
             $("select[name='course_id']").html(data.options);
+           
           }
       });
   }); 

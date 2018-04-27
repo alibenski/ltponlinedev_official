@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\MailtoStudent;
 use App\Mail\MailtoApproverHR;
 use App\Mail\MailtoStudentHR;
+use App\PlacementForm;
 
 class ApprovalController extends Controller
 {
@@ -25,6 +26,125 @@ class ApprovalController extends Controller
     public function show($id)
     {
         //
+    }
+
+    public function getPlacementFormData($staff, $lang, $id, $form)
+    {
+        //get variables from URL to decrypt and pass to controller logic 
+        $staff = Crypt::decrypt($staff);
+        $lang = Crypt::decrypt($lang);
+        $id = Crypt::decrypt($id);
+        $form_counter = Crypt::decrypt($form);
+
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code'); 
+        $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
+
+        //query from PlacementForm table the needed information data to include in the control logic and then pass to approval page
+        $input_course = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $form_counter)
+                                ->get();
+        $input_staff = PlacementForm::withTrashed()->orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('id', $id)
+                                ->where('eform_submit_count', $form_counter)
+                                ->first();
+
+        // check if decision has already been made or self-paid form
+        $existing_appr_value = $input_staff->approval;
+        $is_self_pay = $input_staff->is_self_pay_form;
+        $is_deleted = $input_staff->deleted_at;
+        if (isset($existing_appr_value) || isset($is_self_pay) || isset($is_deleted)) {
+            return redirect()->route('eform');
+        } 
+        
+        return view('form.placementApprovalPage')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
+    }
+
+    public function updatePlacementFormData(Request $request, $staff, $lang, $formcount)
+    {   
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $forms = PlacementForm::orderBy('id', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->first();
+
+        $mgr_comment =  $request->input('mgr_comment');
+        $decision = $request->input('decision-'.$forms->L);
+        // Validate decision input 
+                $this->validate($request, array(
+                    'decision-'.$forms->L => 'required|',
+                )); 
+
+        // Save the data to db 
+        $updateData = PlacementForm::find($forms->id);
+        $updateData->approval =  $decision; 
+        $updateData->mgr_comments = $mgr_comment;
+        $updateData->save();
+
+        // check the organization of the student to know which email process is followed by the system
+        $org = $forms->DEPT; 
+
+        // Add more organizations in the IF statement below
+        if ($org != 'UNOG' && $decision != '0') {
+            // mail to staff members which have a CLM learning partner
+            Mail::to($staff_email)
+                    ->cc($mgr_email)
+                    ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
+
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
+           
+            // return redirect()->route('eform');            
+        } else {
+            // mail to UNOG staff members or staff which do not have CLM learning partner
+            Mail::to($staff_email)
+                    ->cc($mgr_email)
+                    ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
+        }
+        
+        if($decision == '1'){
+            $decision_text = 'Yes, you have approved at least one of the chosen schedules.';
+            } else {
+            $decision_text = 'No, you did not approve any of the chosen schedules.';
+
+            $enrol_form_d = [];
+            for ($i = 0; $i < count($forms); $i++) {
+                $enrol_form_d = $forms[$i]->id;
+                $course = Preenrolment::find($enrol_form_d);
+                $course->delete();
+                }
+            }
+        // Set flash data with message
+        $request->session()->flash('success', 'Manager Decision has been saved! Decision is: '.$decision_text);
+
+        return redirect()->route('eform');
     }
 
     /**

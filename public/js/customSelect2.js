@@ -2,7 +2,15 @@
       $(".wx").select2({
         //theme: "bootstrap",   
         minimumResultsForSearch: -1,
-        placeholder: 'Choose Here',
+        placeholder: 'Select Course Here',
+        "language": {
+            "noResults": function(){
+                return "<strong class='text-danger'>Sorry No Courses Offered for this Language this Semester. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the availability of courses and classes</a>";
+                }
+        },
+        escapeMarkup: function (markup) {
+        return markup;
+        }
       });
   }); 
 

@@ -94,7 +94,7 @@
             </div>
             <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">{{ csrf_field() }}
               <div class="modal-body">
-                <p>It looks like you have changed organizations from your last enrolment. Please confirm and click the Next button.</p>
+                <p>It looks like you are a new student or you have changed organizations from your last enrolment. Please confirm and click the Next button.</p>
                 <label for="organization">New Organization:</label> <input id="inputOrg" name="" type="text" value="" readonly="">
               </div>
               <div class="modal-footer">
