@@ -459,6 +459,7 @@
           method: 'POST',
           data: {L:L, _token:token},
           success: function(data, status) {
+            console.log(data);
             $("select[name='course_id']").html('');
             $("select[name='course_id']").html(data.options);
           }

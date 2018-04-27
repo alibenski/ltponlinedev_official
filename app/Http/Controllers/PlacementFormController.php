@@ -102,4 +102,50 @@ class PlacementFormController extends Controller
         $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
         return redirect()->route('home');
     }
+
+    public function postSelfPayPlacementInfo(Request $request, $attachment_pay_file, $attachment_identity_file)
+    {   
+        $index_id = $request->input('index_id');
+        $language_id = $request->input('L'); 
+        $course_id = $request->input('course_id');
+        $term_id = $request->input('term_id');
+        //$schedule_id is an array 
+        $schedule_id = $request->input('schedule_id');
+        $mgr_email = $request->input('mgr_email');
+        $mgr_fname = $request->input('mgr_fname');
+        $mgr_lname = $request->input('mgr_lname');
+        $uniquecode = $request->input('CodeIndexID');
+        $org = $request->input('org');
+        $agreementBtn = $request->input('agreementBtn');
+
+        $this->validate($request, array(
+            'placementLang' => 'required|integer',
+            'agreementBtn' => 'required|',
+        ));
+
+        $qryEformCount = PlacementForm::withTrashed()
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('eform_submit_count', 'desc')->first();
+           
+        $eform_submit_count = 1;
+        if(isset($qryEformCount->eform_submit_count)){
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+        }
+
+        $placementForm = new PlacementForm;
+        $placementForm->L = $language_id;
+        $placementForm->Term = $term_id;
+        $placementForm->INDEXID = $index_id;
+        $placementForm->DEPT = $org;
+        $placementForm->attachment_id = $attachment_identity_file->id;
+        $placementForm->attachment_pay = $attachment_pay_file->id;
+        $placementForm->is_self_pay_form = 1;
+        $placementForm->eform_submit_count = $eform_submit_count;      
+        $placementForm->placement_schedule_id = $request->placementLang;
+        $placementForm->std_comments = $request->std_comment;
+        $placementForm->consentBtn = $request->consentBtn;
+        $placementForm->agreementBtn = $request->agreementBtn;
+        $placementForm->save();
+    }
 }

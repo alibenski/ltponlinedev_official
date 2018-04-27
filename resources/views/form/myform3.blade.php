@@ -193,7 +193,7 @@
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
                     <div class="form-group">
-                        <label for="course_id" class="col-md-3 control-label">Enrol to which course: </label>
+                        <label for="course_id" class="col-md-3 control-label">Preferred course: </label>
                         <div class="col-md-8">
                           <div class="dropdown">
                             <select class="col-md-8 form-control course_select_no" name="course_id" autocomplete="off">
@@ -204,7 +204,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="schedule_id" class="col-md-3 control-label">Pick 2 (max) class schedules: </label>
+                        <label for="schedule_id" class="col-md-3 control-label">Preferred schedules (2 max): </label>
                         <button type="button" class="multi-clear button btn btn-danger" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
                         <div class="col-md-8">
                           <div class="dropdown">
@@ -372,10 +372,10 @@
               $(".placementTestMsg").attr('style', 'display:none');
               $(".placement-enrol").attr('style', 'display:none');
               $(".placement-beginner-msg").attr('style', 'display:none');
-                $.get("{{ route('check-enrolment-entries-ajax') }}", function(data) {
-                      console.log('regular enrol form count:' + data);
+                $.get("{{ route('check-selfpay-entries-ajax') }}", function(data) {
+                      console.log('selfpay enrol form count:' + data);
                       if (data >= 2) {
-                        alert('You are not allowed to submit more than 2 enrolment forms. You will now be redirected to the submitted forms page.');
+                        alert('You are not allowed to submit more than 2 payment-based enrolment forms. You will now be redirected to the submitted forms page.');
                         $("#loader").fadeIn(500);
                         var delay = 1000;
                         setTimeout(function() {
@@ -391,11 +391,12 @@
       $("#placementDecision3").prop('checked', false);
       $("select[name='course_id']").prop('disabled', false);
   });
+  // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
-      $.get("{{ route('check-enrolment-entries-ajax') }}", function(data) {
+      $.get("{{ route('check-selfpay-entries-ajax') }}", function(data) {
             console.log('regular enrol form count:' + data);
             if (data >= 2) {
-              alert('You are not allowed to submit more than 2 enrolment forms. However, if you are not a complete beginner, you could submit a placement test form. The page will now reload.');
+              alert('You are not allowed to submit more than 2 payment-based enrolment forms. However, if you are not a complete beginner, you could submit a placement test form. The page will now reload.');
               $("#loader").fadeIn(500);
               // var redirUrl = "{{ route('submitted') }}";
               // $(location).attr('href',redirUrl);
@@ -430,10 +431,10 @@
   // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
     $("input[name='placementDecisionB']").val("0");
-      $.get("{{ route('check-placement-entries-ajax') }}", function(data) {
+      $.get("{{ route('check-selfpay-placement-entries-ajax') }}", function(data) {
             console.log(data.length);
             if (data.length >= 2) {
-              alert('You are not allowed to submit more than 2 placement test forms. You will now be redirected.');
+              alert('You are not allowed to submit more than 2 payment-based placement test forms. You will now be redirected.');
               $("#loader").fadeIn(500);
               var redirUrl = "{{ route('whatorg') }}";
               $(location).attr('href',redirUrl);

@@ -10,7 +10,7 @@ class Course extends Model
     protected $table = 'LTP_CR_LIST';
 
     public function classes() {
-    return $this->hasMany('App\Classroom'); 
+    return $this->hasMany('App\Classroom', 'Te_Code_New', 'Te_Code_New'); 
     }
 
     public function users() {

@@ -23,6 +23,7 @@ use DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\PlacementFormController;
 
 class SelfPayController extends Controller
 {
@@ -112,7 +113,7 @@ class SelfPayController extends Controller
 
         return view('form.myform3')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
         } else {
-        return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. First visit: < '. route('whatorg') .' > and answer the mandatory question.');
+        return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. Click on "Register/Enrol Here" < '. route('whatorg') .' > from the Menu below and answer the mandatory question.');
         }
     }
 
@@ -164,12 +165,8 @@ class SelfPayController extends Controller
                         ));
             }                              
         }
-                    //validate other input fields outside of above loop
+                    // 1st part of validate other input fields 
                         $this->validate($request, array(
-                            'term_id' => 'required|',
-                            'schedule_id' => 'required|',
-                            'course_id' => 'required|',
-                            'L' => 'required|',
                             'identityfile' => 'required|mimes:pdf,doc,docx|max:20000',
                             'payfile' => 'required|mimes:pdf,doc,docx|max:20000',
                         )); 
@@ -223,6 +220,23 @@ class SelfPayController extends Controller
                             ]); 
             $attachment_pay_file->save();
         }  
+
+        // check if placement test form
+        // if so, call method from PlacementFormController
+        if ($request->placementDecisionB === '0') {
+            app('App\Http\Controllers\PlacementFormController')->postSelfPayPlacementInfo($request, $attachment_pay_file, $attachment_identity_file);
+            $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+            return redirect()->route('home');
+        }
+
+                    // 2nd part of validate other input fields 
+                        $this->validate($request, array(
+                            'term_id' => 'required|',
+                            'schedule_id' => 'required|',
+                            'course_id' => 'required|',
+                            'L' => 'required|',
+                        )); 
+
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {

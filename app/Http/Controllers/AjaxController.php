@@ -69,6 +69,15 @@ class AjaxController extends Controller
 
     public function ajaxGetDate()
     {
+            // $select_courses = Course::with('classes')
+            // ->where('L', 'F')
+            // ->whereNotNull('Te_Code_New')
+            // ->get()
+            // ->pluck('classes');
+
+            // dd($select_courses);
+            // $data = $select_courses;
+            // return response()->json($data);
         //get current year and date
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year;       
@@ -95,12 +104,12 @@ class AjaxController extends Controller
     {
         if($request->ajax()){
             //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
-            $select_courses = Course::where('L', $request->L)
+            $select_course = Course::where('L', $request->L)
             ->whereNotNull('Te_Code_New')
             ->orderBy('id', 'asc')
             ->pluck("Description","Te_Code_New")
             ->all();
-            
+
             $data = view('ajax-select',compact('select_courses'))->render();
             return response()->json(['options'=>$data]);
         }
@@ -192,6 +201,44 @@ class AjaxController extends Controller
             return response()->json($data);
     }
 
+    public function ajaxCheckSelfpayPlacementEntries()
+    {
+        $current_user = Auth::user()->indexno;
+        $now_date = Carbon::now()->toDateString();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                    ->whereDate('Term_End', '>=', $now_date)
+                    ->get()->min();
+
+            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        $placementFromCount = PlacementForm::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)
+                ->where('Term', $next_term->Term_Code)
+                ->where('is_self_pay_form', 1)
+                ->get();
+
+        $data = $placementFromCount;
+            return response()->json($data);        
+    }
+
+    public function ajaxCheckSelfpayEntries()
+    {
+        $current_user = Auth::user()->indexno;
+        $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
+            ->where(function($q){ 
+                $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+                // do NOT count number of submitted forms disapproved by manager or HR learning partner  
+                $q->where('Term', $latest_term )->where('deleted_at', NULL)
+                    ->where('is_self_pay_form', 1)
+                    ;
+            })->count('eform_submit_count');
+
+            $data = $eformGrouped;
+            return response()->json($data);
+    }
+    
+    /*
+        checks whether student is NEW or missed 2 semesters
+    */
     public function ajaxCheckPlacementCourse(Request $request)
     {
         if($request->ajax()){
