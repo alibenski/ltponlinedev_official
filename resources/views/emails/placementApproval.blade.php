@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Staff Member, {{ $staff->name }}, would like to take a placement exam on a CLM language and needs your approval.
+            Staff Member, {{ $staff->name }}, would like to take a placement test on a CLM language and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -193,8 +193,8 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear Manager, </p>
-                                     <p> Staff Member, {{ $staff->name }}, would like to take a placement exam for CLM language: <strong>{{ $input_course->languages->name }}</strong></p>
-                                    <p>The placement exam will be on @if ($input_course->L == 'F') {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif
+                                     <p> Staff Member, {{ $staff->name }}, would like to take a placement test for CLM language: <strong>{{ $input_course->languages->name }}</strong></p>
+                                    <p>The placement test will be on @if ($input_course->L == 'F') {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif
                                     </p>
 
                                      <p> Please click on the button below to access the approval page.</p>

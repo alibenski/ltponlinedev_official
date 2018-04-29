@@ -244,6 +244,7 @@
                 
                     <div class="form-group col-md-12">
                           <div class="disclaimer alert col-md-8 col-md-offset-2">
+                                    <p class="small text-danger"><strong>Required field</strong></p>
                                     <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
                                     <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
                           </div>

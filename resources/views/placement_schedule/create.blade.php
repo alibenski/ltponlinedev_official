@@ -3,7 +3,7 @@
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    <h2>Create Course + Schedule for Term: {{ $next_term->Term_Code.' - '.$next_term->Term_Name.' - '.$next_term->Comments }}</h2>
+    <h2>Create Placement Test Schedule for Term: {{ $next_term->Term_Code.' - '.$next_term->Term_Name.' - '.$next_term->Comments }}</h2>
     <h5 class="alert alert-info alert-block">On this page, language administrators create the Course-Schedule combinations BEFORE the Enrolment period</h5>
     <hr>
 
@@ -80,26 +80,24 @@
                     <tbody>
                         <tr>
                           <td>
-                                @foreach ($format as $id => $name)
+                                
 
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="format_id" value="{{ $id }}" /> {{ $name }}
+                                            <input type="radio" name="format_id" value="" /> 
                                         </label>
                                     </div>
 
-                                @endforeach
+                                
                           </td>
                           <td>
-                                @foreach ($duration as $id => $name)
 
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="duration_id" value="{{ $id }}" /> {{ $name }}
+                                            <input type="radio" name="duration_id" value="" />
                                         </label>
                                     </div>
 
-                                @endforeach
                           </td>
                         </tr>
                     </tbody>
@@ -118,15 +116,15 @@
                     <tbody>
                         <tr>
                           <td>
-                                @foreach ($schedules as $id => $name)
+                                {{-- @foreach ($schedules as $id => $name) --}}
 
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="schedule_id[]" multiple="multiple" value="{{ $id }}" /> {{ $name }}
+                                            <input type="checkbox" name="schedule_id[]" multiple="multiple" value="" /> 
                                         </label>
                                     </div>
 
-                                @endforeach
+                                {{-- @endforeach --}}
                           </td>
                         </tr>
                     </tbody>

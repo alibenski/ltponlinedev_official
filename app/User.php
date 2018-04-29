@@ -31,6 +31,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function preenrolment()
+    {
+    return $this->hasMany('App\Preenrolment', 'indexno' ,'INDEXID');
+    }
+
     public function courses() {
     return $this->belongsTo('App\Course', 'course_id'); 
     }
@@ -58,7 +63,7 @@ class User extends Authenticatable
         $this->notify(new CustomPassword($token));
     }
 }
-
+// class to modify email template of password reset 
 class CustomPassword extends ResetPassword
 {
     public function toMail($notifiable)

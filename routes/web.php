@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('courses', 'CourseController');
     Route::resource('organizations', 'OrgController');
     Route::resource('placement-schedule', 'PlacementScheduleController');
+    Route::resource('preenrolment', 'PreenrolmentController');
 });
 
 //middleware to prevent back button and access cache

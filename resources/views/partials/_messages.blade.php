@@ -1,13 +1,13 @@
 @if (Session::has('success')) 
 	<div class="alert alert-success alert-block" role="alert">
-		<strong>Success: </strong> {{ Session::get('success') }}
+		<strong>Message: </strong> {{ Session::get('success') }}
 	</div>
 
 @endif
 
 @if (Session::has('org_change_success')) 
 	<div class="alert alert-success alert-block" role="alert">
-		<strong>Success: </strong> {{ Session::get('org_change_success') }}
+		<strong>Message: </strong> {{ Session::get('org_change_success') }}
 	</div>
 
 @endif

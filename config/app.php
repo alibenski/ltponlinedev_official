@@ -51,8 +51,8 @@ return [
     |
     */
 
-    'url' => 'http://ltponlinedev.local',
-    // 'url' => 'http://ltponlinedev.unog.ch',
+    // 'url' => 'http://ltponlinedev.local',
+    'url' => 'http://ltponlinedev.unog.ch',
 
     /*
     |--------------------------------------------------------------------------
