@@ -76,9 +76,9 @@
                             <th>{{ $input_staff->languages->name }}</th>
                             <td>
                               @if($input_staff->L == 'F')
-                              {{ $input_staff->placementSchedule->date_of_plexam }} to {{ $input_staff->placementSchedule->date_of_plexam_end }}
+                              {{ date('d M Y', strtotime($input_staff->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_staff->placementSchedule->date_of_plexam_end)) }}
                               @else
-                              {{ $input_staff->placementSchedule->date_of_plexam }}
+                              {{ date('d M Y', strtotime($input_staff->placementSchedule->date_of_plexam)) }}
                               @endif
                             </td>
                             <td>

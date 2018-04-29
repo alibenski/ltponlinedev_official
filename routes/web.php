@@ -33,19 +33,27 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
     Route::get('/','WelcomeController@index');
 });
 
-//home page routes
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg']);
-// Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg'])->middleware('opencloseenrolment');
-Route::post('/whatform', ['as'=>'whatform','uses'=>'HomeController@whatform'])->middleware('check-prev-url');
-Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
-Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
-Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
-//Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
-Route::delete('/delete/user/{staff}/course/{tecode}/{form}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
-//apply auth middleware only so students could edit their profile
-Route::resource('students', 'StudentController');
-Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
+Route::middleware(['auth'])->group(function () {
+    Route::middleware(['first-time-login'])->group(function () { //middleware to force user to change password 
+        //home page routes
+        Route::get('/home', 'HomeController@index')->name('home');
+        Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg']);
+        // Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg'])->middleware('opencloseenrolment');
+        Route::post('/whatform', ['as'=>'whatform','uses'=>'HomeController@whatform'])->middleware('check-prev-url');
+        Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
+        Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
+        Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
+        //Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+        Route::delete('/delete/user/{staff}/course/{tecode}/{form}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+        //apply auth middleware only so students could edit their profile
+        Route::resource('students', 'StudentController');
+        Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
+            });
+    Route::get('password/expired', 'FirstTimeLoginController@expired')
+        ->name('password.expired');
+    Route::post('password/post_expired', 'FirstTimeLoginController@postExpired')
+        ->name('password.post_expired');
+});
 
 //route for ajax jquery on organization
 Route::get('org-select-ajax', ['as'=>'org-select-ajax','uses'=>'AjaxController@ajaxOrgSelect']);

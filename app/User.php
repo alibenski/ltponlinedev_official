@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'indexno', 'name', 'nameFirst', 'nameLast', 'email', 'temp_email', 'password', 'approved_account', 'approved_update', 'account_token', 'update_token',
+        'indexno', 'name', 'nameFirst', 'nameLast', 'email', 'temp_email', 'password', 'must_change_password', 'approved_account', 'approved_update', 'account_token', 'update_token',
     ];
 
     /**
@@ -65,7 +65,8 @@ class CustomPassword extends ResetPassword
     {
         return (new MailMessage)
             ->from('clm_language@un.org', 'CLM Language')
-            ->subject( 'Password Reset Request' )
+            ->subject( 'CLM Online Registration Password Reset' )
+            ->priority(1)
             ->line('We are sending this email because we recieved a forgot password request.')
             ->action('Reset Password', url(config('app.url') . route('password.reset', $this->token, false)))
             ->line('If you did not request a password reset, no further action is required. Please contact us if you did not submit this request.');

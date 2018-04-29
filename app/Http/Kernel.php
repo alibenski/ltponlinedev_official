@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'check-prev-url' => \App\Http\Middleware\CheckPrevURL::class,
         'check-placement-exam' => \App\Http\Middleware\CheckPlacementExam::class,
         'prevent-access-placement' => \App\Http\Middleware\PreventAccessPlacement::class,
+        'first-time-login' => \App\Http\Middleware\FirstTimeLogin::class,
     ];
 }

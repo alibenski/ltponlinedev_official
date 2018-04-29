@@ -194,7 +194,7 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear CLM Learning Partner, </p>
                                      <p> Staff Member, {{ $staff_name }}, would like to take a placement exam for CLM language: <strong>{{ $input_course->languages->name }}</strong></p>
-                                     <p>The placement exam will be on <strong> @if ($input_course->L == 'F') {{ $input_course->placementSchedule->date_of_plexam }} to {{ $input_course->placementSchedule->date_of_plexam_end }}. @else {{ $input_course->placementSchedule->date_of_plexam }}. @endif </strong>
+                                     <p>The placement exam will be on <strong> @if ($input_course->L == 'F') {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
                                     <p>Please note that the request above has initially been approved by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>
                                      <p>Please click on the button below to access the approval page.</p>

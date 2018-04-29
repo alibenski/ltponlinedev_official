@@ -101,7 +101,7 @@
                     <h4><strong>Placement Test Request Form # {{ $plform->eform_submit_count }}</strong></h4>
                     <h5>@if($plform->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif</h5> 
                     <h5>Language: <strong>{{ $plform->languages->name }}</strong></h5>
-                    <h5>Test Date: <strong>{{ $plform->placementSchedule->date_of_plexam }}</strong></h5>
+                    <h5>@if($plform->L == 'F')Test Date: Online from <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> to <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam_end)) }}</strong> @else Test Date: <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> @endif</h5>
                 </div>
                 </div>
                 <hr>
