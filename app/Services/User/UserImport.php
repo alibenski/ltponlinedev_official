@@ -105,7 +105,7 @@ class UserImport
         try {
             DB::connection()->disableQueryLog();
             DB::beginTransaction();
-            $pwd = bcrypt('Welcome2u');
+            // $pwd = bcrypt('Welcome2u');
             foreach ($rows as $row) {
             if (count($header) != count($row)) {
                 // var_dump(count($header), count($row));
@@ -121,7 +121,8 @@ class UserImport
                     'nameFirst' => $row['nameFirst'],
                     'nameLast' => $row['nameLast'],
                     'email' => $row['email'],
-                    'password' => $pwd,
+                    'password' => bcrypt($row['password']),
+                    'must_change_password' => 1,
                     // 'password' => bcrypt(uniqid()),
                     'approved_account' => 1,
                 ]);

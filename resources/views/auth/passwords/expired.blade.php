@@ -12,10 +12,10 @@
                         <div class="alert alert-success">
                             {{ session('status') }}
                         </div>
-                        <a href="/">Return to homepage</a>
+                        <a href="/">Continue to the enrolment platform</a>
                     @else
                     <div class="alert alert-info">
-                        You are required to change your password.
+                        For security reasons, you are required to change your password upon first login.
                     </div>
                     <form class="form-horizontal" method="POST" action="{{ route('password.post_expired') }}">
                         {{ csrf_field() }}
