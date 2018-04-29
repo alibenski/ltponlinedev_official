@@ -12,11 +12,11 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-danger btn-space"></i>Changing your CLM Online E-mail Address</h4></span>
+                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-danger btn-space"></i>Changing your CLM Online Email Address</h4></span>
             </div>
             <div class="modal-body">
-                <p>Once you change your e-mail address, this will become your <strong>login</strong> and your <strong>official</strong> e-mail address to which we will be sending notifications and other future correspondences. Thus, please be careful when updating the e-mail address field.</p>
-                <p>For your security,  after submitting the changes, you will be automatically logged out from the application and  we will send a verification e-mail to the <strong>new e-mail address</strong> you will set here. <strong><em>The e-mail update will not take effect until you confirm.</em></strong></p> 
+                <p>Once you change your email address, this will become your <strong>login</strong> and your <strong>official</strong> email address to which we will be sending notifications and other future correspondences. Thus, please be careful when updating the email address field.</p>
+                <p>For your security,  after submitting the changes, you will be automatically logged out from the application and  we will send a verification email to the <strong>new email address</strong> you will set here. <strong><em>The email update will not take effect until you confirm.</em></strong></p> 
                 <p>Please note that the confirmation is only valid for <strong>24 hours</strong> upon submission of your request.</p>
             </div>
             <div class="modal-footer">
@@ -79,7 +79,7 @@
                                     {{-- apply jS or HTML preferred characters for this field --}}
                                     <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input id="email" name="email" placeholder="{{ $student->email }}" class="form-control"  type="text">                                    
                                 </div>
-                                <p class="small text-danger"><strong>IMPORTANT NOTE:</strong> Once you change your e-mail address, this will become <strong>your login and your official e-mail address</strong> to which we will be sending notifications and other future correspondences.</p>
+                                <p class="small text-danger"><strong>IMPORTANT NOTE:</strong> Once you change your email address, this will become <strong>your login and your official email address</strong> to which we will be sending notifications and other future correspondences.</p>
                             </div>
                         </div>
 

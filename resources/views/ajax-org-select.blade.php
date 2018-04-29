@@ -13,7 +13,7 @@
 											@endif
                                     </select>
                                   </div>
-                                  <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field. A wrong input may nullify your enrolment.</strong></p>
+                                  <p class="small text-danger"><strong>Please check that you select the correct Organization in this field. A wrong input may nullify your enrolment.</strong></p>
                                 </div>
                             </div>
                             </div>

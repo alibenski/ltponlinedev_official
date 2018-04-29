@@ -24,7 +24,7 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
-                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQ's regarding enrolment eligibility.</p>
+                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
                   <p>Please find and choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank"><strong>HERE</strong></a> before proceeding below. </p>                  
                 </div>
 
@@ -45,13 +45,13 @@
                 </div>
 
                 <div id="secretMsg1" class="col-md-12" style="display: none">
-                  <p>You confirmed that you are a <em>self-paying student</em>, please follow the instructions below:</p>
+                  <p>You confirmed that you are a <em>self-paying student</em>. Please follow the instructions below:</p>
                   <ol>
                     <li>Choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank">HERE</a></li>
                     <li>Prepare a copy of proof of payment</li>
-                    <li>Prepare a copy of your carte de légitimation or employee attestation</li>
+                    <li>Prepare a copy of your carte de légitimation or work certificate</li>
                   </ol>
-                  <p>After doing the instructions, click the Next button to continue</p>
+                  <p>After following the instructions, click the Next button to continue</p>
                 </div>
                 <div id="secretMsg2" class="col-md-12" style="display: none">
                   <p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
@@ -70,7 +70,7 @@
                         @endif
                       </select>
                     </div>
-                    <p class="small text-danger"><strong>Please check that you belong to the correct Organization in this field.</strong></p>
+                    <p class="small text-danger"><strong>Please check that you select the correct Organization in this field.</strong></p>
                   </div>
                 </div>
 
@@ -94,7 +94,7 @@
             </div>
             <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">{{ csrf_field() }}
               <div class="modal-body">
-                <p>It looks like you are a new student or you have changed organizations from your last enrolment. Please confirm and click the Next button.</p>
+                <p>It looks like you are a new student or you have changed organizations since your last enrolment. Please confirm and click the Next button.</p>
                 <label for="organization">New Organization:</label> <input id="inputOrg" name="" type="text" value="" readonly="">
               </div>
               <div class="modal-footer">

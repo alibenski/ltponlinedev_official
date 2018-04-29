@@ -139,6 +139,7 @@ class NoFormController extends Controller
         $uniquecode = $request->input('CodeIndexID');
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
+        $flexibleBtn = $request->input('flexibleBtn');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -234,7 +235,8 @@ class NoFormController extends Controller
                 'DEPT' => $org,    
                 'eform_submit_count' => $eform_submit_count, 
                 'form_counter' => $form_counter,  
-                'agreementBtn' => $agreementBtn,                
+                'agreementBtn' => $agreementBtn,
+                'flexibleBtn' => $flexibleBtn,              
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();

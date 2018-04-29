@@ -136,6 +136,7 @@ class SelfPayController extends Controller
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         $consentBtn = $request->input('consentBtn');
+        $flexibleBtn = $request->input('flexibleBtn');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -259,6 +260,7 @@ class SelfPayController extends Controller
                 'DEPT' => $org,
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
+                'flexibleBtn' => $flexibleBtn,  
                 ]); 
 
                     foreach ($ingredients as $data) {

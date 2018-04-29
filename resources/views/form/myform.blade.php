@@ -103,7 +103,7 @@
                     <div class="placementTestMsg " style="display: none">
                       <div class="alert alert-warning">
                         <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
-                        <p>Our records show that either you are a new student or you have not been enrolled on the selected language course during the past 2 terms.</p>
+                        <p>Our records show that either you are a new student or you have not been enrolled on the selected language course during the past two terms.</p>
                         <p>You are required to take a <strong>Placement Test</strong> unless you are a complete beginner.</p>
                         
                         <div class="form-group">
@@ -125,8 +125,8 @@
                     <div class="alert alert-info alert-dismissible">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
-                      <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. Please choose the schedule for your placement test if available. If none, then please come back next semester.</p> 
-                      <p>At the end of this form, you have the option to fill out a comment box to express your concerns <strong>(e.g. preferred specialized course, time contraints, etc.)</strong>. Thank you for your cooperation.</p>
+                      <p>You have answered <strong>NO</strong>. You are not a complete beginner on your selected language. Please select a date for your placement test from the options available. If you are unable to take the test, then you can apply again in the next enrolment period.</p> 
+                      <p>At the end of this form, you have the option to fill out a comment box to express any concerns <strong>(e.g. preferred specialized course, time contraints, etc.)</strong>. Thank you for your cooperation.</p>
                     </div>
                     
                     <div class="otherQuestions2 row col-md-12">
@@ -158,7 +158,7 @@
                     <div class="alert alert-info alert-dismissible">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
-                      <p>You have answered <strong>YES</strong> and the beginner course for your selected language has been automatically filled in. Please continue below.</p>
+                      <p>You have answered <strong>YES</strong>. The beginner course for your selected language has been automatically filled in. Click the "Preferred class schedule" field to check their availability.</p>
                     </div>
                   </div>
 
@@ -186,7 +186,14 @@
                           </div>
                         </div>
                     </div>
-                  
+
+                    <div class="form-group col-md-12">
+                      <div class="disclaimer-flexible alert alert-default alert-block col-md-8 col-md-offset-3">
+                        <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
+                        <label for="flexibleBtn" class="form-control-static">Please check this box if you will be flexible to take another schedule should the classes be full for this course. 
+                        </label>
+                      </div>
+                    </div> 
                             <!-- SHOW CHOICES REAL TIME -->
                     <div class="col-md-12">
                       <div class="well">
@@ -292,7 +299,7 @@
       $('.insert-container').append('<div class="insert-msg"></div>')
 
       if ($(this).val() == 'F') {
-        $(".place-here").hide().append('<label for="scheduleChoices">The French Placement Test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
+        $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
       }
@@ -308,12 +315,24 @@
           data: {L:L, _token:token},
           success: function(data) { // get the placement test schedules
               $.each(data, function(index, val) {
-                  console.log(val);
+                  var m_names = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                  var d = new Date(val.date_of_plexam);
+                  var curr_date = d.getDate();
+                  var curr_month = d.getMonth();
+                  var curr_year = d.getFullYear();
+                  var dateString = curr_date + " " + m_names[curr_month] + " " + curr_year;
+
+                  var dend = new Date(val.date_of_plexam_end);
+                  var curr_date_end = dend.getDate();
+                  var curr_month_end = dend.getMonth();
+                  var curr_year_end = dend.getFullYear();
+                  var dateStringEnd = curr_date_end + " " + m_names[curr_month_end] + " " + curr_year_end;
+
                   $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
                   if ($("input[name='L']:checked").val() == 'F') {
-                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ val.date_of_plexam +' to ' + val.date_of_plexam_end + '</label>'+'<br>').fadeIn();
+                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ dateString +' to ' + dateStringEnd + '</label>'+'<br>').fadeIn();
                   } else {
-                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>').fadeIn();
+                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label>'+'<br>').fadeIn();
                   }
               }); // end of $.each
               // if no schedule, tell student there is none
@@ -431,10 +450,11 @@
       $.get("{{ route('check-placement-entries-ajax') }}", function(data) {
             console.log(data.length);
             if (data.length >= 2) {
-              alert('You are not allowed to submit more than 2 placement test forms. You will now be redirected.');
+              alert('You are not allowed to submit more than 2 placement test forms. The page will now reload.');
               $("#loader").fadeIn(500);
-              var redirUrl = "{{ route('whatorg') }}";
-              $(location).attr('href',redirUrl);
+              // var redirUrl = "{{ route('whatorg') }}";
+              // $(location).attr('href',redirUrl);
+              location.reload(true);
             }
           }); 
     $(".placement-enrol").removeAttr('style');

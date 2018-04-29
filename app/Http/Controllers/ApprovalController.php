@@ -15,6 +15,9 @@ use App\Mail\MailtoStudent;
 use App\Mail\MailtoApproverHR;
 use App\Mail\MailtoStudentHR;
 use App\PlacementForm;
+use App\Mail\MailPlacementApprovaltoStudent;
+use App\Mail\MailPlacementHRApprovaltoStudent;
+use App\Mail\MailPlacementTesttoApproverHR;
 
 class ApprovalController extends Controller
 {
@@ -96,15 +99,47 @@ class ApprovalController extends Controller
         $updateData->mgr_comments = $mgr_comment;
         $updateData->save();
 
+        // query from the table with the saved data and then
+        // execute Mail class before redirect
+        $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->first();
+
+        $formItems = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->get();
+
+        // query student email from users model via index nmber in preenrolment model
+        $staff_name = $formfirst->users->name;
+        $staff_email = $formfirst->users->email;
+        $staff_index = $formfirst->INDEXID;   
+        $mgr_email = $formfirst->mgr_email;
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $course = PlacementForm::orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $staff_index)
+                                ->value('L');
+        // query from Preenrolment table the needed information data to include in email
+        $input_course = $formfirst; 
+
         // check the organization of the student to know which email process is followed by the system
-        $org = $forms->DEPT; 
+        $org = $formfirst->DEPT; 
 
         // Add more organizations in the IF statement below
         if ($org != 'UNOG' && $decision != '0') {
             // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
+                    ->send(new MailPlacementApprovaltoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
 
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
@@ -119,32 +154,161 @@ class ApprovalController extends Controller
             $org_email_arr = $org_email->toArray(); 
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
+                    ->send(new MailPlacementTesttoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
            
             // return redirect()->route('eform');            
         } else {
             // mail to UNOG staff members or staff which do not have CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
-                    ->send(new MailtoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
+                    ->send(new MailPlacementApprovaltoStudent($formItems, $input_course, $staff_name, $mgr_comment, $request));
         }
         
         if($decision == '1'){
-            $decision_text = 'Yes, you have approved at least one of the chosen schedules.';
+            $decision_text = 'Yes, you have approved the request.';
             } else {
-            $decision_text = 'No, you did not approve any of the chosen schedules.';
+            $decision_text = 'No, you did not approve the request.';
 
-            $enrol_form_d = [];
-            for ($i = 0; $i < count($forms); $i++) {
-                $enrol_form_d = $forms[$i]->id;
-                $course = Preenrolment::find($enrol_form_d);
+                $enrol_form_d = $forms->id;
+                $course = PlacementForm::find($enrol_form_d);
                 $course->delete();
-                }
+                
             }
         // Set flash data with message
         $request->session()->flash('success', 'Manager Decision has been saved! Decision is: '.$decision_text);
 
         return redirect()->route('eform');
+    }
+
+    public function getPlacementFormData2hr($staff, $lang, $id, $form)
+    {   
+        //get variables from URL to decrypt and pass to controller logic 
+        $staff = Crypt::decrypt($staff);
+        $lang = Crypt::decrypt($lang);
+        $id = Crypt::decrypt($id);
+        $form_counter = Crypt::decrypt($form);
+
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
+        //query from PlacementForm table the needed information data to include in the control logic and then pass to approval page
+        $input_course = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $form_counter)
+                                ->get();
+        $input_staff = PlacementForm::orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('eform_submit_count', $form_counter)
+                                ->where('id', $id)
+                                ->where('L', $lang)
+                                ->first();
+        //check if decision has already been made
+        $existing_appr_value = $input_staff->approval_hr;
+        $is_self_pay = $input_staff->is_self_pay_form;
+        $is_deleted = $input_staff->deleted_at;
+        if (isset($existing_appr_value) || isset($is_self_pay) || isset($is_deleted)) {
+            return redirect()->route('eform2');
+        } 
+        
+        return view('form.placementApprovalHRPage')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
+    }
+
+    public function updatePlacementFormData2hr(Request $request, $staff, $lang, $formcount)
+    {
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $forms = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->first();
+                
+        $hr_comment =  $request->input('hr_comment');
+        $decision = $request->input('decisionhr'); 
+        // Validate data
+            $this->validate($request, array(
+                'decisionhr' => 'required|boolean|',
+                'INDEXID' => 'required',
+            )); 
+
+        // Save the data to db
+            $enrol_form = $forms->id;
+            $course = PlacementForm::find($enrol_form);
+            $course->approval_hr = $decision;
+            $course->hr_comments = $hr_comment;
+            $course->save();
+
+        // execute Mail class before redirect
+        $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->first();    
+
+        $formItems = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->get();
+
+        // query student email from users model via index nmber in preenrolment model
+        $staff_name = $formfirst->users->name;
+        $staff_email = $formfirst->users->email;
+        $staff_index = $formfirst->INDEXID;   
+        $mgr_email = $formfirst->mgr_email;
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Term_End', '>=', $now_date)
+                ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $course = PlacementForm::orderBy('Term', 'desc')->orderBy('id', 'desc')
+                                ->where('INDEXID', $staff_index)
+                                ->value('L');
+        //query from PlacementForm table the needed information data to include in email
+        $input_course = $formfirst;
+
+        // query org and clm hr partner emails addresses 
+        $org = $formfirst->DEPT; 
+        $other_org = Torgan::where('Org name', $org)->first();
+        $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+        $org_email = $org_query->map(function ($val, $key) {
+            return $val->email;
+        });
+
+        $org_email_arr = $org_email->toArray(); 
+
+        Mail::to($staff_email)
+                ->cc($mgr_email)
+                ->bcc($org_email_arr)
+                ->send(new MailPlacementHRApprovaltoStudent($formItems, $input_course, $staff_name, $request));
+        
+        if($decision == 1){
+            $decision_text = 'Yes, you approved the request.';
+        } else {
+            $decision_text = 'No, you did not approved the request.';
+
+                $enrol_form_d = $forms->id;
+                $course = PlacementForm::find($enrol_form_d);
+                $course->delete();
+        }
+    
+        // Set flash data with message
+        $request->session()->flash('success', 'CLM Learning Partner Decision has been saved! Decision is: '.$decision_text);
+
+        return redirect()->route('eform2');
     }
 
     /**

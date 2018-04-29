@@ -274,7 +274,7 @@ class AjaxController extends Controller
             $placementData = null; 
 
             $difference =  $next_term->Term_Code - $repos_value;
-            if (($repos_value == 0 || $difference > 9) && $placementData == null) {
+            if (($repos_value == 0 || $difference >= 9) && $placementData == null) {
                 $data = true;
             } else {
                 $data = false;

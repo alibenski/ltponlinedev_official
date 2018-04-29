@@ -12,7 +12,7 @@
 </div>
 <div class="container">
   <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-6">
             <div class="panel panel-info">
                     <div class="panel-heading"><strong>Submitted Enrolment Forms for the 
                         @if(empty($next_term->Term_Name))
@@ -27,46 +27,10 @@
                           @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
-                              {{-- show if course is 1st or 2nd choice --}}
-                                {{-- <div>
-                                @if( $form->continue_bool == 1 )
-                                  <span class="label label-primary margin-label">First Choice
-                                @else 
-                                  <span class="label label-default margin-label">Second Choice
-                                @endif  
-                                </div> --}}
-                              {{-- show decision labels --}}
-                              {{-- <div>
-                                  @if($form->is_self_pay_form == 1)
-                                    <span id="status" class="label label-success margin-label">
-                                  Self Payment --}}
-                                  {{--  @elseif(isset($form->deleted_at))
-                                    <span id="status" class="label label-danger margin-label">
-                                  Cancelled --}}
-                                  {{-- @elseif(is_null($form->approval) && is_null($form->approval_hr))
-                                    <span id="status" class="label label-warning margin-label">
-                                  Pending Approval
-                                  @elseif(in_array(Auth::user()->sddextr->DEPT, ["UNOG", "JIU"]) && $form->approval == 1 && is_null($form->approval_hr))
-                                    <span id="status" class="label label-success margin-label">
-                                  Approved
-                                  @elseif($form->approval == 1 && is_null($form->approval_hr))
-                                    <span id="status" class="label label-warning margin-label">
-                                  Pending Approval
-                                  @elseif($form->approval == 1 && $form->approval_hr == 1)
-                                    <span id="status" class="label label-success margin-label">
-                                  Approved
-                                  @elseif($form->approval == 0 && is_null($form->approval_hr))
-                                    <span id="status" class="label label-danger margin-label">
-                                  Disapproved
-                                  @elseif($form->approval == 1 && $form->approval_hr == 0)
-                                    <span id="status" class="label label-danger margin-label">
-                                  Disapproved
-                                  @endif 
-                                </div> --}}
                                 @if($form->cancelled_by_student == 1)
                                   <span class="label label-danger margin-label">Enrolment Form Cancelled By Student</span>
                                 @endif 
-                                <h4><strong>Enrolment Form # {{ $form->eform_submit_count }}</strong></h4>
+                                <h4><strong>Enrolment Form # {{ $form->eform_submit_count }}</strong> @if($form->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif </h4>
                                 <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
                                 
                                     <div class="col-sm-6">
@@ -122,6 +86,28 @@
                           @endforeach  
                         </div>
             </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="panel panel-warning">
+            <div class="panel-heading"><strong>Placement Test Request Forms</strong></div>
+            <div class="panel-body">
+              @foreach($plforms_submitted as $plform)
+                <div class="row">
+                <div class="col-sm-12">
+                    @if($plform->cancelled_by_student == 1)
+                      <span class="label label-danger margin-label">Enrolment Form Cancelled By Student</span>
+                    @endif 
+                    <h4><strong>Placement Test Request Form # {{ $plform->eform_submit_count }}</strong></h4>
+                    <h5>@if($plform->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif</h5> 
+                    <h5>Language: <strong>{{ $plform->languages->name }}</strong></h5>
+                    <h5>Test Date: <strong>{{ $plform->placementSchedule->date_of_plexam }}</strong></h5>
+                </div>
+                </div>
+                <hr>
+              @endforeach                  
+            </div>
+          </div>
         </div>
 
       </div>

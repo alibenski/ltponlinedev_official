@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
     <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
-    <title>CLM Online Profile Update</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+    <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
     <!-- Web Font / @font-face : BEGIN -->
     <!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely removed. -->
@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            CLM Online Profile has been updated. Confirmation needed.
+            Decision for the Placement Test to a CLM language of {{ $staff_name }}.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -168,7 +168,7 @@
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
                 <tr>
                     <td style="padding: 20px 0; text-align: center">
-                        <img src="http://placehold.it/200x50" width="200" height="50" alt="alt_text" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                        <img src="https://learning.unog.ch/sites/all/themes/sdlstheme/images/CLM-TextRight_En.jpg" width="260" height="93" alt="alt_text" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                     </td>
                 </tr>
             </table>
@@ -178,11 +178,11 @@
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
 
                 <!-- Hero Image, Flush : BEGIN -->
-                <tr>
+{{--                 <tr>
                     <td bgcolor="#ffffff" align="center">
                         <img src="http://placehold.it/1200x600" width="600" height="" alt="alt_text" border="0" align="center" style="width: 100%; max-width: 600px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; margin: auto;" class="g-img">
                     </td>
-                </tr>
+                </tr> --}}
                 <!-- Hero Image, Flush : END -->
 
                 <!-- 1 Column Text + Button : BEGIN -->
@@ -191,32 +191,40 @@
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Profile Update</h1>
-                                     <p> Dear {{$student->name}}, </p>
-                                     <p style="text-align: justify;"> You recently changed your e-mail address and consequently, your login for the CLM Online Enrolment website. Your new login e-mail address is <em>{{ $student->temp_email }}</em></p>
-                                     <p style="text-align: justify;">Please click on the button below to confirm this update.</p>
-                                      <p><strong>NOTE: </strong>The confirmation link button will expire in 24 hours. Please contact the CLM Language Secretariat if you have any questions.</p>
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
+                                     <p> Dear {{ $staff_name }}, </p>
+                                     <p> Your  <strong>placement test</strong> request for CLM language, <strong>{{ $input_course->languages->name }}</strong>, has been <strong>@if( $input_course->approval_hr == 1) approved @else disapproved @endif </strong> by your HR Staff and Development Section.</p>
+
+                                      <p><strong>Comment/Reason:</strong>
+                                        <br>                                      
+                                        @if( empty($request->hr_comment))
+                                            None
+                                        @else 
+                                            {{$request->hr_comment}}
+                                        @endif
+                                      </p>
+                                      <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    {{-- Button : BEGIN --}}
+                                    <!-- Button : BEGIN
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                                <a href="{{ route('verify.updateProfileConfirmed', [Crypt::encrypt($student->id), Crypt::encrypt($student->temp_email), $student->update_token]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Confirmation Link&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                <a href="" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Approval Link&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>
                                     </table>
-                                    {{-- Button : END --}}
+                                    Button : END -->
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Important Reminder</h2>
-                                    <p style="margin: 0;">Changing your CLM Online Enrolment email address also changes your login username.</p>
+                                    <p style="margin: 0;">Upon further verification, you will soon receive a convocation email from the Language Secretariat with detailed instructions on your placement test.</p>
                                 </td>
                             </tr>
                         </table>

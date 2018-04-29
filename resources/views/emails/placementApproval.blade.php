@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Staff Member, {{ $staff->name }}, would like to enrol to a CLM language course and needs your approval.
+            Staff Member, {{ $staff->name }}, would like to take a placement exam on a CLM language and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear Manager, </p>
-                                     <p> Staff Member, {{ $staff->name }}, would like to take a placement exam for CLM language: {{ $input_course->languages->name }}</p>
+                                     <p> Staff Member, {{ $staff->name }}, would like to take a placement exam for CLM language: <strong>{{ $input_course->languages->name }}</strong></p>
                                     <p>The placement exam will be on @if ($input_course->L == 'F') {{ $input_course->placementSchedule->date_of_plexam }} to {{ $input_course->placementSchedule->date_of_plexam_end }}. @else {{ $input_course->placementSchedule->date_of_plexam }}. @endif
                                     </p>
 

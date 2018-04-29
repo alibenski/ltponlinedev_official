@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'CLM Online Enrolment',
+    'name' => 'CLM Language Training Online Registration Platform',
 
     /*
     |--------------------------------------------------------------------------
@@ -51,8 +51,8 @@ return [
     |
     */
 
-    //'url' => 'http://ltponlinedev.local',
-    'url' => 'http://ltponlinedev.unog.ch',
+    'url' => 'http://ltponlinedev.local',
+    // 'url' => 'http://ltponlinedev.unog.ch',
 
     /*
     |--------------------------------------------------------------------------

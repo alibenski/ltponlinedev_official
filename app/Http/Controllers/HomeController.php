@@ -19,6 +19,7 @@ use Session;
 use Carbon\Carbon;
 use DB;
 use App\SDDEXTR;
+use App\PlacementForm;
 
 class HomeController extends Controller
 {
@@ -85,7 +86,11 @@ class HomeController extends Controller
             ->where('Term', $next_term_code )
             ->get(['Te_Code', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
             // ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count']);
-
+        $plforms_submitted = PlacementForm::withTrashed()
+            ->where('INDEXID', '=', $current_user)
+            ->where('Term', $next_term_code )
+            ->get();
+            
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
         //$array_codes = explode(',', $str_codes);
@@ -94,7 +99,7 @@ class HomeController extends Controller
         //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
  
-        return view('form.submitted')->withForms_submitted($forms_submitted)->withNext_term($next_term);
+        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term);
     }
 
     public function showMod(Request $request)

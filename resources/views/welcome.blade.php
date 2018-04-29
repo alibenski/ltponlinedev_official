@@ -53,25 +53,25 @@
                                     </ul>
                                 </div>
                             @endif
-                            <h1 class="cover-heading tlt" style="margin-bottom: 50px;">Welcome to the UNOG CLM Online Enrolment Website</h1>
+                            <h1 class="cover-heading tlt" style="margin-bottom: 50px;"> CLM Language Training Online Registration Platform</h1>
                             <div class="col-md-12">
                                 <div class="col-md-6 b1">
-                                    <div class="panel panel-primary">
-                                      <div class="panel-body btn-welcome-img b1">
-                                        <p>Register and enrol with UNOG Centre for Learning and Multilingualism &trade;</p>
+                                    <div class="panel panel-success">
+                                      <div class="panel-body btn-bg-img b1">
+                                        <p>You are already a CLM student and you received an email from CLM Language with your credentials. Click “Login” to enroll in courses.</p>
                                         <p class="lead btn-bottom">
-                                        <a href="/register" class="btn btn-lg btn-primary">Join</a>
+                                        <a href="{{ url('/login') }}" class="btn btn-lg btn-success">Login</a>
                                         </p>
                                       </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 b1">
-                                    <div class="panel panel-success">
-                                      <div class="panel-body btn-bg-img b1">
-                                        <p>If you received an e-mail concerning your credentials from the CLM Language Secretariat, please click the log-in button to access the platform.</p>
+                                    <div class="panel panel-primary">
+                                      <div class="panel-body btn-welcome-img b1">
+                                        <p>You are a new student and you have not received your credentials by email. Click “join” to create an account and enrol in CLM language courses.</p>
                                         <p class="lead btn-bottom">
-                                        <a href="{{ url('/login') }}" class="btn btn-lg btn-success">Log-in</a>
+                                        <a href="/register" class="btn btn-lg btn-primary">Join</a>
                                         </p>
                                       </div>
                                     </div>

@@ -11,14 +11,6 @@
     height: 300px;
 	}
 </style>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-	    $.plot($("#placeholder"), data, options);
-	    $.plot($("#placeholder2"), data, options);
-	});
-</script>
-
 @stop
 
 @section('content')
@@ -32,6 +24,13 @@
 @section('java_script')
 <script src="{{ asset('bower_components/Flot/jquery.flot.js') }}"></script>
 <script src="{{ asset('bower_components/Flot/jquery.flot.pie.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.plot($("#placeholder"), data, options);
+        $.plot($("#placeholder2"), data, options);
+    });
+</script>
 
 <script type="text/javascript">
 var data = [

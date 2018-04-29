@@ -139,6 +139,7 @@ class RepoController extends Controller
         $decision = $request->input('decision');
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
+        $flexibleBtn = $request->input('flexibleBtn');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -235,6 +236,7 @@ class RepoController extends Controller
                 'eform_submit_count' => $eform_submit_count,              
                 'form_counter' => $form_counter,  
                 'agreementBtn' => $agreementBtn,
+                'flexibleBtn' => $flexibleBtn,
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
