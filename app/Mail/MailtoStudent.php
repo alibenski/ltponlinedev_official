@@ -44,6 +44,6 @@ class MailtoStudent extends Mailable
                     ->from('clm_language@un.org', 'CLM Language')
                     ->bcc('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Notification: Manager/Supervisor Decision Made for CLM Language Course Enrolment '.$this->input_course->courses->Description);
+                    ->subject('Notification: Manager/Supervisor Decision Made on CLM Language Course Enrolment '.$this->input_course->courses->Description.' of '.$this->staff_name);
     }
 }

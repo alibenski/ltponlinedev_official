@@ -40,6 +40,6 @@ class MailtoStudentHR extends Mailable
                     ->from('clm_language@un.org', 'CLM Language')
                     ->bcc('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Notification: CLM Learning Partner Decision Made for CLM Language Course Enrolment '.$this->input_course->courses->Description);
+                    ->subject('Notification: CLM Learning Partner Decision Made on CLM Language Course Enrolment '.$this->input_course->courses->Description.' of '.$this->staff_name);
     }
 }

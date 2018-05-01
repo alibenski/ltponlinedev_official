@@ -1,7 +1,7 @@
 @extends('public')
 
 @section('customcss')
-<link href="{{ asset('css/cover.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('css/cover.css') }}" rel="stylesheet"> --}}
 @stop
 
 @section('content')

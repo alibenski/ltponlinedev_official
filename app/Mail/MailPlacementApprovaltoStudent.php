@@ -42,6 +42,6 @@ class MailPlacementApprovaltoStudent extends Mailable
                     ->from('clm_language@un.org', 'CLM Language')
                     ->bcc('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Notification: Manager/Supervisor Decision Made for CLM Language Placement Test Request - '.$this->input_course->languages->name);
+                    ->subject('Notification: Manager/Supervisor Decision Made on CLM Language Placement Test Request - '.$this->input_course->languages->name.' for '.$this->staff_name);
     }
 }

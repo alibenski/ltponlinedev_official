@@ -55,6 +55,7 @@ class NewUserController extends Controller
         $newUser = new NewUser;
         $newUser->indexno_new = $request->indexno;
         $newUser->gender = $request->gender;
+        $newUser->name = $request->nameFirst.' '.$request->nameLast;
         $newUser->nameLast = $request->nameLast;
         $newUser->nameFirst = $request->nameFirst;
         $newUser->email = $request->email;
@@ -64,7 +65,7 @@ class NewUserController extends Controller
         $newUser->student_cat = $request->student_cat;
         $newUser->save();
 
-        $request->session()->flash('success', 'Thank you for your registration. Your new credentials will be emailed.' ); //laravel 5.4 version
+        // $request->session()->flash('success', 'Thank you for your registration. Your new credentials will be emailed.' ); //laravel 5.4 version
 
         return redirect()->route('new_user_msg');
     }

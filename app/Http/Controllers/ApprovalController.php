@@ -469,7 +469,7 @@ class ApprovalController extends Controller
 
         // Add more organizations in the IF statement below
         // if ($org != 'UNOG' && $decision != '0') {
-        if ($learning_partner = '1' && $decision != '0') {
+        if ($learning_partner == '1' && $decision != '0') {
             // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)

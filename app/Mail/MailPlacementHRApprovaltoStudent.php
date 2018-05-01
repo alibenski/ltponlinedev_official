@@ -40,6 +40,6 @@ class MailPlacementHRApprovaltoStudent extends Mailable
                     ->from('clm_language@un.org', 'CLM Language')
                     ->bcc('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Notification: CLM Learning Partner Decision Made for CLM Language Placement Test - '.$this->input_course->languages->name);
+                    ->subject('Notification: CLM Learning Partner Decision Made on CLM Language Placement Test - '.$this->input_course->languages->name.' for '.$this->staff_name);
     }
 }
