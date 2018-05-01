@@ -58,7 +58,7 @@
                                 <div class="col-md-6 b1">
                                     <div class="panel panel-success">
                                       <div class="panel-body btn-bg-img b1">
-                                        <p>You are already a CLM student and you received an email from CLM Language with your credentials. Click “Login” to enroll in courses.</p>
+                                        <p>You are already a CLM student and you received an email from CLM Language with your credentials. Click “Login” to enrol in courses.</p>
                                         <p class="lead btn-bottom">
                                         <a href="{{ url('/login') }}" class="btn btn-lg btn-success">Login</a>
                                         </p>
@@ -71,7 +71,7 @@
                                       <div class="panel-body btn-welcome-img b1">
                                         <p>You are a new student and you have not received your credentials by email. Click “join” to create an account and enrol in CLM language courses.</p>
                                         <p class="lead btn-bottom">
-                                        <a href="/register" class="btn btn-lg btn-primary">Join</a>
+                                        <a href="/newuser/create" class="btn btn-lg btn-primary">Join</a>
                                         </p>
                                       </div>
                                     </div>

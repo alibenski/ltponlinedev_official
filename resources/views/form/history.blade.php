@@ -12,7 +12,8 @@
                         <div class="panel-body">
                             <ul  class="list-group">
                                 @foreach($historical_data as $hist_datum)
-                                        <li class="list-group-item"><strong class="text-success">{{ $hist_datum->courses->Description }}</strong> : {{ $hist_datum->terms->Term_Name }}</li>
+                                        <li class="list-group-item"><strong class="text-success">@if(empty($hist_datum->courses->Description)) {{ $hist_datum->Te_Code }} @else {{ $hist_datum->courses->Description }} @endif</strong> : 
+                                            {{ $hist_datum->terms->Term_Name }}</li>
                                 @endforeach
                             </ul>
                         </div>

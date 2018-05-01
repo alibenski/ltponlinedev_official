@@ -134,8 +134,11 @@ class ApprovalController extends Controller
         // check the organization of the student to know which email process is followed by the system
         $org = $formfirst->DEPT; 
 
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+        
         // Add more organizations in the IF statement below
-        if ($org != 'UNOG' && $decision != '0') {
+        if ($learning_partner == '1' && $decision != '0') {
             // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)
@@ -443,6 +446,9 @@ class ApprovalController extends Controller
         // check the organization of the student to know which email process is followed by the system
         $org = $formfirst->DEPT; 
 
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+
         // store decision values in array and then compare the values to define $decision variable
         $getDecision = [];
         $decision = null;
@@ -462,7 +468,8 @@ class ApprovalController extends Controller
         }
 
         // Add more organizations in the IF statement below
-        if ($org != 'UNOG' && $decision != '0') {
+        // if ($org != 'UNOG' && $decision != '0') {
+        if ($learning_partner = '1' && $decision != '0') {
             // mail to staff members which have a CLM learning partner
             Mail::to($staff_email)
                     ->cc($mgr_email)

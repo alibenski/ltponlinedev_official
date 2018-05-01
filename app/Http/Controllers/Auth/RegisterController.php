@@ -79,9 +79,11 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'indexno' => 'nullable|max:255|unique:users',
+            'indexno' => 'nullable|max:255|unique:SDDEXTR,INDEXID_New',
             'nameFirst' => 'required|string|max:255',
             'nameLast' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:SDDEXTR,EMAIL',
             'password' => 'required|string|min:6|confirmed',
             'g-recaptcha-response' => 'required|captcha',
         ]);
@@ -97,7 +99,7 @@ class RegisterController extends Controller
     {
         if (is_null($data['indexno'])) {
             $qryLatestIndex = User::orderBy('id', 'desc')->first();
-            $qryLatestIndexID = $qryLatestIndex->id;
+            $qryLatestIndexID = $qryLatestIndex->id ;
 
             $indexGenerate = 'Z'.$qryLatestIndexID;
             $data['indexno'] = $indexGenerate;
@@ -111,12 +113,12 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-        $user->sddextr()->create([
-            'INDEXNO' => $data['indexno'],
-            'LASTNAME' => $data['nameLast'],
-            'FIRSTNAME' => $data['nameFirst'],
-            'EMAIL' => $data['email'],
-        ]);
+        // $user->sddextr()->create([
+        //     'INDEXNO' => $data['indexno'],
+        //     'LASTNAME' => $data['nameLast'],
+        //     'FIRSTNAME' => $data['nameFirst'],
+        //     'EMAIL' => $data['email'],
+        // ]);
         // whatever else you need to do - send email, etc
 
         return $user;

@@ -112,7 +112,8 @@ Route::get('eform', function () { return view('confirmation_page_unog'); })->nam
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
 Route::get('confirmationLinkUsed', function () { return view('confirmationLinkUsed'); })->name('confirmationLinkUsed');
 Route::get('confirmationLinkExpired', function () { return view('confirmationLinkExpired'); })->name('confirmationLinkExpired');
-
+Route::get('new_user_msg', function () { return view('new_user_msg'); })->name('new_user_msg');
+Route::resource('newuser', 'NewUserController');
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();
     // Authentication Routes...

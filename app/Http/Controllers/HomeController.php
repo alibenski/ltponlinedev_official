@@ -128,6 +128,7 @@ class HomeController extends Controller
     {
         $current_user = Auth::user()->indexno;
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->get();
+        // dd(Auth::user()->name);
         return view('form.history')->withHistorical_data($historical_data);
     }
 
@@ -169,7 +170,7 @@ class HomeController extends Controller
         // validate if organization is billed or not
         // query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)
-            ->value('Org Billed'); // change to appropriate field name 'is_self_pay' or 'is_billed'
+            ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
 
         if ($request->decision == 1) {
             session()->flash('success','Please fill up the payment-based enrolment form');

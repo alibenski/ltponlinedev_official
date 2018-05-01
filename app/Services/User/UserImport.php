@@ -109,19 +109,23 @@ class UserImport
             foreach ($rows as $row) {
             if (count($header) != count($row)) {
                 // var_dump(count($header), count($row));
+                // var_dump($header);
                 continue;
                 }
                 $row = array_combine($header, $row);
                 // var_dump($header);
-                // var_dump($row['name']);
-                // var_dump(isset($row['indexno']));
+                // var_dump($row['new']);
+                // var_dump($row['indexno']);
+                // var_dump(isset($row['new']));
+                // dd();
                 User::create([
+                    'indexno_new' => $row['indexno_new'],
+                    'password' => bcrypt($row['password']),
                     'indexno' => $row['indexno'],
                     'name' => $row['name'],
                     'nameFirst' => $row['nameFirst'],
                     'nameLast' => $row['nameLast'],
                     'email' => $row['email'],
-                    'password' => bcrypt($row['password']),
                     'must_change_password' => 1,
                     // 'password' => bcrypt(uniqid()),
                     'approved_account' => 1,
