@@ -114,22 +114,33 @@ class UserImport
                 }
                 $row = array_combine($header, $row);
                 // var_dump($header);
-                // var_dump($row['new']);
+                // var_dump($row['indexno_old']);
                 // var_dump($row['indexno']);
                 // var_dump(isset($row['new']));
                 // dd();
                 User::create([
-                    'indexno_new' => $row['indexno_new'],
-                    'password' => bcrypt($row['password']),
+                    // 'indexno_new' => $row['indexno_new'],
                     'indexno' => $row['indexno'],
-                    'name' => $row['name'],
+                    'password' => bcrypt($row['password']),
+                    // 'indexno' => $row['indexno'],
+                    'indexno_old' => $row['indexno_old'],
+                    // 'name' => $row['name'],
                     'nameFirst' => $row['nameFirst'],
                     'nameLast' => $row['nameLast'],
+                    'name' => $row['nameFirst'].' '.$row['nameLast'],
                     'email' => $row['email'],
                     'must_change_password' => 1,
                     // 'password' => bcrypt(uniqid()),
                     'approved_account' => 1,
                 ]);
+
+                // $user->sddextr()->create([
+                //     'INDEXNO' => $data['indexno'],
+                //     'INDEXNO_old' => $data['indexno_old'],
+                //     'LASTNAME' => $data['nameLast'],
+                //     'FIRSTNAME' => $data['nameFirst'],
+                //     'EMAIL' => $data['email'],
+                // ]);
             }
             DB::commit();
         } 

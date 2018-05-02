@@ -60,7 +60,7 @@ class NewUserController extends Controller
         $newUser->nameFirst = $request->nameFirst;
         $newUser->email = $request->email;
         $newUser->org = $request->org;
-        $newUser->contact_num = $request->name;
+        $newUser->contact_num = $request->contact_num;
         $newUser->cat = $request->cat;
         $newUser->student_cat = $request->student_cat;
         $newUser->save();
