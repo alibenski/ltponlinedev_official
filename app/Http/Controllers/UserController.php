@@ -57,15 +57,16 @@ class UserController extends Controller
     {
         //Validate name, email and password fields
         $this->validate($request, [
+            'indexno' => 'required|unique:users',
             'name'=>'required|max:120',
             'email'=>'required|email|unique:users',
-            //'password'=>'required|min:6|confirmed'
+            'password'=>'required|min:6|confirmed'
         ]);
 
         $user = User::create([ 
             'email' => $request->email, 
             'name' => $request->name,
-            //'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password),
         ]); 
 
         $roles = $request['roles']; //Retrieving the roles field

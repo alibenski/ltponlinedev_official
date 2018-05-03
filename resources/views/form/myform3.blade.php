@@ -79,7 +79,7 @@
                       @else
                         @foreach( $repos_lang as $value )
                           <div class="input-group">
-                              <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="@if(empty($value) || is_null($value))NO DB ENTRY @else {{ $value->courses->EDescription}} @endif last @if(empty($value) || is_null($value))NO DB ENTRY @else {{ $value->terms->Term_Name }} @endif" readonly>                           
+                              <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="@if(empty($value->courses->EDescription) || is_null($value->courses->EDescription)) {{ $value->Te_Code }} @else {{ $value->courses->EDescription}} @endif last @if(empty($value->terms->Term_Name) || is_null($value->terms->Term_Name))NO DB ENTRY @else {{ $value->terms->Term_Name }} @endif" readonly>                                        
                           </div>
                         @endforeach
                       @endif
