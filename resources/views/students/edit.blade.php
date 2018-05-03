@@ -136,13 +136,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="contractExp" class="col-md-2 control-label">Contract Expiration:</label>
 
                             <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->CONEXP }}</p>
                             </div>
-                        </div>
+                        </div> --}}
                         
                         <div class="col-md-4 col-md-offset-4">
                               <button type="submit" class="btn btn-success btn-block">Submit Changes</button>

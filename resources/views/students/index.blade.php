@@ -85,13 +85,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="contractExp" class="col-md-4 control-label">Contract Expiration:</label>
 
                             <div class="col-md-8 form-control-static">
                                 <p>{{ Auth::user()->sddextr->CONEXP }}</p>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <label for="course" class="col-md-4 control-label">Last UN Language Course:</label>
@@ -99,7 +99,7 @@
                             <div class="col-md-8 form-control-static">
                                 <p>
                                     @if(empty ($repos_lang->courses->EDescription))
-                                    none
+                                    {{ $repos_lang->Te_Code }}
                                     @else
                                     {{ $repos_lang->courses->EDescription }}
                                     @endif
