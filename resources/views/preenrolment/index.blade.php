@@ -2,16 +2,27 @@
 
 @section('content')
 
+{{ $enrolment_forms->links() }}
+<div class="dropdown">
+	<select name="language" id="language">
+		<option value="">Select Language</option>
+		<option value="A">Arabic</option>
+		<option value="C">Chinese</option>
+		<option value="E">English</option>
+		<option value="F">French</option>
+		<option value="R">Russian</option>
+		<option value="S">Spanish</option>
+	</select>
+</div>
 <table class="table table-bordered table-striped">
-
     <thead>
         <tr>
             <th>Name</th>
             <th>Language</th>
             <th>Course</th>
             <th>Schedule</th>
-            <th>Attachment ID</th>
-            <th>Attachment Payment</th>
+            <th>ID Proof</th>
+            <th>Payment Proof</th>
             <th>Time Stamp</th>
         </tr>
     </thead>
@@ -34,4 +45,13 @@
 		@endforeach
     </tbody>
 </table>
+@stop
+
+@section('java_script')
+<script>
+	$("#language").on('change',function() {
+		var L = $("select[name='language']").val();
+		console.log(L);
+	});
+</script>
 @stop

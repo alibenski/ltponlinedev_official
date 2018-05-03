@@ -16,7 +16,7 @@ class PreenrolmentController extends Controller
      */
     public function index()
     {
-        $enrolment_forms = Preenrolment::where('Term', '188')->get();
+        $enrolment_forms = Preenrolment::paginate(20);
         // dd($enrolment_forms);
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms);
     }
