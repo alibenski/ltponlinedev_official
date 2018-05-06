@@ -14,10 +14,24 @@ class PreenrolmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $enrolment_forms = Preenrolment::paginate(20);
-        // dd($enrolment_forms);
+        $enrolment_forms = new Preenrolment;
+
+        if ($request->has('L')) {
+            $enrolment_forms = Preenrolment::where('L',$request->L);
+        } 
+
+        // if ($request->has('sort')) {
+        //     $enrolment_forms = Preenrolment::orderBy('created_at', $request->sort);  
+        // }
+            
+            $enrolment_forms = $enrolment_forms->paginate(10)->appends ([
+                'L' => $request->L,
+                // 'sort' => $request->sort,
+            ]);
+
+        
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms);
     }
 
