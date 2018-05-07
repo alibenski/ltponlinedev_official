@@ -28,6 +28,8 @@
 	            <th>Language</th>
 	            <th>Course</th>
 	            <th>Schedule</th>
+	            <th>Manager Approval</th>
+	            <th>HR Approval</th>
 	            <th>ID Proof</th>
 	            <th>Payment Proof</th>
 	            <th>Time Stamp</th>
@@ -42,6 +44,8 @@
 				<td>{{ $form->L }}</td>
 				<td>{{ $form->courses->Description }}</td>
 				<td>{{ $form->schedule->name }}</td>
+				<td>{{ $form->approval }}</td>
+				<td>{{ $form->approval_hr }}</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank">carte attachment</a> @endif
 				</td>
 				<td>
