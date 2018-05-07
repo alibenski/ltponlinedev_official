@@ -14,7 +14,7 @@ class SDDEXTR extends Model
      * @var array
      */
     protected $fillable = [
-        'TITLE','FIRSTNAME', 'LASTNAME', 'CATEGORY', 'DEPT', 'PHONE', 'LEVEL', 'EMAIL', 
+        'INDEXNO', 'INDEXNO_old', 'TITLE','FIRSTNAME', 'LASTNAME', 'CAT', 'CATEGORY', 'DEPT', 'PHONE', 'LEVEL', 'EMAIL', 'SEX', 'created_at', 
     ];
 
 	/**
