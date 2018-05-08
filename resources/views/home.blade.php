@@ -41,7 +41,7 @@
             </div>
         </div>  
 
-        <div class="col-md-3">
+        {{-- <div class="col-md-3">
             <div class="panel panel-info">
                 <div class="panel-heading text-center"><strong>UN Language Courses</strong></div>
                 <div class="panel-body">
@@ -55,7 +55,7 @@
                     </ul>
                 </div>
             </div>
-        </div> 
+        </div>  --}}
     </div>
 </div>
 @endsection
