@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-	<div class="col-sm-6">
+	<div class="input-group col-sm-6">
 		<h4>Filters:</h4>
 		<a href="/admin/preenrolment/?L=A" class="filter-lang btn btn-info">Arabic</a>
 		<a href="/admin/preenrolment/?L=C" class="filter-lang btn btn-info">Chinese</a>

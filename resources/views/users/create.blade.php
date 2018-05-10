@@ -14,8 +14,13 @@
           </div>
 
           <div class="form-group">
-            <label class="control-label">Name: </label>
-  				  <input name="name" type="text" class="form-control" value="">
+            <label class="control-label">First Name: </label>
+  				  <input name="nameFirst" type="text" class="form-control" value="">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Last Name: </label>
+            <input name="nameLast" type="text" class="form-control" value="">
           </div>
 
           <div class="form-group">
@@ -34,6 +39,86 @@
                   </label>
 						  </div>
 			    </div>
+
+          <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
+              <label for="gender" class=" control-label">Gender</label>
+              <div class="dropdown">
+                  <select class="form-control select2-basic-single" style="width: 50%;" name="gender" autocomplete="off" >
+                      <option value="">--- Please Select ---</option>
+                      <option value="F">Female</option>
+                      <option value="M">Male</option>
+                  </select>
+              </div>
+
+              <div class="col-md-6">
+                  {{-- <input id="gender" type="text" class="form-control" name="gender" value="{{ old('gender') }}" required autofocus> --}}
+
+                  @if ($errors->has('gender'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('gender') }}</strong>
+                      </span>
+                  @endif
+              </div>
+          </div>
+
+          <div class="form-group{{ $errors->has('org') ? ' has-error' : '' }}">
+              <label for="org" class=" control-label">Organization</label>
+
+                  {{-- <input id="org" type="text" class="form-control" name="org" value="{{ old('org') }}" required autofocus> --}}
+
+                  <div class="dropdown">
+                      <select class="form-control select2-basic-single" style="width: 100%;" name="org" autocomplete="off" >
+                          <option value="">--- Please Select Organization ---</option>
+                              @if(!empty($org))
+                                @foreach($org as $value)
+                                  <option class="wx" value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{$value['Org Full Name']}}</option>
+                                @endforeach
+                              @endif
+                      </select>
+                  </div>
+
+                  @if ($errors->has('org'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('org') }}</strong>
+                      </span>
+                  @endif
+          </div>
+
+          <div class="form-group{{ $errors->has('contact_num') ? ' has-error' : '' }}">
+              <label for="contact_num" class=" control-label">Contact Number</label>
+
+                  <input id="contact_num" type="text" class="form-control" name="contact_num" value="{{ old('contact_num') }}" required autofocus>
+
+                  @if ($errors->has('contact_num'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('contact_num') }}</strong>
+                      </span>
+                  @endif
+          </div>
+
+          <div class="form-group{{ $errors->has('cat') ? ' has-error' : '' }}">
+              <label for="cat" class=" control-label">Category</label>
+                  <div class="dropdown">
+                      <select class="form-control select2-basic-single" style="width: 50%;" name="cat" autocomplete="off" >
+                          <option value="">--- Please Select Category ---</option>
+                              @if(!empty($cat))
+                                @foreach($cat as $key => $value)
+                                  <option class="wx" value="{{ $key }}">{{ $value}}</option>
+                                @endforeach
+                              @endif
+                      </select>
+                  </div>
+
+              <div class="col-md-6">
+                  {{-- <input id="cat" type="text" class="form-control" name="cat" value="{{ old('cat') }}" required autofocus> --}}
+
+                  @if ($errors->has('cat'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('cat') }}</strong>
+                      </span>
+                  @endif
+              </div>
+          </div>
 
           <div class="form-group">
             <label class="control-label">Password: </label>

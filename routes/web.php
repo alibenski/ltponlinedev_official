@@ -15,7 +15,14 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('/', function () { return view('admin.index'); })->name('admin_dashboard');
     Route::get('user/import', 'AdminController@importUser')->name('import-user');
     Route::post('user/import', 'AdminController@handleImportUser')->name('bulk-import-user');
+    Route::get('user/import-exist', 'AdminController@importExistingUser')->name('import-existing-user');
+    Route::post('user/import-exist', 'AdminController@handleImportExistingUser')->name('bulk-import-existing-user');
     Route::resource('users', 'UserController');
+
+    // separate password reset form
+    Route::get('/user/{id}/passwordreset', ['as' => 'users.passwordreset', 'uses' => 'UserController@passwordReset' ]);
+    Route::put('/user/{id}/resetpassword', ['as' => 'users.resetpassword', 'uses' => 'UserController@resetPassword' ]);
+
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
     Route::resource('classrooms', 'ClassroomController');

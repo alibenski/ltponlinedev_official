@@ -2,18 +2,18 @@
 
 @section('content')
 
-<h1 class="text-danger">Import New Users</h1>
+<h1 class="text-danger">Import Existing Users</h1>
 <div class='col-sm-4'>
-	<div class="box box-primary">
+	<div class="box box-warning">
 		<div class="box-body">
-			<form action="{{ route('bulk-import-user') }}" method="POST" enctype="multipart/form-data">
+			<form action="{{ route('bulk-import-existing-user') }}" method="POST" enctype="multipart/form-data">
 				{{ csrf_field() }}
 					<div class="form-group">
 						<label for="file">Select a file to import</label>
 						<input type="file" name="file" class="form-control" placeholder="Input field">
 					</div>
 					<div class="form-group">
-						<button class="btn btn-primary">
+						<button class="btn btn-warning">
 							<i class="fa fa-upload"></i> Upload
 						</button>
 					</div>

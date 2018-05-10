@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\NewUser;
 use Illuminate\Http\Request;
 use DB;
+use App\TORGAN;
 
 class NewUserController extends Controller
 {
@@ -27,8 +28,8 @@ class NewUserController extends Controller
     {
         $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
         $student_status = DB::table('STU_STATUS')->pluck("StandFor","Abbreviation")->all();
-
-        return view('users.new_user')->withCat($cat)->withStudent_status($student_status);
+        $org = TORGAN::get(["Org Full Name","Org name"]);
+        return view('users.new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
     }
 
     /**

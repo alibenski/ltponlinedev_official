@@ -6,9 +6,26 @@
     <h1><i class="fa fa-users"></i> User Administration <a href="{{ route('roles.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Roles</a>
     <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Permissions</a></h1>
     <hr>
-    <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
-    <a href="{{ route('import-user') }}" class="btn btn-primary">Bulk Import User</a>
-    <div class="table-responsive">
+    
+    <div class="form-group col-lg-4">
+        <form method="GET" action="{{ route('users.index') }}">
+            <div class="input-group">           
+                <input type="text" name="search" class="form-control">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-info button-prevent-multi-submit">Search Name</button>
+                    <a href="/admin/users/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+            </div>
+        </form>    
+    </div>
+
+    <div class="form-group col-lg-12">
+        <a href="{{ route('users.create') }}" class="btn btn-success">Add Single User</a>
+        <a href="{{ route('import-user') }}" class="btn btn-primary">Bulk Import New Users</a>
+        <a href="{{ route('import-existing-user') }}" class="btn btn-warning">Bulk Import Existing Users</a>  
+    </div>
+
+    <div class="table-responsive col-lg-12">
         <table class="table table-bordered table-striped">
 
             <thead>
@@ -45,7 +62,6 @@
         </table>
         {{ $users->links() }}     
     </div>
-
 </div>
 
 

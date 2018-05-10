@@ -27,15 +27,15 @@
 
                         <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
                             <label for="gender" class="col-md-4 control-label">Gender</label>
+                            <div class="col-md-6">
                             <div class="dropdown">
-                                <select class="col-md-8 form-control select2-basic-single" style="width: 50%;" name="gender" autocomplete="off" >
+                                <select class="col-md-8 form-control select2-basic-single" style="width: 100%;" name="gender" autocomplete="off" >
                                     <option value="">--- Please Select ---</option>
                                     <option value="F">Female</option>
                                     <option value="M">Male</option>
                                 </select>
                             </div>
 
-                            <div class="col-md-6">
                                 {{-- <input id="gender" type="text" class="form-control" name="gender" value="{{ old('gender') }}" required autofocus> --}}
 
                                 @if ($errors->has('gender'))
@@ -92,7 +92,18 @@
                             <label for="org" class="col-md-4 control-label">Organization</label>
 
                             <div class="col-md-6">
-                                <input id="org" type="text" class="form-control" name="org" value="{{ old('org') }}" required autofocus>
+                                {{-- <input id="org" type="text" class="form-control" name="org" value="{{ old('org') }}" required autofocus> --}}
+
+                            <div class="dropdown">
+                              <select class="form-control select2-basic-single" style="width: 100%;" name="org" autocomplete="off" >
+                                  <option value="">--- Please Select Organization ---</option>
+                                      @if(!empty($org))
+                                        @foreach($org as $value)
+                                          <option class="wx" value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{$value['Org Full Name']}}</option>
+                                        @endforeach
+                                      @endif
+                              </select>
+                            </div>
 
                                 @if ($errors->has('org'))
                                     <span class="help-block">
@@ -118,8 +129,9 @@
 
                         <div class="form-group{{ $errors->has('cat') ? ' has-error' : '' }}">
                             <label for="cat" class="col-md-4 control-label">Category</label>
+                            <div class="col-md-6">
                                 <div class="dropdown">
-                                    <select class="col-md-8 form-control select2-basic-single" style="width: 50%;" name="cat" autocomplete="off" >
+                                    <select class="col-md-8 form-control select2-basic-single" style="width: 100%;" name="cat" autocomplete="off" >
                                         <option value="">--- Please Select Category ---</option>
                                             @if(!empty($cat))
                                               @foreach($cat as $key => $value)
@@ -129,7 +141,6 @@
                                     </select>
                                 </div>
 
-                            <div class="col-md-6">
                                 {{-- <input id="cat" type="text" class="form-control" name="cat" value="{{ old('cat') }}" required autofocus> --}}
 
                                 @if ($errors->has('cat'))
@@ -142,8 +153,9 @@
 
                         <div class="form-group{{ $errors->has('student_cat') ? ' has-error' : '' }}">
                             <label for="student_cat" class="col-md-4 control-label">Student Status</label>
+                            <div class="col-md-6">
                                 <div class="dropdown">
-                                    <select class="col-md-8 form-control select2-basic-single" style="width: 50%;" name="student_cat" autocomplete="off" >
+                                    <select class="col-md-8 form-control select2-basic-single" style="width: 100%;" name="student_cat" autocomplete="off" >
                                         <option value="">--- Please Select Status ---</option>
                                             @if(!empty($student_status))
                                               @foreach($student_status as $key => $value)
@@ -153,7 +165,6 @@
                                     </select>
                                 </div>
 
-                            <div class="col-md-6">
                                 {{-- <input id="student_cat" type="text" class="form-control" name="student_cat" value="{{ old('student_cat') }}" required autofocus> --}}
 
                                 @if ($errors->has('student_cat'))
