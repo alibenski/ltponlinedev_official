@@ -33,7 +33,7 @@
                             <label for="title" class="col-md-4 control-label">Title:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->TITLE }}</p>
+                                <p>@if(empty ( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->TITLE }} @endif</p>
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
                             <label for="fullName" class="col-md-4 control-label">Full Name:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->LASTNAME }}, {{ Auth::user()->sddextr->FIRSTNAME }}</p>
+                                <p>@if(empty( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->LASTNAME }}, {{ Auth::user()->sddextr->FIRSTNAME }} @endif</p>
                             </div>
                         </div>
 
@@ -57,7 +57,7 @@
                             <label for="org" class="col-md-4 control-label">Organization:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }}</p>
+                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }} @endif</p>
                             </div>
                         </div>
 
@@ -65,7 +65,7 @@
                             <label for="contactNo" class="col-md-4 control-label">Contact Number:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->PHONE }}</p>
+                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->PHONE }} @endif</p>
                             </div>
                         </div>
 
@@ -73,7 +73,7 @@
                             <label for="jobAppointment" class="col-md-4 control-label">Type of Appointment:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->CATEGORY }}</p>
+                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->CATEGORY }} @endif</p>
                             </div>
                         </div>
 
@@ -81,7 +81,7 @@
                             <label for="gradeLevel" class="col-md-4 control-label">Grade Level:</label>
 
                             <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->LEVEL }}</p>
+                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->LEVEL }}@endif</p>
                             </div>
                         </div>
 
@@ -98,7 +98,9 @@
 
                             <div class="col-md-8 form-control-static">
                                 <p>
-                                    @if(empty ($repos_lang->courses->EDescription))
+                                    @if(empty ($repos_lang))
+                                    None
+                                    @elseif(empty ($repos_lang->courses->EDescription))
                                     {{ $repos_lang->Te_Code }}
                                     @else
                                     {{ $repos_lang->courses->EDescription }}
