@@ -2,24 +2,31 @@
 
 @section('content')
 <div class="row">
-	<div class="input-group col-sm-6">
+	<div class="input-group col-sm-8">
 		<h4>Filters:</h4>
-		<a href="/admin/preenrolment/?L=A" class="filter-lang btn btn-info">Arabic</a>
-		<a href="/admin/preenrolment/?L=C" class="filter-lang btn btn-info">Chinese</a>
-		<a href="/admin/preenrolment/?L=E" class="filter-lang btn btn-info">English</a>
-		<a href="/admin/preenrolment/?L=F" class="filter-lang btn btn-info">French</a>
-		<a href="/admin/preenrolment/?L=R" class="filter-lang btn btn-info">Russian</a>
-		<a href="/admin/preenrolment/?L=S" class="filter-lang btn btn-info">Spanish</a>
-		<a href="/admin/preenrolment/" class="filter-reset btn btn-danger">Reset</a>
-	</div>
-{{-- 	<div class="col-sm-6 text-right">
-		<h4>Sort:</h4>
-		<a href="{{ route('preenrolment.index'), ['L' => Request::has('L'), 'sort' => 'asc'] }}" class="btn btn-success">Asc</a>
-		<a href="{{ route('preenrolment.index'), ['L' => Request::has('L'), 'sort' => 'desc'] }}" class="btn btn-danger">Desc</a>
-	</div> --}}
+        <form method="GET" action="{{ route('preenrolment.index') }}">
+            <div class="input-group">           
+                <div class="input-group-btn">
+					<div class="dropdown">
+					    <select class="col-md-4 form-control select2-basic-single" style="width: 100%;" name="language" autocomplete="off" >
+					        <option value="">--- Please Select ---</option>
+					        <option value="A">Arabic</option>
+					        <option value="C">Chinese</option>
+					        <option value="E">English</option>
+					        <option value="F">French</option>
+					        <option value="R">Russian</option>
+					        <option value="S">Spanish</option>
+					    </select>
+					</div>
+                    <button type="submit" class="btn btn-info button-prevent-multi-submit">Filter Language</button>
+                    <a href="/admin/preenrolment/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+            </div>
+        </form>    
+    </div>
 </div>
 
-
+{{ $enrolment_forms->links() }}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
@@ -62,11 +69,10 @@
 
 @section('java_script')
 <script>
-	$(document).ready(function() {
-		$(".filter-lang").on('click', function() {
-			var L = $(this).val();
-			console.log(L);
-		});
+$(document).ready(function() {
+	$("select[name='language']").on('change', function() {
+		console.log('get data');
 	});
+});
 </script>
 @stop
