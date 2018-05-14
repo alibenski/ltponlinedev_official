@@ -166,7 +166,7 @@ class HomeController extends Controller
             $student->sddextr->DEPT = $request->input('organization');
             $student->sddextr->save();
         }
-        
+        // dd(Auth::id());
         // validate if organization is billed or not
         // query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)

@@ -282,6 +282,7 @@
 
 <script>  
   $(document).ready(function () {
+      console.log('selfpay');
       $('#modal-check').modal('show');
   });
 </script>
