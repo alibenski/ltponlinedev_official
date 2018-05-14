@@ -5,6 +5,7 @@
 	<div class="input-group col-sm-8">
 		<h4>Filters:</h4>
         <form method="GET" action="{{ route('preenrolment.index') }}">
+        <input type="hidden" name="_token" value="{{ Session::token() }}">
             <div class="input-group">           
                 <div class="input-group-btn">
 					<div class="dropdown">
@@ -20,6 +21,17 @@
 					</div>
                     <button type="submit" class="btn btn-info button-prevent-multi-submit">Filter Language</button>
                     <a href="/admin/preenrolment/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="course_id" class="col-md-3 control-label">Preferred course: </label>
+                <div class="col-md-8">
+                  <div class="dropdown">
+                    <select class="col-md-8 form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off">
+                        <option value="">--- Select Course ---</option>
+                    </select>
+                  </div>
                 </div>
             </div>
         </form>    
@@ -71,7 +83,22 @@
 <script>
 $(document).ready(function() {
 	$("select[name='language']").on('change', function() {
-		console.log('get data');
+		
+
+		var L = $(this).val();
+      	var token = $("input[name='_token']").val();
+      	console.log(L);
+
+		$.ajax({
+		  url: "{{ route('select-ajax') }}", 
+		  method: 'POST',
+		  data: {L:L, _token:token},
+		  success: function(data, status) {
+		  	console.log(data);
+		    $("select[name='course_id']").html('');
+		    $("select[name='course_id']").html(data.options);
+			}
+		});
 	});
 });
 </script>
