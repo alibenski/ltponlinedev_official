@@ -104,7 +104,7 @@ class SelfPayController extends Controller
         if ($student_last_term == null) {
                 $repos_lang = null;
                 $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
-                return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
+                return view('form.myform3')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
             }         
 
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
