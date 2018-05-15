@@ -25,6 +25,20 @@ class LoginController extends Controller
      *
      * @var string
      */
+    // protected function authenticated( $user)
+    // {
+
+    //     if($user->hasRole('Admin')) {
+    //         return redirect('/admin');
+    //     }
+
+    //     return redirect('/home');
+    // }
+    // $user = Auth::user();
+    // if ($user->hasRole('Admin')) {
+    //     protected $redirectTo = '/admin';
+    // } 
+
     protected $redirectTo = '/home';
 
     /**

@@ -16,7 +16,7 @@ class NewUserController extends Controller
      */
     public function index()
     {
-        //
+        return view('page_not_available');
     }
 
     /**
@@ -29,7 +29,8 @@ class NewUserController extends Controller
         $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
         $student_status = DB::table('STU_STATUS')->pluck("StandFor","Abbreviation")->all();
         $org = TORGAN::get(["Org Full Name","Org name"]);
-        return view('users.new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
+        return view('page_not_available');
+        // return view('users.new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
     }
 
     /**

@@ -120,6 +120,7 @@ Route::get('eform2', function () { return view('confirmation_page_hr'); })->name
 Route::get('confirmationLinkUsed', function () { return view('confirmationLinkUsed'); })->name('confirmationLinkUsed');
 Route::get('confirmationLinkExpired', function () { return view('confirmationLinkExpired'); })->name('confirmationLinkExpired');
 Route::get('new_user_msg', function () { return view('new_user_msg'); })->name('new_user_msg');
+Route::get('page_not_available', function () { return view('page_not_available'); })->name('page_not_available');
 Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
 Route::resource('newuser', 'NewUserController');
 //Route::get('/', function () { return view('welcome'); });
