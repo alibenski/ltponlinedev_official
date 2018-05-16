@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Spatie\Permission\Traits\HasRoles;
 
 class LoginController extends Controller
 {
@@ -25,21 +26,23 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected function authenticated( $user)
-    // {
+    // protected $redirectTo = '/home';
 
-    //     if($user->hasRole('Admin')) {
-    //         return redirect('/admin');
-    //     }
+    /**
+     * Custom redirect based on Spatie roles
+     */
+    use HasRoles;
 
-    //     return redirect('/home');
-    // }
-    // $user = Auth::user();
-    // if ($user->hasRole('Admin')) {
-    //     protected $redirectTo = '/admin';
-    // } 
+    protected $guard_name = 'web';
+    
+    protected function authenticated($request, $user)
+    {
+        if($user->hasRole('Admin')) {
+            return redirect('/admin');
+        }
+        return redirect('/home');
+    }
 
-    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.

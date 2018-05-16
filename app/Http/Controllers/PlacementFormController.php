@@ -160,4 +160,38 @@ class PlacementFormController extends Controller
         $placementForm->agreementBtn = $request->agreementBtn;
         $placementForm->save();
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $placement_forms = new PlacementForm;
+        $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT',
+        ];
+
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+            if (\Request::has('sort')) {
+                $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            }
+
+        $allQueries = array_merge($queries, $currentQueries);
+        dd($currentQueries, $queries, $allQueries);
+        $placement_forms = $placement_forms->paginate(5)->appends($allQueries);
+        return view('placement_forms.index')->withPlacement_forms($placement_forms);
+    }
 }

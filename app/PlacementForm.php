@@ -28,7 +28,16 @@ class PlacementForm extends Model
     return $this->belongsTo('App\Language', 'L', 'code'); }
 
     public function users() {
-    return $this->belongsTo('App\User', 'INDEXID', 'indexno'); 
+    return $this->belongsTo('App\User', 'INDEXID', 'indexno'); }
+
+    public function terms() {
+    return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
+    }
+   public function filesId() {
+    return $this->belongsTo('App\File', 'attachment_id'); 
+    }   
+    public function filesPay() {
+    return $this->belongsTo('App\File', 'attachment_pay'); 
     }
 
 }

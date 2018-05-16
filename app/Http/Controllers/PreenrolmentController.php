@@ -18,8 +18,7 @@ class PreenrolmentController extends Controller
     {
         $query = \Request::input('language');
         $enrolment_forms = Preenrolment::where('L', 'LIKE', '%' . $query . '%')->paginate(10);
-
-           
+   
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms);
     }
 
