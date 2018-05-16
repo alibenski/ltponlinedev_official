@@ -168,8 +168,10 @@ class PlacementFormController extends Controller
      */
     public function index()
     {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $placement_forms = new PlacementForm;
-        $currentQueries = \Request::query();
+        // $currentQueries = \Request::query();
         $queries = [];
 
         $columns = [
@@ -189,9 +191,9 @@ class PlacementFormController extends Controller
                 $queries['sort'] = \Request::input('sort');
             }
 
-        $allQueries = array_merge($queries, $currentQueries);
-        dd($currentQueries, $queries, $allQueries);
-        $placement_forms = $placement_forms->paginate(5)->appends($allQueries);
-        return view('placement_forms.index')->withPlacement_forms($placement_forms);
+        // $allQueries = array_merge($queries, $currentQueries);
+        $placement_forms = $placement_forms->paginate(10)->appends($queries);
+
+        return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org);
     }
 }

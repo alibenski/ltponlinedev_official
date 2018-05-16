@@ -43,7 +43,8 @@ class OpenCloseEnrolment
         $end_enrolment_date = $carbon_current_term_begin_for_end->addWeeks(7);
 
         //check if $now_date is between start and end enrol dates
-        if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {
+        // if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {
+        if ($now_date >= '2018-05-01 00:00:00' && $now_date <= '2018-05-16 23:00:00') {
             return $next($request);
         }
         

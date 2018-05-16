@@ -4,7 +4,7 @@
 
 <div class='col-lg-4 col-lg-offset-4'>
 
-    <h1><i class='fa fa-user-plus'></i> Add User</h1>
+    <h1><i class='fa fa-user-plus'></i> Add User (Auth & SDDEXTR)</h1>
     <hr>
 	    <form method="POST" action="{{ route('users.store') }}">
         {{ csrf_field() }}

@@ -1,29 +1,55 @@
 @extends('admin.admin')
 
+@section('customcss')
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+@stop
+
 @section('content')
 <div class="row col-sm-12">
-	<div class="input-group col-sm-8">
-        <form method="GET" action="{{ route('placement-form.index') }}">
-		<h4><strong>Filters:</strong></h4>
-            <div class="input-group">           
-                <div class="input-group-btn">
-			        <button name="L" type="submit" class="btn btn-default" value="A">Arabic</button>
-			        <button name="L" type="submit" class="btn btn-default" value="C">Chinese</button>
-			        <button name="L" type="submit" class="btn btn-default" value="E">English</button>
-			        <button name="L" type="submit" class="btn btn-default" value="F">French</button>
-			        <button name="L" type="submit" class="btn btn-default" value="R">Russian</button>
-			        <button name="L" type="submit" class="btn btn-default" value="S">Spanish</button>
-			        <button name="DEPT" type="submit" class="btn btn-default" value="UNOG">UNOG</button>
-                	<a href="/admin/placement-form/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
-                </div>
-                <div class="input-group-btn pull-right">
-			        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
-			        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
-                </div>
+    <form method="GET" action="{{ route('placement-form.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT')]) }}">
+		
+		<div class="input-group col-sm-12">
+			<h4><strong>Filters:</strong></h4>
+			<div class="form-group">
+	            @foreach ($languages as $id => $name)
+				<div class="col-sm-4">
+					<div class="input-group"> 
+	                  <span class="input-group-addon">       
+	                    <input type="radio" name="L" value="{{ $id }}" >                 
+	                  </span>
+	                    <label type="text" class="form-control">{{ $name }}</label>
+	              	</div>
+				</div>
+	            @endforeach	
+			</div>
+		</div>
 
+        <div class="form-group">           
+	      <label for="organization" class="control-label">Filter Organization:</label>
+            <div class="dropdown">
+              <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
+                @if(!empty($org))
+                  @foreach($org as $value)
+                    <option></option>
+                    <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+                  @endforeach
+                @endif
+              </select>
             </div>
-        </form>    
-    </div>
+        </div>
+
+        <div class="form-group">           
+	        <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
+        	<a href="/admin/placement-form/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+
+        <div class="form-group">    
+            <div class="input-group-btn">
+		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+            </div>
+        </div>
+    </form>
 </div>
 
 {{ $placement_forms->links() }}
@@ -49,7 +75,7 @@
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
 				<td>
-				@if(empty($form->DEPT)) None @else <a href="{{ route('placement-form.index') }}?DEPT={{$form->DEPT}}"> {{ $form->DEPT }} </a> @endif
+				@if(empty($form->DEPT)) None @else <strong> {{ $form->DEPT }} </strong> @endif
 				</td>
 				<td>{{ $form->L }}</td>
 				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
@@ -70,7 +96,12 @@
 @stop
 
 @section('java_script')
-<script>
-
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select2-basic-single').select2({
+    placeholder: "Select Organization",
+    });
+});
 </script>
 @stop
