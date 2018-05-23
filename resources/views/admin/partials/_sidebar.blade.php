@@ -11,7 +11,7 @@
           <img src="{{asset('img/spideyman_sample.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Peter Parker</p>
+          <p>{{ Auth::user()->name}}</p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>

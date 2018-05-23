@@ -27,8 +27,8 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $.plot($("#placeholder"), data, options);
-        $.plot($("#placeholder2"), data, options);
+        // $.plot($("#placeholder"), data, options);
+        // $.plot($("#placeholder2"), data, options);
     });
 </script>
 

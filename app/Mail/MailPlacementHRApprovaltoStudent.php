@@ -37,8 +37,8 @@ class MailPlacementHRApprovaltoStudent extends Mailable
     public function build()
     {
         return $this->view('emails.notifyPlacementHRApprovaltoStudent')
-                    ->from('clm_language@un.org', 'CLM Language')
-                    ->bcc('clm_language@un.org')
+                    ->from('clm_language@unog.ch', 'CLM Language')
+                    ->bcc('clm_language@unog.ch')
                     ->priority(1)
                     ->subject('Notification: CLM Learning Partner Decision Made on CLM Language Placement Test - '.$this->input_course->languages->name.' for '.$this->staff_name);
     }

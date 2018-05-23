@@ -36,8 +36,8 @@ class MailPlacementTesttoApprover extends Mailable
     public function build()
     {
         return $this->view('emails.placementApproval')
-                    ->from('clm_language@un.org', 'CLM Language')
-                    ->bcc('clm_language@un.org')
+                    ->from('clm_language@unog.ch', 'CLM Language')
+                    ->bcc('clm_language@unog.ch')
                     ->priority(1)
                     ->subject('Manager/Supervisor Approval Needed: Language Placement Test - '.$this->input_course->languages->name .' for '.$this->staff->sddextr->FIRSTNAME.' '.$this->staff->sddextr->LASTNAME);
     }

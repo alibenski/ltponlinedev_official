@@ -69,7 +69,7 @@ class CustomPassword extends ResetPassword
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->from('clm_language@un.org', 'CLM Language')
+            ->from('clm_language@unog.ch', 'CLM Language')
             ->subject( 'CLM Online Registration Password Reset' )
             ->priority(1)
             ->line('We are sending this email because we recieved a forgot password request.')
