@@ -16,17 +16,6 @@ class ExcelController extends Controller
 
     public function getBladeExcel()
     {
-        $url = \$request->fullurl();
-        $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_HEADER, false);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_REFERER, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    $result = curl_exec($ch);
-    curl_close($ch);
-
     	$languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
                 $placement_forms = new PlacementForm;
@@ -59,7 +48,7 @@ class ExcelController extends Controller
                 // $sheet->loadView('excelfiles.bladeExcel');
                 $sheet->loadView('placement_forms.index')->withLanguages($languages)->withOrg($org)->withPlacement_forms($placement_forms);
             });
-        })->download('csv');
+        })->download('xlsx');
 
         //return view('thecodingstuff.bladexcel');
 
