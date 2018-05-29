@@ -40,6 +40,6 @@ class MailPlacementTesttoApproverHR extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject('CLM Learning Partner Approval Needed: Language Placement Test - '.$this->input_course->languages->name  .' for '.$this->staff_name);
+                    ->subject('CLM Learning Partner Approval Needed for: '.$this->staff_name.' on Language Placement Test - '.$this->input_course->languages->name);
     }
 }

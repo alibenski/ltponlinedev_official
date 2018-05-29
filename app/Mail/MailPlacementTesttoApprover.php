@@ -39,6 +39,6 @@ class MailPlacementTesttoApprover extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject('Manager/Supervisor Approval Needed: Language Placement Test - '.$this->input_course->languages->name .' for '.$this->staff->sddextr->FIRSTNAME.' '.$this->staff->sddextr->LASTNAME);
+                    ->subject('Supervisor Approval Needed for: '.$this->staff->sddextr->FIRSTNAME.' '.$this->staff->sddextr->LASTNAME.' on Language Placement Test - '.$this->input_course->languages->name);
     }
 }

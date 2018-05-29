@@ -44,6 +44,6 @@ class MailtoStudent extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject('Notification: Manager/Supervisor Decision Made on CLM Language Course Enrolment '.$this->input_course->courses->Description.' of '.$this->staff_name);
+                    ->subject('Notification: Supervisor Decision Made on CLM Language Course Enrolment '.$this->input_course->courses->Description.' of '.$this->staff_name);
     }
 }

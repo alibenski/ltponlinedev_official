@@ -143,7 +143,7 @@
     <![endif]-->
 
 </head>
-<body width="100%" bgcolor="#222222" style="margin: 0; mso-line-height-rule: exactly;">
+<body width="100%" bgcolor="#4286f4" style="margin: 0; mso-line-height-rule: exactly;">
     <center style="width: 100%; background: #4286f4; text-align: left;">
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
@@ -197,7 +197,7 @@
                                      <p>The placement test will be on <strong> @if ($input_course->L == 'F') {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
                                     <p>Please note that the request above has initially been approved by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>
-                                     <p>Please click on the button below to access the approval page.</p>
+                                     <p>Please click on the button below to access the decision page.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -207,7 +207,7 @@
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
                                                 <a href="{{ route('approval.getplacementformdata2hr', [Crypt::encrypt($input_course->INDEXID), Crypt::encrypt($input_course->L), Crypt::encrypt($input_course->id), Crypt::encrypt($input_course->eform_submit_count)]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Approval Link&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Decision Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -217,8 +217,8 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Important Reminder</h2>
-                                    <p style="margin: 0;">The decision to whether approve or disapprove this request is irrevocable. Thank you for your cooperation and understanding.</p>
+                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
+                                    <p style="margin: 0;">Once you submit your decision, you will receive an email confirming your choice. If you would like to change your Decision, please contact the Language Training Secretariat via email: clm_language@un.org</p>
                                 </td>
                             </tr>
                         </table>

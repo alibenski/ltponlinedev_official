@@ -41,6 +41,6 @@ class MailtoApprover extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject('Manager/Supervisor Approval Needed: Language Course Enrolment '.$this->input_course->courses->Description .' for '.$this->staff->name);
+                    ->subject('Supervisor Approval Needed for: '.$this->staff->name.' on Language Course Enrolment '.$this->input_course->courses->Description);
     }
 }

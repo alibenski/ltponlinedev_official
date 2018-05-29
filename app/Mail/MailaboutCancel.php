@@ -41,6 +41,6 @@ class MailaboutCancel extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject('Notification of Cancellation: Language Course Enrolment '.$this->display_language->courses->EDescription .' for '.$this->staff_member_name);
+                    ->subject('Cancellation: '.$this->staff_member_name.' Cancelled Language Course Enrolment '.$this->display_language->courses->EDescription);
     }
 }

@@ -42,6 +42,6 @@ class MailtoApproverHR extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject('CLM Learning Partner Approval Needed: Language Course Enrolment '.$this->input_course->courses->Description  .' for '.$this->staff_name);
+                    ->subject('CLM Learning Partner Approval Needed for: '.$this->staff_name.' on Language Course Enrolment '.$this->input_course->courses->Description);
     }
 }
