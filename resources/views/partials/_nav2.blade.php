@@ -1,10 +1,11 @@
 <div class="container">
-<ul class="nav nav-tabs">
+<ul class="nav nav-pills">
 	<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Home</a></li>
 	<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Your Profile</a></li>
-	<li role="presentation" class="{{ Request::is('whatorg') ? "active" : ""}}"><a href="/whatorg">Register/Enrol Here</a></li>
 	<li role="presentation" class="{{ Request::is('submitted') ? "active" : ""}}"><a href="/submitted">Current Submitted Forms</a></li>
 	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">History</a></li>
+
+	<li role="presentation" class="pull-right {{ Request::is('whatorg') ? "active" : ""}}"><a href="/whatorg"><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a></li>
 	<!--<li class="dropdown">
 		<button type="button" href="#" id="BtnDropdown" class="btn btn-info dropdown-toggle" data-toggle="dropdown"> Enrolment Forms <b class="caret"></b></button>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="BtnDropdown">
