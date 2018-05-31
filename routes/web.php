@@ -56,7 +56,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
         Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
         //Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+        
+        // cancellation routes with date limit middleware
         Route::delete('/delete/user/{staff}/course/{tecode}/{form}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+        Route::delete('/delete/user/{staff}/lang/{L}/term/{term}/{form}', ['middleware' => 'limit-cancel','as' => 'submittedPlacement.destroy', 'uses' => 'HomeController@destroyPlacement'])->where('tecode', '(.*)');
+        
         //apply auth middleware only so students could edit their profile
         Route::resource('students', 'StudentController');
         Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
@@ -130,6 +134,7 @@ Route::get('confirmationLinkExpired', function () { return view('confirmationLin
 Route::get('new_user_msg', function () { return view('new_user_msg'); })->name('new_user_msg');
 Route::get('page_not_available', function () { return view('page_not_available'); })->name('page_not_available');
 Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
+Route::get('thankyouSelfPay', function () { return view('thankyouSelfPay'); })->name('thankyouSelfPay');
 Route::resource('newuser', 'NewUserController');
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();

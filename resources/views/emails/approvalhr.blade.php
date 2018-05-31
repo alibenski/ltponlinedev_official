@@ -143,7 +143,7 @@
     <![endif]-->
 
 </head>
-<body width="100%" bgcolor="#222222" style="margin: 0; mso-line-height-rule: exactly;">
+<body width="100%" bgcolor="#4286f4" style="margin: 0; mso-line-height-rule: exactly;">
     <center style="width: 100%; background: #4286f4; text-align: left;">
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
@@ -208,8 +208,8 @@
                                      </li>
                                      @endforeach
                                      </ol>
-                                     <p>Please note that the enrolment above has initially been approved by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>
-                                     <p>Please click on the button below to access the approval page.</p>
+                                     <p>Please note that the enrolment above has initially been decided by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>
+                                     <p>Please click on the button below to access the decision page.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -219,7 +219,7 @@
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
                                                 <a href="{{ route('approval.getform2hr', [Crypt::encrypt($input_course->INDEXID), Crypt::encrypt($input_course->Te_Code), Crypt::encrypt($input_course->id), Crypt::encrypt($input_course->form_counter)]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Approval Link&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Click Here&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -306,8 +306,8 @@
             <!-- Email Footer : BEGIN -->
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: whitesmoke; font-size: 12px; line-height: 140%;">
                 <tr>
-                    <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #888888;" class="x-gmail-data-detectors">
-                        <webversion style="color: #cccccc; text-decoration: underline; font-weight: bold;"></webversion>
+                    <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #222222;" class="x-gmail-data-detectors">
+                        <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>
                         <br><br>
                         Language Training Secretariat<br>
                         For French Annex Bocage 2 - Room 5 (ground floor)<br>
@@ -316,7 +316,7 @@
                         <br><br>
                         <hr>
                         {{date("Y")}} All Rights Reserved. <br><br>
-                        <unsubscribe style="color: #888888; text-decoration: underline;"></unsubscribe>
+                        <unsubscribe style="color: #222222; text-decoration: underline;"></unsubscribe>
                     </td>
                 </tr>
             </table>

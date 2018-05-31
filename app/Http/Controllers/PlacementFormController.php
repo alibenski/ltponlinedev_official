@@ -112,7 +112,7 @@ class PlacementFormController extends Controller
         Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
 
         $request->session()->flash('success', 'Your Placement Test request has been submitted for approval.'); //laravel 5.4 version
-        return redirect()->route('home');
+        return redirect()->route('thankyou');
     }
 
     public function postSelfPayPlacementInfo(Request $request, $attachment_pay_file, $attachment_identity_file)

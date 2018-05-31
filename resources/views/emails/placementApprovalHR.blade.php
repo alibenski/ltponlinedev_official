@@ -218,7 +218,7 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Once you submit your decision, you will receive an email confirming your choice. If you would like to change your Decision, please contact the Language Training Secretariat via email: clm_language@un.org</p>
+                                    <p style="margin: 0;">Once you submit your decision, you will receive an email confirming your choice. If you would like to change your decision, please contact the Language Training Secretariat via email: clm_language@un.org</p>
                                 </td>
                             </tr>
                         </table>
@@ -294,8 +294,8 @@
             <!-- Email Footer : BEGIN -->
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: whitesmoke; font-size: 12px; line-height: 140%;">
                 <tr>
-                    <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #888888;" class="x-gmail-data-detectors">
-                        <webversion style="color: #cccccc; text-decoration: underline; font-weight: bold;"></webversion>
+                    <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #222222;" class="x-gmail-data-detectors">
+                        <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>
                         <br><br>
                         Language Training Secretariat<br>
                         For French Annex Bocage 2 - Room 5 (ground floor)<br>
@@ -304,7 +304,7 @@
                         <br><br>
                         <hr>
                         {{date("Y")}} All Rights Reserved. <br><br>
-                        <unsubscribe style="color: #888888; text-decoration: underline;"></unsubscribe>
+                        <unsubscribe style="color: #222222; text-decoration: underline;"></unsubscribe>
                     </td>
                 </tr>
             </table>

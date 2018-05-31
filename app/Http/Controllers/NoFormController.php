@@ -201,7 +201,7 @@ class NoFormController extends Controller
         if ($request->placementDecisionB === '0') {
             app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request);
             $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
-            return redirect()->route('home');
+            return redirect()->route('thankyou');
         }
 
                     //validate other input fields outside of above loop
@@ -274,7 +274,7 @@ class NoFormController extends Controller
         if ($org == $sddextr_org){
             //flash session success or errorBags 
             $request->session()->flash('success', 'Enrolment Form has been submitted for approval'); //laravel 5.4 version
-            return redirect()->route('home');
+            return redirect()->route('thankyou');
         }
         //if there is change, to call function update below
         else {
