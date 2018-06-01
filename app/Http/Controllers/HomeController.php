@@ -157,7 +157,7 @@ class HomeController extends Controller
     }
     
     public function whatform(Request $request)
-    {
+    {dd($request);
         // if part of new organization, then save the new organization to sddextr
         // same organization and self-pay does not update sddextr
         if ($request->decision === null) {
@@ -165,6 +165,7 @@ class HomeController extends Controller
             $id = Auth::id();
             $student = User::findOrFail($id);
             $student->sddextr->DEPT = $request->input('organization');
+            // $student->sddextr->CAT = $request->input('profile');
             $student->sddextr->save();
         }
         // dd(Auth::id());

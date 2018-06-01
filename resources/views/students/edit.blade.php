@@ -127,7 +127,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gradeLevel" class="col-md-2 control-label">Professional Grade Level:</label>
+                            <label for="gradeLevel" class="col-md-2 control-label">Grade Level:</label>
 
                             <div class="col-md-8 inputGroupContainer">
                                 <div class="input-group">

@@ -33,30 +33,53 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label">Are you a self-paying student?</label>
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
-                                <label for="decision1" class="form-control-static">YES</label>
+                                <label for="decision1" class="form-control-static">YES, I am paying for my enrolment</label>
                       </div>
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-                                <label for="decision2" class="form-control-static">NO</label>
+                                <label for="decision2" class="form-control-static">NO, my organization is paying for my enrolment</label>
                       </div>
                 </div>
 
-                <div id="secretMsg1" class="col-md-12" style="display: none">
+                <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
                   <p>You confirmed that you are a <em>self-paying student</em>. Please follow the instructions below:</p>
                   <ol>
                     <li>Choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank">HERE</a></li>
                     <li>Prepare a copy of proof of payment</li>
                     <li>Prepare a copy of your carte de légitimation or work certificate</li>
                   </ol>
-                  <p>After following the instructions, click the Next button to continue</p>
+                  <p>After following the instructions, please fill out the fields below and click the Next button to continue.</p>
+                  {{-- end of id="secretMsg1"  --}}
                 </div>
-                <div id="secretMsg2" class="col-md-12" style="display: none">
-                  <p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
+
+
+                <div id="secretMsg2" class="col-md-12 alert alert-info" style="display: none">
+                  <p class='text-justify'>You confirmed that you work for a UN organization. Please select your <strong>Profile</strong> and <strong>Organization</strong> below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
+                  {{-- end of id="secretMsg2"  --}}
                 </div>
-                <div id="orgSelect" class="form-group 0 box" style="display: none">
+                
+                <div id="orgSelect" class="form-group" style="display: none">
+                  <label for="profile" class="col-md-2 control-label">Profile:</label>
+                  <div class="col-md-9">
+                    <div class="dropdown">
+                      <select id="profile" name="profile" class="col-md-8 form-control select-profile-single" style="width: 100%;" required="required">
+                            <option></option>
+                            <option value="1">UN Staff Member</option>
+                            <option value="2">Intern/Consultant</option>
+                            <option value="3">Staff of Permanent Mission</option>
+                            <option value="4">Spouse of Staff from UN or Mission</option>
+                            <option value="5">Retired UN Staff Member</option>
+                            <option value="6">Staff of Service Organizations in the Palais</option>
+                            <option value="7">Staff of UN-accredited NGO's and Press Corps</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="orgSelect" class="form-group" style="display: none"> 
                     <label for="organization" class="col-md-2 control-label">Organization:</label>
                   <div class="col-md-9">
                     <div class="dropdown">
@@ -101,6 +124,8 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
                     {{-- <input id="decision2" name="decision" type="hidden" value="0"> --}}
                     <button id="modalBtn" type="submit" class="btn btn-success button-prevent-multi-submit">Next</button>
+                    <input id="inputProfile" name="profile" type="hidden" value="">
+                    <input id="inputDecision" name="decision" type="hidden" value="">
                     <input type="hidden" name="_token" value="{{ Session::token() }}">
               </div>
             </form>
@@ -118,6 +143,7 @@
 <script>
   $(document).ready(function(){
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
+    $("input[name='decision']").prop('checked', false);
   });
 </script>
 
@@ -126,16 +152,19 @@
       
       if($('#decision1').is(':checked')) {
         // reset select2 (4.0.3) value to NULL and show placeholder  
-        $('.select2-basic-single').removeAttr('required').val([]).trigger('change');
+        $('.select-profile-single').val([]).trigger('change');
+        $('.select2-basic-single').val([]).trigger('change');
         $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
         $('button[type="submit"]').addClass( "btn-success", 500);
-        $('#secretMsg2, #orgSelect').fadeOut(500);
-        $('#secretMsg1').fadeIn(800);
+        $('#orgSelect, #secretMsg2').fadeOut(500);
+        $('#secretMsg1, #orgSelect').fadeIn(800);
       } else if ($('#decision2').is(':checked')) {
+        // reset select2 (4.0.3) value to NULL and show placeholder  
+        $('.select-profile-single').val([]).trigger('change');
+        $('.select2-basic-single').val([]).trigger('change');
         $('button[id="formBtn"]').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit">Next</a>');
         $('a.next-link').removeClass( "btn-success", 500);
-        $('.select2-basic-single').attr('required', 'required');
-        $('#secretMsg1').fadeOut(500);
+        $('#orgSelect, #secretMsg1').fadeOut(500);
         $('#secretMsg2, #orgSelect').fadeIn(800);
       }
   });
@@ -144,12 +173,18 @@
 <script type="text/javascript">
   $(document).ready(function() {
     //  select2 dropdown init
+    $('.select-profile-single').select2({
+    placeholder: "Select Profile",
+    });
+    
     $('.select2-basic-single').select2({
     placeholder: "Select Organization",
     });
     // ajax post on change event
     $('select[id="input"]').change(function() {
       var dOrg = $('select[id="input"]').val();
+      var dProfile = $('select[id="profile"]').val();
+      var dDecision = $('input[name="decision"]:checked').val();
       var token = $('meta[name=csrf-token]').attr('content');
       // do not execute ajax and modal if value of selection is NULL
       if (dOrg != null) {
@@ -158,6 +193,10 @@
                 $('#modalshow').modal('show');
                 $('input[id="inputOrg"]').attr('name','organization');
                 $('input[name="organization"]').attr('value', dOrg);
+                $('input[id="inputProfile"]').attr('value', dProfile);
+                $('input[id="inputDecision"]').attr('value', dDecision);
+                console.log('profile' + dProfile);
+                console.log('decision: ' + dDecision);
               } 
               if (data === true) {
                 $('select[id="input"]').attr('name','organization');
