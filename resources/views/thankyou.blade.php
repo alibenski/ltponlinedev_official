@@ -38,7 +38,7 @@
 	                </div>
                 </div>
                 <div class="right-image col-md-4">
-                  <img src="ziggy/img/right-image.png" alt="">
+                  <img src="ziggy/img/Logo2016_transparent.png" alt="">
                 </div>
               </div>
             </div>

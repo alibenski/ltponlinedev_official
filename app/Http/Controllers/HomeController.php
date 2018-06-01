@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use App\Mail\MailaboutCancel;
+use App\Mail\MailaboutPlacementCancel;
 use App\Torgan;
 use App\FocalPoints;
 use App\Language;
@@ -90,7 +91,7 @@ class HomeController extends Controller
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $next_term_code )
             ->get();
-            
+
         //$str = $forms_submitted->pluck('Te_Code');
         //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
         //$array_codes = explode(',', $str_codes);
@@ -265,6 +266,82 @@ class HomeController extends Controller
         }
 
         session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
+        return redirect()->back();
+    }
+
+    public function destroyPlacement(Request $request, $staff, $lang, $term, $eform)
+    {
+        //query submitted forms based from tblLTP_Enrolment table
+        $forms = PlacementForm::orderBy('Term', 'desc')
+                ->where('L', $lang)
+                ->where('INDEXID', '=', $staff)
+                ->where('Term', $term )
+                ->where('eform_submit_count', $eform )
+                ->get();
+        $display_language = PlacementForm::orderBy('Term', 'desc')
+                ->where('L', $lang)
+                ->where('INDEXID', '=', $staff)
+                ->where('Term', $term )
+                ->where('eform_submit_count', $eform )
+                ->first();
+        
+        //get email address of the Manager
+        $mgr_email = $forms->pluck('mgr_email')->first();
+
+        //if self-paying enrolment form
+        if (is_null($mgr_email)){
+            $enrol_form = [];
+            for ($i = 0; $i < count($forms); $i++) {
+                $enrol_form = $forms[$i]->id;
+                $delform = PlacementForm::find($enrol_form);
+                $delform->cancelled_by_student = 1;
+                $delform->save();
+                $delform->delete();
+            }
+            session()->flash('cancel_success', 'Placement Test Request for '.$display_language->languages->name. ' has been cancelled.');
+            return redirect()->back();
+        }
+
+        //email notification to Manager    
+        $staff_member_name = Auth::user()->name;
+            Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+        
+        //email notification to CLM Partner
+        $org = $display_language->DEPT;
+
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+
+        // if there is a learning partner, email them as well
+        if ($learning_partner == '1'){
+            
+            // email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+
+        }
+
+        $enrol_form = [];
+        for ($i = 0; $i < count($forms); $i++) {
+            $enrol_form = $forms[$i]->id;
+            $delform = PlacementForm::find($enrol_form);
+            $delform->cancelled_by_student = 1;
+            $delform->save();
+            $delform->delete();
+        }
+
+        session()->flash('cancel_success', 'Pleacement Form Request for '.$display_language->languages->name. ' has been cancelled.');
         return redirect()->back();
     }
 }

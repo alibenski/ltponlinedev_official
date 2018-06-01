@@ -96,12 +96,25 @@
                 <div class="row">
                 <div class="col-sm-12">
                     @if($plform->cancelled_by_student == 1)
-                      <span class="label label-danger margin-label">Enrolment Form Cancelled By Student</span>
+                      <span class="label label-danger margin-label">Placement Test Request Cancelled By Student</span>
                     @endif 
                     <h4><strong>Placement Test Request Form # {{ $plform->eform_submit_count }}</strong></h4>
                     <h5>@if($plform->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif</h5> 
                     <h5>Language: <strong>{{ $plform->languages->name }}</strong></h5>
                     <h5>@if($plform->L == 'F')Test Date: Online from <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> to <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam_end)) }}</strong> @else Test Date: <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> @endif</h5>
+                    <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}">
+                        <input type="submit" @if (is_null($plform->deleted_at))
+                          value="Cancel Placement Test"
+                        @else
+                          value="Cancelled"
+                        @endif  class="btn btn-danger btn-space" @if (is_null($plform->deleted_at))
+                          
+                        @else
+                          disabled="" 
+                        @endif>
+                        <input type="hidden" name="_token" value="{{ Session::token() }}">
+                       {{ method_field('DELETE') }}
+                    </form>
                 </div>
                 </div>
                 <hr>

@@ -59,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
         
         // cancellation routes with date limit middleware
         Route::delete('/delete/user/{staff}/course/{tecode}/{form}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
-        Route::delete('/delete/user/{staff}/lang/{L}/term/{term}/{form}', ['middleware' => 'limit-cancel','as' => 'submittedPlacement.destroy', 'uses' => 'HomeController@destroyPlacement'])->where('tecode', '(.*)');
+        Route::delete('/delete/user/{staff}/lang/{lang}/term/{term}/{eform}', ['middleware' => 'limit-cancel','as' => 'submittedPlacement.destroy', 'uses' => 'HomeController@destroyPlacement'])->where('tecode', '(.*)');
         
         //apply auth middleware only so students could edit their profile
         Route::resource('students', 'StudentController');
