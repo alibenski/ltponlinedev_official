@@ -171,6 +171,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        jdavidbakr\MailTracker\MailTrackerServiceProvider::class,
         /*
          * Application Service Providers...
          */
