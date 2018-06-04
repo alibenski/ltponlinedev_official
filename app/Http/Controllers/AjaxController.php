@@ -59,12 +59,13 @@ class AjaxController extends Controller
         $ajaxOrg = $request->organization;
         $id = Auth::user()->id;
         $studentOrg = User::findOrFail($id)->sddextr->DEPT;
+        $torgan = Torgan::where('Org name', $ajaxOrg)->first();
         if ($ajaxOrg != $studentOrg) {
             $data = false;
         } else {
             $data = true;
         }
-        return response()->json($data);  
+        return response()->json([$data, $torgan]);  
     }
 
     public function ajaxGetDate()
