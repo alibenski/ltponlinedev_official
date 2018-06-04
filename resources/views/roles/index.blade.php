@@ -26,7 +26,7 @@
 
                     <td>{{ str_replace(array('[',']','"'),'', $role->permissions()->pluck('name')) }}</td>{{-- Retrieve array of permissions associated to a role and convert to string --}}
                     <td>
-                    <a href="{{ URL::to('roles/'.$role->id.'/edit') }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
+                    <a href="{{ URL::to('admin/roles/'.$role->id.'/edit') }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
 
 					<form method="POST" action="{{ route('roles.destroy',  $role->id) }}">
                       <input type="submit" value="Delete" class="btn btn-danger" style="margin: 1px;" disabled="">
@@ -42,7 +42,7 @@
         </table>
     </div>
 
-    <a href="{{ URL::to('roles/create') }}" class="btn btn-success">Add Role</a>
+    <a href="{{ route('roles.create') }}" class="btn btn-success">Add Role</a>
 
 </div>
 

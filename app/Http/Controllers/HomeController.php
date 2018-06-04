@@ -157,19 +157,16 @@ class HomeController extends Controller
     }
     
     public function whatform(Request $request)
-    {dd($request);
-        // if part of new organization, then save the new organization to sddextr
-        // same organization and self-pay does not update sddextr
-        if ($request->decision === null) {
-            // save organization to sddextr table
-            $id = Auth::id();
-            $student = User::findOrFail($id);
-            $student->sddextr->DEPT = $request->input('organization');
-            // $student->sddextr->CAT = $request->input('profile');
-            $student->sddextr->save();
-        }
-        // dd(Auth::id());
-        // validate if organization is billed or not
+    {
+        dd($request);
+        // if part of new organization, then save the new organization to sddextr        
+        // save organization and CAT to sddextr table
+        $id = Auth::id();
+        $student = User::findOrFail($id);
+        $student->sddextr->DEPT = $request->input('organization');
+        // $student->sddextr->CAT = $request->input('profile');
+        $student->sddextr->save();
+
         // query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)
             ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
@@ -177,10 +174,16 @@ class HomeController extends Controller
         if ($request->decision == 1) {
             session()->flash('success','Please fill up the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
-        } elseif ($request->decision == 0 && $org_status == 1) {
-            session()->flash('success','Please fill up the payment-based enrolment form');
-            return redirect(route('selfpayform.create'));
-        } elseif ($request->decision == 0 && $org_status == 0) {
+        } 
+        // elseif ($request->decision == 0 && $org_status == 1) {
+        //     session()->flash('success','Please fill up the payment-based enrolment form');
+        //     return redirect(route('selfpayform.create'));
+        // } 
+        // elseif ($request->decision == 0 && $org_status == 0) {
+        //     session()->flash('success','Please fill up the enrolment form');
+        //     return redirect(route('myform.create'));
+        // } 
+        elseif ($request->decision == 0) {
             session()->flash('success','Please fill up the enrolment form');
             return redirect(route('myform.create'));
         } else 

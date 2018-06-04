@@ -144,7 +144,7 @@
                         <div class="col-md-12 form-group">
                           <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
                           <div class="col-md-8 ">
-                          <textarea name="std_comment" class="form-control"></textarea>
+                          <textarea name="std_comment" class="form-control" maxlength="3500"></textarea>
                           </div>
                         </div>
 
@@ -269,11 +269,22 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.full.js') }}"></script>
-
+<script src="{{ asset('js/bootstrap-maxlength.js') }}"></script>
 <script>
  $(window).load(function(){
  $("#loader").fadeOut(500);
  });
+
+  $('textarea').maxlength({
+    alwaysShow: false,
+    threshold: 500,
+    warningClass: "label label-success",
+    limitReachedClass: "label label-danger",
+    separator: ' out of ',
+    preText: 'Writing ',
+    postText: ' chars.',
+    validate: true
+  });
 </script>
 
 <script>

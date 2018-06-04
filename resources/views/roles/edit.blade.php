@@ -17,7 +17,7 @@
 		<div class='form-group'>
             <div class="checkbox">
                 <label>
-                    @foreach ($roles as $role)
+                    @foreach ($permissions as $permission)
                       <input type="checkbox" name="permissions[]" value="{{ $permission->id, $role->permissions }}" /> {{ ucfirst($permission->name) }}
                       <br>
                     @endforeach

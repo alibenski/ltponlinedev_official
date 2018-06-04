@@ -41,7 +41,13 @@
         <div class="col-md-4">
           <div class="form-group">
             <label class="control-label">Season: </label>
-            <input name="" type="text" class="form-control" value="">
+            <div class="dropdown">
+              <select name="" id="" style="width: 100%;">
+                @foreach($seasons as $id => $value)
+                <option value="{{ $id }}">{{ $value }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
         </div>
 

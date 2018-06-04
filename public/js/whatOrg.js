@@ -5,7 +5,7 @@
         $('.select-profile-single').val([]).trigger('change');
         $('#orgSelect').attr('style', 'display: none');
         $('.select2-basic-single').val([]).trigger('change');      
-        $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
+        $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button>');
         $('button[type="submit"]').addClass( "btn-success", 500);
         $('#profileSelect, #secretMsg2').fadeOut(500);
         $('#secretMsg1, #profileSelect').fadeIn(800);
@@ -102,8 +102,10 @@
               } 
               if (response[0] === true) {
                 $('select[id="input"]').attr('name','organization');
-                $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button> <input type="hidden" name="_token" value="{{ Session::token() }}">');
+                $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button>');
                 $('button[type="submit"]').addClass( "btn-success", 800); 
+                console.log('t profile: ' + dProfile);
+                console.log('t decision: ' + dDecision);
               }
             });
       } else {

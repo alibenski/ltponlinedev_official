@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Term;
+use App\Season;
 
 class TermController extends Controller
 {
@@ -26,7 +27,8 @@ class TermController extends Controller
     public function create()
     {
         $terms = Term::orderBy('Term_Code', 'desc')->paginate(10);
-        return view('terms.create')->withTerms($terms);
+        $seasons = Season::pluck('ESEASON', 'ESEASON');
+        return view('terms.create')->withTerms($terms)->withSeasons($seasons);
     }
 
     /**
