@@ -124,7 +124,7 @@
                 <div class="form-group">
                   <label class="col-md-3 control-label">Comment/Reason: <i>(optional)</i></label>
                   <div class="col-md-8 ">
-                  <textarea name="hr_comment" class="form-control"></textarea>
+                  <textarea name="hr_comment" class="form-control" maxlength="3500"></textarea>
                   <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the staff member.</strong></p>
                   </div>
                 </div>
@@ -163,10 +163,21 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/submit.js') }}"></script>     
-
+<script src="{{ asset('js/bootstrap-maxlength.js') }}"></script>
 <script>
   $(document).ready(function(){
     $('input[type=radio]').prop('checked',false);
+
+    $('textarea').maxlength({
+      alwaysShow: false,
+      threshold: 500,
+      warningClass: "label label-success",
+      limitReachedClass: "label label-danger",
+      separator: ' out of ',
+      preText: 'Writing ',
+      postText: ' chars.',
+      validate: true
+    });
   });
 </script>
 @stop
