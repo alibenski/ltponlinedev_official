@@ -42,9 +42,14 @@ class OpenCloseEnrolment
         $start_enrolment_date = $carbon_current_term_begin->addWeeks(4);
         $end_enrolment_date = $carbon_current_term_begin_for_end->addWeeks(7);
 
+        // get Term_Begin and Term_End from Terms Model
+        $nextTermCode = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+        $startEnrolDate = Term::where('Term_Code', $nextTermCode)->value('Enrol_Date_Begin');
+        $endEnrolDate = Term::where('Term_Code', $nextTermCode)->value('Enrol_Date_End');
+        
         //check if $now_date is between start and end enrol dates
         // if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {
-        if ($now_date >= '2018-05-01 00:00:00' && $now_date <= '2018-05-16 23:00:00') {
+        if ($now_date >= $startEnrolDate && $now_date <= $endEnrolDate) {
             return $next($request);
         }
         

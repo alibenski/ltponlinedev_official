@@ -23,9 +23,7 @@ class LimitCancelPeriod
 
         //query the current term based on year and Term_End column is greater than today's date
         //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        ->get()->min();
+        $terms = \App\Helpers\GlobalFunction::instance()->currentTermObject();
         //query the next term based Term_Begin column is greater than today's date and then get min
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Code', '=', $terms->Term_Next)
@@ -36,21 +34,26 @@ class LimitCancelPeriod
                         ->where('Term_Code', '=', $terms->Term_Next)->get()->min('Comments');
 
         //set limit of 4 working days                        
-        $carbon_next_term_begin = Carbon::parse($next_term)->subWeekdays(4)->toDateString(); 
+        // $carbon_next_term_begin = Carbon::parse($next_term)->subWeekdays(4)->toDateString(); 
         //set limit of 2 weeks days
-        $carbon_next_summer_term_begin = Carbon::parse($next_term)->subWeeks(2)->toDateString();
+        // $carbon_next_summer_term_begin = Carbon::parse($next_term)->subWeeks(2)->toDateString();
+        
+        // refactored code: $cancellationDateLimit replaces $carbon_next_term_begin
+        // and $carbon_next_summer_term_begin in the IF statements below
+        $nextTermCode = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+        $cancellationDateLimit = Term::where('Term_Code', $nextTermCode)->value('Cancel_Date_Limit');
 
         //logic to check if today is 4 WORKING days AFTER the start of the NEXT term 
         //and if the NEXT term is NOT Summer
         //if yes, redirect(), else, $next
-        if ($next_season !== 'SUMMER' && $now_date >= $carbon_next_term_begin) {
+        if ($next_season !== 'SUMMER' && $now_date >= $cancellationDateLimit) {
             return redirect()->route('home')
             ->with('interdire-msg','Cancellation period expired.');
         } 
         //logic to check if today is 2 weeks AFTER the start of the NEXT term 
         //and if the NEXT term is Summer
         //if yes, redirect(), else, $next
-        elseif ($next_season == 'SUMMER' && $now_date >= $carbon_next_summer_term_begin) {
+        elseif ($next_season == 'SUMMER' && $now_date >= $cancellationDateLimit) {
             return redirect()->route('home')
             ->with('interdire-msg','Summer term cancellation period expired.');        
         } 

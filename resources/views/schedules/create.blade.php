@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container">
-  <div class="col-md-11">
+  <div class="col-md-12">
+    <h1>Create New Schedule</h1>
+  </div>
+  <div class="col-md-12">
     <form class="well form-horizontal" method="POST" action="{{ route('schedules.store') }}">
               {{ csrf_field() }}
               <div class="form-group">

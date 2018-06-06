@@ -14,6 +14,7 @@
 					<th>Enrolment Date Begin</th>
 					<th>Enrolment Date End</th>
 					<th>Cancellation Date Limit</th>
+					<th>Season</th>
 					<th>Operation</th>
 				</thead>
 
@@ -46,6 +47,7 @@
 								{{ date('d M Y - H:ia', strtotime($term->Cancel_Date_Limit)) }}
 							@endif
 							</td>
+							<td>{{ $term->Comments }}</td>
 							<td><a href="{{ route('terms.edit', $term->Term_Code)}}" class="btn btn-info pull-left">Edit</a></td>
 						</tr>
 					@endforeach

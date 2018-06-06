@@ -45,19 +45,20 @@ class TermController extends Controller
                 // 'name' => 'required|max:255',
             ));
         // manipulate before storing
-        $termBeginStr = date('d F', strtotime($request->termBeginDate));
-        $termEndStr = date('d F Y', strtotime($request->termEndDate));
+        $termBeginStr = date('d F', strtotime($request->Term_Begin));
+        $termEndStr = date('d F Y', strtotime($request->Term_End));
         $termNameStr = $termBeginStr.' - '.$termEndStr;
 
         // store in database
         $term = new Term;
-        $term->Term_Code = $request->termCode;
+        $term->Term_Code = $request->Term_Code;
         $term->Term_Name = $termNameStr;
-        $term->Term_Begin = $request->termBeginDate;
-        $term->Term_End = $request->termEndDate;
-        $term->Enrol_Date_Begin = $request->enrolBeginInput;
-        $term->Enrol_Date_End = $request->enrolEndInput;
-        $term->Cancel_Date_Limit = $request->cancelDateInput;
+        $term->Term_Begin = $request->Term_Begin;
+        $term->Term_End = $request->Term_End;
+        $term->Enrol_Date_Begin = $request->Enrol_Date_Begin;
+        $term->Enrol_Date_End = $request->Enrol_Date_End;
+        $term->Cancel_Date_Limit = $request->Cancel_Date_Limit;
+        $term->Comments = $request->Comments;
         $term->Activ = 0;
 
         $term->save();
@@ -100,7 +101,31 @@ class TermController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, array(
+                // validate if termCode is unique 
+                'Term_Code' => 'unique:LTP_Terms,Term_Code|',
+                'Term_Begin' => 'required_with:Term_End|',
+                'Term_End' => 'required_with:Term_Begin|',
+            ));
+
+        $noTokenMethod = $request->except(['_token', '_method']);
+        $fliteredInput = (array_filter($noTokenMethod));
+
+        // update data in db
+        $term = Term::findOrFail($id);
+
+        // manipulate Term_Name before storing
+        if (!is_null($request->Term_Begin)) {
+            $termBeginStr = date('d F', strtotime($request->Term_Begin));
+            $termEndStr = date('d F Y', strtotime($request->Term_End));
+            $termNameStr = $termBeginStr.' - '.$termEndStr;
+            $term->Term_Name = $termNameStr;
+        }
+        $term->save();
+        $term->update($fliteredInput);
+
+        $request->session()->flash('success', 'Changes have been saved!');
+        return redirect()->route('terms.index');
     }
 
     /**

@@ -3,83 +3,96 @@
 @section('customcss')
 	{{-- <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen"> --}}
 	<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+  <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 
 @section('content')
 <div class='col-lg-12'>
-    <h1><i class='fa fa-snowflake-o'></i> Edit Semester Term {{ $term->Term_Code }}</h1>
+    <h1><i class='fa fa-snowflake-o'></i> Edit Semester Term {{ $term->Term_Code }} - {{ $term->Comments }}</h1>
     <hr>
-	    <form method="POST" action="{{ route('terms.update', $term->Term_Code) }}">
+	    <form id="updateTermForm" method="POST" action="{{ route('terms.update', $term->Term_Code) }}">
         {{ csrf_field() }}
         <div class="col-md-4">
           <div class="form-group">
-            <label for="termCode" class="control-label">Term Code: </label>
-  				  <input name="termCode" type="text" class="form-control" value="" required="">
+            <label for="Term_Code" class="control-label">Term Code: </label>
+  				  <input name="Term_Code" type="text" class="form-control" value="">
           </div>
 
           <div class="form-group">
-            <label for="termBeginDate" class="control-label">Term Begin Date: </label>
-            <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="termBeginDate">
+            <label for="Term_Begin" class="control-label">Term Begin Date: </label>
+            <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Term_Begin">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="termBeginDate" id="termBeginDate" value="" />
+                  <input type="hidden" name="Term_Begin" id="Term_Begin" value="" />
           </div>
 
           <div class="form-group">
-            <label for="termEndDate" class="control-label">Term End Date: </label>
-  				  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="termEndDate">
+            <label for="Term_End" class="control-label">Term End Date: </label>
+  				  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Term_End">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="termEndDate" id="termEndDate" value="" />
+                  <input type="hidden" name="Term_End" id="Term_End" value="" />
           </div>
         </div>
 
+        {{-- Select Dropdown for SEASON --}}
         <div class="col-md-4">
-          <div class="form-group">
-            <label for="season" class="control-label">Season: </label>
+          <div class="form-group" style="margin-bottom: 21px;">
+            <label for="Comments" class="control-label">Season: </label>
             <div class="dropdown">
-              <select name="season" id="season" style="width: 100%;">
+              <select name="Comments" id="Comments" style="width: 100%;">
+                <option></option>
                 @foreach($seasons as $id => $value)
                 <option value="{{ $id }}">{{ $value }}</option>
                 @endforeach
               </select>
             </div>
           </div>
+
+          <div class="form-group">
+            <label for="Term_Prev" class="control-label">Previous Term Code: </label>
+            <input name="Term_Prev" type="text" class="form-control" value="">
+          </div>          
+
+          <div class="form-group">
+            <label for="Term_Next" class="control-label">Next Term Code: </label>
+            <input name="Term_Next" type="text" class="form-control" value="">
+          </div>
         </div>
 
         <div class="col-md-4">
       		<div class="form-group">
-                  <label for="enrolBeginInput" class="control-label">Enrolment Date Begin: </label>
-                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="enrolBeginInput">
+                  <label for="Enrol_Date_Begin" class="control-label">Enrolment Date Begin: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Enrol_Date_Begin">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="enrolBeginInput" id="enrolBeginInput" value="" />
+                  <input type="hidden" name="Enrol_Date_Begin" id="Enrol_Date_Begin" value="" />
           </div>
 
       		<div class="form-group">
-                  <label for="enrolEndInput" class="control-label">Enrolment Date End: </label>
-                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="enrolEndInput">
+                  <label for="Enrol_Date_End" class="control-label">Enrolment Date End: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Enrol_Date_End">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="enrolEndInput" id="enrolEndInput" value="" />
+                  <input type="hidden" name="Enrol_Date_End" id="Enrol_Date_End" value="" />
           </div>
 
           <div class="form-group">
-                  <label for="cancelDateInput" class="control-label">Cancellation Date Limit: </label>
-                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="cancelDateInput">
+                  <label for="Cancel_Date_Limit" class="control-label">Cancellation Date Limit: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Cancel_Date_Limit">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="cancelDateInput" id="cancelDateInput" value="" />
+                  <input type="hidden" name="Cancel_Date_Limit" id="Cancel_Date_Limit" value="" />
           </div>  
         </div>
 
@@ -100,10 +113,15 @@
 @stop
 
 @section('java_script')
-
+<script src="{{ asset('js/select2.full.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
 <script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+
 <script>
+    $('select[name="Comments"]').select2({
+    placeholder: "No Change",
+    minimumResultsForSearch: Infinity,
+    });
     $('.form_datetime').datetimepicker({
         //language:  'fr',
         weekStart: 1,
@@ -113,6 +131,25 @@
         startView: 2,
         forceParse: 0,
         showMeridian: 1
+    });
+
+    // Check if at least one input field is filled 
+    $(function(){
+        $("#updateTermForm").submit(function(){
+            var valid=0;
+            $(this).find("input, select").not( "[name='_token'], [name='_method']" ).each(function(){
+                if($(this).val() != "") valid+=1;
+            });
+                        
+            if(valid){
+                // alert(valid + " input(s) filled. Thank you.");
+                return true;
+            }
+            else {
+                alert("Error: you must fill in at least one field.");
+                return false;
+            }
+        });
     });
 </script>
 

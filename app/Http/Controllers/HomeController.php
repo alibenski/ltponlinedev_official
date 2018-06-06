@@ -158,7 +158,6 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
-        dd($request);
         // if part of new organization, then save the new organization to sddextr        
         // save organization and CAT to sddextr table
         $id = Auth::id();

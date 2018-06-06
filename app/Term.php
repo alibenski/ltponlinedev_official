@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Term extends Model
 {
     protected $table = 'LTP_Terms';
-    
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'Term_Code', 'Term_Name', 'Term_Begin', 'Term_End', 'Comments', 'Enrol_Date_Begin', 'Enrol_Date_End', 'Cancel_Date_Limit', 
+    ];
 	/**
 	 * primaryKey 
 	 * 
