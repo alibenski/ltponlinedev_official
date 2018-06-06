@@ -16,6 +16,13 @@ class Term extends Model
 	 */
 	protected $primaryKey = 'Term_Code';
 
+	 /**
+     * The name of the "updated at" column.
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'Updated';
+
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *

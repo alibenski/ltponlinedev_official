@@ -86,7 +86,9 @@ class TermController extends Controller
      */
     public function edit($id)
     {
-        //
+        $term = Term::find($id);
+        $seasons = Season::pluck('ESEASON', 'ESEASON');
+        return view('terms.edit')->withTerm($term)->withSeasons($seasons);
     }
 
     /**

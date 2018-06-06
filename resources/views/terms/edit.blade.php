@@ -7,9 +7,9 @@
 
 @section('content')
 <div class='col-lg-12'>
-    <h1><i class='fa fa-snowflake-o'></i> Create Semester Term </h1>
+    <h1><i class='fa fa-snowflake-o'></i> Edit Semester Term {{ $term->Term_Code }}</h1>
     <hr>
-	    <form method="POST" action="{{ route('terms.store') }}">
+	    <form method="POST" action="{{ route('terms.update', $term->Term_Code) }}">
         {{ csrf_field() }}
         <div class="col-md-4">
           <div class="form-group">
@@ -91,6 +91,7 @@
               <div class="col-md-4">
                 <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
                 <input type="hidden" name="_token" value="{{ Session::token() }}">
+                {{ method_field('PUT') }}
               </div>
             </div>
           </div>

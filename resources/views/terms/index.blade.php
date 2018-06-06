@@ -46,7 +46,7 @@
 								{{ date('d M Y - H:ia', strtotime($term->Cancel_Date_Limit)) }}
 							@endif
 							</td>
-							<td><a href="{{ route('terms.index', $term->id)}}" class="btn btn-info pull-left">Edit</a></td>
+							<td><a href="{{ route('terms.edit', $term->Term_Code)}}" class="btn btn-info pull-left">Edit</a></td>
 						</tr>
 					@endforeach
 
