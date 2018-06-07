@@ -50,9 +50,11 @@ class HomeController extends Controller
         //whereYear('Term_End', $now_year)  
                         //->first();
         $now_date = Carbon::now()->toDateString();
+
         $terms = Term::orderBy('Term_Code', 'desc')
                 ->whereDate('Term_End', '>=', $now_date)
                 ->get()->min();
+
         $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
 
         //query submitted forms based from tblLTP_Enrolment table
@@ -61,7 +63,9 @@ class HomeController extends Controller
             ->where('Term', $next_term_code )->get();
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
         
-        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term);
+        $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+
+        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withCurrent_enrol_term($current_enrol_term)->withTerms($terms);
     }
     
     /*

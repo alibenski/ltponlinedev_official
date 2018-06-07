@@ -31,6 +31,15 @@ class GlobalFunction
                         ->whereDate('Term_End', '>=', $now_date)
                         ->get()->min();
         return $currentTermObject;                
+      }      
+      public function currentEnrolTermObject()
+      {
+        $now_date = Carbon::now()->toDateString();
+
+        $currentEnrolTermObject = Term::orderBy('Term_Code', 'desc')
+                        ->whereDate('Enrol_Date_End', '>=', $now_date)
+                        ->get()->min();
+        return $currentEnrolTermObject;                
       }
       public function nextTermCode()
       {
