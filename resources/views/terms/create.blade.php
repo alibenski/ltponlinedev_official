@@ -93,15 +93,25 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                   <input type="hidden" name="Cancel_Date_Limit" id="Cancel_Date_Limit" value="" />
-          </div>  
+          </div>
+
+          <div class="form-group">
+                  <label for="Approval_Date_Limit" class="control-label">Approval Date Limit: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Approval_Date_Limit">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="Approval_Date_Limit" id="Approval_Date_Limit" value="" />
+          </div>   
         </div>
 
           <div class="row">
             <div class="col-md-12">            
-              <div class="col-md-4 col-md-offset-2">
+              <div class="col-md-2 col-md-offset-4">
                 <a href="{{ route('terms.index') }}" class="btn btn-danger btn-block">Back</a>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
                 <input type="hidden" name="_token" value="{{ Session::token() }}">
               </div>
@@ -132,7 +142,6 @@
         forceParse: 0,
         showMeridian: 1
     });
-
   });
 </script>
 @stop

@@ -58,6 +58,7 @@ class TermController extends Controller
         $term->Enrol_Date_Begin = $request->Enrol_Date_Begin;
         $term->Enrol_Date_End = $request->Enrol_Date_End;
         $term->Cancel_Date_Limit = $request->Cancel_Date_Limit;
+        $term->Approval_Date_Limit = $request->Approval_Date_Limit;
         $term->Comments = $request->Comments;
         $term->Activ = 0;
 

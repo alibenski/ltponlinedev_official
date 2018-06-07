@@ -23,8 +23,10 @@ class OpenCloseApprovalRoutes
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year;
 
-        // ideally - get date from Term table field
-        if ($now_date <= '2018-05-29 00:00:00') {
+        // get date from Term table field
+        $nextTermCode = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+        $approvalDateLimit = Term::where('Term_Code', $nextTermCode)->value('Approval_Date_Limit');
+        if ($approvalDateLimit == null || $now_date <= $approvalDateLimit) {
             return $next($request);
         }
 
