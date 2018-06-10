@@ -19,6 +19,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+       // Using Closure based composers...
+        view()->composer('partials._nav2', function ($view) {
+            $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+            $view->with('term', $current_enrol_term);
+        });
+
         Validator::extend('not_equal_to_existing', function($attribute, $value, $parameters, $validator) {
             // get array values from $validator param
             $data = $validator->getData();

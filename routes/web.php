@@ -52,13 +52,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg']);
         // Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg'])->middleware('opencloseenrolment');
         Route::post('/whatform', ['as'=>'whatform','uses'=>'HomeController@whatform'])->middleware('check-prev-url');
-        Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@index2']);
+        Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@currentSubmitted']);
+        Route::get('/previous-submitted', ['as'=>'previous-submitted','uses'=>'HomeController@previousSubmitted']);
         Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
         Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
         //Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
         
         // cancellation routes with date limit middleware
-        Route::delete('/delete/user/{staff}/course/{tecode}/{form}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
+        Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['middleware' => 'limit-cancel','as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
         Route::delete('/delete/user/{staff}/lang/{lang}/term/{term}/{eform}', ['middleware' => 'limit-cancel','as' => 'submittedPlacement.destroy', 'uses' => 'HomeController@destroyPlacement'])->where('tecode', '(.*)');
         
         //apply auth middleware only so students could edit their profile

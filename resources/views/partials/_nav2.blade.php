@@ -1,8 +1,14 @@
 <div class="container">
+    <div class="row">
+        <div class="col-md-12 alert">
+            <h4>Currently <span class="label label-default">OPEN</span> for Enrolment Season: <span class="label label-default">({{ $term->Term_Code }}) {{ $term->Comments }} {{ $term->Term_Name }}</span></h4>
+        </div>
+    </div>
 <ul class="nav nav-pills">
 	<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Home</a></li>
 	<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Your Profile</a></li>
 	<li role="presentation" class="{{ Request::is('submitted') ? "active" : ""}}"><a href="/submitted">Current Submitted Forms</a></li>
+	<li role="presentation" class="{{ Request::is('previous-submitted') ? "active" : ""}}"><a href="/previous-submitted">Previous Forms</a></li>
 	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">History</a></li>
 
 	<li role="presentation" class="pull-right {{ Request::is('whatorg') ? "active" : ""}}"><a href="/whatorg"><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a></li>

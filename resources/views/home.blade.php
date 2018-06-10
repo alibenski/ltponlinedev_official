@@ -6,11 +6,6 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <h4>Online Enrolment <span class="label label-primary">{{ $current_enrol_term->Term_Code }} </span></h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
             <div class="panel panel-primary">
                 <div class="panel-heading"><strong>Dashboard</strong></div>
 

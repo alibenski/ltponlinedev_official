@@ -12,10 +12,10 @@
       <div class="panel panel-info">
           <div class="panel-heading">Enrolment Form for Semester: 
             <strong>
-              @if(empty($next_term && $terms))
+              @if(empty($next_term))
               NO DB ENTRY
               @else 
-              {{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
+              {{ $next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
               @endif
             </strong>
           </div>

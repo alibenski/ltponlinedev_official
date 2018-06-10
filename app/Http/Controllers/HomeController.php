@@ -47,8 +47,7 @@ class HomeController extends Controller
         //query last UN Language Course enrolled in the past based on PASHQ table
         $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
         //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-                        //->first();
+        //whereYear('Term_End', $now_year)->first();
         $now_date = Carbon::now()->toDateString();
 
         $terms = Term::orderBy('Term_Code', 'desc')
@@ -71,29 +70,59 @@ class HomeController extends Controller
     /*
     *    Shows submitted forms @ route{{"/submitted"}}
     */
-    public function index2()
+    public function currentSubmitted()
+    {
+        $current_user = Auth::user()->indexno;
+
+        $now_date = Carbon::now()->toDateString();
+        // get the current enrolment term collection
+        $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        
+        //query submitted forms on current enrolment term based from tblLTP_Enrolment table
+        $forms_submitted = Preenrolment::withTrashed()
+            ->distinct('Te_Code')
+            ->where('INDEXID', '=', $current_user)
+            ->where('Term', $current_enrol_term->Term_Code )
+            ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
+        $plforms_submitted = PlacementForm::withTrashed()
+            ->where('INDEXID', '=', $current_user)
+            ->where('Term', $current_enrol_term->Term_Code )
+            ->get();
+
+        // preserve variable names
+        $next_term = $current_enrol_term; 
+ 
+        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term);
+    }    
+    /*
+    *    Shows submitted forms @ route{{"/submitted"}}
+    */
+    public function previousSubmitted()
     {
         $current_user = Auth::user()->indexno;
 
         //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-                        //->first();
+        //whereYear('Term_End', $now_year)->first();
         $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        // $terms = Term::orderBy('Term_Code', 'desc')
+        //         ->whereDate('Term_End', '>=', $now_date)
+        //         ->get()->min();
+        // $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
         
+        $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        // get the term prior to current enrolment term 
+        $prev_enrol_term = $current_enrol_term->Term_Prev;
+
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::withTrashed()
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )
-            ->get(['Te_Code', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
+            ->where('Term', $prev_enrol_term )
+            ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
             // ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count']);
         $plforms_submitted = PlacementForm::withTrashed()
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )
+            ->where('Term', $prev_enrol_term )
             ->get();
 
         //$str = $forms_submitted->pluck('Te_Code');
@@ -102,7 +131,7 @@ class HomeController extends Controller
         //var_dump($str);
         //var_dump($str_codes);
         //svar_dump($array_codes); 
-        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $prev_enrol_term)->get()->min();
  
         return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term);
     }
@@ -110,18 +139,14 @@ class HomeController extends Controller
     public function showMod(Request $request)
     {
         $current_user = Auth::user()->indexno;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $term_code = $request->term;
         // query submitted forms based from tblLTP_Enrolment table
         $schedules = Preenrolment::withTrashed()
             ->where('Te_Code', $request->tecode)
-            ->where('INDEXID', '=', $current_user)
+            ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)
-            ->where('Term', $next_term_code )->get(['schedule_id', 'approval', 'approval_hr', 'is_self_pay_form',]);
+            ->where('Term', $term_code )->get(['schedule_id', 'approval', 'approval_hr', 'is_self_pay_form',]);
             // ->pluck('schedule.name', 'approval');
 
         // render and return data values via AJAX
@@ -142,17 +167,10 @@ class HomeController extends Controller
         //get current year and date
         $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
-
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        //->first();
-                        ->get()->min();
-
-        //query the next term based Term_Begin column is greater than today's date and then get min
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        // actual current term
+        $terms = Term::orderBy('Term_Code', 'desc')->whereDate('Term_End', '>=', $now_date)->get()->min();
+        // actual enrolment term
+        $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         // ->pluck('Org name','Org name', 'Org Full Name');
@@ -194,29 +212,21 @@ class HomeController extends Controller
 
     }
 
-    public function destroy(Request $request, $staff, $tecode, $form)
+    public function destroy(Request $request, $staff, $tecode,  $term, $form)
     {
         $current_user = $staff;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()
-                ->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')
-                ->where('Term_Code', '=', $terms->Term_Next)
-                ->get()
-                ->min('Term_Code');
+
         //query submitted forms based from tblLTP_Enrolment table
         $forms = Preenrolment::orderBy('Term', 'desc')
                 ->where('Te_Code', $tecode)
                 ->where('INDEXID', '=', $current_user)
-                ->where('Term', $next_term_code )
+                ->where('Term', $term )
                 ->where('form_counter', $form )
                 ->get();
         $display_language = Preenrolment::orderBy('Term', 'desc')
                 ->where('Te_Code', $tecode)
                 ->where('INDEXID', '=', $current_user)
-                ->where('Term', $next_term_code )
+                ->where('Term', $term )
                 ->where('form_counter', $form )
                 ->first();
         
