@@ -34,7 +34,7 @@ class NoFormController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        $this->middleware('opencloseenrolment');
+        // $this->middleware('opencloseenrolment');
         // $this->middleware('checksubmissioncount');
 
     }
@@ -81,17 +81,20 @@ class NoFormController extends Controller
 
         //query the current term based on year and Term_End column is greater than today's date
         //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        //->first();
-                        ->get()->min();
+        $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        // Term::orderBy('Term_Code', 'desc')
+        //                 ->whereDate('Term_End', '>=', $now_date)
+        //                 //->first();
+        //                 ->get()->min();
 
         //query the next term based Term_Begin column is greater than today's date and then get min
         $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+                        ->where('Term_Code', '=', $terms->Term_Next)->get()
+                        // ->min();
 
         $prev_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_End', '<', $now_date)->get()->max();
+                        // ->where('Term_End', '<', $now_date)->get()->max();
+                        ->where('Term_End', $terms->Term_Prev)->get();
 
         //define user variable as User collection
         $user = Auth::user();

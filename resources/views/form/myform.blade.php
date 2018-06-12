@@ -18,7 +18,7 @@
               @if(empty($next_term && $terms))
               NO DB ENTRY
               @else 
-              {{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
+              {{ $terms->Term_Code.' - '.$terms->Term_Name.' - '.$terms->Comments.' Season' }}
               @endif
             </strong>
           </div>
@@ -27,13 +27,12 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
-                <input  name="user_id" type="hidden" value="{{ $repos }}" readonly>
-                <input  type="hidden" value="{{$terms->Term_Code}}">
+                {{-- <input  name="user_id" type="hidden" value="{{$repos}}" readonly> --}}
                 <input  name="term_id" type="hidden" value="
                   @if(empty($terms))
                   NO DB ENTRY
                   @else 
-                  {{ $terms->Term_Next }}
+                  {{$terms->Term_Code}}
                   @endif
                 " readonly>  
                 </div>

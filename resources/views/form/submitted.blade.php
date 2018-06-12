@@ -22,7 +22,7 @@
                         @endif
                         Term
                       </strong>
-                      <input id="termIdSubmitted" type="hidden" value="{{ $next_term->Term_Code }}">
+                      <input id="termIdSubmitted" type="hidden" value="@if(is_null($next_term->Term_Code)) @else {{ $next_term->Term_Code }} @endif">
                     </div>
                         <div class="panel-body">
                           @foreach($forms_submitted as $form)
