@@ -22,6 +22,7 @@
                         @endif
                         Term
                       </strong>
+                      <input id="termIdSubmitted" type="hidden" value="{{ $next_term->Term_Code }}">
                     </div>
                         <div class="panel-body">
                           @foreach($forms_submitted as $form)
@@ -183,22 +184,23 @@
     $('a.stat-0').delay(800).fadeOut('slow', function() {
                       $(this).remove(); 
                       }); 
-      $.get("/get-date-ajax", function(data) {
+      var dterm = $('#termIdSubmitted').val(); console.log(dterm)
+      $.get("/get-date-ajax", {'term':dterm}, function(data) {
             console.log(data);
             // temporary disable for demo
-            // if (data === 'disabled') {
-            //   $('a.cancel-btn').removeAttr("href").css("cursor","not-allowed");  
-            //   $('a.cancel-btn').on('click', function () {
-            //     $( "#dialog" ).dialog( "open" );
-            //   });
-            // }
-          });   
-      $.get("/is-cancelled-ajax", function(data) {
-            $.each(data, function (index, value) {                
+            if (data === 'disabled') {
+              $('a.cancel-btn').removeAttr("href").css("cursor","not-allowed");  
+              $('a.cancel-btn').on('click', function () {
+                $( "#dialog" ).dialog( "open" );
+              });
+            }
+          });
+      $.get("/is-cancelled-ajax", {'term':dterm}, function(data) {
+            $.each(data, function (index, value) {               
                 $('a.delete-is-set').text('Cancelled').animate({
                   backgroundColor: "#fff", color: "#000"}, 800, function() {
                   /* stuff to do after animation is complete */
-                });;
+                });
             });
           }); 
   });  

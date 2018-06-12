@@ -23,24 +23,15 @@ use DB;
 
 class AjaxController extends Controller
 {
-    public function ajaxIsCancelled()
+    public function ajaxIsCancelled(Request $request)
     {
         $current_user = Auth::user()->indexno;
-
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-                        //->first();
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
         
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::withTrashed()
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )
+            ->where('Term', $request->term )
             ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'deleted_at', 'form_counter']);
 
         $data = $forms_submitted;
@@ -68,17 +59,14 @@ class AjaxController extends Controller
         return response()->json([$data, $torgan]);  
     }
 
-    public function ajaxGetDate()
+    public function ajaxGetDate(Request $request)
     {
-        //get current year and date
-        $now_date = Carbon::now();
-        $now_year = Carbon::now()->year;       
-        //return string of Cancel_Date_Limit of CURRENT term
-        $cancel_date_limit = Term::whereYear('Term_End', $now_year)
-                        ->orderBy('Term_Code', 'desc')
-                        ->where('Term_End', '>=', $now_date)
-                        ->min('Cancel_Date_Limit');
-        
+        //get current date
+        $now_date = Carbon::now();    
+        //return string of Cancel_Date_Limit 
+        $cancel_date_limit = Term::orderBy('Term_Code', 'desc')
+                        ->where('Term_Code', $request->term)
+                        ->value('Cancel_Date_Limit');
         if ($now_date > $cancel_date_limit) {
             $data = 'disabled';
         } else {
