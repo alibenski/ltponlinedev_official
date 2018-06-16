@@ -12,6 +12,22 @@
 </div>
 <div class="container">
   <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-body">
+        <label for="termValue" class="col-md-2 control-label">Term Select:</label>
+        <div class="col-md-9">
+          <div class="dropdown">
+            <select id="termValue" name="termValue" class="col-md-8 form-control select-profile-single" style="width: 100%;" required="required">
+                  <option></option>
+                  <option value="189">Autum 2018</option>
+                  <option value="188">Summer 2018</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
         <div class="col-md-6">
             <div class="panel panel-info">
                     <div class="panel-heading"><strong>Submitted Enrolment Forms for the 

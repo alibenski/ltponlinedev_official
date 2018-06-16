@@ -79,25 +79,29 @@ class HomeController extends Controller
         $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
         
         //query submitted forms on current enrolment term based from tblLTP_Enrolment table
-        $forms_submitted = Preenrolment::withTrashed()
-            ->distinct('Te_Code')
-            ->where('INDEXID', '=', $current_user)
-            ->where('Term', $current_enrol_term->Term_Code )
-            ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
-        $plforms_submitted = PlacementForm::withTrashed()
-            ->where('INDEXID', '=', $current_user)
-            ->where('Term', $current_enrol_term->Term_Code )
-            ->get();
+        if (!is_null($current_enrol_term)) {
+            $forms_submitted = Preenrolment::withTrashed()
+                ->distinct('Te_Code')
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $current_enrol_term->Term_Code )
+                ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
+            $plforms_submitted = PlacementForm::withTrashed()
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $current_enrol_term->Term_Code )
+                ->get();
 
-        // preserve variable names
-        $next_term = $current_enrol_term; 
- 
-        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term);
+            // preserve variable names
+            $next_term = $current_enrol_term; 
+     
+            return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term);
+        } 
+        session()->flash('interdire-msg','under construction');
+        return redirect('home');
     }    
     /*
     *    Shows submitted forms @ route{{"/submitted"}}
     */
-    public function previousSubmitted()
+    public function previousSubmitted(Request $request)
     {
         $current_user = Auth::user()->indexno;
 
@@ -111,8 +115,12 @@ class HomeController extends Controller
         
         $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
         // get the term prior to current enrolment term 
-        $prev_enrol_term = $current_enrol_term->Term_Prev;
+        $prev_enrol_term = $request->termValue;
 
+        if (is_null($prev_enrol_term)) {
+            // return redirect('home');
+            $prev_enrol_term = '188';
+        }
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::withTrashed()
             ->distinct('Te_Code')
