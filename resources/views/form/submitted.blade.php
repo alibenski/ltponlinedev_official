@@ -14,16 +14,26 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-body">
+      <form method="GET" action="{{ route('previous-submitted') }}">
         <label for="termValue" class="col-md-2 control-label">Term Select:</label>
         <div class="col-md-9">
           <div class="dropdown">
             <select id="termValue" name="termValue" class="col-md-8 form-control select-profile-single" style="width: 100%;" required="required">
                   <option></option>
+                  <option value="191">Winter 2019</option>
                   <option value="189">Autum 2018</option>
                   <option value="188">Summer 2018</option>
+                  <option value="184">Spring 2018</option>
+                  <option value="181">Winter 2018</option>
             </select>
           </div>
         </div>
+
+        <div class="form-group">           
+          <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
+        </div>
+
+      </form>
       </div>
     </div>
   </div>
