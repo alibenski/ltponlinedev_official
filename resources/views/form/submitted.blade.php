@@ -13,24 +13,27 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
+      <div class="alert alert-info">
+        <h5 class="text-center">Please select the desired <b>Term</b> from the dropdown and click <b>Submit</b> to see the forms submitted during that semester.</h5>
+      </div>
       <div class="panel panel-body">
       <form method="GET" action="{{ route('previous-submitted') }}">
-        <label for="termValue" class="col-md-2 control-label">Term Select:</label>
-        <div class="col-md-9">
-          <div class="dropdown">
-            <select id="termValue" name="termValue" class="col-md-8 form-control select-profile-single" style="width: 100%;" required="required">
-                  <option></option>
-                  <option value="191">Winter 2019</option>
-                  <option value="189">Autum 2018</option>
-                  <option value="188">Summer 2018</option>
-                  <option value="184">Spring 2018</option>
-                  <option value="181">Winter 2018</option>
-            </select>
+        <div class="form-group">
+          <label for="termValue" class="col-md-12 control-label">Term Select:</label>
+          <div class="form-group col-sm-12">
+            <div class="dropdown">
+              <select id="termValue" name="termValue" class="col-md-8 form-control select2-term-single" style="width: 100%;" required="required">
+                @foreach($term_select as $value)
+                    <option></option>
+                    <option value="{{$value->Term_Code}}">{{$value->Comments}} - {{$value->Term_Name}}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
         </div>
 
-        <div class="form-group">           
-          <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
+        <div class="form-group col-md-8">
+          <button type="submit" class="btn btn-success" value="UNOG">Submit</button>        
         </div>
 
       </form>
@@ -180,6 +183,7 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/submit.js') }}"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
 
 <script>
  $(window).load(function(){
@@ -189,6 +193,9 @@
 
 <script>
   $(document).ready(function($) {
+      $('.select2-term-single').select2({
+        placeholder: "Select Term",
+      });
       $( "#dialog" ).dialog({
         autoOpen: false,
         show: {

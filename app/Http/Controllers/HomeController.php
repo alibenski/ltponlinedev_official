@@ -104,7 +104,8 @@ class HomeController extends Controller
     public function previousSubmitted(Request $request)
     {
         $current_user = Auth::user()->indexno;
-        
+        $term_select = Term::orderBy('Term_Code', 'desc')->get();
+
         //query the current term based on year and Term_End column is greater than today's date
         //whereYear('Term_End', $now_year)->first();
         $now_date = Carbon::now()->toDateString();
@@ -141,9 +142,7 @@ class HomeController extends Controller
         //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $prev_enrol_term)->get()->min();
         
-
-        session()->flash('success','Select Term from the dropdown below.');
-        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term);
+        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term)->withTerm_select($term_select);
     }
 
     public function showMod(Request $request)

@@ -17,7 +17,7 @@
 
     <div class="row">
         <div class="col-md-9">
-            <div class="panel panel-success">
+            <div class="panel panel-primary">
                 <div class="panel-heading"><strong>Student Profile</strong></div>
 
                 <div class="panel-body">

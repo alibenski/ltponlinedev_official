@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 alert">
-        	@if(is_null($term)) -- @else
+        	@if(is_null($term)) @else
         		@if($term->Enrol_Date_Begin <= \Carbon\Carbon::now() && \Carbon\Carbon::now() <= $term->Enrol_Date_End) <h4>Current Enrolment Season: <strong> {{ $term->Term_Code }} {{ $term->Comments }} {{ $term->Term_Name }} </strong></h4>  @else <h4><strong><span class="alert alert-danger">Enrolment Closed</span></strong></h4> @endif
         	@endif
         </div>
