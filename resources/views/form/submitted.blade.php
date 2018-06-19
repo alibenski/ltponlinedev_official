@@ -104,6 +104,7 @@
                                           <button type="button" class="btn btn-default btn-space" data-dismiss="modal">Back</button>
                                           <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
                                               <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
+                                              <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
                                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                                              {{ method_field('DELETE') }}
                                           </form>
@@ -142,6 +143,7 @@
                         @else
                           disabled="" 
                         @endif>
+                        <input type="hidden" name="deleteTerm" value="{{ $plform->Term }}">
                         <input type="hidden" name="_token" value="{{ Session::token() }}">
                        {{ method_field('DELETE') }}
                     </form>

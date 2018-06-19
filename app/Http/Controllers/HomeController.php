@@ -106,32 +106,31 @@ class HomeController extends Controller
         $current_user = Auth::user()->indexno;
         $term_select = Term::orderBy('Term_Code', 'desc')->get();
 
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)->first();
-        $now_date = Carbon::now()->toDateString();
+        // query the current term based on year and Term_End column is greater than today's date
+        // whereYear('Term_End', $now_year)->first();
+        // $now_date = Carbon::now()->toDateString();
         // $terms = Term::orderBy('Term_Code', 'desc')
         //         ->whereDate('Term_End', '>=', $now_date)
         //         ->get()->min();
         // $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-        
-        $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        // get the term prior to current enrolment term 
-        $prev_enrol_term = $request->termValue;
 
-        if (is_null($prev_enrol_term)) {
+        // get the term from the select dropdown 
+        $termValue = $request->termValue;
+
+        if (is_null($termValue)) {
             // return redirect('home');
-            $prev_enrol_term = '001';
+            $termValue = '001';
         }
         //query submitted forms based from tblLTP_Enrolment table
         $forms_submitted = Preenrolment::withTrashed()
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $prev_enrol_term )
+            ->where('Term', $termValue )
             ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
             // ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count']);
         $plforms_submitted = PlacementForm::withTrashed()
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $prev_enrol_term )
+            ->where('Term', $termValue )
             ->get();
 
         //$str = $forms_submitted->pluck('Te_Code');
@@ -140,7 +139,7 @@ class HomeController extends Controller
         //var_dump($str);
         //var_dump($str_codes);
         //svar_dump($array_codes); 
-        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $prev_enrol_term)->get()->min();
+        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $termValue)->get()->min();
         
         return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term)->withTerm_select($term_select);
     }

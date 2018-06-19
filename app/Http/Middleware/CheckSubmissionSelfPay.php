@@ -23,26 +23,25 @@ class CheckSubmissionSelfPay
     public function handle($request, Closure $next)
     {
         $current_user = Auth::user()->indexno;
+        $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        if (is_null($current_enrol_term)) {
+            $request->session()->flash('enrolment_closed', 'Self-Pay Check Submission Count function error: Current Enrolment Model does not exist in the table. Please contact the Language Secretariat.');
+            return redirect()->route('home');
+        }
         $grouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
             ->where(function($q){ 
-                $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+                $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+                $current_enrol_termCode = $current_enrol_term->Term_Code;
                 // do NOT count number of submitted forms disapproved by manager or HR learning partner  
-                $q->where('Term', $latest_term )->where('deleted_at', NULL)
+                $q->where('Term', $current_enrol_termCode )->where('deleted_at', NULL)
                     ->where('is_self_pay_form', 1)
                     ;
             })->count('eform_submit_count');
 
         // count number of placement forms submitted
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-
-        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-        
         $placementFromCount = PlacementForm::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)
-                ->where('Term', $next_term->Term_Code)
+                ->where('Term', $current_enrol_term->Term_Code)
                 ->where('is_self_pay_form', 1)
                 ->count();
         

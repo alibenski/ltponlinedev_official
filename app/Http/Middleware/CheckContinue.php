@@ -22,15 +22,23 @@ class CheckContinue
      */
     public function handle($request, Closure $next)
     {
-        // check most current term first and next term
+        // check latest enrolment term 
         $now_date = Carbon::now()->toDateString();
-        $current_term_code = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
+
+        $current_enrol_term_object = Term::orderBy('Term_Code', 'desc')
+                ->whereDate('Enrol_Date_End', '>=', $now_date)
                 ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $current_term_code->Term_Next)->get()->min('Term_Code');
-        // query for continue_bool with term code for the next term and current user
+                
+        if (is_null($current_enrol_term_object)) {
+            $request->session()->flash('enrolment_closed', 'Check Continue function error: Current Enrolment Model does not exist in the table.  Please contact the Language Secretariat.');
+            return redirect()->route('home');
+        }
+        // get the code of latest enrolment term 
+        $current_enrol_termCode = $current_enrol_term_object->Term_Code;
+
+        // query for continue_bool with term code for the latest enrolment term and current user
         $current_user = Auth::user()->indexno;
-        $boolx = Preenrolment::where('INDEXID', '=', $current_user)->where('Term','=', $next_term_code )
+        $boolx = Preenrolment::where('INDEXID', '=', $current_user)->where('Term','=', $current_enrol_termCode )
                     ->where('continue_bool','=', '1' )->value('continue_bool');
 
         // run only if there is already an entry in Preenrolment table

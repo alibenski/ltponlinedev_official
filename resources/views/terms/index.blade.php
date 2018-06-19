@@ -11,6 +11,8 @@
 					<th>Term Name</th>
 					<th>Term Begin Date</th>
 					<th>Term End Date</th>
+					<th>Previous Term</th>
+					<th>Next Term</th>
 					<th>Enrolment Date Begin</th>
 					<th>Enrolment Date End</th>
 					<th>Cancellation Date Limit</th>
@@ -27,6 +29,20 @@
 							<td>{{ $term->Term_Name }}</td>
 							<td>{{ date('d M Y', strtotime($term->Term_Begin)) }}</td>
 							<td>{{ date('d M Y', strtotime($term->Term_End)) }}</td>
+							<td>
+							@if(empty($term->Term_Prev))
+					            <span class="label label-danger">NONE</span>
+							@else
+								{{ $term->Term_Prev }}
+							@endif
+							</td>
+							<td> 
+							@if(empty($term->Term_Next))
+					            <span class="label label-danger">NONE</span>
+							@else
+								{{ $term->Term_Next}}
+							@endif
+							</td> 
 							<td>
 							@if(empty($term->Enrol_Date_Begin))
 					            <span class="label label-danger">NONE</span>

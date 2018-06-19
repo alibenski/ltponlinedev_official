@@ -14,7 +14,7 @@ class Term extends Model
      * @var array
      */
     protected $fillable = [
-        'Term_Code', 'Term_Name', 'Term_Begin', 'Term_End', 'Comments', 'Enrol_Date_Begin', 'Enrol_Date_End', 'Cancel_Date_Limit', 'Approval_Date_Limit', 
+        'Term_Code', 'Term_Name', 'Term_Begin', 'Term_End', 'Term_Prev', 'Term_Next', 'Comments', 'Enrol_Date_Begin', 'Enrol_Date_End', 'Cancel_Date_Limit', 'Approval_Date_Limit', 
     ];
 	/**
 	 * primaryKey 

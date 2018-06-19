@@ -26,40 +26,43 @@ class OpenCloseEnrolment
         //get current year and date
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year;
-
         //return string of Term_Begin of CURRENT term
         //refactored code to \App\Helpers\GlobalFunction::instance()->currentTerm()
         $current_term_begin = \App\Helpers\GlobalFunction::instance()->currentTerm();
-        
         //Carbon parse string value
         $carbon_current_term_begin = Carbon::parse($current_term_begin);
         //we needed to have 2 separate variable for Carbon parsing of $current_term_begin 
         //since $start_enrolment_date is affected by $end_enrolment_date
         //addWeeks gets added from $start_enrolment_date and NOT from $current_term_begin
         $carbon_current_term_begin_for_end = Carbon::parse($current_term_begin);
-
-        //add weeks to Carbon date value to get beginning and end dates of enrolment
+        //automatically add weeks to Carbon date value to get beginning and end dates of enrolment
         $start_enrolment_date = $carbon_current_term_begin->addWeeks(4);
         $end_enrolment_date = $carbon_current_term_begin_for_end->addWeeks(7);
 
-        // get Term_Begin and Term_End from Terms Model
-        $nextTermCode = \App\Helpers\GlobalFunction::instance()->nextTermCode();
-        $startEnrolDate = Term::where('Term_Code', $nextTermCode)->value('Enrol_Date_Begin');
-        $endEnrolDate = Term::where('Term_Code', $nextTermCode)->value('Enrol_Date_End');
-        
-        //check if $now_date is between start and end enrol dates
-        // if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {
-        if ($now_date >= $startEnrolDate && $now_date <= $endEnrolDate) {
-            return $next($request);
-        }
-        
-        //return string of NEXT term
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Begin', '>', $now_date)->get()->min();
+        // check if current enrolment term exists in Term table
+        if (!is_null(\App\Helpers\GlobalFunction::instance()->currentEnrolTermObject())) {
+            $currentEnrolTermCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
+            $startEnrolDate = Term::where('Term_Code', $currentEnrolTermCode)->value('Enrol_Date_Begin');
+            $endEnrolDate = Term::where('Term_Code', $currentEnrolTermCode)->value('Enrol_Date_End');
+            
+            // check if $now_date is between start and end enrol dates
+            // if ($now_date >= $start_enrolment_date && $now_date <= $end_enrolment_date) {
+            if ($now_date >= $startEnrolDate && $now_date <= $endEnrolDate) {
+                return $next($request);
+            }
+            
+            // return string of PREVIOUS term
+            $prev_termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Prev;
+            $prev_term = Term::orderBy('Term_Code', 'desc')
+                            ->where('Term_Code', $prev_termCode)->first();
 
-        $next_term_description =  $next_term->Comments;
-        $next_term_name =  $next_term->Term_Name;
-        $request->session()->flash('enrolment_closed', 'Enrolment Period for the '.$next_term_description.' season ('.$next_term_name.') is CLOSED');
+            $prev_term_description =  $prev_term->Comments;
+            $prev_term_name =  $prev_term->Term_Name;
+            $request->session()->flash('enrolment_closed', 'Enrolment Period for the '.$prev_term_description.' season ('.$prev_term_name.') is CLOSED');
+            return redirect()->route('home');
+        } 
+        // back to home if current enrolment term does not exist in Term table
+        $request->session()->flash('enrolment_closed', 'Enrolment is not yet available');
         return redirect()->route('home');
     }
 }

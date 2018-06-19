@@ -38,7 +38,6 @@ class SelfPayController extends Controller
         $this->middleware('prevent-back-history');
         $this->middleware('opencloseenrolment');
         $this->middleware('checksubmissionselfpay');
-        // $this->middleware('checkcontinue');
     }
 
     /**

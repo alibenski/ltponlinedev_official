@@ -55,6 +55,8 @@ class TermController extends Controller
         $term->Term_Name = $termNameStr;
         $term->Term_Begin = $request->Term_Begin;
         $term->Term_End = $request->Term_End;
+        $term->Term_Prev = $request->Term_Prev;
+        $term->Term_Next = $request->Term_Next;
         $term->Enrol_Date_Begin = $request->Enrol_Date_Begin;
         $term->Enrol_Date_End = $request->Enrol_Date_End;
         $term->Cancel_Date_Limit = $request->Cancel_Date_Limit;

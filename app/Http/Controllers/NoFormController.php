@@ -35,8 +35,6 @@ class NoFormController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
         $this->middleware('opencloseenrolment');
-        // $this->middleware('checksubmissioncount');
-
     }
 
     /**

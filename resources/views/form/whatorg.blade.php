@@ -13,7 +13,7 @@
           <div class="panel-heading">Enrolment Form for Semester: 
             <strong>
               @if(empty($next_term))
-              NO DB ENTRY
+              No DB Entry - TBC
               @else 
               {{ $next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
               @endif
