@@ -28,20 +28,20 @@ class LimitCancelPeriod
         // and $carbon_next_summer_term_begin in the IF statements below
 
         $cancellationDateLimit = Term::where('Term_Code', $termCode)->value('Cancel_Date_Limit');
-        $next_season = Term::where('Term_Code', $termCode)->value('Comments');
+        $current_enrol_season = Term::where('Term_Code', $termCode)->value('Comments');
 
         if (!is_null($cancellationDateLimit)) {
             //logic to check if today is 4 WORKING days AFTER the start of the NEXT term 
             //and if the NEXT term is NOT Summer
             //if yes, redirect(), else, $next
-            if ($next_season !== 'SUMMER' && $now_date >= $cancellationDateLimit) {
+            if ($current_enrol_season !== 'SUMMER' && $now_date >= $cancellationDateLimit) {
                 return redirect()->route('home')
                 ->with('interdire-msg','Cancellation period expired.');
             } 
             //logic to check if today is 2 weeks AFTER the start of the NEXT term 
             //and if the NEXT term is Summer
             //if yes, redirect(), else, $next
-            elseif ($next_season == 'SUMMER' && $now_date >= $cancellationDateLimit) {
+            elseif ($current_enrol_season == 'SUMMER' && $now_date >= $cancellationDateLimit) {
                 return redirect()->route('home')
                 ->with('interdire-msg','Summer term cancellation period expired.');        
             } 
