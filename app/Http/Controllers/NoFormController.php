@@ -84,7 +84,10 @@ class NoFormController extends Controller
         //                 ->whereDate('Term_End', '>=', $now_date)
         //                 //->first();
         //                 ->get()->min();
-
+        if (is_null($terms)) {
+            $request->session()->flash('enrolment_closed', 'Enrolment Form error: Current Enrolment Model does not exist in the table. Please contact and report to the Language Secretariat.');
+            return redirect()->route('whatorg');
+        }
         //query the next term based Term_Begin column is greater than today's date and then get min
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Code', '=', $terms->Term_Next)->get()

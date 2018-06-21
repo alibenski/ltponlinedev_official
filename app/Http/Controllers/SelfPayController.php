@@ -36,8 +36,8 @@ class SelfPayController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        $this->middleware('opencloseenrolment');
-        $this->middleware('checksubmissionselfpay');
+        // $this->middleware('opencloseenrolment');
+        // $this->middleware('checksubmissionselfpay');
     }
 
     /**
@@ -78,11 +78,15 @@ class SelfPayController extends Controller
 
         //query the current term based on year and Term_End column is greater than today's date
         //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        //->first();
-                        ->get()->min();
-
+        $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        // $terms = Term::orderBy('Term_Code', 'desc')
+        //                 ->whereDate('Term_End', '>=', $now_date)
+        //                 //->first();
+        //                 ->get()->min();
+        if (is_null($terms)) {
+                $request->session()->flash('enrolment_closed', 'Enrolment Form error: Current Enrolment Model does not exist in the table. Please contact and report to the Language Secretariat.');
+                return redirect()->route('whatorg');
+        }
         //query the next term based Term_Begin column is greater than today's date and then get min
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
