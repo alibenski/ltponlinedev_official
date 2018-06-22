@@ -23,9 +23,9 @@ class OpenCloseApprovalRoutes
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year;
 
-        // get date from Term table field
-        $nextTermCode = \App\Helpers\GlobalFunction::instance()->nextTermCode();
-        $approvalDateLimit = Term::where('Term_Code', $nextTermCode)->value('Approval_Date_Limit');
+        // get approval limit date from Term table field
+        $nextTermCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        $approvalDateLimit = Term::where('Term_Code', $nextTermCode->Term_Code)->value('Approval_Date_Limit');
         if ($approvalDateLimit == null || $now_date <= $approvalDateLimit) {
             return $next($request);
         }

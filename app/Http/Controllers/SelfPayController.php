@@ -89,7 +89,8 @@ class SelfPayController extends Controller
         }
         //query the next term based Term_Begin column is greater than today's date and then get min
         $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+                        ->where('Term_Code', '=', $terms->Term_Next)->get();
+                        // ->min();
 
         $prev_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_End', '<', $now_date)->get()->max();

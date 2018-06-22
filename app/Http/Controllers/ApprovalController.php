@@ -318,31 +318,28 @@ class ApprovalController extends Controller
      * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
      */
-    public function getForm($staff, $tecode, $id, $form)
+    public function getForm($staff, $tecode, $id, $form, $term)
     {
         //get variables from URL to decrypt and pass to controller logic 
     	$staff = Crypt::decrypt($staff);
         $tecode = Crypt::decrypt($tecode);
         $id = Crypt::decrypt($id);
         $form_counter = Crypt::decrypt($form);
+        $term = Crypt::decrypt($term);
 
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code'); 
+        $next_term_code = $term; 
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
 
         //query from Preenrolment table the needed information data to include in the control logic and then pass to approval page
         $input_course = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
-                                ->where('Term', $next_term_code)
+                                ->where('Term', $term)
                                 ->where('Te_Code', $tecode)
                                 ->where('form_counter', $form_counter)
                                 ->get();
         $input_staff = Preenrolment::withTrashed()->orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
-                                ->where('Term', $next_term_code)
+                                ->where('Term', $term)
                                 ->where('Te_Code', $tecode)
                                 ->where('id', $id)
                                 ->where('form_counter', $form_counter)
@@ -366,13 +363,9 @@ class ApprovalController extends Controller
      * @param  string  $staff $tecode
      * @return \Illuminate\Http\Response
      */
-    public function updateForm(Request $request, $staff, $tecode, $formcount)
+    public function updateForm(Request $request, $staff, $tecode, $formcount, $term)
     {
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_code = $term;
         $forms = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)

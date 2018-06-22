@@ -33,9 +33,9 @@ class RepoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        // $this->middleware('opencloseenrolment');
-        // $this->middleware('checksubmissioncount');
-        // $this->middleware('checkcontinue');
+        $this->middleware('opencloseenrolment');
+        $this->middleware('checksubmissioncount');
+        $this->middleware('checkcontinue');
     }
 
     /**
@@ -253,27 +253,22 @@ class RepoController extends Controller
         $mgr_email = $request->mgr_email;
         $staff = Auth::user();
         $current_user = Auth::user()->indexno;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $current_user)
-                                ->value('Te_Code');
+        // $now_date = Carbon::now()->toDateString();
+        // $terms = Term::orderBy('Term_Code', 'desc')
+        //         ->whereDate('Term_End', '>=', $now_date)
+        //         ->get()->min();
+        // $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->value('Te_Code');
         //query from Preenrolment table the needed information data to include in email
-        $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $current_user)
-                                ->first();
+        $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->first();
         $input_schedules = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $current_user)
-                                ->where('Term', $next_term_code)
+                                ->where('Term', $term_id)
                                 ->where('Te_Code', $course)
                                 ->where('form_counter', $form_counter)
                                 ->get();
 
         Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
-        
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
         $sddextr_org = $sddextr_query->DEPT;
         if ($org == $sddextr_org){
@@ -338,52 +333,5 @@ class RepoController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Show the application selectAjax.
-     *
-     * @return \Illuminate\Http\response
-     */
-    public function selectAjax(Request $request)
-    {
-        if($request->ajax()){
-            //$courses = DB::table('courses')->where('language_id',$request->language_id)->pluck("name","id")->all();
-            $select_courses = Course::where('L', $request->L)
-            ->whereNotNull('Te_Code_New')
-            ->orderBy('id', 'asc')
-            ->pluck("Description","Te_Code_New")
-            ->all();
-            
-            $data = view('ajax-select',compact('select_courses'))->render();
-            return response()->json(['options'=>$data]);
-        }
-    }
-
-    public function selectAjax2(Request $request)
-    {
-        if($request->ajax()){
-
-            //$select_schedules = DB::table('LTP_TEVENTCur')
-            $select_schedules = Classroom::where('Te_Code_New', $request->course_id)
-            ->where(function($q){
-                //get current year and date
-                $now_date = Carbon::now()->toDateString();
-                $now_year = Carbon::now()->year;
-
-                //query the current term based on Term_End column is greater than today's date  
-                $latest_term = Term::orderBy('Term_Code', 'desc')
-                                ->whereDate('Term_End', '>=', $now_date)
-                                ->get()->min();            
-                //$latest_term = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->value('Term_Code');
-                $q->where('Te_Term', $latest_term->Term_Code );
-            })
-
-            //Eager Load scheduler function and pluck using "dot" 
-            ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
-
-            $data = view('ajax-select2',compact('select_schedules'))->render();
-            return response()->json(['options'=>$data]);
-        }
     }
 }

@@ -82,21 +82,13 @@ class AjaxController extends Controller
      */
     public function selectAjax(Request $request)
     {
-        if($request->ajax()){
-            $now_date = Carbon::now()->toDateString();
-                        $terms = Term::orderBy('Term_Code', 'desc')
-                                ->whereDate('Term_End', '>=', $now_date)
-                                ->get()->min();
-
-                        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-            
+        if($request->ajax()){            
             $select_courses = Classroom::where('L', $request->L)
-            ->where('Te_Term', $next_term->Term_Code)
+            ->where('Te_Term', $request->term_id)
             ->orderBy('id', 'asc')
             ->with('course')
             ->get()
-            ->pluck("course.Description","Te_Code_New")
-            ;
+            ->pluck("course.Description","Te_Code_New");
 
             $data = view('ajax-select',compact('select_courses'))->render();
             return response()->json(['options'=>$data]);
@@ -120,23 +112,7 @@ class AjaxController extends Controller
     public function selectAjax2(Request $request)
     {
         if($request->ajax()){
-
-            //$select_schedules = DB::table('LTP_TEVENTCur')
-            $select_schedules = Classroom::where('Te_Code_New', $request->course_id)
-            ->where(function($q){
-                //get current year and date
-                $now_date = Carbon::now()->toDateString();
-                $now_year = Carbon::now()->year;
-
-                //query the current term based on Term_End column is greater than today's date  
-                $latest_term = Term::orderBy('Term_Code', 'desc')
-                                ->whereDate('Term_End', '>=', $now_date)
-                                ->get()->min();            
-                //QUERY THE SCHEDULE BASED ON THE NEXT TERM 'Term_Next' of the CURRENT TERM RECORD/ROW in TERMS TABLE
-                //NEXT TERM CODE MUST BE ENTERED IN TEVENTCUR TABLE
-                $q->where('Te_Term', $latest_term->Term_Next );
-            })
-
+            $select_schedules = Classroom::where('Te_Code_New', $request->course_id)->where('Te_Term', $request->term_id )
             //Eager Load scheduler function and pluck using "dot" 
             ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
 

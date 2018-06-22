@@ -110,8 +110,8 @@ Route::get('check-selfpay-placement-entries-ajax', ['as'=>'check-selfpay-placeme
 
 Route::group(['middleware' => 'open-close-approval-routes'],function(){
     //url routing for manager approval page
-    Route::get('/approval/{staff}/{tecode}/{id}/{form}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
-    Route::put('/approval/user/{staff}/course/{tecode}/{formcount}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+    Route::get('/approval/{staff}/{tecode}/{id}/{form}/{term}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
+    Route::put('/approval/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
     //url routing for hr partner approval page
     Route::get('/approvalhr/{staff}/{tecode}/{id}/{form}', ['as' => 'approval.getform2hr','uses' => 'ApprovalController@getForm2hr' ]);

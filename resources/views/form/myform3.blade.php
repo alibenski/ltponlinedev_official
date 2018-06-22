@@ -17,10 +17,10 @@
       <div class="panel panel-default">
           <div class="panel-heading"><strong>Self Payment</strong> Enrolment Form for Semester: 
             <strong>
-              @if(empty($next_term && $terms))
+              @if(empty($next_term && $terms)) 
               NO DB ENTRY
               @else 
-              {{ $terms->Term_Next.' - '.$next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
+              {{ $terms->Term_Code.' - '.$terms->Term_Name.' - '.$terms->Comments.' Season' }}
               @endif
             </strong>
           </div>
@@ -29,13 +29,12 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
-                <input  name="user_id" type="hidden" value="{{ $repos }}" readonly>
-                <input  type="hidden" value="{{$terms->Term_Code}}">
+                {{-- <input  name="user_id" type="hidden" value="{{ $repos }}" readonly> --}}
                 <input  name="term_id" type="hidden" value="
                   @if(empty($terms))
                   NO DB ENTRY
                   @else 
-                  {{ $terms->Term_Next }}
+                  {{ $terms->Term_Code }}
                   @endif
                 " readonly>  
                 </div>
@@ -515,14 +514,15 @@
 <script type="text/javascript">
   $("input[name='L']").click(function(){
       var L = $(this).val();
+      var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
           url: "{{ route('select-ajax') }}", 
           method: 'POST',
-          data: {L:L, _token:token},
+          data: {L:L, term_id:term, _token:token},
           success: function(data, status) {
-            console.log(data.options[61]);
+            console.log('options: '+data.options[61]);
             $("select[name='course_id']").html('');
             $("select[name='course_id']").html(data.options);
            
@@ -533,14 +533,14 @@
 
 <script type="text/javascript">
   $("select[name='course_id']").change(function(){
-
       var course_id = $(this).val();
+      var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
           url: "{{ route('select-ajax2') }}", 
           method: 'POST',
-          data: {course_id:course_id, _token:token},
+          data: {course_id:course_id, term_id:term, _token:token},
           success: function(data) {
             $("select[name='schedule_id[]']").html('');
             $("select[name='schedule_id[]']").html(data.options);

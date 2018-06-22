@@ -5,6 +5,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 @stop
 @section('content')
 <div id="loader">
@@ -83,6 +84,16 @@
                       @endif
                     </div>
                 </div> 
+
+                <div class="form-group">
+                  <label for="contractDate" class="col-md-3 control-label">Contract Expiry Date: </label>
+                  <div class="input-group date form_datetime col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="contractDate">
+                          <input class="form-control" size="16" type="text" value="" readonly>
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        </div>
+                        <input type="hidden" name="contractDate" id="contractDate" value="" required="" />
+                </div>
 
                 <!-- NO DECISION SECTION -->
                 <div class="0 box">
@@ -267,6 +278,8 @@
 
 @section('scripts_code')
 
+<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
 <script src="{{ asset('js/select2.full.js') }}"></script>
 <script src="{{ asset('js/bootstrap-maxlength.js') }}"></script>
 <script>
@@ -288,6 +301,16 @@
 
 <script>
   $(document).ready(function() {
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
     $.get("/check-placement-form-ajax", function(data) {
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
@@ -494,12 +517,13 @@
 <script type="text/javascript">
   $("input[name='L']").click(function(){
       var L = $(this).val();
+      var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
           url: "{{ route('select-ajax') }}", 
           method: 'POST',
-          data: {L:L, _token:token},
+          data: {L:L, term_id:term, _token:token},
           success: function(data, status) {
             $("select[name='course_id']").html('');
             $("select[name='course_id']").html(data.options);
@@ -510,14 +534,14 @@
 
 <script type="text/javascript">
   $("select[name='course_id']").on('change',function(){
-
       var course_id = $(this).val();
+      var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
           url: "{{ route('select-ajax2') }}", 
           method: 'POST',
-          data: {course_id:course_id, _token:token},
+          data: {course_id:course_id, term_id:term, _token:token},
           success: function(data) {
             $("select[name='schedule_id[]']").html('');
             $("select[name='schedule_id[]']").html(data.options);
