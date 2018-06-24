@@ -87,12 +87,14 @@
 
                 <div class="form-group">
                   <label for="contractDate" class="col-md-3 control-label">Contract Expiry Date: </label>
+                  <div class="col-md-9">
                   <div class="input-group date form_datetime col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="contractDate">
                           <input class="form-control" size="16" type="text" value="" readonly>
                           <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                           <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                         </div>
                         <input type="hidden" name="contractDate" id="contractDate" value="" required="" />
+                  </div>
                 </div>
 
                 <!-- NO DECISION SECTION -->
@@ -310,7 +312,7 @@
         startView: 2,
         forceParse: 0,
         showMeridian: 1,
-        minView: 1, 
+        minView: 2, 
     });
     $.get("/check-placement-form-ajax", function(data) {
       $.each(data, function(index, val) {

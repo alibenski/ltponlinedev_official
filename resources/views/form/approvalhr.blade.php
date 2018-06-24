@@ -13,11 +13,12 @@
 
         <div class="panel-heading">CLM Learning Partner Approval Page Enrolment Form for Semester: <strong>{{ $next_term_code }} : {{ $next_term_name }}</strong></div>
           <div class="panel-body">
-            <form method="POST" action="{{ route('approval.updateform2hr', [$input_staff->INDEXID, $input_staff->Te_Code, $input_staff->form_counter]) }}" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" action="{{ route('approval.updateform2hr', [$input_staff->INDEXID, $input_staff->Te_Code, $input_staff->form_counter, $next_term_code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>
                 <input  name="Te_Code" type="hidden" value="{{$input_staff->Te_Code}}" readonly>
                 <input  name="form_counter" type="hidden" value="{{$input_staff->form_counter}}" readonly>
+                <input  name="Term" type="hidden" value="{{$next_term_code}}" readonly>
                 @foreach($input_course as $course)
                   <input  name="schedule_id[]" type="hidden" value="{{$course->schedule->name}}" readonly>
                 @endforeach
@@ -60,6 +61,16 @@
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input  name="email" placeholder="" class="form-control"  type="text" value="{{$input_staff->mgr_email}}"readonly="">                                    
                         </div>
                         <p class="small text-danger"><strong>This is the email address of the manager/supervisor who has approved the enrolment.</strong></p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Contract Expiry Date:</label>
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-exclamation-sign"></i></span><input  name="org" class="form-control"  type="text" value="{{ date('d M Y', strtotime($input_staff->contractDate))}}" readonly>                                    
+                        </div>
+                        <p class="small text-danger"><strong>Please check and verify the date indicated in this field.</strong></p>
                     </div>
                 </div>
 

@@ -425,14 +425,7 @@ class ApprovalController extends Controller
         $staff_email = $formfirst->users->email;
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $staff_index)
-                                ->value('Te_Code');
+        
         // query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst; 
 
@@ -514,19 +507,16 @@ class ApprovalController extends Controller
      * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
      */
-    public function getForm2hr($staff, $tecode, $id, $form)
+    public function getForm2hr($staff, $tecode, $id, $form, $term)
     {
         //get variables from URL to decrypt and pass to controller logic 
         $staff = Crypt::decrypt($staff);
         $tecode = Crypt::decrypt($tecode);
         $id = Crypt::decrypt($id);
         $form_counter = Crypt::decrypt($form);
+        $term = Crypt::decrypt($term);
 
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_code = $term;
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
         //query from Preenrolment table the needed information data to include in the control logic and then pass to approval page
         $input_course = Preenrolment::orderBy('Term', 'desc')
@@ -535,7 +525,7 @@ class ApprovalController extends Controller
                                 ->where('Te_Code', $tecode)
                                 ->where('form_counter', $form_counter)
                                 ->get();
-        $input_staff = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+        $input_staff = Preenrolment::withTrashed()->orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('form_counter', $form_counter)
@@ -553,13 +543,9 @@ class ApprovalController extends Controller
         return view('form.approvalhr')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
     }
 
-    public function updateForm2hr(Request $request, $staff, $tecode, $formcount)
+    public function updateForm2hr(Request $request, $staff, $tecode, $formcount, $term)
     {
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_code = $term;
         $forms = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
@@ -606,14 +592,7 @@ class ApprovalController extends Controller
         $staff_email = $formfirst->users->email;
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $staff_index)
-                                ->value('Te_Code');
+        
         //query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst;
 

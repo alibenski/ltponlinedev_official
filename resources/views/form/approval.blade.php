@@ -49,16 +49,19 @@
                             <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span><input  name="org" class="form-control"  type="text" value="{{$input_staff->DEPT}}" readonly>                                    
                         </div>
                         <p class="small text-danger"><strong>Please check the organization indicated in this field.</strong></p>
-                        <div class="form-group">
-{{--                           <div class="col-md-12">
-                              <input id="confirmOrg" name="confirmOrg" class="with-font dyes" type="checkbox" value="1" required="required">
-                              <label for="confirmOrg" class="form-control-static">YES, I confirm that the organization indicated above is correct. (required)</label>
-                          </div> --}}
-                          {{-- insert dropdown here call ajax-org-select.blade.php from student->edit --}}
-                        </div>
                     </div>
                 </div>
-             
+                
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">Contract Expiry Date:</label>
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-exclamation-sign"></i></span><input  name="org" class="form-control"  type="text" value="{{ date('d M Y', strtotime($input_staff->contractDate))}}" readonly>                                    
+                        </div>
+                        <p class="small text-danger"><strong>Please check and verify the date indicated in this field.</strong></p>
+                    </div>
+                </div>
+
                 <div class="row">
                   <div class="col-md-12">
                     <table class="table">

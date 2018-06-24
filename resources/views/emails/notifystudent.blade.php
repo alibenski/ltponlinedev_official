@@ -219,7 +219,7 @@
                                             {{$mgr_comment}}
                                         @endif
                                       </p>
-                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and at least one of your enrolment has been <strong>APPROVED</strong> by your manager, please note that your enrolment has now been sent to your organization's HR/Staff Development Office for further review and approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
+                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and <strong>at least one of your enrolment has been approved</strong> by your manager, please note that your enrolment has now been sent to your organization's HR/Staff Development Office for further review and approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
                                 </td>
                             </tr>
                             <tr>

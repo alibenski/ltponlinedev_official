@@ -31,11 +31,9 @@ class AppServiceProvider extends ServiceProvider
             $staff = $data['INDEXID'];
             $tecode = $data['Te_Code'];
             $form_counter = $data['form_counter'];
-            $now_date = Carbon::now()->toDateString(); 
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
-            $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+            $term = $data['Term'];
+            
+            $next_term_code = $term;
             $query_form = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
