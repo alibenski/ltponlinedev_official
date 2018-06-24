@@ -68,6 +68,7 @@ class PlacementFormController extends Controller
         $uniquecode = $request->input('CodeIndexID');
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
+        $contractDate = $request->input('contractDate');
 
         $this->validate($request, array(
             'placementLang' => 'required|integer',
@@ -96,6 +97,7 @@ class PlacementFormController extends Controller
         $placementForm->placement_schedule_id = $request->placementLang;
         $placementForm->std_comments = $request->std_comment;
         $placementForm->agreementBtn = $request->agreementBtn;
+        $placementForm->contractDate = $request->contractDate;
         $placementForm->save();
         
         // mail student regarding placement form information

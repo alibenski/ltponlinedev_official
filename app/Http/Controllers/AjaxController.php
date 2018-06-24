@@ -126,7 +126,7 @@ class AjaxController extends Controller
         $current_user = Auth::user()->indexno;
         $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
             ->where(function($q){ 
-                $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+                $latest_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
                 // do NOT count number of submitted forms disapproved by manager or HR learning partner  
                 $q->where('Term', $latest_term )->where('deleted_at', NULL)
                     ->where('is_self_pay_form', NULL)
@@ -141,16 +141,11 @@ class AjaxController extends Controller
     public function ajaxCheckPlacementForm()
     {
             $current_user = Auth::user()->indexno;
-            $now_date = Carbon::now()->toDateString();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
-
-            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+            $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
 
             $placementData = PlacementForm::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)
-                ->where('Term', $next_term->Term_Code)
+                ->where('Term', $termCode)
                 ->get();
             if (isset($placementData)) {
                 $data = true;
@@ -164,15 +159,11 @@ class AjaxController extends Controller
     public function ajaxCheckPlacementEntries()
     {
         $current_user = Auth::user()->indexno;
-        $now_date = Carbon::now()->toDateString();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
+        $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
 
-            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
         $placementFromCount = PlacementForm::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)
-                ->where('Term', $next_term->Term_Code)
+                ->where('Term', $termCode)
                 ->get();
 
         $data = $placementFromCount;
@@ -182,15 +173,10 @@ class AjaxController extends Controller
     public function ajaxCheckSelfpayPlacementEntries()
     {
         $current_user = Auth::user()->indexno;
-        $now_date = Carbon::now()->toDateString();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
-
-            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
         $placementFromCount = PlacementForm::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)
-                ->where('Term', $next_term->Term_Code)
+                ->where('Term', $termCode)
                 ->where('is_self_pay_form', 1)
                 ->get();
 
@@ -203,7 +189,7 @@ class AjaxController extends Controller
         $current_user = Auth::user()->indexno;
         $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
             ->where(function($q){ 
-                $latest_term = \App\Helpers\GlobalFunction::instance()->nextTermCode();
+                $latest_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
                 // do NOT count number of submitted forms disapproved by manager or HR learning partner  
                 $q->where('Term', $latest_term )->where('deleted_at', NULL)
                     ->where('is_self_pay_form', 1)
@@ -220,26 +206,24 @@ class AjaxController extends Controller
     public function ajaxCheckPlacementCourse(Request $request)
     {
         if($request->ajax()){
-
+            // get the last enrolment from PASHQ table
             $repos_lang = Repo::orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
             
             if (is_null($repos_lang)) {
                 $repos_value = 0;
             } else {
+                // get the Term value of the last enrolment from PASHQ table 
                 $repos_value = $repos_lang->Term;
             }
-
-            $now_date = Carbon::now()->toDateString();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
-
-            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+            // get the previous term code of the previous term of the current enrolment term
+            $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+            $prev_termCode = $current_enrol_term->Term_Prev;
+            $prev_prev_TermCode = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $prev_termCode)->value('Term_Prev');
             // // query placement exam table if student placement enrolment data exists or not
             $placementData = null; 
 
-            $difference =  $next_term->Term_Code - $repos_value;
-            if (($repos_value == 0 || $difference >= 9) && $placementData == null) {
+            // if latest term for selected language is less than the 2 terms then true, take placement
+            if (($repos_value < $prev_prev_TermCode ) && $placementData == null) {
                 $data = true;
             } else {
                 $data = false;
@@ -253,13 +237,7 @@ class AjaxController extends Controller
     {
         if ($request->ajax()) {
 
-            $now_date = Carbon::now()->toDateString();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
-
-            $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-            $placement_schedule = PlacementSchedule::where('language_id', $request->L)->where('term', $next_term->Term_Code)->get();
+            $placement_schedule = PlacementSchedule::where('language_id', $request->L)->where('term', $request->term_id)->get();
             $data = $placement_schedule;
             return response()->json($data);            
         }

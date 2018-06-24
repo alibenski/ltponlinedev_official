@@ -31,19 +31,16 @@ class ApprovalController extends Controller
         //
     }
 
-    public function getPlacementFormData($staff, $lang, $id, $form)
+    public function getPlacementFormData($staff, $lang, $id, $form, $term)
     {
         //get variables from URL to decrypt and pass to controller logic 
         $staff = Crypt::decrypt($staff);
         $lang = Crypt::decrypt($lang);
         $id = Crypt::decrypt($id);
         $form_counter = Crypt::decrypt($form);
+        $term = Crypt::decrypt($term);
 
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code'); 
+        $next_term_code = $term; 
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
 
         //query from PlacementForm table the needed information data to include in the control logic and then pass to approval page
@@ -72,13 +69,9 @@ class ApprovalController extends Controller
         return view('form.placementApprovalPage')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
     }
 
-    public function updatePlacementFormData(Request $request, $staff, $lang, $formcount)
+    public function updatePlacementFormData(Request $request, $staff, $lang, $formcount, $term)
     {   
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_code = $term;
         $forms = PlacementForm::orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
@@ -120,14 +113,7 @@ class ApprovalController extends Controller
         $staff_email = $formfirst->users->email;
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-        $course = PlacementForm::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $staff_index)
-                                ->value('L');
+        
         // query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst; 
 
@@ -183,19 +169,16 @@ class ApprovalController extends Controller
         return redirect()->route('eform');
     }
 
-    public function getPlacementFormData2hr($staff, $lang, $id, $form)
+    public function getPlacementFormData2hr($staff, $lang, $id, $form, $term)
     {   
         //get variables from URL to decrypt and pass to controller logic 
         $staff = Crypt::decrypt($staff);
         $lang = Crypt::decrypt($lang);
         $id = Crypt::decrypt($id);
         $form_counter = Crypt::decrypt($form);
+        $term = Crypt::decrypt($term);
 
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_code = $term; 
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
         //query from PlacementForm table the needed information data to include in the control logic and then pass to approval page
         $input_course = PlacementForm::orderBy('Term', 'desc')
@@ -204,7 +187,7 @@ class ApprovalController extends Controller
                                 ->where('L', $lang)
                                 ->where('eform_submit_count', $form_counter)
                                 ->get();
-        $input_staff = PlacementForm::orderBy('Term', 'desc')->orderBy('id', 'desc')
+        $input_staff = PlacementForm::withTrashed()->orderBy('Term', 'desc')->orderBy('id', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
                                 ->where('eform_submit_count', $form_counter)
@@ -222,13 +205,9 @@ class ApprovalController extends Controller
         return view('form.placementApprovalHRPage')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
     }
 
-    public function updatePlacementFormData2hr(Request $request, $staff, $lang, $formcount)
+    public function updatePlacementFormData2hr(Request $request, $staff, $lang, $formcount, $term)
     {
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $next_term_code = $term;
         $forms = PlacementForm::orderBy('Term', 'desc')
                                 ->where('INDEXID', $staff)
                                 ->where('Term', $next_term_code)
@@ -271,14 +250,7 @@ class ApprovalController extends Controller
         $staff_email = $formfirst->users->email;
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-        $course = PlacementForm::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $staff_index)
-                                ->value('L');
+        
         //query from PlacementForm table the needed information data to include in email
         $input_course = $formfirst;
 

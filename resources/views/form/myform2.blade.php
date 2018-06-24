@@ -344,12 +344,13 @@
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
 
       var L = $(this).val();
+      var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
       console.log(L);
       $.ajax({
           url: "{{ route('check-placement-sched-ajax') }}", 
           method: 'POST',
-          data: {L:L, _token:token},
+          data: {L:L, term_id:term, _token:token},
           success: function(data) { // get the placement test schedules 
               $.each(data, function(index, val) {
                   var m_names = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
@@ -389,14 +390,15 @@
   // check if student is new or missed 2 terms 
       var L = $(this).val();
       var index = $("input[name='index_id']").val();
+      var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
       console.log(L);
       $.ajax({
           url: "{{ route('check-placement-course-ajax') }}", 
           method: 'POST',
-          data: {L:L, index:index, _token:token},
+          data: {L:L, index:index, term_id:term, _token:token},
           success: function(data) {
-            console.log(data);
+            console.log('take placement: ' + data);
             // if ($.isEmptyObject(data)) {
             if (data == true) { // check if student is new or missed 2 terms
               $("input[name='placementDecisionB']").prop('checked', false);

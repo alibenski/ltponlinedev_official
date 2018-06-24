@@ -96,7 +96,7 @@ class RepoController extends Controller
 
             $prev_term = Term::orderBy('Term_Code', 'desc')
                             // ->where('Term_End', '<', $now_date)->get()->max();
-                            ->where('Term_End', $terms->Term_Prev)->get();
+                            ->where('Term_Code', $terms->Term_Prev)->get();
 
             //define user variable as User collection
             $user = Auth::user();

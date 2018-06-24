@@ -93,7 +93,7 @@ class SelfPayController extends Controller
                         // ->min();
 
         $prev_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_End', '<', $now_date)->get()->max();
+                        ->where('Term_Code', $terms->Term_Prev)->get();
 
         //define user variable as User collection
         $user = Auth::user();

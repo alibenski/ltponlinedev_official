@@ -43,63 +43,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $current_user = Auth::user()->indexno;
-        //query last UN Language Course enrolled in the past based on PASHQ table
-        $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)->first();
-        $now_date = Carbon::now()->toDateString();
-
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-
-        //query submitted forms based from tblLTP_Enrolment table
-        $forms_submitted = Preenrolment::distinct('Te_Code')
-            ->where('INDEXID', '=', $current_user)
-            ->where('Term', $next_term_code )->get();
-        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-        
-        $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-
-        return view('home')->withRepos_lang($repos_lang)->withForms_submitted($forms_submitted)->withNext_term($next_term)->withCurrent_enrol_term($current_enrol_term)->withTerms($terms);
+        return view('home');
     }
-    
+       
     /*
-    *    Shows submitted forms @ route{{"/submitted"}}
-    */
-    public function currentSubmitted()
-    {
-        $current_user = Auth::user()->indexno;
-
-        $now_date = Carbon::now()->toDateString();
-        // get the current enrolment term collection
-        $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        
-        //query submitted forms on current enrolment term based from tblLTP_Enrolment table
-        if (!is_null($current_enrol_term)) {
-            $forms_submitted = Preenrolment::withTrashed()
-                ->distinct('Te_Code')
-                ->where('INDEXID', '=', $current_user)
-                ->where('Term', $current_enrol_term->Term_Code )
-                ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
-            $plforms_submitted = PlacementForm::withTrashed()
-                ->where('INDEXID', '=', $current_user)
-                ->where('Term', $current_enrol_term->Term_Code )
-                ->get();
-
-            // preserve variable names
-            $next_term = $current_enrol_term; 
-     
-            return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term);
-        } 
-        session()->flash('interdire-msg','under construction');
-        return redirect('home');
-    }    
-    /*
-    *    Shows submitted forms @ route{{"/submitted"}}
+    *    Shows submitted forms @ route{{"/submitted"}} 
+    *    and route{{"/previous-submitted"}} 
     */
     public function previousSubmitted(Request $request)
     {

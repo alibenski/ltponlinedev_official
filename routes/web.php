@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg']);
         // Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg'])->middleware('opencloseenrolment');
         Route::post('/whatform', ['as'=>'whatform','uses'=>'HomeController@whatform'])->middleware('check-prev-url');
-        Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@currentSubmitted']);
+        Route::get('/submitted', ['as'=>'submitted','uses'=>'HomeController@previousSubmitted']);
         Route::get('/previous-submitted', ['as'=>'previous-submitted','uses'=>'HomeController@previousSubmitted']);
         Route::get('/history', ['as'=>'history','uses'=>'HomeController@history']);
         Route::post('/showform', ['as'=>'submitted.show','uses'=>'HomeController@showMod']);
