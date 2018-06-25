@@ -12,7 +12,7 @@
 </div>
 <div class="container">
   <div class="row">   
-    <div class="col-md-12">
+    <div class="col-md-12">  
       <div class="panel panel-default">
           <div class="panel-heading">Enrolment Form for Semester: 
             <strong>
@@ -37,7 +37,7 @@
                   @endif
                 " readonly>  
                 </div>
-                
+
                 {{-- <div class="form-group">
                     <label for="" class="col-md-3 control-label">Index Number:</label>
 
@@ -344,7 +344,7 @@
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
 
       var L = $(this).val();
-      var token = $("input[name='_token']").val();
+      var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
       console.log(L);
       $.ajax({

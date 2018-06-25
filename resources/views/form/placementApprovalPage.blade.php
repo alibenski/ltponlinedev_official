@@ -14,7 +14,7 @@
 
         <div class="panel-heading">Manager/Supervisor Placement Test Approval Page for Semester: <strong>{{ $next_term_code }} : {{ $next_term_name }}</strong></div>
           <div class="panel-body">
-            <form method="POST" action="{{ route('approval.updateplacementformdata', [$input_staff->INDEXID, $input_staff->L, $input_staff->eform_submit_count]) }}" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" action="{{ route('approval.updateplacementformdata', [$input_staff->INDEXID, $input_staff->L, $input_staff->eform_submit_count, $next_term_code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>
                 <input  name="L" type="hidden" value="{{$input_staff->L}}" readonly>

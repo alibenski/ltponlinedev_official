@@ -4,6 +4,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <style>
+    .select2-results .select2-disabled,  .select2-results__option[aria-disabled=true] { display: none; }
+    </style>
 @stop
 @section('content')
 <div class="container">
@@ -31,21 +34,21 @@
                 <!-- MAKE A DECISION SECTION -->
                 
                 <div class="form-group">
-                    <label class="col-md-4 control-label">Are you a self-paying student?</label>
+                    <label class="col-md-3 control-label">Enrolment Type:</label>
 
-                      <div class="col-md-4">
+                      <div class="col-md-5">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
-                                <label for="decision1" class="form-control-static">YES, I am paying for my enrolment</label>
+                                <label for="decision1" class="form-control-static">I am paying for my enrolment / I am initially paying then my organization will reimburse</label>
                       </div>
 
                       <div class="col-md-4">
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-                                <label for="decision2" class="form-control-static">NO, my organization is paying for my enrolment</label>
+                                <label for="decision2" class="form-control-static">My organization is paying for my enrolment</label>
                       </div>
                 </div>
 
                 <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
-                  <p>You confirmed that you are a <em>self-paying student</em>. Please follow the instructions below:</p>
+                  <p>Before continuing, please follow the following instructions:</p>
                   <ol>
                     <li>Choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank">HERE</a></li>
                     <li>Prepare a copy of proof of payment</li>
@@ -146,6 +149,22 @@
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
     $("input[name='decision']").prop('checked', false);
   });
+</script>
+
+<script>
+  $("input[name='decision']").click(function(){
+      if($('#decision1').is(':checked')) {
+        $('#profile option:gt(3)').removeAttr('disabled');
+        $('.select-profile-single').select2({
+          placeholder: "Select Profile",
+          });
+      } else if ($('#decision2').is(':checked')) {
+        $('#profile option:gt(3)').attr('disabled', 'disabled'); 
+        $('.select-profile-single').select2({
+          placeholder: "Select Profile",
+          });
+      }  
+    });
 </script>
 
 <script src="{{ asset('js/whatOrg.js') }}"></script>

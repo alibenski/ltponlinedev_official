@@ -137,6 +137,7 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
+        $profile = $request->profile;
         // if part of new organization, then save the new organization to sddextr        
         // save organization and CAT to sddextr table
         $id = Auth::id();
@@ -163,7 +164,7 @@ class HomeController extends Controller
         // } 
         elseif ($request->decision == 0) {
             session()->flash('success','Please fill up the enrolment form');
-            return redirect(route('myform.create'));
+            return redirect(route('myform.create'))->with( ['profile' => $profile, 'profile2' => 'string'] );
         } else 
         return redirect(route('whatorg'));
 

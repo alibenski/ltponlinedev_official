@@ -45,13 +45,8 @@ class PlacementFormController extends Controller
     public function getPlacementInfo()
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $now_date = Carbon::now()->toDateString();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                    ->whereDate('Term_End', '>=', $now_date)
-                    ->get()->min();
-
-        $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-        return view('form.myformplacement')->withLanguages($languages)->withNext_term($next_term);
+        
+        return view('form.myformplacement')->withLanguages($languages);
     }
 
     public function postPlacementInfo(Request $request)
@@ -103,12 +98,6 @@ class PlacementFormController extends Controller
         // mail student regarding placement form information
         $staff = Auth::user();
         $current_user = Auth::user()->indexno;
-        $now_date = Carbon::now()->toDateString();
-        $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
-        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-
         $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $term_id)->where('INDEXID', $current_user)->where('L', $language_id)->first();
 
         Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));

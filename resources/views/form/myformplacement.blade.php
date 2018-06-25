@@ -25,7 +25,6 @@
                     {{ csrf_field() }}
                     <div class="form-group">
                         <input type="hidden" name="indexno" value="{{ Auth::user()->indexno }}">
-                        <input type="hidden" name="term" value="{{ $next_term->Term_Code }}">
                         <label for="" class="col-md-3 control-label">Name:</label>
 
                         <div class="col-md-8 inputGroupContainer">
