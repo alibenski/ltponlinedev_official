@@ -143,7 +143,7 @@ class HomeController extends Controller
         $id = Auth::id();
         $student = User::findOrFail($id);
         $student->sddextr->DEPT = $request->input('organization');
-        // $student->sddextr->CAT = $request->input('profile');
+        $student->sddextr->PROFILE = $request->input('profile');
         $student->sddextr->save();
 
         // query Torgan table if $request->organization is selfpaying or not
@@ -164,7 +164,7 @@ class HomeController extends Controller
         // } 
         elseif ($request->decision == 0) {
             session()->flash('success','Please fill up the enrolment form');
-            return redirect(route('myform.create'))->with( ['profile' => $profile, 'profile2' => 'string'] );
+            return redirect(route('myform.create'));
         } else 
         return redirect(route('whatorg'));
 

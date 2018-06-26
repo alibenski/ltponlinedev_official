@@ -70,14 +70,14 @@
                     <div class="dropdown">
                       <select id="profile" name="profile" class="col-md-8 form-control select-profile-single" style="width: 100%;" required="required">
                             <option></option>
-                            <option value="1">UN Staff Member</option>
-                            <option value="2">Intern</option>
-                            <option value="3">Consultant</option>
-                            <option value="4">Staff of Permanent Mission</option>
-                            <option value="5">Spouse of Staff from UN or Mission</option>
-                            <option value="6">Retired UN Staff Member</option>
-                            <option value="7">Staff of Service Organizations in the Palais</option>
-                            <option value="8">Staff of UN-accredited NGO's and Press Corps</option>
+                            <option value="STF">UN Staff Member</option>
+                            <option value="INT">Intern</option>
+                            <option value="CON">Consultant</option>
+                            <option value="MSN">Staff of Permanent Mission</option>
+                            <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
+                            <option value="RET">Retired UN Staff Member</option>
+                            <option value="SERV">Staff of Service Organizations in the Palais</option>
+                            <option value="PRESS">Staff of UN-accredited NGO's and Press Corps</option>
                       </select>
                     </div>
                   </div>

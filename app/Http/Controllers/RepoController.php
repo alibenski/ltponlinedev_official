@@ -68,9 +68,6 @@ class RepoController extends Controller
             }
         // check if user did not directly access link   
         if ($request->session()->has('success') || $result == route('myform.create')){
-
-            $profile = $request->session()->get('profile');
-            $profile2 = $request->session()->get('profile2');
             
             //make collection values available
             $courses = Course::all();
@@ -121,7 +118,7 @@ class RepoController extends Controller
                 ->where('INDEXID', $current_user)->get();
             $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
 
-            return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org)->withProfile($profile)->withProfile2($profile2);
+            return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
         } else {
             return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. Click on "Register/Enrol Here" < '. route('whatorg') .' > from the Menu below and answer the mandatory question.');
         }
