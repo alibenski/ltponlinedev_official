@@ -231,7 +231,7 @@ class SelfPayController extends Controller
         if ($request->placementDecisionB === '0') {
             app('App\Http\Controllers\PlacementFormController')->postSelfPayPlacementInfo($request, $attachment_pay_file, $attachment_identity_file);
             $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
-            return redirect()->route('thankyouSelfPay');
+            return redirect()->route('placementinfo');
         }
 
                     // 2nd part of validate other input fields 
@@ -250,6 +250,7 @@ class SelfPayController extends Controller
                 'Code' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'schedule_id' => $schedule_id[$i],
                 'L' => $language_id,
+                'profile' => $request->profile,
                 'Te_Code' => $course_id,
                 'Term' => $term_id,
                 'INDEXID' => $index_id,

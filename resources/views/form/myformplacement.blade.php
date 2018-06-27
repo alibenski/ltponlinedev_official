@@ -15,16 +15,20 @@
           <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p>Hello {{Auth::user()->sddextr->FIRSTNAME}},</p>
-            <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. You have been redirected to this page to choose the <strong>Placement Test</strong> schedule of your preferred language.</p>
+            <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. You have been redirected to this page to answer additional questions.</p>
           </div>
 
           <div class="panel panel-default col-md-12">
-            <div class="panel-heading "><strong>Placement Test Questionnaire</div>
+            <div class="panel-heading "><strong>Placement Test Additional Questions</strong></div>
                 <div class="panel-body col-md-12">
-                  <form method="POST" action="{{ route('postplacementinfo') }}" class="form-horizontal form-prevent-multi-submit">
+                  <div class="alert alert-danger">
+                    <p>decide whatever messageto put here. i.e. why, how, check all possible options of availability, etc.</p>
+                  </div>
+                  <form method="POST" action="{{ route('postplacementinfo-additional') }}" class="form-horizontal form-prevent-multi-submit">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <input type="hidden" name="indexno" value="{{ Auth::user()->indexno }}">
+                        <input type="hidden" name="id" value="{{ $latest_placement_form->id }}">
                         <label for="" class="col-md-3 control-label">Name:</label>
 
                         <div class="col-md-8 inputGroupContainer">
@@ -43,17 +47,50 @@
                       </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="org" class="col-md-3 control-label">Placement Form Language:</label>
+                      <div class="col-md-8">
+                            <div class="input-group">
+                              <span class="input-group-addon"><i class="fa fa-commenting"></i></span><input  name="language" class="form-control"  type="text" value="{{ $latest_placement_form->languages->name }}" readonly>
+                            </div>
+                      </div>
+                    </div>
+
                     <div class="row panel panel-info col-md-10 col-md-offset-1">
                       <div class="otherQuestions col-md-5">
                         <div class="form-group">
-                          <label for="langInput" class="control-label">Select Language:</label>
+                          <label for="" class="control-label">Your Time Availability:</label>
                           <div class="col-md-12">
-                                  @foreach($languages as $id => $name)
-                                <div class="input-group col-md-12">                                     
-                                  <input id="{{ $name }}" name="langInput" class="with-font" type="radio" value="{{ $id }}">
+                                <div class="input-group col-md-12">                             
+                                  <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
+                                  <label for="morning" class="form-control-static">morning</label>
+                                </div>
+                                <div class="input-group col-md-12">
+                                  <input id="lunchtime1" name="timeInput[]" class="with-font" type="checkbox" value="lunchtime1">
+                                  <label for="lunchtime1" class="form-control-static">lunchtime1 (tbc)</label>
+                                </div>
+                                <div class="input-group col-md-12">
+                                  <input id="lunchtime2" name="timeInput[]" class="with-font" type="checkbox" value="lunchtime2">
+                                  <label for="lunchtime2" class="form-control-static">lunchtime2 (tbc)</label>
+                                </div>
+                                <div class="input-group col-md-12">
+                                  <input id="afternoon" name="timeInput[]" class="with-font" type="checkbox" value="afternoon">
+                                  <label for="afternoon" class="form-control-static">afternoon</label>
+                                </div>
+                           </div>
+                        </div>
+                      </div>
+
+                      <div class="otherQuestions3 col-md-7">
+                        <div class="form-group">
+                          <label for="" class="control-label">Your Day Availability:</label>
+                          <div class="col-md-12">
+                            @foreach ($days as $id => $name)
+                                <div class="input-group col-md-12">                             
+                                  <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}">
                                   <label for="{{ $name }}" class="form-control-static">{{ $name }}</label>
                                 </div>
-                                  @endforeach
+                            @endforeach
                            </div>
                         </div>
                       </div>
@@ -78,7 +115,7 @@
                     <div class="form-group">
                       <div class="disclaimer alert col-md-10 col-md-offset-1">
                         <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
-                        <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
+                        <label for="agreementBtn" class="form-control-static">I understand blah blah blah... disclaimer text here</label>
                       </div>
                     </div>
                     {{-- end of disclaimer --}}
@@ -108,7 +145,7 @@
  });
  </script>
 
-<script>
+{{-- <script>
   $(document).ready(function() {
     $.get("/check-placement-form-ajax", function(data) {
       $.each(data, function(index, val) {
@@ -161,6 +198,6 @@
       });
     });
   });
-</script>
+</script> --}}
 
 @stop

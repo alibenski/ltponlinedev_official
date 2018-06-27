@@ -44,7 +44,8 @@
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-qrcode"></i></span> --}}
-                            <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>                   
+                            <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>
+                            <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>            
                         {{-- </div>
                     </div>
                 </div> --}}
@@ -85,7 +86,7 @@
                     </div>
                 </div> 
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                   <label for="contractDate" class="col-md-3 control-label">Contract Expiry Date: </label>
                   <div class="col-md-9">
                   <div class="input-group date form_datetime col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="contractDate">
@@ -95,7 +96,7 @@
                         </div>
                         <input type="hidden" name="contractDate" id="contractDate" value="" required="" />
                   </div>
-                </div>
+                </div> --}}
 
                 <!-- NO DECISION SECTION -->
                 <div class="0 box">
@@ -138,7 +139,7 @@
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
                       <p>You have answered <strong>NO</strong>. You are not a complete beginner on your selected language. Please select a date for your placement test from the options available. If you are unable to take the test, then you can apply again in the next enrolment period.</p> 
-                      <p>At the end of this form, you have the option to fill out a comment box to express any concerns <strong>(e.g. preferred specialized course, time contraints, etc.)</strong>. Thank you for your cooperation.</p>
+                      <p>At the end of this form, you are <strong>required</strong> to fill out a comment box to express any concerns <strong>(e.g. preferred course, time contraints, etc.)</strong>. Thank you for your cooperation.</p>
                     </div>
                     
                     <div class="otherQuestions2 row col-md-12">
@@ -154,9 +155,9 @@
                         <div class="insert-msg"></div>
 
                         <div class="col-md-12 form-group">
-                          <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                          <label class="col-md-3 control-label">Comment: <i>(required)</i></label>
                           <div class="col-md-8 ">
-                          <textarea name="std_comment" class="form-control" maxlength="3500"></textarea>
+                          <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="preferred course, time contraints, no preferrence, etc."></textarea>
                           </div>
                         </div>
 
@@ -329,6 +330,7 @@
       $(".regular-enrol").attr('style', 'display: none'); // initiate hidden div 
       $(".submission-part").attr('style', 'display: none');
       $("input[name='placementDecisionB']").val("");
+      $("textarea[name='std_comment']").removeAttr('required'); // reset comment box as not required field
   // populate placement schedules
       $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
@@ -381,6 +383,7 @@
 
               // insert message of convocation email
               $('input[name="placementLang"]').on('click', function() {
+                $("textarea[name='std_comment']").attr('required', 'required');
                 $('.insert-msg').hide();
                 $('.insert-msg').addClass('col-md-6 col-md-offset-3');     
                 $('.insert-msg').html("<div class='alert alert-info'>You will receive a convocation email from the Language Secretariat regarding the time and place of the placement test.</div>").fadeIn();

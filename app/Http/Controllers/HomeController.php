@@ -137,13 +137,13 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
-        $profile = $request->profile;
         // if part of new organization, then save the new organization to sddextr        
         // save organization and CAT to sddextr table
         $id = Auth::id();
         $student = User::findOrFail($id);
+        $student->profile = $request->profile;
+        $student->save();
         $student->sddextr->DEPT = $request->input('organization');
-        $student->sddextr->PROFILE = $request->input('profile');
         $student->sddextr->save();
 
         // query Torgan table if $request->organization is selfpaying or not

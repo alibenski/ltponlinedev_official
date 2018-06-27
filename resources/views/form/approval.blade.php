@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="" class="col-md-3 control-label">Contract Expiry Date:</label>
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
@@ -60,7 +60,7 @@
                         </div>
                         <p class="small text-danger"><strong>Please check and verify the date indicated in this field.</strong></p>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="row">
                   <div class="col-md-12">

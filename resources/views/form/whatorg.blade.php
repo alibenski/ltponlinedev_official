@@ -60,7 +60,7 @@
 
 
                 <div id="secretMsg2" class="col-md-12 alert alert-info" style="display: none">
-                  <p class='text-justify'>You confirmed that you work for a UN organization. Please fill out the field(s) below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
+                  <p class='text-justify'>You confirmed that you work for a UN organization who is paying for your enrolment. Please fill out the field(s) below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
                   {{-- end of id="secretMsg2"  --}}
                 </div>
                 

@@ -25,6 +25,7 @@ use Illuminate\Validation\Rule;
 use App\PlacementSchedule;
 use App\PlacementForm;
 use App\Mail\MailPlacementTesttoApprover;
+use App\Day;
 
 class PlacementFormController extends Controller
 {
@@ -35,18 +36,11 @@ class PlacementFormController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         $this->middleware('prevent-back-history');
         // $this->middleware('opencloseenrolment');
         // $this->middleware('checksubmissioncount');
         // $this->middleware('checkcontinue');
-    }
-
-    public function getPlacementInfo()
-    {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        
-        return view('form.myformplacement')->withLanguages($languages);
     }
 
     public function postPlacementInfo(Request $request)
@@ -63,7 +57,7 @@ class PlacementFormController extends Controller
         $uniquecode = $request->input('CodeIndexID');
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
-        $contractDate = $request->input('contractDate');
+        // $contractDate = $request->input('contractDate');
 
         $this->validate($request, array(
             'placementLang' => 'required|integer',
@@ -82,6 +76,7 @@ class PlacementFormController extends Controller
 
         $placementForm = new PlacementForm;
         $placementForm->L = $language_id;
+        $placementForm->profile = $request->profile;
         $placementForm->Term = $term_id;
         $placementForm->INDEXID = $index_id;
         $placementForm->DEPT = $org;
@@ -92,7 +87,7 @@ class PlacementFormController extends Controller
         $placementForm->placement_schedule_id = $request->placementLang;
         $placementForm->std_comments = $request->std_comment;
         $placementForm->agreementBtn = $request->agreementBtn;
-        $placementForm->contractDate = $request->contractDate;
+        // $placementForm->contractDate = $request->contractDate;
         $placementForm->save();
         
         // mail student regarding placement form information
@@ -102,8 +97,6 @@ class PlacementFormController extends Controller
 
         Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
 
-        $request->session()->flash('success', 'Your Placement Test request has been submitted for approval.'); //laravel 5.4 version
-        return redirect()->route('thankyou');
     }
 
     public function postSelfPayPlacementInfo(Request $request, $attachment_pay_file, $attachment_identity_file)
@@ -138,6 +131,7 @@ class PlacementFormController extends Controller
 
         $placementForm = new PlacementForm;
         $placementForm->L = $language_id;
+        $placementForm->profile = $request->profile;
         $placementForm->Term = $term_id;
         $placementForm->INDEXID = $index_id;
         $placementForm->DEPT = $org;
@@ -150,6 +144,42 @@ class PlacementFormController extends Controller
         $placementForm->consentBtn = $request->consentBtn;
         $placementForm->agreementBtn = $request->agreementBtn;
         $placementForm->save();
+    }
+
+    public function getPlacementInfo()
+    {
+        // place control to not access this route directly???
+         
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $days = Day::pluck("Week_Day_Name","Week_Day_Name")->except('Sunday', 'Saturday')->all();
+        $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->first();
+
+        return view('form.myformplacement')->withLanguages($languages)->withDays($days)->withLatest_placement_form($latest_placement_form);
+    }
+
+    public function postPlacementInfoAdditional(Request $request)
+    {  
+        $this->validate($request, array(
+            'dayInput' => 'required|',
+            'timeInput' => 'required|',
+        ));
+        
+        $dayInput = $request->dayInput;
+        $timeInput = $request->timeInput;
+        $implodeDay = implode('-', $dayInput);
+        $implodeTime = implode('-', $timeInput);
+
+        $data = PlacementForm::findorFail($request->id);
+        $data->dayInput = $implodeDay;
+        $data->timeInput = $implodeTime;
+        $data->save();
+
+        if ($data->is_self_pay_form) {
+            $request->session()->flash('success', 'Your answers have been saved.'); //laravel 5.4 version
+            return redirect()->route('thankyouSelfPay');
+        } 
+        $request->session()->flash('success', 'Your answers have been saved.'); //laravel 5.4 version
+        return redirect()->route('thankyou');
     }
 
     /**

@@ -72,7 +72,7 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="Enrol_Date_Begin" id="Enrol_Date_Begin" value="" />
+                  <input type="hidden" name="Enrol_Date_Begin" id="Enrol_Date_Begin" value="" required=""/>
           </div>
 
       		<div class="form-group">
@@ -82,7 +82,7 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="Enrol_Date_End" id="Enrol_Date_End" value="" />
+                  <input type="hidden" name="Enrol_Date_End" id="Enrol_Date_End" value="" required="" />
           </div>
 
           <div class="form-group">

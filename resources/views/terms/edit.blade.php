@@ -10,6 +10,66 @@
 <div class='col-lg-12'>
     <h1><i class='fa fa-snowflake-o'></i> Edit Semester Term {{ $term->Term_Code }} - {{ $term->Comments }}</h1>
     <hr>
+    <div class="row">
+      <div class="col-md-8 well pull-right">
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Term Begin:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Term_Begin )) Update Needed @else {{ date('d M Y', strtotime($term->Term_Begin)) }} @endif</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Term End:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Term_End )) Update Needed @else {{ date('d M Y', strtotime($term->Term_End)) }} @endif</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Previous Term Code:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Term_Prev )) Update Needed @else {{ $term->Term_Prev }} @endif</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Next Term Code:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Term_Next )) Update Needed @else {{ $term->Term_Next }} @endif</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Enrol Date Begin:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Enrol_Date_Begin )) Update Needed @else {{ date('d M Y', strtotime($term->Enrol_Date_Begin)) }} @endif</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Enrol Date End:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Enrol_Date_End )) Update Needed @else {{ date('d M Y', strtotime($term->Enrol_Date_End)) }} @endif</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Cancel Date Limit:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Cancel_Date_Limit )) Update Needed @else {{ date('d M Y', strtotime($term->Cancel_Date_Limit)) }} @endif</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Approval Date Limit:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Approval_Date_Limit )) Update Needed @else {{ date('d M Y', strtotime($term->Approval_Date_Limit)) }} @endif</p>
+            </div>
+        </div>
+      </div>      
+    </div>
 	    <form id="updateTermForm" method="POST" action="{{ route('terms.update', $term->Term_Code) }}">
         {{ csrf_field() }}
         <div class="col-md-4">

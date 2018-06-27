@@ -144,7 +144,7 @@ class NoFormController extends Controller
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
-        $contractDate = $request->input('contractDate');
+        // $contractDate = $request->input('contractDate');
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -206,7 +206,7 @@ class NoFormController extends Controller
         if ($request->placementDecisionB === '0') {
             app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request);
             $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
-            return redirect()->route('thankyou');
+            return redirect()->route('placementinfo');
         }
 
                     //validate other input fields outside of above loop
@@ -228,6 +228,7 @@ class NoFormController extends Controller
                 'Code' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'schedule_id' => $schedule_id[$i],
                 'L' => $language_id,
+                'profile' => $request->profile,
                 'Te_Code' => $course_id,
                 'Term' => $term_id,
                 'INDEXID' => $index_id,
@@ -242,7 +243,7 @@ class NoFormController extends Controller
                 'form_counter' => $form_counter,  
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
-                'contractDate' => $contractDate,            
+                // 'contractDate' => $contractDate,            
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();

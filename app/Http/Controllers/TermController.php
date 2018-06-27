@@ -28,6 +28,9 @@ class TermController extends Controller
     {
         $terms = Term::orderBy('Term_Code', 'desc')->paginate(10);
         $seasons = Season::pluck('ESEASON', 'ESEASON');
+
+        // automated prev and next term code 
+
         return view('terms.create')->withTerms($terms)->withSeasons($seasons);
     }
 
