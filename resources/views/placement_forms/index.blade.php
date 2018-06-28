@@ -6,10 +6,26 @@
 
 @section('content')
 <div class="row col-sm-12">
-    <form method="GET" action="{{ route('placement-form.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT')]) }}">
+	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
+    <form method="GET" action="{{ route('placement-form.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
 		
-		<div class="input-group col-sm-12">
+		<div class="form-group input-group col-sm-12">
 			<h4><strong>Filters:</strong></h4>
+
+			<div class="form-group">
+	          <label for="Term" class="col-md-12 control-label">Term Select:</label>
+	          <div class="form-group col-sm-12">
+	            <div class="dropdown">
+	              <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+	                @foreach($terms as $value)
+	                    <option></option>
+	                    <option value="{{$value->Term_Code}}">{{$value->Comments}} - {{$value->Term_Name}}</option>
+	                @endforeach
+	              </select>
+	            </div>
+	          </div>
+	        </div>
+
 			<div class="form-group">
 	            @foreach ($languages as $id => $name)
 				<div class="col-sm-4">
@@ -22,21 +38,59 @@
 				</div>
 	            @endforeach	
 			</div>
-		</div>
+	        
+	        <div class="form-group">           
+		      <label for="organization" class="col-md-12 control-label"> Organization:</label>
+		      <div class="form-group col-sm-12">
+	            <div class="dropdown">
+	              <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
+	                @if(!empty($org))
+	                  @foreach($org as $value)
+	                    <option></option>
+	                    <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+	                  @endforeach
+	                @endif
+	              </select>
+	            </div>
+	          </div>
+	        </div>
 
-        <div class="form-group">           
-	      <label for="organization" class="control-label">Filter Organization:</label>
-            <div class="dropdown">
-              <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
-                @if(!empty($org))
-                  @foreach($org as $value)
-                    <option></option>
-                    <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
-                  @endforeach
-                @endif
-              </select>
-            </div>
-        </div>
+	        <div class="form-group">           
+		      <div class="col-sm-4">
+					<div class="input-group"> 
+	                  <span class="input-group-addon">       
+	                    <input type="radio" name="approval" value="1" >                 
+	                    <input type="hidden" name="approval_hr" value="1" >                 
+	                  </span>
+	                    <label type="text" class="form-control">Approved Forms</label>
+	              	</div>
+				</div>
+	        </div>
+
+	        <div class="form-group">           
+		      <div class="col-sm-4">
+					<div class="input-group"> 
+	                  <span class="input-group-addon">       
+	                    <input type="radio" name="statusForms" value="cancelled" >                 
+	                  </span>
+	                    <label type="text" class="form-control">Cancelled Forms</label>
+	              	</div>
+				</div>
+	        </div>
+
+	        <div class="form-group">           
+		      <div class="col-sm-4">
+					<div class="input-group"> 
+	                  <span class="input-group-addon">       
+	                    <input type="radio" name="statusForms" value="pending" >                 
+	                  </span>
+	                    <label type="text" class="form-control">Pending Forms</label>
+	              	</div>
+				</div>
+	        </div>
+
+		</div> {{-- end filter div --}}
+
 
         <div class="form-group">           
 	        <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
@@ -51,8 +105,8 @@
         </div>
     </form>
 </div>
-
-{{ $placement_forms->links() }}
+Approved Forms count: {{ $count }}
+{{-- {{ $placement_forms->links() }} --}}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
@@ -91,7 +145,7 @@
 			@endforeach
 	    </tbody>
 	</table>
-	{{ $placement_forms->links() }}
+	{{-- {{ $placement_forms->links() }} --}}
 </div>
 @stop
 
@@ -100,7 +154,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('.select2-basic-single').select2({
-    placeholder: "Select Organization",
+    placeholder: "Select Filter",
     });
 });
 </script>

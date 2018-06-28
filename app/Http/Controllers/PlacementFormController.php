@@ -187,17 +187,28 @@ class PlacementFormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(Request $request)
+    {  
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
         $placement_forms = new PlacementForm;
         // $currentQueries = \Request::query();
         $queries = [];
 
         $columns = [
-            'L', 'DEPT',
+            'L', 'DEPT', 'Term','approval','approval_hr',
         ];
+
+        $approved_1 = PlacementForm::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->whereNotNull('approval')->get();
+        $approved_2 = PlacementForm::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->whereNotNull('approval')->whereNotNull('approval_hr')->get();
+        $approved_3 = PlacementForm::whereNotNull('is_self_pay_form')->get();
+        $placement_forms = $approved_1->merge($approved_2)->merge($approved_3);
+        $count = $placement_forms->count();
+    //     $items = $placement_forms->forPage(1, 10); //Filter the page var
+    // dd($items);
+        // dd($approved_1->count());
+        return view('placement_forms.index')->withCount($count)->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
 
         foreach ($columns as $column) {
             if (\Request::has($column)) {
@@ -214,7 +225,23 @@ class PlacementFormController extends Controller
 
         // $allQueries = array_merge($queries, $currentQueries);
         $placement_forms = $placement_forms->paginate(10)->appends($queries);
+        return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+    }
 
-        return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org);
+    public function getValidPlacementForms($request, $columns, $queries, $placement_forms, $languages, $org, $terms )
+    {
+        foreach ($columns as $column) {
+                if (\Request::has($column)) {
+                    $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                    $queries[$column] = \Request::input($column);
+                }
+            }
+                if (\Request::has('sort')) {
+                    $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
+                    $queries['sort'] = \Request::input('sort');
+                }
+        $placement_forms = $placement_forms->paginate(10)->appends($queries);
+        return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);    
+
     }
 }
