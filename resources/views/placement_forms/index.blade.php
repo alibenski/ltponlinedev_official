@@ -7,6 +7,12 @@
 @section('content')
 <div class="row col-sm-12">
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
+<ul class="nav nav-pills">
+	<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Approved</a></li>
+	<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Cancelled</a></li>
+	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">Pending</a></li>
+</ul>
+
     <form method="GET" action="{{ route('placement-form.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
 		
 		<div class="form-group input-group col-sm-12">
@@ -55,40 +61,6 @@
 	          </div>
 	        </div>
 
-	        <div class="form-group">           
-		      <div class="col-sm-4">
-					<div class="input-group"> 
-	                  <span class="input-group-addon">       
-	                    <input type="radio" name="approval" value="1" >                 
-	                    <input type="hidden" name="approval_hr" value="1" >                 
-	                  </span>
-	                    <label type="text" class="form-control">Approved Forms</label>
-	              	</div>
-				</div>
-	        </div>
-
-	        <div class="form-group">           
-		      <div class="col-sm-4">
-					<div class="input-group"> 
-	                  <span class="input-group-addon">       
-	                    <input type="radio" name="statusForms" value="cancelled" >                 
-	                  </span>
-	                    <label type="text" class="form-control">Cancelled Forms</label>
-	              	</div>
-				</div>
-	        </div>
-
-	        <div class="form-group">           
-		      <div class="col-sm-4">
-					<div class="input-group"> 
-	                  <span class="input-group-addon">       
-	                    <input type="radio" name="statusForms" value="pending" >                 
-	                  </span>
-	                    <label type="text" class="form-control">Pending Forms</label>
-	              	</div>
-				</div>
-	        </div>
-
 		</div> {{-- end filter div --}}
 
 
@@ -105,8 +77,8 @@
         </div>
     </form>
 </div>
-Approved Forms count: {{ $count }}
-{{-- {{ $placement_forms->links() }} --}}
+
+{{ $placement_forms->links() }}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
@@ -145,7 +117,7 @@ Approved Forms count: {{ $count }}
 			@endforeach
 	    </tbody>
 	</table>
-	{{-- {{ $placement_forms->links() }} --}}
+	{{ $placement_forms->links() }}
 </div>
 @stop
 
