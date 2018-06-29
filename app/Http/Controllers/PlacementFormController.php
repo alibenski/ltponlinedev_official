@@ -26,6 +26,8 @@ use App\PlacementSchedule;
 use App\PlacementForm;
 use App\Mail\MailPlacementTesttoApprover;
 use App\Day;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PlacementFormController extends Controller
 {
@@ -219,17 +221,41 @@ class PlacementFormController extends Controller
         return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
-    public function getApprovedPlacementForms()
+    public function getApprovedPlacementForms(Request $request)
     {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
         $approved_1 = PlacementForm::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->whereNotNull('approval')->get();
         $approved_2 = PlacementForm::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->whereNotNull('approval')->whereNotNull('approval_hr')->get();
         $approved_3 = PlacementForm::whereNotNull('is_self_pay_form')->get();
         $placement_forms = $approved_1->merge($approved_2)->merge($approved_3);
+
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT', 'Term',
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+            if (\Request::has('sort')) {
+                $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            }
+
+        
         $count = $placement_forms->count();
-    //     $items = $placement_forms->forPage(1, 10); //Filter the page var
-    // dd($items);
-        // dd($approved_1->count());
-        return view('placement_forms.index')->withCount($count)->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);  
+        
+        return view('placement_forms.approvedPlacementForms')->withCount($count)->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);  
 
     }
 }

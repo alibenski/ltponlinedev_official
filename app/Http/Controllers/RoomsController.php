@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Room;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use App\Preenrolment;
-use App\Repo;
 
-class PreenrolmentController extends Controller
+class RoomsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,17 +14,10 @@ class PreenrolmentController extends Controller
      */
     public function index()
     {
-        $query = \Request::input('language');
-        $enrolment_forms = Preenrolment::where('L', 'LIKE', '%' . $query . '%')->paginate(10);
+        $rooms = Room::all();
 
-        return view('preenrolment.index')->withEnrolment_forms($enrolment_forms);
+        return view('rooms.index')->withRooms($rooms);
     }
-
-    public function priorityFactor()
-    {
-        
-    }
-
 
     /**
      * Show the form for creating a new resource.

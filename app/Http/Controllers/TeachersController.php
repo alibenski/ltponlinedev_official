@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Teachers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use App\Preenrolment;
-use App\Repo;
 
-class PreenrolmentController extends Controller
+class TeachersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,17 +14,10 @@ class PreenrolmentController extends Controller
      */
     public function index()
     {
-        $query = \Request::input('language');
-        $enrolment_forms = Preenrolment::where('L', 'LIKE', '%' . $query . '%')->paginate(10);
+        $teachers = Teachers::all();
 
-        return view('preenrolment.index')->withEnrolment_forms($enrolment_forms);
+        return view('teachers.index')->withTeachers($teachers);
     }
-
-    public function priorityFactor()
-    {
-        
-    }
-
 
     /**
      * Show the form for creating a new resource.
@@ -53,10 +43,10 @@ class PreenrolmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Teachers  $teachers
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Teachers $teachers)
     {
         //
     }
@@ -64,10 +54,10 @@ class PreenrolmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Teachers  $teachers
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Teachers $teachers)
     {
         //
     }
@@ -76,10 +66,10 @@ class PreenrolmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Teachers  $teachers
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Teachers $teachers)
     {
         //
     }
@@ -87,10 +77,10 @@ class PreenrolmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Teachers  $teachers
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Teachers $teachers)
     {
         //
     }

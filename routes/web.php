@@ -37,6 +37,13 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('placement-schedule', 'PlacementScheduleController');
     Route::resource('preenrolment', 'PreenrolmentController');
     Route::resource('placement-form', 'PlacementFormController');
+    Route::resource('teachers', 'TeachersController');
+    Route::resource('rooms', 'RoomsController');
+    Route::get('/placement-form-approved', ['as'=>'placement-form-approved','uses'=>'PlacementFormController@getApprovedPlacementForms']);
+});
+Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin-stats'],function(){
+    //admin routes
+    Route::get('stats', function () { return view('admin.adminStats'); })->name('stats');
 });
 
 //middleware to prevent back button and access cache

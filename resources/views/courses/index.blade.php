@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h1>All Language Courses</h1>
+			<h1><i class="fa fa-book"></i> <span>Course Catalogue</span></h1>
 		</div>
 		
 		<div class="col-md-2">
