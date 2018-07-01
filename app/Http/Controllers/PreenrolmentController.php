@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Preenrolment;
 use App\Repo;
+use DB;
+use App\Torgan;
+use App\Term;
 
 class PreenrolmentController extends Controller
 {
@@ -15,12 +18,46 @@ class PreenrolmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = \Request::input('language');
-        $enrolment_forms = Preenrolment::where('L', 'LIKE', '%' . $query . '%')->paginate(10);
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        return view('preenrolment.index')->withEnrolment_forms($enrolment_forms);
+        // logic to get previous Term of current Term
+        // 9 is 4, 1 is 9, 4 is 1
+
+
+        if (is_null($request->Term)) {
+            $enrolment_forms = null;
+            return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+
+        $enrolment_forms = new Preenrolment;
+        // $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT', 'Term',
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $enrolment_forms = $enrolment_forms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+            if (\Request::has('sort')) {
+                $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            }
+
+        // $allQueries = array_merge($queries, $currentQueries);
+        $enrolment_forms = $enrolment_forms->paginate(10)->appends($queries);
+        return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
     public function priorityFactor()

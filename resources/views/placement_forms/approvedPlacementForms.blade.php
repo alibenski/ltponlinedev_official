@@ -77,8 +77,26 @@
         </div>
     </form>
 </div>
-Approved: {{ $count }}
+
 {{-- {{ $paginator->links() }} --}}
+<table class="table table-bordered table-striped">
+	<tbody>
+	@foreach($priority1 as $value)
+	<tr>
+		<td>
+			{{ $value->users->name }}
+		</td>
+		<td>
+		{{ $value->L }}
+		</td>
+		<td>
+		{{ $value->Term }}
+		</td>
+	</tr>
+	@endforeach
+	</tbody>
+</table>
+Approved: {{ $count }}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>

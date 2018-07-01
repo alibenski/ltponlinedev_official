@@ -24,6 +24,9 @@ class PlacementForm extends Model
     public function placementSchedule() {
     return $this->belongsTo('App\PlacementSchedule'); }
 
+    // public function pashqtcur() {
+    // return $this->belongsTo('App\Repo'); }
+
     public function languages() {
     return $this->belongsTo('App\Language', 'L', 'code'); }
 

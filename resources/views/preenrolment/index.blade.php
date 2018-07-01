@@ -1,49 +1,93 @@
 @extends('admin.admin')
 
-@section('content')
-<div class="row">
-	<div class="input-group col-sm-8">
-		<h4>Filters:</h4>
-        <form method="GET" action="{{ route('preenrolment.index') }}">
-        <input type="hidden" name="_token" value="{{ Session::token() }}">
-            <div class="input-group">           
-                <div class="input-group-btn">
-					<div class="dropdown">
-					    <select class="col-md-4 form-control select2-basic-single" style="width: 100%;" name="language" autocomplete="off" >
-					        <option value="">--- Please Select ---</option>
-					        <option value="A">Arabic</option>
-					        <option value="C">Chinese</option>
-					        <option value="E">English</option>
-					        <option value="F">French</option>
-					        <option value="R">Russian</option>
-					        <option value="S">Spanish</option>
-					    </select>
-					</div>
-                    <button type="submit" class="btn btn-info button-prevent-multi-submit">Filter Language</button>
-                    <a href="/admin/preenrolment/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
-                </div>
-            </div>
+@section('customcss')
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+@stop
 
-            <div class="form-group">
-                <label for="course_id" class="col-md-3 control-label">Preferred course: </label>
-                <div class="col-md-8">
-                  <div class="dropdown">
-                    <select class="col-md-8 form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off">
-                        <option value="">--- Select Course ---</option>
-                    </select>
-                  </div>
-                </div>
+@section('content')
+<div class="row col-sm-12">
+	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
+	<ul class="nav nav-pills">
+		<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="#">Approved</a></li>
+		<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="#">Cancelled</a></li>
+		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="#">Pending</a></li>
+	</ul>
+
+    <form method="GET" action="{{ route('preenrolment.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
+		
+		<div class="form-group input-group col-sm-12">
+			<h4><strong>Filters:</strong></h4>
+
+			<div class="form-group">
+	          <label for="Term" class="col-md-12 control-label">Term Select:</label>
+	          <div class="form-group col-sm-12">
+	            <div class="dropdown">
+	              <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+	                @foreach($terms as $value)
+	                    <option></option>
+	                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
+	                @endforeach
+	              </select>
+	            </div>
+	          </div>
+	        </div>
+
+			<div class="form-group">
+	            @foreach ($languages as $id => $name)
+				<div class="col-sm-4">
+					<div class="input-group"> 
+	                  <span class="input-group-addon">       
+	                    <input type="radio" name="L" value="{{ $id }}" >                 
+	                  </span>
+	                    <label type="text" class="form-control">{{ $name }}</label>
+	              	</div>
+				</div>
+	            @endforeach	
+			</div>
+	        
+	        <div class="form-group">           
+		      <label for="organization" class="col-md-12 control-label"> Organization:</label>
+		      <div class="form-group col-sm-12">
+	            <div class="dropdown">
+	              <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
+	                @if(!empty($org))
+	                  @foreach($org as $value)
+	                    <option></option>
+	                    <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+	                  @endforeach
+	                @endif
+	              </select>
+	            </div>
+	          </div>
+	        </div>
+
+		</div> {{-- end filter div --}}
+
+
+        <div class="form-group">           
+	        <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
+        	<a href="/admin/preenrolment/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+
+        <div class="form-group">    
+            <div class="input-group-btn">
+		        <a href="{{ route('preenrolment.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+		        <a href="{{ route('preenrolment.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
             </div>
-        </form>    
-    </div>
+        </div>
+    </form>
 </div>
 
+@if(is_null($enrolment_forms))
+
+@else
 {{ $enrolment_forms->links() }}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
 	            <th>Name</th>
+	            <th>Term</th>
 	            <th>Language</th>
 	            <th>Course</th>
 	            <th>Schedule</th>
@@ -60,6 +104,7 @@
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
+				<td>{{ $form->Term }}</td>
 				<td>{{ $form->L }}</td>
 				<td>{{ $form->courses->Description }}</td>
 				<td>{{ $form->schedule->name }}</td>
@@ -77,29 +122,16 @@
 	</table>
 	{{ $enrolment_forms->links() }}
 </div>
+@endif
 @stop
 
 @section('java_script')
-<script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript">
 $(document).ready(function() {
-	$("select[name='language']").on('change', function() {
-		
-
-		var L = $(this).val();
-      	var token = $("input[name='_token']").val();
-      	console.log(L);
-
-		$.ajax({
-		  url: "{{ route('select-ajax') }}", 
-		  method: 'POST',
-		  data: {L:L, _token:token},
-		  success: function(data, status) {
-		  	console.log(data);
-		    $("select[name='course_id']").html('');
-		    $("select[name='course_id']").html(data.options);
-			}
-		});
-	});
+    $('.select2-basic-single').select2({
+    placeholder: "Select Filter",
+    });
 });
 </script>
 @stop

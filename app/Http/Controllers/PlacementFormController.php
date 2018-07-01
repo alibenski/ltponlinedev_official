@@ -230,7 +230,22 @@ class PlacementFormController extends Controller
         $approved_1 = PlacementForm::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->whereNotNull('approval')->get();
         $approved_2 = PlacementForm::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->whereNotNull('approval')->whereNotNull('approval_hr')->get();
         $approved_3 = PlacementForm::whereNotNull('is_self_pay_form')->get();
+        
         $placement_forms = $approved_1->merge($approved_2)->merge($approved_3);
+
+        // $placement_forms = $placement_forms->pluck('INDEXID');
+        
+        $priority1 = PlacementForm::join('ltp_pashqtcur', function($join)
+        {
+                        $join->on('tblltp_placement_forms.INDEXID',   '=', 'ltp_pashqtcur.INDEXID');
+                        $join->on('ltp_pashqtcur.L', '=', 'tblltp_placement_forms.L');
+          
+        })
+                        ->where('ltp_pashqtcur.Term', '=', '184')
+                        ->select('tblltp_placement_forms.INDEXID', 'tblltp_placement_forms.L', 'ltp_pashqtcur.Term', 'ltp_pashqtcur.L')
+                        ->get();
+
+        dd($priority1);
 
         $queries = [];
 
@@ -255,7 +270,7 @@ class PlacementFormController extends Controller
         
         $count = $placement_forms->count();
         
-        return view('placement_forms.approvedPlacementForms')->withCount($count)->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);  
+        return view('placement_forms.approvedPlacementForms')->withCount($count)->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms)->withPriority1($priority1);  
 
     }
 }
