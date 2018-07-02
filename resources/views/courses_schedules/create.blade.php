@@ -1,11 +1,15 @@
 @extends('admin.admin')
 
+@section('customcss')
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+@stop
+
 @section('content')
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    <h2>Create Course + Schedule for Term: {{ $next_term->Term_Code.' - '.$next_term->Term_Name.' - '.$next_term->Comments }}</h2>
-    <h5 class="alert alert-info alert-block">On this page, language administrators create the Course-Schedule combinations BEFORE the Enrolment period</h5>
+    <h2>Create Course + Schedule</h2>
+    <h5 class="alert alert-info alert-block">On this page, language administrators create the class schedules (Course-Schedule combinations) BEFORE the Enrolment period</h5>
     <hr>
 
     <form method="POST" action="{{ route('course-schedule.store') }}">
@@ -14,6 +18,26 @@
               <strong>Basic Info</strong>
             </div>
               <div class="panel-body">
+                <div class="form-group">
+                  <label name="term" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
+                  <select class="col-md-8 form-control" name="term" autocomplete="off" required="required">
+                      <option value="">--- Select Term ---</option>
+                      @foreach ($terms as $value)
+                          <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+                      @endforeach
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="enrolment_duration" class="col-md-10 control-label" style="margin: 5px 5px;">Enrolment Duration: </label>
+                  <div class="col-md-12 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i>  Begin</span><input  name="enrolment_duration" class="form-control"  type="text" value="" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i>  End</span><input  name="enrolment_duration" class="form-control"  type="text" value="" readonly>                                    
+                        </div>
+                  </div>
+                </div>  
+
                 <div class="form-group">
                     <label name="L" class="col-md-3 control-label" style="margin: 5px 5px;">Language: </label>
                     <select class="col-md-8 form-control" name="L" autocomplete="off" required="required">
@@ -52,22 +76,13 @@
                 </div> 
 
                 <div class="form-group">
-                    <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course & Level: </label>
+                    <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course: </label>
                       <div class="dropdown">
                         <select class="col-md-8 form-control" name="course_id" autocomplete="off" required="required">
                             <option value="">--- Select Course ---</option>
                         </select>
                       </div>
                 </div>
-
-                <div class="form-group">
-                  <label for="enrolment_duration" class="col-md-10 control-label" style="margin: 5px 5px;">Enrolment Duration: </label>
-                  <div class="col-md-12 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input  name="enrolment_duration" class="form-control"  type="text" value="{{ $next_term->Enrol_Duration }}" readonly>                                    
-                        </div>
-                  </div>
-                </div>  
               </div>
           </div>     
           <div class="well col-md-12" style="margin-top: 20px;">
@@ -137,7 +152,6 @@
           </div>
               <div class="well col-md-6 col-md-offset-3">
                 <div class="form-group">
-                  <input  name="term_id" class="combine" type="hidden" value="{{ $next_term->Term_Code }}" readonly>
                   <input  name="cs_unique" class="combine select2-multi" multiple="multiple" type="hidden" value="" readonly> 
                 </div>
 
@@ -158,11 +172,16 @@
 @stop
 
 @section('java_script')
-
+<script src="{{ asset('js/select2.min.js') }}"></script>
+  
 <script>
   $(document).ready(function(){
     $('input[type=checkbox]').prop('checked',false);
     $('input[type=radio]').prop('checked',false);
+    $('select').select2({
+    placeholder: "--- Select Here ---",
+    }
+      );
   });
 </script>
 
@@ -189,10 +208,11 @@
       var token = $("input[name='_token']").val();
 
       $.ajax({
-          url: "{{ route('select-ajax') }}", 
+          url: "{{ route('select-ajax-level-one') }}", 
           method: 'POST',
           data: {L:L, _token:token},
           success: function(data, status) {
+            console.log(data)
             $("select[name='course_id']").html('');
             $("select[name='course_id']").html(data.options);
           }

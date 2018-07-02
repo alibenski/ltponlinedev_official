@@ -16,9 +16,10 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-10 class-md-offset-2">
+		<div class="col-md-12">
 			<table class="table">
 				<thead>
+					<th>Term</th>
 					<th>CS Code</th>
 					<th>Course Name</th>
 					<th>Day</th>
@@ -29,6 +30,7 @@
 				<tbody>
 					@foreach($course_schedule as $class)
 						<tr>
+							<th>{{ $class->Te_Term }}</th>
 							<th>{{ $class->cs_unique }}</th>
 							<td>{{ $class->Te_Code_New}} - {{ $class->course->Description }}</td>
 							<td>

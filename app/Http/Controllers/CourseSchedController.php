@@ -36,7 +36,7 @@ class CourseSchedController extends Controller
         $next_term = Term::orderBy('Term_Code', 'desc')
                         ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
 
-        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->where('Te_Term', $next_term->Term_Code)->paginate(10);
+        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->where('Te_Term', $next_term->Term_Code)->paginate(20);
 
         return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms)->withNext_term($next_term);
     }
@@ -51,28 +51,14 @@ class CourseSchedController extends Controller
         $courses = Course::all();
         $languages = Language::pluck("name","code")->all();
         $schedules = Schedule::pluck("name","id")->all();
-        
-        //get current year and date
-        $now_date = Carbon::now()->toDateString();
-        $now_year = Carbon::now()->year;
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        ->get()->min();
-        //query the next term based Term_Begin column is greater than today's date and then get min
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-
-        //need to include fields from the csv extract here
-        $next_season = $next_term->Comments;
         $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en","id")->all();
         $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en","id")->all();
         //dd($next_season);
 
 
-        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withNext_term($next_term)->withNext_season($next_season)->withFormat($format)->withDuration($duration);
+        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withFormat($format)->withDuration($duration);
     }
 
     /**

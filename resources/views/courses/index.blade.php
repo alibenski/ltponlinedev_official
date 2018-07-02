@@ -17,14 +17,14 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-10 class-md-offset-2">
+		<div class="col-md-12">
 			<table class="table">
 				<thead>
 					<th>#</th>
 					<th>Code</th>
 					<th>Course Name</th>
 					<th>Language</th>
-					<th>Schedule</th>
+					<th>Operation</th>
 				</thead>
 
 				<tbody>
@@ -35,16 +35,6 @@
 							<td>{{ $course->Te_Code_New }}</td>
 							<td>{{ $course->Description }}</td>
 							<td>{{ $course->language->name }}</td>
-							<td>
-					            @if(empty($exists))
-					            <span class="label label-danger">none</span>
-					            @else
-					            <!-- Variable course refers to schedule function defined as variable schedule -->
-					            @foreach($course->schedule as $schedule)
-					                <span class="label label-default">{{ $schedule->name }}</span>
-					            @endforeach
-					            @endif
-							</td>
 							<td><a href="{{ route('courses.edit', $course->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach

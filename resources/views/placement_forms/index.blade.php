@@ -71,8 +71,8 @@
 
         <div class="form-group">    
             <div class="input-group-btn">
-		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
-		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Request::input('Term')],'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Request::input('Term')],'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
             </div>
         </div>
     </form>
