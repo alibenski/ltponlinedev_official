@@ -3,8 +3,8 @@
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    <h2>Create Placement Test Schedule for Term: {{ $next_term->Term_Code.' - '.$next_term->Term_Name.' - '.$next_term->Comments }}</h2>
-    <h5 class="alert alert-info alert-block">On this page, language administrators create the Course-Schedule combinations BEFORE the Enrolment period</h5>
+    <h2>Create Placement Test Schedule</h2>
+    <h5 class="alert alert-info alert-block">On this page, language administrators create the placement test schedules</h5>
     <hr>
 
     <form method="POST" action="{{ route('placement-schedule.store') }}">
@@ -13,6 +13,16 @@
               <strong>Basic Info</strong>
             </div>
               <div class="panel-body">
+                <div class="form-group">
+                  <label name="term" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
+                    <select class="col-md-8 form-control" name="term" autocomplete="off" required="required" style="width: 100%">
+                        <option value="">--- Select Term ---</option>
+                        @foreach ($terms as $value)
+                            <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                
                 <div class="form-group">
                     <label name="L" class="col-md-3 control-label" style="margin: 5px 5px;">Language: </label>
                     <select class="col-md-8 form-control" name="L" autocomplete="off" required="required">

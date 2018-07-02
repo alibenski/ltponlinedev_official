@@ -242,4 +242,15 @@ class AjaxController extends Controller
             return response()->json($data);            
         }
     }
+
+    public function ajaxGetTermData(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $term_data = Term::where('Term_Code', $request->term)->get();
+
+            $data = $term_data;
+            return response()->json($data); 
+        }
+    }
 }

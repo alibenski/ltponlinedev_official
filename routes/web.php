@@ -88,6 +88,8 @@ Route::post('org-compare-ajax', ['as'=>'org-compare-ajax','uses'=>'AjaxControlle
 // route for ajax jquery if forms have been cancelled or deleted
 Route::get('is-cancelled-ajax', ['as'=>'is-cancelled-ajax','uses'=>'AjaxController@ajaxIsCancelled']);
 
+Route::get('get-term-data-ajax', ['as'=>'get-term-data-ajax','uses'=>'AjaxController@ajaxGetTermData']);
+
 //placement form routes
 Route::get('/placementinfo', ['as'=>'placementinfo','uses'=>'PlacementFormController@getPlacementInfo']); // ->middleware('prevent-access-placement');
 Route::post('/postplacementinfo-additional', ['as'=>'postplacementinfo-additional','uses'=>'PlacementFormController@postPlacementInfoAdditional']);

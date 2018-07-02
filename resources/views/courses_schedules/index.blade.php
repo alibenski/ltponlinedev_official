@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<span><h2><i class="fa fa-calendar"></i> Course + Schedule Before Enrolment: {{ $next_term->Term_Code.' - '.$next_term->Term_Name.' - '.$next_term->Comments }}</h2></span>
+			<span><h2><i class="fa fa-calendar-o"></i> Course + Schedule Before Enrolment</h2></span>
 		</div>
 		
 		<div class="col-md-2">

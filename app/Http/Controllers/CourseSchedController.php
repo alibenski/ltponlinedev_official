@@ -70,7 +70,7 @@ class CourseSchedController extends Controller
     public function store(Request $request)
     {
         $course_id = $request->course_id;
-        $term_id = $request->term_id;
+        $term_id = $request->term;
         $schedule_id = $request->schedule_id;
         $cs_unique = $request->cs_unique;
         $codex = [];     

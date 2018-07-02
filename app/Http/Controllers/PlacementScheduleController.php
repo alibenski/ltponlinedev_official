@@ -74,7 +74,7 @@ class PlacementScheduleController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
 
 
-        return view('placement_schedule.create')->withLanguages($languages)->withNext_term($next_term);
+        return view('placement_schedule.create')->withLanguages($languages)->withTerms($terms);
     }
 
     /**

@@ -8,7 +8,7 @@
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    <h2>Create Course + Schedule</h2>
+    <h2><i class="fa fa-calendar-o"></i> Create Course + Schedule</h2>
     <h5 class="alert alert-info alert-block">On this page, language administrators create the class schedules (Course-Schedule combinations) BEFORE the Enrolment period</h5>
     <hr>
 
@@ -20,27 +20,27 @@
               <div class="panel-body">
                 <div class="form-group">
                   <label name="term" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
-                  <select class="col-md-8 form-control" name="term" autocomplete="off" required="required">
-                      <option value="">--- Select Term ---</option>
-                      @foreach ($terms as $value)
-                          <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
-                      @endforeach
-                  </select>
+                    <select class="col-md-8 form-control" name="term" autocomplete="off" required="required" style="width: 100%">
+                        <option value="">--- Select Term ---</option>
+                        @foreach ($terms as $value)
+                            <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group">
                   <label for="enrolment_duration" class="col-md-10 control-label" style="margin: 5px 5px;">Enrolment Duration: </label>
                   <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i>  Begin</span><input  name="enrolment_duration" class="form-control"  type="text" value="" readonly>                                    
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i>  End</span><input  name="enrolment_duration" class="form-control"  type="text" value="" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i>  Begin</span><input  name="enrol_date_begin" class="form-control"  type="text" value="" readonly>                                    
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i>  End</span><input  name="enrol_date_end" class="form-control"  type="text" value="" readonly>                                    
                         </div>
                   </div>
                 </div>  
 
                 <div class="form-group">
                     <label name="L" class="col-md-3 control-label" style="margin: 5px 5px;">Language: </label>
-                    <select class="col-md-8 form-control" name="L" autocomplete="off" required="required">
+                    <select class="col-md-8 form-control" name="L" autocomplete="off" required="required" style="width: 100%">
                         <option value="">--- Select Language ---</option>
                         @foreach ($languages as $id => $name)
                             <option value="{{ $id }}"> {{ $name }}</option>
@@ -78,7 +78,7 @@
                 <div class="form-group">
                     <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course: </label>
                       <div class="dropdown">
-                        <select class="col-md-8 form-control" name="course_id" autocomplete="off" required="required">
+                        <select class="col-md-8 form-control" name="course_id" autocomplete="off" required="required" style="width: 100%">
                             <option value="">--- Select Course ---</option>
                         </select>
                       </div>
@@ -186,6 +186,36 @@
 </script>
 
 <script type="text/javascript">
+  $("select[name='term']").change(function(){
+      var term = $(this).val();
+      var token = $("input[name='_token']").val();
+      
+      $.ajax({
+          url: "{{ route('get-term-data-ajax') }}", 
+          method: 'GET',
+          data: {term:term, _token:token},
+          success: function(data, status) {
+            var m_names = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+            var denrol_begin = data[0]['Enrol_Date_Begin'];
+            var date = new Date(denrol_begin);
+            var get_date = date.getDate();
+            var get_month = date.getMonth();
+            var get_year = date.getFullYear();
+            var enrolBeginString = get_date + "-" + m_names[get_month] + "-" + get_year;
+
+            var denrol_end = data[0]['Enrol_Date_End'];
+            var date_end = new Date(denrol_end);
+            var get_date_end = date_end.getDate();
+            var get_month_end = date_end.getMonth();
+            var get_year_end = date_end.getFullYear();
+            var enrolEndString = get_date_end + "-" + m_names[get_month_end] + "-" + get_year_end;
+
+            $("input[name='enrol_date_begin']").val(enrolBeginString);
+            $("input[name='enrol_date_end']").val(enrolEndString);
+          }
+      });
+  }); 
+
   $("select[name='L']").change(function(){
       var L = $(this).val();
       var token = $("input[name='_token']").val();
