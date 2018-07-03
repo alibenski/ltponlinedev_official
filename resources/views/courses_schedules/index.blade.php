@@ -8,7 +8,7 @@
 		</div>
 		
 		<div class="col-md-2">
-			<a href="{{ route('course-schedule.create') }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Create</a>
+			<a href="{{ route('course-schedule.create') }}" class="btn  btn-block btn-primary btn-h1-spacing">Create</a>
 		</div>
 		<div class="col-md-12">
 			<hr>

@@ -1,4 +1,12 @@
 @extends('admin.admin')
+
+@section('customcss')
+  {{-- <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen"> --}}
+  <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+  <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+@stop
+
 @section('content')
 
 <div class="row">
@@ -33,50 +41,6 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                  <label for="language_css" class="col-md-10 control-label" style="margin: 5px 5px;">Language CSS (Automatically Rendered based on Language selection above via JQuery): </label>
-                  <div class="col-md-12 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="language_css" class="form-control"  type="text" value="" readonly>                                    
-                        </div>
-                  </div>
-                </div> 
-
-                <div class="form-group">
-                  <label for="availability_css" class="col-md-10 control-label" style="margin: 5px 5px;">Availability CSS (Automatically Rendered via Controller): </label>
-                  <div class="col-md-12 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="availability_css" class="form-control"  type="text" value="" readonly>                                    
-                        </div>
-                  </div>
-                </div> 
-
-                <div class="form-group">
-                  <label for="website_language" class="col-md-10 control-label" style="margin: 5px 5px;">Website Language (Automatically Rendered via static HTML): </label>
-                  <div class="col-md-12 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="website_language" class="form-control"  type="text" value="" readonly>                                    
-                        </div>
-                  </div>
-                </div> 
-
-                <div class="form-group">
-                    <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course & Level: </label>
-                      <div class="dropdown">
-                        <select class="col-md-8 form-control" name="course_id" autocomplete="off" required="required">
-                            <option value="">--- Select Course ---</option>
-                        </select>
-                      </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="enrolment_duration" class="col-md-10 control-label" style="margin: 5px 5px;">Enrolment Duration: </label>
-                  <div class="col-md-12 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input  name="enrolment_duration" class="form-control"  type="text" value="{{ $next_term->Enrol_Duration }}" readonly>                                    
-                        </div>
-                  </div>
-                </div>  
               </div>
           </div>     
           <div class="well col-md-12" style="margin-top: 20px;">
@@ -85,29 +49,20 @@
                   <table class="table">
                     <thead>
                       <th>Format</th>
-                      <th>Duration</th>
                     </thead>
                     <tbody>
                         <tr>
                           <td>
-                                
-
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="format_id" value="" /> 
-                                        </label>
-                                    </div>
-
-                                
-                          </td>
-                          <td>
-
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="duration_id" value="" />
-                                        </label>
-                                    </div>
-
+                            <div class="radio">
+                                <label> 
+                                    <input id="online" type="radio" name="format_id" value="1" /> Online
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label> 
+                                    <input id="written" type="radio" name="format_id" value="0" /> Written
+                                </label>
+                            </div> 
                           </td>
                         </tr>
                     </tbody>
@@ -121,20 +76,34 @@
                 <div class="col-md-12">
                   <table class="table">
                     <thead>
-                      <th>Pick a Schedule</th>
+                      <th>Pick Date</th>
                     </thead>
                     <tbody>
                         <tr>
                           <td>
-                                {{-- @foreach ($schedules as $id => $name) --}}
+                            <button id="addDate" class="btn btn-success btn-space col-md-2 pull-right">Add</button>
+                            <div class="col-md-5">
+                              <div class="form-group date_of_plexam">
+                                <label for="date_of_plexam" class="control-label">Placement Test Date(s): </label>
+                                <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="date_of_plexam">
+                                  <input class="form-control" size="16" type="text" value="" readonly>
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                </div>
+                                <input type="hidden" name="date_of_plexam[]" id="date_of_plexam" value="" required=""/>
+                                <input type="hidden" id="incrementValue" value="1" required=""/>
+                              </div>
 
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="schedule_id[]" multiple="multiple" value="" /> 
-                                        </label>
-                                    </div>
-
-                                {{-- @endforeach --}}
+                              <div class="form-group date_of_plexam_end" style="display: none">
+                                <label for="date_of_plexam_end" class="control-label">Placement Test Date End (For Online Only): </label>
+                                <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="date_of_plexam_end">
+                                  <input class="form-control" size="16" type="text" value="" readonly>
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                </div>
+                                <input type="hidden" name="date_of_plexam_end" id="date_of_plexam_end" value=""/>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                     </tbody>
@@ -143,14 +112,9 @@
               </div>
           </div>
               <div class="well col-md-6 col-md-offset-3">
-                <div class="form-group">
-                  <input  name="term_id" class="combine" type="hidden" value="{{ $next_term->Term_Code }}" readonly>
-                  <input  name="cs_unique" class="combine select2-multi" multiple="multiple" type="hidden" value="" readonly> 
-                </div>
-
                 <div class="row">
                   <div class="col-md-5 col-md-offset-1">
-                    <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
+                    <a href="{{ route('placement-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
                   </div>
                   <div class="col-md-5 ">  
                     <button id="setVal" type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
@@ -165,6 +129,9 @@
 @stop
 
 @section('java_script')
+<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+<script src="{{ asset('js/select2.full.js') }}"></script>
 
 <script>
   $(document).ready(function(){
@@ -173,38 +140,63 @@
   });
 </script>
 
-<script type="text/javascript">
-  $("select[name='L']").change(function(){
-      var L = $(this).val();
-      var token = $("input[name='_token']").val();
-
-      $.ajax({
-          url: "{{ route('select-ajax') }}", 
-          method: 'POST',
-          data: {L:L, _token:token},
-          success: function(data, status) {
-            $("select[name='course_id']").html('');
-            $("select[name='course_id']").html(data.options);
-          }
-      });
-  }); 
+<script>
+  $(document).ready(function() {
+    $('select[name="Comments"]').select2({
+    placeholder: "Select Season",
+    minimumResultsForSearch: Infinity,
+    });
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1,
+        minView: 2, 
+    });
+  });
 </script>
 
-<script type="text/javascript">
-  $("select[name='L']").change(function(){
-      var L = $(this).val();
-      var token = $("input[name='_token']").val();
+<script>
+  $("#online").on('click', function() {
+    $("input").not("#written, #online, #incrementValue").val("");
+    $(".date_of_plexam_end").show();
+    $("#addDate").hide();
+    // get value of incrementValue
+    // remove corresponding input and div from DOM
+  });
+  $("#written").on('click', function() {
+    $("input").not("#written, #online, #incrementValue").val("");
+    $('.date_of_plexam_end').hide();
+    $("#addDate").show();
+  });
+  $("#addDate").on('click', function(event) {
+    event.preventDefault();
+    var incrementValue = +$("#incrementValue").val() + 1;
+    $("#incrementValue").val(incrementValue);
+    $('.date_of_plexam').append('<div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="date_of_plexam' + incrementValue + '">' +
+          '<input class="form-control" size="16" type="text" value="" readonly>' +
+          '<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>' +
+          '<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>' +
+        '</div>' 
+        + '<input type="hidden" name="date_of_plexam[]" id="date_of_plexam' + incrementValue + '" value="" required=""/>'
+    );
 
-      $.ajax({
-          url: "{{ route('select-ajax') }}", 
-          method: 'POST',
-          data: {L:L, _token:token},
-          success: function(data, status) {
-            $("select[name='course_id']").html('');
-            $("select[name='course_id']").html(data.options);
-          }
-      });
-  }); 
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1,
+        minView: 2, 
+    });
+  });
+
 </script>
-
 @stop

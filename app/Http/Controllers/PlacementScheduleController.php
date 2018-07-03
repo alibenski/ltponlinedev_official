@@ -58,19 +58,8 @@ class PlacementScheduleController extends Controller
      */
     public function create()
     {
-        //get current year and date
-        $now_date = Carbon::now()->toDateString();
-        $now_year = Carbon::now()->year;
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        ->get()->min();
-        //query the next term based Term_Begin column is greater than today's date and then get min
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-        $termsAll = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name']);
         $languages = DB::table('languages')->pluck("name","code")->all();
 
 
@@ -84,23 +73,19 @@ class PlacementScheduleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {dd($request);
         //validate the data
         $this->validate($request, array(
-                'name' => 'required|max:255',
+                'term' => 'required|',
+                'L' => 'required|',
             ));
 
         //store in database
-        $course = new Course;
-        $course->name = $request->name;
-        $course->name = $request->name;
-        $course->save();
-        // variable course refers to schedule function in Course.php model
-        // then syncs the data to schedules MySQL table
+        
         $course->schedule()->sync($request->schedules, false);
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
-        return redirect()->route('courses.index');
+        return redirect()->route('placement-schedule.index');
     }
 
     /**
