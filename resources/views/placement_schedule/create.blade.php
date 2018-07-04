@@ -16,64 +16,71 @@
     <hr>
 
     <form method="POST" action="{{ route('placement-schedule.store') }}">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <strong>Basic Info</strong>
-            </div>
-              <div class="panel-body">
-                <div class="form-group">
-                  <label name="term" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
-                    <select class="col-md-8 form-control" name="term" autocomplete="off" required="required" style="width: 100%">
-                        <option value="">--- Select Term ---</option>
-                        @foreach ($terms as $value)
-                            <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label name="L" class="col-md-3 control-label" style="margin: 5px 5px;">Language: </label>
-                    <select class="col-md-8 form-control" name="L" autocomplete="off" required="required">
-                        <option value="">--- Select Language ---</option>
-                        @foreach ($languages as $id => $name)
-                            <option value="{{ $id }}"> {{ $name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+          <div class="col-md-8">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <strong>Basic Info</strong>
+              </div>
+                <div class="panel-body">
+                  <div class="form-group">
+                    <label name="term" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
+                      <select class="col-md-8 form-control select2-basic-single" name="term" autocomplete="off" required="required" style="width: 100%">
+                          <option value="">--- Select Term ---</option>
+                          @foreach ($terms as $value)
+                              <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+                          @endforeach
+                      </select>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label name="L" class="col-md-3 control-label" style="margin: 5px 5px;">Language: </label>
+                      <select class="col-md-8 form-control select2-basic-single" name="L" autocomplete="off" required="required">
+                          <option value="">--- Select Language ---</option>
+                          @foreach ($languages as $id => $name)
+                              <option value="{{ $id }}"> {{ $name }}</option>
+                          @endforeach
+                      </select>
+                  </div>
 
-              </div>
-          </div>     
-          <div class="well col-md-12" style="margin-top: 20px;">
-              <div class="row">
-                <div class="col-md-12">
-                  <table class="table">
-                    <thead>
-                      <th>Format</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                          <td>
-                            <div class="radio">
-                                <label> 
-                                    <input id="online" type="radio" name="format_id" value="1" /> Online
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label> 
-                                    <input id="written" type="radio" name="format_id" value="0" /> Written
-                                </label>
-                            </div> 
-                          </td>
-                        </tr>
-                    </tbody>
-                  </table>
                 </div>
+            </div>   
+          </div>
+
+          <div class="col-md-4">  
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <strong>Format</strong>
               </div>
+                <div class="panel-body">
+                    <table class="table">
+                      <thead>
+                        <th>Type of Test</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+                            <td>
+                              <div class="radio">
+                                  <label> 
+                                      <input id="online" type="radio" name="format_id" value="1" required="" /> Online
+                                  </label>
+                              </div>
+                              <div class="radio">
+                                  <label> 
+                                      <input id="written" type="radio" name="format_id" value="0" required="" /> Written
+                                  </label>
+                              </div> 
+                            </td>
+                          </tr>
+                      </tbody>
+                    </table>
+                </div>
+            </div>
           </div>
 
           <div class="well col-md-12" style="margin-top: 20px;">
               <div class="row">
                 <div class="col-md-12">
+                  <button id="addDate" class="btn btn-success btn-space col-md-2 pull-right" style="display: none;">Add</button>
                   <table class="table">
                     <thead>
                       <th>Pick Date</th>
@@ -81,7 +88,7 @@
                     <tbody>
                         <tr>
                           <td>
-                            <button id="addDate" class="btn btn-success btn-space col-md-2 pull-right">Add</button>
+                            <button id="addDate" class="btn btn-success btn-space col-md-2 pull-right" style="display: none;">Add</button>
                             <div class="col-md-5">
                               <div class="form-group date_of_plexam">
                                 <label for="date_of_plexam" class="control-label">Placement Test Date(s): </label>
@@ -114,11 +121,11 @@
               <div class="well col-md-6 col-md-offset-3">
                 <div class="row">
                   <div class="col-md-5 col-md-offset-1">
-                    <a href="{{ route('placement-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
+                    <a href="{{ route('placement-schedule.index') }}" class="btn btn-danger btn-block btn-space">Back</a>
                   </div>
                   <div class="col-md-5 ">  
-                    <button id="setVal" type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
-                    <input type="hidden" name="_token" value="{{ Session::token() }}">
+                    <button id="setVal" type="submit" class="btn btn-success btn-block button-prevent-multi-submit btn-space">Save</button>
+                    <input id="tokenSession" type="hidden" name="_token" value="{{ Session::token() }}">
                   </div>
                 </div>
               </div>
@@ -142,9 +149,8 @@
 
 <script>
   $(document).ready(function() {
-    $('select[name="Comments"]').select2({
-    placeholder: "Select Season",
-    minimumResultsForSearch: Infinity,
+    $('.select2-basic-single').select2({
+    placeholder: "--- Select ---",
     });
     $('.form_datetime').datetimepicker({
         //language:  'fr',
@@ -162,22 +168,22 @@
 
 <script>
   $("#online").on('click', function() {
-    $("input").not("#written, #online, #incrementValue").val("");
+    $("input").not("#written, #online, #incrementValue, #tokenSession").val("");
     $(".date_of_plexam_end").show();
     $("#addDate").hide();
-    // get value of incrementValue
-    // remove corresponding input and div from DOM
+    $('.addSectionDate').remove();
   });
   $("#written").on('click', function() {
-    $("input").not("#written, #online, #incrementValue").val("");
+    $("input").not("#written, #online, #incrementValue, #tokenSession").val("");
     $('.date_of_plexam_end').hide();
     $("#addDate").show();
+    $('.date_of_plexam').append('<div class="addSectionDate"></div>');
   });
-  $("#addDate").on('click', function(event) {
+  $("#addDate").on('click touchstart', function(event) {
     event.preventDefault();
     var incrementValue = +$("#incrementValue").val() + 1;
     $("#incrementValue").val(incrementValue);
-    $('.date_of_plexam').append('<div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="date_of_plexam' + incrementValue + '">' +
+    $('.addSectionDate').append('<div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="date_of_plexam' + incrementValue + '">' +
           '<input class="form-control" size="16" type="text" value="" readonly>' +
           '<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>' +
           '<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>' +

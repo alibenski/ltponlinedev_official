@@ -7,6 +7,10 @@ use App\User;
 use App\TORGAN;
 use Auth;
 use DB;
+use App\Preenrolment;
+use App\PlacementForm;
+use App\Repo;
+use App\Term;
 
 //Importing laravel-permission models
 use Spatie\Permission\Models\Role;
@@ -213,5 +217,23 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('flash_message',
              'User successfully deleted.');
+    }
+
+    public function manageUserEnrolmentData(Request $request, $id)
+    {
+        $id = $id;
+        $student = User::where('id', $id)->first();
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        if (is_null($request->Term)) {
+            $student_enrolments = null;
+            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments);
+        }
+
+        $student_enrolments = Preenrolment::where('INDEXID', $student->indexno)
+            ->where('Term', $request->Term)
+            ->get();
+
+        return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments);
     }
 }

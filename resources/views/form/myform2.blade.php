@@ -367,10 +367,11 @@
                   var curr_month_end = dend.getMonth();
                   var curr_year_end = dend.getFullYear();
                   var dateStringEnd = curr_date_end + " " + m_names[curr_month_end] + " " + curr_year_end;
-                  
+
+                  console.log('is online:' + val.is_online)
                   $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
-                  if ($("input[name='L']:checked").val() == 'F') {
-                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ dateString +' to ' + dateStringEnd + '</label>'+'<br>').fadeIn();
+                  if (val.is_online == 1) {
+                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label>'+'<br>').fadeIn();
                   } else {
                     $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label>'+'<br>').fadeIn();
                   }

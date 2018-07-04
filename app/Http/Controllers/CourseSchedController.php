@@ -23,22 +23,10 @@ class CourseSchedController extends Controller
      */
     public function index()
     {
-        //get current year and date
-        $now_date = Carbon::now()->toDateString();
-        $now_year = Carbon::now()->year;
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->paginate(10);
 
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        ->get()->min();
-        //query the next term based Term_Begin column is greater than today's date and then get min
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
-
-        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->where('Te_Term', $next_term->Term_Code)->paginate(20);
-
-        return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms)->withNext_term($next_term);
+        return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms);
     }
 
     /**
@@ -70,7 +58,7 @@ class CourseSchedController extends Controller
     public function store(Request $request)
     {
         $course_id = $request->course_id;
-        $term_id = $request->term;
+        $term_id = $request->term_id;
         $schedule_id = $request->schedule_id;
         $cs_unique = $request->cs_unique;
         $codex = [];     

@@ -19,8 +19,8 @@
             </div>
               <div class="panel-body">
                 <div class="form-group">
-                  <label name="term" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
-                    <select class="col-md-8 form-control" name="term" autocomplete="off" required="required" style="width: 100%">
+                  <label name="term_id" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
+                    <select class="col-md-8 form-control" name="term_id" autocomplete="off" required="required" style="width: 100%">
                         <option value="">--- Select Term ---</option>
                         @foreach ($terms as $value)
                             <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
@@ -186,7 +186,7 @@
 </script>
 
 <script type="text/javascript">
-  $("select[name='term']").change(function(){
+  $("select[name='term_id']").change(function(){
       var term = $(this).val();
       var token = $("input[name='_token']").val();
       

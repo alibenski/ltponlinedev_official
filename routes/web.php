@@ -22,7 +22,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // separate password reset form
     Route::get('/user/{id}/passwordreset', ['as' => 'users.passwordreset', 'uses' => 'UserController@passwordReset' ]);
     Route::put('/user/{id}/resetpassword', ['as' => 'users.resetpassword', 'uses' => 'UserController@resetPassword' ]);
-
+    // management of enrolment data per user
+    Route::get('user/{id}/manage-user-enrolment-data', ['as' => 'manage-user-enrolment-data', 'uses' => 'UserController@manageUserEnrolmentData' ]);
+    
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');
 

@@ -50,6 +50,7 @@
                     <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
                     <td>
                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin: 1px;">Edit</a>
+                    <a href="{{ route('manage-user-enrolment-data', $user->id) }}" class="btn btn-success pull-left" style="margin: 1px;">LTP Data</a>
 
 					<form method="POST" action="{{ route('users.destroy',  $user->id) }}">
                       <input type="submit" value="Delete" class="btn btn-danger" style="margin: 1px;" disabled="">

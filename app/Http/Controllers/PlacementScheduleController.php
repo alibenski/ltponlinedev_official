@@ -31,24 +31,11 @@ class PlacementScheduleController extends Controller
      */
     public function index()
     {
-        //get current year and date
-        $now_date = Carbon::now()->toDateString();
-        $now_year = Carbon::now()->year;
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-        $terms = Term::orderBy('Term_Code', 'desc')
-                        ->whereDate('Term_End', '>=', $now_date)
-                        ->get()->min();
-        //query the next term based Term_Begin column is greater than today's date and then get min
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get()->min();
+        $placement_schedule = PlacementSchedule::orderBy('id', 'desc')->orderBy('term', 'desc')->paginate(10);
 
-        $placement_schedule = PlacementSchedule::orderBy('term', 'desc')->paginate(15);
-        $schedules = Schedule::all(['id', 'name']);
-        //return a view and pass in the above variable
-        //dd($schedules);
-        return view('placement_schedule.index')->withPlacement_schedule($placement_schedule)->withSchedules($schedules)->withNext_term($next_term);
+        return view('placement_schedule.index')->withPlacement_schedule($placement_schedule)->withTerms($terms);
     }
 
     /**
@@ -59,9 +46,7 @@ class PlacementScheduleController extends Controller
     public function create()
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-
         $languages = DB::table('languages')->pluck("name","code")->all();
-
 
         return view('placement_schedule.create')->withLanguages($languages)->withTerms($terms);
     }
@@ -73,16 +58,30 @@ class PlacementScheduleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {dd($request);
+    {
+        
         //validate the data
         $this->validate($request, array(
                 'term' => 'required|',
                 'L' => 'required|',
+                'date_of_plexam' => 'required|',
             ));
 
-        //store in database
+        //loop for storing data to database
+        $ingredients = [];        
+        for ($i = 0; $i < count($request->date_of_plexam); $i++) {
+            $ingredients[] = new  PlacementSchedule([
+                'term' => $request->term,
+                'language_id' => $request->L,
+                'date_of_plexam' => $request->date_of_plexam[$i],
+                'date_of_plexam_end' => $request->date_of_plexam_end,
+                'is_online' => $request->format_id,
+                ]); 
+                    foreach ($ingredients as $data) {
+                        $data->save();
+                    }
+        }
         
-        $course->schedule()->sync($request->schedules, false);
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
         return redirect()->route('placement-schedule.index');
