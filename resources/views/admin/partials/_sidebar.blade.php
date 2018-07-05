@@ -45,7 +45,7 @@
             <li><a href="{{ route('schedules.index') }}"><i class="fa fa-clock-o"></i> <span>Schedule (Day & Time)</span></a></li>
             <li><a href="{{ route('course-schedule.index') }}"><i class="fa fa-calendar-o"></i> <span>Course + Schedule</span></a></li>
             <li><a href="{{ route('placement-schedule.index') }}"><i class="fa fa-calendar"></i> <span>Placement Test Schedule</span></a></li>
-            <li><a href=""><i class="fa fa-pencil-square-o"></i> <span>Classes</span></a></li>
+            <li><a href="{{ route('classrooms.index') }}"><i class="fa fa-pencil-square-o"></i> <span>Classes</span></a></li>
             <li><a href="{{ route('rooms.index') }}"><i class="fa fa-building-o"></i> <span>Rooms</span></a></li>
             <li><a href="{{ route('teachers.index') }}"><i class="fa fa-pied-piper-alt"></i> <span>Teachers</span></a></li>
           </ul>

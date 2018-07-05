@@ -9,30 +9,25 @@ use App\Schedule;
 use App\Classroom;
 use App\Term;
 use App\Room;
+use App\Teachers;
 use DB;
 use Carbon\Carbon;
+use Validator;
+use Response;
 
 class ClassroomController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //$this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $classrooms = Classroom::orderBy('Te_Code','ASC')->paginate(10);
-        return view('classrooms.index')->withClassrooms($classrooms);
+        $classrooms = Classroom::orderBy('id','desc')->paginate(10);
+        $rooms = Room::all();
+        $teachers = Teachers::where('In_Out', '1')->get();
+        return view('classrooms.index')->withClassrooms($classrooms)->withRooms($rooms)->withTeachers($teachers);
     }
 
     /**
@@ -141,22 +136,17 @@ class ClassroomController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        // Validate data
-        $course = Course::find($id);
-            $this->validate($request, array(
-                //'name' => 'required|max:255',
-            )); 
-
-        // Save the data to db
-        $course = Course::find($id);
-
-        $course->name = $request->input('name');
-        $course->save();         
-        // Set flash data with message
-        $request->session()->flash('success', 'Changes have been saved!');
-        // Redirect to flash data to posts.show
-        return redirect()->route('courses.index');
+    {dd($request);
+        $validator = Validator::make(Input::all(), $this->rules);
+        if ($validator->fails()) {
+            return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+        } else {
+            $post = Post::findOrFail($id);
+            $post->title = $request->title;
+            $post->content = $request->content;
+            $post->save();
+            return response()->json($post);
+        }
     }
 
     /**

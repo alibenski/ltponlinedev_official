@@ -25,6 +25,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // management of enrolment data per user
     Route::get('user/{id}/manage-user-enrolment-data', ['as' => 'manage-user-enrolment-data', 'uses' => 'UserController@manageUserEnrolmentData' ]);
     
+    // page for tagging students as pass or fail
+    Route::get('pashqtcur', ['as' => 'pashqtcur', 'uses' => 'ResultsController@pashqtcur' ]);
+
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');
 

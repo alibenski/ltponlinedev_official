@@ -8,7 +8,7 @@ class Classroom extends Model
 {
     protected $table = 'LTP_TEVENTCur';
     protected $fillable = [
-        'Code', 'cs_unique','Te_Code_New', 'schedule_id', 'Te_Term',  
+        'Code', 'cs_unique','Te_Code_New', 'schedule_id', 'Te_Term', 'L', 'room_id', 'Tch_ID', 
     ];
 
     /**
