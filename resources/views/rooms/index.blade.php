@@ -20,6 +20,7 @@
 		<div class="col-md-10 class-md-offset-2">
 			<table class="table">
 				<thead>
+					<th>id</th>
 					<th>Name</th>
 					<th>Type</th>
 					<th>Location</th>
@@ -30,6 +31,7 @@
 					@foreach($rooms as $room)
 						
 						<tr>
+							<th>{{ $room->id }}</th>
 							<th>{{ $room->Rl_Room }}</th>
 							<td>{{ $room->Rl_Type }}</td>
 							<td>{{ $room->Rl_Location }}</td>

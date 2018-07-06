@@ -1,6 +1,12 @@
 @extends('admin.admin')
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <!-- icheck checkboxes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/square/yellow.css">
+
+    <!-- toastr notifications -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
 @stop
 @section('content')
 <div class="container">
@@ -94,16 +100,17 @@
                                 <select class="form-control select2" name="room_id" autocomplete="off" style="width: 100%;">
                                     @foreach ($rooms as $room)
                                     <option></option>
-                                    <option value="{{ $room->Rl_Room }}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
+                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
                                     @endforeach
                                 </select>
+                                <p class="errorRoom text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="room_id">Teacher:</label>
+                            <label class="control-label col-sm-2" for="teacher_id">Teacher:</label>
                             <div class="col-sm-10">
-                                <select class="form-control select2" name="room_id" autocomplete="off" style="width: 100%;">
+                                <select class="form-control select2" name="teacher_id" autocomplete="off" style="width: 100%;">
                                     @foreach ($teachers as $teacher)
                                     <option></option>
                                     <option value="{{ $teacher->Tch_ID }}"> {{ $teacher->Tch_Name }}</option>
@@ -129,6 +136,11 @@
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<!-- toastr notifications -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<!-- icheck checkboxes -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+
 <script>
 	$(document).ready(function() {
 	    $('.select2').select2({
@@ -137,10 +149,10 @@
 	});
 	// Edit a post
         $(document).on('click', '.edit-modal', function() {
+        	$('.select2').val(null).trigger('change');
             $('.modal-title').text('Assign Room/Teacher');
             $('#id_edit').val($(this).data('id'));
             $('#title_edit').val($(this).data('title'));
-            // $('#content_edit').val($(this).data('content'));
             id = $('#id_edit').val();
             $('#editModal').modal('show');
         });
@@ -152,12 +164,14 @@
                     '_token': $('input[name=_token]').val(),
                     'id': $("#id_edit").val(),
                     'title': $('#title_edit').val(),
-                    'content': $('#content_edit').val()
+                    'room_id' : $("select[name='room_id']").val(),
+                    'teacher_id' : $("select[name='teacher_id']").val(),
+                    // 'content': $('#content_edit').val()
                 },
                 success: function(data) {
                 	console.log(data)
                     $('.errorTitle').addClass('hidden');
-                    $('.errorContent').addClass('hidden');
+                    $('.errorRoom').addClass('hidden');
 
                     if ((data.errors)) {
                         setTimeout(function () {
@@ -169,12 +183,12 @@
                             $('.errorTitle').removeClass('hidden');
                             $('.errorTitle').text(data.errors.title);
                         }
-                        if (data.errors.content) {
-                            $('.errorContent').removeClass('hidden');
-                            $('.errorContent').text(data.errors.content);
+                        if (data.errors.room_id) {
+                            $('.errorRoom').removeClass('hidden');
+                            $('.errorRoom').text(data.errors.room_id);
                         }
                     } else {
-                        toastr.success('Successfully updated Post!', 'Success Alert', {timeOut: 5000});
+                        toastr.success('Successfully updated class!', 'Success Alert', {timeOut: 5000});
                         $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                         if (data.is_published) {

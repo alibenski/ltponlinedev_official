@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use App\Course;
 use App\User;
 use App\Schedule;
@@ -135,18 +136,25 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    
+    protected $rules =
+    [
+        'room_id' => 'required|',
+    ];
+
     public function update(Request $request, $id)
-    {dd($request);
-        $validator = Validator::make(Input::all(), $this->rules);
-        if ($validator->fails()) {
-            return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
-        } else {
-            $post = Post::findOrFail($id);
-            $post->title = $request->title;
-            $post->content = $request->content;
-            $post->save();
-            return response()->json($post);
-        }
+    {
+            $validator = Validator::make(Input::all(), $this->rules);
+            if ($validator->fails()) {
+                return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+            } else {
+                $classroom = Classroom::findOrFail($id);
+                $classroom->room_id = $request->room_id;
+                $classroom->Tch_ID = $request->teacher_id;
+                // $classroom->save();
+                return response()->json($classroom);
+            }
+
     }
 
     /**
