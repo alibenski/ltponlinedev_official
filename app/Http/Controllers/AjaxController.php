@@ -10,6 +10,7 @@ use App\User;
 use App\Repo;
 use App\Term;
 use App\Classroom;
+use App\CourseSchedule;
 use App\Schedule;
 use App\Preenrolment;
 use App\SDDEXTR;
@@ -83,7 +84,7 @@ class AjaxController extends Controller
     public function selectAjax(Request $request)
     {
         if($request->ajax()){            
-            $select_courses = Classroom::where('L', $request->L)
+            $select_courses = CourseSchedule::where('L', $request->L)
             ->where('Te_Term', $request->term_id)
             ->orderBy('id', 'asc')
             ->with('course')
@@ -112,7 +113,7 @@ class AjaxController extends Controller
     public function selectAjax2(Request $request)
     {
         if($request->ajax()){
-            $select_schedules = Classroom::where('Te_Code_New', $request->course_id)->where('Te_Term', $request->term_id )
+            $select_schedules = CourseSchedule::where('Te_Code_New', $request->course_id)->where('Te_Term', $request->term_id )
             //Eager Load scheduler function and pluck using "dot" 
             ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
 

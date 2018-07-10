@@ -8,6 +8,7 @@ use App\Course;
 use App\User;
 use App\Schedule;
 use App\Classroom;
+use App\CourseSchedule;
 use App\Term;
 use App\Room;
 use App\Teachers;
@@ -15,6 +16,8 @@ use DB;
 use Carbon\Carbon;
 use Validator;
 use Response;
+use App\Day;
+use App\Time;
 
 class ClassroomController extends Controller
 {
@@ -25,10 +28,13 @@ class ClassroomController extends Controller
      */
     public function index(Request $request)
     {
-        $classrooms = Classroom::orderBy('id','desc')->paginate(10);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $classrooms = CourseSchedule::orderBy('id','desc')->paginate(10);
         $rooms = Room::all();
         $teachers = Teachers::where('In_Out', '1')->get();
-        return view('classrooms.index')->withClassrooms($classrooms)->withRooms($rooms)->withTeachers($teachers);
+        $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
+        $etimes = Time::pluck("End_Time","End_Time")->all(); 
+        return view('classrooms.index')->withClassrooms($classrooms)->withRooms($rooms)->withTeachers($teachers)->withTerms($terms)->withBtimes($btimes)->withEtimes($etimes);
     }
 
     /**
@@ -151,7 +157,7 @@ class ClassroomController extends Controller
                 $classroom = Classroom::findOrFail($id);
                 $classroom->room_id = $request->room_id;
                 $classroom->Tch_ID = $request->teacher_id;
-                // $classroom->save();
+                $classroom->save();
                 return response()->json($classroom);
             }
 

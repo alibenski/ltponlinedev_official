@@ -9,6 +9,7 @@ use App\User;
 use App\Schedule;
 use App\Classroom;
 use App\CourseSchedule;
+use App\CsvModel;
 use App\Term;
 use App\Room;
 use DB;
@@ -24,7 +25,7 @@ class CourseSchedController extends Controller
     public function index()
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $course_schedule = Classroom::orderBy('Te_Term', 'DESC')->paginate(10);
+        $course_schedule = CourseSchedule::orderBy('Te_Term', 'DESC')->paginate(10);
 
         return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms);
     }
@@ -77,7 +78,7 @@ class CourseSchedController extends Controller
                 }
                         var_dump($request->cs_unique);
                         $this->validate($request, array(
-                            'cs_unique' => 'unique:LTP_TEVENTCur,cs_unique|',
+                            'cs_unique' => 'unique:tblLTP_CourseSchedule,cs_unique|',
                         ));
             }
         }
@@ -89,7 +90,7 @@ class CourseSchedController extends Controller
         //loop for storing Code value to database
         $ingredients = [];        
         for ($i = 0; $i < count($schedule_id); $i++) {
-            $ingredients[] = new  Classroom([
+            $ingredients[] = new  CourseSchedule([
                 'L'=> $request->L,
                 'Te_Code_New' => $course_id,
                 'Te_Term' => $term_id,
@@ -103,9 +104,9 @@ class CourseSchedController extends Controller
                     }
         }
         //query newly saved course+schedule entries to produce needed csv extract
-        $get_courses = Classroom::where('Te_Code_New', $request->course_id)
+        $get_courses = CourseSchedule::where('Te_Code_New', $request->course_id)
             ->where('Te_Term', $term_id )->get();
-        $get_courses_first = Classroom::where('Te_Code_New', $request->course_id)
+        $get_courses_first = CourseSchedule::where('Te_Code_New', $request->course_id)
             ->where('Te_Term', $term_id )->first();
         $get_course_name = $get_courses_first->course->Description;
         
@@ -126,7 +127,7 @@ class CourseSchedController extends Controller
             var_dump($implode_times);
 
         //updateOrCreate method used to update record or insert new record
-            $ingredients_csv = CourseSchedule::updateOrCreate(
+            $ingredients_csv = CsvModel::updateOrCreate(
                 ['course' => $get_course_name],
                 ['day' => $implode_days,
                 'time' => $implode_times,
