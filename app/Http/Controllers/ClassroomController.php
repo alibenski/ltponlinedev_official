@@ -55,7 +55,8 @@ class ClassroomController extends Controller
     }
     protected $rules =
     [
-        'teacher_id' => 'required|',
+        'sectionNo' => 'required|',
+        'Code' => 'unique:LTP_TEVENTCur,Code|',
     ];
     /**
      * Store a newly created resource in storage.
@@ -65,60 +66,80 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {   
+        $tecode = $request->input('tecode');
+        $L = $request->input('L');
+        $cs_unique = $request->input('cs_unique');
+        $schedule_id = $request->input('schedule_id');
+        $sectionNo = $request->input('sectionNo');
+        $teacher_id = $request->input('teacher_id');
+        $term_id = $request->input('term_id');
+        $sectionNo = $request->input('sectionNo');
+        $code = $request->input('Code');
+        $codex = [];  
+
+        //concatenate (implode) Code input before validation   
+        //check if $code has no input
+        if ( empty( $code ) ) {
+            //loop based on $sectionNo count and store in $codex array
+            for ($i=0; $i < count($sectionNo); $i++) { 
+                $codex[] = array($cs_unique, $sectionNo[$i]);
+                //implode array elements and pass imploded string value to $codex array as element
+                $codex[$i] = implode('-', $codex[$i]);
+                //for each $codex array element stored, loop array merge method
+                //and output each array element to a string via $request->Code
+                foreach ($codex as $value) {
+                    $request->merge( [ 'Code' => $value ] );
+                }
+                        // var_dump($request->Code);
+                        // $this->validate($request, array(
+                        //     'Code' => 'unique:LTP_TEVENTCur,Code|',
+                        // ));
+            }
+        }
+
         $validator = Validator::make(Input::all(), $this->rules);
             if ($validator->fails()) {
                 return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
-            } else {               
-                $course_id = $request->input('course_id');
-                $schedule_id = $request->input('schedule_id');
-                $term_id = $request->input('term_id');
-                $room_id = $request->input('room_id');
-                $code = $request->input('Code');
-                $codex = [];  
-                //concatenate (implode) Code input before validation   
-                //check if $code has no input
-                if ( empty( $code ) ) {
-                    //loop based on $room_id count and store in $codex array
-                    for ($i=0; $i < count($room_id); $i++) { 
-                        $codex[] = array($course_id, $schedule_id, $term_id, $room_id[$i]);
-                        //implode array elements and pass imploded string value to $codex array as element
-                        $codex[$i] = implode('-', $codex[$i]);
-                        //for each $codex array element stored, loop array merge method
-                        //and output each array element to a string via $request->Code
-                        foreach ($codex as $value) {
-                            $request->merge( [ 'Code' => $value ] );
-                        }
-                                var_dump($request->Code);
-                                $this->validate($request, array(
-                                    'Code' => 'unique:LTP_TEVENTCur,Code|',
-                                ));
-                    }
-                }
-                                $this->validate($request, array(
-                                    'term_id' => 'required|',
-                                    'schedule_id' => 'required|',
-                                    'course_id' => 'required|',
-                                    'room_id' => 'required|',   
-                                ));
+            } else{
                 //loop for storing Code value to database
                 $ingredients = [];        
-                for ($i = 0; $i < count($room_id); $i++) {
+                for ($i = 0; $i < count($sectionNo); $i++) {
                     $ingredients[] = new  Classroom([
-                        'schedule_id' => $schedule_id,
-                        'Te_Code' => $course_id,
+                        'Code' => $cs_unique.'-'.$sectionNo[$i],
                         'Te_Term' => $term_id,
-                        'Code' => $course_id.'-'.$schedule_id.'-'.$term_id.'-'.$room_id[$i],
-                        "created_at" =>  \Carbon\Carbon::now(),
-                        "updated_at" =>  \Carbon\Carbon::now(),
+                        'cs_unique' => $cs_unique,
+                        'L' => $L,
+                        'Te_Code_New' => $tecode,
+                        'schedule_id' => $schedule_id,
+                        'sectionNo' => $sectionNo[$i],
+                        'Tch_ID' => $teacher_id[$i],
+                        'Te_Mon' => $request->Te_Mon,
+                        'Te_Mon_Room' => $request->Te_Mon_Room,
+                        'Te_Mon_BTime' => $request->Te_Mon_BTime,
+                        'Te_Mon_ETime' => $request->Te_Mon_ETime,
+                        'Te_Tue' => $request->Te_Tue,
+                        'Te_Tue_Room' => $request->Te_Tue_Room,
+                        'Te_Tue_BTime' => $request->Te_Tue_BTime,
+                        'Te_Tue_ETime' => $request->Te_Tue_ETime,
+                        'Te_Wed' => $request->Te_Wed,
+                        'Te_Wed_Room' => $request->Te_Wed_Room,
+                        'Te_Wed_BTime' => $request->Te_Wed_BTime,
+                        'Te_Wed_ETime' => $request->Te_Wed_ETime,
+                        'Te_Thu' => $request->Te_Thu,
+                        'Te_Thu_Room' => $request->Te_Thu_Room,
+                        'Te_Thu_BTime' => $request->Te_Thu_BTime,
+                        'Te_Thu_ETime' => $request->Te_Thu_ETime,
+                        'Te_Fri' => $request->Te_Fri,
+                        'Te_Fri_Room' => $request->Te_Fri_Room,
+                        'Te_Fri_BTime' => $request->Te_Fri_BTime,
+                        'Te_Fri_ETime' => $request->Te_Fri_ETime,
                         ]);
                             foreach ($ingredients as $data) {
                                 $data->save();
                             }
                 }
-            return response()->json($classroom);
-            }
-        // $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
-        // return redirect()->route('classrooms.index');
+                return response()->json($request);
+            }     
     }
 
     /**

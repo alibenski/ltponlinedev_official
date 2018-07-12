@@ -104,7 +104,7 @@ return [
             'required' => 'Schedule is required. Please check if schedule is available on the "Preferred schedules (2 max)" field.',
         ],
         'Code' => [
-            'unique' => 'Course, Schedule, and Room combination already exists for this Term.',
+            'unique' => 'Course and Section # combination already exists for this Term.',
         ],
         'CodeIndexID' => [
             'unique' => 'You have already submitted an enrolment form for this language course.',

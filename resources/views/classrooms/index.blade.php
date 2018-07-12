@@ -65,7 +65,7 @@
 							<td>
 								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-content=""><span class="glyphicon glyphicon-eye-open"></span> Show</button>
 							<td>
-								<button class="edit-modal btn btn-info" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}"><span class="glyphicon glyphicon-edit"></span> Create</button>
+								<button class="edit-modal btn btn-info" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-edit"></span> Create</button>
 							</td>
 						</tr>
 					@endforeach
@@ -96,6 +96,11 @@
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="title_edit" disabled>
                                 <input type="text" class="form-control" id="term" disabled>
+                                <input type="text" class="form-control" id="Code" disabled>
+                                <input type="text" class="form-control" id="L" disabled>
+                                <input type="text" class="form-control" id="tecode" disabled>
+                                <input type="text" class="form-control" id="schedule" disabled>
+                                <input type="text" class="form-control" id="cs_unique" disabled>
                                 <p class="errorTitle text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -103,7 +108,7 @@
                             <div id="sectionCount" class="content-clone">
                                 <hr>
                                 
-                                <h4><strong>Section # <input type="text" id="sectionValue" name="room_id[]" value="1" required="" disabled="" /></strong></h4>
+                                <h4><strong>Section # <input type="text" id="sectionValue" name="sectionNo[]" value="1" required="" disabled="" /></strong></h4>
     			                <div class="form-group class-section">
     								<div class="form-group col-sm-12">
     		                            <label class="control-label col-sm-2" for="teacher_id">Teacher:</label>
@@ -399,6 +404,11 @@
             $('#id_edit').val($(this).data('id'));
             $('#title_edit').val($(this).data('title'));
             $('#term').val($(this).data('term'));
+            $('#L').val($(this).data('language'));
+            $('#tecode').val($(this).data('tecode'));
+            $('#schedule').val($(this).data('schedule'));
+            $('#cs_unique').val($(this).data('csunique'));
+            $('#Code').val(null);
             id = $('#id_edit').val();
             $('#editModal').modal('show');
             
@@ -413,7 +423,8 @@
         $('.modal-footer').on('click', '.edit', function() {
             var teacher = $("select[name='teacher_id[]']").map(function(){
                              return this.value; }).get();
-
+            var section = $("input[name='sectionNo[]']").map(function(){
+                             return this.value; }).get();
 
             $.ajax({
                 type: 'POST',
@@ -424,7 +435,12 @@
                     'title': $('#title_edit').val(),
                     'teacher_id[]' : teacher,
                     'term_id' : $('#term').val(),
-                    'room_id[]' : $("input[name='room_id[]']").val(),
+                    'L' : $('#L').val(),
+                    'Code' : $('#Code').val(),
+                    'tecode' : $('#tecode').val(),
+                    'schedule_id' : $('#schedule').val(),
+                    'cs_unique' : $('#cs_unique').val(),
+                    'sectionNo[]' : section,
                     'Te_Mon' : $("input[name='Te_Mon']").val(),
                     'Te_Mon_Room' : $("select[name='Te_Mon_Room']").val(),
                     'Te_Mon_BTime' : $("select[name='Te_Mon_BTime']").val(),
@@ -450,25 +466,25 @@
                 success: function(data) {
                 	console.log(data)
                     $('.errorTitle').addClass('hidden');
-                    $('.errorRoom').addClass('hidden');
+                    $('.errorTeacher').addClass('hidden');
 
                     if ((data.errors)) {
                         setTimeout(function () {
                             $('#editModal').modal('show');
                             toastr.error('Validation error!', 'Error Alert', {timeOut: 5000});
                         }, 500);
-
-                        if (data.errors.title) {
+            
+                        if (data.errors.Code) {
                             $('.errorTitle').removeClass('hidden');
-                            $('.errorTitle').text(data.errors.title);
+                            $('.errorTitle').text(data.errors.Code);
                         }
-                        if (data.errors.teacher_id) {
+                        if (data.errors.Tch_ID) {
                             $('.errorTeacher').removeClass('hidden');
-                            $('.errorTeacher').text(data.errors.teacher_id);
+                            $('.errorTeacher').text(data.errors.Tch_ID);
                         }
                     } else {
                         toastr.success('Successfully created!', 'Success Alert', {timeOut: 5000});
-                        // location.reload(true);
+                        location.reload(true);
                         // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
 
                         // if (data.is_published) {
