@@ -95,12 +95,13 @@
                             <label class="control-label col-sm-2" for="title">Title:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="title_edit" disabled>
-                                <input type="text" class="form-control" id="term" disabled>
-                                <input type="text" class="form-control" id="Code" disabled>
-                                <input type="text" class="form-control" id="L" disabled>
-                                <input type="text" class="form-control" id="tecode" disabled>
-                                <input type="text" class="form-control" id="schedule" disabled>
-                                <input type="text" class="form-control" id="cs_unique" disabled>
+                                <input type="hidden" class="form-control" id="term" disabled>
+                                <input type="hidden" class="form-control" id="Code" disabled>
+                                <input type="hidden" class="form-control" id="L" disabled>
+                                <input type="hidden" class="form-control" id="tecode" disabled>
+                                <input type="hidden" class="form-control" id="schedule" disabled>
+                                <input type="hidden" class="form-control" id="cs_unique" disabled>
+                                <br>
                                 <p class="errorTitle text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
@@ -389,14 +390,26 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
 
 <script>
-    	$(document).ready(function() {
-    		// $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});
-    	    // $('.select2').select2({placeholder: "Select Here",});
-    	});
 	// Show parameters
 		$("input[type='checkbox']").on('click', function() {
 			$(this).parent().next(".content-params").toggle();
 		});
+        $(document).ready(function() {
+            // $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});
+            // $('.select2').select2({placeholder: "Select Here",});
+            
+            $.get("{{ route('get-section-no-ajax') }}", function(data) {
+                /*optional stuff to do after success */
+            });
+
+            // Clone section
+            var incrementValue = 2;
+            $("#addSection").on('click', function() {
+                $("#sectionCount").clone(true).attr('id', 'sectionCount'+ incrementValue++).insertAfter("[id^=sectionCount]:last");
+                var sectionValue = +$("#sectionValue").val() + 1;
+                $("#sectionValue").attr('value', sectionValue);
+            });
+        });
 	// Edit a post
         $(document).on('click', '.edit-modal', function() {
         	$('.select2').val(null).trigger('change');
@@ -411,14 +424,6 @@
             $('#Code').val(null);
             id = $('#id_edit').val();
             $('#editModal').modal('show');
-            
-            // Clone section
-            var incrementValue = 2;
-            $("#addSection").on('click', function() {
-                $("#sectionCount").clone(true).attr('id', 'sectionCount'+ incrementValue++).insertAfter("[id^=sectionCount]:last");
-                var sectionValue = +$("#sectionValue").val() + 1;
-                $("#sectionValue").attr('value', sectionValue);
-            });
         });
         $('.modal-footer').on('click', '.edit', function() {
             var teacher = $("select[name='teacher_id[]']").map(function(){

@@ -122,6 +122,8 @@ Route::get('check-enrolment-entries-ajax', ['as'=>'check-enrolment-entries-ajax'
 Route::get('check-selfpay-entries-ajax', ['as'=>'check-selfpay-entries-ajax','uses'=>'AjaxController@ajaxCheckSelfpayEntries']);
 Route::get('check-selfpay-placement-entries-ajax', ['as'=>'check-selfpay-placement-entries-ajax','uses'=>'AjaxController@ajaxCheckSelfpayPlacementEntries']);
 
+// ajax use to get section number of cs_unique
+Route::get('get-section-no-ajax', ['as'=>'get-section-no-ajax','uses'=>'AjaxController@ajaxGetSectionNo']);
 
 Route::group(['middleware' => 'open-close-approval-routes'],function(){
     //url routing for manager approval page

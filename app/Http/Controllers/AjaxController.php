@@ -24,6 +24,13 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxGetSectionNo()
+    {
+        // get value of cs_unique if exist
+        // if null, then sectionValue = 1
+        // if exists, plus 1 to the value and return to DOM
+    }
+
     public function ajaxIsCancelled(Request $request)
     {
         $current_user = Auth::user()->indexno;
