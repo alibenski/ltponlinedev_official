@@ -24,11 +24,19 @@ use DB;
 
 class AjaxController extends Controller
 {
-    public function ajaxGetSectionNo()
+    public function ajaxGetSectionNo(Request $request)
     {
-        // get value of cs_unique if exist
+        // get value of cs_unique and query in TEVENTcur if exists
+        $cs_unique = $request->input('cs_unique');
+        $cs_exist = Classroom::orderBy('Te_Term', 'desc')->where('cs_unique', $cs_unique)->get();
         // if null, then sectionValue = 1
-        // if exists, plus 1 to the value and return to DOM
+        // if (is_null($cs_exist)) {
+        //     $data = '1';
+        // } else { // if exists, plus 1 to the value and return to DOM
+        //     $data = $cs_exist->sectionNo + 1;
+        // }       
+        // 
+        return response()->json($cs_exist); 
     }
 
     public function ajaxIsCancelled(Request $request)

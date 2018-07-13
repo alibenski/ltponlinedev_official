@@ -398,10 +398,6 @@
             // $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});
             // $('.select2').select2({placeholder: "Select Here",});
             
-            $.get("{{ route('get-section-no-ajax') }}", function(data) {
-                /*optional stuff to do after success */
-            });
-
             // Clone section
             var incrementValue = 2;
             $("#addSection").on('click', function() {
@@ -410,7 +406,7 @@
                 $("#sectionValue").attr('value', sectionValue);
             });
         });
-	// Edit a post
+	// Create (Edit) a classroom 
         $(document).on('click', '.edit-modal', function() {
         	$('.select2').val(null).trigger('change');
             $('.modal-title').text('Assign Room/Teacher');
@@ -424,6 +420,25 @@
             $('#Code').val(null);
             id = $('#id_edit').val();
             $('#editModal').modal('show');
+
+            $.ajax({
+                url: '{{ route('get-section-no-ajax') }}',
+                type: 'GET',
+                data: {'cs_unique' : $('#cs_unique').val(),
+                },
+            })
+            .done(function(data) {
+                console.log("success");
+                console.log(data);
+
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+            
         });
         $('.modal-footer').on('click', '.edit', function() {
             var teacher = $("select[name='teacher_id[]']").map(function(){
