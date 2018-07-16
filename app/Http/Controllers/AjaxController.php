@@ -28,15 +28,17 @@ class AjaxController extends Controller
     {
         // get value of cs_unique and query in TEVENTcur if exists
         $cs_unique = $request->input('cs_unique');
-        $cs_exist = Classroom::orderBy('Te_Term', 'desc')->where('cs_unique', $cs_unique)->get();
+        $cs_exist = Classroom::orderBy('Te_Term', 'desc')->orderBy('sectionNo', 'desc')->where('cs_unique', $cs_unique)->get();
+        $status = isset($cs_exist[0]) ? $cs_exist[0] : false;
         // if null, then sectionValue = 1
-        // if (is_null($cs_exist)) {
-        //     $data = '1';
-        // } else { // if exists, plus 1 to the value and return to DOM
-        //     $data = $cs_exist->sectionNo + 1;
-        // }       
-        // 
-        return response()->json($cs_exist); 
+        if (!$status) {
+            $data = 1;
+            // $data = var_dump($data);
+        } else { // if exists, plus 1 to the value and return to DOM
+            $data = $cs_exist[0]['sectionNo'] + 1;
+        }       
+        
+        return response()->json($data); 
     }
 
     public function ajaxIsCancelled(Request $request)

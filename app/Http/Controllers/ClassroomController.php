@@ -30,6 +30,7 @@ class ClassroomController extends Controller
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $classrooms = CourseSchedule::orderBy('id','desc')->paginate(10);
+        $show_classrooms = Classroom::all();
         $rooms = Room::all();
         $teachers = Teachers::where('In_Out', '1')->get();
         $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
@@ -114,25 +115,25 @@ class ClassroomController extends Controller
                         'sectionNo' => $sectionNo[$i],
                         'Tch_ID' => $teacher_id[$i],
                         'Te_Mon' => $request->Te_Mon,
-                        'Te_Mon_Room' => $request->Te_Mon_Room,
-                        'Te_Mon_BTime' => $request->Te_Mon_BTime,
-                        'Te_Mon_ETime' => $request->Te_Mon_ETime,
+                        'Te_Mon_Room' => $request->Te_Mon_Room[$i],
+                        'Te_Mon_BTime' => $request->Te_Mon_BTime[$i],
+                        'Te_Mon_ETime' => $request->Te_Mon_ETime[$i],
                         'Te_Tue' => $request->Te_Tue,
-                        'Te_Tue_Room' => $request->Te_Tue_Room,
-                        'Te_Tue_BTime' => $request->Te_Tue_BTime,
-                        'Te_Tue_ETime' => $request->Te_Tue_ETime,
+                        'Te_Tue_Room' => $request->Te_Tue_Room[$i],
+                        'Te_Tue_BTime' => $request->Te_Tue_BTime[$i],
+                        'Te_Tue_ETime' => $request->Te_Tue_ETime[$i],
                         'Te_Wed' => $request->Te_Wed,
-                        'Te_Wed_Room' => $request->Te_Wed_Room,
-                        'Te_Wed_BTime' => $request->Te_Wed_BTime,
-                        'Te_Wed_ETime' => $request->Te_Wed_ETime,
+                        'Te_Wed_Room' => $request->Te_Wed_Room[$i],
+                        'Te_Wed_BTime' => $request->Te_Wed_BTime[$i],
+                        'Te_Wed_ETime' => $request->Te_Wed_ETime[$i],
                         'Te_Thu' => $request->Te_Thu,
-                        'Te_Thu_Room' => $request->Te_Thu_Room,
-                        'Te_Thu_BTime' => $request->Te_Thu_BTime,
-                        'Te_Thu_ETime' => $request->Te_Thu_ETime,
+                        'Te_Thu_Room' => $request->Te_Thu_Room[$i],
+                        'Te_Thu_BTime' => $request->Te_Thu_BTime[$i],
+                        'Te_Thu_ETime' => $request->Te_Thu_ETime[$i],
                         'Te_Fri' => $request->Te_Fri,
-                        'Te_Fri_Room' => $request->Te_Fri_Room,
-                        'Te_Fri_BTime' => $request->Te_Fri_BTime,
-                        'Te_Fri_ETime' => $request->Te_Fri_ETime,
+                        'Te_Fri_Room' => $request->Te_Fri_Room[$i],
+                        'Te_Fri_BTime' => $request->Te_Fri_BTime[$i],
+                        'Te_Fri_ETime' => $request->Te_Fri_ETime[$i],
                         ]);
                             foreach ($ingredients as $data) {
                                 $data->save();

@@ -63,7 +63,7 @@
 								@endif
 							</td>
 							<td>
-								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-content=""><span class="glyphicon glyphicon-eye-open"></span> Show</button>
+								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
 							<td>
 								<button class="edit-modal btn btn-info" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-edit"></span> Create</button>
 							</td>
@@ -75,6 +75,44 @@
 			{{ $classrooms->links() }}		
 		</div>
 	</div>
+    <!-- Modal form to show a post -->
+    <div id="showModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="id">ID:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="id_show" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="title">Title:</label>
+                            <div class="col-sm-10">
+                                <input type="name" class="form-control" id="title_show" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="content">Content:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="content_show" cols="40" rows="5" disabled></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <span class='glyphicon glyphicon-remove'></span> Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 	<!-- Modal form to edit a form -->
     <div id="editModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -105,12 +143,14 @@
                                 <p class="errorTitle text-center alert alert-danger hidden"></p>
                             </div>
                         </div>
+                        <div class="form-group col-sm-12">
+                            <button id="addSection" type="button" class="btn btn-success pull-left">Add Section</button>
+                        </div>
                         <div id="accordion">
                             <div id="sectionCount" class="content-clone">
-                                <hr>
-                                
-                                <h4><strong>Section # <input type="text" id="sectionValue" name="sectionNo[]" value="1" required="" disabled="" /></strong></h4>
-    			                <div class="form-group class-section">
+                                <div class="col-sm-12"><hr></div>
+                                <h4><strong>Section # <input type="text" class="btn" id="sectionValue" name="sectionNo[]" value="" required="" disabled=""  /></strong></h4>
+                                <div class="form-group class-section">
     								<div class="form-group col-sm-12">
     		                            <label class="control-label col-sm-2" for="teacher_id">Teacher:</label>
     		                            <div class="col-sm-10">
@@ -139,7 +179,7 @@
             											<div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Mon_Room">Room:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Mon_Room" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Mon_Room[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($rooms as $room)
             					                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
@@ -150,7 +190,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Mon_BTime">Begin Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Mon_BTime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Mon_BTime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($btimes as $id => $val)
             					                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -161,7 +201,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Mon_ETime">End Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Mon_ETime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Mon_ETime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($etimes as $id => $val)
             					                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -185,7 +225,7 @@
             											<div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Tue_Room">Room:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Tue_Room" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Tue_Room[]" autocomplete="off" style="width: 100%;">
                                                                     <option></option>
             					                                    @foreach ($rooms as $room)
             					                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
@@ -197,7 +237,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Tue_BTime">Begin Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Tue_BTime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Tue_BTime[]" autocomplete="off" style="width: 100%;">
                                                                     <option></option>
             					                                    @foreach ($btimes as $id => $val)
             					                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -208,7 +248,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Tue_ETime">End Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Tue_ETime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Tue_ETime[]" autocomplete="off" style="width: 100%;">
                                                                     <option></option>
             					                                    @foreach ($etimes as $id => $val)
             					                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -232,9 +272,9 @@
             											<div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Wed_Room">Room:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Wed_Room" autocomplete="off" style="width: 100%;">
-            					                                    @foreach ($rooms as $room)
+            					                                <select class="form-control " name="Te_Wed_Room[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
+                                                                    @foreach ($rooms as $room)
             					                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
             					                                    @endforeach
             					                                </select>
@@ -244,7 +284,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Wed_BTime">Begin Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Wed_BTime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Wed_BTime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($btimes as $id => $val)
                                                                     <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -255,7 +295,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Wed_ETime">End Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Wed_ETime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Wed_ETime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($etimes as $id => $val)
                                                                     <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -279,9 +319,9 @@
             											<div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Thu_Room">Room:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Thu_Room" autocomplete="off" style="width: 100%;">
-            					                                    @foreach ($rooms as $room)
+            					                                <select class="form-control " name="Te_Thu_Room[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
+                                                                    @foreach ($rooms as $room)
             					                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
             					                                    @endforeach
             					                                </select>
@@ -291,7 +331,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Thu_BTime">Begin Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Thu_BTime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Thu_BTime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($btimes as $id => $val)
                                                                     <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -302,7 +342,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Thu_ETime">End Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Thu_ETime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Thu_ETime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($etimes as $id => $val)
                                                                     <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -326,9 +366,9 @@
             											<div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Fri_Room">Room:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Fri_Room" autocomplete="off" style="width: 100%;">
-            					                                    @foreach ($rooms as $room)
+            					                                <select class="form-control " name="Te_Fri_Room[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
+                                                                    @foreach ($rooms as $room)
             					                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
             					                                    @endforeach
             					                                </select>
@@ -338,7 +378,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Fri_BTime">Begin Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Fri_BTime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Fri_BTime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($btimes as $id => $val)
                                                                     <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -349,7 +389,7 @@
             					                        <div class="btn-space col-sm-12">
             					                            <label class="control-label col-sm-4" for="Te_Fri_ETime">End Time:</label>
             					                            <div class="col-sm-8">
-            					                                <select class="form-control " name="Te_Fri_ETime" autocomplete="off" style="width: 100%;">
+            					                                <select class="form-control " name="Te_Fri_ETime[]" autocomplete="off" style="width: 100%;">
             					                                    <option></option>
                                                                     @foreach ($etimes as $id => $val)
                                                                     <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
@@ -364,10 +404,10 @@
     			                    </div> 
     							</div> 
                             </div>
+                            <div class="clone-paste-here"></div>
                         </div>
                     </form>
                     <div class="modal-footer">
-						<button id="addSection" type="button" class="btn btn-success pull-left">Add Section</button>
                         <button type="button" class="btn btn-primary edit" data-dismiss="modal">
                             <span class='glyphicon glyphicon-check'></span> Save
                         </button>
@@ -390,6 +430,14 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
 
 <script>
+    // Show a post
+        $(document).on('click', '.show-modal', function() {
+            $('.modal-title').text('Show');
+            $('#id_show').val($(this).data('id'));
+            $('#title_show').val($(this).data('title'));
+            $('#content_show').val($(this).data('csunique'));
+            $('#showModal').modal('show');
+        });
 	// Show parameters
 		$("input[type='checkbox']").on('click', function() {
 			$(this).parent().next(".content-params").toggle();
@@ -397,18 +445,14 @@
         $(document).ready(function() {
             // $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});
             // $('.select2').select2({placeholder: "Select Here",});
-            
-            // Clone section
-            var incrementValue = 2;
-            $("#addSection").on('click', function() {
-                $("#sectionCount").clone(true).attr('id', 'sectionCount'+ incrementValue++).insertAfter("[id^=sectionCount]:last");
-                var sectionValue = +$("#sectionValue").val() + 1;
-                $("#sectionValue").attr('value', sectionValue);
-            });
         });
 	// Create (Edit) a classroom 
         $(document).on('click', '.edit-modal', function() {
+            // reset values
         	$('.select2').val(null).trigger('change');
+            $('.clone-paste-here').remove();
+            $('.content-clone').after('<div class="clone-paste-here"></div>')
+            // get values
             $('.modal-title').text('Assign Room/Teacher');
             $('#id_edit').val($(this).data('id'));
             $('#title_edit').val($(this).data('title'));
@@ -430,21 +474,68 @@
             .done(function(data) {
                 console.log("success");
                 console.log(data);
-
+                $("#sectionValue").attr('value', data);
             })
             .fail(function() {
                 console.log("error");
             })
             .always(function() {
                 console.log("complete");
-            });
-            
+            });     
         });
+
+        // Clone section
+        var incrementValue = 2;
+        $("#addSection").on('click', function() {
+            $("#sectionCount").clone(true).attr('id', 'sectionCount'+ incrementValue++).appendTo('.clone-paste-here')
+            // insertAfter("[id^=sectionCount]:last");
+            var sectionCountValue = +$("#sectionValue").val() + 1;
+            $("#sectionValue").attr('value', sectionCountValue);
+        });
+
         $('.modal-footer').on('click', '.edit', function() {
             var teacher = $("select[name='teacher_id[]']").map(function(){
                              return this.value; }).get();
             var section = $("input[name='sectionNo[]']").map(function(){
                              return this.value; }).get();
+
+            var Te_Mon_Room = $("select[name='Te_Mon_Room[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Mon_BTime = $("select[name='Te_Mon_BTime[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Mon_ETime = $("select[name='Te_Mon_ETime[]']").map(function(){
+                             return this.value; }).get();
+                    
+            var Te_Tue_Room = $("select[name='Te_Tue_Room[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Tue_BTime = $("select[name='Te_Tue_BTime[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Tue_ETime = $("select[name='Te_Tue_ETime[]']").map(function(){
+                             return this.value; }).get();
+                    
+            var Te_Wed_Room = $("select[name='Te_Wed_Room[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Wed_BTime = $("select[name='Te_Wed_BTime[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Wed_ETime = $("select[name='Te_Wed_ETime[]']").map(function(){
+                             return this.value; }).get();
+                    
+            var Te_Thu_Room = $("select[name='Te_Thu_Room[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Thu_BTime = $("select[name='Te_Thu_BTime[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Thu_ETime = $("select[name='Te_Thu_ETime[]']").map(function(){
+                             return this.value; }).get();
+                    
+            var Te_Fri_Room = $("select[name='Te_Fri_Room[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Fri_BTime = $("select[name='Te_Fri_BTime[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Fri_ETime = $("select[name='Te_Fri_ETime[]']").map(function(){
+                             return this.value; }).get();
+                    
+
+
 
             $.ajax({
                 type: 'POST',
@@ -462,25 +553,25 @@
                     'cs_unique' : $('#cs_unique').val(),
                     'sectionNo[]' : section,
                     'Te_Mon' : $("input[name='Te_Mon']").val(),
-                    'Te_Mon_Room' : $("select[name='Te_Mon_Room']").val(),
-                    'Te_Mon_BTime' : $("select[name='Te_Mon_BTime']").val(),
-                    'Te_Mon_ETime' : $("select[name='Te_Mon_ETime']").val(),
+                    'Te_Mon_Room[]' : Te_Mon_Room,
+                    'Te_Mon_BTime[]' : Te_Mon_BTime,
+                    'Te_Mon_ETime[]' : Te_Mon_ETime,
                     'Te_Tue' : $("input[name='Te_Tue']").val(),
-                    'Te_Tue_Room' : $("select[name='Te_Tue_Room']").val(),
-                    'Te_Tue_BTime' : $("select[name='Te_Tue_BTime']").val(),
-                    'Te_Tue_ETime' : $("select[name='Te_Tue_ETime']").val(),
+                    'Te_Tue_Room[]' : Te_Tue_Room,
+                    'Te_Tue_BTime[]' : Te_Tue_BTime,
+                    'Te_Tue_ETime[]' : Te_Tue_ETime,
                     'Te_Wed' : $("input[name='Te_Wed']").val(),
-                    'Te_Wed_Room' : $("select[name='Te_Wed_Room']").val(),
-                    'Te_Wed_BTime' : $("select[name='Te_Wed_BTime']").val(),
-                    'Te_Wed_ETime' : $("select[name='Te_Wed_ETime']").val(),
+                    'Te_Wed_Room[]' : Te_Wed_Room,
+                    'Te_Wed_BTime[]' : Te_Wed_BTime,
+                    'Te_Wed_ETime[]' : Te_Wed_ETime,
                     'Te_Thu' : $("input[name='Te_Thu']").val(),
-                    'Te_Thu_Room' : $("select[name='Te_Thu_Room']").val(),
-                    'Te_Thu_BTime' : $("select[name='Te_Thu_BTime']").val(),
-                    'Te_Thu_ETime' : $("select[name='Te_Thu_ETime']").val(),
+                    'Te_Thu_Room[]' : Te_Thu_Room,
+                    'Te_Thu_BTime[]' : Te_Thu_BTime,
+                    'Te_Thu_ETime[]' : Te_Thu_ETime,
                     'Te_Fri' : $("input[name='Te_Fri']").val(),
-                    'Te_Fri_Room' : $("select[name='Te_Fri_Room']").val(),
-                    'Te_Fri_BTime' : $("select[name='Te_Fri_BTime']").val(),
-                    'Te_Fri_ETime' : $("select[name='Te_Fri_ETime']").val(),
+                    'Te_Fri_Room[]' : Te_Fri_Room,
+                    'Te_Fri_BTime[]' : Te_Fri_BTime,
+                    'Te_Fri_ETime[]' : Te_Fri_ETime,
                     
                 },
                 success: function(data) {
