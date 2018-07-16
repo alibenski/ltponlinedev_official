@@ -34,8 +34,24 @@ class Classroom extends Model
     return $this->belongsTo('App\Term', 'Te_Term', 'Term_Code'); 
     }
 
-    public function rooms() {
-    return $this->belongsTo('App\Room', 'room_id'); 
+    public function roomsMon() {
+    return $this->belongsTo('App\Room', 'Te_Mon_Room', 'id'); 
+    }
+
+    public function roomsTue() {
+    return $this->belongsTo('App\Room', 'Te_Tue_Room', 'id'); 
+    }
+
+    public function roomsWed() {
+    return $this->belongsTo('App\Room', 'Te_Wed_Room', 'id'); 
+    }
+
+    public function roomsThu() {
+    return $this->belongsTo('App\Room', 'Te_Thu_Room', 'id' ); 
+    }
+
+    public function roomsFri() {
+    return $this->belongsTo('App\Room', 'Te_Fri_Room', 'id'); 
     }
 
     public function teachers() {

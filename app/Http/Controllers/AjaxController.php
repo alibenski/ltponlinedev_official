@@ -24,6 +24,18 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxShowSection(Request $request)
+    {    
+        if($request->ajax()){            
+            $show_classrooms = Classroom::where('cs_unique', $request->cs_unique)
+            ->orderBy('sectionNo', 'asc')
+            ->get();
+
+            $data = view('classrooms.show',compact('show_classrooms'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
+
     public function ajaxGetSectionNo(Request $request)
     {
         // get value of cs_unique and query in TEVENTcur if exists

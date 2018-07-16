@@ -100,9 +100,10 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="content">Content:</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" id="content_show" cols="40" rows="5" disabled></textarea>
+                                <textarea style="display: none;" class="form-control" id="content_show" cols="40" rows="5" disabled></textarea>
                             </div>
                         </div>
+                        <div class="form-group class-list"></div>
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -146,7 +147,7 @@
                         <div class="form-group col-sm-12">
                             <button id="addSection" type="button" class="btn btn-success pull-left">Add Section</button>
                         </div>
-                        <div id="accordion">
+                        <div id="section-accordion">
                             <div id="sectionCount" class="content-clone">
                                 <div class="col-sm-12"><hr></div>
                                 <h4><strong>Section # <input type="text" class="btn" id="sectionValue" name="sectionNo[]" value="" required="" disabled=""  /></strong></h4>
@@ -430,6 +431,9 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
 
 <script>
+        $(document).ready(function() {
+            // $('.select2').select2({placeholder: "Select Here",});
+        });
     // Show a post
         $(document).on('click', '.show-modal', function() {
             $('.modal-title').text('Show');
@@ -437,14 +441,30 @@
             $('#title_show').val($(this).data('title'));
             $('#content_show').val($(this).data('csunique'));
             $('#showModal').modal('show');
+
+            $.ajax({
+                url: '{{ route('show-section-ajax') }}',
+                type: 'GET',
+                data: {'cs_unique' : $('#content_show').val(),
+                },
+            })
+            .done(function(data) {
+                console.log("success");
+                console.log(data);
+                $(".class-list").html('');
+                $(".class-list").html(data.options);
+                $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });    
         });
-	// Show parameters
-		$("input[type='checkbox']").on('click', function() {
-			$(this).parent().next(".content-params").toggle();
-		});
-        $(document).ready(function() {
-            // $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});
-            // $('.select2').select2({placeholder: "Select Here",});
+    // Show parameters
+        $("input[type='checkbox']").on('click', function() {
+            $(this).parent().next(".content-params").toggle();
         });
 	// Create (Edit) a classroom 
         $(document).on('click', '.edit-modal', function() {
