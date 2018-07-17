@@ -24,10 +24,40 @@ class PreenrolmentController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        // logic to get previous Term of current Term
+        // logic to get previous Term of current/existing Term
         // 9 is 4, 1 is 9, 4 is 1
+        // if last digit value is 9, subtract 5 from selectedTerm value
+        $selectedTerm = $request->Term; // No need of type casting
+        // echo substr($selectedTerm, 0, 1); // get first value
+        // echo substr($selectedTerm, -1); // get last value
+        $lastDigit = substr($selectedTerm, -1);
 
+        if ($lastDigit == 9) {
+            $term = $selectedTerm - 5;
+            // dd($term);
+        }
+        // if last digit is 1, check Term table for previous term value or subtract 2 from selectedTerm value
+        if ($lastDigit == 1) {
+            $term = $selectedTerm - 2;
+        }
+        // if last digit is 4, check Term table for previous term value or subtract 3 from selectedTerm value
+        if ($lastDigit == 4) {
+            $term = $selectedTerm - 3;
+        }
+        if ($lastDigit == 8) {
+            $term = $selectedTerm - 4;
+        }
 
+        $enrolment_forms = Preenrolment::orderBy('Term', 'desc')->where('Term', $selectedTerm)->get();
+        foreach ($enrolment_forms as $enrolmentForm) {
+                $student_index = $enrolmentForm->INDEXID;
+                // verify in PASHQTcur the last course/class the student had
+                $student_previous_class = Repo::where('term', $term)->where('INDEXID', $student_index)->where('L', $request->L)->get()->toArray();
+                if (!empty(array_filter($student_previous_class))) {
+                    dd($student_previous_class);
+                }
+            }
+        
         if (is_null($request->Term)) {
             $enrolment_forms = null;
             return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);

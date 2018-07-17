@@ -235,17 +235,17 @@ class PlacementFormController extends Controller
 
         // $placement_forms = $placement_forms->pluck('INDEXID');
         
-        $priority1 = PlacementForm::join('ltp_pashqtcur', function($join)
+        $priority1 = PlacementForm::join('LTP_PASHQTcur', function($join)
         {
-                        $join->on('tblltp_placement_forms.INDEXID',   '=', 'ltp_pashqtcur.INDEXID');
-                        $join->on('ltp_pashqtcur.L', '=', 'tblltp_placement_forms.L');
+                        $join->on('tblLTP_Placement_Forms.INDEXID',   '=', 'LTP_PASHQTcur.INDEXID');
+                        $join->on('LTP_PASHQTcur.L', '=', 'tblLTP_Placement_Forms.L');
           
         })
-                        ->where('ltp_pashqtcur.Term', '=', '184')
-                        ->select('tblltp_placement_forms.INDEXID', 'tblltp_placement_forms.L', 'ltp_pashqtcur.Term', 'ltp_pashqtcur.L')
+                        ->where('LTP_PASHQTcur.Term', '=', '184')
+                        ->select('tblLTP_Placement_Forms.INDEXID', 'tblLTP_Placement_Forms.L', 'LTP_PASHQTcur.Term', 'LTP_PASHQTcur.L')
                         ->get();
 
-        dd($priority1);
+        dd($placement_forms);
 
         $queries = [];
 
