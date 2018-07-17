@@ -12,30 +12,36 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-sm-12">
 			<h1>Classes - Assign Rooms and Teachers</h1>
 		</div>
 
 		<div class="form-group">
-          <label name="term_id" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
-            <select class="col-md-8 form-control select2" name="term_id" autocomplete="off" required="required" style="width: 100%">
+        <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
+          <label name="Te_Term" class="col-sm-4 control-label" style="margin: 5px 5px;">Term: </label>
+            <select class="col-sm-8 form-control select2-filter" name="Te_Term" autocomplete="off" required="required" style="width: 100%">
                 <option value="">--- Select Term ---</option>
                 @foreach ($terms as $value)
                     <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
                 @endforeach
             </select>
+            <div class="form-group col-sm-12 add-margin">           
+                <button type="submit" class="btn btn-success">Submit</button>
+                <a href="/admin/classrooms/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+            </div>
+        </form>
         </div>
 		{{-- <div class="col-md-2">
 			<a href="{{ route('classrooms.create') }}" class="btn btn-block btn-primary btn-h1-spacing">Create Classes</a>
 
 		</div> --}}
-		<div class="col-md-12">
+		<div class="col-sm-12">
 			<hr>
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="col-md-10 class-md-offset-2">
+		<div class="col-sm-10 class-sm-offset-2">
 			<table class="table">
 				<thead>
 					<th>#</th>
@@ -424,7 +430,7 @@
 @endsection
 
 @section('java_script')
-{{-- <script src="{{ asset('js/select2.min.js') }}"></script> --}}
+<script src="{{ asset('js/select2.min.js') }}"></script>
 <!-- toastr notifications -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <!-- icheck checkboxes -->
@@ -432,7 +438,7 @@
 
 <script>
         $(document).ready(function() {
-            // $('.select2').select2({placeholder: "Select Here",});
+            $('.select2-filter').select2({placeholder: "Select Here",});
         });
     // Show a post
         $(document).on('click', '.show-modal', function() {

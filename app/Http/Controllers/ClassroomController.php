@@ -29,7 +29,24 @@ class ClassroomController extends Controller
     public function index(Request $request)
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $classrooms = CourseSchedule::orderBy('id','desc')->paginate(10);
+        $classrooms = new CourseSchedule;
+        // $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'Te_Term',
+        ];
+
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $classrooms = $classrooms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+        $classrooms = $classrooms->orderBy('id','desc')->paginate(10)->appends($queries);
+
         $rooms = Room::all();
         $teachers = Teachers::where('In_Out', '1')->get();
         $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
@@ -164,7 +181,7 @@ class ClassroomController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $classroom = Classroom::where('id', $id)->first();
         $rooms = Room::all();
-        $teachers = Teachers::where('In_Out', '1')->get();
+        $teachers = Teachers::where('In_Out', '1')->orderBy('Tch_Lastname', 'asc')->get();
         $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
         $etimes = Time::pluck("End_Time","End_Time")->all(); 
 
@@ -181,29 +198,16 @@ class ClassroomController extends Controller
     
     public function update(Request $request, $id)
     { 
+        $noTokenMethod = $request->except(['_token', '_method']);
+        $fliteredInput = (array_filter($noTokenMethod));
+            if(!$fliteredInput) {
+                $request->session()->flash('warning', 'No changes made!');
+            return redirect()->back();
+            }
         $classroom = Classroom::findOrFail($id);
-        $classroom->Tch_ID = $request->teacher_id;
-        $classroom->Te_Mon = $request->Te_Mon;
-        $classroom->Te_Mon_Room = $request->Te_Mon_Room;
-        $classroom->Te_Mon_BTime = $request->Te_Mon_BTime;
-        $classroom->Te_Mon_ETime = $request->Te_Mon_ETime;
-        $classroom->Te_Tue = $request->Te_Tue;
-        $classroom->Te_Tue_Room = $request->Te_Tue_Room;
-        $classroom->Te_Tue_BTime = $request->Te_Tue_BTime;
-        $classroom->Te_Tue_ETime = $request->Te_Tue_ETime;
-        $classroom->Te_Wed = $request->Te_Wed;
-        $classroom->Te_Wed_Room = $request->Te_Wed_Room;
-        $classroom->Te_Wed_BTime = $request->Te_Wed_BTime;
-        $classroom->Te_Wed_ETime = $request->Te_Wed_ETime;
-        $classroom->Te_Thu = $request->Te_Thu;
-        $classroom->Te_Thu_Room = $request->Te_Thu_Room;
-        $classroom->Te_Thu_BTime = $request->Te_Thu_BTime;
-        $classroom->Te_Thu_ETime = $request->Te_Thu_ETime;
-        $classroom->Te_Fri = $request->Te_Fri;
-        $classroom->Te_Fri_Room = $request->Te_Fri_Room;
-        $classroom->Te_Fri_BTime = $request->Te_Fri_BTime;
-        $classroom->Te_Fri_ETime = $request->Te_Fri_ETime;
         $classroom->save();
+        $classroom->update($fliteredInput);
+        $request->session()->flash('success', 'Changes have been saved!');
         return redirect()->back();
     }
 

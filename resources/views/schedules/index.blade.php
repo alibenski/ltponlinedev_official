@@ -4,9 +4,13 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h1><i class="fa fa-clock-o"></i> All Schedules <a href="{{ route('schedules.create') }}" class="btn btn-success btn-h1-spacing pull-right" style="margin: 1px;">Create</a></h1>
+			<h1><i class="fa fa-clock-o"></i> All Schedules </h1>
 		</div>
-		
+
+		<div class="col-md-2">
+			<a href="{{ route('schedules.create') }}" class="btn btn-block btn-primary btn-h1-spacing">Create</a>
+
+		</div>
 		<div class="col-md-12">
 			<hr>
 		</div>

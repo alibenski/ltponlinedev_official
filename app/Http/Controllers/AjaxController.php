@@ -24,6 +24,48 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxDeleteDayParam(Request $request)
+    {
+        $deleteDayParam = Classroom::where('id', $request->id)->first();
+        $dayID = $request->dayID;
+        if ($dayID == '2') {
+            $deleteDayParam->Te_Mon = null;
+            $deleteDayParam->Te_Mon_Room = null;
+            $deleteDayParam->Te_Mon_BTime = null;
+            $deleteDayParam->Te_Mon_Room = null;
+            $deleteDayParam->save();
+        }
+        if ($dayID == '3') {
+            $deleteDayParam->Te_Tue = null;
+            $deleteDayParam->Te_Tue_Room = null;
+            $deleteDayParam->Te_Tue_BTime = null;
+            $deleteDayParam->Te_Tue_ETime = null;
+            $deleteDayParam->save();
+        }
+        if ($dayID == '4') {
+            $deleteDayParam->Te_Wed = null;
+            $deleteDayParam->Te_Wed_Room = null;
+            $deleteDayParam->Te_Wed_BTime = null;
+            $deleteDayParam->Te_Wed_ETime = null;
+            $deleteDayParam->save();
+        }
+        if ($dayID == '5') {
+            $deleteDayParam->Te_Thu = null;
+            $deleteDayParam->Te_Thu_Room = null;
+            $deleteDayParam->Te_Thu_BTime = null;
+            $deleteDayParam->Te_Thu_ETime = null;
+            $deleteDayParam->save();
+        }
+        if ($dayID == '6') {
+            $deleteDayParam->Te_Fri = null;
+            $deleteDayParam->Te_Fri_Room = null;
+            $deleteDayParam->Te_Fri_BTime = null;
+            $deleteDayParam->Te_Fri_ETime = null;
+            $deleteDayParam->save();
+        }
+
+        return response()->json($deleteDayParam); 
+    }
     public function ajaxShowSection(Request $request)
     {    
         if($request->ajax()){            

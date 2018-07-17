@@ -8,7 +8,7 @@
 		</div>
 		
 		<div class="col-md-2">
-			<a href="#" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Create Room</a>
+			<a href="#" class="btn btn-block btn-primary btn-h1-spacing">Create Room</a>
 
 		</div>
 		<div class="col-md-12">

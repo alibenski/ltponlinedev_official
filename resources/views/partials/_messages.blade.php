@@ -5,6 +5,13 @@
 
 @endif
 
+@if (Session::has('warning')) 
+	<div class="alert alert-warning alert-block" role="alert">
+		<strong>Message: </strong> {{ Session::get('warning') }}
+	</div>
+
+@endif
+
 @if (Session::has('org_change_success')) 
 	<div class="alert alert-success alert-block" role="alert">
 		<strong>Message: </strong> {{ Session::get('org_change_success') }}
