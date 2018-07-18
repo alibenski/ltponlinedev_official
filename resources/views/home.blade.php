@@ -32,7 +32,7 @@
                             <p>The system will identify if you are a new student in the language requested, or if you have had &nbsp;a break in study of more than two terms.&nbsp; &nbsp;In these cases, a placement test will be automatically required, unless you are a complete beginner.</p>
                             <h4><strong>What should I do if I want to cancel my language course?</strong></h4>
                             <p>Go to the tab &ldquo;current submitted forms&rdquo;, select the cancellation form &nbsp;&nbsp;and click on the button: &ldquo;Cancel Enrolment&rdquo;</p>
-                            <p>The deadline for cancelling your course is 22 July at 11:59 p.m.&nbsp;</p>
+                            <p>The deadline for cancelling your course is 27 July at 11:59 p.m.&nbsp;</p>
                             <h4><strong>Contact:</strong></h4>
                             <p>If you have any questions, please contact the Language Secretariat by email: <strong>clm_language@un.org.</strong></p>
                         </div>                   
