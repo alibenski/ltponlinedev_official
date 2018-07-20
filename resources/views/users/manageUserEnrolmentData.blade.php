@@ -4,7 +4,9 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 
+
 @section('content')
+@include('admin.partials._userAdminNav')
 <div class="row col-sm-12">
 	<h3>Viewing: <strong>{{ $student->name }}</strong></h3>
 	<h3>@if(Request::input('Term'))Term: {{ Request::input('Term') }} @else Please Choose Term @endif</h3>

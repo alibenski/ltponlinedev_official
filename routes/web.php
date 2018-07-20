@@ -44,7 +44,12 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('placement-form', 'PlacementFormController');
     Route::resource('teachers', 'TeachersController');
     Route::resource('rooms', 'RoomsController');
-    Route::get('/placement-form-approved', ['as'=>'placement-form-approved','uses'=>'PlacementFormController@getApprovedPlacementForms']);
+    
+    Route::get('/placement-form-approved', ['as'=>'placement-form-approved','uses'=>'ValidateFormsController@getApprovedPlacementForms']);
+
+    // temporary page for validating queries /admin/validate-page
+    Route::any('validate-page', ['as'=>'validate-page','uses'=>'ValidateFormsController@getApprovedEnrolmentForms']);
+
 });
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin-stats'],function(){
     //admin routes
