@@ -8,7 +8,7 @@ class Repo extends Model
 {
     protected $table = 'LTP_PASHQTcur';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 
+        'schedule_id','id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'created_at'
     ];
     //declare the foreign key on the 3rd parameter of the function
     //in this case, field Te_Code inside table PASH is associated to foreign key Te_Code

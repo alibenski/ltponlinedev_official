@@ -95,7 +95,7 @@ class CourseSchedController extends Controller
                 'Te_Code_New' => $course_id,
                 'Te_Term' => $term_id,
                 'schedule_id' => $schedule_id[$i],
-                'cs_unique' => $course_id.'-'.$term_id.'-'.$schedule_id[$i],
+                'cs_unique' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'Te_Hours' => $request->duration_id, 
                 'Te_Description' => $request->format_id,
                 "created_at" =>  \Carbon\Carbon::now(),
