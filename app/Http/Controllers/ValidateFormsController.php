@@ -38,18 +38,35 @@ class ValidateFormsController extends Controller
 	public function getApprovedEnrolmentForms(Request $request)
     {
         // sort enrolment forms by date of submission
-        $approved_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('L','F')->where('Term', '188')->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->orderBy('created_at', 'asc')->get();
         // apply unique() method to remove dupes 
         // apply values() method to reset key series of the array 
-        $approved_1 = $approved_1->unique('INDEXID')->values()->all(); // becomes an array
+        $approved_1 = $approved_0_1->unique('INDEXID')->values()->all(); // becomes an array
 
-        $approved_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('approval','1')->where('approval_hr', '1')->groupBy('INDEXID')->get();
-        $approved_3 = Preenrolment::select('INDEXID')->whereNotNull('is_self_pay_form')->groupBy('INDEXID')->get();
+        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
         
-        // $placement_forms = $approved_1->merge($approved_2)->merge($approved_3);
-        // $arr = [];
-        // foreach ($approved_2 as $value) {
-        // 	$arr[] = $value->INDEXID;
+        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_2 = $approved_0_2->unique('INDEXID')->values()->all();
+
+        $approved_0_3_collect = Preenrolment::whereNotNull('is_self_pay_form')->where('Term', '188')->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_3 = Preenrolment::select('INDEXID')->whereNotNull('is_self_pay_form')->where('Term', '188')->orderBy('created_at', 'asc')->get();
+        $approved_3 = $approved_0_3->unique('INDEXID')->values()->all(); 
+        
+
+        $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections with sorting
+        $approved_collections = $approved_collections->unique('INDEXID')->values()->all(); 
+        
+        // merge collections but without sorting
+        // $approved_all = array_merge($approved_1,$approved_2,$approved_3);
+        
+
+        $arrCollect = [];
+        // foreach ($approved_collections as $value) {
+        // 	// $arrCollect[] = $value->INDEXID;
+        // 	$arrCollect[] = $value->L;
         // }
         
         // logic to get previous Term of current/existing Term
@@ -77,16 +94,23 @@ class ValidateFormsController extends Controller
         }
 
         $arrINDEXID = [];
+        $arrL = [];
         $arrStudentReEnrolled = [];
         $arrValue = [];
         
-        for ($i=0; $i < count($approved_1); $i++) { 
-            $arrINDEXID[] = $approved_1[$i]['INDEXID'];
+        for ($i=0; $i < count($approved_collections); $i++) { 
+            $arrINDEXID[] = $approved_collections[$i]['INDEXID'];
+            $arrL[] = $approved_collections[$i]['L'];
             // echo $i. " - " .$arrINDEXID[$i] ;
             // echo "<br>";
         
             // priority 1: check each index id if they are already in re-enroling students from previous term via PASHQTcur table
-            $student_reenrolled = Repo::select('INDEXID')->where('Term', $prev_term)->where('L', 'F')->where('INDEXID', $arrINDEXID[$i])->groupBy('INDEXID')->get()->toArray();
+            $student_reenrolled = Repo::select('INDEXID')
+            	->where('Term', $prev_term)
+            	->where('L', $arrL[$i])
+            	->where('INDEXID', $arrINDEXID[$i])
+            	->groupBy('INDEXID')
+            	->get()->toArray();
             $arrStudentReEnrolled[] = $student_reenrolled;
             $student_reenrolled_filtered = array_filter($student_reenrolled);
             
@@ -95,7 +119,7 @@ class ValidateFormsController extends Controller
                 // to know what's in $item
                 // echo '<pre>'; var_dump($item);
                 foreach ($item as $value) {
-                    $arrValue[] = $value; // store the INDEXID values in array
+                    $arrValue[] = $value; // store the reenrolled INDEXID values in array
                     // echo $value['INDEXID'];
                     // echo "<br>";
                     // echo '<pre>'; var_dump($value['INDEXID']);
@@ -108,8 +132,8 @@ class ValidateFormsController extends Controller
 
         for ($i=0; $i < count($arrValue); $i++) {
         	// collect priority 1 enrolment forms 
-            $enrolment_forms_reenrolled = Preenrolment::orderBy('created_at', 'asc')->where('INDEXID', $arrValue[$i])->get();
-            $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
+            $enrolment_forms_reenrolled = Preenrolment::where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
+            // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
             $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
             // assigning of students to classes and saved in PASHQTcur table
@@ -128,8 +152,12 @@ class ValidateFormsController extends Controller
             }   
         }
         
+        /*
+        Priority 3 
+         */
+        
         // dd($approved_1,$approved_2,$approved_3);
-        dd($approved_1, $arr_enrolment_forms_reenrolled, $ingredients, count($ingredients));
+        dd($approved_collections, $arrValue,$ingredients);
     }
 
     public function getApprovedPlacementForms(Request $request)
