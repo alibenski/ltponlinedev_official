@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('teachers', 'TeachersController');
     Route::resource('rooms', 'RoomsController');
     
+    Route::resource('selfpayform', 'SelfPayController', ['only' => ['index', 'update']]);
+
     Route::get('/placement-form-approved', ['as'=>'placement-form-approved','uses'=>'ValidateFormsController@getApprovedPlacementForms']);
 
     // temporary page for validating queries /admin/validate-page

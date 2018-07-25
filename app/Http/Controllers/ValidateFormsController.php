@@ -145,7 +145,6 @@ class ValidateFormsController extends Controller
          */
 
 
-
         $arr_enrolment_forms_reenrolled = [];
         $ingredients = []; 
 

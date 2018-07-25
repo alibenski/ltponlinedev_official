@@ -36,8 +36,8 @@ class SelfPayController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        // $this->middleware('opencloseenrolment');
-        // $this->middleware('checksubmissionselfpay');
+        $this->middleware('opencloseenrolment')->except(['index','update']);
+        // $this->middleware('checksubmissionselfpay')->except(['index','update']);
     }
 
     /**
@@ -47,7 +47,9 @@ class SelfPayController extends Controller
      */
     public function index()
     {
-        //
+        $selfpayforms = Preenrolment::where('is_self_pay_form', '1')->orderBy('created_at','asc')->paginate(10);
+
+        return view('selfpayforms.index')->withSelfpayforms($selfpayforms);
     }
 
     /**
