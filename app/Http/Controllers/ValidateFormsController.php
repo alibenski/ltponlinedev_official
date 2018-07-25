@@ -56,7 +56,7 @@ class ValidateFormsController extends Controller
         $approved_3 = $approved_0_3->unique('INDEXID')->values()->all(); 
         
 
-        $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections with sorting
+        $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections with sorting by submission date and time
         $approved_collections = $approved_collections->unique('INDEXID')->values()->all(); 
         
         // merge collections but without sorting
@@ -111,9 +111,10 @@ class ValidateFormsController extends Controller
             	->where('INDEXID', $arrINDEXID[$i])
             	->groupBy('INDEXID')
             	->get()->toArray();
+
             $arrStudentReEnrolled[] = $student_reenrolled;
             $student_reenrolled_filtered = array_filter($student_reenrolled);
-            
+
             // iterate to get the index id of staff who are re-enroling
             foreach($student_reenrolled_filtered as $item) {
                 // to know what's in $item
@@ -126,6 +127,24 @@ class ValidateFormsController extends Controller
                 }
             }
         }
+
+        /*
+        Priority 3 
+         */
+        $arrPriority3 = [];
+        $priority3_not_reset = array_diff($arrINDEXID,$arrValue);
+        $priority3 = array_values($priority3_not_reset) ;
+        for ($i=0; $i < count($priority3); $i++) {
+        	// collect priority 3 enrolment forms 
+            $enrolment_forms_priority3 = Preenrolment::where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
+            $arrPriority3[] = $enrolment_forms_priority3 ;
+        }
+        
+        /*
+        Priority 4 new students, no PASHQTcur records
+         */
+
+
 
         $arr_enrolment_forms_reenrolled = [];
         $ingredients = []; 
@@ -152,12 +171,9 @@ class ValidateFormsController extends Controller
             }   
         }
         
-        /*
-        Priority 3 
-         */
         
         // dd($approved_1,$approved_2,$approved_3);
-        dd($approved_collections, $arrValue,$ingredients);
+        dd('Count '.count($approved_collections),$arrPriority3, $arrValue,$ingredients);
     }
 
     public function getApprovedPlacementForms(Request $request)
