@@ -20,6 +20,7 @@ use App\Schedule;
 use App\Preenrolment;
 use App\SDDEXTR;
 use App\Torgan;
+use App\TempSort;
 
 use App\PlacementSchedule;
 use App\PlacementForm;
@@ -128,23 +129,6 @@ class ValidateFormsController extends Controller
             }
         }
 
-        /*
-        Priority 3 
-         */
-        $arrPriority3 = [];
-        $priority3_not_reset = array_diff($arrINDEXID,$arrValue);
-        $priority3 = array_values($priority3_not_reset) ;
-        for ($i=0; $i < count($priority3); $i++) {
-        	// collect priority 3 enrolment forms 
-            $enrolment_forms_priority3 = Preenrolment::where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
-            $arrPriority3[] = $enrolment_forms_priority3 ;
-        }
-        
-        /*
-        Priority 4 new students, no PASHQTcur records
-         */
-
-
         $arr_enrolment_forms_reenrolled = [];
         $ingredients = []; 
 
@@ -156,23 +140,80 @@ class ValidateFormsController extends Controller
 
             // assigning of students to classes and saved in PASHQTcur table
             foreach ($enrolment_forms_reenrolled as $value) {
-                $ingredients[] = new  Repo([
-                'id' => $value->id,
-                'INDEXID' => $value->INDEXID,
-                'schedule_id' => $value->schedule_id,
+                $ingredients[] = new  TempSort([
+                'CodeIndexID' => $value->CodeIndexID,
                 'Code' => $value->Code,
+                'schedule_id' => $value->schedule_id,
+                'L' => $value->L,
+                'profile' => $value->profile,
+                'Te_Code' => $value->Te_Code,
                 'Term' => $value->Term,
-                'created_at' => $value->created_at,
+                'INDEXID' => $value->INDEXID,
+                "created_at" =>  $value->created_at,
+                "UpdatedOn" =>  $value->UpdatedOn,
+                'mgr_email' =>  $value->mgr_email,
+                'mgr_lname' => $value->mgr_lname,
+                'mgr_fname' => $value->mgr_fname,
+                'continue_bool' => $value->continue_bool,
+                'DEPT' => $value->DEPT, 
+                'eform_submit_count' => $value->eform_submit_count,              
+                'form_counter' => $value->form_counter,  
+                'agreementBtn' => $value->agreementBtn,
+                'flexibleBtn' => $value->flexibleBtn,
                 ]); 
                     foreach ($ingredients as $data) {
-                        // $data->save();
+                        $data->save();
                     }     
             }   
         }
         
+        /*
+        Priority 3 
+         */
+        $arrPriority3 = [];
+        $ingredients3 = [];
+        $priority3_not_reset = array_diff($arrINDEXID,$arrValue);
+        $priority3 = array_values($priority3_not_reset) ;
+        for ($i=0; $i < count($priority3); $i++) {
+            // collect priority 3 enrolment forms 
+            $enrolment_forms_priority3 = Preenrolment::where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
+            $arrPriority3[] = $enrolment_forms_priority3 ;
+
+            foreach ($enrolment_forms_priority3 as $value) {
+                $ingredients3[] = new  TempSort([
+                'CodeIndexID' => $value->CodeIndexID,
+                'Code' => $value->Code,
+                'schedule_id' => $value->schedule_id,
+                'L' => $value->L,
+                'profile' => $value->profile,
+                'Te_Code' => $value->Te_Code,
+                'Term' => $value->Term,
+                'INDEXID' => $value->INDEXID,
+                "created_at" =>  $value->created_at,
+                "UpdatedOn" =>  $value->UpdatedOn,
+                'mgr_email' =>  $value->mgr_email,
+                'mgr_lname' => $value->mgr_lname,
+                'mgr_fname' => $value->mgr_fname,
+                'continue_bool' => $value->continue_bool,
+                'DEPT' => $value->DEPT, 
+                'eform_submit_count' => $value->eform_submit_count,              
+                'form_counter' => $value->form_counter,  
+                'agreementBtn' => $value->agreementBtn,
+                'flexibleBtn' => $value->flexibleBtn,
+                ]); 
+                    foreach ($ingredients3 as $data) {
+                        $data->save();
+                    }     
+            }  
+        }
+        
+        /*
+        Priority 4 new students, no PASHQTcur records
+         */
         
         // dd($approved_1,$approved_2,$approved_3);
-        dd('Count '.count($approved_collections),$arrPriority3, $arrValue,$ingredients);
+        // TempSort::truncate();
+        dd('Count '.count($approved_collections),$arrPriority3, $arrValue,$ingredients, $ingredients3);
     }
 
     public function getApprovedPlacementForms(Request $request)
@@ -255,10 +296,26 @@ class ValidateFormsController extends Controller
             $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
             foreach ($enrolment_forms_reenrolled as $value) {
-                $ingredients[] = new  Repo([
-                'INDEXID' => $value->INDEXID,
+                $ingredients[] = new  TempSort([
+                'CodeIndexID' => $value->CodeIndexID,
                 'Code' => $value->Code,
+                'schedule_id' => $value->schedule_id,
+                'L' => $value->L,
+                'profile' => $value->profile,
+                'Te_Code' => $value->Te_Code,
                 'Term' => $value->Term,
+                'INDEXID' => $value->INDEXID,
+                "created_at" =>  $value->created_at,
+                "updated_at" =>  $value->updated_at,
+                'mgr_email' =>  $value->mgr_email,
+                'mgr_lname' => $value->mgr_lname,
+                'mgr_fname' => $value->mgr_fname,
+                'continue_bool' => $value->continue_bool,
+                'DEPT' => $value->DEPT, 
+                'eform_submit_count' => $value->eform_submit_count,              
+                'form_counter' => $value->form_counter,  
+                'agreementBtn' => $value->agreementBtn,
+                'flexibleBtn' => $value->flexibleBtn,
                 ]); 
                     foreach ($ingredients as $data) {
                         // $data->save();

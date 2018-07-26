@@ -52,6 +52,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // temporary page for validating queries /admin/validate-page
     Route::any('validate-page', ['as'=>'validate-page','uses'=>'ValidateFormsController@getApprovedEnrolmentForms']);
 
+    // temporary page for sorting queries /admin/sort-page
+    Route::any('sort-page', ['as'=>'sort-page','uses'=>'TempSortController@sortEnrolmentForms']);
+
 });
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin-stats'],function(){
     //admin routes
