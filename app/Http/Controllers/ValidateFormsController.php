@@ -172,6 +172,7 @@ class ValidateFormsController extends Controller
          */
         $arrPriority3 = [];
         $ingredients3 = [];
+        // get the INDEXID's which are not existing
         $priority3_not_reset = array_diff($arrINDEXID,$arrValue);
         $priority3 = array_values($priority3_not_reset) ;
         for ($i=0; $i < count($priority3); $i++) {

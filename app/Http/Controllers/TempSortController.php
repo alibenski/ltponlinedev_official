@@ -6,17 +6,32 @@ use Illuminate\Http\Request;
 use App\TempSort;
 use App\Preenrolment;
 use App\Repo;
+use DB;
 
 class TempSortController extends Controller
 {
+	public function orderCodes()
+	{
+		$codeSortByCountIndexID = TempSort::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'FIO1')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
+    	foreach ($codeSortByCountIndexID as $value) {
+    		DB::table('tblLTP_TempOrder')->insert(
+			    ['Term' => $value->Term, 'Code' => $value->Code, 'CountIndexID' => $value->CountIndexID]
+			);
+    	}
+    	// DB::table('tblLTP_TempOrder')->truncate();
+    	dd($codeSortByCountIndexID);
+	}
+
     public function sortEnrolmentForms()
-    {
+    {	
+    	return $this->checkCodeIfExistsInPash();
     	$getCode = TempSort::select('Code')->where('Te_Code', 'FIO1')->groupBy('Code')->get()->toArray();
 
     	$arrCodeCount = [];
     	$arrPerCode = [];
         $num_classes =[];
 
+        // get the count for each Code
     	for ($i=0; $i < count($getCode); $i++) { 
     		$perCode = TempSort::where('Code', $getCode[$i])->value('Code');
     		$countPerCode = TempSort::where('Code', $getCode[$i])->get()->count();
@@ -27,10 +42,12 @@ class TempSortController extends Controller
             $num_classes[] = $arrCodeCount[$i]/15;
 
         }
-        
+        //  get the min of the counts
         $minValue = min($arrCodeCount);
         $arr = [];
         $arrSaveToPash = [];
+
+        // use min to determine the first course-schedule assignment
         for ($i=0; $i < count($arrPerCode); $i++) { 
 
             if ($minValue >= $arrCodeCount[$i]) {
@@ -60,20 +77,31 @@ class TempSortController extends Controller
                     'flexibleBtn' => $value->flexibleBtn,
                     ]); 
                     foreach ($arrSaveToPash as $data) {
-                        // $data->save();
+                        $data->save();
                     }     
                 }   
-            } elseif ($minValue < $arrCodeCount[$i]) {
-                // check and exclude existing INDEXID with the Code
-                $queryIndexID = TempSort::where('Code', $arrPerCode[$i])->get(); 
-                foreach ($queryIndexID as $value) {
-                    $arrSaveToPash[] = $value->INDEXID;
-                }
-            }
+            } 
         }
 
         $new = array_map(null,$arrPerCode, $arrCodeCount, $num_classes);
-    	dd($getCode,$arrPerCode,$arrCodeCount,$minValue, $num_classes, $new, $arr,$arrSaveToPash);
-    	
+    	dd($getCode,$arrPerCode,$arrCodeCount,$minValue, $num_classes, $new, $arr,$arrSaveToPash);    	
+    }
+
+    public function checkCodeIfExistsInPash()
+    {
+    	$checkCodeIfExisting = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+    	$arr = [];
+    	foreach ($checkCodeIfExisting as $value) {
+    		$queryPashForCodes = Repo::where('Code', $value->Code)->get();
+    		foreach ($queryPashForCodes as $item) {
+    			$arr[] = $item->INDEXID;
+    			
+    		}
+    		if (empty($queryPashForCodes)) {
+    			echo 'none exists';
+    		}
+
+    	}
+    	dd($arr);
     }
 }
