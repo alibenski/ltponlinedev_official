@@ -12,6 +12,7 @@ class TempSortController extends Controller
 {
 	public function orderCodes()
 	{
+		// query existing records where specific course is given
 		$codeSortByCountIndexID = TempSort::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'FIO1')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
     	foreach ($codeSortByCountIndexID as $value) {
     		DB::table('tblLTP_TempOrder')->insert(
@@ -77,7 +78,7 @@ class TempSortController extends Controller
                     'flexibleBtn' => $value->flexibleBtn,
                     ]); 
                     foreach ($arrSaveToPash as $data) {
-                        $data->save();
+                        // $data->save();
                     }     
                 }   
             } 
@@ -89,19 +90,62 @@ class TempSortController extends Controller
 
     public function checkCodeIfExistsInPash()
     {
-    	$checkCodeIfExisting = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+    	$checkCodeIfExisting = DB::table('tblLTP_TempOrder')->select('Code', 'Term')->orderBy('id')->get()->toArray();
     	$arr = [];
+    	$arrStd = [];
     	foreach ($checkCodeIfExisting as $value) {
+    		$queryPashForCodesArr = Repo::where('Code', $value->Code)->get()->toArray();
+    		$arr[] = $queryPashForCodesArr;
     		$queryPashForCodes = Repo::where('Code', $value->Code)->get();
-    		foreach ($queryPashForCodes as $item) {
-    			$arr[] = $item->INDEXID;
-    			
-    		}
-    		if (empty($queryPashForCodes)) {
+    		
+    		if (empty($queryPashForCodesArr)) {
     			echo 'none exists';
+    			echo '<br>';
+    			// check INDEXID of students if existing in PASHQTcur
+				$students = DB::table('tblLTP_TempSort')
+		        ->select('tblLTP_TempSort.*')
+		        ->where('tblLTP_TempSort.Term', "=",$value->Term)
+		        ->where('tblLTP_TempSort.Code', "=",$value->Code)
+		        // leftjoin sql statement with subquery using raw statement
+		        ->leftJoin(DB::raw("(SELECT 
+				      LTP_PASHQTcur.INDEXID FROM LTP_PASHQTcur
+				      WHERE LTP_PASHQTcur.Term = '$value->Term') as items"),function($q){
+				        $q->on("tblLTP_TempSort.INDEXID","=","items.INDEXID")
+				        ;
+				  })
+		        ->whereNull('items.INDEXID')        
+		        ->get();
+		        // $arrStd[] = $students;
+		        foreach ($students as $value) {
+                    $arrStd[] = new  Repo([
+                    'CodeIndexID' => $value->CodeIndexID,
+                    'Code' => $value->Code,
+                    'schedule_id' => $value->schedule_id,
+                    'L' => $value->L,
+                    'profile' => $value->profile,
+                    'Te_Code' => $value->Te_Code,
+                    'Term' => $value->Term,
+                    'INDEXID' => $value->INDEXID,
+                    "created_at" =>  $value->created_at,
+                    "UpdatedOn" =>  $value->UpdatedOn,
+                    'mgr_email' =>  $value->mgr_email,
+                    'mgr_lname' => $value->mgr_lname,
+                    'mgr_fname' => $value->mgr_fname,
+                    'continue_bool' => $value->continue_bool,
+                    'DEPT' => $value->DEPT, 
+                    'eform_submit_count' => $value->eform_submit_count,              
+                    'form_counter' => $value->form_counter,  
+                    'agreementBtn' => $value->agreementBtn,
+                    'flexibleBtn' => $value->flexibleBtn,
+                    ]); 
+                    foreach ($arrStd as $data) {
+                        $data->save();
+                    }     
+                } 
     		}
-
     	}
-    	dd($arr);
+		
+		
+    	dd($checkCodeIfExisting,$arr,$arrStd);
     }
 }
