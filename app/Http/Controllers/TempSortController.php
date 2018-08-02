@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\TempSort;
 use App\Preenrolment;
 use App\Repo;
+use App\Classroom;
+use App\CourseSchedule;
 use DB;
 
 class TempSortController extends Controller
@@ -30,8 +32,7 @@ class TempSortController extends Controller
 
     	$arrCodeCount = [];
     	$arrPerCode = [];
-        $num_classes =[];
-
+        $ingredients = [];
         // get the count for each Code
     	for ($i=0; $i < count($getCode); $i++) { 
     		$perCode = TempSort::where('Code', $getCode[$i])->value('Code');
@@ -39,10 +40,9 @@ class TempSortController extends Controller
 
     		$arrPerCode[] = $perCode;
 			$arrCodeCount[] = $countPerCode;
-            // calculate sum per code and divide by 14 or 15 for number of classes
-            $num_classes[] = $arrCodeCount[$i]/15;
 
         }
+
         //  get the min of the counts
         $minValue = min($arrCodeCount);
         $arr = [];
@@ -139,13 +139,40 @@ class TempSortController extends Controller
                     'flexibleBtn' => $value->flexibleBtn,
                     ]); 
                     foreach ($arrStd as $data) {
-                        $data->save();
+                        // $data->save();
                     }     
                 } 
     		}
     	}
 		
+		$getCodeForSectionNo = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get();
+
+		$arrCountStdPerCode = [];
+		foreach ($getCodeForSectionNo as $value) {
+			$countStdPerCode = Repo::where('Code', $value->Code)->get()->count();
+			
+			$arrCountStdPerCode[] = $countStdPerCode;
+		}
+		// calculate sum per code and divide by 14 or 15 for number of classes
+		$num_classes =[];
+		for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
+			$num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
+		}
+		$num_classes = [5, 3];
 		
-    	dd($checkCodeIfExisting,$arr,$arrStd);
+		$sectionNo = 1;
+		$ingredients = [];
+		for ($i=0; $i < 5; $i++) { 
+			$ingredients[] = new  Classroom([
+                        'Code' => '$cs_unique-'.$sectionNo++,
+                        ]);
+		}
+
+    	dd($checkCodeIfExisting,$arr,$arrStd, $getCodeForSectionNo, $countStdPerCode,$arrCountStdPerCode,$num_classes,$ingredients);
+    }
+
+    public function createSections()
+    {
+    	
     }
 }
