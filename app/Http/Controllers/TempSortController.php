@@ -34,7 +34,8 @@ class TempSortController extends Controller
     	$arrPerCode = [];
         $ingredients = [];
         // get the count for each Code
-    	for ($i=0; $i < count($getCode); $i++) { 
+        $j = count($getCode);
+    	for ($i=0; $i < $j; $i++) { 
     		$perCode = TempSort::where('Code', $getCode[$i])->value('Code');
     		$countPerCode = TempSort::where('Code', $getCode[$i])->get()->count();
 
@@ -145,30 +146,65 @@ class TempSortController extends Controller
     		}
     	}
 		
+		/*
+		 Start process of creating classes based on nnumber of students assigned per course-schedule 
+		 */
 		$getCodeForSectionNo = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get();
 
 		$arrCountStdPerCode = [];
 		foreach ($getCodeForSectionNo as $value) {
 			$countStdPerCode = Repo::where('Code', $value->Code)->get()->count();
-			
 			$arrCountStdPerCode[] = $countStdPerCode;
 		}
+		
 		// calculate sum per code and divide by 14 or 15 for number of classes
 		$num_classes =[];
 		for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
 			$num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
 		}
-		$num_classes = [5, 3];
 		
-		$sectionNo = 1;
-		$ingredients = [];
-		for ($i=0; $i < 5; $i++) { 
-			$ingredients[] = new  Classroom([
-                        'Code' => '$cs_unique-'.$sectionNo++,
-                        ]);
+		$getCode = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+		$arrGetCode = [];
+		$arrGetDetails = [];
+		foreach ($getCode as $valueCode) {
+			$arrGetCode[] = $valueCode->Code;
+			
+			$getDetails = CourseSchedule::where('cs_unique', $valueCode->Code)->get();
+			foreach ($getDetails as $valueDetails) {
+				$arrGetDetails[] = $valueDetails;
+			}
 		}
 
-    	dd($checkCodeIfExisting,$arr,$arrStd, $getCodeForSectionNo, $countStdPerCode,$arrCountStdPerCode,$num_classes,$ingredients);
+		// $num_classes=[5,2];
+		$ingredients = [];
+		$k = count($num_classes);
+		for ($i=0; $i < count($num_classes); $i++) { 
+				// check existing section first
+				// if null, then value is 1
+				$sectionNo = 1;
+				$sectionNo2 = 1;
+				// if not null, get last value from TEVENTcur table
+				// $sectionNo = $TEVENTcur->sectionNo;
+				// $sectionNo2 = $TEVENTcur->sectionNo;
+				
+				$counter = $num_classes[$i];
+				for ($i2=0; $i2 < $counter; $i2++) { 
+					$ingredients[] = new  Classroom([
+                        'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                        'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                        'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                        'L' => $arrGetDetails[$i]->L, 
+                        'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                        'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                        'sectionNo' => $sectionNo2++,
+                        ]);
+					foreach ($ingredients as $data) {
+                                // $data->save();
+                            }
+				}
+		}
+
+    	dd($k,$counter,$num_classes,$arrGetCode,$arrGetDetails,$ingredients);
     }
 
     public function createSections()
