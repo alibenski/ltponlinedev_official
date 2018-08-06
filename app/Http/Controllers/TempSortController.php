@@ -14,6 +14,7 @@ class TempSortController extends Controller
 {
 	public function orderCodes()
 	{
+		// first step
 		// query existing records where specific course is given
 		$codeSortByCountIndexID = TempSort::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'FIO1')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
     	foreach ($codeSortByCountIndexID as $value) {
@@ -79,14 +80,14 @@ class TempSortController extends Controller
                     'flexibleBtn' => $value->flexibleBtn,
                     ]); 
                     foreach ($arrSaveToPash as $data) {
-                        // $data->save();
+                        $data->save();
                     }     
                 }   
             } 
         }
 
-        $new = array_map(null,$arrPerCode, $arrCodeCount, $num_classes);
-    	dd($getCode,$arrPerCode,$arrCodeCount,$minValue, $num_classes, $new, $arr,$arrSaveToPash);    	
+        $new = array_map(null,$arrPerCode, $arrCodeCount);
+    	dd($getCode,$arrPerCode,$arrCodeCount,$minValue, $new, $arr,$arrSaveToPash);    	
     }
 
     public function checkCodeIfExistsInPash()
@@ -140,7 +141,7 @@ class TempSortController extends Controller
                     'flexibleBtn' => $value->flexibleBtn,
                     ]); 
                     foreach ($arrStd as $data) {
-                        // $data->save();
+                        $data->save();
                     }     
                 } 
     		}
@@ -166,6 +167,7 @@ class TempSortController extends Controller
 		$getCode = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
 		$arrGetCode = [];
 		$arrGetDetails = [];
+		
 		foreach ($getCode as $valueCode) {
 			$arrGetCode[] = $valueCode->Code;
 			
@@ -178,33 +180,67 @@ class TempSortController extends Controller
 		// $num_classes=[5,2];
 		$ingredients = [];
 		$k = count($num_classes);
+		
+
 		for ($i=0; $i < count($num_classes); $i++) { 
-				// check existing section first
-				// if null, then value is 1
-				$sectionNo = 1;
-				$sectionNo2 = 1;
-				// if not null, get last value from TEVENTcur table
-				// $sectionNo = $TEVENTcur->sectionNo;
-				// $sectionNo2 = $TEVENTcur->sectionNo;
-				
-				$counter = $num_classes[$i];
-				for ($i2=0; $i2 < $counter; $i2++) { 
-					$ingredients[] = new  Classroom([
-                        'Code' => $arrGetCode[$i].'-'.$sectionNo++,
-                        'Te_Term' => $arrGetDetails[$i]->Te_Term,
-                        'cs_unique' => $arrGetDetails[$i]->cs_unique,
-                        'L' => $arrGetDetails[$i]->L, 
-                        'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
-                        'schedule_id' => $arrGetDetails[$i]->schedule_id,
-                        'sectionNo' => $sectionNo2++,
-                        ]);
-					foreach ($ingredients as $data) {
-                                // $data->save();
-                            }
+			$sectionNo = 1;
+			$sectionNo2 = 1;
+			$arrExistingSection = [];
+			
+			// check existing section(s) first
+			$getCode2 = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+			foreach ($getCode2 as $valueCode2) {
+				$existingSection = Classroom::where('cs_unique', $valueCode2->Code)->orderBy('sectionNo', 'desc')->get();
+				$arrExistingSection[] = $existingSection;
+				if (isset($existingSection)) {
+					foreach ($existingSection as $valueSection) {
+						$sectionNo = $valueSection->sectionNo + 1;
+						$sectionNo2 = $valueSection->sectionNo + 1;
+					}
 				}
+			}
+			var_dump('section value starts at: '.$sectionNo);
+			$counter = $num_classes[$i];
+			for ($i2=0; $i2 < $counter; $i2++) { 
+				$ingredients[] = new  Classroom([
+                    'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                    'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                    'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                    'L' => $arrGetDetails[$i]->L, 
+                    'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                    'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                    'sectionNo' => $sectionNo2++,
+                    ]);
+				foreach ($ingredients as $data) {
+                            $data->save();
+				}
+			}
+		}
+		
+		// query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
+		$arrGetClassRoomDetails = [];
+		$arrGetPashStudents = [];
+		foreach ($getCode as $valueCode) {
+			// code from TempSort, put in array
+			$arrGetCode[] = $valueCode->Code; 
+			
+			$getClassRoomDetails = Classroom::where('cs_unique', $valueCode->Code)->get();
+			foreach ($getClassRoomDetails as $valueClassRoomDetails) {
+				$arrGetClassRoomDetails[] = $valueClassRoomDetails;
+				
+				$getPashStudents = Repo::where('Code', $valueCode->Code)->get()->take(15);
+				foreach ($getPashStudents as $valuePashStudents) {
+					$pashUpdate = Repo::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
+					// $pashUpdate->update(['CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+					
+					$arrGetPashStudents[] = $pashUpdate;
+				}
+			}
 		}
 
-    	dd($k,$counter,$num_classes,$arrGetCode,$arrGetDetails,$ingredients);
+
+
+    	dd($k,$counter,$num_classes,$arrGetCode,$arrGetDetails,$ingredients,$arrGetClassRoomDetails,$arrExistingSection,$getCode2);
     }
 
     public function createSections()

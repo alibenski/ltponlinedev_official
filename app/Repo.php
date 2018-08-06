@@ -8,7 +8,7 @@ class Repo extends Model
 {
     protected $table = 'LTP_PASHQTcur';
     protected $fillable = [
-        'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT'
+        'CodeIndexIDClass','schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT'
     ];
     
     /**
