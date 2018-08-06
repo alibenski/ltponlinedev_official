@@ -190,14 +190,14 @@ class TempSortController extends Controller
 			// check existing section(s) first
 			$getCode2 = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
 			foreach ($getCode2 as $valueCode2) {
-				$existingSection = Classroom::where('cs_unique', $valueCode2->Code)->orderBy('sectionNo', 'desc')->get();
+				$existingSection = Classroom::where('cs_unique', $valueCode2->Code)->orderBy('sectionNo', 'desc')->get()->toArray();
 				$arrExistingSection[] = $existingSection;
-				if (isset($existingSection)) {
-					foreach ($existingSection as $valueSection) {
-						$sectionNo = $valueSection->sectionNo + 1;
-						$sectionNo2 = $valueSection->sectionNo + 1;
-					}
-				}
+				// if (isset($existingSection)) {
+				// 	foreach ($existingSection as $valueSection) {
+				// 		$sectionNo = $valueSection->sectionNo + 1;
+				// 		$sectionNo2 = $valueSection->sectionNo + 1;
+				// 	}
+				// }
 			}
 			var_dump('section value starts at: '.$sectionNo);
 			$counter = $num_classes[$i];
