@@ -12,6 +12,7 @@ use DB;
 
 class TempSortController extends Controller
 {
+	
 	public function orderCodes()
 	{
 		// first step
@@ -154,7 +155,8 @@ class TempSortController extends Controller
 
 		$arrCountStdPerCode = [];
 		foreach ($getCodeForSectionNo as $value) {
-			$countStdPerCode = Repo::where('Code', $value->Code)->get()->count();
+			// query student count who are not yet assigned to a class section (null)
+			$countStdPerCode = Repo::where('Code', $value->Code)->where('CodeIndexIDClass', null)->get()->count();
 			$arrCountStdPerCode[] = $countStdPerCode;
 		}
 		
@@ -177,7 +179,7 @@ class TempSortController extends Controller
 			}
 		}
 
-		$num_classes=[5,2];
+		// $num_classes=[5,2];
 		$ingredients = [];
 		$k = count($num_classes);
 		$arrExistingSection = [];
@@ -191,27 +193,27 @@ class TempSortController extends Controller
             $arrExistingSection[] = $existingSection;
             // if not, get existing value of sectionNo
             if (!empty($existingSection)) {
-                foreach ($existingSection as $valueSection) {
-                    $arr[] = $valueSection['sectionNo'];
-                    $sectionNo = $valueSection['sectionNo'] + 1;
-                    $sectionNo2 = $valueSection['sectionNo'] + 1;
-                    
-                    for ($i2=0; $i2 < $counter; $i2++) { 
-                        $ingredients[] = new  Classroom([
-                            'Code' => $arrGetCode[$i].'-'.$sectionNo++,
-                            'Te_Term' => $arrGetDetails[$i]->Te_Term,
-                            'cs_unique' => $arrGetDetails[$i]->cs_unique,
-                            'L' => $arrGetDetails[$i]->L, 
-                            'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
-                            'schedule_id' => $arrGetDetails[$i]->schedule_id,
-                            'sectionNo' => $sectionNo2++,
-                            ]);
-                        foreach ($ingredients as $data) {
-                                    // $data->save();
-                        }
+                $sectionNo = $existingSection[0]['sectionNo'] + 1;
+                $sectionNo2 = $existingSection[0]['sectionNo'] + 1;
+                $arr[] = $sectionNo;
+                var_dump($sectionNo);
+
+                for ($i2=0; $i2 < $counter; $i2++) { 
+                    $ingredients[] = new  Classroom([
+                        'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                        'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                        'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                        'L' => $arrGetDetails[$i]->L, 
+                        'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                        'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                        'sectionNo' => $sectionNo2++,
+                        ]);
+                    foreach ($ingredients as $data) {
+                                $data->save();
                     }
                 }
-            } else {
+            } 
+            else {
                 $sectionNo = 1;
                 $sectionNo2 = 1;
                 for ($i2=0; $i2 < $counter; $i2++) { 
@@ -243,17 +245,18 @@ class TempSortController extends Controller
 			foreach ($getClassRoomDetails as $valueClassRoomDetails) {
 				$arrGetClassRoomDetails[] = $valueClassRoomDetails;
 				
-				$getPashStudents = Repo::where('Code', $valueCode->Code)->get()->take(15);
+				// query student count who are not yet assigned to a class section (null)
+				$getPashStudents = Repo::where('Code', $valueCode->Code)->where('CodeIndexIDClass', null)->get()->take(15);
 				foreach ($getPashStudents as $valuePashStudents) {
 					$pashUpdate = Repo::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
-					// $pashUpdate->update(['CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+					$pashUpdate->update(['CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID, 'CodeClass' => $valueClassRoomDetails->Code]);
 					
 					$arrGetPashStudents[] = $pashUpdate;
 				}
 			}
 		}
 
-    	dd($arr,$arrExistingSection,$ingredients);
+    	dd($arrExistingSection,$arr,$ingredients);
     }
 
     public function createSections()

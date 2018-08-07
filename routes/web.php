@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('/placement-form-approved', ['as'=>'placement-form-approved','uses'=>'ValidateFormsController@getApprovedPlacementForms']);
 
+    Route::any('vsa-page', ['as'=>'vsa-page','uses'=>'ValidateFormsController@index']);
+
     // temporary page for validating queries /admin/validate-page
     Route::any('validate-page', ['as'=>'validate-page','uses'=>'ValidateFormsController@getApprovedEnrolmentForms']);
 

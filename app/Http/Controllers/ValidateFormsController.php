@@ -32,10 +32,13 @@ use Illuminate\Validation\Rule;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-
-
 class ValidateFormsController extends Controller
 {
+    public function index()
+    {
+        return view('vsa-page');
+    }
+
 	public function getApprovedEnrolmentForms(Request $request)
     {
         // sort enrolment forms by date of submission
@@ -138,7 +141,7 @@ class ValidateFormsController extends Controller
             // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
             $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
-            // assigning of students to classes and saved in PASHQTcur table
+            // assigning of students to classes and saved in TempSort table
             foreach ($enrolment_forms_reenrolled as $value) {
                 $ingredients[] = new  TempSort([
                 'CodeIndexID' => $value->CodeIndexID,
@@ -166,6 +169,10 @@ class ValidateFormsController extends Controller
                     }     
             }   
         }
+
+        /*
+        Priority 2 new students, wait-listed from wait-list table
+         */
         
         /*
         Priority 3 
@@ -234,96 +241,6 @@ class ValidateFormsController extends Controller
 
     public function priorityFactor()
     {
-        // logic to get previous Term of current/existing Term
-        // 9 is 4, 1 is 9, 4 is 1
-        // if last digit value is 9, subtract 5 from selectedTerm value
-        $selectedTerm = $request->Term; // No need of type casting
-        // echo substr($selectedTerm, 0, 1); // get first value
-        // echo substr($selectedTerm, -1); // get last value
-        $lastDigit = substr($selectedTerm, -1);
 
-        if ($lastDigit == 9) {
-            $prev_term = $selectedTerm - 5;
-            // dd($term);
-        }
-        // if last digit is 1, check Term table for previous term value or subtract 2 from selectedTerm value
-        if ($lastDigit == 1) {
-            $prev_term = $selectedTerm - 2;
-        }
-        // if last digit is 4, check Term table for previous term value or subtract 3 from selectedTerm value
-        if ($lastDigit == 4) {
-            $prev_term = $selectedTerm - 3;
-        }
-        if ($lastDigit == 8) {
-            $prev_term = $selectedTerm - 4;
-        }
-
-        // enrolment forms non-UNOG approved by manager & HR
-        $enrolment_forms_2 = Preenrolment::select('INDEXID')->where('L', 'F')->where('approval', '1')->where('approval_hr', '1')->where('Term', $selectedTerm)->groupBy('INDEXID')->get()->toArray();
-
-        $arrINDEXID = [];
-        $arrStudentReEnrolled = [];
-        $arrValue = [];
-        
-        for ($i=0; $i < count($enrolment_forms_2); $i++) { 
-            $arrINDEXID[] = $enrolment_forms_2[$i]['INDEXID'];
-            // echo $i. " - " .$arrINDEXID[$i] ;
-            // echo "<br>";
-        
-            // check each index id if they are already in re-enroling students from previous term
-            $student_reenrolled = Repo::select('INDEXID')->where('Term', $prev_term)->where('L', 'F')->where('INDEXID', $arrINDEXID[$i])->groupBy('INDEXID')->get()->toArray();
-            $arrStudentReEnrolled[] = $student_reenrolled;
-            $student_reenrolled_filtered = array_filter($student_reenrolled);
-            
-            // iterate to get the index id of staff who are re-enroling
-            foreach($student_reenrolled_filtered as $item) {
-                // to know what's in $item
-                // echo '<pre>'; var_dump($item);
-                foreach ($item as $value) {
-                    $arrValue[] = $value;
-                    // echo $value['INDEXID'];
-                    // echo "<br>";
-                    // echo '<pre>'; var_dump($value['INDEXID']);
-                }
-            }
-        }
-
-        $arr_enrolment_forms_reenrolled = [];
-        $ingredients = []; 
-
-        for ($i=0; $i < 14; $i++) { 
-            $enrolment_forms_reenrolled = Preenrolment::orderBy('id', 'asc')->where('INDEXID', $arrValue[$i])->get();
-            
-            $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
-
-            foreach ($enrolment_forms_reenrolled as $value) {
-                $ingredients[] = new  TempSort([
-                'CodeIndexID' => $value->CodeIndexID,
-                'Code' => $value->Code,
-                'schedule_id' => $value->schedule_id,
-                'L' => $value->L,
-                'profile' => $value->profile,
-                'Te_Code' => $value->Te_Code,
-                'Term' => $value->Term,
-                'INDEXID' => $value->INDEXID,
-                "created_at" =>  $value->created_at,
-                "updated_at" =>  $value->updated_at,
-                'mgr_email' =>  $value->mgr_email,
-                'mgr_lname' => $value->mgr_lname,
-                'mgr_fname' => $value->mgr_fname,
-                'continue_bool' => $value->continue_bool,
-                'DEPT' => $value->DEPT, 
-                'eform_submit_count' => $value->eform_submit_count,              
-                'form_counter' => $value->form_counter,  
-                'agreementBtn' => $value->agreementBtn,
-                'flexibleBtn' => $value->flexibleBtn,
-                ]); 
-                    foreach ($ingredients as $data) {
-                        // $data->save();
-                    }     
-            }   
-        }
-
-        dd(count($arrValue), $arr_enrolment_forms_reenrolled, $ingredients);
     }
 }
