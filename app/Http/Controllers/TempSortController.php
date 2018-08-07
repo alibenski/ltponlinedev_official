@@ -177,44 +177,59 @@ class TempSortController extends Controller
 			}
 		}
 
-		// $num_classes=[5,2];
+		$num_classes=[5,2];
 		$ingredients = [];
 		$k = count($num_classes);
-		
-
+		$arrExistingSection = [];
+        $arr = [];
+        
 		for ($i=0; $i < count($num_classes); $i++) { 
-			$sectionNo = 1;
-			$sectionNo2 = 1;
-			$arrExistingSection = [];
-			
 			// check existing section(s) first
-			$getCode2 = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
-			foreach ($getCode2 as $valueCode2) {
-				$existingSection = Classroom::where('cs_unique', $valueCode2->Code)->orderBy('sectionNo', 'desc')->get()->toArray();
-				$arrExistingSection[] = $existingSection;
-				// if (isset($existingSection)) {
-				// 	foreach ($existingSection as $valueSection) {
-				// 		$sectionNo = $valueSection->sectionNo + 1;
-				// 		$sectionNo2 = $valueSection->sectionNo + 1;
-				// 	}
-				// }
-			}
-			var_dump('section value starts at: '.$sectionNo);
-			$counter = $num_classes[$i];
-			for ($i2=0; $i2 < $counter; $i2++) { 
-				$ingredients[] = new  Classroom([
-                    'Code' => $arrGetCode[$i].'-'.$sectionNo++,
-                    'Te_Term' => $arrGetDetails[$i]->Te_Term,
-                    'cs_unique' => $arrGetDetails[$i]->cs_unique,
-                    'L' => $arrGetDetails[$i]->L, 
-                    'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
-                    'schedule_id' => $arrGetDetails[$i]->schedule_id,
-                    'sectionNo' => $sectionNo2++,
-                    ]);
-				foreach ($ingredients as $data) {
-                            $data->save();
-				}
-			}
+            // value of section is 1, if $existingSection is empty
+            $counter = $num_classes[$i];
+            $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
+            $arrExistingSection[] = $existingSection;
+            // if not, get existing value of sectionNo
+            if (!empty($existingSection)) {
+                foreach ($existingSection as $valueSection) {
+                    $arr[] = $valueSection['sectionNo'];
+                    $sectionNo = $valueSection['sectionNo'] + 1;
+                    $sectionNo2 = $valueSection['sectionNo'] + 1;
+                    
+                    for ($i2=0; $i2 < $counter; $i2++) { 
+                        $ingredients[] = new  Classroom([
+                            'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                            'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                            'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                            'L' => $arrGetDetails[$i]->L, 
+                            'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                            'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                            'sectionNo' => $sectionNo2++,
+                            ]);
+                        foreach ($ingredients as $data) {
+                                    // $data->save();
+                        }
+                    }
+                }
+            } else {
+                $sectionNo = 1;
+                $sectionNo2 = 1;
+                for ($i2=0; $i2 < $counter; $i2++) { 
+                    $ingredients[] = new  Classroom([
+                        'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                        'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                        'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                        'L' => $arrGetDetails[$i]->L, 
+                        'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                        'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                        'sectionNo' => $sectionNo2++,
+                        ]);
+                    foreach ($ingredients as $data) {
+                                $data->save();
+                    }
+                }
+            }
+                var_dump('section value starts at: '.$sectionNo);
 		}
 		
 		// query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
@@ -238,9 +253,7 @@ class TempSortController extends Controller
 			}
 		}
 
-
-
-    	dd($k,$counter,$num_classes,$arrGetCode,$arrGetDetails,$ingredients,$arrGetClassRoomDetails,$arrExistingSection,$getCode2);
+    	dd($arr,$arrExistingSection,$ingredients);
     }
 
     public function createSections()
