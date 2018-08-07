@@ -15,7 +15,7 @@
 
 @section('content')
 
-<h1 class="text-danger">Admin Page</h1>
+<h1 class="text-danger">Admin Page Here and There</h1>
 
-
+<p>Choose Term here</p>
 @endsection
