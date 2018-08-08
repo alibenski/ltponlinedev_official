@@ -44,18 +44,20 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('placement-form', 'PlacementFormController');
     Route::resource('teachers', 'TeachersController');
     Route::resource('rooms', 'RoomsController');
+    Route::resource('waitlist', 'WaitlistController');
     
     Route::resource('selfpayform', 'SelfPayController', ['only' => ['index', 'update']]);
 
     Route::get('/placement-form-approved', ['as'=>'placement-form-approved','uses'=>'ValidateFormsController@getApprovedPlacementForms']);
 
-    Route::any('vsa-page', ['as'=>'vsa-page','uses'=>'ValidateFormsController@index']);
+    Route::any('vsa-page-1', ['as'=>'vsa-page-1','uses'=>'ValidateFormsController@vsaPage1']);
+    Route::any('vsa-page-2', ['as'=>'vsa-page-2','uses'=>'TempSortController@vsaPage2']);
 
     // temporary page for validating queries /admin/validate-page
     Route::any('validate-page', ['as'=>'validate-page','uses'=>'ValidateFormsController@getApprovedEnrolmentForms']);
 
     // temporary page for sorting queries /admin/sort-page
-    Route::any('sort-page', ['as'=>'sort-page','uses'=>'TempSortController@sortEnrolmentForms']);
+    Route::any('sort-page', ['as'=>'sort-page','uses'=>'TempSortController@orderCodes']);
 
 });
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin-stats'],function(){

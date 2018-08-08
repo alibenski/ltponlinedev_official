@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Term;
 use App\TempSort;
 use App\Preenrolment;
 use App\Repo;
@@ -12,25 +13,32 @@ use DB;
 
 class TempSortController extends Controller
 {
-	
-	public function orderCodes()
-	{
+	public function vsaPage2()
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $term = TempSort::orderBy('id', 'desc')->first();
+        return view('admin.operations.vsa-page-2')->withLanguages($languages)->withTerm($term);
+    }
+
+	public function orderCodes(Request $request)
+	{	
+		$te_code = $request->course_id;
 		// first step
 		// query existing records where specific course is given
-		$codeSortByCountIndexID = TempSort::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'FIO1')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
+		$codeSortByCountIndexID = TempSort::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', $te_code)->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
     	foreach ($codeSortByCountIndexID as $value) {
     		DB::table('tblLTP_TempOrder')->insert(
 			    ['Term' => $value->Term, 'Code' => $value->Code, 'CountIndexID' => $value->CountIndexID]
 			);
     	}
     	// DB::table('tblLTP_TempOrder')->truncate();
-    	dd($codeSortByCountIndexID);
+    	// dd($codeSortByCountIndexID);
+		$this->sortEnrolmentForms($te_code);
 	}
 
-    public function sortEnrolmentForms()
+    public function sortEnrolmentForms($te_code)
     {	
-    	return $this->checkCodeIfExistsInPash();
-    	$getCode = TempSort::select('Code')->where('Te_Code', 'FIO1')->groupBy('Code')->get()->toArray();
+    	$getCode = TempSort::select('Code')->where('Te_Code', $te_code)->groupBy('Code')->get()->toArray();
 
     	$arrCodeCount = [];
     	$arrPerCode = [];
@@ -88,7 +96,8 @@ class TempSortController extends Controller
         }
 
         $new = array_map(null,$arrPerCode, $arrCodeCount);
-    	dd($getCode,$arrPerCode,$arrCodeCount,$minValue, $new, $arr,$arrSaveToPash);    	
+    	// dd($getCode,$arrPerCode,$arrCodeCount,$minValue, $new, $arr,$arrSaveToPash);
+    	$this->checkCodeIfExistsInPash();
     }
 
     public function checkCodeIfExistsInPash()
@@ -256,7 +265,8 @@ class TempSortController extends Controller
 			}
 		}
 
-    	dd($arrExistingSection,$arr,$ingredients);
+		return redirect()->back();
+    	// dd($arrExistingSection,$arr,$ingredients);
     }
 
     public function createSections()

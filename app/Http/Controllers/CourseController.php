@@ -29,11 +29,30 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::paginate(15);
-        $schedules = Schedule::all(['id', 'name']);
-        //return a view and pass in the above variable
-        //dd($schedules);
-        return view('courses.index')->withCourses($courses)->withSchedules($schedules);
+        $languages = DB::table('languages')->pluck("name","code")->all();
+
+        $courses = new Course;
+        $queries = [];
+        $columns = [
+            'L',
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $courses = $courses->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+            if (\Request::has('sort')) {
+                $courses = $courses->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            }
+        $courses = $courses->whereNotNull('Te_Code_New')->paginate(10)->appends($queries);
+
+        return view('courses.index')->withCourses($courses)->withLanguages($languages);
     }
 
     /**

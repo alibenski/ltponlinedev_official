@@ -46,7 +46,7 @@
 				<thead>
 					<th>#</th>
 					<th>Term</th>
-					<th>Class Code</th>
+					{{-- <th>Class Code</th> --}}
 					<th>Course Name</th>
 					<th>Schedule</th>
 					<th>Sections</th>
@@ -59,7 +59,7 @@
 						<tr  class="item{{$classroom->id}}">
 							<th>{{ $classroom->id }}</th>
 							<th>{{ $classroom->Te_Term }}</th>
-							<th>{{ $classroom->Code }}</th>
+							{{-- <th>{{ $classroom->Code }}</th> --}}
 							<td>{{ $classroom->course->Description }}</td>
 							<td>
 								@if(empty( $classroom->scheduler->name ))

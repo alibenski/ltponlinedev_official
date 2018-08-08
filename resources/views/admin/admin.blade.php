@@ -224,7 +224,7 @@ desired effect
         <small>Language Training Programme</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li><a href="{{ route('admin_dashboard') }}"><i class="fa fa-dashboard"></i> Admin Home</a></li>
         <li class="active">Here</li>
       </ol>
     </section>

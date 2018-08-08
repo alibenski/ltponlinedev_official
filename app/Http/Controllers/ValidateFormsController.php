@@ -21,6 +21,7 @@ use App\Preenrolment;
 use App\SDDEXTR;
 use App\Torgan;
 use App\TempSort;
+use App\Waitlist;
 
 use App\PlacementSchedule;
 use App\PlacementForm;
@@ -34,29 +35,31 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ValidateFormsController extends Controller
 {
-    public function index()
+    public function vsaPage1()
     {
-        return view('vsa-page');
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        return view('admin.operations.vsa-page-1')->withTerms($terms);
     }
 
 	public function getApprovedEnrolmentForms(Request $request)
     {
+
         // sort enrolment forms by date of submission
-        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
         
-        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
         // apply unique() method to remove dupes 
         // apply values() method to reset key series of the array 
         $approved_1 = $approved_0_1->unique('INDEXID')->values()->all(); // becomes an array
 
-        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
         
-        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', '188')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
         $approved_2 = $approved_0_2->unique('INDEXID')->values()->all();
 
-        $approved_0_3_collect = Preenrolment::whereNotNull('is_self_pay_form')->where('Term', '188')->orderBy('created_at', 'asc')->get();
+        $approved_0_3_collect = Preenrolment::whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         
-        $approved_0_3 = Preenrolment::select('INDEXID')->whereNotNull('is_self_pay_form')->where('Term', '188')->orderBy('created_at', 'asc')->get();
+        $approved_0_3 = Preenrolment::select('INDEXID')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         $approved_3 = $approved_0_3->unique('INDEXID')->values()->all(); 
         
 
@@ -76,7 +79,7 @@ class ValidateFormsController extends Controller
         // logic to get previous Term of current/existing Term
         // 9 is 4, 1 is 9, 4 is 1
         // if last digit value is 9, subtract 5 from selectedTerm value
-        $selectedTerm = 188; // No need of type casting
+        $selectedTerm = $request->Term; // No need of type casting
         // echo substr($selectedTerm, 0, 1); // get first value
         // echo substr($selectedTerm, -1); // get last value
         $lastDigit = substr($selectedTerm, -1);
@@ -101,8 +104,8 @@ class ValidateFormsController extends Controller
         $arrL = [];
         $arrStudentReEnrolled = [];
         $arrValue = [];
-        
-        for ($i=0; $i < count($approved_collections); $i++) { 
+        $countApprovedCollections = count($approved_collections);
+        for ($i=0; $i < $countApprovedCollections; $i++) { 
             $arrINDEXID[] = $approved_collections[$i]['INDEXID'];
             $arrL[] = $approved_collections[$i]['L'];
             // echo $i. " - " .$arrINDEXID[$i] ;
@@ -134,8 +137,8 @@ class ValidateFormsController extends Controller
 
         $arr_enrolment_forms_reenrolled = [];
         $ingredients = []; 
-
-        for ($i=0; $i < count($arrValue); $i++) {
+        $countArrValue = count($arrValue);
+        for ($i=0; $i < $countArrValue; $i++) {
         	// collect priority 1 enrolment forms 
             $enrolment_forms_reenrolled = Preenrolment::where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
             // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
@@ -173,7 +176,27 @@ class ValidateFormsController extends Controller
         /*
         Priority 2 new students, wait-listed from wait-list table
          */
-        
+        // collect priority 2 students
+        $waitlisted_students = Waitlist::orderBy('id', 'asc')->get();
+        // saved students in TempSort table
+        $ingredients2 = [];
+        foreach ($waitlisted_students as $valueWaitlist) {
+            $ingredients2[] = new  TempSort([
+            'CodeIndexID' => $valueWaitlist->CodeIndexID,
+            'Code' => $valueWaitlist->Code,
+            'schedule_id' => $valueWaitlist->schedule_id,
+            'L' => $valueWaitlist->L,
+            'profile' => $valueWaitlist->profile,
+            'Te_Code' => $valueWaitlist->Te_Code,
+            'Term' => $request->Term, // fill Term field with current Term
+            'INDEXID' => $valueWaitlist->INDEXID,
+            "created_at" =>  $valueWaitlist->created_at,
+            "UpdatedOn" =>  $valueWaitlist->UpdatedOn,
+            ]); 
+                foreach ($ingredients2 as $data) {
+                    $data->save();
+                }     
+        }
         /*
         Priority 3 
          */
@@ -182,7 +205,8 @@ class ValidateFormsController extends Controller
         // get the INDEXID's which are not existing
         $priority3_not_reset = array_diff($arrINDEXID,$arrValue);
         $priority3 = array_values($priority3_not_reset) ;
-        for ($i=0; $i < count($priority3); $i++) {
+        $countPriority3 = count($priority3);
+        for ($i=0; $i < $countPriority3; $i++) {
             // collect priority 3 enrolment forms 
             $enrolment_forms_priority3 = Preenrolment::where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
             $arrPriority3[] = $enrolment_forms_priority3 ;
@@ -221,7 +245,9 @@ class ValidateFormsController extends Controller
         
         // dd($approved_1,$approved_2,$approved_3);
         // TempSort::truncate();
-        dd('Count '.count($approved_collections),$arrPriority3, $arrValue,$ingredients, $ingredients3);
+        $request->session()->flash('success', 'Validation done!');
+        return redirect()->route('vsa-page-2');
+        // dd('Count '.count($approved_collections),$arrPriority3, $arrValue,$ingredients, $ingredients3);
     }
 
     public function getApprovedPlacementForms(Request $request)
