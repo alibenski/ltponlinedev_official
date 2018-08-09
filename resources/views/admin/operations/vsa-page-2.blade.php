@@ -40,6 +40,11 @@
 
 @section('java_script')
 <script type="text/javascript">
+  $(document).ready(function(){
+    $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
+    $("input[name='L']").prop('checked', false);
+  });
+
   $("input[name='L']").click(function(){
       var L = $(this).val();
       var term = $("input[name='term_id']").val();
