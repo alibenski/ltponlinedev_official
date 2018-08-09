@@ -34,6 +34,9 @@ class TempSortController extends Controller
     	// DB::table('tblLTP_TempOrder')->truncate();
     	// dd($codeSortByCountIndexID);
 		$this->sortEnrolmentForms($te_code);
+
+        $request->session()->flash('success', 'Auto '.$te_code.' done!');
+        return redirect()->route('vsa-page-2');
 	}
 
     public function sortEnrolmentForms($te_code)
@@ -226,7 +229,7 @@ class TempSortController extends Controller
                 $sectionNo = $existingSection[0]['sectionNo'] + 1;
                 $sectionNo2 = $existingSection[0]['sectionNo'] + 1;
                 $arr[] = $sectionNo;
-                var_dump($sectionNo);
+                // var_dump($sectionNo);
 
                 for ($i2=0; $i2 < $counter; $i2++) { 
                     $ingredients[] = new  Classroom([
@@ -261,7 +264,7 @@ class TempSortController extends Controller
                     }
                 }
             }
-                var_dump('section value starts at: '.$sectionNo);
+                // var_dump('section value starts at: '.$sectionNo);
 		}
 		
 		// query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
@@ -285,8 +288,15 @@ class TempSortController extends Controller
 				}
 			}
 		}
-
-		return redirect()->back();
     	// dd($arrExistingSection,$arr,$ingredients);
+    }
+
+    public function reAnalyzePashEntries()
+    {
+        // query PASH entries to get Code count
+        // if the count is less than 6 where L = Ar,Ch,Ru 
+        // if the count is less than 8 where L = Fr,En,Sp
+        // then change CodeClass and assign to same Te_Code with a Code count which is less than 15
+
     }
 }

@@ -1,6 +1,7 @@
 @extends('admin.admin')
 
 @section('content')
+
 <h2><strong>Validate-Sort-Assign</strong></h2>
 <h3>Step 2:</h3>
 <h4>Term: @if (is_null($term)) TempSort Table empty!  @else {{$term->Term}} @endif</h4>
@@ -13,7 +14,7 @@
           <div class="col-md-8">
               @foreach ($languages as $id => $name)
             <div class="input-group col-md-9">
-                      <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
+                      <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}" required="">
                       <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
             </div>
               @endforeach
@@ -23,7 +24,7 @@
         <label for="course_id" class="col-md-3 control-label">Choose course: </label>
         <div class="col-md-8">
           <div class="dropdown">
-            <select class="col-md-8 form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off">
+            <select class="col-md-8 form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off" required="">
                 <option value="">--- Select Course ---</option>
             </select>
           </div>
