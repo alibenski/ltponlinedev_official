@@ -69,7 +69,9 @@ class ValidateFormsController extends Controller
         // merge collections but without sorting
         // $approved_all = array_merge($approved_1,$approved_2,$approved_3);
         
-
+        /*
+        Priority 1 re-enrolled students and Priority 2 waitlisted students
+         */
         $arrCollect = [];
         // foreach ($approved_collections as $value) {
         // 	// $arrCollect[] = $value->INDEXID;
@@ -174,30 +176,6 @@ class ValidateFormsController extends Controller
         }
 
         /*
-        Priority 2 new students, wait-listed from wait-list table
-         */
-        // collect priority 2 students
-        $waitlisted_students = Waitlist::orderBy('id', 'asc')->get();
-        // saved students in TempSort table
-        $ingredients2 = [];
-        foreach ($waitlisted_students as $valueWaitlist) {
-            $ingredients2[] = new  TempSort([
-            'CodeIndexID' => $valueWaitlist->CodeIndexID,
-            'Code' => $valueWaitlist->Code,
-            'schedule_id' => $valueWaitlist->schedule_id,
-            'L' => $valueWaitlist->L,
-            'profile' => $valueWaitlist->profile,
-            'Te_Code' => $valueWaitlist->Te_Code,
-            'Term' => $request->Term, // fill Term field with current Term
-            'INDEXID' => $valueWaitlist->INDEXID,
-            "created_at" =>  $valueWaitlist->created_at,
-            "UpdatedOn" =>  $valueWaitlist->UpdatedOn,
-            ]); 
-                foreach ($ingredients2 as $data) {
-                    $data->save();
-                }     
-        }
-        /*
         Priority 3 
          */
         $arrPriority3 = [];
@@ -240,7 +218,7 @@ class ValidateFormsController extends Controller
         }
         
         /*
-        Priority 4 new students, no PASHQTcur records
+        Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
          */
         
         // dd($approved_1,$approved_2,$approved_3);
@@ -263,10 +241,5 @@ class ValidateFormsController extends Controller
         }
         
         dd($approved_1,$approved_2,$approved_3, $arr);
-    }
-
-    public function priorityFactor()
-    {
-
     }
 }

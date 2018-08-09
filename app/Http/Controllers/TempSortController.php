@@ -42,20 +42,23 @@ class TempSortController extends Controller
 
     	$arrCodeCount = [];
     	$arrPerCode = [];
+    	$arrPerTerm = [];
         $ingredients = [];
         // get the count for each Code
         $j = count($getCode);
     	for ($i=0; $i < $j; $i++) { 
     		$perCode = TempSort::where('Code', $getCode[$i])->value('Code');
+    		$perTerm = TempSort::where('Code', $getCode[$i])->value('Term');
     		$countPerCode = TempSort::where('Code', $getCode[$i])->get()->count();
 
     		$arrPerCode[] = $perCode;
+    		$arrPerTerm[] = $perTerm;
 			$arrCodeCount[] = $countPerCode;
 
         }
 
-        //  get the min of the counts
-        $minValue = min($arrCodeCount);
+        //  get the min of the counts for each Code
+        $minValue = min($arrCodeCount);       
         $arr = [];
         $arrSaveToPash = [];
 
@@ -63,9 +66,26 @@ class TempSortController extends Controller
         for ($i=0; $i < count($arrPerCode); $i++) { 
 
             if ($minValue >= $arrCodeCount[$i]) {
-                $arr = $arrPerCode[$i]; 
+                // $arr = $arrPerCode[$i]; 
+		        
+		        // if there are 2 or more codes with equal count
+		        // run query with leftJoin() to remove duplicates
+		        $queryEnrolForms = DB::table('tblLTP_TempSort')
+			        ->select('tblLTP_TempSort.*')
+			        ->where('tblLTP_TempSort.Term', "=",$arrPerTerm[$i])
+			        ->where('tblLTP_TempSort.Code', "=",$arrPerCode[$i])
+			        // leftjoin sql statement with subquery using raw statement
+			        ->leftJoin(DB::raw("(SELECT 
+					      LTP_PASHQTcur.INDEXID FROM LTP_PASHQTcur
+					      WHERE LTP_PASHQTcur.Term = '$arrPerTerm[$i]') as items"),function($q){
+					        $q->on("tblLTP_TempSort.INDEXID","=","items.INDEXID")
+					        ;
+					  })
+			        ->whereNull('items.INDEXID')        
+			        ->get();
+
+                // $queryEnrolForms = TempSort::where('Code', $arrPerCode[$i])->get();
                 // assign course-schedule to student and save in PASHQTcur
-                $queryEnrolForms = TempSort::where('Code', $arrPerCode[$i])->get();
                 foreach ($queryEnrolForms as $value) {
                     $arrSaveToPash[] = new  Repo([
                     'CodeIndexID' => $value->CodeIndexID,
@@ -95,7 +115,7 @@ class TempSortController extends Controller
             } 
         }
 
-        $new = array_map(null,$arrPerCode, $arrCodeCount);
+        // $new = array_map(null,$arrPerCode, $arrCodeCount);
     	// dd($getCode,$arrPerCode,$arrCodeCount,$minValue, $new, $arr,$arrSaveToPash);
     	$this->checkCodeIfExistsInPash();
     }
@@ -115,19 +135,20 @@ class TempSortController extends Controller
     			echo '<br>';
     			// check INDEXID of students if existing in PASHQTcur
 				$students = DB::table('tblLTP_TempSort')
-		        ->select('tblLTP_TempSort.*')
-		        ->where('tblLTP_TempSort.Term', "=",$value->Term)
-		        ->where('tblLTP_TempSort.Code', "=",$value->Code)
-		        // leftjoin sql statement with subquery using raw statement
-		        ->leftJoin(DB::raw("(SELECT 
-				      LTP_PASHQTcur.INDEXID FROM LTP_PASHQTcur
-				      WHERE LTP_PASHQTcur.Term = '$value->Term') as items"),function($q){
-				        $q->on("tblLTP_TempSort.INDEXID","=","items.INDEXID")
-				        ;
-				  })
-		        ->whereNull('items.INDEXID')        
-		        ->get();
+			        ->select('tblLTP_TempSort.*')
+			        ->where('tblLTP_TempSort.Term', "=",$value->Term)
+			        ->where('tblLTP_TempSort.Code', "=",$value->Code)
+			        // leftjoin sql statement with subquery using raw statement
+			        ->leftJoin(DB::raw("(SELECT 
+					      LTP_PASHQTcur.INDEXID FROM LTP_PASHQTcur
+					      WHERE LTP_PASHQTcur.Term = '$value->Term') as items"),function($q){
+					        $q->on("tblLTP_TempSort.INDEXID","=","items.INDEXID")
+					        ;
+					  })
+			        ->whereNull('items.INDEXID')        
+			        ->get();
 		        // $arrStd[] = $students;
+		        // save the queried students above to PASHQTcur table 
 		        foreach ($students as $value) {
                     $arrStd[] = new  Repo([
                     'CodeIndexID' => $value->CodeIndexID,
@@ -267,10 +288,5 @@ class TempSortController extends Controller
 
 		return redirect()->back();
     	// dd($arrExistingSection,$arr,$ingredients);
-    }
-
-    public function createSections()
-    {
-    	
     }
 }
