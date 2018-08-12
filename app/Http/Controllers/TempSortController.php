@@ -269,7 +269,11 @@ class TempSortController extends Controller
 		
 		// query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
 		$arrGetClassRoomDetails = [];
-		$arrGetPashStudents = [];
+		$arrCountCodeClass = [];
+        $arrGetOrphanStudents =[];
+        $arrNotCompleteClasses = [];
+        $arrNotCompleteCount = [];
+        $arrjNotCompleteCount = [];
 		foreach ($getCode as $valueCode) {
 			// code from TempSort, put in array
 			$arrGetCode[] = $valueCode->Code; 
@@ -282,21 +286,59 @@ class TempSortController extends Controller
 				$getPashStudents = Repo::where('Code', $valueCode->Code)->where('CodeIndexIDClass', null)->get()->take(15);
 				foreach ($getPashStudents as $valuePashStudents) {
 					$pashUpdate = Repo::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
-					$pashUpdate->update(['CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID, 'CodeClass' => $valueClassRoomDetails->Code]);
-					
-					$arrGetPashStudents[] = $pashUpdate;
-				}
-			}
-		}
-    	// dd($arrExistingSection,$arr,$ingredients);
+					$pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+                }
+
+                // query count of CodeClass which did not meet the minimum number of students
+                $checkCountCodeClass = Repo::select('Code','CodeClass', DB::raw('count(*) as CountCodeClass'))->where('Code', $valueClassRoomDetails->cs_unique)->where('CodeClass', $valueClassRoomDetails->Code)->groupBy('Code','CodeClass')->orderBy('CountCodeClass', 'asc')->get();
+                $checkCountCodeClass->sortBy('CountCodeClass');
+
+                foreach ($checkCountCodeClass as $valueCountCodeClass) {
+                        $arrCountCodeClass[] = $valueCountCodeClass->CountCodeClass;
+                    
+                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 15) {
+                        $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
+                        $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
+
+                            $arrjNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
+                        
+
+                        // $c = count($arrNotCompleteClasses);
+                        // for ($iCount=0; $iCount < $c; $iCount++) {
+                        //     $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
+                        //     $jNotCompleteCount = intVal(15 - $arrNotCompleteCount[$iCount]);
+                        //     // $arrjNotCompleteCount[] = $jNotCompleteCount;
+
+                        //     // for ($iCounter2=0; $iCounter2 < $jNotCompleteCount; $iCounter2++) { 
+                        //     //     $setClassToOrphans = Repo::where('id', $arrGetOrphanStudents[$iCounter])->update(['CodeClass' => $arrNotCompleteClasses[$iCounter]]);
+                        //     // }
+                        // }
+                    }
+
+                    // if ($valueCountCodeClass->CountCodeClass < 8) {
+                    //     $getOrphanStudents = Repo::where('CodeClass', $valueCountCodeClass->CodeClass)->get();
+                        
+                    //     foreach ($getOrphanStudents as $valueOrphanStudents) {
+                    //         $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                    //         $setNullToOrphans = Repo::where('id', $valueOrphanStudents->id)->update(['CodeIndexIDClass' => null]);
+                    //     }
+                        
+                    //     // $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+                    // }
+
+                }
+            }
+        }
+        dd($arrCountCodeClass,$arrGetOrphanStudents, $arrNotCompleteClasses, $arrNotCompleteCount, $arrjNotCompleteCount);
     }
 
     public function reAnalyzePashEntries()
     {
-        // query PASH entries to get Code count
+        
+        // query PASH entries to get CodeClass count
+        
         // if the count is less than 6 where L = Ar,Ch,Ru 
         // if the count is less than 8 where L = Fr,En,Sp
         // then change CodeClass and assign to same Te_Code with a Code count which is less than 15
-
     }
 }
