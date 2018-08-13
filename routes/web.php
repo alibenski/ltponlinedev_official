@@ -97,6 +97,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('password/post_expired', 'FirstTimeLoginController@postExpired')
         ->name('password.post_expired');
 });
+// route for ajax select on vsa-page-2
+Route::post('select-ajax-admin', ['as'=>'select-ajax-admin','uses'=>'AjaxController@selectAjaxAdmin']);
 
 //route for ajax jquery on organization
 Route::get('org-select-ajax', ['as'=>'org-select-ajax','uses'=>'AjaxController@ajaxOrgSelect']);

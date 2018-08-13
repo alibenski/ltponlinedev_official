@@ -22,6 +22,8 @@ class TempSortController extends Controller
 
 	public function orderCodes(Request $request)
 	{	
+		// truncate/clear table content first
+		DB::table('tblLTP_TempOrder')->truncate();
 		$te_code = $request->course_id;
 		// first step
 		// query existing records where specific course is given
@@ -182,7 +184,7 @@ class TempSortController extends Controller
     	}
 		
 		/*
-		 Start process of creating classes based on nnumber of students assigned per course-schedule 
+		 Start process of creating classes based on number of students assigned per course-schedule 
 		 */
 		$getCodeForSectionNo = DB::table('tblLTP_TempOrder')->select('Code')->orderBy('id')->get();
 
@@ -206,6 +208,9 @@ class TempSortController extends Controller
 		foreach ($getCode as $valueCode) {
 			$arrGetCode[] = $valueCode->Code;
 			
+			// update record in CourseSchedule table to indicate that classroom has been created for this cs_unique 
+			$updateCourseSchedule = CourseSchedule::where('cs_unique', $valueCode->Code)->update(['Code' => 'Y']);
+
 			$getDetails = CourseSchedule::where('cs_unique', $valueCode->Code)->get();
 			foreach ($getDetails as $valueDetails) {
 				$arrGetDetails[] = $valueDetails;
@@ -266,79 +271,97 @@ class TempSortController extends Controller
             }
                 // var_dump('section value starts at: '.$sectionNo);
 		}
-		
-		// query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
+		$this->assignAndAnalyze($getCode);
+    }
+
+    public function assignAndAnalyze($getCode)
+    {
+    	// query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
 		$arrGetClassRoomDetails = [];
 		$arrCountCodeClass = [];
         $arrGetOrphanStudents =[];
         $arrNotCompleteClasses = [];
         $arrNotCompleteCount = [];
         $arrjNotCompleteCount = [];
-		foreach ($getCode as $valueCode) {
+        $arrNotCompleteCode = [];
+        $arrGetOrphanIndexID = [];
+        $arrNotCompleteScheduleID = []; 
+
+		foreach ($getCode as $valueCode2) {
 			// code from TempSort, put in array
-			$arrGetCode[] = $valueCode->Code; 
+			$arrGetCode[] = $valueCode2->Code; 
 			
-			$getClassRoomDetails = Classroom::where('cs_unique', $valueCode->Code)->get();
+			$getClassRoomDetails = Classroom::where('cs_unique', $valueCode2->Code)->get();
 			foreach ($getClassRoomDetails as $valueClassRoomDetails) {
 				$arrGetClassRoomDetails[] = $valueClassRoomDetails;
 				
 				// query student count who are not yet assigned to a class section (null)
-				$getPashStudents = Repo::where('Code', $valueCode->Code)->where('CodeIndexIDClass', null)->get()->take(15);
+				$getPashStudents = Repo::where('Code', $valueCode2->Code)->where('CodeIndexIDClass', null)->get()->take(15);
 				foreach ($getPashStudents as $valuePashStudents) {
 					$pashUpdate = Repo::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
+					// update record with classroom assigned
 					$pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
                 }
 
-                // query count of CodeClass which did not meet the minimum number of students
-                $checkCountCodeClass = Repo::select('Code','CodeClass', DB::raw('count(*) as CountCodeClass'))->where('Code', $valueClassRoomDetails->cs_unique)->where('CodeClass', $valueClassRoomDetails->Code)->groupBy('Code','CodeClass')->orderBy('CountCodeClass', 'asc')->get();
+                // query PASH entries to get CodeClass count
+                $checkCountCodeClass = Repo::select('Te_Code', 'Code','CodeClass', 'schedule_id', 'L', DB::raw('count(*) as CountCodeClass'))->where('Code', $valueClassRoomDetails->cs_unique)->where('CodeClass', $valueClassRoomDetails->Code)->groupBy('Te_Code','Code','CodeClass','schedule_id','L')->orderBy('CountCodeClass', 'asc')->get();
                 $checkCountCodeClass->sortBy('CountCodeClass');
 
+                // query count of CodeClass which did not meet the minimum number of students
                 foreach ($checkCountCodeClass as $valueCountCodeClass) {
                         $arrCountCodeClass[] = $valueCountCodeClass->CountCodeClass;
                     
-                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 15) {
-                        $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
-                        $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
-
-                            $arrjNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
+                    // if the count is less than 6 where L = Ar,Ch,Ru 
+        			$language_group_1 = ['A','C','R'];
+        			if (in_array($valueCountCodeClass->L, $language_group_1) && $valueCountCodeClass->CountCodeClass < 6) {
+                        $getOrphanStudents = Repo::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
                         
-
-                        // $c = count($arrNotCompleteClasses);
-                        // for ($iCount=0; $iCount < $c; $iCount++) {
-                        //     $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
-                        //     $jNotCompleteCount = intVal(15 - $arrNotCompleteCount[$iCount]);
-                        //     // $arrjNotCompleteCount[] = $jNotCompleteCount;
-
-                        //     // for ($iCounter2=0; $iCounter2 < $jNotCompleteCount; $iCounter2++) { 
-                        //     //     $setClassToOrphans = Repo::where('id', $arrGetOrphanStudents[$iCounter])->update(['CodeClass' => $arrNotCompleteClasses[$iCounter]]);
-                        //     // }
-                        // }
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                        }
+                    }
+        			// if the count is less than 8 where L = Fr,En,Sp
+                    $language_group_2 = ['E','F','S'];
+                    if (in_array($valueCountCodeClass->L, $language_group_2) && $valueCountCodeClass->CountCodeClass < 8) {
+                        $getOrphanStudents = Repo::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
+                        
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                            // $setNullToOrphans = Repo::where('id', $valueOrphanStudents->id)->update(['CodeIndexIDClass' => null]);
+                        }
+                        
+                        // $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
                     }
 
-                    // if ($valueCountCodeClass->CountCodeClass < 8) {
-                    //     $getOrphanStudents = Repo::where('CodeClass', $valueCountCodeClass->CodeClass)->get();
-                        
-                    //     foreach ($getOrphanStudents as $valueOrphanStudents) {
-                    //         $arrGetOrphanStudents[] = $valueOrphanStudents->id;
-                    //         $setNullToOrphans = Repo::where('id', $valueOrphanStudents->id)->update(['CodeIndexIDClass' => null]);
-                    //     }
-                        
-                    //     // $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
-                    // }
-
+                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 15) {
+                        $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
+                        $arrNotCompleteCode[] = $valueCountCodeClass->Code;
+                        $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
+                        $arrNotCompleteScheduleID[] = $valueCountCodeClass->schedule_id;
+                    } 
                 }
             }
         }
-        dd($arrCountCodeClass,$arrGetOrphanStudents, $arrNotCompleteClasses, $arrNotCompleteCount, $arrjNotCompleteCount);
-    }
 
-    public function reAnalyzePashEntries()
-    {
-        
-        // query PASH entries to get CodeClass count
-        
-        // if the count is less than 6 where L = Ar,Ch,Ru 
-        // if the count is less than 8 where L = Fr,En,Sp
         // then change CodeClass and assign to same Te_Code with a Code count which is less than 15
+        // assign orphaned students with classrooms which are not at max capacity
+        $c = count($arrNotCompleteClasses);
+        if ($c != 0) {
+        	for ($iCount=0; $iCount < $c; $iCount++) {
+            // $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
+            $jNotCompleteCount = intVal(15 - $arrNotCompleteCount[$iCount]);
+            $arrjNotCompleteCount[] = $jNotCompleteCount;
+
+	            for ($iCounter2=0; $iCounter2 < $jNotCompleteCount; $iCounter2++) { 
+	            	if (!empty($arrGetOrphanStudents[$iCounter2])) {          		
+	            		$setClassToOrphans = Repo::where('id', $arrGetOrphanStudents[$iCounter2])->update(['CodeClass' => $arrNotCompleteClasses[$iCount], 'CodeIndexIDClass' => $arrNotCompleteClasses[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 'CodeIndexID' => $arrNotCompleteCode[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 'Code' => $arrNotCompleteCode[$iCount], 'schedule_id' => $arrNotCompleteScheduleID[$iCount]]);
+	            	} 
+	            }
+        	}
+        }
+        // else statement if necessary
+        // dd($arrCountCodeClass,$arrGetOrphanStudents, $arrNotCompleteClasses, $arrNotCompleteCount, $arrjNotCompleteCount, $c);
     }
 }

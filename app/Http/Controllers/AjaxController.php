@@ -167,6 +167,22 @@ class AjaxController extends Controller
         }
     }
 
+    public function selectAjaxAdmin(Request $request)
+    {
+        if($request->ajax()){            
+            $select_courses = CourseSchedule::where('L', $request->L)
+            ->where('Te_Term', $request->term_id)
+            ->whereNull('Code')
+            ->orderBy('id', 'asc')
+            ->with('course')
+            ->get()
+            ->pluck("course.Description","Te_Code_New");
+
+            $data = view('ajax-select',compact('select_courses'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
+
     public function selectAjaxLevelOne(Request $request)
     {
         if($request->ajax()){

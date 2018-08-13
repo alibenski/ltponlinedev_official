@@ -52,7 +52,7 @@
       var token = $("input[name='_token']").val();
 
       $.ajax({
-          url: "{{ route('select-ajax') }}", 
+          url: "{{ route('select-ajax-admin') }}", 
           method: 'POST',
           data: {L:L, term_id:term, _token:token},
           success: function(data, status) {
