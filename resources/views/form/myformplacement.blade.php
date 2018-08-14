@@ -22,7 +22,7 @@
             <div class="panel-heading "><strong>Placement Test Additional Questions</strong></div>
                 <div class="panel-body col-md-12">
                   <div class="alert alert-danger">
-                    <p>decide whatever messageto put here. i.e. why, how, check all possible options of availability, etc.</p>
+                    <p>Please indicate the time(s) and the date(s) you are available to attend. Check all that apply. <br> Merci de préciser les heures et les jours aux quels vous étiez disponible d'assister. Sélectionnez toutes les réponses appropriées.</p>
                   </div>
                   <form method="POST" action="{{ route('postplacementinfo-additional') }}" class="form-horizontal form-prevent-multi-submit">
                     {{ csrf_field() }}
@@ -59,7 +59,7 @@
                     <div class="row panel panel-info col-md-10 col-md-offset-1">
                       <div class="otherQuestions col-md-5">
                         <div class="form-group">
-                          <label for="" class="control-label">Your Time Availability:</label>
+                          <label for="" class="control-label">Time:</label>
                           <div class="col-md-12">
                                 <div class="input-group col-md-12">                             
                                   <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
@@ -83,7 +83,7 @@
 
                       <div class="otherQuestions3 col-md-7">
                         <div class="form-group">
-                          <label for="" class="control-label">Your Day Availability:</label>
+                          <label for="" class="control-label">Day:</label>
                           <div class="col-md-12">
                             @foreach ($days as $id => $name)
                                 <div class="input-group col-md-12">                             
@@ -115,7 +115,7 @@
                     <div class="form-group">
                       <div class="disclaimer alert col-md-10 col-md-offset-1">
                         <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
-                        <label for="agreementBtn" class="form-control-static">I understand blah blah blah... disclaimer text here</label>
+                        <label for="agreementBtn" class="form-control-static">I understand that I may not be given my preferred time schedule as it will be subjected to further evaluation and analysis by the Language Secretariat.</label>
                       </div>
                     </div>
                     {{-- end of disclaimer --}}

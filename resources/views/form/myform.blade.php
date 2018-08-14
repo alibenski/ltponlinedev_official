@@ -171,14 +171,14 @@
                     <div class="alert alert-info alert-dismissible">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
-                      <p>You have answered <strong>YES</strong>. The beginner course for your selected language has been automatically filled in. Click the "Preferred class schedule" field to check their availability.</p>
+                      <p>You have answered <strong>YES</strong>. The beginner course for your selected language has been automatically filled in. Click the "Available class schedule" field to check their availability.</p>
                     </div>
                   </div>
 
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
                     
                     <div class="form-group">
-                        <label for="course_id" class="col-md-3 control-label">Preferred course: </label>
+                        <label for="course_id" class="col-md-3 control-label">Available course: </label>
                         <div class="col-md-8">
                           <div class="dropdown">
                             <select class="col-md-8 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
@@ -189,7 +189,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="schedule_id" class="col-md-3 control-label">Preferred class schedule (2 max): </label>
+                        <label for="schedule_id" class="col-md-3 control-label">Available class schedule (2 max): </label>
                         <button type="button" class="multi-clear button btn btn-danger" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
                         <div class="col-md-8">
                           <div class="dropdown">

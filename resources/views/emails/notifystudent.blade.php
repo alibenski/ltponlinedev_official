@@ -219,6 +219,7 @@
                                             {{$mgr_comment}}
                                         @endif
                                       </p>
+                                      <p>Please be reminded that <strong style="color: red;">THIS IS NOT A CONVOCATION EMAIL. The schedule(s) above will be further evaluated by the Language Secretariat.</strong></p>
                                       <p><strong>NOTE:</strong> If you are a non-UNOG staff member and <strong>at least one of your enrolment has been approved</strong> by your manager, please note that your enrolment has now been sent to your organization's HR/Staff Development Office for further review and approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
                                 </td>
                             </tr>
@@ -240,7 +241,7 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Please note that the class schedules are not absolute and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
+                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
                                 </td>
                             </tr>
                         </table>

@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        '\App\Console\Commands\ApprovalReminder',
     ];
 
     /**
@@ -24,8 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        //insert name and signature of you command and define the time of excusion
+        $schedule->command('ApprovalReminder:approvalreminder')
+                ->weekly()->tuesdays()->at('15:00');
     }
 
     /**

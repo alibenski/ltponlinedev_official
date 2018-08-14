@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// test route for test queries
+Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
+
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
     //admin routes
     Route::get('/', function () { return view('admin.index'); })->name('admin_dashboard');

@@ -428,7 +428,7 @@
         $(".lang_select_no").removeAttr("name");
         $(".course_select_no").removeAttr("name");
         $(".schedule_select_no").removeAttr("name");   
-          alert("Please select your preferred schedule.");             
+          alert("Please select a schedule.");             
   });          
 </script>
 
