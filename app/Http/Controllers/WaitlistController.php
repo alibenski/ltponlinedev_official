@@ -27,20 +27,20 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\FocalPoints;
 
+use App\Mail\SendMailable;
+use App\Jobs\SendEmailJob;
+
 class WaitlistController extends Controller
 {
     public function testQuery()
     {
+        // DB::table('jobs')->truncate();
         Log::info("Start sending email");
-        $recipient = 'test@gmail.com';
-        for ($i=0; $i < 100; $i++)  {
-            Mail::raw("This is a test automated message", function($message) use ($recipient){
-                // Log::info("Start sending email");
-                $message->from('clm_language@unog.ch', 'CLM Language');
-                $message->to($recipient)->subject('MGR - This is a test automated message');
-                // Log::info("Finished sending email");
-            });
+        for ($i=0; $i < 3; $i++)  {
+            $emailJob = (new SendEmailJob())->delay(Carbon::now()->addMinutes(5));
+            dispatch($emailJob);
         }
+            echo 'email sent<br>';
         Log::info("Finished sending email");
         // //get current year and date
         // $now_date = Carbon::now();
@@ -100,7 +100,7 @@ class WaitlistController extends Controller
         //     }
         // }
         return 'task done';
-        dd($enrolments_no_mgr_approval, $arr, $enrolment_term,$arrDept,$arrHrEmails);
+        // dd($enrolments_no_mgr_approval, $arr, $enrolment_term,$arrDept,$arrHrEmails);
     }
 
     /**
