@@ -26,9 +26,11 @@ class ApprovalReminder extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(\App\Http\Controllers\WaitlistController $email)
     {
         parent::__construct();
+
+        $this->email = $email;
     }
 
     /**
@@ -37,15 +39,8 @@ class ApprovalReminder extends Command
      * @return mixed
      */
     public function handle()
-    {
-        
-
-        Mail::raw("This is a test automated message - sends every hour", function($message){
-
-           $message->from('clm_language@unog.ch', 'CLM Language');
-           $message->to('allyson.frias@un.org')->subject('This is a test automated message');
-        });
-        
-        $this->info('Reminder approval email has been sent successfully'); 
+    {       
+        // execute method function to send reminder emails found in the controller from construct()
+        $this->email->testQuery(); 
     }
 }

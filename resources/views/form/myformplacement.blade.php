@@ -11,19 +11,16 @@
 </div>
     <div class="container">
       <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 col-md-offset-2">{{-- 
           <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p>Hello {{Auth::user()->sddextr->FIRSTNAME}},</p>
             <p>You have answered <strong>NO</strong>, you are not a complete beginner on your selected language. You have been redirected to this page to answer additional questions.</p>
-          </div>
+          </div> --}}
 
           <div class="panel panel-default col-md-12">
             <div class="panel-heading "><strong>Placement Test Additional Questions</strong></div>
                 <div class="panel-body col-md-12">
-                  <div class="alert alert-danger">
-                    <p>Please indicate the time(s) and the date(s) you are available to attend. Check all that apply. <br> Merci de préciser les heures et les jours aux quels vous étiez disponible d'assister. Sélectionnez toutes les réponses appropriées.</p>
-                  </div>
                   <form method="POST" action="{{ route('postplacementinfo-additional') }}" class="form-horizontal form-prevent-multi-submit">
                     {{ csrf_field() }}
                     <div class="form-group">
@@ -55,7 +52,11 @@
                             </div>
                       </div>
                     </div>
-
+                    
+                    <div class="alert alert-danger">
+                    <p>Please indicate the time(s) and the date(s) you are available to attend. Check all that apply. <br> Merci de préciser les heures et les jours aux quels vous étiez disponible d'assister. Sélectionnez toutes les réponses appropriées.</p>
+                    </div>
+                    
                     <div class="row panel panel-info col-md-10 col-md-offset-1">
                       <div class="otherQuestions col-md-5">
                         <div class="form-group">

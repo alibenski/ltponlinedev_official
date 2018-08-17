@@ -36,8 +36,8 @@ class WaitlistController extends Controller
     {
         // DB::table('jobs')->truncate();
         Log::info("Start sending email");
-        for ($i=0; $i < 3; $i++)  {
-            $emailJob = (new SendEmailJob())->delay(Carbon::now()->addMinutes(5));
+        for ($i=0; $i < 2; $i++)  {
+            $emailJob = (new SendEmailJob())->delay(Carbon::now()->addSeconds(10));
             dispatch($emailJob);
         }
             echo 'email sent<br>';

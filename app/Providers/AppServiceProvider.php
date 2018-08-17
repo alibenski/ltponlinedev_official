@@ -4,10 +4,14 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Queue\Events\JobFailed;
 use Validator;
 use App\Preenrolment;
 use App\Term;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -18,6 +22,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        Queue::failing(function (JobFailed $event) {
+            // $event->connectionName
+            // $event->job
+            // $event->exception
+            Mail::raw("Mail Queue Failing", function($message) {
+            $message->from('clm_language@unog.ch', 'CLM Language');
+            $message->to('allyson.frias@un.org')->subject('Alert: Mail Queue Failing');
+            });
+        });
 
        // Using Closure based composers...
         view()->composer('partials._nav2', function ($view) {

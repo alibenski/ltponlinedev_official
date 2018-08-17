@@ -32,8 +32,21 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        
-        Mail::to('mail@gmail.com')->send(new SendMailable());
-        
+        Mail::to('allyson.frias@un.org')->send(new SendMailable());
+    }
+
+    /**
+     * The job failed to process.
+     *
+     * @param  Exception  $exception
+     * @return void
+     */
+    public function failed(Exception $exception)
+    {
+        Mail::raw("Mail Delivery Job Failure", function($message) {
+            $message->from('clm_language@unog.ch', 'CLM Language');
+            $message->to('allyson.frias@un.org')->subject('Alert: Mail Delivery Failure Reminder Email');
+            $message->text($exception);
+        });
     }
 }

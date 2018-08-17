@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Console;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,9 +24,23 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //insert name and signature of you command and define the time of excusion
+        // insert name and signature of you command and define the time of execution
+        // run command to send reminder emails to managers in class \App\Console\Commands\ApprovalReminder
         $schedule->command('ApprovalReminder:approvalreminder')
-                ->weekly()->tuesdays()->at('15:00');
+                ->weekly()->mondays()->at('05:00')
+                ->withoutOverlapping();
+        // run command to execute queued emails in jobs table 
+        // Log::info("Start queue:work");
+        $work = $schedule->command('queue:work --tries=3')
+                // ->cron('* * * * * *')
+                ->withoutOverlapping();
+        // Log::info("End queue:work");
+        // there is a 60 second delay to execute job with no changes occured to the code or the query due to queue:restart
+        if ($work) {
+            // Log::info("Start queue:restart");
+            $schedule->command('queue:restart');
+            // Log::info("End queue:restart");
+        }
     }
 
     /**

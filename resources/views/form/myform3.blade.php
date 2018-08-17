@@ -153,7 +153,6 @@
                   <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
                     <div class="alert alert-info alert-dismissible">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                      <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
                       <p>You have answered <strong>NO</strong>. You are not a complete beginner on your selected language. Please select a date for your placement test from the options available. If you are unable to take the test, then you can apply again in the next enrolment period.</p> 
                       <p>At the end of this form, you are <strong>required</strong> to fill out a comment box to express any concerns <strong>(e.g. preferred course, time contraints, etc.)</strong>. Thank you for your cooperation.</p>
                     </div>
@@ -171,7 +170,7 @@
                         <div class="insert-msg"></div>
 
                         <div class="col-md-12 form-group">
-                          <label class="col-md-3 control-label">Comment: <i>(required)</i></label>
+                          <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
                           <div class="col-md-8 ">
                           <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="preferred course, time contraints, no preferrence, etc."></textarea>
                           </div>

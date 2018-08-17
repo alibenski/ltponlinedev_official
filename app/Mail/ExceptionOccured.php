@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendMailable extends Mailable
+class ExceptionOccured extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,9 +16,9 @@ class SendMailable extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($content)
     {
-        //
+        $this->content = $content;
     }
 
     /**
@@ -28,8 +28,7 @@ class SendMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('page_not_available')
-                    ->subject('mgr reminder email changed - This is a test automated message')
-                    ->from('clm_language@unog.ch', 'CLM Language');
+        return $this->view('emails.exception')
+                    ->with('content', $this->content);
     }
 }

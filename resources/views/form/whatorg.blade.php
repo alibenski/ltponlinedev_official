@@ -18,7 +18,7 @@
               @if(empty($next_term))
               No DB Entry - TBC
               @else 
-              {{ $next_term->Term_Name.' - '.$next_term->Comments.' Season' }}
+              {{ $next_term->Term_Name.' - '.$next_term->Comments.' Term' }}
               @endif
             </strong>
           </div>
@@ -54,13 +54,13 @@
                     <li>Prepare a copy of proof of payment</li>
                     <li>Prepare a copy of your carte de légitimation or work certificate</li>
                   </ol>
-                  <p>After following the instructions, please fill out the field(s) below and click the Next button to continue.</p>
+                  <p>After following the instructions, please answer the field(s) below and click the Next button to continue.</p>
                   {{-- end of id="secretMsg1"  --}}
                 </div>
 
 
                 <div id="secretMsg2" class="col-md-12 alert alert-info" style="display: none">
-                  <p class='text-justify'>You confirmed that you work for a UN organization who is paying for your enrolment. Please fill out the field(s) below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
+                  <p class='text-justify'>You confirmed that you work for a UN organization who is paying for your enrolment. Please answer the field(s) below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
                   {{-- end of id="secretMsg2"  --}}
                 </div>
                 
@@ -70,7 +70,7 @@
                     <div class="dropdown">
                       <select id="profile" name="profile" class="col-md-8 form-control select-profile-single" style="width: 100%;" required="required">
                             <option></option>
-                            <option value="STF">UN Staff Member</option>
+                            <option value="STF">Staff Member</option>
                             <option value="INT">Intern</option>
                             <option value="CON">Consultant</option>
                             <option value="MSN">Staff of Permanent Mission</option>
@@ -154,12 +154,12 @@
 <script>
   $("input[name='decision']").click(function(){
       if($('#decision1').is(':checked')) {
-        $('#profile option:gt(3)').removeAttr('disabled');
+        $('#profile option:gt(1)').removeAttr('disabled');
         $('.select-profile-single').select2({
           placeholder: "Select Profile",
           });
       } else if ($('#decision2').is(':checked')) {
-        $('#profile option:gt(3)').attr('disabled', 'disabled'); 
+        $('#profile option:gt(1)').attr('disabled', 'disabled'); 
         $('.select-profile-single').select2({
           placeholder: "Select Profile",
           });
