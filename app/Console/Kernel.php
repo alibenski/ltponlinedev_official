@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('ApprovalReminder:approvalreminder')
                 ->weekly()->mondays()->at('05:00')
                 ->withoutOverlapping();
-        // run command to execute queued emails in jobs table 
+        // run command to execute queued jobs in the jobs table 
         // Log::info("Start queue:work");
         $work = $schedule->command('queue:work --tries=3')
                 // ->cron('* * * * * *')

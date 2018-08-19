@@ -2,77 +2,89 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Waitlist;
-
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MailtoApprover;
-use App\Language;
-use App\Course;
-use App\User;
-use App\Repo;
-use App\Term;
 use App\Classroom;
-use App\Schedule;
+use App\Course;
+use App\FocalPoints;
+use App\Jobs\SendEmailJob;
+use App\Language;
+use App\Mail\MailtoApprover;
+use App\Mail\SendMailable;
 use App\Preenrolment;
+use App\Repo;
 use App\SDDEXTR;
+use App\Schedule;
+use App\Term;
 use App\Torgan;
-use Session;
+use App\User;
+use App\Waitlist;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Validation\Rule;
-
 use Illuminate\Support\Facades\Log;
-use App\FocalPoints;
-
-use App\Mail\SendMailable;
-use App\Jobs\SendEmailJob;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use Session;
 
 class WaitlistController extends Controller
 {
     public function testQuery()
     {
         // DB::table('jobs')->truncate();
-        Log::info("Start sending email");
-        for ($i=0; $i < 2; $i++)  {
-            $emailJob = (new SendEmailJob())->delay(Carbon::now()->addSeconds(10));
-            dispatch($emailJob);
+        // Log::info("Start sending email");
+        // for ($i=0; $i < 2; $i++)  {
+        //     $emailJob = (new SendEmailJob())->delay(Carbon::now()->addSeconds(10));
+        //     dispatch($emailJob);
+        // }
+        //     echo 'email sent<br>';
+        // Log::info("Finished sending email");
+        //get current year and date
+        $now_date = Carbon::now();
+        $now_year = Carbon::now()->year; 
+        $enrolment_term = Term::whereYear('Term_End', $now_year)
+                        ->orderBy('Term_Code', 'desc')
+                        ->where('Approval_Date_Limit', '>=', $now_date)
+                        ->value('Term_Code');
+        if (empty($enrolment_term)) {
+            Log::info("Term is null. No Emails sent.");
+            echo "Term is null. No Emails sent.";
+            return exit();
         }
-            echo 'email sent<br>';
-        Log::info("Finished sending email");
-        // //get current year and date
-        // $now_date = Carbon::now();
-        // $now_year = Carbon::now()->year; 
-        // $enrolment_term = Term::whereYear('Term_End', $now_year)
-        //                 ->orderBy('Term_Code', 'desc')
-        //                 ->where('Enrol_Date_End', '>=', $now_date)
-        //                 ->value('Term_Code');
-        // if (empty($enrolment_term)) {
-        //     Log::info("Term is null. No Emails sent.");
-        //     // return exit();
-        // }
 
-        // $arr = [];
-        // $enrolments_no_mgr_approval = Preenrolment::where('Term', '188')->whereNull('is_self_pay_form')->whereNull('approval')->get();
+        $arr = [];
+        $enrolments_no_mgr_approval = Preenrolment::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval')->get();
 
-        // if ($enrolments_no_mgr_approval->isEmpty()) {
-        //     Log::info("No email addresses to pick up. No Emails sent.");
-        //     return exit();
-        // }
-        // foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
-        // {
-        //     $arr[] = $valueMgrEmails->mgr_email; 
-        //     $recipient = $valueMgrEmails->mgr_email;
-        //     Mail::raw("This is a test automated message", function($message) use ($recipient){
-        //         // Log::info("Start sending email");
-        //         $message->from('clm_language@unog.ch', 'CLM Language');
-        //         $message->to($recipient)->subject('MGR - This is a test automated message');
-        //         // Log::info("Finished sending email");
-        //     });
-        // }
-        
+        if ($enrolments_no_mgr_approval->isEmpty()) {
+            Log::info("No email addresses to pick up. No Emails sent.");
+            echo $enrolment_term;
+            echo  $enrolments_no_mgr_approval;
+            return exit();
+        }
+        foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
+        {
+            $arr[] = $valueMgrEmails->mgr_email; 
+            $recipient = $valueMgrEmails->mgr_email;
+            $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+            
+            $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $valueMgrEmails->INDEXID)->where('Term', $enrolment_term)->first();
+            $input_schedules = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $valueMgrEmails->INDEXID)
+                                ->where('Term', $enrolment_term)
+                                ->where('Te_Code', $valueMgrEmails->Te_Code)
+                                ->where('form_counter', $valueMgrEmails->form_counter)
+                                ->get();
+            echo $recipient;
+            echo '<br>';
+            echo '<br>';
+
+            // Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
+            // Mail::raw("This is a test automated message", function($message) use ($recipient){
+            //     $message->from('clm_language@unog.ch', 'CLM Language');
+            //     $message->to($recipient)->subject('MGR - This is a test automated message');
+            // });
+        }
+        dd($arr);
         // $arrDept = [];
         // $arrHrEmails = [];
         // $enrolments_no_hr_approval = Preenrolment::where('Term', '188')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get();

@@ -41,6 +41,6 @@ class ApprovalReminder extends Command
     public function handle()
     {       
         // execute method function to send reminder emails found in the controller from construct()
-        $this->email->testQuery(); 
+        // $this->email->testQuery(); 
     }
 }

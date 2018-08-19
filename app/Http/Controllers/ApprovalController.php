@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use App\Preenrolment;
-use App\Term;
-use App\User;
-use App\Torgan;
 use App\FocalPoints;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MailtoStudent;
-use App\Mail\MailtoApproverHR;
-use App\Mail\MailtoStudentHR;
-use App\PlacementForm;
 use App\Mail\MailPlacementApprovaltoStudent;
 use App\Mail\MailPlacementHRApprovaltoStudent;
 use App\Mail\MailPlacementTesttoApproverHR;
+use App\Mail\MailtoApproverHR;
+use App\Mail\MailtoStudent;
+use App\Mail\MailtoStudentHR;
+use App\PlacementForm;
+use App\Preenrolment;
+use App\Term;
+use App\Torgan;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 
 class ApprovalController extends Controller
 {
