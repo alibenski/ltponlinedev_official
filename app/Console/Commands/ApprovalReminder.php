@@ -26,11 +26,12 @@ class ApprovalReminder extends Command
      *
      * @return void
      */
-    public function __construct(\App\Http\Controllers\WaitlistController $email)
+    public function __construct(\App\Http\Controllers\PreenrolmentController $email, \App\Http\Controllers\PlacementFormController $placement_email)
     {
         parent::__construct();
 
         $this->email = $email;
+        $this->placement_email = $placement_email;
     }
 
     /**
@@ -41,6 +42,7 @@ class ApprovalReminder extends Command
     public function handle()
     {       
         // execute method function to send reminder emails found in the controller from construct()
-        // $this->email->testQuery(); 
+        // $this->email->sendReminderEmails(); 
+        // $this->placement_email->sendReminderEmailsPlacement(); 
     }
 }

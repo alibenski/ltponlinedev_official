@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.errors')
 
 @section('content')
     <div class='col-lg-4 col-lg-offset-4'>

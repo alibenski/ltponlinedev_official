@@ -25,7 +25,12 @@ class OpenCloseApprovalRoutes
 
         // get approval limit date from Term table field
         $nextTermCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        $approvalDateLimit = Term::where('Term_Code', $nextTermCode->Term_Code)->value('Approval_Date_Limit');
+        
+        if (is_null($nextTermCode)) {
+            abort(403, 'Unauthorized action. Value null set on Term.');
+        }
+
+        $approvalDateLimit = Term::where('Term_Code', '$nextTermCode->Term_Code')->value('Approval_Date_Limit');
         if ($approvalDateLimit == null || $now_date <= $approvalDateLimit) {
             return $next($request);
         }

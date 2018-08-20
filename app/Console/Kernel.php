@@ -27,8 +27,9 @@ class Kernel extends ConsoleKernel
         // insert name and signature of you command and define the time of execution
         // run command to send reminder emails to managers in class \App\Console\Commands\ApprovalReminder
         $schedule->command('ApprovalReminder:approvalreminder')
-                ->weekly()->mondays()->at('05:00')
+                ->weekly()->mondays()->at('17:56')
                 ->withoutOverlapping();
+                
         // run command to execute queued jobs in the jobs table 
         // Log::info("Start queue:work");
         $work = $schedule->command('queue:work --tries=3')

@@ -2,32 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MailtoApprover;
-use App\Language;
-use App\Course;
-use App\User;
-use App\Repo;
-use App\Term;
 use App\Classroom;
-use App\Schedule;
+use App\Course;
+use App\Day;
+use App\FocalPoints;
+use App\Language;
+use App\Mail\MailPlacementTesttoApprover;
+use App\Mail\MailtoApprover;
+use App\Mail\SendMailableReminderPlacement;
+use App\Mail\SendReminderEmailPlacementHR;
+use App\PlacementForm;
+use App\PlacementSchedule;
 use App\Preenrolment;
+use App\Repo;
 use App\SDDEXTR;
+use App\Schedule;
+use App\Term;
 use App\Torgan;
-use Session;
+use App\User;
 use Carbon\Carbon;
 use DB;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Validation\Rule;
-
-use App\PlacementSchedule;
-use App\PlacementForm;
-use App\Mail\MailPlacementTesttoApprover;
-use App\Day;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use Session;
 
 class PlacementFormController extends Controller
 {
@@ -43,6 +46,91 @@ class PlacementFormController extends Controller
         // $this->middleware('opencloseenrolment');
         // $this->middleware('checksubmissioncount');
         // $this->middleware('checkcontinue');
+    }
+
+    /**
+     * Send reminder emails to manager and HR focalpoints.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendReminderEmailsPlacement()
+    {
+        $now_date = Carbon::now();
+        $now_year = Carbon::now()->year; 
+        $enrolment_term = Term::whereYear('Term_End', $now_year)
+                        ->orderBy('Term_Code', 'desc')
+                        ->where('Approval_Date_Limit', '>=', $now_date)
+                        ->value('Term_Code');
+        if (empty($enrolment_term)) {
+            Log::info("Term is null. No Emails sent.");
+            echo "Term is null. No Emails sent.";
+            return exit();
+        }
+
+        $arrRecipient = [];
+        $enrolments_no_mgr_approval = PlacementForm::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'L', 'eform_submit_count', 'mgr_email')->groupBy('INDEXID', 'L', 'eform_submit_count', 'mgr_email')->get();
+
+        if ($enrolments_no_mgr_approval->isEmpty()) {
+            Log::info("No email addresses to pick up. No Emails sent.");
+            echo $enrolment_term;
+            echo  $enrolments_no_mgr_approval;
+            return exit();
+        }
+        foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
+        {
+            $arrRecipient[] = $valueMgrEmails->mgr_email; 
+            $recipient = $valueMgrEmails->mgr_email;
+
+            $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+            $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $enrolment_term)->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
+
+            Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
+            echo $recipient;
+            echo '<br>';
+            echo '<br>';
+        }
+
+        $arrDept = [];
+        $arrHrEmails = [];
+        $arr=[];
+        $enrolments_no_hr_approval = PlacementForm::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get();
+
+        foreach ($enrolments_no_hr_approval as $valueDept) {
+            $arrDept[] = $valueDept->DEPT;
+            $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
+            $learning_partner = $torgan->has_learning_partner;
+
+            if ($learning_partner == '1') {
+                $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
+                $fp_email = $query_hr_email->map(function ($val, $key) {
+                    return $val->email;
+                });
+                $fp_email_arr = $fp_email->toArray();
+                $arrHrEmails[] = $fp_email_arr;
+
+                $formItems = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $valueDept->INDEXID)
+                                ->where('Term', $enrolment_term)
+                                ->where('L', $valueDept->L)
+                                ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                ->get();
+                $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $valueDept->INDEXID)
+                                ->where('Term', $enrolment_term)
+                                ->where('L', $valueDept->L)
+                                ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                ->first();   
+                // $staff_name = $formfirst->users->name;
+                $staff_name = $formfirst->users->name;
+                $arr[] = $staff_name;
+                $mgr_email = $formfirst->mgr_email;    
+                $input_course = $formfirst; 
+                // Mail::to($fp_email_arr);
+                Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+            }
+        }
+        // dd($arrRecipient, $enrolments_no_mgr_approval, $arrHrEmails,$arr);
+        return 'reminder placement emails sent';
     }
 
     public function postPlacementInfo(Request $request)
@@ -62,6 +150,7 @@ class PlacementFormController extends Controller
         // $contractDate = $request->input('contractDate');
 
         $this->validate($request, array(
+            'mgr_email' => 'required|email',
             'placementLang' => 'required|integer',
             'agreementBtn' => 'required|',
         ));
