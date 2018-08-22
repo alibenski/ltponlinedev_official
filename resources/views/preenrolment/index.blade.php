@@ -11,6 +11,7 @@
 		<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="#">Approved</a></li>
 		<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="#">Cancelled</a></li>
 		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="#">Pending</a></li>
+		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="{{ route('selfpayform.index') }}">Manage Self-Paying</a></li>
 	</ul>
 
     <form method="GET" action="{{ route('preenrolment.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">

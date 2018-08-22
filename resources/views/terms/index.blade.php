@@ -4,10 +4,12 @@
 <div class="col-lg-12">
 	<h1><i class="fa fa-lg fa-snowflake-o"></i> All Semester Terms </h1>
 
-	<div class="col-md-1">
+	<div class="col-md-2">
 			<a href="{{ route('terms.create') }}" class="btn btn-block btn-h1-spacing btn-primary btn-h1-spacing">Create Term</a>
 	</div>
-    <hr>
+	<div class="row col-md-12">
+    <hr>		
+	</div>
     <div class="row col-md-12">
 		<div class="table-responsive">
 			<table class="table table-bordered table-striped">

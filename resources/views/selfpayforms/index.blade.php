@@ -1,5 +1,7 @@
 @extends('admin.admin')
-
+@section('customcss')
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+@stop
 @section('content')
 @if(is_null($selfpayforms))
 
@@ -10,6 +12,7 @@
 	    <thead>
 	        <tr>
 	            <th>Operation</th>
+	            <th>Status</th>
 	            <th>Name</th>
 	            <th>Term</th>
 	            <th>Language</th>
@@ -24,7 +27,11 @@
 			@foreach($selfpayforms as $form)
 			<tr>
 				<td>
-					<button class="edit-modal btn btn-success"> <span class="glyphicon glyphicon-check"></span> Approve</button>
+					<button class="edit-modal btn btn-success btn-space"> <span class="glyphicon glyphicon-check"></span> Approve</button>
+					<button class="edit-modal btn btn-danger btn-space"> <span class="glyphicon glyphicon-remove-circle"></span> Disapprove</button>
+				</td>
+				<td>
+				@if(empty($form->selfpay_approval)) None @else {{ $form->selfpay_approval }} @endif	
 				</td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
