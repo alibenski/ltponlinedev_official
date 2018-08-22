@@ -16,13 +16,13 @@
 					<th>Term Name</th>
 					<th>Term Begin Date</th>
 					<th>Term End Date</th>
-					<th>Previous Term</th>
-					<th>Next Term</th>
 					<th>Enrolment Date Begin</th>
 					<th>Enrolment Date End</th>
 					<th>Cancellation Date Limit</th>
 					<th>Approval Date Limit</th>
 					<th>Season</th>
+					<th>Remind Mgr</th>
+					<th>Remind HR</th>
 					<th>Operation</th>
 				</thead>
 
@@ -34,20 +34,6 @@
 							<td>{{ $term->Term_Name }}</td>
 							<td>{{ date('d M Y', strtotime($term->Term_Begin)) }}</td>
 							<td>{{ date('d M Y', strtotime($term->Term_End)) }}</td>
-							<td>
-							@if(empty($term->Term_Prev))
-					            <span class="label label-danger">NONE</span>
-							@else
-								{{ $term->Term_Prev }}
-							@endif
-							</td>
-							<td> 
-							@if(empty($term->Term_Next))
-					            <span class="label label-danger">NONE</span>
-							@else
-								{{ $term->Term_Next}}
-							@endif
-							</td> 
 							<td>
 							@if(empty($term->Enrol_Date_Begin))
 					            <span class="label label-danger">NONE</span>
@@ -77,6 +63,8 @@
 							@endif
 							</td>
 							<td>{{ $term->Comments }}</td>
+							<td>{{ $term->Remind_Mgr_After }} days</td>
+							<td>{{ $term->Remind_HR_After }} days</td>
 							<td><a href="{{ route('terms.edit', $term->Term_Code)}}" class="btn btn-info pull-left">Edit</a></td>
 						</tr>
 					@endforeach

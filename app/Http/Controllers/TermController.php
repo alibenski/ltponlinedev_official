@@ -43,11 +43,40 @@ class TermController extends Controller
     public function store(Request $request)
     {
         // validate the data 
-        // validate date to be greater that now()
         $this->validate($request, array(
-                // 'name' => 'required|max:255',
+                'Term_Code' => 'required|unique:LTP_Terms',
+                'Remind_Mgr_After' => 'required|integer',
+                'Remind_HR_After' => 'required|integer',
             ));
-        // manipulate before storing
+
+        // Term_Begin should not be less than Approval_Date_Limit of previous term
+        $selectedTerm = $request->Term_Code; // No need of type casting
+        // echo substr($selectedTerm, 0, 1); // get first value
+        // echo substr($selectedTerm, -1); // get last value
+        $lastDigit = substr($selectedTerm, -1);
+
+        if ($lastDigit == 9) {
+            $prev_term = $selectedTerm - 5;
+        }
+        // if last digit is 1, check Term table for previous term value or subtract 2 from selectedTerm value
+        if ($lastDigit == 1) {
+            $prev_term = $selectedTerm - 2;
+        }
+        // if last digit is 4, check Term table for previous term value or subtract 3 from selectedTerm value
+        if ($lastDigit == 4) {
+            $prev_term = $selectedTerm - 3;
+        }
+        if ($lastDigit == 8) {
+            $prev_term = $selectedTerm - 4;
+        }
+        $previous_term = Term::where('Term_Code', $prev_term)->first();
+
+        if ($request->Enrol_Date_Begin < $previous_term->Approval_Date_Limit) {
+            $request->session()->flash('interdire-msg', 'Enrolment Begin Date ('.$request->Enrol_Date_Begin.') cannot be less than the Approval Date Limit ('.$previous_term->Approval_Date_Limit.') of the previous term: '.$prev_term);
+            return redirect()->back();
+        }
+
+        // manipulate strings before storing
         $termBeginStr = date('d F', strtotime($request->Term_Begin));
         $termEndStr = date('d F Y', strtotime($request->Term_End));
         $termNameStr = $termBeginStr.' - '.$termEndStr;
@@ -64,6 +93,8 @@ class TermController extends Controller
         $term->Enrol_Date_End = $request->Enrol_Date_End;
         $term->Cancel_Date_Limit = $request->Cancel_Date_Limit;
         $term->Approval_Date_Limit = $request->Approval_Date_Limit;
+        $term->Remind_Mgr_After = $request->Remind_Mgr_After;
+        $term->Remind_HR_After = $request->Remind_HR_After;
         $term->Comments = $request->Comments;
         $term->Activ = 0;
 

@@ -68,6 +68,20 @@
                 <p>@if(empty ( $term->Approval_Date_Limit )) Update Needed @else {{ date('d M Y', strtotime($term->Approval_Date_Limit)) }} @endif</p>
             </div>
         </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Send reminder emails to managers after:</label>
+
+            <div class="form-control-static">
+                <p>{{ $term->Remind_Mgr_After }} days</p>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="title" class="control-label">Send reminder emails to HR partner after:</label>
+
+            <div class="form-control-static">
+                <p>{{ $term->Remind_HR_After }} days</p>
+            </div>
+        </div>
       </div>      
     </div>
 	    <form id="updateTermForm" method="POST" action="{{ route('terms.update', $term->Term_Code) }}">
@@ -75,7 +89,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="Term_Code" class="control-label">Term Code: </label>
-  				  <input name="Term_Code" type="text" class="form-control" value="">
+  				  <input name="Term_Code" type="number" class="form-control" value="">
           </div>
 
           <div class="form-group">
@@ -96,6 +110,11 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                   <input type="hidden" name="Term_End" id="Term_End" value="" />
+          </div>
+
+          <div class="form-group">
+            <label for="Remind_Mgr_After" class="control-label">Send reminder emails to managers after how many days? </label>
+            <input name="Remind_Mgr_After" type="number" class="form-control" value="">
           </div>
         </div>
 
@@ -121,6 +140,11 @@
           <div class="form-group">
             <label for="Term_Next" class="control-label">Next Term Code: </label>
             <input name="Term_Next" type="text" class="form-control" value="">
+          </div>
+
+          <div class="form-group">
+            <label for="Remind_HR_After" class="control-label">Send reminder emails to HR partner after how many days? </label>
+            <input name="Remind_HR_After" type="number" class="form-control" value="">
           </div>
         </div>
 

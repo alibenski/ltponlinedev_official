@@ -67,8 +67,10 @@ class PlacementFormController extends Controller
             return exit();
         }
 
+        $remind_mgr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_Mgr_After'); // get int value after how many days reminder email should be sent
+
         $arrRecipient = [];
-        $enrolments_no_mgr_approval = PlacementForm::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'L', 'eform_submit_count', 'mgr_email')->groupBy('INDEXID', 'L', 'eform_submit_count', 'mgr_email')->get();
+        $enrolments_no_mgr_approval = PlacementForm::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'L', 'eform_submit_count', 'mgr_email','created_at')->groupBy('INDEXID', 'L', 'eform_submit_count', 'mgr_email','created_at')->get();
 
         if ($enrolments_no_mgr_approval->isEmpty()) {
             Log::info("No email addresses to pick up. No Emails sent.");
@@ -78,17 +80,21 @@ class PlacementFormController extends Controller
         }
         foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
         {
-            $arrRecipient[] = $valueMgrEmails->mgr_email; 
-            $recipient = $valueMgrEmails->mgr_email;
+            if ($now_date >= Carbon::parse($valueMgrEmails->created_at)->addDays($remind_mgr_param)) {
+                $arrRecipient[] = $valueMgrEmails->mgr_email; 
+                $recipient = $valueMgrEmails->mgr_email;
 
-            $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
-            $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $enrolment_term)->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
+                $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+                $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $enrolment_term)->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
 
-            Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
-            echo $recipient;
-            echo '<br>';
-            echo '<br>';
+                Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
+                echo $recipient;
+                echo '<br>';
+                echo '<br>';
+            }
         }
+
+        $remind_hr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_HR_After');
 
         $arrDept = [];
         $arrHrEmails = [];
@@ -96,37 +102,39 @@ class PlacementFormController extends Controller
         $enrolments_no_hr_approval = PlacementForm::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get();
 
         foreach ($enrolments_no_hr_approval as $valueDept) {
-            $arrDept[] = $valueDept->DEPT;
-            $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
-            $learning_partner = $torgan->has_learning_partner;
+            if ($now_date >= Carbon::parse($valueDept->UpdatedOn)->addDays($remind_hr_param)) {
+                $arrDept[] = $valueDept->DEPT;
+                $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
+                $learning_partner = $torgan->has_learning_partner;
 
-            if ($learning_partner == '1') {
-                $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
-                $fp_email = $query_hr_email->map(function ($val, $key) {
-                    return $val->email;
-                });
-                $fp_email_arr = $fp_email->toArray();
-                $arrHrEmails[] = $fp_email_arr;
+                if ($learning_partner == '1') {
+                    $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
+                    $fp_email = $query_hr_email->map(function ($val, $key) {
+                        return $val->email;
+                    });
+                    $fp_email_arr = $fp_email->toArray();
+                    $arrHrEmails[] = $fp_email_arr;
 
-                $formItems = PlacementForm::orderBy('Term', 'desc')
-                                ->where('INDEXID', $valueDept->INDEXID)
-                                ->where('Term', $enrolment_term)
-                                ->where('L', $valueDept->L)
-                                ->where('eform_submit_count', $valueDept->eform_submit_count)
-                                ->get();
-                $formfirst = PlacementForm::orderBy('Term', 'desc')
-                                ->where('INDEXID', $valueDept->INDEXID)
-                                ->where('Term', $enrolment_term)
-                                ->where('L', $valueDept->L)
-                                ->where('eform_submit_count', $valueDept->eform_submit_count)
-                                ->first();   
-                // $staff_name = $formfirst->users->name;
-                $staff_name = $formfirst->users->name;
-                $arr[] = $staff_name;
-                $mgr_email = $formfirst->mgr_email;    
-                $input_course = $formfirst; 
-                // Mail::to($fp_email_arr);
-                Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+                    $formItems = PlacementForm::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $valueDept->INDEXID)
+                                    ->where('Term', $enrolment_term)
+                                    ->where('L', $valueDept->L)
+                                    ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                    ->get();
+                    $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $valueDept->INDEXID)
+                                    ->where('Term', $enrolment_term)
+                                    ->where('L', $valueDept->L)
+                                    ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                    ->first();   
+                    // $staff_name = $formfirst->users->name;
+                    $staff_name = $formfirst->users->name;
+                    $arr[] = $staff_name;
+                    $mgr_email = $formfirst->mgr_email;    
+                    $input_course = $formfirst; 
+                    // Mail::to($fp_email_arr);
+                    Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+                }
             }
         }
         // dd($arrRecipient, $enrolments_no_mgr_approval, $arrHrEmails,$arr);

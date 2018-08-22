@@ -30,18 +30,22 @@ class PreenrolmentController extends Controller
         //get current year and date
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year; 
+        // get the correct enrolment term code
         $enrolment_term = Term::whereYear('Term_End', $now_year)
                         ->orderBy('Term_Code', 'desc')
+                        ->where('Enrol_Date_Begin', '<=', $now_date)
                         ->where('Approval_Date_Limit', '>=', $now_date)
-                        ->value('Term_Code');
+                        ->min('Term_Code');
         if (empty($enrolment_term)) {
             Log::info("Term is null. No Emails sent.");
             echo "Term is null. No Emails sent.";
             return exit();
         }
 
+        $remind_mgr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_Mgr_After'); // get int value after how many days reminder email should be sent
+
         $arrRecipient = [];
-        $enrolments_no_mgr_approval = Preenrolment::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email')->get();
+        $enrolments_no_mgr_approval = Preenrolment::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
 
         if ($enrolments_no_mgr_approval->isEmpty()) {
             Log::info("No email addresses to pick up. No Emails sent.");
@@ -51,61 +55,69 @@ class PreenrolmentController extends Controller
         }
         foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
         {
-            $arrRecipient[] = $valueMgrEmails->mgr_email; 
-            $recipient = $valueMgrEmails->mgr_email;
+            if ($now_date >= Carbon::parse($valueMgrEmails->created_at)->addDays($remind_mgr_param)) {
+            
+                $arrRecipient[] = $valueMgrEmails->mgr_email; 
+                $recipient = $valueMgrEmails->mgr_email;
 
-            $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
-            $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $valueMgrEmails->INDEXID)->where('Term', $enrolment_term)->first();
-            $input_schedules = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $valueMgrEmails->INDEXID)
-                                ->where('Term', $enrolment_term)
-                                ->where('Te_Code', $valueMgrEmails->Te_Code)
-                                ->where('form_counter', $valueMgrEmails->form_counter)
-                                ->get();
-            Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
-            // Mail::raw("This is a test automated message", function($message) use ($recipient){
-            //     $message->from('clm_language@unog.ch', 'CLM Language');
-            //     $message->to('allyson.frias@un.org')->subject('MGR - This is a test automated message');
-            // });
-            echo $recipient;
-            echo '<br>';
-            echo '<br>';
+                $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+                $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $valueMgrEmails->INDEXID)->where('Term', $enrolment_term)->first();
+                $input_schedules = Preenrolment::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $valueMgrEmails->INDEXID)
+                                    ->where('Term', $enrolment_term)
+                                    ->where('Te_Code', $valueMgrEmails->Te_Code)
+                                    ->where('form_counter', $valueMgrEmails->form_counter)
+                                    ->get();
+                Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
+                // Mail::raw("This is a test automated message", function($message) use ($recipient){
+                //     $message->from('clm_language@unog.ch', 'CLM Language');
+                //     $message->to('allyson.frias@un.org')->subject('MGR - This is a test automated message');
+                // });
+                echo $recipient;
+                echo '<br>';
+                echo '<br>';
+            }
         }
+
+        $remind_hr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_HR_After');
 
         $arrDept = [];
         $arrHrEmails = [];
-        $enrolments_no_hr_approval = Preenrolment::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get();
+        $enrolments_no_hr_approval = Preenrolment::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT', 'UpdatedOn')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT','UpdatedOn')->get();
 
         foreach ($enrolments_no_hr_approval as $valueDept) {
-            $arrDept[] = $valueDept->DEPT;
-            $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
-            $learning_partner = $torgan->has_learning_partner;
+            if ($now_date >= Carbon::parse($valueDept->UpdatedOn)->addDays($remind_hr_param)) {
+                
+                $arrDept[] = $valueDept->DEPT;
+                $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
+                $learning_partner = $torgan->has_learning_partner;
 
-            if ($learning_partner == '1') {
-                $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
-                $fp_email = $query_hr_email->map(function ($val, $key) {
-                    return $val->email;
-                });
-                $fp_email_arr = $fp_email->toArray();
-                $arrHrEmails[] = $fp_email_arr;
+                if ($learning_partner == '1') {
+                    $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
+                    $fp_email = $query_hr_email->map(function ($val, $key) {
+                        return $val->email;
+                    });
+                    $fp_email_arr = $fp_email->toArray();
+                    $arrHrEmails[] = $fp_email_arr;
 
-                $formItems = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $valueDept->INDEXID)
-                                ->where('Term', $enrolment_term)
-                                ->where('Te_Code', $valueDept->Te_Code)
-                                ->where('form_counter', $valueDept->form_counter)
-                                ->get();
-                $formfirst = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $valueDept->INDEXID)
-                                ->where('Term', $enrolment_term)
-                                ->where('Te_Code', $valueDept->Te_Code)
-                                ->where('form_counter', $valueDept->form_counter)
-                                ->first();   
-                $staff_name = $formfirst->users->name;
-                $mgr_email = $formfirst->mgr_email;    
-                $input_course = $formfirst; 
-                // Mail::to($fp_email_arr);
-                Mail::to($fp_email_arr)->send(new SendReminderEmailHR($formItems, $input_course, $staff_name, $mgr_email));
+                    $formItems = Preenrolment::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $valueDept->INDEXID)
+                                    ->where('Term', $enrolment_term)
+                                    ->where('Te_Code', $valueDept->Te_Code)
+                                    ->where('form_counter', $valueDept->form_counter)
+                                    ->get();
+                    $formfirst = Preenrolment::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $valueDept->INDEXID)
+                                    ->where('Term', $enrolment_term)
+                                    ->where('Te_Code', $valueDept->Te_Code)
+                                    ->where('form_counter', $valueDept->form_counter)
+                                    ->first();   
+                    $staff_name = $formfirst->users->name;
+                    $mgr_email = $formfirst->mgr_email;    
+                    $input_course = $formfirst; 
+                    // Mail::to($fp_email_arr);
+                    Mail::to($fp_email_arr)->send(new SendReminderEmailHR($formItems, $input_course, $staff_name, $mgr_email));
+                }
             }
         }
         // dd($arrRecipient, $enrolments_no_mgr_approval, $arrHrEmails,$formfirst);

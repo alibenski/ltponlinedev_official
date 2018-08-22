@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Term;
 use Carbon\Carbon;
-use Session;
+use Closure;
 use DB;
+use Illuminate\Support\Facades\Crypt;
+use Session;
 
 class OpenCloseApprovalRoutes
 {
@@ -19,23 +20,18 @@ class OpenCloseApprovalRoutes
      */
     public function handle($request, Closure $next)
     {
-        // get current year and date
+        // get current date
         $now_date = Carbon::now();
-        $now_year = Carbon::now()->year;
+        // get the term from http route parameters via $request
+        $term = Crypt::decrypt($request->route('term'));
 
-        // get approval limit date from Term table field
-        $nextTermCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        
-        if (is_null($nextTermCode)) {
-            abort(403, 'Unauthorized action. Value null set on Term.');
-        }
-
-        $approvalDateLimit = Term::where('Term_Code', '$nextTermCode->Term_Code')->value('Approval_Date_Limit');
+        $approvalDateLimit = Term::where('Term_Code', $term)->value('Approval_Date_Limit');
         if ($approvalDateLimit == null || $now_date <= $approvalDateLimit) {
             return $next($request);
         }
 
         // redirect to page telling that the duration for approval has passed
-        return redirect()->route('confirmationLinkExpired');
+        // return redirect()->route('confirmationLinkExpired');
+        abort(403, 'Unauthorized action. Date limit for approval reached.');
     }
 }

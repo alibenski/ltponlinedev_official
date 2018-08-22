@@ -15,7 +15,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="Term_Code" class="control-label">Term Code: </label>
-  				  <input name="Term_Code" type="text" class="form-control" value="" required="">
+  				  <input name="Term_Code" type="number" class="form-control" value="" required="">
           </div>
 
           <div class="form-group">
@@ -36,6 +36,11 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                   <input type="hidden" name="Term_End" id="Term_End" value="" required=""/>
+          </div>
+
+          <div class="form-group">
+            <label for="Remind_Mgr_After" class="control-label">Send reminder emails to managers after how many days? </label>
+            <input name="Remind_Mgr_After" type="number" class="form-control" value="" required="">
           </div>
         </div>
 
@@ -61,7 +66,11 @@
             <label for="Term_Next" class="control-label">Next Term Code: </label>
             <input name="Term_Next" type="text" class="form-control" value="">
           </div>
-
+          
+          <div class="form-group">
+            <label for="Remind_HR_After" class="control-label">Send reminder emails to HR partner after how many days? </label>
+            <input name="Remind_HR_After" type="number" class="form-control" value="" required="">
+          </div>
         </div>
 
         <div class="col-md-4">
