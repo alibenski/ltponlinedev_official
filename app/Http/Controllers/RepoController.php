@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MailtoApprover;
-use App\Language;
-use App\Course;
-use App\User;
-use App\Repo;
-use App\Term;
 use App\Classroom;
-use App\Schedule;
+use App\Course;
+use App\Day;
+use App\Language;
+use App\Mail\MailtoApprover;
 use App\Preenrolment;
+use App\Repo;
 use App\SDDEXTR;
+use App\Schedule;
+use App\Term;
 use App\Torgan;
-use Session;
+use App\User;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use Session;
 
 class RepoController extends Controller
 {
@@ -73,7 +74,7 @@ class RepoController extends Controller
             $courses = Course::all();
             //get values directly from 'languages' table
             $languages = DB::table('languages')->pluck("name","code")->all();
-
+            $days = Day::pluck("Week_Day_Name","Week_Day_Name")->except('Sunday', 'Saturday')->all();
             //get current year and date
             $now_date = Carbon::now()->toDateString();
             $now_year = Carbon::now()->year;
@@ -111,14 +112,14 @@ class RepoController extends Controller
             if ($student_last_term == null) {
                     $repos_lang = null;
                     $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
-                    return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
+                    return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org)->withDays($days);
                 }    
 
             $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
                 ->where('INDEXID', $current_user)->get();
             $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
 
-            return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org);
+            return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org)->withDays($days);
         } else {
             return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. Click on "Register/Enrol Here" < '. route('whatorg') .' > from the Menu below and answer the mandatory question.');
         }
@@ -207,8 +208,14 @@ class RepoController extends Controller
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
             app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request);
+            // $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+            // return redirect()->route('placementinfo');
+            if ($request->is_self_pay_form == 1) {
             $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
-            return redirect()->route('placementinfo');
+            return redirect()->route('thankyouSelfPay');
+            } 
+            $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+            return redirect()->route('thankyou');
         }
 
                     //validate other input fields outside of above loop

@@ -9,10 +9,11 @@
     
     <div class="form-group col-lg-4">
         <form method="GET" action="{{ route('users.index') }}">
+            {{-- search by name or email--}}
             <div class="input-group">           
                 <input type="text" name="search" class="form-control">
                 <div class="input-group-btn">
-                    <button type="submit" class="btn btn-info button-prevent-multi-submit">Search Name</button>
+                    <button type="submit" class="btn btn-info button-prevent-multi-submit">Search by Name/Email</button>
                     <a href="/admin/users/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
                 </div>
             </div>

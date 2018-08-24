@@ -13,7 +13,7 @@
 	<li role="presentation" class="{{ Request::is('previous-submitted') ? "active" : ""}}"><a href="/previous-submitted">Submitted Forms</a></li>
 	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">History</a></li>
 
-	<li role="presentation" class="pull-right {{ Request::is('whatorg') ? "active" : ""}}"><a href="/whatorg"><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a></li>
+	<li role="presentation" class="pull-right {{ Request::is('whatorg') ? "active" : ""}}">@if(is_null($term)) <a href="#" class="text-danger"><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Enrolment Closed</strong></a> @else <a  href="/whatorg "><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a>@endif</li>
 	<!--<li class="dropdown">
 		<button type="button" href="#" id="BtnDropdown" class="btn btn-info dropdown-toggle" data-toggle="dropdown"> Enrolment Forms <b class="caret"></b></button>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="BtnDropdown">

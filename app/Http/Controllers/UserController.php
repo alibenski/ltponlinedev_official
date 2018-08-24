@@ -41,8 +41,8 @@ class UserController extends Controller
         // Gets the query string from our form submission 
         $query = \Request::input('search');
         // Returns an array of users that have the query string located somewhere within 
-        // our users name. Paginates them so we can break up lots of search results.
-        $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(20);
+        // our users name or email fields. Paginates them so we can break up lots of search results.
+        $users = User::where('name', 'LIKE', '%' . $query . '%')->orWhere('email', 'LIKE', '%' . $query . '%')->paginate(20);
 
         return view('users.index')->with('users', $users);
     }

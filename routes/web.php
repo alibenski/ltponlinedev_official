@@ -151,22 +151,24 @@ Route::post('delete-day-param-ajax', ['as'=>'delete-day-param-ajax','uses'=>'Aja
 Route::group(['middleware' => 'open-close-approval-routes'],function(){
     //url routing for manager approval page
     Route::get('/approval/{staff}/{tecode}/{id}/{form}/{term}', ['as' => 'approval.getform', 'uses' => 'ApprovalController@getForm' ]);
-    Route::put('/approval/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
     //url routing for hr partner approval page
     Route::get('/approvalhr/{staff}/{tecode}/{id}/{form}/{term}', ['as' => 'approval.getform2hr','uses' => 'ApprovalController@getForm2hr' ]);
-    Route::put('/approvalhr/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform2hr','uses' => 'ApprovalController@updateForm2hr' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 
     //url routing for manager placement test approval page
     Route::get('/approval/{staff}/{lang}/placement/{id}/{form}/{term}', ['as' => 'approval.getplacementformdata', 'uses' => 'ApprovalController@getPlacementFormData' ]);
-    Route::put('/approval/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata', 'uses' => 'ApprovalController@updatePlacementFormData' ]);
+    
 
     //url routing for hr partner placement test approval page
     Route::get('/approvalhr/{staff}/{lang}/placement/{id}/{form}/{term}', ['as' => 'approval.getplacementformdata2hr','uses' => 'ApprovalController@getPlacementFormData2hr' ]);
-    Route::put('/approvalhr/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata2hr','uses' => 'ApprovalController@updatePlacementFormData2hr' ]);
+    
 });
 
-
+    Route::put('/approval/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+    Route::put('/approvalhr/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform2hr','uses' => 'ApprovalController@updateForm2hr' ])->where('tecode', '(.*)'); // where clause accepts routes with slashes
+    Route::put('/approval/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata', 'uses' => 'ApprovalController@updatePlacementFormData' ]);
+    Route::put('/approvalhr/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata2hr','uses' => 'ApprovalController@updatePlacementFormData2hr' ]);
+    
 //public pages
 Route::get('eform', function () { return view('confirmation_page_unog'); })->name('eform');
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');

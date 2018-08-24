@@ -203,6 +203,7 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
+                                      <p>Your request will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
                                       <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
                                 </td>
                             </tr>

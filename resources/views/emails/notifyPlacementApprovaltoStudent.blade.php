@@ -193,8 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your <strong>placement test</strong> request for CLM language, <strong>{{ $input_course->languages->name }}</strong>, has been decided.</p>
-                                     <p> Your<strong> manager</strong> (with email address: {{ $input_course->mgr_email }}) has <strong>@if( $input_course->approval == 1) approved @else disapproved @endif </strong>your request.</p>
+                                     <p> Your <strong>placement test</strong> request for CLM language, <strong>{{ $input_course->languages->name }}</strong>, has been processed by your <strong>manager (with email address: {{ $input_course->mgr_email }}) </strong>. Your manager has <strong>@if( $input_course->approval == 1) approved @else disapproved @endif </strong>your request.</p>
 
                                       <p><strong>Comment/Reason:</strong>
                                         <br>
@@ -204,7 +203,8 @@
                                             {{$mgr_comment}}
                                         @endif
                                       </p>
-                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and your request has been <strong>APPROVED</strong> by your manager, please note that your request has now been sent to your organization's HR/Staff Development Office for further review and approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
+                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and your manager has approved, your request has now been sent to your organization's HR/Staff Development Office for approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
+                                      <p>If approved, your request will be processed by the Language Training Secretariat, and you will receive further information about your registration.</strong></p>
                                 </td>
                             </tr>
                             <tr>

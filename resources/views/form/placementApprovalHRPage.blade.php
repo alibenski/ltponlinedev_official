@@ -12,7 +12,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
 
-        <div class="panel-heading">CLM Learning Partner Approval Page Placement Test for Semester: <strong>{{ $next_term_code }} : {{ $next_term_name }}</strong></div>
+        <div class="panel-heading">CLM Learning Partner Approval Page Placement Test for: <strong>{{ $next_term_name }}</strong></div>
           <div class="panel-body">
             <form method="POST" action="{{ route('approval.updateplacementformdata2hr', [$input_staff->INDEXID, $input_staff->L, $input_staff->eform_submit_count,$next_term_code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
@@ -66,20 +66,20 @@
                   <div class="col-md-12">
                     <table class="table">
                       <thead>
-                        <th>Language</th>
-                        <th>Schedule</th>
+                        <th>Language Course</th>
+                        <th>Date Duration of Classes</th>
                         <th>Manager's Decision</th>
                       </thead>
 
                       <tbody>                       
                           <tr>
                             <th>{{ $input_staff->languages->name }}</th>
-                            <td>
-                              @if($input_staff->L == 'F')
+                            <td>{{ $next_term_name }}
+                              {{-- @if($input_staff->L == 'F')
                               {{ date('d M Y', strtotime($input_staff->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_staff->placementSchedule->date_of_plexam_end)) }}
                               @else
                               {{ date('d M Y', strtotime($input_staff->placementSchedule->date_of_plexam)) }}
-                              @endif
+                              @endif --}}
                             </td>
                             <td>
                               @if($input_staff->approval == 1)

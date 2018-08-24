@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear CLM Learning Partner, </p>
-                                     <p> Staff Member, {{ $staff_name }}, would like to take a placement test for CLM language: <strong>{{ $input_course->languages->name }}</strong></p>
+                                     <p> Staff Member, {{ $staff_name }}, would like to take a placement test for CLM language: <strong>{{ $input_course->languages->name }}</strong> to attend classes <strong>from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
                                      <p>The placement test will be on <strong> @if ($input_course->L == 'F') {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
                                     <p>Please note that the request above has initially been approved by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>

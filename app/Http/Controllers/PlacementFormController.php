@@ -195,7 +195,10 @@ class PlacementFormController extends Controller
         $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $term_id)->where('INDEXID', $current_user)->where('L', $language_id)->first();
 
         Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
-
+        // get newly created placement form record
+        $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->where('Term', $term_id)->where('L', $language_id)->first();
+        $placement_form_id = $latest_placement_form->id;
+        $this->postPlacementInfoAdditional($request, $placement_form_id);
     }
 
     public function postSelfPayPlacementInfo(Request $request, $attachment_pay_file, $attachment_identity_file)
@@ -243,24 +246,29 @@ class PlacementFormController extends Controller
         $placementForm->consentBtn = $request->consentBtn;
         $placementForm->agreementBtn = $request->agreementBtn;
         $placementForm->save();
+        // get newly created placement form record
+        $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->where('Term', $term_id)->where('L', $language_id)->first();
+        $placement_form_id = $latest_placement_form->id;
+        $this->postPlacementInfoAdditional($request, $placement_form_id);
     }
 
     public function getPlacementInfo()
     {
         // place control to not access this route directly???
          
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $days = Day::pluck("Week_Day_Name","Week_Day_Name")->except('Sunday', 'Saturday')->all();
-        $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->first();
+        // $languages = DB::table('languages')->pluck("name","code")->all();
+        // $days = Day::pluck("Week_Day_Name","Week_Day_Name")->except('Sunday', 'Saturday')->all();
+        // $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->first();
 
-        return view('form.myformplacement')->withLanguages($languages)->withDays($days)->withLatest_placement_form($latest_placement_form);
+        // return view('form.myformplacement')->withLanguages($languages)->withDays($days)->withLatest_placement_form($latest_placement_form);
     }
 
-    public function postPlacementInfoAdditional(Request $request)
+    public function postPlacementInfoAdditional($request, $placement_form_id)
     {  
         $this->validate($request, array(
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'course_preference_comment' => 'required|',
         ));
         
         $dayInput = $request->dayInput;
@@ -268,17 +276,16 @@ class PlacementFormController extends Controller
         $implodeDay = implode('-', $dayInput);
         $implodeTime = implode('-', $timeInput);
 
-        $data = PlacementForm::findorFail($request->id);
+        $data = PlacementForm::findorFail($placement_form_id);
         $data->dayInput = $implodeDay;
         $data->timeInput = $implodeTime;
+        $data->course_preference_comment = $request->course_preference_comment;
         $data->save();
 
         if ($data->is_self_pay_form) {
-            $request->session()->flash('success', 'Your answers have been saved.'); //laravel 5.4 version
-            return redirect()->route('thankyouSelfPay');
-        } 
-        $request->session()->flash('success', 'Your answers have been saved.'); //laravel 5.4 version
-        return redirect()->route('thankyou');
+            $request->request->add(['is_self_pay_form' => 1]);
+            return $request;
+        }       
     }
 
     /**

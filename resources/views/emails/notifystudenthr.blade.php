@@ -241,7 +241,7 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
-                                      <p>Please be reminded that <strong style="color: red;">THIS IS NOT A CONVOCATION EMAIL. The schedule(s) above will be further evaluated by the Language Secretariat.</strong></p>
+                                      <p>Please be reminded that <strong style="color: red;">this is not a convocation email.</strong> Your enrolment form will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
                                       <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
                                 </td>
                             </tr>

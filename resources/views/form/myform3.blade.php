@@ -131,7 +131,6 @@
 
                     <div class="placementTestMsg " style="display: none">
                       <div class="alert alert-warning">
-                        <p>Dear {{Auth::user()->sddextr->FIRSTNAME}},</p>
                         <p>Our records show that either you are a new student or you have not been enrolled on the selected language course during the past two terms.</p>
                         <p>You are required to take a <strong>Placement Test</strong> unless you are a complete beginner.</p>
                         
@@ -151,34 +150,103 @@
                     </div>
 
                   <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
-                    <div class="alert alert-info alert-dismissible">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                      <p>You have answered <strong>NO</strong>. You are not a complete beginner on your selected language. Please select a date for your placement test from the options available. If you are unable to take the test, then you can apply again in the next enrolment period.</p> 
-                      <p>At the end of this form, you are <strong>required</strong> to fill out a comment box to express any concerns <strong>(e.g. preferred course, time contraints, etc.)</strong>. Thank you for your cooperation.</p>
-                    </div>
-                    
-                    <div class="otherQuestions2 row col-md-12">
-                      <div class="insert-container col-md-12">
-                          <div class="form-group">
-                            <div class="place-here col-md-6 col-md-offset-3">
-                            <label for="scheduleChoices"></label>
-                              <div class="scheduleChoices col-md-12">
-                              {{-- insert jquery schedules here --}}
-                              </div>
+                    <div class="col-md-12">
+                      <div class="panel panel-info">
+                        <div class="panel-heading col-md-12"><strong>Placement Test Dates</strong></div>
+                        <div class="panel-body">
+                          <div class="row col-md-10 col-md-offset-1">
+                            <div class="alert alert-info alert-dismissible">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <p>Please select a date for your placement test from the options available. If you are unable to take the test on the given dates, then apply again in the next enrolment period.</p> 
+                                <p>Fill out the <em>optional</em> comment box for any concerns about the placement test.</p>
                             </div>
                           </div>
-                        <div class="insert-msg"></div>
+                          
+                          <div class="otherQuestions2 row col-md-12">
+                            <div class="insert-container col-md-12">
+                                <div class="form-group">
+                                  <div class="place-here col-md-6 col-md-offset-3">
+                                  <label for="scheduleChoices"></label>
+                                    <div class="scheduleChoices col-md-12">
+                                    {{-- insert jquery schedules here --}}
+                                    </div>
+                                  </div>
+                                </div>
+                              <div class="insert-msg"></div>
 
-                        <div class="col-md-12 form-group">
-                          <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
-                          <div class="col-md-8 ">
-                          <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="preferred course, time contraints, no preferrence, etc."></textarea>
+                              <div class="col-md-12 form-group">
+                                <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                                <div class="col-md-8 ">
+                                <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="concerns about the placement test"></textarea>
+                                </div>
+                              </div>
+
+                            </div>    
                           </div>
                         </div>
-
-                      </div>    
+                      </div>
                     </div>
 
+                    <div class="col-md-12">
+                      <div class="panel panel-danger">
+                        <div class="panel-heading col-md-12"><strong>Information About Your Course Preference</strong></div>
+                        <div class="panel-body">
+                          <div class="row col-md-10 col-md-offset-1">
+                            <div class="alert alert-danger">
+                            <p>Please indicate the time(s) and the date(s) of your availability to attend the course. Check all that apply. <br><br> 
+                            Merci de préciser les heures et les jours auxquel vous êtes disponible d'assister aux cours. Sélectionnez toutes les réponses appropriées.</p>
+                            </div>
+                          </div>
+                          <div class="row panel panel-danger col-md-10 col-md-offset-1">
+                            <div class="otherQuestions col-md-5">
+                              <div class="form-group">
+                                <label for="" class="control-label">Time:</label>
+                                <div class="col-md-12">
+                                      <div class="input-group col-md-12">                             
+                                        <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
+                                        <label for="morning" class="form-control-static">morning</label>
+                                      </div>
+                                      <div class="input-group col-md-12">
+                                        <input id="lunchtime1" name="timeInput[]" class="with-font" type="checkbox" value="lunchtime1">
+                                        <label for="lunchtime1" class="form-control-static">lunchtime1 (tbc)</label>
+                                      </div>
+                                      <div class="input-group col-md-12">
+                                        <input id="lunchtime2" name="timeInput[]" class="with-font" type="checkbox" value="lunchtime2">
+                                        <label for="lunchtime2" class="form-control-static">lunchtime2 (tbc)</label>
+                                      </div>
+                                      <div class="input-group col-md-12">
+                                        <input id="afternoon" name="timeInput[]" class="with-font" type="checkbox" value="afternoon">
+                                        <label for="afternoon" class="form-control-static">afternoon</label>
+                                      </div>
+                                 </div>
+                              </div>
+                            </div>
+
+                            <div class="otherQuestions3 col-md-7">
+                              <div class="form-group">
+                                <label for="" class="control-label">Day:</label>
+                                <div class="col-md-12">
+                                  @foreach ($days as $id => $name)
+                                      <div class="input-group col-md-12">                             
+                                        <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}">
+                                        <label for="{{ $name }}" class="form-control-static">{{ $name }}</label>
+                                      </div>
+                                  @endforeach
+                                 </div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                              <label class="col-md-3 control-label">Comment: <i>(required)</i></label>
+                              <div class="col-md-8 pink-border">
+                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, etc." required=""></textarea>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div> {{-- end panel body --}}
+                      </div>
+                    </div>
 
                   </div> {{-- end of placement test enrolment part --}}
 
@@ -320,7 +388,7 @@
       $(".regular-enrol").attr('style', 'display: none'); // initiate hidden div 
       $(".submission-part").attr('style', 'display: none');
       $("input[name='placementDecisionB']").val("");
-      $("textarea[name='std_comment']").removeAttr('required'); // reset comment box as not required field
+      $("textarea[name='course_preference_comment']").removeAttr('required'); // reset comment box as not required field
   // populate placement schedules
       $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
@@ -373,10 +441,10 @@
 
               // insert message of convocation email
               $('input[name="placementLang"]').on('click', function() {
-                $("textarea[name='std_comment']").attr('required', 'required');
+                $("textarea[name='course_preference_comment']").attr('required', 'required');
                 $('.insert-msg').hide();
                 $('.insert-msg').addClass('col-md-6 col-md-offset-3');     
-                $('.insert-msg').html("<div class='alert alert-info'>You will receive a convocation email from the Language Secretariat regarding the time and place of the placement test.</div>").fadeIn();
+                $('.insert-msg').html("<div class='alert alert-info'>You will receive further information from the Language Secretariat regarding the placement test.</div>").fadeIn();
               });
             }
       });

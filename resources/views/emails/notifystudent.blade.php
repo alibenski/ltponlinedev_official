@@ -193,8 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided.</p>
-                                     <p> Please refer to your <strong> manager's</strong> (with email address: {{ $input_course->mgr_email }}) decision(s) below.</p>
+                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been processed by your <strong>manager (with email address: {{ $input_course->mgr_email }}) </strong>as seen below.</p>
 
                                         <p><strong>Your chosen schedule(s):</strong></p>
                                             @foreach($formItems as $value)
@@ -219,8 +218,8 @@
                                             {{$mgr_comment}}
                                         @endif
                                       </p>
-                                      <p>Please be reminded that <strong style="color: red;">THIS IS NOT A CONVOCATION EMAIL. The schedule(s) above will be further evaluated by the Language Secretariat.</strong></p>
-                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and <strong>at least one of your enrolment has been approved</strong> by your manager, please note that your enrolment has now been sent to your organization's HR/Staff Development Office for further review and approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
+                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and <em>at least one of your chosen schedules has been approved</em> by your manager, your enrolment form has now been sent to your organization's HR/Staff Development Office for approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
+                                      <p>If approved, your enrolment form will be processed by the Language Training Secretariat, and you will receive further information about your registration.</strong></p>
                                 </td>
                             </tr>
                             <tr>

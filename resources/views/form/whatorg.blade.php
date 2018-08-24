@@ -16,7 +16,7 @@
           <div class="panel-heading">Enrolment Form for Semester: 
             <strong>
               @if(empty($next_term))
-              No DB Entry - TBC
+              Enrolment Period Closed
               @else 
               {{ $next_term->Term_Name.' - '.$next_term->Comments.' Term' }}
               @endif

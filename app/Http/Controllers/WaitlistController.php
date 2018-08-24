@@ -35,6 +35,59 @@ class WaitlistController extends Controller
 {
     public function testQuery()
     {
+        $enrolments_no_mgr_approval = PlacementForm::where('Term', '188')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'L', 'eform_submit_count', 'mgr_email','created_at')->groupBy('INDEXID', 'L', 'eform_submit_count', 'mgr_email','created_at')->get()->take(1);
+        foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
+        {           
+                $arrRecipient[] = $valueMgrEmails->mgr_email; 
+                $recipient = $valueMgrEmails->mgr_email;
+
+                $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+                $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', '188')->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
+
+                Mail::to('allyson.frias@un.org')->send(new SendMailableReminderPlacement($input_course, $staff));
+                echo $recipient;
+                echo '<br>';
+                echo '<br>';   
+        }
+        $arrDept = [];
+        $arrHrEmails = [];
+        $enrolments_no_hr_approval = PlacementForm::where('Term', '188')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get()->take(1);
+
+        foreach ($enrolments_no_hr_approval as $valueDept) {
+                
+                $arrDept[] = $valueDept->DEPT;
+                $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
+                $learning_partner = $torgan->has_learning_partner;
+
+                if ($learning_partner == '1') {
+                    $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
+                    $fp_email = $query_hr_email->map(function ($val, $key) {
+                        return $val->email;
+                    });
+                    $fp_email_arr = $fp_email->toArray();
+                    $arrHrEmails[] = $fp_email_arr;
+
+                    $formItems = PlacementForm::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $valueDept->INDEXID)
+                                    ->where('Term', '188')
+                                    ->where('L', $valueDept->L)
+                                    ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                    ->get();
+                    $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $valueDept->INDEXID)
+                                    ->where('Term', '188')
+                                    ->where('L', $valueDept->L)
+                                    ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                    ->first();   
+                    // $staff_name = $formfirst->users->name;
+                    $staff_name = $formfirst->users->name;
+                    $arr[] = $staff_name;
+                    $mgr_email = $formfirst->mgr_email;    
+                    $input_course = $formfirst; 
+                    // Mail::to($fp_email_arr);
+                    Mail::to('allyson.frias@un.org')->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+                }
+        }
         // DB::table('jobs')->truncate();
         // Log::info("Start sending email");
         // for ($i=0; $i < 2; $i++)  {
