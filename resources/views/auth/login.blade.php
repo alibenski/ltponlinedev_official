@@ -11,6 +11,11 @@
         <strong>Note: </strong> {{ Session::get('success') }}
     </div>
 @endif
+@if (Session::has('warning')) 
+    <div class="alert alert-warning alert-block text-center" role="alert">
+        <strong>Note: </strong> {{ Session::get('warning') }}
+    </div>
+@endif
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\NewUser;
-use Illuminate\Http\Request;
-use DB;
 use App\TORGAN;
+use App\User;
+use DB;
+use Illuminate\Http\Request;
 
 class NewUserController extends Controller
 {
@@ -29,8 +30,8 @@ class NewUserController extends Controller
         $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
         $student_status = DB::table('STU_STATUS')->pluck("StandFor","Abbreviation")->all();
         $org = TORGAN::get(["Org Full Name","Org name"]);
-        return view('page_not_available');
-        // return view('users.new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
+        // return view('page_not_available');
+        return view('users.new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
     }
 
     /**
@@ -42,16 +43,34 @@ class NewUserController extends Controller
     public function store(Request $request)
     {
                 //validate the data
-        $this->validate($request, array(
-                'gender' => 'required|string|',
-                'nameLast' => 'required|string|max:255',
-                'nameFirst' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
-                'org' => 'required|string|max:255',
-                'contact_num' => 'required|max:255',
-                'cat' => 'required|',
-                'student_cat' => 'required|',
-            ));
+        // $this->validate($request, array(
+        //         'gender' => 'required|string|',
+        //         'nameLast' => 'required|string|max:255',
+        //         'nameFirst' => 'required|string|max:255',
+        //         'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+        //         'org' => 'required|string|max:255',
+        //         'contact_num' => 'required|max:255',
+        //         'cat' => 'required|',
+        //         'student_cat' => 'required|',
+        //     ));
+
+        $query_staff_record = User::where('indexno', $request->indexno)->where('email', $request->email)->get();
+        // if staff exists in auth table, redirect to login page
+        if ($query_staff_record) {
+            $request->session()->flash('warning', 'Your Index ID and email address already exist in our records. Please login or reset your password.' );
+            return redirect('login');
+        }
+
+        $query_sddextr_record = User::where('INDEXNO', $request->indexno)->where('EMAIL', $request->email)->get();
+        // if staff does not exist in auth table but exists in sddextr, create auth record and send credentials
+        if ($query_sddextr_record) {
+            
+        }
+
+        // if not in auth table and sddextr table, send email to Secretariat to create his login credentials to the system and sddextr record
+        
+        dd($request, $query_sddextr_record);
+
 
         //store in database
         $newUser = new NewUser;
@@ -65,7 +84,7 @@ class NewUserController extends Controller
         $newUser->contact_num = $request->contact_num;
         $newUser->cat = $request->cat;
         $newUser->student_cat = $request->student_cat;
-        $newUser->save();
+        // $newUser->save();
 
         // $request->session()->flash('success', 'Thank you for your registration. Your new credentials will be emailed.' ); //laravel 5.4 version
 

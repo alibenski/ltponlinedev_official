@@ -12,7 +12,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('indexno') ? ' has-error' : '' }}">
-                            <label for="indexno" class="col-md-4 control-label">Index # <span class="small text-danger">(Leave blank if you are not in the Umoja system)</span></label>
+                            <label for="indexno" class="col-md-4 control-label">Umoja Index # <span class="small text-danger"></span></label>
 
                             <div class="col-md-6">
                                 <input id="indexno" type="text" class="form-control" name="indexno" value="{{ old('indexno') }}" autofocus>

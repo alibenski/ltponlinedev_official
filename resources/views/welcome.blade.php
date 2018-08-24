@@ -71,7 +71,8 @@
                                       <div class="panel-body btn-welcome-img b1">
                                         <p>You are a new student and you have not received your credentials by email. Click “join” to create an account and enrol in CLM language courses.</p>
                                         <p class="lead btn-bottom">
-                                        <a href="/newuser/create" class="btn btn-lg btn-primary">Join</a>
+                                        {{-- <a href="/newuser/create" class="btn btn-lg btn-primary">Join</a> --}}
+                                        <button class="btn btn-lg btn-primary show-modal">Join</button>
                                         </p>
                                       </div>
                                     </div>
@@ -92,21 +93,45 @@
                     </div>
                 </div>
             </div>
-                        <!-- Scripts -->
-                        @include('partials._js')
+
+            <!-- Modal form to show a post -->
+            <div id="showModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-5 question" for="id">Are you a UN Staff Member with an Umoja profile?</label>
+                                    <a href="{{ url('/newuser/create') }}" class="btn btn-default">Yes</a>
+                                    <a href="#" class="btn btn-default">No </a>
+                                </div>                                
+                            </form>
+                            <div class="modal-footer">
+                                {{-- <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                    <span class='glyphicon glyphicon-remove'></span> Close
+                                </button> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scripts -->
+            @include('partials._js')
 
             <script src="{{ asset('textillate/assets/jquery.fittext.js') }}"></script>
             <script src="{{ asset('textillate/assets/jquery.lettering.js') }}"></script>
             <script src="{{ asset('textillate/jquery.textillate.js') }}"></script>
 
             <script>
-                // $(function () {
-                //     $('.tlt').textillate({ 
-                //         in: { effect: 'fadeInUp' }, 
-                //         out: { effect: 'swing', shuffle: true},
-                //         loop: true
-                //     });
-                // })
+               $(document).on('click', '.show-modal', function() {
+                    $('.modal-title').text('Please answer the question below');
+                    $('#showModal').modal('show');
+                });
             </script>
     </body>
 </html>

@@ -164,3 +164,12 @@ nav.navbar.navbar-default.navbar-static-top {
     width: 700px;
   }
 }
+
+/* Modal customized  */ 
+.modal-content {
+  background: rgba(255,255,255,.25);
+}
+.modal-content .question {
+  font-weight: 100;
+  padding-top: 0;
+}
