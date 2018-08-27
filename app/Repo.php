@@ -22,8 +22,12 @@ class Repo extends Model
     //in this case, field Te_Code inside table PASH is associated to foreign key Te_Code
     //which is a field in table LTP_Terms (Model: Term) 
     public function courses() {
-    return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code'); 
+    return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code_New'); 
 	}
+
+    public function coursesOld() {
+    return $this->belongsTo('App\Course', 'Te_Code_old', 'Te_Code'); 
+    }
 
     public function languages() {
     return $this->belongsTo('App\Language', 'L', 'code'); 

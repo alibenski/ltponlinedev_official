@@ -53,7 +53,10 @@
                                     </ul>
                                 </div>
                             @endif
+                            <div class="col-md-12">
+                                <img src="/img/Logo2016_transparent.png" alt="CLM_logo">
                             <h1 class="cover-heading tlt" style="margin-bottom: 50px;"> CLM Language Training Online Registration Platform</h1>
+                            </div>
                             <div class="col-md-12">
                                 <div class="col-md-6 b1">
                                     <div class="panel panel-success">

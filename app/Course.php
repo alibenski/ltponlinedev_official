@@ -21,7 +21,6 @@ class Course extends Model
     return $this->belongsTo('App\Language', 'L', 'code'); 
     }
 
-
     public function repos() {
     return $this->hasMany('App\Repo'); 
     }

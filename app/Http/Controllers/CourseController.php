@@ -62,14 +62,20 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $courses = Course::all();
+        $course_type = DB::table('tblLTP_Course_Type_Param')->pluck("DescriptionEn","CourseType")->all();
+        $course_level_type = DB::table('tblLTP_Course_Level_Type_Param')->pluck("LevelEn","LevelType")->all();
+        $course_order = DB::table('tblLTP_Course_Order_Param')->pluck("Order","Order")->all();
         //$courses = Course::all(['id', 'name']); // selected $key => $value
         $languages = DB::table('languages')->pluck("name","code")->all();
 
         //get latest semester/term
         $terms = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->first();
 
-        return view('courses.create')->withCourses($courses)->withLanguages($languages)->withTerms($terms);
+        return view('courses.create')->withCourse_type($course_type)
+                ->withCourse_level_type($course_level_type)
+                ->withCourse_order($course_order)
+                ->withLanguages($languages)
+                ->withTerms($terms);
     }
 
     /**
@@ -80,19 +86,17 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //validate the data
+        // validate the data
         $this->validate($request, array(
                 'name' => 'required|max:255',
             ));
 
-        //store in database
+        // store in database
         $course = new Course;
-        $course->name = $request->name;
-        $course->name = $request->name;
-        $course->save();
+        
         // variable course refers to schedule function in Course.php model
         // then syncs the data to schedules MySQL table
-        $course->schedule()->sync($request->schedules, false);
+        // $course->schedule()->sync($request->schedules, false);
         $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
         return redirect()->route('courses.index');

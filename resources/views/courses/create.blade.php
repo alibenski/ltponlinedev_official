@@ -1,5 +1,8 @@
 @extends('admin.admin')
-
+@section('customcss')
+    <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+@stop
 @section('content')
 		<div class="col-md-10 col-md-offset-1">
 			{{-- legend for course creation --}}
@@ -28,36 +31,42 @@
 					</div>
 					<div class="form-group">
 						<label>Select Course Type</label>
-						<select class="col-md-8 form-control" name="L" autocomplete="off" required="required">
-			                <option value="">--- Select Course Type ---</option>
-			                <option value="">Advanced</option>
-			                <option value="">Regular</option>
-			                <option value="">Oral</option>
+						<select class="col-md-8 form-control select2-basic-single" name="CourseType" autocomplete="off" required="required">
+							@if(!empty($course_type))
+							@foreach($course_type as $key => $value)
+			                <option></option>
+			                <option value="{{ $key }}">{{ $value }}</option>
+			                @endforeach
+			                @endif
 		                </select>
 					</div>
 					<div class="form-group">
 						<label>Select Level</label>
-						<select class="col-md-8 form-control" name="L" autocomplete="off" required="required">
-		                    <option value="">--- Select Level Type ---</option>
-		                    <option value="">Level 1</option>
-		                    <option value="">Intermediate</option>
-		                    <option value="">Advance</option>
+						<select class="col-md-8 form-control select2-basic-single" name="LevelType" autocomplete="off" required="required">
+		                    @if(!empty($course_level_type))
+							@foreach($course_level_type as $keyLevel => $valueLevel)
+		                    <option></option>
+		                    <option value="{{$keyLevel}}">{{$valueLevel}}</option>
+		                    @endforeach
+		                    @endif
 		                </select>
 					</div>
 					<div class="form-group">
 						<label>Select Order</label>
-						<select class="col-md-8 form-control" name="L" autocomplete="off" required="required">
-		                    <option value="">--- Select Order ---</option>
-		                    <option value="">1</option>
-		                    <option value="">2</option>
-		                    <option value="">3</option>
+						<select class="col-md-8 form-control select2-basic-single" name="Order" autocomplete="off" required="required">
+		                    @if(!empty($course_order))
+							@foreach($course_order as $keyOrder => $valueOrder)
+		                    <option></option>
+		                    <option value="{{$keyOrder}}">{{$valueOrder}}</option>
+		                    @endforeach
+		                    @endif
 		                </select>
 					</div>
 					
 					<div class="form-group">
 						<label for="">Course Description</label>
 						<div>
-							<input type="text" style="width: 100%">
+							<input name="Description" type="text" style="width: 100%" required="">
 						</div>
 					</div>
 
@@ -73,4 +82,16 @@
 				</form>
 			</div>
 		</div>
+@stop
+@section('java_script')
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/submit.js') }}"></script>
+<script>
+	$(document).ready(function() {
+    //  select2 dropdown init
+	    $('.select2-basic-single').select2({
+	    placeholder: "Select Here",
+	    });
+  	});
+</script>
 @stop
