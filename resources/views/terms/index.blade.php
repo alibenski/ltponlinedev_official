@@ -22,6 +22,7 @@
 					<th>Enrolment Date End</th>
 					<th>Cancellation Date Limit</th>
 					<th>Approval Date Limit</th>
+					<th>Approval Date Limit HR</th>
 					<th>Season</th>
 					<th>Remind Mgr</th>
 					<th>Remind HR</th>
@@ -62,6 +63,13 @@
 					            <span class="label label-danger">NONE</span>
 							@else
 								{{ date('d M Y - H:ia', strtotime($term->Approval_Date_Limit)) }}
+							@endif
+							</td>
+							<td>
+							@if(empty($term->Approval_Date_Limit_HR))
+					            <span class="label label-danger">NONE</span>
+							@else
+								{{ date('d M Y - H:ia', strtotime($term->Approval_Date_Limit_HR)) }}
 							@endif
 							</td>
 							<td>{{ $term->Comments }}</td>

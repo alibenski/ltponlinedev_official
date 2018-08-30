@@ -50,10 +50,10 @@ class ApprovalReminder extends Command
         $enrolment_term = Term::whereYear('Term_End', $now_year)
                         ->orderBy('Term_Code', 'desc')
                         ->where('Enrol_Date_Begin', '<=', $now_date)
-                        ->where('Approval_Date_Limit', '>=', $now_date)
+                        ->where('Approval_Date_Limit_HR', '>=', $now_date)
                         ->get()->min();
             if ($enrolment_term) {
-            // execute method function to send reminder emails found in the controller from construct()
+                // execute method function to send reminder emails found in the controller from construct()
                 // $this->email->sendReminderEmails(); 
                 // $this->placement_email->sendReminderEmailsPlacement(); 
             }

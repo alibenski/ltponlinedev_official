@@ -105,13 +105,23 @@
           </div>
 
           <div class="form-group">
-                  <label for="Approval_Date_Limit" class="control-label">Approval Date Limit: </label>
+                  <label for="Approval_Date_Limit" class="control-label">Approval Date Limit for Manager: </label>
                   <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Approval_Date_Limit">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                   <input type="hidden" name="Approval_Date_Limit" id="Approval_Date_Limit" value="" />
+          </div>
+
+          <div class="form-group">
+                  <label for="Approval_Date_Limit_HR" class="control-label">Approval Date Limit for HR: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Approval_Date_Limit_HR">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="Approval_Date_Limit_HR" id="Approval_Date_Limit_HR" value="" />
           </div>   
         </div>
 

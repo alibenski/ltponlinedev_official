@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Course;
-use App\Language;
-use App\User;
-use App\Schedule;
 use App\Classroom;
+use App\Course;
 use App\CourseSchedule;
 use App\CsvModel;
-use App\Term;
+use App\Language;
 use App\Room;
-use DB;
+use App\Schedule;
+use App\Teachers;
+use App\Term;
+use App\User;
 use Carbon\Carbon;
+use DB;
+use Illuminate\Http\Request;
 
 class CourseSchedController extends Controller
 {
@@ -44,10 +45,10 @@ class CourseSchedController extends Controller
 
         $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en","id")->all();
         $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en","id")->all();
-        //dd($next_season);
+        $teachers = Teachers::where('In_Out', '1')->get();
+        $rooms = Room::all();
 
-
-        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withFormat($format)->withDuration($duration);
+        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withFormat($format)->withDuration($duration)->withTeachers($teachers)->withRooms($rooms);
     }
 
     /**

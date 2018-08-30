@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'prevent-access-placement' => \App\Http\Middleware\PreventAccessPlacement::class,
         'first-time-login' => \App\Http\Middleware\FirstTimeLogin::class,
         'open-close-approval-routes' => \App\Http\Middleware\OpenCloseApprovalRoutes::class,
+        'open-close-approval-routes-hr' => \App\Http\Middleware\OpenCloseApprovalRoutesHR::class,
     ];
 }

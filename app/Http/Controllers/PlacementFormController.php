@@ -59,13 +59,15 @@ class PlacementFormController extends Controller
         $now_year = Carbon::now()->year; 
         $enrolment_term = Term::whereYear('Term_End', $now_year)
                         ->orderBy('Term_Code', 'desc')
-                        ->where('Approval_Date_Limit', '>=', $now_date)
+                        ->where('Approval_Date_Limit_HR', '>=', $now_date)
                         ->value('Term_Code');
         if (empty($enrolment_term)) {
             Log::info("Term is null. No Emails sent.");
             echo "Term is null. No Emails sent.";
             return exit();
         }
+
+        $enrolment_term_object = Term::findOrFail($enrolment_term);
 
         $remind_mgr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_Mgr_After'); // get int value after how many days reminder email should be sent
 
@@ -76,23 +78,33 @@ class PlacementFormController extends Controller
             Log::info("No email addresses to pick up. No Emails sent.");
             echo $enrolment_term;
             echo  $enrolments_no_mgr_approval;
-            return exit();
+            // return exit();
         }
         foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
         {
-            if ($now_date >= Carbon::parse($valueMgrEmails->created_at)->addDays($remind_mgr_param)) {
-                $arrRecipient[] = $valueMgrEmails->mgr_email; 
+            if ($valueMgrEmails->created_at < Carbon::parse($enrolment_term_object->Enrol_Date_End)->subDays($remind_mgr_param)) {
+                if ($now_date >= Carbon::parse($valueMgrEmails->created_at)->addDays($remind_mgr_param)) {
+                    $arrRecipient[] = $valueMgrEmails->mgr_email; 
+                    $recipient = $valueMgrEmails->mgr_email;
+
+                    $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+                    $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $enrolment_term)->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
+
+                    Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
+                    echo $recipient;
+                    echo '<br>';
+                    echo '<br>';
+                }
+            }
+            if ($now_date->toDateString() == Carbon::parse($enrolment_term_object->Approval_Date_Limit)->toDateString()) {
                 $recipient = $valueMgrEmails->mgr_email;
 
                 $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
                 $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $enrolment_term)->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
 
                 Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
-                echo $recipient;
-                echo '<br>';
-                echo '<br>';
             }
-        }
+        } // end of foreach loop
 
         $remind_hr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_HR_After');
 
@@ -102,8 +114,44 @@ class PlacementFormController extends Controller
         $enrolments_no_hr_approval = PlacementForm::where('Term', $enrolment_term)->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get();
 
         foreach ($enrolments_no_hr_approval as $valueDept) {
-            if ($now_date >= Carbon::parse($valueDept->UpdatedOn)->addDays($remind_hr_param)) {
-                $arrDept[] = $valueDept->DEPT;
+            if ($valueDept->UpdatedOn < Carbon::parse($enrolment_term_object->Enrol_Date_End)->subDays($remind_hr_param)) {
+                if ($now_date >= Carbon::parse($valueDept->UpdatedOn)->addDays($remind_hr_param)) {
+                    $arrDept[] = $valueDept->DEPT;
+                    $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
+                    $learning_partner = $torgan->has_learning_partner;
+
+                    if ($learning_partner == '1') {
+                        $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
+                        $fp_email = $query_hr_email->map(function ($val, $key) {
+                            return $val->email;
+                        });
+                        $fp_email_arr = $fp_email->toArray();
+                        $arrHrEmails[] = $fp_email_arr;
+
+                        $formItems = PlacementForm::orderBy('Term', 'desc')
+                                        ->where('INDEXID', $valueDept->INDEXID)
+                                        ->where('Term', $enrolment_term)
+                                        ->where('L', $valueDept->L)
+                                        ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                        ->get();
+                        $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                        ->where('INDEXID', $valueDept->INDEXID)
+                                        ->where('Term', $enrolment_term)
+                                        ->where('L', $valueDept->L)
+                                        ->where('eform_submit_count', $valueDept->eform_submit_count)
+                                        ->first();   
+                        // $staff_name = $formfirst->users->name;
+                        $staff_name = $formfirst->users->name;
+                        $arr[] = $staff_name;
+                        $mgr_email = $formfirst->mgr_email;    
+                        $input_course = $formfirst; 
+                        // Mail::to($fp_email_arr);
+                        Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+                    }
+                }
+            }
+
+            if ($now_date->toDateString() == Carbon::parse($enrolment_term_object->Approval_Date_Limit_HR)->toDateString()) {
                 $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
                 $learning_partner = $torgan->has_learning_partner;
 
@@ -135,8 +183,9 @@ class PlacementFormController extends Controller
                     // Mail::to($fp_email_arr);
                     Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
                 }
-            }
-        }
+            }            
+        } // end of foreach loop
+        
         // dd($arrRecipient, $enrolments_no_mgr_approval, $arrHrEmails,$arr);
         return 'reminder placement emails sent';
     }

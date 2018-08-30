@@ -73,6 +73,7 @@
                             <option value="STF">Staff Member</option>
                             <option value="INT">Intern</option>
                             <option value="CON">Consultant</option>
+                            <option value="JPO">JPO</option>
                             <option value="MSN">Staff of Permanent Mission</option>
                             <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
                             <option value="RET">Retired UN Staff Member</option>

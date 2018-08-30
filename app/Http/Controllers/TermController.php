@@ -93,6 +93,7 @@ class TermController extends Controller
         $term->Enrol_Date_End = $request->Enrol_Date_End;
         $term->Cancel_Date_Limit = $request->Cancel_Date_Limit;
         $term->Approval_Date_Limit = $request->Approval_Date_Limit;
+        $term->Approval_Date_Limit_HR = $request->Approval_Date_Limit_HR;
         $term->Remind_Mgr_After = $request->Remind_Mgr_After;
         $term->Remind_HR_After = $request->Remind_HR_After;
         $term->Comments = $request->Comments;
