@@ -58,10 +58,12 @@ class CourseSchedController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {dd($request);
         $course_id = $request->course_id;
         $term_id = $request->term_id;
         $schedule_id = $request->schedule_id;
+        $Tch_ID = $request->Tch_ID;
+        $room_id = $request->room_id;
         $cs_unique = $request->cs_unique;
         $codex = [];     
         //concatenate (implode) Code input before validation   
@@ -69,7 +71,7 @@ class CourseSchedController extends Controller
         if ( empty( $code ) ) {
             //loop based on $room_id count and store in $codex array
             for ($i=0; $i < count($schedule_id); $i++) { 
-                $codex[] = array($course_id, $term_id, $schedule_id[$i]);
+                $codex[] = array($course_id, $schedule_id[$i], $term_id);
                 //implode array elements and pass imploded string value to $codex array as element
                 $codex[$i] = implode('-', $codex[$i]);
                 //for each $codex array element stored, loop array merge method
@@ -87,6 +89,8 @@ class CourseSchedController extends Controller
                             'course_id' => 'required|alpha_num', 
                             'term_id' => 'required|integer|',
                             'schedule_id' => 'required|array',
+                            'Tch_ID' => 'required|array',
+                            'room_id' => 'required|array',
                         ));
         //loop for storing Code value to database
         $ingredients = [];        
@@ -96,16 +100,23 @@ class CourseSchedController extends Controller
                 'Te_Code_New' => $course_id,
                 'Te_Term' => $term_id,
                 'schedule_id' => $schedule_id[$i],
+                'Tch_ID' => $Tch_ID[$i],
+                'room_id' => $room_id[$i],
                 'cs_unique' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'Te_Hours' => $request->duration_id, 
                 'Te_Description' => $request->format_id,
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" =>  \Carbon\Carbon::now(),
+                'created_at' =>  \Carbon\Carbon::now(),
+                'updated_at' =>  \Carbon\Carbon::now(),
                 ]);
                     foreach ($ingredients as $data) {
                         $data->save();
                     }
+            $unique_key = $course_id.'-'.$schedule_id[$i].'-'.$term_id;                
+            $new_record = CourseSchedule::where('cs_unique', $unique_key)->get();
+
         }
+        dd($new_record);
+        
         //query newly saved course+schedule entries to produce needed csv extract
         $get_courses = CourseSchedule::where('Te_Code_New', $request->course_id)
             ->where('Te_Term', $term_id )->get();

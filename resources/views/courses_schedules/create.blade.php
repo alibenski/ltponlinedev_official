@@ -20,7 +20,7 @@
         <div class="panel-body">
           <div class="form-group">
             <label name="term_id" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
-              <select class="col-md-8 form-control" name="term_id" autocomplete="off" required="required" style="width: 100%">
+              <select class="col-md-8 form-control select2-one" name="term_id" autocomplete="off" required="required" style="width: 100%">
                   <option value="">--- Select Term ---</option>
                   @foreach ($terms as $value)
                       <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
@@ -40,7 +40,7 @@
 
           <div class="form-group">
               <label name="L" class="col-md-3 control-label" style="margin: 5px 5px;">Language: </label>
-              <select class="col-md-8 form-control" name="L" autocomplete="off" required="required" style="width: 100%">
+              <select class="col-md-8 form-control select2-one" name="L" autocomplete="off" required="required" style="width: 100%">
                   <option value="">--- Select Language ---</option>
                   @foreach ($languages as $id => $name)
                       <option value="{{ $id }}"> {{ $name }}</option>
@@ -78,7 +78,7 @@
           <div class="form-group">
               <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course: </label>
                 <div class="dropdown">
-                  <select class="col-md-8 form-control" name="course_id" autocomplete="off" required="required" style="width: 100%">
+                  <select class="col-md-8 form-control select2-one" name="course_id" autocomplete="off" required="required" style="width: 100%">
                       <option value="">--- Select Course ---</option>
                   </select>
                 </div>
@@ -139,31 +139,36 @@
       <div class="panel panel-primary">
         <div class="panel-heading">Schedule</div>
         <div class="panel-body">
-          <div class="well col-md-12" style="margin-top: 20px;">
-              <div class="row">
-                <div class="col-md-12">
-                  <table class="table">
-                    <thead>
-                      <th>Pick a Schedule</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                          <td>
-                                @foreach ($schedules as $id => $name)
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="schedule_id[]" multiple="multiple" value="{{ $id }}" /> {{ $name }}
-                                        </label>
-                                    </div>
-
-                                @endforeach
-                          </td>
-                        </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-12">
+                @foreach ($schedules as $id => $name)
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="schedule_id[]" multiple="multiple" value="{{ $id }}" /> {{ $name }}
+                        </label>
+                    </div>
+                    <div class="form-group">
+                      <label name="Tch_ID" class="col-md-3 control-label" style="margin: 5px 5px;">Teachers: </label>
+                        <select id="Tch_ID_select_{{ $id }}" class="col-md-8 form-control select2-multi" name="Tch_ID[]" multiple="multiple" autocomplete="off" style="width: 100%">
+                            <option value="">--- Select Teacher ---</option>
+                            @foreach ($teachers as $valueTeacher)
+                                <option value="{{$valueTeacher->Tch_ID}}">{{$valueTeacher->Tch_Name}} </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                      <label name="room_id" class="col-md-3 control-label" style="margin: 5px 5px;">Rooms: </label>
+                      <select id="room_id_select_{{ $id }}" class="col-md-8 form-control select2-multi" name="room_id[]" multiple="multiple" autocomplete="off"  style="width: 100%">
+                          <option value="">--- Select Room ---</option>
+                          @foreach ($rooms as $valueRoom)
+                              <option value="{{$valueRoom->Rl_Room}}">{{$valueRoom->Rl_Room}} </option>
+                          @endforeach
+                      </select>
+                    </div>
+                @endforeach
+              </div>                  
+            </div>
           </div>
         </div>
       </div>
@@ -171,46 +176,26 @@
 
       <div class="col-md-6">
       <div class="panel panel-info">
-        <div class="panel-heading">Teacher and Room</div>
+        <div class="panel-heading">Operation</div>
         <div class="panel-body">
-          <div class="form-group">
-            <label name="term_id" class="col-md-3 control-label" style="margin: 5px 5px;">Teachers: </label>
-              <select class="col-md-8 form-control" name="term_id" autocomplete="off" required="required" style="width: 100%">
-                  <option value="">--- Select Teacher ---</option>
-                  @foreach ($teachers as $valueTeacher)
-                      <option value="{{$valueTeacher->Tch_ID}}">{{$valueTeacher->Tch_Name}} </option>
-                  @endforeach
-              </select>
-          </div>
-          <div class="form-group">
-            <label name="term_id" class="col-md-3 control-label" style="margin: 5px 5px;">Rooms: </label>
-              <select class="col-md-8 form-control" name="term_id" autocomplete="off" required="required" style="width: 100%">
-                  <option value="">--- Select Room ---</option>
-                  @foreach ($rooms as $valueRoom)
-                      <option value="{{$valueRoom->Rl_Room}}">{{$valueRoom->Rl_Room}} </option>
-                  @endforeach
-              </select>
+          <div class="well col-md-6 col-md-offset-3">
+            <div class="row">
+              <div class="col-md-5 col-md-offset-1">
+                <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
+              </div>
+              <div class="col-md-5 ">  
+                <button id="setVal" type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+              </div>
+            </div>
           </div>
         </div>
       </div>
       </div>
       </div>
 
-      <div class="well col-md-6 col-md-offset-3">
-        <div class="form-group">
-          <input  name="cs_unique" class="combine select2-multi" multiple="multiple" type="hidden" value="" readonly> 
-        </div>
-
-        <div class="row">
-          <div class="col-md-5 col-md-offset-1">
-            <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
-          </div>
-          <div class="col-md-5 ">  
-            <button id="setVal" type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
-            <input type="hidden" name="_token" value="{{ Session::token() }}">
-          </div>
-        </div>
-      </div>
+      <input  name="cs_unique" type="hidden" value="" readonly> 
+      
     </form>
   </div>
 </div>﻿
@@ -224,10 +209,15 @@
   $(document).ready(function(){
     $('input[type=checkbox]').prop('checked',false);
     $('input[type=radio]').prop('checked',false);
-    $('select').select2({
-    placeholder: "--- Select Here ---",
-    }
-      );
+
+    $('.select2-one').select2({
+      placeholder: "--- Select Here ---",
+    });
+    
+    $('.select2-multi').select2({
+      placeholder: "--- Select Here ---",
+      maximumSelectionLength: 1,
+    });
   });
 </script>
 
@@ -296,4 +286,14 @@
   }); 
 </script>
 
+<script>
+    $("input[name='schedule_id[]']").on('click', function() {
+      var $boxes = $('input[name="schedule_id[]"]:checked');
+      $boxes.each(function(){
+        console.log($boxes.val())
+        $('#Tch_ID_select_'+$boxes.val()).attr('required', 'required');
+      });
+
+    });
+</script>
 @stop
