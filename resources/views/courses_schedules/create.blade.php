@@ -7,7 +7,7 @@
 @section('content')
 
 <div class="row">
-  <div class="col-md-10 col-md-offset-1">
+  <div class="col-md-10 ">
     <h2><i class="fa fa-calendar-o"></i> Create Course + Schedule</h2>
     <h5 class="alert alert-warning alert-block">Message: Language Secretariat creates the class schedules (Course-Schedule combinations) BEFORE the Enrolment period</h5>
     <hr>
@@ -145,10 +145,10 @@
                 @foreach ($schedules as $id => $name)
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="schedule_id[]" multiple="multiple" value="{{ $id }}" /> {{ $name }}
+                            <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id[]" multiple="multiple" value="{{ $id }}" /> {{ $name }}
                         </label>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group teacher_div_{{ $id }}" style="display: none;">
                       <label name="Tch_ID" class="col-md-3 control-label" style="margin: 5px 5px;">Teachers: </label>
                         <select id="Tch_ID_select_{{ $id }}" class="col-md-8 form-control select2-multi" name="Tch_ID[]" multiple="multiple" autocomplete="off" style="width: 100%">
                             <option value="">--- Select Teacher ---</option>
@@ -157,7 +157,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group room_div_{{ $id }}" style="display: none;">
                       <label name="room_id" class="col-md-3 control-label" style="margin: 5px 5px;">Rooms: </label>
                       <select id="room_id_select_{{ $id }}" class="col-md-8 form-control select2-multi" name="room_id[]" multiple="multiple" autocomplete="off"  style="width: 100%">
                           <option value="">--- Select Room ---</option>
@@ -178,15 +178,16 @@
       <div class="panel panel-info">
         <div class="panel-heading">Operation</div>
         <div class="panel-body">
-          <div class="well col-md-6 col-md-offset-3">
-            <div class="row">
-              <div class="col-md-5 col-md-offset-1">
-                <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
-              </div>
-              <div class="col-md-5 ">  
-                <button id="setVal" type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
-                <input type="hidden" name="_token" value="{{ Session::token() }}">
-              </div>
+          <div class="row">
+            <div class="col-md-4 ">
+              <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
+            </div>
+            <div class="col-md-4 ">
+              <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block">
+            </div>
+            <div class="col-md-4 ">  
+              <button id="saveBtn" type="submit" class="btn btn-success btn-block button-prevent-multi-submit" disabled="">Save</button>
+              <input type="hidden" name="_token" value="{{ Session::token() }}">
             </div>
           </div>
         </div>
@@ -287,13 +288,58 @@
 </script>
 
 <script>
-    $("input[name='schedule_id[]']").on('click', function() {
-      var $boxes = $('input[name="schedule_id[]"]:checked');
-      $boxes.each(function(){
-        console.log($boxes.val())
-        $('#Tch_ID_select_'+$boxes.val()).attr('required', 'required');
-      });
-
+$(document).ready(function(){
+  /* Get the checkboxes values based on the class attached to each check box */
+  $("#buttonClass").click(function() {
+      getValueUsingClass();
+  });
+  function getValueUsingClass(){
+    /* declare an checkbox array */
+    var chkArray = [];
+    
+    /* look for all checkbxoes that have name of 'schedule_id[]' attached to it and check if it was checked */
+    $('input[name="schedule_id[]"]:checked').each(function() {
+      chkArray.push($(this).val());
     });
+
+    $.each(chkArray, function(index, val) {
+      console.log(val)
+      $('#Tch_ID_select_'+val).prop('required', true);
+      $('#room_id_select_'+val).prop('required', true);
+      $('.teacher_div_'+val).removeAttr('style');
+      $('.room_div_'+val).removeAttr('style');
+    });
+
+    /* we join the array separated by the comma */
+    var selected;
+    selected = chkArray.join(',') ;
+    
+    /* check if there is selected checkboxes, by default the length is 1 as it contains one single comma */
+    if(selected.length > 0){
+      console.log("You have selected " + selected)
+      $('#saveBtn').removeAttr('disabled');
+    }else{
+      alert("Please at least check one of the checkbox");
+      $('#saveBtn').attr('disabled', 'disabled');
+    }
+  }
+});   
+</script>
+
+<script>
+$(document).ready(function(){
+  $('input[name="schedule_id[]"]').on('click', function() {
+    var valueID = $(this).val();
+      if (!$('#box_value_'+valueID).is(':checked')) {
+        // console.log($('#Tch_ID_select_'+valueID))
+        $('#Tch_ID_select_'+valueID).val([]).trigger('change'); // reset select2 value
+        $('#room_id_select_'+valueID).val([]).trigger('change'); // reset select2 value
+        $('#Tch_ID_select_'+valueID).prop('required', false);
+        $('#room_id_select_'+valueID).prop('required', false);
+        $('.teacher_div_'+valueID).attr('style', 'display: none;');
+        $('.room_div_'+valueID).attr('style', 'display: none;');
+      }
+  });
+});   
 </script>
 @stop

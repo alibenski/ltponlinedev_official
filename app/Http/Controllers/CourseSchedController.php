@@ -58,7 +58,7 @@ class CourseSchedController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {dd($request);
+    {
         $course_id = $request->course_id;
         $term_id = $request->term_id;
         $schedule_id = $request->schedule_id;
@@ -111,9 +111,12 @@ class CourseSchedController extends Controller
                     foreach ($ingredients as $data) {
                         $data->save();
                     }
+
+            // fetch and create classroom according to the newly created record(s)  
             $unique_key = $course_id.'-'.$schedule_id[$i].'-'.$term_id;                
             $new_record = CourseSchedule::where('cs_unique', $unique_key)->get();
 
+            $this->saveClassRoom($new_record); 
         }
         dd($new_record);
         
@@ -152,6 +155,28 @@ class CourseSchedController extends Controller
         $request->session()->flash('success', 'Course + Schedule saved!'); //laravel 5.4 version
         return redirect()->back();
 
+    }
+
+    public function saveClassRoom($new_record)
+    {
+
+        foreach ($new_record as $value) {
+            $schedule_fields = Schedule::find($value->schedule_id);
+            if (isset($schedule_fields->day_1)) {
+                
+            }
+
+            $new_class = new Classroom;
+            $new_class->Code = $value->Te_Code_New.'-'.$value->schedule_id.'-'.$value->Te_Term.'-1';
+            $new_class->Te_Term = $value->Te_Term;
+            $new_class->cs_unique = $value->cs_unique;
+            $new_class->L = $value->L;
+            $new_class->Te_Code_New = $value->Te_Code_New;
+            $new_class->schedule_id = $value->schedule_id;
+            $new_class->sectionNo = 1;
+            $new_class->Tch_ID = $value->Tch_ID;
+            $new_class->save();
+        }
     }
 
     /**

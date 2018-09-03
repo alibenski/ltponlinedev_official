@@ -101,7 +101,10 @@ return [
 
     'custom' => [
         'schedule_id' => [
-            'required' => 'Schedule is required. Please check if schedule is available on the "Available class schedule (2 max)" field.',
+            'required' => 'Schedule is required. Please make sure that you have chosen from the available options.',
+        ],
+        'Tch_ID' => [
+            'required' => 'The teacher field is required.',
         ],
         'Code' => [
             'unique' => 'Course-Schedule and Section # combination already exists for this Term.',
