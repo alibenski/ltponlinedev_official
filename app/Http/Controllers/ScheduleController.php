@@ -62,9 +62,17 @@ class ScheduleController extends Controller
                 'end_time' => 'required',
             ));  
 
+        $countDays = count($request->begin_day);
         // Save the data to db
         $schedule = new Schedule;
         $schedule->begin_day = implode(' ', $request->begin_day);
+        for ($i=0; $i < $countDays; $i++) { 
+            if ($request->begin_day[$i] == 'Monday') {$schedule->day_1 = 2;}
+            if ($request->begin_day[$i] == 'Tuesday') {$schedule->day_2 = 3;}
+            if ($request->begin_day[$i] == 'Wednesday') {$schedule->day_3 = 4;}
+            if ($request->begin_day[$i] == 'Thursday') {$schedule->day_4 = 5;}
+            if ($request->begin_day[$i] == 'Friday') {$schedule->day_5 = 6;}
+        }
         //$schedule->end_day = $request->end_day;
         $schedule->begin_time = $request->begin_time;
         $schedule->end_time = $request->end_time;

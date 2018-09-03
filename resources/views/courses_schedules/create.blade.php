@@ -91,44 +91,42 @@
       <div class="panel panel-info">
         <div class="panel-heading">Format and Duration</div>
         <div class="panel-body">
-          <div class="well col-md-12" style="margin-top: 20px;">
-            <div class="row">
-              <div class="col-md-12">
-                <table class="table">
-                  <thead>
-                    <th>Format</th>
-                    <th>Duration</th>
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <td>
-                              @foreach ($format as $id => $name)
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table">
+                <thead>
+                  <th>Format</th>
+                  <th>Duration</th>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td>
+                            @foreach ($format as $id => $name)
 
-                                  <div class="radio">
-                                      <label>
-                                          <input type="radio" name="format_id" value="{{ $id }}" /> {{ $name }}
-                                      </label>
-                                  </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="format_id" value="{{ $id }}" /> {{ $name }}
+                                    </label>
+                                </div>
 
-                              @endforeach
-                        </td>
-                        <td>
-                              @foreach ($duration as $id => $name)
+                            @endforeach
+                      </td>
+                      <td>
+                            @foreach ($duration as $id => $name)
 
-                                  <div class="radio">
-                                      <label>
-                                          <input type="radio" name="duration_id" value="{{ $id }}" /> {{ $name }}
-                                      </label>
-                                  </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="duration_id" value="{{ $id }}" /> {{ $name }}
+                                    </label>
+                                </div>
 
-                              @endforeach
-                        </td>
-                      </tr>
-                  </tbody>
-                </table>
-              </div>
+                            @endforeach
+                      </td>
+                    </tr>
+                </tbody>
+              </table>
             </div>
-          </div>
+          </div> 
         </div>
       </div>     
       </div>
@@ -162,7 +160,7 @@
                       <select id="room_id_select_{{ $id }}" class="col-md-8 form-control select2-multi" name="room_id[]" multiple="multiple" autocomplete="off"  style="width: 100%">
                           <option value="">--- Select Room ---</option>
                           @foreach ($rooms as $valueRoom)
-                              <option value="{{$valueRoom->Rl_Room}}">{{$valueRoom->Rl_Room}} </option>
+                              <option value="{{$valueRoom->id}}">{{$valueRoom->Rl_Room}} </option>
                           @endforeach
                       </select>
                     </div>

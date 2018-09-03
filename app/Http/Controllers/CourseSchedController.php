@@ -159,13 +159,7 @@ class CourseSchedController extends Controller
 
     public function saveClassRoom($new_record)
     {
-
         foreach ($new_record as $value) {
-            $schedule_fields = Schedule::find($value->schedule_id);
-            if (isset($schedule_fields->day_1)) {
-                
-            }
-
             $new_class = new Classroom;
             $new_class->Code = $value->Te_Code_New.'-'.$value->schedule_id.'-'.$value->Te_Term.'-1';
             $new_class->Te_Term = $value->Te_Term;
@@ -175,6 +169,38 @@ class CourseSchedController extends Controller
             $new_class->schedule_id = $value->schedule_id;
             $new_class->sectionNo = 1;
             $new_class->Tch_ID = $value->Tch_ID;
+
+            $schedule_fields = Schedule::find($value->schedule_id);
+            if (isset($schedule_fields->day_1)) {
+                $new_class->Te_Mon = 2;
+                $new_class->Te_Mon_BTime = $schedule_fields->begin_time;
+                $new_class->Te_Mon_ETime = $schedule_fields->end_time;
+                $new_class->Te_Mon_Room = $value->room_id;
+            }
+            if (isset($schedule_fields->day_2)) {
+                $new_class->Te_Tue = 3;
+                $new_class->Te_Tue_BTime = $schedule_fields->begin_time;
+                $new_class->Te_Tue_ETime = $schedule_fields->end_time;
+                $new_class->Te_Tue_Room = $value->room_id;
+            }
+            if (isset($schedule_fields->day_3)) {
+                $new_class->Te_Wed = 4;
+                $new_class->Te_Wed_BTime = $schedule_fields->begin_time;
+                $new_class->Te_Wed_ETime = $schedule_fields->end_time;
+                $new_class->Te_Wed_Room = $value->room_id;
+            }
+            if (isset($schedule_fields->day_4)) {
+                $new_class->Te_Thu = 5;
+                $new_class->Te_Thu_BTime = $schedule_fields->begin_time;
+                $new_class->Te_Thu_ETime = $schedule_fields->end_time;
+                $new_class->Te_Thu_Room = $value->room_id;
+            }
+            if (isset($schedule_fields->day_5)) {
+                $new_class->Te_Fri = 6;
+                $new_class->Te_Fri_BTime = $schedule_fields->begin_time;
+                $new_class->Te_Fri_ETime = $schedule_fields->end_time;
+                $new_class->Te_Fri_Room = $value->room_id;
+            }
             $new_class->save();
         }
     }
