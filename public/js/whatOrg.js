@@ -28,7 +28,7 @@
     var dProfile = $(this).val(); 
     console.log('Profile selected: ' + dProfile);
 
-      if (dProfile === '4') { // staff from mission
+      if (dProfile === 'MSU') { // staff from mission
         $("select[id='input'] option[value='MSU']").prop('selected',true);
         $('.select2-basic-single').val('MSU').trigger('change');
           console.log($('select[id="input"]').val());
@@ -37,7 +37,7 @@
           var token = $('meta[name=csrf-token]').attr('content');
         orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
       }
-      if (dProfile === '5') { // spouse
+      if (dProfile === 'SPOUSE') { // spouse
         $("select[id='input'] option[value='999']").prop('selected',true);
         $('.select2-basic-single').val('999').trigger('change');
           console.log($('select[id="input"]').val());
@@ -46,25 +46,25 @@
           var token = $('meta[name=csrf-token]').attr('content');
         orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
       }
-      if (dProfile === '6') { // retired UN staff
-        $("select[id='input'] option[value='']").prop('selected',true);
-        $('.select2-basic-single').val('').trigger('change');
+      if (dProfile === 'RET') { // retired UN staff
+        $("select[id='input'] option[value='RET']").prop('selected',true);
+        $('.select2-basic-single').val('RET').trigger('change');
           console.log($('select[id="input"]').val());
           var dOrg = $('select[id="input"]').val();
           var dDecision = $('input[name="decision"]:checked').val();
           var token = $('meta[name=csrf-token]').attr('content');
         orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
       }
-      if (dProfile === '7') { // staff from service orgs in Palais
-        $("select[id='input'] option[value='']").prop('selected',true);
-        $('.select2-basic-single').val('').trigger('change');
+      if (dProfile === 'SERV') { // staff from service orgs in Palais
+        $("select[id='input'] option[value='SERV']").prop('selected',true);
+        $('.select2-basic-single').val('SERV').trigger('change');
           console.log($('select[id="input"]').val());
           var dOrg = $('select[id="input"]').val();
           var dDecision = $('input[name="decision"]:checked').val();
           var token = $('meta[name=csrf-token]').attr('content');
         orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
       }
-      if (dProfile === '8') { // staff from PRESS NGO
+      if (dProfile === 'PRESS') { // staff from PRESS NGO
         $("select[id='input'] option[value='PRESS']").prop('selected',true);
         $('.select2-basic-single').val('PRESS').trigger('change');
           console.log($('select[id="input"]').val());

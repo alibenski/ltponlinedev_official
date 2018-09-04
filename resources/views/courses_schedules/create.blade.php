@@ -1,6 +1,7 @@
 @extends('admin.admin')
 
 @section('customcss')
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 
@@ -135,9 +136,12 @@
       <div class="row">
       <div class="col-md-6">  
       <div class="panel panel-primary">
-        <div class="panel-heading">Schedule</div>
+        <div class="panel-heading"><strong>Schedule</strong></div>
         <div class="panel-body">
           <div class="row">
+            <div class="col-md-4 ">
+              <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block btn-space">
+            </div>
             <div class="col-md-12">
               <div class="col-md-12">
                 @foreach ($schedules as $id => $name)
@@ -177,14 +181,11 @@
         <div class="panel-heading">Operation</div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-md-4 ">
-              <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block">Back</a>
+            <div class="col-md-5 col-md-offset-1">
+              <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block btn-space">Back</a>
             </div>
-            <div class="col-md-4 ">
-              <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block">
-            </div>
-            <div class="col-md-4 ">  
-              <button id="saveBtn" type="submit" class="btn btn-success btn-block button-prevent-multi-submit" disabled="">Save</button>
+            <div class="col-md-5">  
+              <button id="saveBtn" type="submit" class="btn btn-space btn-success btn-block button-prevent-multi-submit" disabled="">Save</button>
               <input type="hidden" name="_token" value="{{ Session::token() }}">
             </div>
           </div>

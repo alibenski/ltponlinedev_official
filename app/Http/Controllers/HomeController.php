@@ -137,12 +137,13 @@ class HomeController extends Controller
     
     public function whatform(Request $request)
     {
-        // if part of new organization, then save the new organization to sddextr        
-        // save organization and CAT to sddextr table
+        // if part of new organization, then save the new organization to sddextr     
+        // save CAT to Auth User table   
         $id = Auth::id();
         $student = User::findOrFail($id);
         $student->profile = $request->profile;
         $student->save();
+        // save organization to sddextr table
         $student->sddextr->DEPT = $request->input('organization');
         $student->sddextr->save();
 
@@ -154,18 +155,19 @@ class HomeController extends Controller
             session()->flash('success','Please fill up the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
         } 
-        // elseif ($request->decision == 0 && $org_status == 1) {
-        //     session()->flash('success','Please fill up the payment-based enrolment form');
-        //     return redirect(route('selfpayform.create'));
-        // } 
-        // elseif ($request->decision == 0 && $org_status == 0) {
+        elseif ($request->decision == 0 && $org_status == 1) {
+            session()->flash('success','Please fill up the payment-based enrolment form');
+            return redirect(route('selfpayform.create'));
+        } 
+        elseif ($request->decision == 0 && $org_status == 0) {
+            session()->flash('success','Please fill up the enrolment form');
+            return redirect(route('myform.create'));
+        } 
+        // elseif ($request->decision == 0) {
         //     session()->flash('success','Please fill up the enrolment form');
         //     return redirect(route('myform.create'));
         // } 
-        elseif ($request->decision == 0) {
-            session()->flash('success','Please fill up the enrolment form');
-            return redirect(route('myform.create'));
-        } else 
+        else 
         return redirect(route('whatorg'));
 
     }

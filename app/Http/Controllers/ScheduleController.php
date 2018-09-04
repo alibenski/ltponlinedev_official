@@ -56,13 +56,18 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-            $this->validate($request, array(
-                'begin_day' => 'bail|required|',
-                'begin_time' => 'required',
-                'end_time' => 'required',
-            ));  
-
         $countDays = count($request->begin_day);
+        $implodeName = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
+        $request->merge( [ 'name' => $implodeName ] );
+
+        $this->validate($request, array(
+            'name' => 'unique:schedules,name|',
+            'begin_day' => 'bail|required|',
+            'begin_time' => 'required',
+            'end_time' => 'required',
+        ));  
+
+        
         // Save the data to db
         $schedule = new Schedule;
         $schedule->begin_day = implode(' ', $request->begin_day);
@@ -82,7 +87,7 @@ class ScheduleController extends Controller
         // Set flash data with message
         $request->session()->flash('success', 'New entry has been saved!');
         // Redirect to flash data to posts.show
-        return redirect()->route('schedules.index'); 
+        return redirect()->route('schedules.create'); 
 
     }
 
@@ -122,18 +127,33 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $implodeName = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
+        $request->merge( [ 'name' => $implodeName ] );
         // Validate data
         $schedule = Schedule::find($id);
             $this->validate($request, array(
+                'name' => 'unique:schedules,name|',
                 'begin_day' => 'required',
                 'begin_time' => 'required',
                 'end_time' => 'required',
             )); 
-
+        $countDays = count($request->begin_day);
         // Save the data to db
         $schedule = Schedule::find($id);
-        //$schedule->name = $request->input('sched_name');
         $schedule->begin_day = implode(' ', $request->begin_day);
+        // set fields to null first
+        $schedule->day_1 = null;
+        $schedule->day_2 = null;
+        $schedule->day_3 = null;
+        $schedule->day_4 = null;
+        $schedule->day_5 = null;
+        for ($i=0; $i < $countDays; $i++) { 
+            if ($request->begin_day[$i] == 'Monday') {$schedule->day_1 = 2;}
+            if ($request->begin_day[$i] == 'Tuesday') {$schedule->day_2 = 3;}
+            if ($request->begin_day[$i] == 'Wednesday') {$schedule->day_3 = 4;}
+            if ($request->begin_day[$i] == 'Thursday') {$schedule->day_4 = 5;}
+            if ($request->begin_day[$i] == 'Friday') {$schedule->day_5 = 6;}
+        }
         $schedule->begin_time = $request->input('begin_time');
         $schedule->end_time = $request->input('end_time');
         $schedule->name = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
