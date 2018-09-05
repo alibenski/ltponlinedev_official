@@ -11,6 +11,7 @@ use Mail;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 use App\Mail\ExceptionOccured;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -76,11 +77,15 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof TokenMismatchException) {
             $request->session()->flash('expired', 'Enrolment form session has expired. Please log in and try again.');
-
             return redirect()
                 ->route('login')
                 ->withInput($request->except('password', 'password_confirmation', '_token'));
         }
+
+        // if ($exception instanceof MethodNotAllowedHttpException) {
+        //     abort(401, 'Unauthorized action.');
+        // }
+
         return parent::render($request, $exception);
     }
 

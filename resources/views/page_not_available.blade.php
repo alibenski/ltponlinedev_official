@@ -17,6 +17,6 @@
 	      <span class="circle small"></span>
 	    </div>
 	  </section>
-	  <h2 class="text-center" style="color: #fff"><strong>The Registration Form to create new user accounts for the Summer term is now closed.</strong></h2>
+	  <h2 class="text-center" style="color: #fff"><strong>The Registration Form to create new user accounts is currently closed.</strong></h2>
 	</body>
 </html>

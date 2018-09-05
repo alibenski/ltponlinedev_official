@@ -15,6 +15,7 @@ Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
 
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
     //admin routes
+    Route::resource('newuser', 'NewUserController',['only' => ['index', 'show', 'edit', 'update']]);
     Route::get('/', function () { return view('admin.index'); })->name('admin_dashboard');
     Route::get('user/import', 'AdminController@importUser')->name('import-user');
     Route::post('user/import', 'AdminController@handleImportUser')->name('bulk-import-user');
@@ -178,7 +179,7 @@ Route::get('new_user_msg', function () { return view('new_user_msg'); })->name('
 Route::get('page_not_available', function () { return view('page_not_available'); })->name('page_not_available');
 Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
 Route::get('thankyouSelfPay', function () { return view('thankyouSelfPay'); })->name('thankyouSelfPay');
-Route::resource('newuser', 'NewUserController');
+Route::resource('newuser', 'NewUserController',['only' => ['create', 'store']]);
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();
 
