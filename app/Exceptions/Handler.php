@@ -82,9 +82,9 @@ class Handler extends ExceptionHandler
                 ->withInput($request->except('password', 'password_confirmation', '_token'));
         }
 
-        // if ($exception instanceof MethodNotAllowedHttpException) {
-        //     abort(401, 'Unauthorized action.');
-        // }
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            abort(405, 'MethodNotAllowedHttpException.');
+        }
 
         return parent::render($request, $exception);
     }
