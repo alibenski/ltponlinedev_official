@@ -48,9 +48,7 @@ class SelfPayController extends Controller
      */
     public function index()
     {
-        $selfpayforms = Preenrolment::select('INDEXID','Term','L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('INDEXID','Term','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')->get();
-
-        // $selfpayforms->orderBy('created_at','asc')->paginate(10);
+        $selfpayforms = Preenrolment::select( 'INDEXID','Term','L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('INDEXID','Term','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')->orderBy('created_at', 'asc')->get();
 
         return view('selfpayforms.index')->withSelfpayforms($selfpayforms);
     }

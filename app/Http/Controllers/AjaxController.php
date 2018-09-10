@@ -27,11 +27,23 @@ class AjaxController extends Controller
     /**
      * show schedules in modal
      */
-    public function showSchedules()
+    public function showScheduleSelfPay(Request $request)
+    {
+        if($request->ajax()){         
+            $show_sched_selfpay = Preenrolment::where('INDEXID', $request->index)->where('Te_Code', $request->tecode)->where('Term', $request->term)->get();
+            
+            $data = view('selfpayforms.show',compact('show_sched_selfpay'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
+
+    /**
+     * show schedules in modal
+     */
+    public function postDecisionSelfPay()
     {
         
     }
-
     /**
      * delete day parameter when editing classrooms in classroom view
      */
