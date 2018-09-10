@@ -6,7 +6,7 @@
 @if(is_null($selfpayforms))
 
 @else
-{{ $selfpayforms->links() }}
+{{-- {{ $selfpayforms->links() }} --}}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
@@ -17,7 +17,7 @@
 	            <th>Term</th>
 	            <th>Language</th>
 	            <th>Course</th>
-	            <th>Schedule</th>
+	            {{-- <th>Schedule</th> --}}
 	            <th>ID Proof</th>
 	            <th>Payment Proof</th>
 	            <th>Time Stamp</th>
@@ -39,12 +39,9 @@
 				<td>{{ $form->Term }}</td>
 				<td>{{ $form->L }}</td>
 				<td>{{ $form->courses->Description }}</td>
-				<td>{{ $form->schedule->name }}</td>
-				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank">carte attachment</a> @endif
-				</td>
-				<td>
-				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank">payment attachment</a> @endif
-				</td>
+				{{-- <td>{{ $form->schedule->name }}</td> --}}
+				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank">carte attachment</a> @endif</td>
+				<td>@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank">payment attachment</a> @endif </td>
 				<td>{{ $form->created_at}}</td>
 			</tr>
 			@endforeach

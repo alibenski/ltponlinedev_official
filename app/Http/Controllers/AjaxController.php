@@ -24,6 +24,17 @@ use DB;
 
 class AjaxController extends Controller
 {
+    /**
+     * show schedules in modal
+     */
+    public function showSchedules()
+    {
+        
+    }
+
+    /**
+     * delete day parameter when editing classrooms in classroom view
+     */
     public function ajaxDeleteDayParam(Request $request)
     {
         $deleteDayParam = Classroom::where('id', $request->id)->first();
@@ -66,6 +77,10 @@ class AjaxController extends Controller
 
         return response()->json($deleteDayParam); 
     }
+
+    /**
+     * show sections in modal in classroom view
+     */
     public function ajaxShowSection(Request $request)
     {    
         if($request->ajax()){            
@@ -78,6 +93,9 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     * get existing section no. in the classroom view
+     */
     public function ajaxGetSectionNo(Request $request)
     {
         // get value of cs_unique and query in TEVENTcur if exists
@@ -95,6 +113,9 @@ class AjaxController extends Controller
         return response()->json($data); 
     }
 
+    /**
+     * check if enrolment form is cancelled in submitted forms view
+     */
     public function ajaxIsCancelled(Request $request)
     {
         $current_user = Auth::user()->indexno;
@@ -110,6 +131,7 @@ class AjaxController extends Controller
 
         return response()->json($data); 
     }
+
     public function ajaxOrgSelect()
     {
         $select_org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
@@ -117,6 +139,9 @@ class AjaxController extends Controller
         return response()->json([$data]);  
     }
 
+    /**
+     * compare if chosen organization in whatorg view is the same in User Model 
+     */
     public function ajaxOrgCompare(Request $request)
     {
         $ajaxOrg = $request->organization;
@@ -131,6 +156,9 @@ class AjaxController extends Controller
         return response()->json([$data, $torgan]);  
     }
 
+    /**
+     * on doc ready, disable cancel button in submitted forms view based on cancel date in Terms table 
+     */
     public function ajaxGetDate(Request $request)
     {
         //get current date
@@ -167,6 +195,9 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     * ajax select on vsa-page-2 admin page
+     */
     public function selectAjaxAdmin(Request $request)
     {
         if($request->ajax()){            
@@ -183,6 +214,9 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     * ajax select if student level one of any language in enrolment form
+     */
     public function selectAjaxLevelOne(Request $request)
     {
         if($request->ajax()){
@@ -197,6 +231,9 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     * ajax select returns available schedules associated to the course selected in enrolment form
+     */
     public function selectAjax2(Request $request)
     {
         if($request->ajax()){
