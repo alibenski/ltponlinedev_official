@@ -67,17 +67,17 @@ class NewUserController extends Controller
         $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
         if ($query_sddextr_record) {
-            dd('existing sddextr');
-            // $user = User::create([ 
-            //     'indexno' => $request->indexno,
-            //     'email' => $request->email, 
-            //     'nameFirst' => $request->nameFirst,
-            //     'nameLast' => $request->nameLast,
-            //     'name' => $request->nameFirst.' '.$request->nameLast,
-            //     'password' => Hash::make($request->password),
-            //     'must_change_password' => 1,
-            //     'approved_account' => 1,
-            // ]);
+            $user = User::create([ 
+                'indexno' => $request->indexno,
+                'email' => $request->email, 
+                'nameFirst' => $request->nameFirst,
+                'nameLast' => $request->nameLast,
+                'name' => $request->nameFirst.' '.$request->nameLast,
+                'password' => Hash::make($request->password),
+                'must_change_password' => 1,
+                'approved_account' => 1,
+            ]);
+            
         }
 
         // if not in auth table and sddextr table, send email to Secretariat to create his login credentials to the system and sddextr record
