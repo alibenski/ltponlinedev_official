@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\NewUser;
+use App\SDDEXTR;
 use App\TORGAN;
 use App\User;
 use DB;
@@ -30,8 +31,8 @@ class NewUserController extends Controller
         $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
         $student_status = DB::table('STU_STATUS')->pluck("StandFor","Abbreviation")->all();
         $org = TORGAN::get(["Org Full Name","Org name"]);
-        return view('page_not_available');
-        // return view('users.new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
+        // return view('page_not_available');
+        return view('users.new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
     }
 
     /**
@@ -55,23 +56,33 @@ class NewUserController extends Controller
                 // 'g-recaptcha-response' => 'required|captcha',
         ));
 
-        $query_staff_record = User::where('indexno', $request->indexno)->where('email', $request->email)->get();
+        $query_auth_record = User::where('indexno', $request->indexno)->orWhere('email', $request->email)->first();
 
         // if staff exists in auth table, redirect to login page
-        if (!$query_staff_record->isEmpty()) {
-            $request->session()->flash('warning', 'Your Index ID and email address already exist in our records. Please login or reset your password.' );
+        if ($query_auth_record) {
+            $request->session()->flash('warning', 'Your Index ID ('.$query_auth_record->indexno.') and email address ('.$query_auth_record->email.') already exist in our records. Please login or reset your password.' );
             return redirect('login');
         }
 
-        // $query_sddextr_record = User::where('INDEXNO', $request->indexno)->where('EMAIL', $request->email)->get();
-        // // if staff does not exist in auth table but exists in sddextr, create auth record and send credentials
-        // if ($query_sddextr_record) {
-            
-        // }
+        $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
+        // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
+        if ($query_sddextr_record) {
+            dd('existing sddextr');
+            // $user = User::create([ 
+            //     'indexno' => $request->indexno,
+            //     'email' => $request->email, 
+            //     'nameFirst' => $request->nameFirst,
+            //     'nameLast' => $request->nameLast,
+            //     'name' => $request->nameFirst.' '.$request->nameLast,
+            //     'password' => Hash::make($request->password),
+            //     'must_change_password' => 1,
+            //     'approved_account' => 1,
+            // ]);
+        }
 
         // if not in auth table and sddextr table, send email to Secretariat to create his login credentials to the system and sddextr record
         
-        dd($request, $query_staff_record);
+        dd($request, $query_auth_record);
 
 
         //store in database
