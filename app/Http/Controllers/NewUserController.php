@@ -8,6 +8,8 @@ use App\TORGAN;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class NewUserController extends Controller
 {
@@ -66,20 +68,28 @@ class NewUserController extends Controller
 
         $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
+        // dd($query_sddextr_record);
         if ($query_sddextr_record) {
             $user = User::create([ 
-                'indexno' => $request->indexno,
-                'email' => $request->email, 
+                'indexno' => $query_sddextr_record->INDEXNO,
+                'email' => $query_sddextr_record->EMAIL, 
                 'nameFirst' => $request->nameFirst,
                 'nameLast' => $request->nameLast,
                 'name' => $request->nameFirst.' '.$request->nameLast,
-                'password' => Hash::make($request->password),
+                'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
             ]);
             
+            // send email to user using email from sddextr 
+            // Mail::to($query_sddextr_record->email)->send(new SendAuthMail($query_sddextr_record->EMAIL));
+            Mail::raw("username: ".$query_sddextr_record->EMAIL." password: Welcome2CLM", function($message) use($query_sddextr_record){
+                $message->from('clm_language@unog.ch', 'CLM Language');
+                $message->to($query_sddextr_record->EMAIL)->subject('MGR - This is a test automated message');
+            });
+            $request->session()->flash('warning', 'Credentials sent to: '.$query_sddextr_record->EMAIL );
+            return redirect('login');
         }
-
         // if not in auth table and sddextr table, send email to Secretariat to create his login credentials to the system and sddextr record
         
         dd($request, $query_auth_record);
