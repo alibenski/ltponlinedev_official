@@ -28,8 +28,8 @@ class NewUserController extends Controller
         // Returns an array of users that have the query string located somewhere within 
         // our users name or email fields. Paginates them so we can break up lots of search results.
         $users = NewUser::orderBy('id', 'desc')
+            ->where('approved_account', 0)
             ->where('name', 'LIKE', '%' . $query . '%')
-            ->orWhere('email', 'LIKE', '%' . $query . '%')
             ->paginate(20);
 
         return view('users_new.index')->with('users', $users);
