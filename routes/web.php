@@ -182,6 +182,8 @@ Route::get('page_not_available', function () { return view('page_not_available')
 Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
 Route::get('thankyouSelfPay', function () { return view('thankyouSelfPay'); })->name('thankyouSelfPay');
 Route::resource('newuser', 'NewUserController',['only' => ['create', 'store']]);
+Route::get('get-new-new-user', ['as' => 'get-new-new-user','uses' => 'NewUserController@getNewNewUser' ]);
+Route::post('post-new-new-user', ['as' => 'post-new-new-user','uses' => 'NewUserController@postNewNewUser' ]);
 //Route::get('/', function () { return view('welcome'); });
 Auth::routes();
 

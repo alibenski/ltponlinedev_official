@@ -11,14 +11,15 @@ class SendAuthMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $sddextr_email_address ;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($sddextr_email_address)
     {
-        //
+        $this->sddextr_email_address = $sddextr_email_address;
     }
 
     /**
@@ -28,6 +29,10 @@ class SendAuthMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('emails.sendAuthMail')
+                    ->from('clm_language@unog.ch', 'CLM Language')
+                    ->bcc('clm_language@unog.ch')
+                    ->priority(1)
+                    ->subject("Information concernant le nouveau système d'inscription en ligne - Information concerning the new online registration system");
     }
 }
