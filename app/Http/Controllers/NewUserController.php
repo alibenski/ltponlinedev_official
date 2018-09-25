@@ -155,9 +155,18 @@ class NewUserController extends Controller
      * @param  \App\NewUser  $newUser
      * @return \Illuminate\Http\Response
      */
-    public function show(NewUser $newUser)
+    public function show(Request $request)
     {
-        //
+        return $request;
+        if($newUser->ajax()){     
+        return 'yown';       
+        //     $show_classrooms = Classroom::where('cs_unique', $request->cs_unique)
+        //     ->orderBy('sectionNo', 'asc')
+        //     ->get();
+
+        //     $data = view('classrooms.show',compact('show_classrooms'))->render();
+        //     return response()->json(['options'=>$data]);
+        }
     }
 
     /**
@@ -180,7 +189,8 @@ class NewUserController extends Controller
      */
     public function update(Request $request, NewUser $newUser)
     {
-        //
+        return 'something';
+        dd($request, $newUser);
     }
 
     /**
