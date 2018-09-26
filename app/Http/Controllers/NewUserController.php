@@ -202,6 +202,8 @@ class NewUserController extends Controller
             'approved_account' => 1,
         ]); 
         // send email with credentials
+        $sddextr_email_address = $request->email;
+        Mail::to($request->email)->send(new SendAuthMail($sddextr_email_address));
         // save entry to SDDEXTR table
         return redirect()->route('newuser.index');
     }

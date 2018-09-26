@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
-use Session;
+use App\NewUser;
+use App\Services\User\ExistingUserImport;
+use App\Services\User\UserImport;
 use Carbon\Carbon;
 use DB;
-use App\Services\User\UserImport;
-use App\Services\User\ExistingUserImport;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Session;
 
 
 class AdminController extends Controller
 {
+    public function adminIndex()
+    {
+        $new_user_count = NewUser::where('approved_account', 0)->count();
+
+        return view('admin.index')->withNew_user_count($new_user_count);   
+    }
+
     public function importUser() 
     {
         return view('admin.import-user');

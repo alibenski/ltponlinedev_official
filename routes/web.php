@@ -17,7 +17,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     //admin routes
     Route::resource('newuser', 'NewUserController',['only' => ['index', 'show', 'update']]);
     Route::get('edit-new-user', ['as'=>'edit-new-user','uses'=>'NewUserController@editNewUser']);
-    Route::get('/', function () { return view('admin.index'); })->name('admin_dashboard');
+    Route::get('/', 'AdminController@adminIndex')->name('admin_dashboard');
     Route::get('user/import', 'AdminController@importUser')->name('import-user');
     Route::post('user/import', 'AdminController@handleImportUser')->name('bulk-import-user');
     Route::get('user/import-exist', 'AdminController@importExistingUser')->name('import-existing-user');
