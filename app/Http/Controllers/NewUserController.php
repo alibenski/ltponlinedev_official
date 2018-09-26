@@ -157,16 +157,7 @@ class NewUserController extends Controller
      */
     public function show(Request $request)
     {
-        return $request;
-        if($newUser->ajax()){     
-        return 'yown';       
-        //     $show_classrooms = Classroom::where('cs_unique', $request->cs_unique)
-        //     ->orderBy('sectionNo', 'asc')
-        //     ->get();
-
-        //     $data = view('classrooms.show',compact('show_classrooms'))->render();
-        //     return response()->json(['options'=>$data]);
-        }
+        
     }
 
     /**
@@ -175,9 +166,14 @@ class NewUserController extends Controller
      * @param  \App\NewUser  $newUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(NewUser $newUser)
+    public function editNewUser(Request $request)
     {
-        //
+        if($request->ajax()){     
+            $new_user_info = NewUser::find($request->id);
+
+            $data = view('users_new.edit',compact('new_user_info'))->render();
+            return response()->json(['options'=>$data]);
+        }
     }
 
     /**
@@ -187,10 +183,27 @@ class NewUserController extends Controller
      * @param  \App\NewUser  $newUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, NewUser $newUser)
+    public function update(Request $request, $id)
     {
-        return 'something';
-        dd($request, $newUser);
+        
+        $newUser = NewUser::findOrFail($id);
+        $newUser->approved_account = 1;
+        $newUser->save();
+
+        // save entry to Auth table
+        $user = User::create([ 
+            'indexno' => $request->indexno,
+            'email' => $request->email, 
+            'nameFirst' => $request->nameFirst,
+            'nameLast' => $request->nameLast,
+            'name' => $request->nameFirst.' '.$request->nameLast,
+            'password' => Hash::make('Welcome2CLM'),
+            'must_change_password' => 1,
+            'approved_account' => 1,
+        ]); 
+        // send email with credentials
+        // save entry to SDDEXTR table
+        return redirect()->route('newuser.index');
     }
 
     /**
