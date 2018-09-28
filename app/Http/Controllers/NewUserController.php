@@ -170,8 +170,9 @@ class NewUserController extends Controller
     {
         if($request->ajax()){     
             $new_user_info = NewUser::find($request->id);
+            $org = TORGAN::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
 
-            $data = view('users_new.edit',compact('new_user_info'))->render();
+            $data = view('users_new.edit',compact('new_user_info','org'))->render();
             return response()->json(['options'=>$data]);
         }
     }
@@ -185,15 +186,19 @@ class NewUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        dd($request);
         $newUser = NewUser::findOrFail($id);
         $newUser->approved_account = 1;
         $newUser->save();
 
+        // manipulate index number 
+        
         // save entry to Auth table
         $user = User::create([ 
+            'indexno_old' => $request->indexno,
             'indexno' => $request->indexno,
             'email' => $request->email, 
+            'profile' => $request->profile, 
             'nameFirst' => $request->nameFirst,
             'nameLast' => $request->nameLast,
             'name' => $request->nameFirst.' '.$request->nameLast,
@@ -204,7 +209,23 @@ class NewUserController extends Controller
         // send email with credentials
         $sddextr_email_address = $request->email;
         Mail::to($request->email)->send(new SendAuthMail($sddextr_email_address));
+        
+        
+        
         // save entry to SDDEXTR table
+        $sddextr = SDDEXTR::create([
+            'INDEXNO_old' => $request->indexno,
+            'INDEXNO' => $request->indexno,
+            'TITLE' => $request->title,
+            'FIRSTNAME' => $request->nameFirst,
+            'LASTNAME' => $request->nameLast,            
+            'SEX' => $request->gender,            
+            'DEPT' => $request->org,       
+            'PHONE' => $request->contact_num,       
+            'BIRTH' => $request->dob,       
+            'EMAIL' => $request->email, 
+        ]);
+
         return redirect()->route('newuser.index');
     }
 

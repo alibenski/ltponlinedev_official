@@ -220,7 +220,7 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        CLM Online Enrolment Administration
+        <a href="{{ route('admin_dashboard') }}">CLM Online Enrolment Administration</a>
         <small>Language Training Programme</small>
       </h1>
       <ol class="breadcrumb">

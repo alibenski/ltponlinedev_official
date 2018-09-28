@@ -1,5 +1,8 @@
 @extends('admin.admin')
-
+@section('customcss')
+    <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+@stop
 @section('content')
 <h1><i class="fa fa-users"></i> New User Administration </h1>
     <hr>
@@ -68,8 +71,9 @@
 </div>
 @stop
 @section('java_script')
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/submit.js') }}"></script>
 <script>
-// Show a post
 $(document).on('click', '.show-modal', function() {
     $('.modal-title').text('Show Details');
     $('#id_show').val($(this).data('id'));
