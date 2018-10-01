@@ -157,7 +157,7 @@ class NewUserController extends Controller
      */
     public function show(Request $request)
     {
-        
+           
     }
 
     /**
