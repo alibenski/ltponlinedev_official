@@ -56,7 +56,7 @@ class Preenrolment extends Model
 	public function terms() {
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
     }
-   public function filesId() {
+    public function filesId() {
     return $this->belongsTo('App\File', 'attachment_id'); 
     }   
     public function filesPay() {

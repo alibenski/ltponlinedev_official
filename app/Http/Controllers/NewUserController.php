@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FileNewUser;
 use App\Mail\SendAuthMail;
 use App\NewUser;
 use App\SDDEXTR;
@@ -11,6 +12,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class NewUserController extends Controller
 {
@@ -95,13 +97,11 @@ class NewUserController extends Controller
             $request->session()->flash('warning', 'Login Credentials sent to: '.$query_sddextr_record->EMAIL );
             return redirect('login');
         }
-        // if not in auth table and sddextr table, send email to Secretariat to create his login credentials to the system and sddextr record
+        // if not in auth table and sddextr table, student fills out new user form
         if (!$query_auth_record && !$query_sddextr_record) {
             $request->session()->flash('warning', 'We do not have your Index and Email in our system. Please fill out the form below which will be reviewed by the Language Secretariat. Once validated, you will receive an email with your login credentials.');
             return redirect()->route('get-new-new-user');
         }
-
-        dd($request, $query_auth_record);
     }
 
     public function getNewNewUser()
@@ -145,7 +145,135 @@ class NewUserController extends Controller
         // $newUser->cat = $request->cat;
         // $newUser->student_cat = $request->student_cat;
         $newUser->save();
-        
+        // send email notification to Secretariat to approve his login credentials to the system and sddextr record
+        Mail::raw("New UN user request for: ".$request->nameFirst.' '.$request->nameLast, function($message) {
+                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+                $message->to('clm_language@un.org')->subject('Notification: New UN User Request');
+            });
+         // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
+
+        return redirect()->route('new_user_msg');
+    }
+
+    public function getNewOutsideUser()
+    {
+        return view('page_not_available');
+        // return view('users_new.new_outside_user');
+    }
+
+    public function postNewOutsideUser(Request $request)
+    {
+        //validate the data
+        $this->validate($request, array(
+                'email' => 'required|email',
+                'g-recaptcha-response' => 'required|captcha',
+        ));
+
+        // check if staff exists in Auth table
+        $query_auth_record = User::where('email', $request->email)->first();
+
+        // if staff exists in auth table, redirect to login page
+        if ($query_auth_record) {
+            $request->session()->flash('warning', 'Your Index ID ('.$query_auth_record->indexno.') and email address ('.$query_auth_record->email.') already exist in our records. Please login or reset your password.' );
+            return redirect('login');
+        }
+
+        // if staff exists in sddextr table, redirect to login page
+        $query_sddextr_record = SDDEXTR::where('EMAIL', $request->email)->first();
+        // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
+        if ($query_sddextr_record) {
+            $user = User::create([ 
+                'indexno_old' => $query_sddextr_record->INDEXNO_old,
+                'indexno' => $query_sddextr_record->INDEXNO,
+                'email' => $query_sddextr_record->EMAIL, 
+                'nameFirst' => $query_sddextr_record->FIRSTNAME,
+                'nameLast' => $query_sddextr_record->LASTNAME,
+                'name' => $query_sddextr_record->FIRSTNAME.' '.$query_sddextr_record->LASTNAME,
+                'password' => Hash::make('Welcome2CLM'),
+                'must_change_password' => 1,
+                'approved_account' => 1,
+            ]);
+            $sddextr_email_address = $query_sddextr_record->EMAIL;
+            // send credential email to user using email from sddextr 
+            Mail::to($query_sddextr_record->EMAIL)->send(new SendAuthMail($sddextr_email_address));
+            // Mail::raw("username: ".$query_sddextr_record->EMAIL." password: Welcome2CLM", function($message) use($query_sddextr_record){
+            //     $message->from('clm_language@unog.ch', 'CLM Language');
+            //     $message->to($query_sddextr_record->EMAIL)->subject('MGR - This is a test automated message');
+            // });
+            $request->session()->flash('warning', 'Login Credentials sent to: '.$query_sddextr_record->EMAIL );
+            return redirect('login');
+        }
+
+        // if not in auth table and sddextr table, student fills out new non-UN user form
+        if (!$query_auth_record && !$query_sddextr_record) {
+            $request->session()->flash('warning', 'We do not have your Index and Email in our system. Please fill out the form below which will be reviewed by the Language Secretariat. Once validated, you will receive an email with your login credentials.');
+            return redirect()->route('get-new-outside-user-form');
+        }
+    }
+
+    public function getNewOutsideUserForm()
+    {
+        $org = TORGAN::get(["Org Full Name","Org name"]);
+        return view('users_new.new_outside_user_form')->withOrg($org);
+    }
+
+    public function postNewOutsideUserForm(Request $request)
+    {
+        //validate the data
+        $this->validate($request, array(
+                'gender' => 'required|string|',
+                'title' => 'required|',
+                'profile' => 'required|',
+                'nameLast' => 'required|string|max:255',
+                'nameFirst' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+                'org' => 'required|string|max:255',
+                'contact_num' => 'required|max:255',
+                // 'cat' => 'required|',
+                // 'student_cat' => 'required|',
+                'contractfile' => 'required|mimes:pdf,doc,docx|max:20000',
+                'g-recaptcha-response' => 'required|captcha',
+        ));
+
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('contractfile')){
+            $request->file('contractfile');
+            $filename = 'new_user_request_'.$request->nameLast.'_'.$request->nameFirst.'.'.$request->contractfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
+            //Create new record in db table
+            $attachment_contract_file = new FileNewUser([
+                    'filename' => $filename,
+                    'size' => $request->contractfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_contract_file->save();
+        }
+
+        //store in database
+        $newUser = new NewUser;
+        $newUser->indexno_new = $request->indexno;
+        $newUser->gender = $request->gender;
+        $newUser->title = $request->title;
+        $newUser->profile = $request->profile;
+        $newUser->name = $request->nameFirst.' '.$request->nameLast;
+        $newUser->nameLast = $request->nameLast;
+        $newUser->nameFirst = $request->nameFirst;
+        $newUser->email = $request->email;
+        $newUser->org = $request->org;
+        $newUser->contact_num = $request->contact_num;
+        $newUser->dob = $request->dob;
+        $newUser->attachment_id = $attachment_contract_file->id;
+        // $newUser->cat = $request->cat;
+        // $newUser->student_cat = $request->student_cat;
+        $newUser->save();
+        // send email notification to Secretariat to approve his login credentials to the system and sddextr record
+        Mail::raw("New UN user request for: ".$request->nameFirst.' '.$request->nameLast, function($message) {
+                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+                $message->to('clm_language@un.org')->subject('Notification: New Non-UN User Request');
+            });
+         // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
+
         return redirect()->route('new_user_msg');
     }
 
@@ -157,7 +285,7 @@ class NewUserController extends Controller
      */
     public function show(Request $request)
     {
-           
+                   
     }
 
     /**
@@ -171,7 +299,8 @@ class NewUserController extends Controller
         if($request->ajax()){     
             $new_user_info = NewUser::find($request->id);
             $org = TORGAN::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
-
+            
+            // $auto_index = 
             $data = view('users_new.edit',compact('new_user_info','org'))->render();
             return response()->json(['options'=>$data]);
         }

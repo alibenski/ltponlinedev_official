@@ -12,10 +12,10 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+                <div class="panel-heading">Registeration External</div>
 
                 <div class="panel-body">
-                    <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('post-new-new-user') }}">
+                    <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('post-new-outside-user-form') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('indexno') ? ' has-error' : '' }}">
@@ -37,6 +37,18 @@
                             <label for="gender" class="col-md-4 control-label"><span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6 ">
                                 <p class="form-control-static">required field</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group{{ $errors->has('contractfile') ? ' has-error' : '' }}">
+                            <label for="contractfile" class="col-md-4 control-label">Copy of Contract <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <div class="col-md-6">
+                            <input name="contractfile" type="file" class="col-md-8 form-control-static" required="required">
+                                @if ($errors->has('contractfile'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('contractfile') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
 

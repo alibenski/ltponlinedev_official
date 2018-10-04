@@ -4,22 +4,23 @@
 	        {{ csrf_field() }}
 	        <div class="form-group">
 	            <label class="control-label">Index #: </label>
-	            <input name="indexno" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $new_user_info->indexno) }}">
+	            <input name="indexno" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('indexno', $new_user_info->indexno) }}">
+	            <p class="small-text text-danger">This field is system generated. The admin needs to verify in Umoja if the person is a UN staff member and change the index no. field accordingly.</p>
 	        </div>
 			
 			<div class="form-group">
 	            <label class="control-label">Title: </label>
-	            <input name="title" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $new_user_info->title) }}">
+	            <input name="title" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('title', $new_user_info->title) }}">
 	        </div>
 
 	        <div class="form-group">
 	            <label class="control-label">First Name: </label>
-	            <input name="nameFirst" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $new_user_info->nameFirst) }}">
+	            <input name="nameFirst" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('nameFirst', $new_user_info->nameFirst) }}">
 	        </div>
 	
 			<div class="form-group">
 	            <label class="control-label">Last Name: </label>
-	            <input name="nameLast" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $new_user_info->nameLast) }}">
+	            <input name="nameLast" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('nameLast', $new_user_info->nameLast) }}">
 	        </div>
 
 	        <div class="form-group">
@@ -51,12 +52,17 @@
 			
 			<div class="form-group">
 	            <label class="control-label">Gender: </label>
-	            <input name="gender" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $new_user_info->gender) }}">
+	            <input name="gender" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('gender', $new_user_info->gender) }}">
 	        </div>
 
 	        <div class="form-group">
 	            <label class="control-label">Contact #: </label>
-	            <input name="contact_num" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $new_user_info->contact_num) }}">
+	            <input name="contact_num" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('contact_num', $new_user_info->contact_num) }}">
+	        </div>
+			
+			<div class="form-group">
+	            <label class="control-label">Attachment: </label>
+	            @if(empty($new_user_info->filesId->path)) <strong>None</strong> @else <a href="{{ Storage::url($new_user_info->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
 	        </div>
 
 	        <button type="button" data-dismiss="modal" class="btn btn-danger btn-space button-prevent-multi-submit"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button>

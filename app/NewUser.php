@@ -16,4 +16,9 @@ class NewUser extends Model
     protected $dates = [
     	'dob',
     ];
+
+	public function filesId() {
+    return $this->belongsTo('App\FileNewUser', 'attachment_id'); 
+    }      
+
 }

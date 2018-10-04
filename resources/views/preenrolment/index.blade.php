@@ -111,10 +111,10 @@
 				<td>{{ $form->schedule->name }}</td>
 				<td>{{ $form->approval }}</td>
 				<td>{{ $form->approval_hr }}</td>
-				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank">carte attachment</a> @endif
+				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
 				<td>
-				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank">payment attachment</a> @endif
+				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
 				<td>{{ $form->created_at}}</td>
 			</tr>

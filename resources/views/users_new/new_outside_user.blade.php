@@ -3,31 +3,17 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading">Validate & Register</div>
-
+                <div class="panel-heading">Validation of Account</div>
                 <div class="panel-body">
-                    <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('newuser.store') }}">
+                    <div class="alert alert-info col-md-8 col-md-offset-2">
+                        <p class="small text-center"><strong>If you are an existing student of the UNOG Language Training Programme, please enter the email address you are using to receive convocation emails from CLM Language.</strong></p>
+                    </div>
+                    <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('post-new-outside-user') }}">
                         {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('indexno') ? ' has-error' : '' }}">
-                            <label for="indexno" class="col-md-4 control-label">Index # <span class="small text-danger"></span></label>
-
-                            <div class="col-md-6">
-                                <input id="indexno" type="text" class="form-control" name="indexno" value="{{ old('indexno') }}" autofocus>
-
-                                @if ($errors->has('indexno'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('indexno') }}</strong>
-                                    </span>
-                                @endif
-                            <p class="small text-danger"><strong>Please delete trailing zeroes if you have an index number which is less than 8 digits e.g. 00012345 -> 12345</strong></p>
-                            </div>
-                        </div>
-
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">UN Email Address</label>
+                            <label for="email" class="col-md-4 control-label">Email Address</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
@@ -37,7 +23,6 @@
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
-                            <p class="small text-danger"><strong>Please enter the email address you are using to receive convocation emails from CLM Language.</strong></p>
                             </div>
                         </div>
 
