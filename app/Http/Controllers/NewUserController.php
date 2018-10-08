@@ -232,7 +232,7 @@ class NewUserController extends Controller
                 // 'cat' => 'required|',
                 // 'student_cat' => 'required|',
                 'contractfile' => 'required|mimes:pdf,doc,docx|max:20000',
-                'g-recaptcha-response' => 'required|captcha',
+                // 'g-recaptcha-response' => 'required|captcha',
         ));
 
         //Store the attachments to storage path and save in db table
