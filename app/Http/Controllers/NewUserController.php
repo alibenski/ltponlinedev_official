@@ -44,8 +44,8 @@ class NewUserController extends Controller
      */
     public function create()
     {
-        return view('page_not_available');
-        // return view('users_new.new_user');
+        // return view('page_not_available');
+        return view('users_new.new_user');
     }
 
     /**
