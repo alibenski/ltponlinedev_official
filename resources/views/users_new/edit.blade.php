@@ -4,7 +4,7 @@
 	        {{ csrf_field() }}
 	        <div class="form-group">
 	            <label class="control-label">Index #: </label>
-	            <input name="indexno" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('indexno', $new_user_info->indexno) }}">
+	            <input name="indexno" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('indexno', $auto_index) }}">
 	            <p class="small-text text-danger">This field is system generated. The admin needs to verify in Umoja if the person is a UN staff member and change the index no. field accordingly.</p>
 	        </div>
 			
@@ -47,7 +47,8 @@
 
 	        <div class="form-group">
 	            <label class="control-label">DOB: </label>
-	            <input name="dob" class="form-control" readonly value="@if(empty($new_user_info->dob)) n/a @else {{ $new_user_info->dob->format('F d, Y') }} @endif"> 
+	            <input name="dobstring" class="form-control" readonly value="@if(empty($new_user_info->dob)) @else {{ $new_user_info->dob->format('F d, Y') }} @endif"> 
+	            <input name="dob" type="hidden" class="form-control" readonly value="@if(empty($new_user_info->dob)) @else {{ $new_user_info->dob }} @endif"> 
 	        </div>	
 			
 			<div class="form-group">

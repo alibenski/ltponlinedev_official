@@ -118,38 +118,38 @@ class CourseSchedController extends Controller
 
             $this->saveClassRoom($new_record); 
         }
-        dd($new_record);
+        // dd($new_record);
         
         //query newly saved course+schedule entries to produce needed csv extract
-        $get_courses = CourseSchedule::where('Te_Code_New', $request->course_id)
-            ->where('Te_Term', $term_id )->get();
-        $get_courses_first = CourseSchedule::where('Te_Code_New', $request->course_id)
-            ->where('Te_Term', $term_id )->first();
-        $get_course_name = $get_courses_first->course->Description;
+        // $get_courses = CourseSchedule::where('Te_Code_New', $request->course_id)
+        //     ->where('Te_Term', $term_id )->get();
+        // $get_courses_first = CourseSchedule::where('Te_Code_New', $request->course_id)
+        //     ->where('Te_Term', $term_id )->first();
+        // $get_course_name = $get_courses_first->course->Description;
         
-        $days_arr = [];
-        for ($i = 0; $i < count($get_courses); $i++) {
-            $days_arr[] = [$get_courses[$i]->scheduler->begin_day]; 
-            $days_arr[$i] = implode('>', $days_arr[$i]);
-        }
-            $implode_days = implode('>', $days_arr);
-            var_dump($implode_days);
+        // $days_arr = [];
+        // for ($i = 0; $i < count($get_courses); $i++) {
+        //     $days_arr[] = [$get_courses[$i]->scheduler->begin_day]; 
+        //     $days_arr[$i] = implode('>', $days_arr[$i]);
+        // }
+        //     $implode_days = implode('>', $days_arr);
+        //     var_dump($implode_days);
         
-        $times_arr = [];
-        for ($i = 0; $i < count($get_courses); $i++) {
-            $times_arr[] = [$get_courses[$i]->scheduler->time_combination];
-            $times_arr[$i] = implode('>', $times_arr[$i]);
-        }
-            $implode_times = implode('>', $times_arr);
-            var_dump($implode_times);
+        // $times_arr = [];
+        // for ($i = 0; $i < count($get_courses); $i++) {
+        //     $times_arr[] = [$get_courses[$i]->scheduler->time_combination];
+        //     $times_arr[$i] = implode('>', $times_arr[$i]);
+        // }
+        //     $implode_times = implode('>', $times_arr);
+        //     var_dump($implode_times);
 
-        //updateOrCreate method used to update record or insert new record
-            $ingredients_csv = CsvModel::updateOrCreate(
-                ['course' => $get_course_name],
-                ['day' => $implode_days,
-                'time' => $implode_times,
-                ]);
-            $ingredients_csv->save();
+        // //updateOrCreate method used to update record or insert new record
+        //     $ingredients_csv = CsvModel::updateOrCreate(
+        //         ['course' => $get_course_name],
+        //         ['day' => $implode_days,
+        //         'time' => $implode_times,
+        //         ]);
+        //     $ingredients_csv->save();
 
 
         $request->session()->flash('success', 'Course + Schedule saved!'); //laravel 5.4 version

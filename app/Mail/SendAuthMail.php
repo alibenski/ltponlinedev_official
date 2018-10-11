@@ -33,6 +33,6 @@ class SendAuthMail extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject("Information concernant le nouveau système d'inscription en ligne - Information concerning the new online registration system");
+                    ->subject("Information concerning the new online registration system - Information concernant le nouveau système d'inscription en ligne");
     }
 }

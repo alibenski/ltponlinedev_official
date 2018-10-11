@@ -44,8 +44,8 @@ class NewUserController extends Controller
      */
     public function create()
     {
-        // return view('page_not_available');
-        return view('users_new.new_user');
+        return view('page_not_available');
+        // return view('users_new.new_user');
     }
 
     /**
@@ -100,7 +100,8 @@ class NewUserController extends Controller
         // if not in auth table and sddextr table, student fills out new user form
         if (!$query_auth_record && !$query_sddextr_record) {
             $request->session()->flash('warning', 'We do not have your Index and Email in our system. Please fill out the form below which will be reviewed by the Language Secretariat. Once validated, you will receive an email with your login credentials.');
-            return redirect()->route('get-new-new-user');
+            // return redirect()->route('get-new-new-user');
+            return redirect()->route('get-new-outside-user-form');
         }
     }
 
@@ -299,9 +300,8 @@ class NewUserController extends Controller
         if($request->ajax()){     
             $new_user_info = NewUser::find($request->id);
             $org = TORGAN::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
-            
-            // $auto_index = 
-            $data = view('users_new.edit',compact('new_user_info','org'))->render();
+            $auto_index = 'EXT'.$new_user_info->id;
+            $data = view('users_new.edit',compact('new_user_info','org','auto_index'))->render();
             return response()->json(['options'=>$data]);
         }
     }
@@ -315,13 +315,10 @@ class NewUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
         $newUser = NewUser::findOrFail($id);
         $newUser->approved_account = 1;
         $newUser->save();
 
-        // manipulate index number 
-        
         // save entry to Auth table
         $user = User::create([ 
             'indexno_old' => $request->indexno,
@@ -338,8 +335,6 @@ class NewUserController extends Controller
         // send email with credentials
         $sddextr_email_address = $request->email;
         Mail::to($request->email)->send(new SendAuthMail($sddextr_email_address));
-        
-        
         
         // save entry to SDDEXTR table
         $sddextr = SDDEXTR::create([

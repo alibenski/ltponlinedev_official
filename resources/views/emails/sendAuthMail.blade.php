@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                     <p>Hello, </p>
-                                    <p>As announced, CLM has developed a new online registration tool with the objective is to update and make the registration process smoother. All the registration steps will be done online, removing the paperwork and the physical signatures.</p>
+                                    <p>As announced, CLM has developed a new online registration tool with the objective to update and make the registration process smoother. All the registration steps will be done online, removing the paperwork and the physical signatures.</p>
                                     <p>You can already access the platform and check your profile; however, you will only be able to enrol in courses once registration is open.</p>
                                     <p>Your credentials are: 
                                         <ul>

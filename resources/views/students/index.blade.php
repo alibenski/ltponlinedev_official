@@ -100,11 +100,7 @@
                                 <p>
                                     @if(empty ($repos_lang))
                                     None
-                                    @elseif(empty ($repos_lang->courses->EDescription))
-                                    {{ $repos_lang->Te_Code }}
-                                    @else
-                                    {{ $repos_lang->courses->EDescription }}
-                                    @endif
+                                    @elseif(empty($repos_lang->Te_Code)) {{ $repos_lang->coursesOld->Description }} @else {{ $repos_lang->courses->Description}} @endif
                                 </p>
                             </div>
                         </div>

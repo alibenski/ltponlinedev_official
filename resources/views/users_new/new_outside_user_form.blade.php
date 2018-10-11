@@ -41,7 +41,7 @@
                         </div>
                         
                         <div class="form-group{{ $errors->has('contractfile') ? ' has-error' : '' }}">
-                            <label for="contractfile" class="col-md-4 control-label">Copy of Contract <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="contractfile" class="col-md-4 control-label">Copy of Badge ID / Carte de Légitimation <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6">
                             <input name="contractfile" type="file" class="col-md-8 form-control-static" required="required">
                                 @if ($errors->has('contractfile'))
