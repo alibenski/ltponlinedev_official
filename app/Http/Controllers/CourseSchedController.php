@@ -28,6 +28,8 @@ class CourseSchedController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $course_schedule = CourseSchedule::orderBy('Te_Term', 'DESC')->paginate(10);
 
+        
+
         return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms);
     }
 

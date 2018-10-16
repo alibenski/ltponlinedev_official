@@ -193,11 +193,11 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear Manager, </p>
-                                     <p> Staff Member, {{ $staff->name }}, would like to take a placement test for CLM language: <strong>{{ $input_course->languages->name }}</strong> to attend classes <strong>from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
-                                    <p>The placement test will be on @if ($input_course->L == 'F') {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif
+                                     <p> The staff member, {{ $staff->name }}, would like to take a placement test for a language class at CLM in <strong>{{ $input_course->languages->name }}</strong> to attend classes <strong>from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
+                                    <p>The placement test will be @if ($input_course->L == 'F') from {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else on {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif
                                     </p>
 
-                                     <p> Please click on the button below to access the approval page.</p>
+                                     <p> Please click on the button below to access the validation page.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -207,7 +207,7 @@
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
                                                 <a href="{{ route('approval.getplacementformdata', [Crypt::encrypt($input_course->INDEXID), Crypt::encrypt($input_course->L), Crypt::encrypt($input_course->id), Crypt::encrypt($input_course->eform_submit_count), Crypt::encrypt($input_course->Term)]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Decision Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Validation Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -217,8 +217,25 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                     <p> Chère ou cher superviseur, </p>
+                                     <p> Le membre du personnel, {{ $staff->name }}, voudrait présenter un test de placement pour suivre un  cours de langue dispensé par le CFM en  <strong>{{ $input_course->languages->name }}</strong> <strong> du {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} au {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
+                                    <p>Le test de placement aura lieu @if ($input_course->L == 'F') du {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} au {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else le {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif
+                                    </p>
+
+                                     <p> Veuillez cliquer sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Once you submit your decision, you will receive an email confirming your choice. If you would like to change your decision, please contact the Language Training Secretariat via email: clm_language@un.org</p>
+                                    <p style="margin: 0;">Once you submit your decision, you will receive an email confirming your choice. Should you need to change your decision, please contact the Language Training Secretariat via email: clm_language@un.org</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Avertissement </h2>
+                                    <p style="margin: 0;">Une fois la décision validée, vous recevrez un courrier électronique de validation. Si vous changez de décision, veuillez contacter le secrétariat du Programme de formation linguistique par courrier électronique à clm_language@un.org</p>
                                 </td>
                             </tr>
                         </table>

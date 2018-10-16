@@ -229,8 +229,37 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                     <p> Chère ou cher Partenaire de formation, </p>
+                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant : <strong> {{ $input_course->courses->Description }} </strong></p>
+                                     <p> Le membre du personnel a indiqué comme options possibles les horaires suivants :</p>
+                                     <ol>
+                                     @foreach($formItems as $form)   
+                                     <li><strong>{{ $form->schedule->name }}</strong> -  Décision du superviseur :  
+                                        <strong>
+                                        @if( $form->approval == 1)
+                                                approuvé 
+                                        @else
+                                                désapprouvé
+                                        @endif   
+                                        </strong>
+                                     </li>
+                                     @endforeach
+                                     </ol>
+                                     <p>Les choix d’horaires ci-dessus ont été approuvés ou désapprouvés par le ou la superviseur dont l’adresse électronique est : <strong> {{ $mgr_email }}</strong></p>
+                                     <p>Veuillez cliquer sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
                                     <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Avertissement </h2>
+                                    <p style="margin: 0;">Veuillez noter la possibilité que les horaires des cours changent suite à une modification du secrétariat du Programme de formation linguistique.</p>
                                 </td>
                             </tr>
                         </table>

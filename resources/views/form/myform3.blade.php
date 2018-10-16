@@ -206,14 +206,14 @@
                                         <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
                                         <label for="morning" class="form-control-static">morning</label>
                                       </div>
-                                      <div class="input-group col-md-12">
+                                      {{-- <div class="input-group col-md-12">
                                         <input id="lunchtime1" name="timeInput[]" class="with-font" type="checkbox" value="lunchtime1">
                                         <label for="lunchtime1" class="form-control-static">lunchtime1 (tbc)</label>
                                       </div>
                                       <div class="input-group col-md-12">
                                         <input id="lunchtime2" name="timeInput[]" class="with-font" type="checkbox" value="lunchtime2">
                                         <label for="lunchtime2" class="form-control-static">lunchtime2 (tbc)</label>
-                                      </div>
+                                      </div> --}}
                                       <div class="input-group col-md-12">
                                         <input id="afternoon" name="timeInput[]" class="with-font" type="checkbox" value="afternoon">
                                         <label for="afternoon" class="form-control-static">afternoon</label>
@@ -314,7 +314,7 @@
                           <div class="disclaimer alert col-md-8 col-md-offset-2">
                                     <p class="small text-danger"><strong>Required field</strong></p>
                                     <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
-                                    <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular ST/IC/Geneva/2017/6</a> regarding language courses at UNOG.</label>
+                                    <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular</a> regarding language courses at UNOG.</label>
                           </div>
                     </div>
 
@@ -426,7 +426,8 @@
                   var curr_year_end = dend.getFullYear();
                   var dateStringEnd = curr_date_end + " " + m_names[curr_month_end] + " " + curr_year_end;
 
-                  $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
+                  // $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
+                  $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" >').fadeIn();
                   if (val.is_online == 1) {
                     $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label>'+'<br>').fadeIn();
                   } else {
@@ -441,7 +442,7 @@
 
               // insert message of convocation email
               $('input[name="placementLang"]').on('click', function() {
-                $("textarea[name='course_preference_comment']").attr('required', 'required');
+                // $("textarea[name='course_preference_comment']").attr('required', 'required');
                 $('.insert-msg').hide();
                 $('.insert-msg').addClass('col-md-6 col-md-offset-3');     
                 $('.insert-msg').html("<div class='alert alert-info'>You will receive further information from the Language Secretariat regarding the placement test.</div>").fadeIn();
@@ -523,6 +524,20 @@
                   $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
                   $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
                   console.log($("select[name='course_id']").val());
+                  // get schedule of selected language level 1 
+                  var course_id = $("select[name='course_id']").val();
+                  var term = $("input[name='term_id']").val();
+                  var token = $("input[name='_token']").val();
+                  console.log("course: "+course_id)
+                  $.ajax({
+                      url: "{{ route('select-ajax2') }}", 
+                      method: 'POST',
+                      data: {course_id:course_id, _token:token, term_id:term },
+                      success: function(data) {
+                        $("select[name='schedule_id[]']").html('');
+                        $("select[name='schedule_id[]']").html(data.options);
+                      }
+                  });
                 }
             });
 
@@ -530,18 +545,6 @@
       $(".placement-beginner-msg").removeAttr('style');
       $(".regular-enrol").removeAttr('style'); // show div with select dropdown
       $(".submission-part").removeAttr('style');
-      var course_id = $("select[name='course_id']").val();
-      var token = $("input[name='_token']").val();
-
-      $.ajax({
-          url: "{{ route('select-ajax2') }}", 
-          method: 'POST',
-          data: {course_id:course_id, _token:token},
-          success: function(data) {
-            $("select[name='schedule_id[]']").html('');
-            $("select[name='schedule_id[]']").html(data.options);
-          }
-      });
 
   });
   // when student clicks NO I am not a beginner

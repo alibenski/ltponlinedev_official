@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear Manager, </p>
-                                     <p> Staff Member, {{ $staff->name }}, would like to enrol to CLM language course: {{ $input_course->courses->Description }}</p>
+                                     <p> The staff member, {{ $staff->name }}, would like to enrol in the following CLM language course: {{ $input_course->courses->Description }}</p>
                                      <p> The staff member chose the following options for class schedule(s):</p>
                                      <ol>
                                      @foreach($input_schedules as $schedules)   
@@ -201,7 +201,7 @@
                                      @endforeach
                                      </ol>
 
-                                     <p> Please click on the button below to access the decision page.</p>
+                                     <p>Please click on the button below to validate or invalidate the chosen class schedules.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -221,8 +221,29 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                     <p> Chère ou cher superviseur, </p>
+                                     <p> Le membre du personnel, {{ $staff->name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant {{ $input_course->courses->Description }}</p>
+                                     <p> Le fonctionnaire a indiqué comme options possibles les horaires suivants :</p>
+                                     <ol>
+                                     @foreach($input_schedules as $schedules)   
+                                     <li>{{ $schedules->schedule->name }}</li>
+                                     @endforeach
+                                     </ol>
+
+                                     <p>Veuillez s’il vous plaît cliquer sur le bouton ci-dessus  pour valider ou infirmer les horaires d’inscription.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
+                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further modification made by the secretariat of the Language Training Programme.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Avertissement</h2>
+                                    <p style="margin: 0;">Veuillez noter la possibilité que les les horaires des cours changent suite à une modification du secrétariat du Programme de formation linguistique.</p>
                                 </td>
                             </tr>
                         </table>

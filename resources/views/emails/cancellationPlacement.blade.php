@@ -197,6 +197,14 @@
                                      <p> Thank you very much for your kind attention.</p>
                                 </td>
                             </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                     <p> Chère ou cher superviseur ou Partenaire de formation, </p>
+                                     <p> Vous recevez ce message pour vous informer que le membre du personnel, <strong>{{ $staff_member_name }}</strong>, a <strong>annulé</strong> sa demande de test de placement pour un cours dans la langue suivante : <strong>{{ $display_language->languages->name }}</strong></p>
+                                     <p> Bien cordialement.</p>
+                                </td>
+                            </tr>
                             <!-- <tr>
                                 <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <!-- Button : BEGIN

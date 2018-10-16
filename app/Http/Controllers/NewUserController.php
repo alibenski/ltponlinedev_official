@@ -44,8 +44,8 @@ class NewUserController extends Controller
      */
     public function create()
     {
-        return view('page_not_available');
-        // return view('users_new.new_user');
+        // return view('page_not_available');
+        return view('users_new.new_user');
     }
 
     /**
@@ -158,8 +158,8 @@ class NewUserController extends Controller
 
     public function getNewOutsideUser()
     {
-        return view('page_not_available');
-        // return view('users_new.new_outside_user');
+        // return view('page_not_available');
+        return view('users_new.new_outside_user');
     }
 
     public function postNewOutsideUser(Request $request)

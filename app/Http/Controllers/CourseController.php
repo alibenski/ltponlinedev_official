@@ -88,7 +88,7 @@ class CourseController extends Controller
     {
         // validate the data
         $this->validate($request, array(
-                'name' => 'required|max:255',
+                //'name' => 'required|max:255',
             ));
 
         // store in database

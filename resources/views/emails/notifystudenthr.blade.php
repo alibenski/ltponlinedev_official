@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. </p>
+                                     <p> Your enrolment in the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. </p>
 
                                         <div class="row">
                                           <div class="col-md-12">
@@ -241,8 +241,64 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
-                                      <p>Please be reminded that <strong style="color: red;">this is not a convocation email.</strong> Your enrolment form will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
+                                      <p>Please be reminded that <strong style="color: red;">this is not a convocation email.</strong> Your enrolment will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
                                       <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                     <p> Dear {{ $staff_name }}, </p>
+                                     <p> Votre inscription au cours de langue du CFM, <strong>{{ $input_course->courses->Description }}</strong>, a été décidée. </p>
+
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <table class="table">
+                                              <thead>
+                                                <th>Calendrier du ou des cours choisi(s)</th>
+                                              </thead>
+
+                                              <tbody>
+                                                @foreach($formItems as $array)                         
+                                                  <tr>
+                                                    <td>
+                                                      @if(empty($array))
+                                                      null
+                                                      @else
+                                                      <strong>{{ $array->schedule->name }}</strong> - Décision du superviseur :
+                                                        <strong>
+                                                          @if($array->approval)
+                                                          approuvé
+                                                          @else
+                                                          désapprouvé
+                                                          @endif
+                                                        </strong>
+                                                       @endif
+                                                    </td>
+                                                  </tr>
+                                                @endforeach
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+
+                                     <p> <strong>Les ressources humaines ou le bureau du développement du personnel de votre organisation </strong> ont <strong>  
+                                        @if( $input_course->approval_hr == 1)
+                                                approuvé 
+                                        @else
+                                                désapprouvé
+                                        @endif
+                                      </strong> votre inscription.</p>
+                                      <p><strong>Commentaires/Raisons :</strong>
+                                        <br>                                      
+                                        @if( empty($request->hr_comment))
+                                            Aucun
+                                        @else 
+                                            {{$request->hr_comment}}
+                                        @endif
+                                      </p>
+                                      <p>Veuillez noter que <strong style="color: red;">ceci n’est pas un email de convocation.</strong> Votre inscription sera maintenant traitée par le secrétariat du Programme de formation linguistique et vous recevrez ensuite de plus amples informations quant à votre inscription.</p>
+                                      <p><strong>NOTE: </strong>Pour toute question quant à la décision ci-dessus, veuillez contacter directement les ressources humaines ou le bureau du développement du personnelde votre organisation.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -263,7 +319,13 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
+                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further modification made by the secretariat of the Language Training Programme.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Avertissement </h2>
+                                    <p style="margin: 0;">Veuillez noter la possibilité que les horaires des cours changent suite à une modification du secrétariat du Programme de formation linguistique.</p>
                                 </td>
                             </tr>
                         </table>

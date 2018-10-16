@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been processed by your <strong>manager (with email address: {{ $input_course->mgr_email }}) </strong>as seen below.</p>
+                                     <p> Your enrolment to the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been processed by your <strong>manager (with the following email address: {{ $input_course->mgr_email }}) </strong>as seen below.</p>
 
                                         <p><strong>Your chosen schedule(s):</strong></p>
                                             @foreach($formItems as $value)
@@ -218,8 +218,41 @@
                                             {{$mgr_comment}}
                                         @endif
                                       </p>
-                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and <em>at least one of your chosen schedules has been approved</em> by your manager, your enrolment form has now been sent to your organization's HR/Staff Development Office for approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
-                                      <p>If approved, your enrolment form will be processed by the Language Training Secretariat, and you will receive further information about your registration.</strong></p>
+                                      <p><strong>NOTE:</strong> If you are a non-UNOG staff member and at least one of your chosen schedules has been approved by your manager, your enrolment form has now been sent to your organization's HR/Staff Development Office for approval. You will receive another email which will include the decision of your HR/Staff Development Office.</p>
+                                      <p>If approved, your enrolment will be processed by the Language Training Secretariat, and you will receive further information about your registration.</strong></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                     <p> Cher/Chère {{ $staff_name }}, </p>
+                                     <p> Votre inscription au cours de langue du CFM, <strong>{{ $input_course->courses->Description }}</strong>, a été traitée par la ou le <strong>manager superviseur dont l’adresse mail est la suivante :  {{ $input_course->mgr_email }} </strong>.</p>
+
+                                        <p><strong>Vos choix d’horaire :</strong></p>
+                                            @foreach($formItems as $value)
+                                        <p>
+                                                {{ $value->schedule->name }} - Décision du superviseur : 
+                                                    <strong>
+                                                    @if( $value->approval == 1)
+                                                            approuvé 
+                                                    @else
+                                                            désapprouvé
+                                                    @endif   
+                                                    </strong>
+                                        </p>
+                                            @endforeach
+
+
+                                      <p><strong>Commentaire/Raison :</strong>
+                                        <br>
+                                        @if( empty($mgr_comment))
+                                            Aucun
+                                        @else 
+                                            {{$mgr_comment}}
+                                        @endif
+                                      </p>
+                                      <p><strong>NOTE:</strong> Si vous n’êtes pas un membre de l’ONUG et qu’au moins un de vos horaires a été approuvé par le superviseur, votre formulaire d’inscription a déjà été envoyé aux Ressources humaines ou au bureau du développement du personnel de votre organisation Vous allez recevoir un autre mail qui contiendra la décision finale.</p>
+                                      <p>Si approuvé, votre inscription sera traitée par le secrétariat du Programme de formation linguistique  et vous recevrez un email avec toute l’information nécessaire afin de continuer l’inscription.</strong></p>
                                 </td>
                             </tr>
                             <tr>
@@ -240,7 +273,13 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
+                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further modification made by the secretariat of the Language Training Programme.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Avertissement </h2>
+                                    <p style="margin: 0;">Veuillez noter la possibilité que les les horaires des cours changent suite à une modification du secrétariat du Programme de formation linguistique.</p>
                                 </td>
                             </tr>
                         </table>
