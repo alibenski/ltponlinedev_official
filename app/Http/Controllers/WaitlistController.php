@@ -36,20 +36,133 @@ class WaitlistController extends Controller
 {
     public function testQuery()
     {
-        $encryptedValue = Crypt::encrypt('L16008/');
-        $encryptedValue2 = Crypt::encrypt('C7R1/');
-        $encryptedValue3 = Crypt::encrypt('207/');
-        $encryptedValue4 = Crypt::encrypt('1/');
-        $encryptedValue5 = Crypt::encrypt('191');
-        echo $encryptedValue;
-        echo $encryptedValue2;
-        echo $encryptedValue3;
-        echo $encryptedValue4;
-        echo $encryptedValue5;
-        $decrypted = Crypt::decrypt($encryptedValue);
+        $arrRecipient = [];
+        $enrolments_no_mgr_approval = Preenrolment::where('INDEXID', 'L21923')->where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
         
-        return ;
+        // if ($enrolments_no_mgr_approval->isEmpty()) {
+        //     Log::info("No email addresses to pick up. No Emails sent.");
+        //     echo $enrolment_term;
+        //     echo  $enrolments_no_mgr_approval;
+        //     // return exit();
+        // }
+        foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
+        { 
+            // if submission date < (Enrol_Date_End minus x days) then send reminder emails after x days of submission
+            // if ($valueMgrEmails->created_at < Carbon::parse($enrolment_term_object->Enrol_Date_End)->subDays($remind_mgr_param)) {
+                // if ($now_date >= Carbon::parse($valueMgrEmails->created_at)->addDays($remind_mgr_param)) {
+                
+                    $arrRecipient[] = $valueMgrEmails->mgr_email; 
+                    $recipient = $valueMgrEmails->mgr_email;
+
+                    $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+                    $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $valueMgrEmails->INDEXID)->where('Term', '191')->first();
+                    $input_schedules = Preenrolment::orderBy('Term', 'desc')
+                                        ->where('INDEXID', $valueMgrEmails->INDEXID)
+                                        ->where('Term', '191')
+                                        ->where('Te_Code', $valueMgrEmails->Te_Code)
+                                        ->where('form_counter', $valueMgrEmails->form_counter)
+                                        ->get();
+                    // Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
+                    
+                    echo 'email sent to: '.$recipient;
+                    echo '<br>';
+                    echo '<br>';
+                // }
+            // }
+        } // end of foreach loop
+        dd($enrolments_no_mgr_approval);
     }
+    // {
+        // $arrDept = [];
+        // $arrHrEmails = [];
+        // $arr=[];
+        // $enrolments_no_hr_approval = PlacementForm::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get();
+
+        // foreach ($enrolments_no_hr_approval as $valueDept) {
+        //     // if ($valueDept->UpdatedOn < Carbon::parse($enrolment_term_object->Enrol_Date_End)->subDays($remind_hr_param)) {
+        //         // if ($now_date >= Carbon::parse($valueDept->UpdatedOn)->addDays($remind_hr_param)) {
+        //             $arrDept[] = $valueDept->DEPT;
+        //             $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
+        //             $learning_partner = $torgan->has_learning_partner;
+
+        //             if ($learning_partner == '1') {
+        //                 $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
+        //                 $fp_email = $query_hr_email->map(function ($val, $key) {
+        //                     return $val->email;
+        //                 });
+        //                 $fp_email_arr = $fp_email->toArray();
+        //                 $arrHrEmails[] = $fp_email_arr;
+
+        //                 $formItems = PlacementForm::orderBy('Term', 'desc')
+        //                                 ->where('INDEXID', $valueDept->INDEXID)
+        //                                 ->where('Term', '191')
+        //                                 ->where('L', $valueDept->L)
+        //                                 ->where('eform_submit_count', $valueDept->eform_submit_count)
+        //                                 ->get();
+        //                 $formfirst = PlacementForm::orderBy('Term', 'desc')
+        //                                 ->where('INDEXID', $valueDept->INDEXID)
+        //                                 ->where('Term', '191')
+        //                                 ->where('L', $valueDept->L)
+        //                                 ->where('eform_submit_count', $valueDept->eform_submit_count)
+        //                                 ->first();   
+        //                 // $staff_name = $formfirst->users->name;
+        //                 $staff_name = $formfirst->users->name;
+        //                 $arr[] = $staff_name;
+        //                 $mgr_email = $formfirst->mgr_email;    
+        //                 $input_course = $formfirst; 
+        //                 // Mail::to($fp_email_arr);
+        //                 Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+        //             }
+        //         // }
+        //     // }          
+        // } // end of foreach loop
+        // dd($enrolments_no_hr_approval);
+    // }
+    // {
+        
+    //     $arrDept = [];
+    //     $arrHrEmails = [];
+    //     $enrolments_no_hr_approval = Preenrolment::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT', 'UpdatedOn')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT','UpdatedOn')->get();
+
+    //     foreach ($enrolments_no_hr_approval as $valueDept) {
+    //         // if ($valueDept->UpdatedOn < Carbon::parse($enrolment_term_object->Enrol_Date_End)->subDays($remind_hr_param)) {
+    //             // if ($now_date >= Carbon::parse($valueDept->UpdatedOn)->addDays($remind_hr_param)) {
+                    
+    //                 $arrDept[] = $valueDept->DEPT;
+    //                 $torgan = Torgan::where('Org name', $valueDept->DEPT)->first();
+    //                 $learning_partner = $torgan->has_learning_partner;
+
+    //                 if ($learning_partner == '1') {
+    //                     $query_hr_email = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']); 
+    //                     $fp_email = $query_hr_email->map(function ($val, $key) {
+    //                         return $val->email;
+    //                     });
+    //                     $fp_email_arr = $fp_email->toArray();
+    //                     $arrHrEmails[] = $fp_email_arr;
+
+    //                     $formItems = Preenrolment::orderBy('Term', 'desc')
+    //                                     ->where('INDEXID', $valueDept->INDEXID)
+    //                                     ->where('Term', '191')
+    //                                     ->where('Te_Code', $valueDept->Te_Code)
+    //                                     ->where('form_counter', $valueDept->form_counter)
+    //                                     ->get();
+    //                     $formfirst = Preenrolment::orderBy('Term', 'desc')
+    //                                     ->where('INDEXID', $valueDept->INDEXID)
+    //                                     ->where('Term', '191')
+    //                                     ->where('Te_Code', $valueDept->Te_Code)
+    //                                     ->where('form_counter', $valueDept->form_counter)
+    //                                     ->first();   
+    //                     $staff_name = $formfirst->users->name;
+    //                     $mgr_email = $formfirst->mgr_email;    
+    //                     $input_course = $formfirst; 
+    //                     // Mail::to($fp_email_arr);
+    //                     Mail::to($fp_email_arr)->send(new SendReminderEmailHR($formItems, $input_course, $staff_name, $mgr_email));
+    //                 }
+    //             // }
+    //         // }
+    //     }
+    //     dd($enrolments_no_hr_approval);
+    // }
     // {
     //     $never_logged = User::where('must_change_password', 1)->get();
     //     $input = ([ 

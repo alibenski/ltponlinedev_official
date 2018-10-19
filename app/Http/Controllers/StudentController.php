@@ -111,7 +111,7 @@ class StudentController extends Controller
                 // 'lastName' => 'required|string',
                 // 'firstName' => 'required|string',
                 // validate if email is unique 
-                'email' => 'required_without_all:title,lastName,firstName,org,contactNo,jobAppointment,gradeLevel,organization|unique:users,email',
+                'email' => 'required_without_all:TITLE,lastName,firstName,org,contactNo,jobAppointment,gradeLevel,organization|unique:users,email',
                 // 'org' => 'required|',
                 'contactNo' => 'regex:/^[0-9\-+]+$/|nullable',
                 // 'jobAppointment' => 'required|string',
@@ -134,6 +134,9 @@ class StudentController extends Controller
 
     public function updateNoEmail($student, $request)
     {
+            if (!is_null($request->input('TITLE'))) {
+                $student->sddextr->TITLE = $request->input('TITLE');
+            }
             if (!is_null($request->input('firstName'))) {
                 $student->sddextr->FIRSTNAME = $request->input('firstName');
             }

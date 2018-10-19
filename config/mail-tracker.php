@@ -9,7 +9,7 @@ return [
     /**
      * To disable injecting tracking links, set this to false.
      */
-    'track-links'=>true,
+    'track-links'=>false,
 
     /**
      * Optionally expire old emails, set to 0 to keep forever.

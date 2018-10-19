@@ -42,11 +42,11 @@
                         {{ csrf_field() }}
 
                         <div class="form-group">
-                            <label for="title" class="col-md-2 control-label">Title:</label>
+                            <label for="TITLE" class="col-md-2 control-label">Title:</label>
 
                             <div class="col-md-2 inputGroupContainer">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-venus-mars"></i></span><input  name="title" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->TITLE }} @endif" class="form-control"  type="text">
+                                    <span class="input-group-addon"><i class="fa fa-venus-mars"></i></span><input  name="TITLE" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->TITLE }} @endif" class="form-control"  type="text">
                                 </div>
                             </div>
                         </div>

@@ -32,7 +32,7 @@
               <div class="col-md-10 col-md-offset-1"> 
                 <div class="left-text col-md-8">
                   <h4><em>Thank You</em><br>Your request has been sent to your manager</h4>
-                  <p>Once your manager has given the decision, you will receive email notifications to let you know about the status of your request and other information.</p>
+                  <p>Once your manager has made the decision, you will receive email notifications to let you know about the status of your request and other information.</p>
 	                <div>
 	                	<a href="/home" class="btn btn-success">Back to Home Page</a>
 	                </div>
