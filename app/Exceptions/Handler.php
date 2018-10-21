@@ -75,6 +75,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException) {
+            
+            return abort(405, 'File(s) too large. Please go back and upload accordingly');
+        }
+        
+
         if ($exception instanceof TokenMismatchException) {
             $request->session()->flash('expired', 'Enrolment form session has expired. Please log in and try again.');
             return redirect()

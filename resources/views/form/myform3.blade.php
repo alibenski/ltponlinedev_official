@@ -103,7 +103,7 @@
                     <div class="form-group">
                         <div class="alert alert-default alert-block">
                           <div class="small text-danger col-md-offset-3">
-                            <strong>Note: accepts pdf, doc, and docx files only</strong>
+                            <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
                           </div>
                         
                           <div class="form-group">

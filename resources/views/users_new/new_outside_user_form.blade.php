@@ -43,12 +43,13 @@
                         <div class="form-group{{ $errors->has('contractfile') ? ' has-error' : '' }}">
                             <label for="contractfile" class="col-md-4 control-label">Copy of Badge ID / Carte de Légitimation <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6">
-                            <input name="contractfile" type="file" class="col-md-8 form-control-static" required="required">
+                            <input name="contractfile" type="file" class="col-md-12 form-control-static" required="required">
                                 @if ($errors->has('contractfile'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('contractfile') }}</strong>
                                     </span>
                                 @endif
+                                <p class="small text-danger"><strong>File size must less than 8MB</strong></p>
                             </div>
                         </div>
 
@@ -305,7 +306,7 @@
         todayBtn:  1,
         autoclose: 1,
         todayHighlight: 1,
-        startView: 2,
+        startView: 4,
         forceParse: 0,
         showMeridian: 1,
         minView: 2

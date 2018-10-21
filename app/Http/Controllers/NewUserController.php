@@ -232,8 +232,8 @@ class NewUserController extends Controller
                 'contact_num' => 'required|max:255',
                 // 'cat' => 'required|',
                 // 'student_cat' => 'required|',
-                'contractfile' => 'required|mimes:pdf,doc,docx|max:20000',
-                // 'g-recaptcha-response' => 'required|captcha',
+                'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
+                'g-recaptcha-response' => 'required|captcha',
         ));
 
         //Store the attachments to storage path and save in db table

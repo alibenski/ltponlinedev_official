@@ -176,8 +176,8 @@ class SelfPayController extends Controller
         }
                     // 1st part of validate other input fields 
                         $this->validate($request, array(
-                            'identityfile' => 'required|mimes:pdf,doc,docx|max:20000',
-                            'payfile' => 'required|mimes:pdf,doc,docx|max:20000',
+                            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+                            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
                         )); 
         // control the number of submitted enrolment forms
         $qryEformCount = Preenrolment::withTrashed()
