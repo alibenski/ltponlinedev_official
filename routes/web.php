@@ -12,6 +12,8 @@
 */
 // test route for test queries
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
+Route::get('send-auth-email', 'WaitlistController@sendAuthEmailIndividual')->name('send-auth-email');
+
 
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
     //admin routes

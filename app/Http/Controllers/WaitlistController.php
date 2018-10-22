@@ -12,6 +12,7 @@ use App\Mail\SendMailable;
 use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailHR;
 use App\Mail\SendReminderEmailPlacementHR;
+use App\Mail\SendAuthMail;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -34,10 +35,20 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function sendAuthEmailIndividual()
+    {
+        $sddextr_email_address = 'mballa@unhcr.org';
+        // send credential email to user using email from sddextr 
+        Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
+
+        dd($sddextr_email_address);
+    }
+
     public function testQuery()
     {
+        // method to re-send emails to manager for un-approved forms
         $arrRecipient = [];
-        $enrolments_no_mgr_approval = Preenrolment::where('INDEXID', 'L21923')->where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
+        $enrolments_no_mgr_approval = Preenrolment::where('INDEXID', 'L22509')->where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
         
         // if ($enrolments_no_mgr_approval->isEmpty()) {
         //     Log::info("No email addresses to pick up. No Emails sent.");

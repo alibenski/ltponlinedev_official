@@ -3,6 +3,14 @@
 		<form method="POST" action="{{ route('newuser.update', $new_user_info->id) }}">
 	        {{ csrf_field() }}
 	        <div class="form-group">
+	            <label class="control-label text-danger">Possible duplicates (Please review before approving): {{ count($possible_dupes) }}</label>
+		        @foreach($possible_dupes as $dupe)
+		        <ul>
+					<li>{{ $dupe->name }} : {{ $dupe->email }}</li>
+		        </ul>
+		        @endforeach
+	        </div>
+	        <div class="form-group">
 	            <label class="control-label">Index #: </label>
 	            <input name="indexno" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('indexno', $auto_index) }}">
 	            <p class="small-text text-danger">This field is system generated. The admin needs to verify in Umoja if the person is a UN staff member and change the index no. field accordingly.</p>

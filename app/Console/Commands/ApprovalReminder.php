@@ -54,8 +54,8 @@ class ApprovalReminder extends Command
                         ->get()->min();
             if ($enrolment_term) {
                 // execute method function to send reminder emails found in the controller from construct()
-                // $this->email->sendReminderEmails(); 
-                // $this->placement_email->sendReminderEmailsPlacement(); 
+                $this->email->sendReminderEmails(); 
+                $this->placement_email->sendReminderEmailsPlacement(); 
             }
     }
 }

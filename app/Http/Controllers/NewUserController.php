@@ -127,6 +127,7 @@ class NewUserController extends Controller
                 'contact_num' => 'required|max:255',
                 // 'cat' => 'required|',
                 // 'student_cat' => 'required|',
+                'dob' => 'required',
                 'g-recaptcha-response' => 'required|captcha',
         ));
 
@@ -232,6 +233,7 @@ class NewUserController extends Controller
                 'contact_num' => 'required|max:255',
                 // 'cat' => 'required|',
                 // 'student_cat' => 'required|',
+                'dob' => 'required',
                 'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
                 'g-recaptcha-response' => 'required|captcha',
         ));
@@ -301,7 +303,11 @@ class NewUserController extends Controller
             $new_user_info = NewUser::find($request->id);
             $org = TORGAN::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
             $auto_index = 'EXT'.$new_user_info->id;
-            $data = view('users_new.edit',compact('new_user_info','org','auto_index'))->render();
+            $possible_dupes = User::where('name', 'LIKE', '%' . $new_user_info->nameLast . '%')
+                ->orWhere('name', 'LIKE', '%' . $new_user_info->nameFirst . '%')
+                ->orWhere('name', 'LIKE', '%' . $new_user_info->email . '%')
+                ->get();
+            $data = view('users_new.edit',compact('new_user_info','org','auto_index','possible_dupes'))->render();
             return response()->json(['options'=>$data]);
         }
     }
@@ -315,6 +321,16 @@ class NewUserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // check if there is a duplicate in Auth users table
+        $this->validate($request, array(
+                // validate if email is unique 
+                'email' => 'unique:users,email',
+            )); 
+        $this->validate($request, array(
+                // validate if email is unique 
+                'email' => 'unique:SDDEXTR,EMAIL',
+            )); 
+
         $newUser = NewUser::findOrFail($id);
         $newUser->approved_account = 1;
         $newUser->save();

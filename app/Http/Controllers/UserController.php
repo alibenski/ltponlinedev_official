@@ -21,6 +21,7 @@ use Session;
 
 //Enables BCrypt for password encyption
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -81,6 +82,7 @@ class UserController extends Controller
 
         $user = User::create([ 
             'indexno' => $request->indexno,
+            'indexno_old' => $request->indexno,
             'email' => $request->email, 
             'nameFirst' => $request->nameFirst,
             'nameLast' => $request->nameLast,
@@ -89,6 +91,11 @@ class UserController extends Controller
             'must_change_password' => 1,
             'approved_account' => 1,
         ]); 
+        
+        //Send Auth credentials to student via email
+        $sddextr_email_address = $request->email;
+        // send credential email to user using email from sddextr 
+        // Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
 
         $user->sddextr()->create([
             'INDEXNO' => $request->indexno,
@@ -103,15 +110,16 @@ class UserController extends Controller
         ]);
 
         $roles = $request['roles']; //Retrieving the roles field
-    //Checking if a role was selected
+        //Checking if a role was selected
         if (isset($roles)) {
 
             foreach ($roles as $role) {
             $role_r = Role::where('id', '=', $role)->firstOrFail();            
             $user->assignRole($role_r); //Assigning role to user
             }
-        }        
-    //Redirect to the users.index view and display message
+        }
+
+        //Redirect to the users.index view and display message
         return redirect()->route('users.index')
             ->with('flash_message',
              'User successfully added.');
