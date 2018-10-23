@@ -48,7 +48,7 @@ class WaitlistController extends Controller
     {
         // method to re-send emails to manager for un-approved forms
         $arrRecipient = [];
-        $enrolments_no_mgr_approval = Preenrolment::where('INDEXID', 'L22509')->where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
+        $enrolments_no_mgr_approval = Preenrolment::where('INDEXID', '527299')->where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
         
         // if ($enrolments_no_mgr_approval->isEmpty()) {
         //     Log::info("No email addresses to pick up. No Emails sent.");
@@ -73,7 +73,7 @@ class WaitlistController extends Controller
                                         ->where('Te_Code', $valueMgrEmails->Te_Code)
                                         ->where('form_counter', $valueMgrEmails->form_counter)
                                         ->get();
-                    // Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
+                    Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
                     
                     echo 'email sent to: '.$recipient;
                     echo '<br>';
@@ -87,7 +87,7 @@ class WaitlistController extends Controller
         // $arrDept = [];
         // $arrHrEmails = [];
         // $arr=[];
-        // $enrolments_no_hr_approval = PlacementForm::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get();
+        // $enrolments_no_hr_approval = PlacementForm::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->get();
 
         // foreach ($enrolments_no_hr_approval as $valueDept) {
         //     // if ($valueDept->UpdatedOn < Carbon::parse($enrolment_term_object->Enrol_Date_End)->subDays($remind_hr_param)) {
@@ -133,7 +133,7 @@ class WaitlistController extends Controller
         
     //     $arrDept = [];
     //     $arrHrEmails = [];
-    //     $enrolments_no_hr_approval = Preenrolment::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT', 'UpdatedOn')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT','UpdatedOn')->get();
+    //     $enrolments_no_hr_approval = Preenrolment::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT', 'UpdatedOn')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'DEPT','UpdatedOn')->get();
 
     //     foreach ($enrolments_no_hr_approval as $valueDept) {
     //         // if ($valueDept->UpdatedOn < Carbon::parse($enrolment_term_object->Enrol_Date_End)->subDays($remind_hr_param)) {
@@ -202,7 +202,7 @@ class WaitlistController extends Controller
     //     }
     //     $arrDept = [];
     //     $arrHrEmails = [];
-    //     $enrolments_no_hr_approval = PlacementForm::where('Term', '188')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->get()->take(1);
+    //     $enrolments_no_hr_approval = PlacementForm::where('Term', '188')->whereNull('is_self_pay_form')->whereNull('approval_hr')->where('approval', '1')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->get()->take(1);
 
     //     foreach ($enrolments_no_hr_approval as $valueDept) {
                 

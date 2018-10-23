@@ -46,11 +46,45 @@ class SelfPayController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $selfpayforms = Preenrolment::select( 'INDEXID','Term','L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('INDEXID','Term','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')->orderBy('created_at', 'asc')->get();
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        return view('selfpayforms.index')->withSelfpayforms($selfpayforms);
+
+
+        if (is_null($request->Term)) {
+            $selfpayforms = null;
+            return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+
+        $selfpayforms = Preenrolment::select( 'INDEXID','Term','L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('INDEXID','Term','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+        // ->orderBy('created_at', 'asc')->get();
+        // $selfpayforms = new Preenrolment;
+        // $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT', 'Term',
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $selfpayforms = $selfpayforms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+            if (\Request::has('sort')) {
+                $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            }
+
+        $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
+        return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
 

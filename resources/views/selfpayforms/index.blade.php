@@ -1,12 +1,80 @@
 @extends('admin.admin')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
+<h2>Payment-based Enrolment Forms</h2>
+<div class="row col-sm-12">
+    @if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
+    <form method="GET" action="{{ route('selfpayform.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
+        
+        <div class="form-group input-group col-sm-12">
+            <h4><strong>Filters:</strong></h4>
+
+            <div class="form-group">
+              <label for="Term" class="col-md-12 control-label">Term Select:</label>
+              <div class="form-group col-sm-12">
+                <div class="dropdown">
+                  <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+                    @foreach($terms as $value)
+                        <option></option>
+                        <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+                @foreach ($languages as $id => $name)
+                <div class="col-sm-4">
+                    <div class="input-group"> 
+                      <span class="input-group-addon">       
+                        <input type="radio" name="L" value="{{ $id }}" >                 
+                      </span>
+                        <label type="text" class="form-control">{{ $name }}</label>
+                    </div>
+                </div>
+                @endforeach 
+            </div>
+            
+            <div class="form-group">           
+              <label for="organization" class="col-md-12 control-label"> Organization:</label>
+              <div class="form-group col-sm-12">
+                <div class="dropdown">
+                  <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
+                    @if(!empty($org))
+                      @foreach($org as $value)
+                        <option></option>
+                        <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+                      @endforeach
+                    @endif
+                  </select>
+                </div>
+              </div>
+            </div>
+
+        </div> {{-- end filter div --}}
+
+
+        <div class="form-group">           
+            <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
+            <a href="/admin/selfpayform/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+
+        <div class="form-group">    
+            <div class="input-group-btn">
+                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Request::input('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+            </div>
+        </div>
+    </form>
+</div>
 @if(is_null($selfpayforms))
 
 @else
-{{-- {{ $selfpayforms->links() }} --}}
+{{ $selfpayforms->links() }}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
@@ -28,6 +96,7 @@
 			<tr>
 				<td>
 					<button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
+                </td>
 				<td>
 				@if(empty($form->selfpay_approval)) None @else {{ $form->selfpay_approval }} @endif	
 				</td>
@@ -56,24 +125,6 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="id">ID:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="id_show" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="title">Title:</label>
-                        <div class="col-sm-10">
-                            <input type="name" class="form-control" id="title_show" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="content">Content:</label>
-                        <div class="col-sm-10">
-                            <textarea style="display: none;" class="form-control" id="content_show" cols="40" rows="5" disabled></textarea>
-                        </div>
-                    </div>
                     <div class="form-group class-list"></div>
                 </form>
                 <div class="modal-footer">
@@ -90,6 +141,14 @@
 @stop
 
 @section('java_script')
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select2-basic-single').select2({
+    placeholder: "Select Filter",
+    });
+});
+</script>
 <script>
 // Show a post
 $(document).on('click', '.show-modal', function() {

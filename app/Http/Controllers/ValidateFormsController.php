@@ -45,16 +45,16 @@ class ValidateFormsController extends Controller
     {
 
         // sort enrolment forms by date of submission
-        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
         
-        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
         // apply unique() method to remove dupes 
         // apply values() method to reset key series of the array 
         $approved_1 = $approved_0_1->unique('INDEXID')->values()->all(); // becomes an array
 
-        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
         
-        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
         $approved_2 = $approved_0_2->unique('INDEXID')->values()->all();
 
         $approved_0_3_collect = Preenrolment::whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
@@ -230,8 +230,8 @@ class ValidateFormsController extends Controller
 
     public function getApprovedPlacementForms(Request $request)
     {
-        $approved_1 = PlacementForm::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('approval','1')->get();
-        $approved_2 = PlacementForm::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS'])->where('approval','1')->where('approval_hr', '1')->get();
+        $approved_1 = PlacementForm::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('approval','1')->get();
+        $approved_2 = PlacementForm::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('approval','1')->where('approval_hr', '1')->get();
         $approved_3 = PlacementForm::select('INDEXID')->whereNotNull('is_self_pay_form')->get();
         
         $placement_forms = $approved_1->merge($approved_2)->merge($approved_3);
