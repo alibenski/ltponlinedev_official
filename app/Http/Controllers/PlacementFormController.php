@@ -57,7 +57,7 @@ class PlacementFormController extends Controller
     {
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year; 
-        $enrolment_term = Term::whereYear('Term_End', $now_year)
+        $enrolment_term = Term::whereYear('Enrol_Date_Begin', $now_year)
                         ->orderBy('Term_Code', 'desc')
                         ->where('Approval_Date_Limit_HR', '>=', $now_date)
                         ->value('Term_Code');

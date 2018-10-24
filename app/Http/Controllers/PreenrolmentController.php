@@ -31,7 +31,7 @@ class PreenrolmentController extends Controller
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year; 
         // get the correct enrolment term code
-        $enrolment_term = Term::whereYear('Term_End', $now_year)
+        $enrolment_term = Term::whereYear('Enrol_Date_Begin', $now_year)
                         ->orderBy('Term_Code', 'desc')
                         ->where('Enrol_Date_Begin', '<=', $now_date)
                         ->where('Approval_Date_Limit_HR', '>=', $now_date)

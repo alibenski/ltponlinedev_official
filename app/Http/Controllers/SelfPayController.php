@@ -96,6 +96,9 @@ class SelfPayController extends Controller
     public function create(Request $request)
     {  
         $sess = $request->session()->get('_previous');
+        if (is_null($sess)) {
+            return redirect('home')->with('interdire-msg', 'Whoops! Looks like something went wrong... Please report the problem to clm_language@un.org');
+        }
         $result = array();
             foreach($sess as $val)
             {

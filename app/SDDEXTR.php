@@ -40,7 +40,7 @@ class SDDEXTR extends Model
     const UPDATED_AT = 'UPDATED';
 
     public function users() {
-    return $this->belongsTo('App\User'); 
+    return $this->belongsTo('App\User','indexno','INDEXNO'); 
     }
 	public function torgan() {
     return $this->hasOne('App\Torgan', 'Org name', 'DEPT'); 

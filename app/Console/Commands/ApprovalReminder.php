@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Term;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ApprovalReminder extends Command
@@ -47,15 +48,18 @@ class ApprovalReminder extends Command
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year; 
         // get the correct enrolment term object
-        $enrolment_term = Term::whereYear('Term_End', $now_year)
+        $enrolment_term = Term::whereYear('Enrol_Date_Begin', $now_year)
                         ->orderBy('Term_Code', 'desc')
                         ->where('Enrol_Date_Begin', '<=', $now_date)
                         ->where('Approval_Date_Limit_HR', '>=', $now_date)
                         ->get()->min();
             if ($enrolment_term) {
+                Log::info("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term);
                 // execute method function to send reminder emails found in the controller from construct()
                 $this->email->sendReminderEmails(); 
                 $this->placement_email->sendReminderEmailsPlacement(); 
+            } else {
+                Log::info("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
             }
     }
 }

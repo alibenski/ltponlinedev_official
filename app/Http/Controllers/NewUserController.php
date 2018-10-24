@@ -302,7 +302,11 @@ class NewUserController extends Controller
         if($request->ajax()){     
             $new_user_info = NewUser::find($request->id);
             $org = TORGAN::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
-            $auto_index = 'EXT'.$new_user_info->id;
+            if (is_null($new_user_info->indexno_new)) {
+                $auto_index = 'EXT'.$new_user_info->id;
+            } else {
+                $auto_index = $new_user_info->indexno_new;
+            }
             $possible_dupes = User::where('name', 'LIKE', '%' . $new_user_info->nameLast . '%')
                 ->orWhere('name', 'LIKE', '%' . $new_user_info->nameFirst . '%')
                 ->orWhere('name', 'LIKE', '%' . $new_user_info->email . '%')

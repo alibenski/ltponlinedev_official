@@ -101,13 +101,14 @@ Route::middleware(['auth'])->group(function () {
         
         //apply auth middleware only so students could edit their profile
         Route::resource('students', 'StudentController');
-        Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
-            });
+    });
     Route::get('password/expired', 'FirstTimeLoginController@expired')
         ->name('password.expired');
     Route::post('password/post_expired', 'FirstTimeLoginController@postExpired')
         ->name('password.post_expired');
 });
+// route to update email of student - this should be outside of auth middleware for the student to have access to this route 
+Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
 // route for ajax select on vsa-page-2
 Route::post('select-ajax-admin', ['as'=>'select-ajax-admin','uses'=>'AjaxController@selectAjaxAdmin']);
 

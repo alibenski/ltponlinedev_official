@@ -48,7 +48,7 @@ class WaitlistController extends Controller
     {
         // method to re-send emails to manager for un-approved forms
         $arrRecipient = [];
-        $enrolments_no_mgr_approval = Preenrolment::where('INDEXID', '527299')->where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
+        $enrolments_no_mgr_approval = Preenrolment::where('INDEXID', '')->where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
         
         // if ($enrolments_no_mgr_approval->isEmpty()) {
         //     Log::info("No email addresses to pick up. No Emails sent.");
