@@ -5,8 +5,10 @@
         $('.select-profile-single').val([]).trigger('change');
         $('#orgSelect').attr('style', 'display: none');
         $('.select2-basic-single').val([]).trigger('change');      
-        $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button>');
-        $('button[type="submit"]').addClass( "btn-success", 500);
+        // $('a.next-link').replaceWith('<button id="formBtn" type="submit" class="btn btn-block button-prevent-multi-submit">Next</button>');
+        // $('button[type="submit"]').addClass( "btn-success", 500);
+        $('button[id="formBtn"]').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit" disabled>Next</a>');
+        $('a.next-link').removeClass( "btn-success", 500);
         $('#profileSelect, #secretMsg2').fadeOut(500);
         $('#secretMsg1, #profileSelect').fadeIn(800);
       } else if ($('#decision2').is(':checked')) {
@@ -14,13 +16,18 @@
         $('.select-profile-single').val([]).trigger('change');
         $('#orgSelect').attr('style', 'display: none');
         $('.select2-basic-single').val([]).trigger('change');
-        $('button[id="formBtn"]').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit">Next</a>');
+        $('button[id="formBtn"]').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit" disabled>Next</a>');
         $('a.next-link').removeClass( "btn-success", 500);
         $('#profileSelect, #secretMsg1').fadeOut(500);
         $('#secretMsg2, #profileSelect').fadeIn(800);
       }
   });
-
+  // on modal close
+  $('#modalshow').on('hide.bs.modal', function() {
+    $('button[id="formBtn"]').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit" disabled>Next</a>');
+    alert('You did not click the Next button. This page will automatically refresh.');
+    location.reload();
+  })
   // on event change of Profile, show orgSelect
   $('select[id="profile"]').on('change', function() {
     $('.select2-basic-single').val([]).trigger('change');
