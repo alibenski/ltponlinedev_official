@@ -37,7 +37,7 @@ class WaitlistController extends Controller
 {
     public function sendAuthEmailIndividual()
     {
-        $sddextr_email_address = 'mballa@unhcr.org';
+        $sddextr_email_address = 'm_hallali@yahoo.com';
         // send credential email to user using email from sddextr 
         Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
 

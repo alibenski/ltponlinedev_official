@@ -12,8 +12,10 @@
 	        </div>
 	        <div class="form-group">
 	            <label class="control-label">Index #: </label>
-	            <input name="indexno" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('indexno', $auto_index) }}">
-	            <p class="small-text text-danger">This field is system generated. The admin needs to verify in Umoja if the person is a UN staff member and change the index no. field accordingly.</p>
+	            <input name="indexno" type="text" class="form-control"  value="{{ old('indexno', $auto_index) }}">
+	            <p class="small-text text-danger">This field is system generated. The admin needs to verify in Umoja if the person is a UN staff member and change the index no. field accordingly. Click on the Generate button below if the index no. is incorrect.</p>
+	            <button type="button" id="generateExtIndex" class="btn btn-info">Generate EXT index number</button>
+	            <input id="ExtIndex" type="hidden" value="{{ $ext_index }}">
 	        </div>
 			
 			<div class="form-group">
@@ -84,5 +86,9 @@
 <script>
 	$('.select2-basic-single').select2({
 	dropdownParent: $('#showModal')
+	});
+	$("#generateExtIndex").on('click', function(event) {
+		var ExtIndex = $("#ExtIndex").val(); 
+		$('input[name="indexno"]').val(ExtIndex);
 	});
 </script>

@@ -6,7 +6,11 @@
 @section('content')
 <h1><i class="fa fa-users"></i> New User Administration </h1>
     <hr>
-    
+    <div class="row col-sm-12">
+    	<div class="alert alert-info">
+    		<p><strong>NOTE: </strong>If the new user requestor already has an account in the system, please contact him and provide him with his credentials. Reset his password if necessary.</p>
+    	</div>
+    </div>
     <div class="form-group col-lg-4">
         <form method="GET" action="{{ route('newuser.index') }}">
             {{-- search by name or email--}}

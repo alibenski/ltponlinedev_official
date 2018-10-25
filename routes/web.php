@@ -56,6 +56,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('waitlist', 'WaitlistController');
     
     Route::resource('selfpayform', 'SelfPayController', ['only' => ['index', 'update']]);
+    Route::get('selfpayform/{indexid}/{tecode}/{term}', ['as'=>'selfpayform.edit','uses'=>'SelfPayController@edit']);
+
     Route::get('selfpayform/show-schedule-selfpay', ['as'=>'show-schedule-selfpay','uses'=>'AjaxController@showScheduleSelfPay']);
     Route::post('selfpayform/post-decision-selfpay', ['as'=>'post-decision-selfpay','uses'=>'AjaxController@postDecisionSelfPay']);
 
@@ -131,7 +133,7 @@ Route::post('/postplacementinfo', ['as'=>'postplacementinfo','uses'=>'PlacementF
 Route::post('/postSelfPayPlacementInfo', ['as'=>'postSelfPayPlacementInfo','uses'=>'PlacementFormController@postSelfPayPlacementInfo']);
 
 //fee-paying form routes
-Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store', 'edit']]);
+Route::resource('selfpayform', 'SelfPayController', ['only' => ['create', 'store']]);
 
 //if already selected YES to continue course, go to these routes
 Route::resource('noform', 'NoFormController', ['only' => ['create', 'store', 'edit']]);

@@ -302,16 +302,19 @@ class NewUserController extends Controller
         if($request->ajax()){     
             $new_user_info = NewUser::find($request->id);
             $org = TORGAN::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $ext_index = 'EXT'.$new_user_info->id;
+
             if (is_null($new_user_info->indexno_new)) {
                 $auto_index = 'EXT'.$new_user_info->id;
             } else {
                 $auto_index = $new_user_info->indexno_new;
             }
+
             $possible_dupes = User::where('name', 'LIKE', '%' . $new_user_info->nameLast . '%')
                 ->orWhere('name', 'LIKE', '%' . $new_user_info->nameFirst . '%')
                 ->orWhere('name', 'LIKE', '%' . $new_user_info->email . '%')
                 ->get();
-            $data = view('users_new.edit',compact('new_user_info','org','auto_index','possible_dupes'))->render();
+            $data = view('users_new.edit',compact('new_user_info','org','auto_index','possible_dupes', 'ext_index'))->render();
             return response()->json(['options'=>$data]);
         }
     }
@@ -327,6 +330,7 @@ class NewUserController extends Controller
     {
         // check if there is a duplicate in Auth users table
         $this->validate($request, array(
+                'indexno' => 'required',
                 // validate if email is unique 
                 'email' => 'unique:users,email',
             )); 

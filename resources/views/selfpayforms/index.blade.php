@@ -2,12 +2,79 @@
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <style>
+        .modal {
+              position: fixed;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              overflow: hidden;
+            }
+
+            .modal-dialog {
+              position: fixed;
+              margin: 0;
+              width: 100%;
+              height: 100%;
+              padding: 0;
+            }
+
+            .modal-content {
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              border: 2px solid #3c7dcf;
+              border-radius: 0;
+              box-shadow: none;
+            }
+
+            .modal-header {
+              position: absolute;
+              top: 0;
+              right: 0;
+              left: 0;
+              height: 50px;
+              padding: 10px;
+              background: #6598d9;
+              border: 0;
+            }
+
+            .modal-title {
+              font-weight: 300;
+              font-size: 2em;
+              color: #fff;
+              line-height: 30px;
+            }
+
+            .modal-body {
+              position: absolute;
+              top: 50px;
+              bottom: 60px;
+              width: 100%;
+              font-weight: 300;
+              overflow: auto;
+            }
+
+            /*.modal-footer {
+              position: absolute;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              height: 60px;
+              padding: 10px;
+              background: #f1f3f5;*/
+            }
+
+    </style>
 @stop
 @section('content')
 <h2>Payment-based Enrolment Forms</h2>
 <div class="row col-sm-12">
     @if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
-    <form method="GET" action="{{ route('selfpayform.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
+    <form id="form-filter" method="GET" action="{{ route('selfpayform.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
         
         <div class="form-group input-group col-sm-12">
             <h4><strong>Filters:</strong></h4>
@@ -59,7 +126,7 @@
 
 
         <div class="form-group">           
-            <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
+            <button type="submit" class="btn btn-success filter-submit-btn" name="submit-filter" value="submit-filter">Submit</button>
             <a href="/admin/selfpayform/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
         </div>
 
@@ -82,9 +149,9 @@
 	            <th>Operation</th>
 	            <th>Status</th>
 	            <th>Name</th>
-	            <th>Term</th>
-	            <th>Course</th>
-	            {{-- <th>Schedule</th> --}}
+	            <th>Organization</th>
+                <th>Term</th>
+                <th>Course</th>
 	            <th>ID Proof</th>
 	            <th>Payment Proof</th>
 	            <th>Time Stamp</th>
@@ -94,7 +161,8 @@
 			@foreach($selfpayforms as $form)
 			<tr>
 				<td>
-					<button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
+					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
+                    <a href="{{ route('selfpayform.edit', [$form->INDEXID, $form->Te_Code, $form->Term]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
                 </td>
 				<td>
 				@if(empty($form->selfpay_approval)) None @else {{ $form->selfpay_approval }} @endif	
@@ -102,9 +170,9 @@
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
-				<td>{{ $form->Term }}</td>
-				<td>{{ $form->courses->Description }}</td>
-				{{-- <td>{{ $form->schedule->name }}</td> --}}
+				<td>@if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif</td>
+                <td>{{ $form->Term }}</td>
+                <td>{{ $form->courses->Description }}</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>
 				<td>@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
 				<td>{{ $form->created_at}}</td>
@@ -150,9 +218,11 @@ $(document).ready(function() {
 <script>
 // Show a post
 $(document).on('click', '.show-modal', function() {
-    $('.modal-title').text('Show');
+    $('.modal-title').text('Showing Information');
     $('#id_show').val($(this).data('id'));
     $('#title_show').val($(this).data('title'));
+    // $('#form-filter').removeAttr('action');
+    // $('.filter-submit-btn').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit" disabled>Next</a>');
     var index = $(this).data('index');
     var tecode = $(this).data('tecode');
     var term = $(this).data('term');
@@ -178,5 +248,10 @@ $(document).on('click', '.show-modal', function() {
         console.log("complete");
     });    
 });
+
+// on modal close
+  $('#showModal').on('hide.bs.modal', function() {
+    location.reload();
+  })
 </script>
 @stop

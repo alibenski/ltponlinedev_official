@@ -55,11 +55,24 @@ class ApprovalReminder extends Command
                         ->get()->min();
             if ($enrolment_term) {
                 Log::info("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term);
+
                 // execute method function to send reminder emails found in the controller from construct()
                 $this->email->sendReminderEmails(); 
                 $this->placement_email->sendReminderEmailsPlacement(); 
+
+                // notify admin by email
+                Mail::raw("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term, function($message) {
+                $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
+                $message->to('allyson.frias@un.org')->subject("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term);
+                });
             } else {
                 Log::info("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
+
+                // notify admin by email
+                Mail::raw("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php", function($message) {
+                $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
+                $message->to('allyson.frias@un.org')->subject("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
+                });
             }
     }
 }

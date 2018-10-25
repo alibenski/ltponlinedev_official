@@ -21,6 +21,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -52,14 +53,18 @@ class SelfPayController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
+        // if(Input::get('submit-approval')) {
+        //     return 'do it';
+        //     dd($request);
 
+        // }else if(is_null(Input::get('submit-filter')) || Input::get('submit-filter')){
 
         if (is_null($request->Term)) {
             $selfpayforms = null;
             return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
 
-        $selfpayforms = Preenrolment::select( 'INDEXID','Term','L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('INDEXID','Term','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+        $selfpayforms = Preenrolment::select( 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
         // ->orderBy('created_at', 'asc')->get();
         // $selfpayforms = new Preenrolment;
         // $currentQueries = \Request::query();
@@ -85,6 +90,7 @@ class SelfPayController extends Controller
 
         $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
         return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        // }
     }
 
 
@@ -368,9 +374,13 @@ class SelfPayController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $indexid, $tecode, $term)
     {
-        //
+        $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
+           
+            $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term',$term)->get();
+
+        return view('selfpayforms.edit',compact('selfpay_student','show_sched_selfpay'));
     }
 
     /**
@@ -382,7 +392,14 @@ class SelfPayController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request);
+        $next_term_code = $term;
+        $forms = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $request->INDEXID)
+                                ->where('Term', $request->Term)
+                                ->where('Te_Code', $request->Te_Code)
+                                ->where('form_counter', $formcount)
+                                ->get();
     }
 
     /**

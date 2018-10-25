@@ -166,6 +166,7 @@ class UserController extends Controller
         ]);
         $input = ([ 
             'password' => Hash::make($request->password),
+            'must_change_password' => 1,
         ]); //Retreive the name, email and password fields
 
         $user->fill($input)->save();
