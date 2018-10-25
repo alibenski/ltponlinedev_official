@@ -9,23 +9,29 @@
 	<div class="form-group">
 	    <label class="control-label col-sm-2" for="title">Course:</label>
 	    <div class="col-sm-10">
-	        <input type="name" class="form-control" id="title_show" disabled>
+	        <input type="name" class="form-control" id="course_show" value="{{ $selfpay_student->courses->Description }}" disabled>
+	    </div>
+	</div>
+	<div class="form-group">
+	    <label class="control-label col-sm-2" for="title">Profile:</label>
+	    <div class="col-sm-10">
+	        <input type="name" class="form-control" id="profile_show" value="{{ $selfpay_student->profile }}" disabled>
 	    </div>
 	</div>
 	<div class="form-group">
 	    <label class="control-label col-sm-2" for="title">Organization:</label>
 	    <div class="col-sm-10">
-	        <input type="name" class="form-control" id="title_show" disabled>
+	        <input type="name" class="form-control" id="org_show" value="{{ $selfpay_student->DEPT }}" disabled>
 	    </div>
 	</div>
 	<div class="form-group">
 	    <label class="control-label col-sm-2" for="content">Content:</label>
 	    <div class="col-sm-10">
-	        <textarea class="form-control" id="content_show" cols="40" rows="5" disabled></textarea>
+	        <textarea class="form-control" id="comment_show" cols="40" rows="5" disabled></textarea>
 	    </div>
 	</div>
 	<div class="form-group">	
-		<label class="control-label col-sm-2" for="content">Schedule:</label>
+		<label class="control-label col-sm-2" for="content">Schedule(s):</label>
 		@foreach($show_sched_selfpay as $show_sched)
 	    <div class="col-sm-12">
 			<ul>

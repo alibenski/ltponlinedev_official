@@ -30,7 +30,7 @@ class AjaxController extends Controller
     public function showScheduleSelfPay(Request $request)
     {
         if($request->ajax()){
-            $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code','profile')->where('INDEXID', $request->index)->where('Te_Code', $request->tecode)->where('Term', $request->term)->first();    
+            $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code','profile', 'DEPT')->where('INDEXID', $request->index)->where('Te_Code', $request->tecode)->where('Term', $request->term)->first();    
             $show_sched_selfpay = Preenrolment::where('INDEXID', $request->index)->where('Te_Code', $request->tecode)->where('Term', $request->term)->get();
             
             $data = view('selfpayforms.show',compact('selfpay_student','show_sched_selfpay'))->render();

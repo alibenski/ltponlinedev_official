@@ -83,7 +83,6 @@
 	            <th>Status</th>
 	            <th>Name</th>
 	            <th>Term</th>
-	            <th>Language</th>
 	            <th>Course</th>
 	            {{-- <th>Schedule</th> --}}
 	            <th>ID Proof</th>
@@ -104,7 +103,6 @@
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
 				<td>{{ $form->Term }}</td>
-				<td>{{ $form->L }}</td>
 				<td>{{ $form->courses->Description }}</td>
 				{{-- <td>{{ $form->schedule->name }}</td> --}}
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>
