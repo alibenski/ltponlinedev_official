@@ -61,7 +61,7 @@ class ApprovalReminder extends Command
                 $this->placement_email->sendReminderEmailsPlacement(); 
 
                 // notify admin by email
-                Mail::raw("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term, function($message) {
+                Mail::raw("ApprovalReminder.php executed in Enrolment Term : ".$enrolment_term, function($message) use ($enrolment_term) {
                 $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
                 $message->to('allyson.frias@un.org')->subject("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term);
                 });
@@ -69,7 +69,7 @@ class ApprovalReminder extends Command
                 Log::info("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
 
                 // notify admin by email
-                Mail::raw("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php", function($message) {
+                Mail::raw("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php", function($message) use ($enrolment_term){
                 $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
                 $message->to('allyson.frias@un.org')->subject("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
                 });
