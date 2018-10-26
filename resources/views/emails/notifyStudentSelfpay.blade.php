@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Decision for the enrolment to a CLM language course.
+            CLM Language Secretariat Decision on {{ $request->course_show }}
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -192,13 +192,17 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
+                                    <p> Dear {{ $request->nom }}, </p>
+                                    <p> Your enrolment form for {{ $request->course_show }} has a status of <strong> @if($request['submit-approval'] == 1 )  approved @elseif($request['submit-approval'] == 0) disapproved @else pending @endif </strong>. </p>
+                                    <p> CLM Language Secretariat comment: </p>
+                                    <p> {{ $request->admin_comment_show }}</p>
                                 </td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
                                 </td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <!-- Button : BEGIN

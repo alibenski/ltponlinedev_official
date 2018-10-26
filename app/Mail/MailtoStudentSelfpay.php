@@ -34,6 +34,6 @@ class MailtoStudentSelfpay extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->bcc('clm_language@unog.ch')
                     ->priority(1)
-                    ->subject('Notification: CLM Language Secretariat Decision Made on Your Enrolment to Language Course:');
+                    ->subject('Notification: CLM Language Secretariat Decision Made on Your Enrolment to Language Course: ' .$this->request->course_show);
     }
 }

@@ -2,73 +2,6 @@
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-    <style>
-        .modal {
-              position: fixed;
-              top: 0;
-              right: 0;
-              bottom: 0;
-              left: 0;
-              overflow: hidden;
-            }
-
-            .modal-dialog {
-              position: fixed;
-              margin: 0;
-              width: 100%;
-              height: 100%;
-              padding: 0;
-            }
-
-            .modal-content {
-              position: absolute;
-              top: 0;
-              right: 0;
-              bottom: 0;
-              left: 0;
-              border: 2px solid #3c7dcf;
-              border-radius: 0;
-              box-shadow: none;
-            }
-
-            .modal-header {
-              position: absolute;
-              top: 0;
-              right: 0;
-              left: 0;
-              height: 50px;
-              padding: 10px;
-              background: #6598d9;
-              border: 0;
-            }
-
-            .modal-title {
-              font-weight: 300;
-              font-size: 2em;
-              color: #fff;
-              line-height: 30px;
-            }
-
-            .modal-body {
-              position: absolute;
-              top: 50px;
-              bottom: 60px;
-              width: 100%;
-              font-weight: 300;
-              overflow: auto;
-            }
-
-            /*.modal-footer {
-              position: absolute;
-              right: 0;
-              bottom: 0;
-              left: 0;
-              height: 60px;
-              padding: 10px;
-              background: #f1f3f5;*/
-            }
-
-    </style>
 @stop
 @section('content')
 <h2>Payment-based Enrolment Forms</h2>
@@ -165,7 +98,7 @@
                     <a href="{{ route('selfpayform.edit', [$form->INDEXID, $form->Te_Code, $form->Term]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
                 </td>
 				<td>
-				@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) Disapproved @else Approved @endif	
+				@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) Disapproved @elseif ($form->selfpay_approval == 1) Approved @else Pending @endif	
 				</td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif

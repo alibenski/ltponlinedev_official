@@ -393,6 +393,13 @@ class SelfPayController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, array(
+                            'Term' => 'required|',
+                            'INDEXID' => 'required|',
+                            'Te_Code' => 'required|',
+                            'submit-approval' => 'required|',
+                        )); 
+
         $forms = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $request->INDEXID)
                                 ->where('Term', $request->Term)
@@ -400,13 +407,24 @@ class SelfPayController extends Controller
                                 ->get();
         foreach ($forms as $form) {
             $enrolment_record = Preenrolment::where('id', $form->id)->first();
+            $enrolment_record->Comments = $request->admin_comment_show;
             $enrolment_record->selfpay_approval = $request['submit-approval'];
             $enrolment_record->save();
         }
+
+        // save comments in the comments table and associate it to the enrolment form
+        // foreach ($forms as $form) {
+        //     $admin_comment = new AdminComment;
+        //     $admin_comment->Comments = $request->admin_comment_show;
+        //     $admin_comment->CodeIndexID = $form->CodeIndexID;
+        //     $admin_comment->save();
+        // }
+        // dd('saved comment');
+
         $staff_email = User::where('indexno', $request->INDEXID)->first();
         Mail::to($staff_email)
                     ->send(new MailtoStudentSelfpay($request));
-        
+        $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
         return redirect(route('selfpayform.index'));
     }
 

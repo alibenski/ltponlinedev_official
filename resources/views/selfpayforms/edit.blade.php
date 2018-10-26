@@ -55,14 +55,15 @@
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="admin_comment_show">Admin Comment:</label>
+	    <label class="control-label" for="admin_comment_show">Admin Comment: (This text will be included in the email)</label>
 	    <div class="">
-	        <textarea class="form-control" name="admin_comment_show" cols="40" rows="5" readonly></textarea>
+	        <textarea class="form-control" name="admin_comment_show" cols="40" rows="5"></textarea>
 	    </div>
 	</div>
 	<div class="col-sm-12">
 		<button type="submit" class="show-modal btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button>
 		<button type="submit" class="show-modal btn btn-success" name="submit-approval" value="1"><span class="glyphicon glyphicon-ok"></span>  Approve</button>	
+		<button type="submit" class="show-modal btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button>
 	</div>
 	<input type="hidden" name="_token" value="{{ Session::token() }}">
 	        {{ method_field('PUT') }}
