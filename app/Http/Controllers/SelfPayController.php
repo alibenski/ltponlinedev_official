@@ -9,6 +9,7 @@ use App\File;
 use App\Http\Controllers\PlacementFormController;
 use App\Language;
 use App\Mail\MailtoApprover;
+use App\Mail\MailtoStudentSelfpay;
 use App\Preenrolment;
 use App\Repo;
 use App\SDDEXTR;
@@ -64,7 +65,7 @@ class SelfPayController extends Controller
             return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
 
-        $selfpayforms = Preenrolment::select( 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
         // ->orderBy('created_at', 'asc')->get();
         // $selfpayforms = new Preenrolment;
         // $currentQueries = \Request::query();
@@ -392,14 +393,21 @@ class SelfPayController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
-        $next_term_code = $term;
         $forms = Preenrolment::orderBy('Term', 'desc')
                                 ->where('INDEXID', $request->INDEXID)
                                 ->where('Term', $request->Term)
                                 ->where('Te_Code', $request->Te_Code)
-                                ->where('form_counter', $formcount)
                                 ->get();
+        foreach ($forms as $form) {
+            $enrolment_record = Preenrolment::where('id', $form->id)->first();
+            $enrolment_record->selfpay_approval = $request['submit-approval'];
+            $enrolment_record->save();
+        }
+        $staff_email = User::where('indexno', $request->INDEXID)->first();
+        Mail::to($staff_email)
+                    ->send(new MailtoStudentSelfpay($request));
+        
+        return redirect(route('selfpayform.index'));
     }
 
     /**

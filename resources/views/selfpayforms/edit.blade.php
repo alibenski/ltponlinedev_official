@@ -61,7 +61,7 @@
 	    </div>
 	</div>
 	<div class="col-sm-12">
-		<button type="submit" class="show-modal btn btn-danger" name="submit-disapproval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button>
+		<button type="submit" class="show-modal btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button>
 		<button type="submit" class="show-modal btn btn-success" name="submit-approval" value="1"><span class="glyphicon glyphicon-ok"></span>  Approve</button>	
 	</div>
 	<input type="hidden" name="_token" value="{{ Session::token() }}">

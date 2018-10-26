@@ -165,7 +165,7 @@
                     <a href="{{ route('selfpayform.edit', [$form->INDEXID, $form->Te_Code, $form->Term]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
                 </td>
 				<td>
-				@if(empty($form->selfpay_approval)) None @else {{ $form->selfpay_approval }} @endif	
+				@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) Disapproved @else Approved @endif	
 				</td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
