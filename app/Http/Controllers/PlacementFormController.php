@@ -268,6 +268,7 @@ class PlacementFormController extends Controller
         $this->validate($request, array(
             'placementLang' => 'required|integer',
             'agreementBtn' => 'required|',
+            'course_preference_comment' => 'required|',
         ));
 
         $qryEformCount = PlacementForm::withTrashed()

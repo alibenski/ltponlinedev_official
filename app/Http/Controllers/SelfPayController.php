@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AdminComment;
 use App\Classroom;
 use App\Course;
 use App\Day;
@@ -10,6 +11,7 @@ use App\Http\Controllers\PlacementFormController;
 use App\Language;
 use App\Mail\MailtoApprover;
 use App\Mail\MailtoStudentSelfpay;
+use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
 use App\SDDEXTR;
@@ -94,6 +96,91 @@ class SelfPayController extends Controller
         // }
     }
 
+    public function indexPlacementSelfPay(Request $request)
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        if (is_null($request->Term)) {
+            $selfpayforms = null;
+            return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+
+        $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+        
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT', 'Term',
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $selfpayforms = $selfpayforms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+            if (\Request::has('sort')) {
+                $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            }
+
+        $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
+        return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+    }
+
+    public function editPlacementSelfPay(Request $request, $indexid, $language, $term)
+    {
+        $selfpay_student = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term', $term)->first();
+           
+        $show_sched_selfpay = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term',$term)->get();
+
+        // $show_admin_comments = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term', $term)->first()->adminCommentPlacement;
+
+        return view('selfpayforms.edit-placement-selfpay',compact('selfpay_student','show_sched_selfpay', 'show_admin_comments'));
+    }
+
+    public function postPlacementSelfPay(Request $request, $id)
+    {
+        $this->validate($request, array(
+                            'Term' => 'required|',
+                            'INDEXID' => 'required|',
+                            'L' => 'required|',
+                            'submit-approval' => 'required|',
+                        )); 
+
+        $forms = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $request->INDEXID)
+                                ->where('Term', $request->Term)
+                                ->where('L', $request->L)
+                                ->get();
+
+        foreach ($forms as $form) {
+            $enrolment_record = PlacementForm::where('id', $form->id)->first();
+            // $enrolment_record->Comments = $request->admin_comment_show;
+            $enrolment_record->selfpay_approval = $request['submit-approval'];
+            $enrolment_record->save();
+        }
+dd($forms);
+        // save comments in the comments table and associate it to the enrolment form
+        foreach ($forms as $form) {
+            $admin_comment = new AdminComment;
+            $admin_comment->Comments = $request->admin_comment_show;
+            $admin_comment->CodeIndexID = $form->CodeIndexID;
+            $admin_comment->save();
+        }
+        
+
+        $staff_email = User::where('indexno', $request->INDEXID)->first();
+        Mail::to($staff_email)
+                    ->send(new MailtoStudentSelfpay($request));
+        $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
+        return redirect(route('selfpayform.index-placement-selfpay'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -379,9 +466,11 @@ class SelfPayController extends Controller
     {
         $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
            
-            $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term',$term)->get();
+        $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term',$term)->get();
 
-        return view('selfpayforms.edit',compact('selfpay_student','show_sched_selfpay'));
+        $show_admin_comments = Preenrolment::select('CodeIndexID', 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first()->adminComment;
+
+        return view('selfpayforms.edit',compact('selfpay_student','show_sched_selfpay', 'show_admin_comments'));
     }
 
     /**
@@ -413,13 +502,12 @@ class SelfPayController extends Controller
         }
 
         // save comments in the comments table and associate it to the enrolment form
-        // foreach ($forms as $form) {
-        //     $admin_comment = new AdminComment;
-        //     $admin_comment->Comments = $request->admin_comment_show;
-        //     $admin_comment->CodeIndexID = $form->CodeIndexID;
-        //     $admin_comment->save();
-        // }
-        // dd('saved comment');
+        foreach ($forms as $form) {
+            $admin_comment = new AdminComment;
+            $admin_comment->Comments = $request->admin_comment_show;
+            $admin_comment->CodeIndexID = $form->CodeIndexID;
+            $admin_comment->save();
+        }
 
         $staff_email = User::where('indexno', $request->INDEXID)->first();
         Mail::to($staff_email)

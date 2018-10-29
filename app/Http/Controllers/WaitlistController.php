@@ -35,6 +35,22 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function sddextr()
+    {
+        $sddextr = SDDEXTR::where('INDEXNO', '17942')->first();
+        return $sddextr->users->name;
+    }
+    public function queryTerm()
+    {
+        $now_date = Carbon::now();
+        $now_year = Carbon::now()->year; 
+        $enrolment_term = Term::whereYear('Enrol_Date_Begin', $now_year)
+                        ->orderBy('Term_Code', 'desc')
+                        ->where('Enrol_Date_Begin', '<=', $now_date)
+                        ->where('Approval_Date_Limit_HR', '>=', $now_date)
+                        ->get()->min();
+        dd($enrolment_term);
+    }
     public function sendAuthEmailIndividual()
     {
         $sddextr_email_address = 'm_hallali@yahoo.com';

@@ -6,10 +6,10 @@
 @section('content')
 <div class="row">
 	<div class="col-sm-10 col-sm-offset-1">
-	<form method="POST" action="{{ route('selfpayform.update', $selfpay_student->INDEXID) }}">
+	<form method="POST" action="{{ route('post-placement-selfpay', $selfpay_student->id) }}">
 	{{ csrf_field() }}
 	<input name="INDEXID" type="hidden" value="{{ $selfpay_student->INDEXID }}">
-	<input name="Te_Code" type="hidden" value="{{ $selfpay_student->Te_Code }}">
+	{{-- <input name="L" type="hidden" value="{{ $selfpay_student->L }}"> --}}
 	<input name="Term" type="hidden" value="{{ $selfpay_student->Term }}">
 	<div class="form-group">
 	    <label class="control-label" for="id_show">Name:</label>
@@ -18,9 +18,9 @@
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="course_show">Course:</label>
+	    <label class="control-label" for="course_show">Language:</label>
 	    <div class="">
-	        <input type="text" class="form-control" name="course_show" value="{{ $selfpay_student->courses->Description }}" readonly>
+	        <input type="text" class="form-control" name="L" value="{{ $selfpay_student->L }}" readonly>
 	    </div>
 	</div>
 	<div class="form-group">
@@ -36,12 +36,10 @@
 	    </div>
 	</div>
 	<div class="form-group">	
-		<label class="control-label" for="show_sched">Schedule(s):</label>
+		<label class="control-label" for="show_sched">Date of Exam:</label>
 		@foreach($show_sched_selfpay as $show_sched)
-	    <div class="col-sm-12">
-			<ul>
-	    		<li>{{ $show_sched->schedule->name }}</li>
-			</ul>
+	    <div class="">
+			<input type="text" class="form-control" name="show_sched" value="{{ $show_sched->placementSchedule->date_of_plexam }}" readonly>
 		</div>
 		@endforeach
 	</div>
@@ -49,9 +47,15 @@
 	    <label class="control-label" for="flexible_show">Is Flexible: @if($selfpay_student->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="student_comment_show">Student Comment:</label>
+	    <label class="control-label" for="student_comment_show">Student Comment on Placement Exam:</label>
 	    <div class="">
-	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly></textarea>
+	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly>{{$selfpay_student->std_comments}}</textarea>
+	    </div>
+	</div>
+	<div class="form-group">
+	    <label class="control-label" for="student_comment_show">Student Comment on Course Preference:</label>
+	    <div class="">
+	        <textarea class="form-control" name="course_preference_show" cols="40" rows="5" readonly>{{$selfpay_student->course_preference_comment}}</textarea>
 	    </div>
 	</div>
 	<div class="form-group">
@@ -82,9 +86,9 @@
             <div class="modal-body">
             	<form class="form-horizontal" role="form">
             		
-                	@foreach($show_admin_comments as $comment)
+                	{{-- @foreach($show_admin_comments as $comment)
                     	{{ $comment->comments }} <br> at {{ $comment->created_at }} by {{ $comment->user->name }} <br><br>
-                    @endforeach
+                    @endforeach --}}
                     
             	</form>
             </div>

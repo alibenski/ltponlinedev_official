@@ -13,6 +13,8 @@
 // test route for test queries
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
 Route::get('send-auth-email', 'WaitlistController@sendAuthEmailIndividual')->name('send-auth-email');
+Route::get('query-term', 'WaitlistController@queryTerm')->name('query-term');
+Route::get('sddextr', 'WaitlistController@sddextr')->name('sddextr');
 
 
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
@@ -57,6 +59,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     
     Route::resource('selfpayform', 'SelfPayController', ['only' => ['index', 'update']]);
     Route::get('selfpayform/{indexid}/{tecode}/{term}', ['as'=>'selfpayform.edit','uses'=>'SelfPayController@edit']);
+    Route::get('selfpayform/index-placement-selfpay', ['as'=>'index-placement-selfpay','uses'=>'SelfPayController@indexPlacementSelfPay']);
+    Route::get('selfpayform/edit-placement-selfpay/{indexid}/{language}/{term}', ['as'=>'edit-placement-selfpay','uses'=>'SelfPayController@editPlacementSelfPay']);
+    Route::put('selfpayform/post-placement-selfpay/{indexid}', ['as'=>'post-placement-selfpay','uses'=>'SelfPayController@postPlacementSelfPay']);
 
     Route::get('selfpayform/show-schedule-selfpay', ['as'=>'show-schedule-selfpay','uses'=>'AjaxController@showScheduleSelfPay']);
     Route::post('selfpayform/post-decision-selfpay', ['as'=>'post-decision-selfpay','uses'=>'AjaxController@postDecisionSelfPay']);

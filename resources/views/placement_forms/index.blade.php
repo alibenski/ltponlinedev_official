@@ -11,6 +11,7 @@
 	<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Approved</a></li>
 	<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Cancelled</a></li>
 	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">Pending</a></li>
+	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="{{ route('index-placement-selfpay') }}">Manage Self-Paying Placement Forms</a></li>
 </ul>
 
     <form method="GET" action="{{ route('placement-form.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">

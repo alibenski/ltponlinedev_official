@@ -54,7 +54,7 @@ class ApprovalReminder extends Command
                         ->where('Approval_Date_Limit_HR', '>=', $now_date)
                         ->get()->min();
             if ($enrolment_term) {
-                Log::info("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term);
+                Log::info("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term->Term_Code);
 
                 // execute method function to send reminder emails found in the controller from construct()
                 $this->email->sendReminderEmails(); 
@@ -63,15 +63,15 @@ class ApprovalReminder extends Command
                 // notify admin by email
                 Mail::raw("ApprovalReminder.php executed in Enrolment Term : ".$enrolment_term, function($message) use ($enrolment_term) {
                 $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
-                $message->to('allyson.frias@un.org')->subject("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term);
+                $message->to('allyson.frias@un.org')->subject("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term->Term_Code);
                 });
             } else {
                 Log::info("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
 
                 // notify admin by email
-                Mail::raw("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php", function($message) use ($enrolment_term){
+                Mail::raw("Enrolment Term variable is false in ApprovalReminder.php", function($message) {
                 $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
-                $message->to('allyson.frias@un.org')->subject("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
+                $message->to('allyson.frias@un.org')->subject("Enrolment Term variable is false in ApprovalReminder.php");
                 });
             }
     }
