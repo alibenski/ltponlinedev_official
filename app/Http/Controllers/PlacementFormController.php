@@ -348,6 +348,12 @@ class PlacementFormController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        if (is_null($request->Term)) {
+            $placement_forms = null;
+            return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+
         $placement_forms = new PlacementForm;
         // $currentQueries = \Request::query();
         $queries = [];
@@ -371,7 +377,52 @@ class PlacementFormController extends Controller
             }
 
         // $allQueries = array_merge($queries, $currentQueries);
-        $placement_forms = $placement_forms->paginate(10)->appends($queries);
+        $placement_forms = $placement_forms->withTrashed()->paginate(10)->appends($queries);
         return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+    }
+
+    public function edit($id)
+    {
+        $placement_form = PlacementForm::withTrashed()->find($id);
+
+        return view('placement_forms.edit',compact('placement_form'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // $this->validate($request, array(
+        //                     'Term' => 'required|',
+        //                     'INDEXID' => 'required|',
+        //                     'L' => 'required|',
+        //                     'submit-approval' => 'required|',
+        //                 )); 
+
+        // $forms = PlacementForm::orderBy('Term', 'desc')
+        //                         ->where('INDEXID', $request->INDEXID)
+        //                         ->where('Term', $request->Term)
+        //                         ->where('L', $request->L)
+        //                         ->get();
+
+        // foreach ($forms as $form) {
+        //     $enrolment_record = PlacementForm::where('id', $form->id)->first();
+        //     $enrolment_record->Comments = $request->admin_comment_show;
+        //     $enrolment_record->selfpay_approval = $request['submit-approval'];
+        //     $enrolment_record->save();
+        // }
+
+        // // save comments in the comments table and associate it to the enrolment form
+        // foreach ($forms as $form) {
+        //     $admin_comment = new AdminCommentPlacement;
+        //     $admin_comment->comments = $request->admin_comment_show;
+        //     $admin_comment->placement_id = $form->id;
+        //     $admin_comment->user_id = Auth::user()->id;
+        //     $admin_comment->save();
+        // }
+        
+        // $staff_email = User::where('indexno', $request->INDEXID)->first();
+        // Mail::to($staff_email)
+        //             ->send(new MailtoStudentSelfpayPlacement($request));
+        // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
+        // return redirect(route('index-placement-selfpay'));
     }
 }

@@ -5,6 +5,7 @@
 @stop
 
 @section('content')
+<h2>Enrolment Forms</h2>
 <div class="row col-sm-12">
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
 	<ul class="nav nav-pills">
@@ -89,9 +90,10 @@
 	        <tr>
 	            <th>Name</th>
 	            <th>Term</th>
-	            <th>Language</th>
+	            <th>Organization</th>
 	            <th>Course</th>
 	            <th>Schedule</th>
+	            <th>Student Cancelled?</th>
 	            <th>Manager Approval</th>
 	            <th>HR Approval</th>
 	            <th>ID Proof</th>
@@ -106,11 +108,57 @@
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
 				<td>{{ $form->Term }}</td>
-				<td>{{ $form->L }}</td>
+				<td>{{ $form->DEPT }}</td>
 				<td>{{ $form->courses->Description }}</td>
 				<td>{{ $form->schedule->name }}</td>
-				<td>{{ $form->approval }}</td>
-				<td>{{ $form->approval_hr }}</td>
+				<td>
+					@if( is_null($form->cancelled_by_student))
+					@else <span id="status" class="label label-danger margin-label">YES</span>
+					@endif
+				</td>
+				<td>
+					@if($form->is_self_pay_form == 1)
+					<span id="status" class="label label-info margin-label">
+					N/A - Self Payment</span>
+					@elseif(is_null($form->approval))
+					<span id="status" class="label label-warning margin-label">
+					Pending Approval</span>
+					@elseif($form->approval == 1)
+					<span id="status" class="label label-success margin-label">
+					Approved</span>
+					@elseif($form->approval == 0)
+					<span id="status" class="label label-danger margin-label">
+					Disapproved</span>
+					@endif 
+				</td>
+				<td>
+					@if(is_null($form->is_self_pay_form))
+						@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+							<span id="status" class="label label-info margin-label">
+							N/A - Non-paying organization</span>
+						@else
+							@if(is_null($form->approval) && is_null($form->approval_hr))
+							<span id="status" class="label label-warning margin-label">
+							Pending Approval</span>
+							@elseif($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr)))
+							<span id="status" class="label label-danger margin-label">
+							N/A - Disapproved by Manager</span>
+							@elseif($form->approval == 1 && is_null($form->approval_hr))
+							<span id="status" class="label label-warning margin-label">
+							Pending Approval</span>
+							@elseif($form->approval == 1 && $form->approval_hr == 1)
+							<span id="status" class="label label-success margin-label">
+							Approved</span>
+							@elseif($form->approval == 1 && $form->approval_hr == 0)
+							<span id="status" class="label label-danger margin-label">
+							Disapproved</span>
+							@endif
+						@endif
+					@else
+					<span id="status" class="label label-info margin-label">
+					N/A - Self Payment</span>
+					@endif
+				</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
 				<td>

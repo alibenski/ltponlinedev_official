@@ -7,7 +7,7 @@
     <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Permissions</a></h1>
     <hr>
     
-    <div class="form-group col-lg-4">
+    <div class="form-group col-lg-10">
         <form method="GET" action="{{ route('users.index') }}">
             {{-- search by name or email--}}
             <div class="input-group">           

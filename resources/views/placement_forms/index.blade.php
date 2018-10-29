@@ -5,6 +5,7 @@
 @stop
 
 @section('content')
+<h2>Placement Test Forms</h2>
 <div class="row col-sm-12">
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
 <ul class="nav nav-pills">
@@ -79,15 +80,20 @@
     </form>
 </div>
 
+@if(is_null($placement_forms))
+
+@else
 {{ $placement_forms->links() }}
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
+	        	<th>Operation</th>
 	            <th>Name</th>
 	            <th>Organization</th>
 	            <th>Language</th>
-	            <th>Schedule</th>
+	            <th>Student Cancelled?</th>
+	            <th>Exam Date</th>
 	            <th>Manager Approval</th>
 	            <th>HR Approval</th>
 	            <th>ID Proof</th>
@@ -99,19 +105,69 @@
 			@foreach($placement_forms as $form)
 			<tr>
 				<td>
+					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
+                    <a href="{{ route('placement-form.edit', [$form->id]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
+                </td>
+				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
 				<td>
-				@if(empty($form->DEPT)) None @else <strong> {{ $form->DEPT }} </strong> @endif
+				@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
 				</td>
 				<td>{{ $form->L }}</td>
+				<td>
+					@if( is_null($form->cancelled_by_student))
+					@else <span id="status" class="label label-danger margin-label">YES</span>
+					@endif
+				</td>
 				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
-				<td>@if ($form->approval === 1) approved @elseif ($form->approval === 0) disapproved @else pending @endif</td>
-				<td>@if ($form->approval_hr === 1) approved @elseif ($form->approval_hr === 0) disapproved @else pending @endif</td>
-				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank">carte attachment</a> @endif
+				<td>
+					@if($form->is_self_pay_form == 1)
+					<span id="status" class="label label-info margin-label">
+					N/A - Self Payment</span>
+					@elseif(is_null($form->approval))
+					<span id="status" class="label label-warning margin-label">
+					Pending Approval</span>
+					@elseif($form->approval == 1)
+					<span id="status" class="label label-success margin-label">
+					Approved</span>
+					@elseif($form->approval == 0)
+					<span id="status" class="label label-danger margin-label">
+					Disapproved</span>
+					@endif
 				</td>
 				<td>
-				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank">payment attachment</a> @endif
+					@if(is_null($form->is_self_pay_form))
+						@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+							<span id="status" class="label label-info margin-label">
+							N/A - Non-paying organization</span>
+						@else
+							@if(is_null($form->approval) && is_null($form->approval_hr))
+							<span id="status" class="label label-warning margin-label">
+							Pending Approval</span>
+							@elseif($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr)))
+							<span id="status" class="label label-danger margin-label">
+							N/A - Disapproved by Manager</span>
+							@elseif($form->approval == 1 && is_null($form->approval_hr))
+							<span id="status" class="label label-warning margin-label">
+							Pending Approval</span>
+							@elseif($form->approval == 1 && $form->approval_hr == 1)
+							<span id="status" class="label label-success margin-label">
+							Approved</span>
+							@elseif($form->approval == 1 && $form->approval_hr == 0)
+							<span id="status" class="label label-danger margin-label">
+							Disapproved</span>
+							@endif
+						@endif
+					@else
+					<span id="status" class="label label-info margin-label">
+					N/A - Self Payment</span>
+					@endif
+				</td>
+				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
+				</td>
+				<td>
+				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
 				<td>{{ $form->created_at}}</td>
 			</tr>
@@ -120,6 +176,7 @@
 	</table>
 	{{ $placement_forms->links() }}
 </div>
+@endif
 @stop
 
 @section('java_script')

@@ -51,7 +51,7 @@
 	<div class="form-group">
 	    <label class="control-label" for="student_comment_show">Student Comment:</label>
 	    <div class="">
-	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly></textarea>
+	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly placeholder="field not yet functioning"></textarea>
 	    </div>
 	</div>
 	<div class="form-group">

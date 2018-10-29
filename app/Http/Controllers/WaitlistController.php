@@ -39,6 +39,38 @@ class WaitlistController extends Controller
     {
         $sddextr = SDDEXTR::where('INDEXNO', '17942')->first();
         return $sddextr->users->name;
+/*
+        // method to re-send emails to manager for un-approved forms
+        $arrRecipient = [];
+        $enrolments_no_mgr_approval = Preenrolment::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
+        
+        foreach ($enrolments_no_mgr_approval as  $valueMgrEmails) 
+        {                 
+            $arrRecipient[] = $valueMgrEmails->mgr_email; 
+            $recipient = $valueMgrEmails->mgr_email;
+
+            $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+            $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $valueMgrEmails->INDEXID)->where('Term', '191')->first();
+            $input_schedules = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $valueMgrEmails->INDEXID)
+                                ->where('Term', '191')
+                                ->where('Te_Code', $valueMgrEmails->Te_Code)
+                                ->where('form_counter', $valueMgrEmails->form_counter)
+                                ->get();
+            // Mail::to('allyson.frias@un.org')->send(new SendMailable($input_course, $input_schedules, $staff));
+            
+            echo 'email sent to: '.$recipient;
+            echo '<br>';
+            echo $input_course->courses->Description;
+            echo '<br>';
+            // echo $input_schedules;
+            // echo '<br>';
+            echo $staff->name;
+            echo '<br>';
+            echo '<br>';
+        } // end of foreach loop
+        dd($enrolments_no_mgr_approval);
+*/
     }
     public function queryTerm()
     {

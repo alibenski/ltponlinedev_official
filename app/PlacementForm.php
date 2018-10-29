@@ -43,6 +43,6 @@ class PlacementForm extends Model
     return $this->belongsTo('App\File', 'attachment_pay'); 
     }
     public function adminCommentPlacement() {
-        return $this->hasMany('App\AdminComment'); 
+        return $this->hasMany('App\AdminCommentPlacement',  'placement_id', 'id'); 
     }
 }

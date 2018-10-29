@@ -17,9 +17,4 @@ class AdminComment extends Model
     {
         return $this->belongsTo('App\Preenrolment', 'CodeIndexID', 'CodeIndexID');
     }
-
-    public function placementForm()
-    {
-        return $this->belongsTo('App\PlacementFrom');
-    }
 }

@@ -8,41 +8,44 @@
                 <p>Manager's Approval: 
 					@if($value->is_self_pay_form == 1)
 					<span id="status" class="label label-success margin-label">
-					N/A - Self Payment
+					N/A - Self Payment</span>
 					@elseif(is_null($value->approval))
 					<span id="status" class="label label-warning margin-label">
-					Pending Approval
+					Pending Approval</span>
 					@elseif($value->approval == 1)
 					<span id="status" class="label label-success margin-label">
-					Approved
+					Approved</span>
 					@elseif($value->approval == 0)
 					<span id="status" class="label label-danger margin-label">
-					Disapproved
+					Disapproved</span>
 					@endif
                 </p>
                 <p>HR Staff and Development Section Approval:
-					@if($value->is_self_pay_form == 1)
-					<span id="status" class="label label-success margin-label">
-					N/A - Self Payment
-					{{-- Add more organizations in array below --}}
-					@elseif(in_array(Auth::user()->sddextr->DEPT, ["UNOG", "JIU"]))
+					@if(is_null($value->is_self_pay_form))
+						@if(in_array($value->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+							<span id="status" class="label label-info margin-label">
+							N/A - Non-paying organization</span>
+						@else
+							@if(is_null($value->approval) && is_null($value->approval_hr))
+							<span id="status" class="label label-warning margin-label">
+							Pending Approval</span>
+							@elseif($value->approval == 0 && (is_null($value->approval_hr) || isset($value->approval_hr)))
+							<span id="status" class="label label-danger margin-label">
+							N/A - Disapproved by Manager</span>
+							@elseif($value->approval == 1 && is_null($value->approval_hr))
+							<span id="status" class="label label-warning margin-label">
+							Pending Approval</span>
+							@elseif($value->approval == 1 && $value->approval_hr == 1)
+							<span id="status" class="label label-success margin-label">
+							Approved</span>
+							@elseif($value->approval == 1 && $value->approval_hr == 0)
+							<span id="status" class="label label-danger margin-label">
+							Disapproved</span>
+							@endif
+						@endif
+					@else
 					<span id="status" class="label label-info margin-label">
-					N/A
-					@elseif(is_null($value->approval) && is_null($value->approval_hr))
-					<span id="status" class="label label-warning margin-label">
-					Pending Approval
-					@elseif($value->approval == 0 && (is_null($value->approval_hr) || isset($value->approval_hr)))
-					<span id="status" class="label label-danger margin-label">
-					N/A - Disapproved by Manager
-					@elseif($value->approval == 1 && is_null($value->approval_hr))
-					<span id="status" class="label label-warning margin-label">
-					Pending Approval
-					@elseif($value->approval == 1 && $value->approval_hr == 1)
-					<span id="status" class="label label-success margin-label">
-					Approved
-					@elseif($value->approval == 1 && $value->approval_hr == 0)
-					<span id="status" class="label label-danger margin-label">
-					Disapproved
+					N/A - Self Payment</span>
 					@endif
                 </p>
               @endforeach

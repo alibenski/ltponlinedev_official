@@ -222,7 +222,7 @@ class PreenrolmentController extends Controller
             }
 
         // $allQueries = array_merge($queries, $currentQueries);
-        $enrolment_forms = $enrolment_forms->paginate(10)->appends($queries);
+        $enrolment_forms = $enrolment_forms->withTrashed()->paginate(10)->appends($queries);
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 

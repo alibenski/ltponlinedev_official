@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AdminComment;
+use App\AdminCommentPlacement;
 use App\Classroom;
 use App\Course;
 use App\Day;
@@ -11,6 +12,7 @@ use App\Http\Controllers\PlacementFormController;
 use App\Language;
 use App\Mail\MailtoApprover;
 use App\Mail\MailtoStudentSelfpay;
+use App\Mail\MailtoStudentSelfpayPlacement;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -139,7 +141,7 @@ class SelfPayController extends Controller
            
         $show_sched_selfpay = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term',$term)->get();
 
-        // $show_admin_comments = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term', $term)->first()->adminCommentPlacement;
+        $show_admin_comments = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term', $term)->first()->adminCommentPlacement;
 
         return view('selfpayforms.edit-placement-selfpay',compact('selfpay_student','show_sched_selfpay', 'show_admin_comments'));
     }
@@ -161,25 +163,25 @@ class SelfPayController extends Controller
 
         foreach ($forms as $form) {
             $enrolment_record = PlacementForm::where('id', $form->id)->first();
-            // $enrolment_record->Comments = $request->admin_comment_show;
+            $enrolment_record->Comments = $request->admin_comment_show;
             $enrolment_record->selfpay_approval = $request['submit-approval'];
             $enrolment_record->save();
         }
-dd($forms);
+
         // save comments in the comments table and associate it to the enrolment form
         foreach ($forms as $form) {
-            $admin_comment = new AdminComment;
-            $admin_comment->Comments = $request->admin_comment_show;
-            $admin_comment->CodeIndexID = $form->CodeIndexID;
+            $admin_comment = new AdminCommentPlacement;
+            $admin_comment->comments = $request->admin_comment_show;
+            $admin_comment->placement_id = $form->id;
+            $admin_comment->user_id = Auth::user()->id;
             $admin_comment->save();
         }
         
-
         $staff_email = User::where('indexno', $request->INDEXID)->first();
         Mail::to($staff_email)
-                    ->send(new MailtoStudentSelfpay($request));
+                    ->send(new MailtoStudentSelfpayPlacement($request));
         $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
-        return redirect(route('selfpayform.index-placement-selfpay'));
+        return redirect(route('index-placement-selfpay'));
     }
 
     /**
@@ -504,8 +506,9 @@ dd($forms);
         // save comments in the comments table and associate it to the enrolment form
         foreach ($forms as $form) {
             $admin_comment = new AdminComment;
-            $admin_comment->Comments = $request->admin_comment_show;
+            $admin_comment->comments = $request->admin_comment_show;
             $admin_comment->CodeIndexID = $form->CodeIndexID;
+            $admin_comment->user_id = Auth::user()->id;
             $admin_comment->save();
         }
 

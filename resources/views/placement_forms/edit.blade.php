@@ -6,73 +6,83 @@
 @section('content')
 <div class="row">
 	<div class="col-sm-10 col-sm-offset-1">
-	<form method="POST" action="{{ route('post-placement-selfpay', $selfpay_student->id) }}">
+	<form method="POST" action="{{ route('placement-form.update', $placement_form->INDEXID) }}">
 	{{ csrf_field() }}
-	<input name="INDEXID" type="hidden" value="{{ $selfpay_student->INDEXID }}">
-	{{-- <input name="L" type="hidden" value="{{ $selfpay_student->L }}"> --}}
-	<input name="Term" type="hidden" value="{{ $selfpay_student->Term }}">
+	<input name="INDEXID" type="hidden" value="{{ $placement_form->INDEXID }}">
+	<input name="L" type="hidden" value="{{ $placement_form->L }}">
+	<input name="Term" type="hidden" value="{{ $placement_form->Term }}">
 	<div class="form-group">
 	    <label class="control-label" for="id_show">Name:</label>
 	    <div class="">
-	        <input name="nom" type="text" class="form-control"  value="{{ $selfpay_student->users->name }}" readonly>
+	        <input name="nom" type="text" class="form-control"  value="{{ $placement_form->users->name }}" readonly>
 	    </div>
 	</div>
 	<div class="form-group">
 	    <label class="control-label" for="course_show">Language:</label>
 	    <div class="">
-	        <input type="text" class="form-control" name="Lstring" value="{{ $selfpay_student->languages->name }}" readonly>
-	        <input type="hidden" class="form-control" name="L" value="{{ $selfpay_student->L }}" readonly>
+	        <input type="text" class="form-control" name="course_show" value="{{ $placement_form->languages->name }}" readonly>
 	    </div>
 	</div>
 	<div class="form-group">
 	    <label class="control-label" for="profile_show">Profile:</label>
 	    <div class="">
-	        <input type="text" class="form-control" name="profile_show" value="{{ $selfpay_student->profile }}" readonly>
+	        <input type="text" class="form-control" name="profile_show" value="{{ $placement_form->profile }}" readonly>
 	    </div>
 	</div>
 	<div class="form-group">
 	    <label class="control-label" for="org_show">Organization:</label>
 	    <div class="">
-	        <input type="text" class="form-control" name="org_show" value="{{ $selfpay_student->DEPT }}" readonly>
+	        <input type="text" class="form-control" name="org_show" value="{{ $placement_form->DEPT }}" readonly>
 	    </div>
 	</div>
 	<div class="form-group">	
 		<label class="control-label" for="show_sched">Exam Date:</label>
-		@foreach($show_sched_selfpay as $show_sched)
-	    <div class="">
-			<input type="text" class="form-control" name="show_sched" value="{{ $show_sched->placementSchedule->date_of_plexam }}" readonly>
+		{{-- @foreach($placement_form as $show_sched) --}}
+	    <div class="col-sm-12">
+			<ul>
+	    		<li>{{ $placement_form->placementSchedule->date_of_plexam }}</li>
+			</ul>
 		</div>
-		@endforeach
+		{{-- @endforeach --}}
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="flexible_show">Is Flexible: @if($selfpay_student->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
+	    <label class="control-label" for="flexible_show">Is Flexible: @if($placement_form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="student_comment_show">Student Comment on Placement Exam:</label>
+	    <label class="control-label" for="student_comment_show">Preferred Days:</label>
 	    <div class="">
-	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly>{{$selfpay_student->std_comments}}</textarea>
+	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly placeholder="no comment">{{ $placement_form->dayInput }}</textarea>
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="student_comment_show">Student Comment on Course Preference:</label>
+	    <label class="control-label" for="student_comment_show">Preferred Time:</label>
 	    <div class="">
-	        <textarea class="form-control" name="course_preference_show" cols="40" rows="5" readonly>{{$selfpay_student->course_preference_comment}}</textarea>
+	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly placeholder="no comment">{{ $placement_form->timeInput }}</textarea>
 	    </div>
 	</div>
 	<div class="form-group">
-	    <div class="col-sm-12"><button type="button" class="show-modal btn btn-info pull-right" data-toggle="modal"><span class="glyphicon glyphicon-comment"></span>  View All Admin Notes</button></div>
-	    <label class="control-label" for="admin_comment_show">Admin Comment: (This text will be included in the email)</label>
+	    <label class="control-label" for="student_comment_show">Student Comment:</label>
 	    <div class="">
-	        <textarea class="form-control" name="admin_comment_show" cols="40" rows="5"></textarea>
+	        <textarea class="form-control" name="student_comment_show" cols="40" rows="5" readonly  placeholder="no comment">{{ $placement_form->std_comments }}</textarea>
+	    </div>
+	</div>
+	<div class="form-group">
+	    {{-- <div class="col-sm-12"><button type="button" class="show-modal btn btn-info pull-right" data-toggle="modal"><span class="glyphicon glyphicon-comment"></span>  View All Admin Notes</button></div> --}}
+	    <label class="control-label" for="admin_comment_show">Course Preference:</label>
+	    <div class="">
+	        <textarea class="form-control" name="admin_comment_show" cols="40" rows="5" readonly  placeholder="no comment">{{ $placement_form->course_preference_comment }}</textarea>
 	    </div>
 	</div>
 	<div class="col-sm-12">
+		<a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-remove"></span>  Back</a>
+	</div>
+	{{-- <div class="col-sm-12">
 		<button type="submit" class="btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button>
 		<button type="submit" class="btn btn-success" name="submit-approval" value="1"><span class="glyphicon glyphicon-ok"></span>  Approve</button>	
 		<button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button>
-	</div>
-	<input type="hidden" name="_token" value="{{ Session::token() }}">
-	        {{ method_field('PUT') }}
+	</div> --}}
+	{{-- <input type="hidden" name="_token" value="{{ Session::token() }}">
+	        {{ method_field('PUT') }} --}}
 	</form>	
 	</div>
 </div>
@@ -87,9 +97,9 @@
             <div class="modal-body">
             	<form class="form-horizontal" role="form">
             		
-                	@foreach($show_admin_comments as $comment)
+                	{{-- @foreach($show_admin_comments as $comment)
                     	{{ $comment->comments }} <br> at {{ $comment->created_at }} by {{ $comment->user->name }} <br><br>
-                    @endforeach
+                    @endforeach --}}
                     
             	</form>
             </div>
