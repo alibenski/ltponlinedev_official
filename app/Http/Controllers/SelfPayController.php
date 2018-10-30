@@ -152,6 +152,7 @@ class SelfPayController extends Controller
                             'Term' => 'required|',
                             'INDEXID' => 'required|',
                             'L' => 'required|',
+                            'admin_comment_show' => 'required|',
                             'submit-approval' => 'required|',
                         )); 
 
@@ -488,6 +489,7 @@ class SelfPayController extends Controller
                             'Term' => 'required|',
                             'INDEXID' => 'required|',
                             'Te_Code' => 'required|',
+                            'admin_comment_show' => 'required|',
                             'submit-approval' => 'required|',
                         )); 
 

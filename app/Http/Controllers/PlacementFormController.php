@@ -349,36 +349,42 @@ class PlacementFormController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        if (is_null($request->Term)) {
+        if (is_null($request->Term) ) {
             $placement_forms = null;
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
+        // if (is_null($request->Term) && !empty($request->session()->get('Term')) ) {
+            
+        // }
+            $placement_forms = new PlacementForm;
+            // $currentQueries = \Request::query();
+            $queries = [];
 
-        $placement_forms = new PlacementForm;
-        // $currentQueries = \Request::query();
-        $queries = [];
+            $columns = [
+                'L', 'DEPT', 'Term',
+            ];
+            // $indexno = \Request::input('INDEXID');
 
-        $columns = [
-            'L', 'DEPT', 'Term',
-        ];
+            foreach ($columns as $column) {
+                if (\Request::has($column)) {
+                    $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                    // $placement_forms->whereHas('users.indexno', function($q) use ( $indexno) {
+                    //     return $q->where('indexno',  $indexno);
+                    // });
+                    $queries[$column] = \Request::input($column);
+                }
 
-        
-        foreach ($columns as $column) {
-            if (\Request::has($column)) {
-                $placement_forms = $placement_forms->where($column, \Request::input($column) );
-                $queries[$column] = \Request::input($column);
-            }
+            } 
 
-        } 
+                if (\Request::has('sort')) {
+                    $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
+                    $queries['sort'] = \Request::input('sort');
+                }
 
-            if (\Request::has('sort')) {
-                $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
-                $queries['sort'] = \Request::input('sort');
-            }
-
-        // $allQueries = array_merge($queries, $currentQueries);
-        $placement_forms = $placement_forms->withTrashed()->paginate(10)->appends($queries);
-        return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            // $allQueries = array_merge($queries, $currentQueries);
+            $placement_forms = $placement_forms->withTrashed()->paginate(10)->appends($queries);
+            // $request->session()->put('Term', \Request::input('Term') );
+            return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
     public function edit($id)

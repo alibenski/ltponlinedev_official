@@ -33,7 +33,9 @@
 	            </div>
 	          </div>
 	        </div>
-
+	        <div class="form-group col-sm-12">
+				<input type="text" name="INDEXID" class="form-control">
+	        </div>
 			<div class="form-group">
 	            @foreach ($languages as $id => $name)
 				<div class="col-sm-4">
