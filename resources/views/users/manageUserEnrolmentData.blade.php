@@ -8,6 +8,7 @@
 @section('content')
 @include('admin.partials._userAdminNav')
 <div class="row col-sm-12">
+	<a href="{{ route('users.index') }}" class="btn btn-danger"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
 	<h3>Viewing: <strong>{{ $student->name }}</strong></h3>
 	<div class="panel panel-primary">
         <div class="panel-heading"><strong>Student Profile</strong></div>
