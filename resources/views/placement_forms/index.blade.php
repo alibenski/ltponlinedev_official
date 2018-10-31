@@ -21,21 +21,24 @@
 			<h4><strong>Filters:</strong></h4>
 
 			<div class="form-group">
-	          <label for="Term" class="col-md-12 control-label">Term Select:</label>
+	          <label for="Term" class="col-sm-12 control-label">Term Select:</label>
 	          <div class="form-group col-sm-12">
 	            <div class="dropdown">
-	              <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+	              <select id="Term" name="Term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;">
 	                @foreach($terms as $value)
 	                    <option></option>
-	                    <option value="{{$value->Term_Code}}">{{$value->Comments}} - {{$value->Term_Name}}</option>
+	                    <option value="{{ $value->Term_Code }}">{{$value->Comments}} - {{$value->Term_Name}}</option>
 	                @endforeach
 	              </select>
 	            </div>
 	          </div>
 	        </div>
+	        
 	        <div class="form-group col-sm-12">
-				<input type="text" name="INDEXID" class="form-control">
+	        	<label for="search" class="control-label">Search by Name:</label>
+				<input type="text" name="search" class="form-control" placeholder="Enter name here">
 	        </div>
+
 			<div class="form-group">
 	            @foreach ($languages as $id => $name)
 				<div class="col-sm-4">
@@ -50,10 +53,10 @@
 			</div>
 	        
 	        <div class="form-group">           
-		      <label for="organization" class="col-md-12 control-label"> Organization:</label>
+		      <label for="organization" class="col-sm-12 control-label"> Organization:</label>
 		      <div class="form-group col-sm-12">
 	            <div class="dropdown">
-	              <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
+	              <select id="input" name="DEPT" class="col-sm-10 form-control select2-basic-single" style="width: 100%;">
 	                @if(!empty($org))
 	                  @foreach($org as $value)
 	                    <option></option>

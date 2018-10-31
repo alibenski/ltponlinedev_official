@@ -35,6 +35,17 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function testMethod()
+    {
+        $name = 'allyson';
+        $placement_forms = PlacementForm::with('users')
+            ->whereHas('users', function($q) use ( $name) {
+                return $q->where('name', 'LIKE', '%' . $name . '%');
+            })
+            ->get();
+        
+        dd($placement_forms);
+    }
     public function sddextr()
     {
         $sddextr = SDDEXTR::where('INDEXNO', '17942')->first();
