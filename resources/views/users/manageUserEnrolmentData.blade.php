@@ -9,6 +9,90 @@
 @include('admin.partials._userAdminNav')
 <div class="row col-sm-12">
 	<h3>Viewing: <strong>{{ $student->name }}</strong></h3>
+	<div class="panel panel-primary">
+        <div class="panel-heading"><strong>Student Profile</strong></div>
+        <div class="panel-body">
+			<form class="form-horizontal">
+		        <div class="form-group">
+		            <label for="title" class="col-md-4 control-label">Title:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>@if(empty ( $student->sddextr )) Update Needed @else {{ $student->sddextr->TITLE }} @endif</p>
+		            </div>
+		        </div>
+
+		        <div class="form-group">
+		            <label for="fullName" class="col-md-4 control-label">Full Name:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>@if(empty( $student->sddextr )) Update Needed @else {{ $student->sddextr->LASTNAME }}, {{ $student->sddextr->FIRSTNAME }} @endif</p>
+		            </div>
+		        </div>
+
+		        <div class="form-group">
+		            <label for="email" class="col-md-4 control-label">Email Address:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>{{ $student->email }}</p>
+		            </div>
+		        </div>
+
+		        <div class="form-group">
+		            <label for="org" class="col-md-4 control-label">Organization:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif</p>
+		            </div>
+		        </div>
+
+		        <div class="form-group">
+		            <label for="contactNo" class="col-md-4 control-label">Contact Number:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->PHONE }} @endif</p>
+		            </div>
+		        </div>
+
+		        <div class="form-group">
+		            <label for="jobAppointment" class="col-md-4 control-label">Type of Appointment:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->CATEGORY }} @endif</p>
+		            </div>
+		        </div>
+
+		        <div class="form-group">
+		            <label for="gradeLevel" class="col-md-4 control-label">Grade Level:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->LEVEL }}@endif</p>
+		            </div>
+		        </div>
+
+		        {{-- <div class="form-group">
+		            <label for="contractExp" class="col-md-4 control-label">Contract Expiration:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>{{ $student->sddextr->CONEXP }}</p>
+		            </div>
+		        </div> --}}
+
+		        <div class="form-group">
+		            <label for="course" class="col-md-4 control-label">Last UN Language Course:</label>
+
+		            <div class="col-md-8 form-control-static">
+		                <p>
+		                    @if(empty ($repos_lang))
+		                    None
+		                    @elseif(empty($repos_lang->Te_Code)) {{ $repos_lang->coursesOld->Description }} @else {{ $repos_lang->courses->Description}} @endif
+		                </p>
+		            </div>
+		        </div>
+		        {{-- <div class="col-md-4 col-md-offset-4"><a href="{{ route('students.edit', $student->id) }}" class="btn btn-block btn-info btn-md">Edit my CLM Online Profile</a>
+		        </div> --}}
+		    </form>
+		</div>
+		</div>
 	<h3>@if(Request::input('Term'))Term: {{ Request::input('Term') }} @else Please Choose Term @endif</h3>
    	<div class="row col-sm-3">
 		<form method="GET" action="{{ route('manage-user-enrolment-data', $id) }}">

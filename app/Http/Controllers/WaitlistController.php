@@ -37,14 +37,11 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
-        $name = 'allyson';
-        $placement_forms = PlacementForm::with('users')
-            ->whereHas('users', function($q) use ( $name) {
-                return $q->where('name', 'LIKE', '%' . $name . '%');
-            })
-            ->get();
-        
-        dd($placement_forms);
+        $sddextr_email_address = 'allyson.frias@gmail.com';
+        // send credential email to user using email from sddextr 
+        Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
+
+        dd($sddextr_email_address);
     }
     public function sddextr()
     {
