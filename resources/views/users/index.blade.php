@@ -2,15 +2,16 @@
 
 @section('content')
 
-<div class="col-lg-10 col-lg-offset-1">
+<div class="col-sm-10 col-sm-offset-1">
     <h1><i class="fa fa-users"></i> User Administration <a href="{{ route('roles.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Roles</a>
     <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Permissions</a></h1>
     <hr>
     
-    <div class="form-group col-lg-10">
+    <div class="form-group col-sm-12">
         <form method="GET" action="{{ route('users.index') }}">
             {{-- search by name or email--}}
-            <div class="input-group">           
+                <label for="search" class="control-label">Search here to check if the student has a login account in the system:</label>         
+            <div class="input-group">  
                 <input type="text" name="search" class="form-control">
                 <div class="input-group-btn">
                     <button type="submit" class="btn btn-info button-prevent-multi-submit">Search by Name/Email</button>
@@ -20,13 +21,13 @@
         </form>    
     </div>
 
-    <div class="form-group col-lg-12">
+    <div class="form-group col-sm-12">
         <a href="{{ route('users.create') }}" class="btn btn-success">Add Single User</a>
         <a href="{{ route('import-user') }}" class="btn btn-primary">Bulk Import New Users</a>
         <a href="{{ route('import-existing-user') }}" class="btn btn-warning">Bulk Import Existing Users</a>  
     </div>
-
-    <div class="table-responsive col-lg-12">
+    {{ $users->links() }}     
+    <div class="table-responsive col-sm-12">
         <table class="table table-bordered table-striped">
 
             <thead>
@@ -35,7 +36,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Contact Number</th>
-                    <th>Date/Time Added</th>
+                    <th>Member Since</th>
                     <th>User Roles</th>
                     <th>Operations</th>
                 </tr>
@@ -53,7 +54,7 @@
                     <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
                     <td>
                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin: 1px;">Edit</a>
-                    <a href="{{ route('manage-user-enrolment-data', $user->id) }}" class="btn btn-success pull-left" style="margin: 1px;">LTP Data</a>
+                    <a href="{{ route('manage-user-enrolment-data', $user->id) }}" class="btn btn-warning pull-left" style="margin: 1px;">LTP Data</a>
 
 					<form method="POST" action="{{ route('users.destroy',  $user->id) }}">
                       <input type="submit" value="Delete" class="btn btn-danger" style="margin: 1px;" disabled="">
@@ -66,7 +67,6 @@
             </tbody>
 
         </table>
-        {{ $users->links() }}     
     </div>
 </div>
 

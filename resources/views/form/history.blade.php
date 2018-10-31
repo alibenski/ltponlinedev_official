@@ -12,12 +12,22 @@
                 </div>
                 <div class="panel-body">
                     @if(empty($historical_data))
-                    None
+                    <div class="alert alert-warning">
+                        <p>There were no historical records found.</p>
+                    </div>
                     @else
                     <ul  class="list-group">
                         @foreach($historical_data as $hist_datum)
-                                <li class="list-group-item"><strong class="text-success">@if(empty($hist_datum)) No History @elseif(empty($hist_datum->Te_Code)) {{ $hist_datum->coursesOld->Description }} @else {{ $hist_datum->courses->Description }} @endif</strong> : 
-                                    {{ $hist_datum->terms->Term_Name }}</li>
+                            <li class="list-group-item"><strong class="text-success">
+                            @if(empty($hist_datum))
+                            <div class="alert alert-warning">
+                                <p>There were no historical records found.</p>
+                            </div>
+                            @else
+                                @if(empty($hist_datum->Te_Code)) {{ $hist_datum->coursesOld->Description }} 
+                                @else {{ $hist_datum->courses->Description }} 
+                                @endif</strong> : {{ $hist_datum->terms->Term_Name }}</li>
+                            @endif
                         @endforeach
                     </ul>
                     @endif

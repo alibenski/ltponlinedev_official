@@ -115,7 +115,12 @@ class HomeController extends Controller
     {
         $current_user = Auth::user()->indexno;
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->get();
-        // dd(Auth::user()->name);
+        
+        if ($historical_data->isEmpty()) {
+            $historical_data = null;
+            return view('form.history')->withHistorical_data($historical_data);
+        }
+        // dd($historical_data);
         return view('form.history')->withHistorical_data($historical_data);
     }
 

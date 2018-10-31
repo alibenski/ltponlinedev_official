@@ -37,15 +37,17 @@ class UserController extends Controller
      */
     public function index()
     {
-        //Get all users and pass it to the view
-        // $users = User::paginate(50); 
-        // Gets the query string from our form submission 
         $query = \Request::input('search');
         // Returns an array of users that have the query string located somewhere within 
         // our users name or email fields. Paginates them so we can break up lots of search results.
-        $users = User::where('name', 'LIKE', '%' . $query . '%')->orWhere('email', 'LIKE', '%' . $query . '%')->paginate(20);
-
-        return view('users.index')->with('users', $users);
+        $users = User::where('name', 'LIKE', '%' . $query . '%')->orWhere('email', 'LIKE', '%' . $query . '%')
+            ->paginate(20);    
+        if ($users->getCollection()->count() == 0) {
+                        // $request->session()->flash('interdire-msg', 'No such user found in the login accounts records of the system. ');
+                        return redirect()->route('users.index')->with('users', $users)->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
+                    } 
+  
+        return view('users.index')->with('users', $users);             
     }
 
     /**
@@ -234,15 +236,33 @@ class UserController extends Controller
         $student = User::where('id', $id)->first();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
+        $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
+
+        if ($student_last_term == null) {
+            $repos_lang = null;
+            $student_enrolments = null;
+            $student_placements = null;
+            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang);
+        }    
+
+        $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
+                ->where('INDEXID', $student->indexno)->first();
+
         if (is_null($request->Term)) {
             $student_enrolments = null;
-            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments);
+            $student_placements = null;
+            
+            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang);
         }
 
         $student_enrolments = Preenrolment::where('INDEXID', $student->indexno)
             ->where('Term', $request->Term)
             ->get();
+        $student_placements = PlacementForm::where('INDEXID', $student->indexno)
+            ->where('Term', $request->Term)
+            ->get();
+        
 
-        return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments);
+        return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang);
     }
 }
