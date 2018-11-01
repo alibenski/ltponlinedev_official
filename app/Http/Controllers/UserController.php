@@ -235,13 +235,16 @@ class UserController extends Controller
         $id = $id;
         $student = User::where('id', $id)->first();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-
+        $student_enrolments = Preenrolment::where('INDEXID', $student->indexno)
+            ->where('Term', $request->Term)
+            ->get();
+        $student_placements = PlacementForm::where('INDEXID', $student->indexno)
+            ->where('Term', $request->Term)
+            ->get();
         $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
 
         if ($student_last_term == null) {
             $repos_lang = null;
-            $student_enrolments = null;
-            $student_placements = null;
             return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang);
         }    
 
@@ -253,15 +256,7 @@ class UserController extends Controller
             $student_placements = null;
             
             return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang);
-        }
-
-        $student_enrolments = Preenrolment::where('INDEXID', $student->indexno)
-            ->where('Term', $request->Term)
-            ->get();
-        $student_placements = PlacementForm::where('INDEXID', $student->indexno)
-            ->where('Term', $request->Term)
-            ->get();
-        
+        }      
 
         return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang);
     }

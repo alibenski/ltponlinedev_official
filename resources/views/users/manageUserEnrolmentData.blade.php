@@ -135,7 +135,7 @@
 		@if(count($student_enrolments) == 0)
 		@else
 		<div class="filtered-table">
-			<h4>Regular Enrolment Form(s) Submitted:</h4>
+			<h4><strong>Regular Enrolment Form(s) Submitted:</strong></h4>
 			<table class="table table-bordered table-striped">
 			    <thead>
 			        <tr>
@@ -203,10 +203,10 @@
 						N/A - Self Payment</span>
 						@endif
 						</td>
-						<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank">carte attachment</a> @endif
+						<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 						</td>
 						<td>
-						@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank">payment attachment</a> @endif
+						@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 						</td>
 						<td>{{ $form->created_at}}</td>
 					</tr>
@@ -223,7 +223,7 @@
 		@if(count($student_placements) == 0)
 		@else
 		<div class="filtered-table">
-			<h4>Placement Form(s) Submitted:</h4>
+			<h4><strong>Placement Form(s) Submitted:</strong></h4>
 			<table class="table table-bordered table-striped">
 			    <thead>
 			        <tr>
@@ -289,10 +289,10 @@
 						N/A - Self Payment</span>
 						@endif
 						</td>
-						<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank">carte attachment</a> @endif
+						<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 						</td>
 						<td>
-						@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank">payment attachment</a> @endif
+						@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 						</td>
 						<td>{{ $form->created_at}}</td>
 					</tr>
