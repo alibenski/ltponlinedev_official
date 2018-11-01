@@ -21,12 +21,12 @@
                             <li class="list-group-item"><strong class="text-success">
                             @if(empty($hist_datum))
                             <div class="alert alert-warning">
-                                <p>There were no historical records found.</p>
+                                <p>No records found.</p>
                             </div>
                             @else
                                 @if(empty($hist_datum->Te_Code)) {{ $hist_datum->coursesOld->Description }} 
                                 @else {{ $hist_datum->courses->Description }} 
-                                @endif</strong> : {{ $hist_datum->terms->Term_Name }}</li>
+                                @endif</strong> : {{ $hist_datum->terms->Term_Name }} (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else @endif)</li>
                             @endif
                         @endforeach
                     </ul>

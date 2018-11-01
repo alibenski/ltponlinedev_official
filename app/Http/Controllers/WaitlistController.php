@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Classroom;
 use App\Course;
+use App\CourseSchedule;
 use App\FocalPoints;
 use App\Jobs\SendEmailJob;
 use App\Language;
 use App\Mail\MailtoApprover;
+use App\Mail\SendAuthMail;
 use App\Mail\SendMailable;
 use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailHR;
 use App\Mail\SendReminderEmailPlacementHR;
-use App\Mail\SendAuthMail;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -37,11 +38,21 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
-        $sddextr_email_address = 'allyson.frias@gmail.com';
-        // send credential email to user using email from sddextr 
-        Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
+        $current_term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        $student_last_record = Repo::orderBy('Term', 'desc')->where('Term', $current_term->Term_Code)
+                ->where('INDEXID', '17942')->first();
 
-        dd($sddextr_email_address);
+        $select_courses = CourseSchedule::where('L', 'F')
+            ->where('Te_Term', '191')
+            ->orderBy('id', 'asc')
+            ->with('course')
+            // ->whereHas('course', function($q) {
+            //                 return $q->where('id', '<', 11);
+            //             })
+            ->get();
+            // ->pluck("course.Description","Te_Code_New");
+
+        dd($select_courses, $student_last_record->Result, $student_last_record->Te_Code_old, $current_term);
     }
     public function sddextr()
     {
