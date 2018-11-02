@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group col-md-8">
-          <button type="submit" class="btn btn-success" value="UNOG">Submit</button>        
+          <button type="submit" class="btn btn-success" value="UNOG">View Forms</button>        
         </div>
 
       </form>

@@ -10,7 +10,7 @@
 <div class="row col-sm-12">
 	<a href="{{ route('users.index') }}" class="btn btn-danger"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
 	<button type="button" class="show-modal btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
-	<button type="button" class="show-modal-history btn btn-primary" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View History</button>
+	<button type="button" class="show-modal-history btn btn-primary" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
 
 	<h3>Viewing: <strong>{{ $student->name }}</strong></h3>
 
