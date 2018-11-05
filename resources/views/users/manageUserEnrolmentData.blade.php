@@ -39,7 +39,7 @@
 
 
 		    <div class="form-group">           
-		        <button type="submit" class="btn btn-success">Submit</button>
+		        <button type="submit" class="btn btn-success">View Forms</button>
 		    	<a href="{{ route('manage-user-enrolment-data', $id) }}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
 		    </div>
 		</form>

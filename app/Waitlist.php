@@ -44,6 +44,9 @@ class Waitlist extends Model
     public function courses() {
     return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code_New'); 
 	}
+    public function placementforms() {
+    return $this->belongsTo('App\PlacementForm', 'INDEXID', 'INDEXID'); 
+    }
     public function schedule() {
     return $this->belongsTo('App\Schedule', 'schedule_id'); 
     }

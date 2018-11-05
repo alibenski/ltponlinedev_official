@@ -397,7 +397,7 @@ class PlacementFormController extends Controller
     public function edit($id)
     {
         $placement_form = PlacementForm::withTrashed()->find($id);
-
+        // dd($placement_form);
         return view('placement_forms.edit',compact('placement_form'));
     }
 

@@ -45,4 +45,7 @@ class PlacementForm extends Model
     public function adminCommentPlacement() {
         return $this->hasMany('App\AdminCommentPlacement',  'placement_id', 'id'); 
     }
+    public function waitlist() {
+        return $this->hasMany('App\Waitlist',  'INDEXID', 'INDEXID'); 
+    }
 }
