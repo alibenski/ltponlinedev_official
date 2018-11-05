@@ -46,7 +46,12 @@
 		{{-- @endforeach --}}
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="flexible_show">Placement Test: {{ $placement_form->INDEXID }}</label>
+	    <label class="control-label" for="flexible_show">Placement Test/ Waitlist Information: @if ($waitlists)
+	    	@foreach($waitlists as $waitlisted)
+	    		@foreach($waitlisted->waitlist as $info_details)
+	    			{{ $info_details->id }}
+	    		@endforeach 
+	    	@endforeach @else -- @endif </label>
 	</div>
 	<div class="form-group">
 	    <label class="control-label" for="flexible_show">Is Flexible: @if($placement_form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>

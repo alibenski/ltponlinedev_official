@@ -397,8 +397,9 @@ class PlacementFormController extends Controller
     public function edit($id)
     {
         $placement_form = PlacementForm::withTrashed()->find($id);
-        // dd($placement_form);
-        return view('placement_forms.edit',compact('placement_form'));
+        $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
+        // dd($placement_form, $placement_student_index);
+        return view('placement_forms.edit',compact('placement_form','waitlists'));
     }
 
     public function update(Request $request, $id)

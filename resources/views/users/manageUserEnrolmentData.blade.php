@@ -59,6 +59,7 @@
 			            <th>Language</th>
 			            <th>Course</th>
 			            <th>Schedule</th>
+			            <th>Manager Email</th>
 			            <th>Manager Approval</th>
 			            <th>HR Approval</th>
 			            <th>ID Proof</th>
@@ -75,6 +76,7 @@
 						<td>{{ $form->L }}</td>
 						<td>{{ $form->courses->Description }}</td>
 						<td>{{ $form->schedule->name }}</td>
+						<td>@if($form->mgr_email){{ $form->mgr_email }} @else - @endif</td>
 						<td>
 							@if($form->is_self_pay_form == 1)
 							<span id="status" class="label label-info margin-label">
