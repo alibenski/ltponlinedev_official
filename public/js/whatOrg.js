@@ -71,7 +71,16 @@
           var token = $('meta[name=csrf-token]').attr('content');
         orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
       }
-      if (dProfile === 'PRESS') { // staff from PRESS NGO
+      if (dProfile === 'NGO') { // staff from NGO
+        $("select[id='input'] option[value='NGO']").prop('selected',true);
+        $('.select2-basic-single').val('NGO').trigger('change');
+          console.log($('select[id="input"]').val());
+          var dOrg = $('select[id="input"]').val();
+          var dDecision = $('input[name="decision"]:checked').val();
+          var token = $('meta[name=csrf-token]').attr('content');
+        orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
+      }
+      if (dProfile === 'PRESS') { // staff from PRESS
         $("select[id='input'] option[value='PRESS']").prop('selected',true);
         $('.select2-basic-single').val('PRESS').trigger('change');
           console.log($('select[id="input"]').val());

@@ -78,7 +78,8 @@
                             <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
                             <option value="RET">Retired UN Staff Member</option>
                             <option value="SERV">Staff of Service Organizations in the Palais</option>
-                            <option value="PRESS">Staff of UN-accredited NGO's and Press Corps</option>
+                            <option value="NGO">Staff of UN-accredited NGO's</option>
+                            <option value="PRESS">Staff of UN Press Corps</option>
                       </select>
                     </div>
                   </div>

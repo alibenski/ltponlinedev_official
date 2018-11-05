@@ -330,11 +330,12 @@ class NewUserController extends Controller
     {
         // check if there is a duplicate in Auth users table
         $this->validate($request, array(
-                'indexno' => 'required',
+                'indexno' => 'required|unique:users,indexno',
                 // validate if email is unique 
                 'email' => 'unique:users,email',
             )); 
         $this->validate($request, array(
+                'indexno' => 'unique:SDDEXTR,INDEXNO_old',
                 // validate if email is unique 
                 'email' => 'unique:SDDEXTR,EMAIL',
             )); 
