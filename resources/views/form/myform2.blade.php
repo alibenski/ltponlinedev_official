@@ -352,6 +352,15 @@
 <script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
 <script src="{{ asset('js/select2.full.js') }}"></script>
 <script src="{{ asset('js/bootstrap-maxlength.js') }}"></script>
+<script src="{{ asset('js/jquery.userTimeout.js') }}"></script>
+<script>
+// $(document).userTimeout({
+//   logouturl: 'http://ltponlinedev.local/logout',
+//   session: 600000,
+//   force: 900000,
+//   modalBody: 'You\'re session will time out due to inactivity. Please choose to stay logged in or to logoff. Otherwise, you will be logged off automatically after 15 minutes.'
+// });
+</script>
 <script>
  $(window).load(function(){
  $("#loader").fadeOut(500);

@@ -261,6 +261,7 @@ class AjaxController extends Controller
 
     public function ajaxCheckEnrolmentEntries()
     {
+        if (Auth::check()) {
         $current_user = Auth::user()->indexno;
         $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
             ->where(function($q){ 
@@ -273,7 +274,7 @@ class AjaxController extends Controller
 
             $data = $eformGrouped;
             return response()->json($data);
-            
+        }
     }
 
     public function ajaxCheckPlacementForm()
@@ -310,16 +311,18 @@ class AjaxController extends Controller
 
     public function ajaxCheckSelfpayPlacementEntries()
     {
-        $current_user = Auth::user()->indexno;
-        $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
-        $placementFromCount = PlacementForm::orderBy('Term', 'desc')
-                ->where('INDEXID', $current_user)
-                ->where('Term', $termCode)
-                ->where('is_self_pay_form', 1)
-                ->get();
+        if (Auth::check()) {
+            $current_user = Auth::user()->indexno;
+            $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
+            $placementFromCount = PlacementForm::orderBy('Term', 'desc')
+                    ->where('INDEXID', $current_user)
+                    ->where('Term', $termCode)
+                    ->where('is_self_pay_form', 1)
+                    ->get();
 
-        $data = $placementFromCount;
-            return response()->json($data);        
+            $data = $placementFromCount;
+                return response()->json($data);        
+        }
     }
 
     public function ajaxCheckSelfpayEntries()
