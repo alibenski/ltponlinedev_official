@@ -32,36 +32,35 @@
 
             <thead>
                 <tr>
+                    <th>Operations</th>
                     <th>Index</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Contact Number</th>
                     <th>Member Since</th>
                     <th>User Roles</th>
-                    <th>Operations</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($users as $user)
                 <tr>
+                    <td>
+                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin: 1px;">Edit</a>
+                    <a href="{{ route('manage-user-enrolment-data', $user->id) }}" class="btn btn-warning pull-left" style="margin: 1px;">LTP Data</a>
 
+					{{-- <form method="POST" action="{{ route('users.destroy',  $user->id) }}">
+                      <input type="submit" value="Delete" class="btn btn-danger" style="margin: 1px;" disabled="">
+                      <input type="hidden" name="_token" value="{{ Session::token() }}">
+                     {{ method_field('DELETE') }}
+                  	</form> --}}
+                    </td>
                     <td>{{ $user->indexno }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>@if(empty($user->sddextr->PHONE )) none @else <strong> {{$user->sddextr->PHONE}} </strong>@endif</td>
                     <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
                     <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
-                    <td>
-                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin: 1px;">Edit</a>
-                    <a href="{{ route('manage-user-enrolment-data', $user->id) }}" class="btn btn-warning pull-left" style="margin: 1px;">LTP Data</a>
-
-					<form method="POST" action="{{ route('users.destroy',  $user->id) }}">
-                      <input type="submit" value="Delete" class="btn btn-danger" style="margin: 1px;" disabled="">
-                      <input type="hidden" name="_token" value="{{ Session::token() }}">
-                     {{ method_field('DELETE') }}
-                  	</form>
-                    </td>
                 </tr>
                 @endforeach
             </tbody>

@@ -279,6 +279,7 @@ class AjaxController extends Controller
 
     public function ajaxCheckPlacementForm()
     {
+        if (Auth::check()) {
             $current_user = Auth::user()->indexno;
             $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
 
@@ -293,10 +294,12 @@ class AjaxController extends Controller
             }
                 $data = $placementData;
             return response()->json($data);
+        }
     }
 
     public function ajaxCheckPlacementEntries()
     {
+        if (Auth::check()) {
         $current_user = Auth::user()->indexno;
         $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
 
@@ -307,6 +310,7 @@ class AjaxController extends Controller
 
         $data = $placementFromCount;
             return response()->json($data);
+        }
     }
 
     public function ajaxCheckSelfpayPlacementEntries()
@@ -327,6 +331,7 @@ class AjaxController extends Controller
 
     public function ajaxCheckSelfpayEntries()
     {
+        if (Auth::check()) {
         $current_user = Auth::user()->indexno;
         $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
             ->where(function($q){ 
@@ -339,6 +344,7 @@ class AjaxController extends Controller
 
             $data = $eformGrouped;
             return response()->json($data);
+        }
     }
     
     /*

@@ -358,7 +358,7 @@
 //   logouturl: 'http://ltponlinedev.local/logout',
 //   session: 600000,
 //   force: 900000,
-//   modalBody: 'You\'re session will time out due to inactivity. Please choose to stay logged in or to logoff. Otherwise, you will be logged off automatically after 15 minutes.'
+//   modalBody: 'Due to security reasons, your session will time out due to inactivity. Please choose to stay logged in or to logoff. Otherwise, you will be logged off automatically after 15 minutes.'
 // });
 </script>
 <script>
