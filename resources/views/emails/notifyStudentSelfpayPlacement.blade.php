@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                     <p> Dear {{ $request->nom }}, </p>
-                                    <p> Your enrolment form for {{ $request->Lstring }} has a status of <strong> @if($request['submit-approval'] == 1 )  approved @elseif($request['submit-approval'] == 0) disapproved @else pending @endif </strong>. </p>
+                                    <p> Your registration for the {{ $request->Lstring }} placement test has a status of <strong> @if($request['submit-approval'] == 1 )  approved. You will receive an email with regards to the test in due course. @elseif($request['submit-approval'] == 0) disapproved. @else pending. @endif </strong> </p>
                                     <p> CLM Language Secretariat comment: </p>
                                     <p> {{ $request->admin_comment_show }}</p>
                                 </td>

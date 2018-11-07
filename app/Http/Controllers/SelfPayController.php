@@ -43,7 +43,7 @@ class SelfPayController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        $this->middleware('opencloseenrolment')->except(['index','update']);
+        $this->middleware('opencloseenrolment')->only(['create','store']);
         // $this->middleware('checksubmissionselfpay')->except(['index','update']);
     }
 
@@ -152,7 +152,7 @@ class SelfPayController extends Controller
                             'Term' => 'required|',
                             'INDEXID' => 'required|',
                             'L' => 'required|',
-                            'admin_comment_show' => 'required|',
+                            // 'admin_comment_show' => 'required|',
                             'submit-approval' => 'required|',
                         )); 
 
