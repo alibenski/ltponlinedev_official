@@ -369,7 +369,7 @@ class PlacementFormController extends Controller
 
             foreach ($columns as $column) {
                 if (\Request::has($column)) {
-                    $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                    $placement_forms = $placement_forms->where('selfpay_approval', '1')->orWhere('selfpay_approval', null)->where($column, \Request::input($column) );
                     
                     $queries[$column] = \Request::input($column);
                 }
@@ -390,13 +390,13 @@ class PlacementFormController extends Controller
                 }
 
             // $allQueries = array_merge($queries, $currentQueries);
-            $placement_forms = $placement_forms->withTrashed()->paginate(10)->appends($queries);
+            $placement_forms = $placement_forms->paginate(10)->appends($queries);
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
     public function edit($id)
     {
-        $placement_form = PlacementForm::withTrashed()->find($id);
+        $placement_form = PlacementForm::find($id);
         $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
         // dd($placement_form, $placement_student_index);
         return view('placement_forms.edit',compact('placement_form','waitlists'));

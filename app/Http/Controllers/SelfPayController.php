@@ -467,7 +467,7 @@ class SelfPayController extends Controller
      */
     public function edit(Request $request, $indexid, $tecode, $term)
     {
-        $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
+        $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn','attachment_id', 'attachment_pay')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
            
         $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term',$term)->get();
 

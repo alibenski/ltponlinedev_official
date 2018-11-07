@@ -5,6 +5,9 @@
 @stop
 @section('content')
 <div class="row">
+	<div class="alert alert-info col-sm-10 col-sm-offset-1">
+	<h4 class="text-center"><strong><u>Payment-based Placement Form</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
+	</div>
 	<div class="col-sm-10 col-sm-offset-1">
 	<form method="POST" action="{{ route('post-placement-selfpay', $selfpay_student->id) }}">
 	{{ csrf_field() }}
@@ -25,6 +28,14 @@
 	    </div>
 	</div>
 	<div class="form-group">
+		<label class="control-label" for="org_show">ID Proof:</label>
+		<td>@if(empty($selfpay_student->filesId->path)) None @else <a href="{{ Storage::url($selfpay_student->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>	
+	</div>
+	<div class="form-group">	
+		<label class="control-label" for="org_show">Payment Proof:</label>
+		<td>@if(empty($selfpay_student->filesPay->path)) None @else <a href="{{ Storage::url($selfpay_student->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
+	</div>				
+	<div class="form-group">
 	    <label class="control-label" for="profile_show">Profile:</label>
 	    <div class="">
 	        <input type="text" class="form-control" name="profile_show" value="{{ $selfpay_student->profile }}" readonly>
@@ -40,11 +51,14 @@
 		<label class="control-label" for="show_sched">Exam Date:</label>
 		@foreach($show_sched_selfpay as $show_sched)
 	    <div class="">
-			<input type="text" class="form-control" name="show_sched" value="{{ $show_sched->placementSchedule->date_of_plexam }}" readonly>
+			{{-- <input type="text" class="form-control" name="show_sched" value="{{ $show_sched->placementSchedule->date_of_plexam }}" readonly> --}}
+			<ul>
+	    		<li>@if($show_sched->L == 'F') <strong>ONLINE</strong> from {{ $show_sched->placementSchedule->date_of_plexam }} to {{ $show_sched->placementSchedule->date_of_plexam_end }} @else {{ $show_sched->placementSchedule->date_of_plexam }} @endif</li>
+			</ul>
 		</div>
 		@endforeach
 	</div>
-	<div class="form-group">
+{{-- 	<div class="form-group">
 	    <label class="control-label" for="flexible_show">Is Flexible: @if($selfpay_student->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 	</div>
 	<div class="form-group">
@@ -58,7 +72,7 @@
 	    <div class="">
 	        <textarea class="form-control" name="course_preference_show" cols="40" rows="5" readonly>{{$selfpay_student->course_preference_comment}}</textarea>
 	    </div>
-	</div>
+	</div> --}}
 	<div class="form-group">
 	    <div class="col-sm-12"><button type="button" class="show-modal btn btn-info pull-right" data-toggle="modal"><span class="glyphicon glyphicon-comment"></span>  View All Admin Notes</button></div>
 	    <label class="control-label" for="admin_comment_show">Admin Comment: (This text will be included in the email)</label>
@@ -88,7 +102,10 @@
             	<form class="form-horizontal" role="form">
             		
                 	@foreach($show_admin_comments as $comment)
-                    	{{ $comment->comments }} <br> at {{ $comment->created_at }} by {{ $comment->user->name }} <br><br>
+                		@if(is_null($comment->comments)) no comment made 
+                		@else
+                    	{{ $comment->comments }} @endif 
+                    	<br> at {{ $comment->created_at }} by {{ $comment->user->name }} <br><br>
                     @endforeach
                     
             	</form>

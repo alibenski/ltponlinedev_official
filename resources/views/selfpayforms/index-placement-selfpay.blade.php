@@ -4,7 +4,9 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
-<h2>Payment-based Placement Forms</h2>
+<div class="alert alert-info col-sm-10 col-sm-offset-1">
+    <h4 class="text-center"><strong><u>Payment-based Placement Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
+</div>
 <div class="row col-sm-12">
     @if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
     <form id="form-filter" method="GET" action="{{ route('index-placement-selfpay',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
@@ -75,7 +77,7 @@
 
 @else
 {{ $selfpayforms->links() }}
-<div class="filtered-table">
+<div class="table-responsive col-sm-12 filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
@@ -98,7 +100,7 @@
                     <a href="{{ route('edit-placement-selfpay', [$form->INDEXID, $form->L, $form->Term]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
                 </td>
 				<td>
-				@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) Disapproved @elseif ($form->selfpay_approval == 1) Approved @else Pending @endif	
+				@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) <span class="alert alert-danger">Disapproved</span> @elseif ($form->selfpay_approval == 1) <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif	
 				</td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif

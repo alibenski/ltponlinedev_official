@@ -5,7 +5,9 @@
 @stop
 
 @section('content')
-<h2>Placement Test Forms</h2>
+<div class="alert alert-warning col-sm-10 col-sm-offset-1">
+	<h4 class="text-center"><strong><u>View All Placement Test Forms</h4></u></strong>
+</div>
 <div class="row col-sm-12">
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
 <ul class="nav nav-pills">
@@ -89,7 +91,7 @@
 
 @else
 {{ $placement_forms->links() }}
-<div class="filtered-table">
+<div class="table-responsive col-sm-12 filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
@@ -97,7 +99,7 @@
 	            <th>Name</th>
 	            <th>Organization</th>
 	            <th>Language</th>
-	            <th>Student Cancelled?</th>
+	            {{-- <th>Student Cancelled?</th> --}}
 	            <th>Exam Date</th>
 	            <th>Manager Approval</th>
 	            <th>HR Approval</th>
@@ -120,11 +122,11 @@
 				@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
 				</td>
 				<td>{{ $form->L }}</td>
-				<td>
+				{{-- <td>
 					@if( is_null($form->cancelled_by_student))
 					@else <span id="status" class="label label-danger margin-label">YES</span>
 					@endif
-				</td>
+				</td> --}}
 				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
 				<td>
 					@if($form->is_self_pay_form == 1)
