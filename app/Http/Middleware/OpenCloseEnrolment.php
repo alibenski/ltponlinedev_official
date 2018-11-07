@@ -58,7 +58,8 @@ class OpenCloseEnrolment
 
             $prev_term_description =  $prev_term->Comments;
             $prev_term_name =  $prev_term->Term_Name;
-            $request->session()->flash('enrolment_closed', 'Enrolment Period for the '.$prev_term_description.' season ('.$prev_term_name.') is CLOSED');
+            // $request->session()->flash('enrolment_closed', 'Enrolment Period for the '.$prev_term_description.' season ('.$prev_term_name.') is CLOSED');
+            $request->session()->flash('enrolment_closed', 'Enrolment Period is CLOSED');
             return redirect()->route('home');
         } 
         // back to home if current enrolment term does not exist in Term table
