@@ -44,8 +44,8 @@ class NewUserController extends Controller
      */
     public function create()
     {
-        // return view('page_not_available');
-        return view('users_new.new_user');
+        return view('page_not_available');
+        // return view('users_new.new_user');
     }
 
     /**
@@ -159,8 +159,8 @@ class NewUserController extends Controller
 
     public function getNewOutsideUser()
     {
-        // return view('page_not_available');
-        return view('users_new.new_outside_user');
+        return view('page_not_available');
+        // return view('users_new.new_outside_user');
     }
 
     public function postNewOutsideUser(Request $request)
@@ -215,6 +215,7 @@ class NewUserController extends Controller
 
     public function getNewOutsideUserForm()
     {
+        return view('page_not_available');
         $org = TORGAN::get(["Org Full Name","Org name"]);
         return view('users_new.new_outside_user_form')->withOrg($org);
     }
