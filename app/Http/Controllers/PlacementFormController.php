@@ -209,6 +209,7 @@ class PlacementFormController extends Controller
         $this->validate($request, array(
             'mgr_email' => 'required|email',
             'placementLang' => 'required|integer',
+            'course_preference_comment' => 'required|',
             'agreementBtn' => 'required|',
         ));
 
