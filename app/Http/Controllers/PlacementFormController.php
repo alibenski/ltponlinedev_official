@@ -369,7 +369,7 @@ class PlacementFormController extends Controller
 
             foreach ($columns as $column) {
                 if (\Request::has($column)) {
-                    $placement_forms = $placement_forms->where('selfpay_approval', '1')->orWhere('selfpay_approval', null)->where($column, \Request::input($column) );
+                    $placement_forms = $placement_forms->where($column, \Request::input($column) );
                     
                     $queries[$column] = \Request::input($column);
                 }
@@ -385,7 +385,7 @@ class PlacementFormController extends Controller
                 }  
 
                 if (\Request::has('sort')) {
-                    $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
+                    $placement_forms = $placement_forms->where('selfpay_approval', '1')->orWhere('selfpay_approval', null)->orderBy('created_at', \Request::input('sort') );
                     $queries['sort'] = \Request::input('sort');
                 }
 
