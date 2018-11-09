@@ -395,6 +395,57 @@ class PlacementFormController extends Controller
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
+    public function getFilteredPlacementForms(Request $request)
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        // $request->session()->put('Term', \Request::input('Term') );
+        // dd($request);
+        // if (is_null($request->Term) && $request->session()->has('Term') ) {
+        //     dd($request->session()->get('Term'));
+        // }
+        
+        if (is_null($request->Term) ) {
+            $placement_forms = null;
+            return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+            $placement_forms = new PlacementForm;
+            // $currentQueries = \Request::query();
+            $queries = [];
+
+            $columns = [
+                'L', 'DEPT', 'Term',
+            ];
+
+            foreach ($columns as $column) {
+                if (\Request::has($column)) {
+                    $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                    
+                    $queries[$column] = \Request::input($column);
+                }
+                
+            } 
+                if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $placement_forms = $placement_forms->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+                }  
+
+                if (\Request::has('sort')) {
+                    $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
+                    $queries['sort'] = \Request::input('sort');
+                }
+
+            // $allQueries = array_merge($queries, $currentQueries);
+            $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
+            return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+    }
+
     public function edit($id)
     {
         $placement_form = PlacementForm::find($id);
@@ -405,25 +456,48 @@ class PlacementFormController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $this->validate($request, array(
-        //                     'Term' => 'required|',
-        //                     'INDEXID' => 'required|',
-        //                     'L' => 'required|',
-        //                     'submit-approval' => 'required|',
-        //                 )); 
+        $this->validate($request, array(
+                            'Term' => 'required|',
+                            'INDEXID' => 'required|',
+                            'L' => 'required|',
+                            'decision' => 'required|',
+                            'submit-approval' => 'required|',
+                        )); 
 
-        // $forms = PlacementForm::orderBy('Term', 'desc')
-        //                         ->where('INDEXID', $request->INDEXID)
-        //                         ->where('Term', $request->Term)
-        //                         ->where('L', $request->L)
-        //                         ->get();
+        $placement_form = PlacementForm::find($id);
+        if (isset($placement_form->convoked)) {
+                $this->validate($request, array(
+                                'course_id' => 'required|',
+                                'schedule_id' => 'required|',
+                            ));
+                $placement_form->assigned_to_course = 1;
+                $placement_form->schedule_id = $request->schedule_id;
+                $placement_form->Te_Code = $request->course_id;
+                $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
+                $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+                $placement_form->save();
+        } else {
+            $placement_form->convoked = $request->decision;
+            if( $request->decision == 1){
+                $placement_form->save();
+                // $staff_email = User::where('indexno', $request->INDEXID)->first();
+                // Mail::to($staff_email)
+                //             ->send(new XXX($request));
+            } else {
+                $this->validate($request, array(
+                                'course_id' => 'required|',
+                                'schedule_id' => 'required|',
+                            ));
+                $placement_form->assigned_to_course = 1;
+                $placement_form->schedule_id = $request->schedule_id;
+                $placement_form->Te_Code = $request->course_id;
+                $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
+                $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+                $placement_form->save();
+            }
+        }
 
-        // foreach ($forms as $form) {
-        //     $enrolment_record = PlacementForm::where('id', $form->id)->first();
-        //     $enrolment_record->Comments = $request->admin_comment_show;
-        //     $enrolment_record->selfpay_approval = $request['submit-approval'];
-        //     $enrolment_record->save();
-        // }
+        
 
         // // save comments in the comments table and associate it to the enrolment form
         // foreach ($forms as $form) {
@@ -434,10 +508,7 @@ class PlacementFormController extends Controller
         //     $admin_comment->save();
         // }
         
-        // $staff_email = User::where('indexno', $request->INDEXID)->first();
-        // Mail::to($staff_email)
-        //             ->send(new MailtoStudentSelfpayPlacement($request));
-        // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
-        // return redirect(route('index-placement-selfpay'));
+        $request->session()->flash('success', 'Placement form record has been updated.'); 
+        return redirect()->back();
     }
 }

@@ -4,11 +4,13 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
-<div class="alert alert-info col-sm-10 col-sm-offset-1">
+<div class="alert alert-info col-sm-12">
     <h4 class="text-center"><strong><u>Payment-based Placement Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
 </div>
+<div class="alert col-sm-12">
+    @if(Request::input('Term'))<h4 class="pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4>Please Choose Term</h4> @endif
+</div>
 <div class="row col-sm-12">
-    @if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
     <form id="form-filter" method="GET" action="{{ route('index-placement-selfpay',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
         
         <div class="form-group input-group col-sm-12">

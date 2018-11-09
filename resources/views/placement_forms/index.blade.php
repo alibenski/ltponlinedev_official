@@ -5,19 +5,19 @@
 @stop
 
 @section('content')
-<div class="alert alert-warning col-sm-10 col-sm-offset-1">
-	<h4 class="text-center"><strong><u>View All Placement Test Forms</h4></u></strong>
+<div class="alert alert-warning col-sm-12">
+	<h4 class="text-center"><strong>Placement Test Forms</strong></h4>
 </div>
 <div class="row col-sm-12">
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
-<ul class="nav nav-pills">
-	<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Approved</a></li>
-	<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Cancelled</a></li>
-	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">Pending</a></li>
-	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="{{ route('index-placement-selfpay') }}">Manage Self-Paying Placement Forms</a></li>
-</ul>
+	{{-- <ul class="nav nav-pills">
+		<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Approved</a></li>
+		<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Cancelled</a></li>
+		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">Pending</a></li>
+	</ul> --}}
+	<a href="{{ route('index-placement-selfpay') }}" class="btn btn-info pull-right">Manage Self-Paying Placement Forms</a>
 
-    <form method="GET" action="{{ route('placement-form.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
+    <form method="GET" target="_blank" action="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
 		
 		<div class="form-group input-group col-sm-12">
 			<h4><strong>Filters:</strong></h4>

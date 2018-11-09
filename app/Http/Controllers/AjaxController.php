@@ -131,6 +131,7 @@ class AjaxController extends Controller
      */
     public function ajaxIsCancelled(Request $request)
     {
+        if (Auth::check()) {
         $current_user = Auth::user()->indexno;
         
         //query submitted forms based from tblLTP_Enrolment table
@@ -142,7 +143,8 @@ class AjaxController extends Controller
 
         $data = $forms_submitted;
 
-        return response()->json($data); 
+        return response()->json($data);
+        } 
     }
 
     public function ajaxOrgSelect()

@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.no_sidebar_admin')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
@@ -6,7 +6,7 @@
 @section('content')
 <div class="row">
 	<div class="col-sm-10 col-sm-offset-1">
-	<form method="POST" action="{{ route('placement-form.update', $placement_form->INDEXID) }}">
+	<form method="POST" action="{{ route('placement-form.update', $placement_form->id) }}">
 	{{ csrf_field() }}
 	<input name="INDEXID" type="hidden" value="{{ $placement_form->INDEXID }}">
 	<input name="L" type="hidden" value="{{ $placement_form->L }}">
@@ -35,6 +35,19 @@
 	        <input type="text" class="form-control" name="course_show" value="{{ $placement_form->languages->name }}" readonly>
 	    </div>
 	</div>
+
+	@if(is_null($placement_form->is_self_pay_form))
+	@else
+	<div class="form-group">
+		<label class="control-label" for="org_show">ID Proof:</label>
+		<td>@if(empty($placement_form->filesId->path)) None @else <a href="{{ Storage::url($placement_form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>	
+	</div>
+	<div class="form-group">	
+		<label class="control-label" for="org_show">Payment Proof:</label>
+		<td>@if(empty($placement_form->filesPay->path)) None @else <a href="{{ Storage::url($placement_form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
+	</div>
+	@endif	
+
 	<div class="form-group">
 	    <label class="control-label" for="profile_show">Profile:</label>
 	    <div class="">
@@ -107,23 +120,49 @@
 	<!-- MAKE A DECISION SECTION -->
                 
     <div class="form-group">
-        <label class="control-label">Will Student Take Placement Test?</label>
+        <label class="control-label">Operation:</label>
 
           <div class="col-sm-12">
                     <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
-                    <label for="decision1" class="form-control-static">Yes</label>
+                    <label for="decision1" class="form-control-static">Mark the student to take the placement test</label>
           </div>
 
           <div class="col-sm-12">
                     <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-                    <label for="decision2" class="form-control-static">No</label>
+                    <label for="decision2" class="form-control-static">Assign course to student</label>
           </div>
     </div>
 
+	<div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
+
+		<div class="form-group">
+		    <label for="course_id" class="control-label">Assign Course: </label>
+		    
+		      <div class="dropdown">
+		        <select class="form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off">
+		            <option value="">--- Select ---</option>
+		        </select>
+		      </div>
+		    
+		</div>
+
+		<div class="form-group">
+		    <label for="schedule_id" class="control-label">Assign Schedule: </label>
+		    
+		      <div class="dropdown">
+		        <select class="form-control schedule_select_no wx" style="width: 100%; " name="schedule_id" autocomplete="off">
+		            <option value="">--- Select ---</option>
+		        </select>
+		      </div>
+		    
+		</div>
+
+	</div> {{-- end of hidden fields --}}
+
 	<div class="form-group col-sm-12">
-		<a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a>
+		{{-- <a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a> --}}
 		{{-- <button type="submit" class="btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button> --}}
-		<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1"><span class="glyphicon glyphicon-ok"></span>  Submit and Send Email</button>	
+		<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1"><span class="glyphicon glyphicon-ok"></span>  Submit </button>	
 		{{-- <button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button> --}}
 	</div>
 	<input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -131,47 +170,76 @@
 	</form>	
 	</div>
 </div>
-<!-- Modal form to show a post -->
-<div id="showModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body">
-            	<form class="form-horizontal" role="form">
-            		
-                	{{-- @foreach($show_admin_comments as $comment)
-                    	{{ $comment->comments }} <br> at {{ $comment->created_at }} by {{ $comment->user->name }} <br><br>
-                    @endforeach --}}
-                    
-            	</form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">
-                    <span class='glyphicon glyphicon-remove'></span> Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+
 @stop
 @section('java_script')
 <script src="{{ asset('js/submit.js') }}"></script>
+<script src="{{ asset('js/select2.full.js') }}"></script>
 <script>
-// Show a post
-$(document).on('click', '.show-modal', function() {
-    $('.modal-title').text('Admin Notes');
-    console.log('click');
-    // $('#id_show').val($(this).data('id'));
-    // $('#title_show').val($(this).data('title'));
-    // // $('#form-filter').removeAttr('action');
-    // // $('.filter-submit-btn').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit" disabled>Next</a>');
-    // var index = $(this).data('index');
-    // var tecode = $(this).data('tecode');
-    // var term = $(this).data('term');
-    $('#showModal').modal('show'); 
-});
+	$(document).ready(function(){
+	  $(".wx").select2({   
+	    minimumResultsForSearch: -1,
+	    placeholder: 'Select Here',
+	    "language": {
+	        "noResults": function(){
+	            return "<strong class='text-danger'>Sorry No Courses Offered for this Language this Semester. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the availability of courses and classes</a>";
+	            }
+	    },
+
+	    escapeMarkup: function (markup) {
+	    return markup;
+	    }
+	  });
+	}); 
+</script>
+<script>
+	$(document).on('click', '#decision1', function() {
+	    $(".regular-enrol").attr('style', 'display: none;');
+	    $('.wx').val([]).trigger('change');
+	});
+
+	$(document).on('click', '#decision2', function() {
+	    $(".regular-enrol").removeAttr('style');
+	    var L = $("input[name='L']").val();
+		var term = $("input[name='Term']").val();
+		var token = $("input[name='_token']").val();
+	    console.log(L);
+		$.ajax({
+		  url: "{{ route('select-ajax') }}", 
+		  method: 'POST',
+		  data: {L:L, term_id:term, _token:token},
+		  success: function(data, status) {
+		  	console.log("success");
+		    $("select[name='course_id']").html('');
+		    $("select[name='course_id']").html(data.options);
+		  }
+		});
+	    
+	});
+</script>
+<script>
+	$("select[name='course_id']").on('change',function(){
+		var course_id = $(this).val();
+		var term = $("input[name='Term']").val();
+		var token = $("input[name='_token']").val();
+		console.log(course_id)
+		$.ajax({
+		  url: "{{ route('select-ajax2') }}", 
+		  method: 'POST',
+		  data: {course_id:course_id, term_id:term, _token:token},
+		  success: function(data) {
+		  	console.log("success on schedule");
+		    $("select[name='schedule_id']").html('');
+		    $("select[name='schedule_id']").html(data.options);
+		  }
+		});
+  	}); 
+</script>
+<script>
+	localStorage.setItem("update", "0");
+	$("button[name='submit-approval']").click(function(){//target element and request click event
+		localStorage.setItem("update", "1");//set localStorage of parent page
+		setTimeout(function(){window.close();},500);//timeout code to close window
+		});
 </script>
 @stop

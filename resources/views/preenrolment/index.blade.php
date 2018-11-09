@@ -8,12 +8,12 @@
 <h2>Enrolment Forms</h2>
 <div class="row col-sm-12">
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
-	<ul class="nav nav-pills">
+	{{-- <ul class="nav nav-pills">
 		<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="#">Approved</a></li>
 		<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="#">Cancelled</a></li>
 		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="#">Pending</a></li>
-		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="{{ route('selfpayform.index') }}">Manage Self-Paying</a></li>
-	</ul>
+	</ul> --}}
+	<a href="{{ route('selfpayform.index') }}"  class="btn btn-info pull-right">Manage Self-Paying Enrolments</a>
 
     <form method="GET" action="{{ route('preenrolment.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
 		

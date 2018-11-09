@@ -12,7 +12,6 @@
 	<form method="POST" action="{{ route('post-placement-selfpay', $selfpay_student->id) }}">
 	{{ csrf_field() }}
 	<input name="INDEXID" type="hidden" value="{{ $selfpay_student->INDEXID }}">
-	{{-- <input name="L" type="hidden" value="{{ $selfpay_student->L }}"> --}}
 	<input name="Term" type="hidden" value="{{ $selfpay_student->Term }}">
 	<div class="form-group">
 	    <label class="control-label" for="id_show">Name:</label>

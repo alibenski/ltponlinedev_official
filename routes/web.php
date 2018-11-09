@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('send-reminder-emails', 'PreenrolmentController@sendReminderEmails')->name('send-reminder-emails');
     Route::resource('placement-form', 'PlacementFormController');
     Route::get('send-reminder-emails-placement', 'PlacementFormController@sendReminderEmailsPlacement')->name('send-reminder-emails-placement');
+    Route::get('/placement-form-filtered', ['as'=>'placement-form-filtered','uses'=>'PlacementFormController@getFilteredPlacementForms']);
+
     Route::resource('teachers', 'TeachersController');
     Route::resource('rooms', 'RoomsController');
     Route::resource('waitlist', 'WaitlistController');
