@@ -42,7 +42,7 @@ class MailtoStudent extends Mailable
     {
         return $this->view('emails.notifystudent')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Notification: Supervisor Decision Made on CLM Language Course Enrolment '.$this->input_course->courses->Description.' of '.$this->staff_name);
     }

@@ -40,7 +40,7 @@ class MailPlacementApprovaltoStudent extends Mailable
     {
         return $this->view('emails.notifyPlacementApprovaltoStudent')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Notification: Manager/Supervisor Decision Made on CLM Language Placement Test Request - '.$this->input_course->languages->name.' for '.$this->staff_name);
     }

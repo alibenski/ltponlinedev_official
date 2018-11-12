@@ -31,7 +31,7 @@ class SendAuthMail extends Mailable
     {
         return $this->view('emails.sendAuthMail')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject("Information concerning the new online registration system - Information concernant le nouveau système d'inscription en ligne");
     }

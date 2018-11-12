@@ -32,7 +32,7 @@ class MailtoStudentSelfpayPlacement extends Mailable
     {
         return $this->view('emails.notifyStudentSelfpayPlacement')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Notification: CLM Language Secretariat Decision Made on Your Placement Form Request to Language: '.$this->request->Lstring);
     }

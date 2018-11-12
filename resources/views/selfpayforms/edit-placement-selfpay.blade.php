@@ -1,11 +1,11 @@
-@extends('admin.admin')
+@extends('admin.no_sidebar_admin')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
 <div class="row">
-	<div class="alert alert-info col-sm-10 col-sm-offset-1">
+	<div class="alert alert-warning col-sm-10 col-sm-offset-1">
 	<h4 class="text-center"><strong><u>Payment-based Placement Form</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
 	</div>
 	<div class="col-sm-10 col-sm-offset-1">

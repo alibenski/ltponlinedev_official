@@ -15,7 +15,7 @@
 		<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Cancelled</a></li>
 		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">Pending</a></li>
 	</ul> --}}
-	<a href="{{ route('index-placement-selfpay') }}" class="btn btn-info pull-right">Manage Self-Paying Placement Forms</a>
+	{{-- <a href="{{ route('index-placement-selfpay') }}" class="btn btn-info pull-right">Manage Self-Paying Placement Forms</a> --}}
 
     <form method="GET" target="_blank" action="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
 		

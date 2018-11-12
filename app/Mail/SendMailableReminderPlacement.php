@@ -36,7 +36,7 @@ class SendMailableReminderPlacement extends Mailable
     {
         return $this->view('emails.placementApproval')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Reminder - Supervisor Approval Needed for: '.$this->staff->sddextr->FIRSTNAME.' '.$this->staff->sddextr->LASTNAME.' on Language Placement Test - '.$this->input_course->languages->name);
     }

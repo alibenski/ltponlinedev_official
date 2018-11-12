@@ -32,7 +32,7 @@ class MailtoStudentSelfpay extends Mailable
     {
         return $this->view('emails.notifyStudentSelfpay')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Notification: CLM Language Secretariat Decision Made on Your Enrolment to Language Course: ' .$this->request->course_show);
     }

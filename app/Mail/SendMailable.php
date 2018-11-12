@@ -37,7 +37,7 @@ class SendMailable extends Mailable
         return $this->view('emails.approval')
                     ->subject('Reminder - Supervisor Approval Needed for: '.$this->staff->name.' on Language Course Enrolment '.$this->input_course->courses->Description)
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1);
     }
 }

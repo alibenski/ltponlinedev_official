@@ -13,7 +13,7 @@
 		<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="#">Cancelled</a></li>
 		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="#">Pending</a></li>
 	</ul> --}}
-	<a href="{{ route('selfpayform.index') }}"  class="btn btn-info pull-right">Manage Self-Paying Enrolments</a>
+	{{-- <a href="{{ route('selfpayform.index') }}"  class="btn btn-info pull-right">Manage Self-Paying Enrolments</a> --}}
 
     <form method="GET" action="{{ route('preenrolment.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
 		

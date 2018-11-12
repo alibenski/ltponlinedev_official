@@ -2,9 +2,15 @@
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <style>
+        .alert-purple{
+            background-color: #6b2b63;
+            color: #fff !important;
+        }
+    </style>
 @stop
 @section('content')
-<div class="alert alert-info col-sm-12">
+<div class="alert alert-purple col-sm-12">
     <h4 class="text-center"><strong><u>Payment-based Placement Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
 </div>
 <div class="alert col-sm-12">

@@ -38,7 +38,7 @@ class MailaboutPlacementCancel extends Mailable
     {
         return $this->view('emails.cancellationPlacement')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Cancellation: '.$this->staff_member_name.' Cancelled Placement Test for '.$this->display_language->languages->name);
     }

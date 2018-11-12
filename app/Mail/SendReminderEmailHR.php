@@ -40,7 +40,7 @@ class SendReminderEmailHR extends Mailable
     {
         return $this->view('emails.approvalhr')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Reminder - CLM Learning Partner Approval Needed for: '.$this->staff_name.' on Language Course Enrolment '.$this->input_course->courses->Description);
     }

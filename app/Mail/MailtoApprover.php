@@ -39,7 +39,7 @@ class MailtoApprover extends Mailable
     {
         return $this->view('emails.approval')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@unog.ch')
+                    ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Supervisor Approval Needed for: '.$this->staff->name.' on Language Course Enrolment '.$this->input_course->courses->Description);
     }
