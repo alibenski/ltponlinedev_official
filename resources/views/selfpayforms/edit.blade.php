@@ -127,4 +127,11 @@ $(document).on('click', '.show-modal', function() {
     $('#showModal').modal('show'); 
 });
 </script>
+<script>
+	localStorage.setItem("update", "0");
+	$("button[name='submit-approval']").click(function(){//target element and request click event
+		localStorage.setItem("update", "1");//set localStorage of parent page
+		setTimeout(function(){window.close();},500);//timeout code to close window
+		});
+</script>
 @stop

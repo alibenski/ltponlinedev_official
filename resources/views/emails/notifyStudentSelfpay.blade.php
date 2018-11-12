@@ -193,7 +193,9 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                     <p> Dear {{ $request->nom }}, </p>
-                                    <p> Your registration for the {{ $request->course_show }} course has a status of <strong> @if($request['submit-approval'] == 1 )  approved. You will receive an email with further instructions in due course. @elseif($request['submit-approval'] == 0) disapproved. @else pending. @endif </strong> </p>
+                                    <p> Your registration for the {{ $request->course_show }} course has a status of <strong> @if($request['submit-approval'] == 1 )  approved. Please note that if you obtain a space in one of our courses you will receive an official email with information regarding your course around mid-december.</strong></p><p>In case there is no space available, you will be waitlisted and you will also receive a notification by email prior the start of the term. Should a space become available, you will be contacted. </p> <hr>
+                                    <p> Votre inscription a été approuvée. Veuilez noter que si vous obtenez une place dans l’un de nos cours, vous recevrez un courrier électronique aux alentours de mi-décembre. </p><p>Au cas où il n'y aurait plus de place disponible, vous serez mis.e en liste d'attente et vous recevrez également une notification par courrier électronique avant le début du trimestre. Si une place venait à se libérer, vous serez contacté(e)</p>
+                                    @elseif($request['submit-approval'] == 0) disapproved. @else pending. @endif </strong> </p>
                                     <p> CLM Language Secretariat comment: </p>
                                     <p> {{ $request->admin_comment_show }}</p>
                                 </td>

@@ -155,9 +155,9 @@ class SelfPayController extends Controller
         }
 
         $staff_email = User::where('indexno', $request->INDEXID)->first();
-        // Mail::to($staff_email)->send(new MailtoStudentSelfpay($request));
+        Mail::to($staff_email)->send(new MailtoStudentSelfpay($request));
         
-        $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
+        // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
         return redirect(route('selfpayform.index'));
     }
 
@@ -244,8 +244,8 @@ class SelfPayController extends Controller
         $staff_email = User::where('indexno', $request->INDEXID)->first();
         Mail::to($staff_email)
                     ->send(new MailtoStudentSelfpayPlacement($request));
-        $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
-        return redirect(route('index-placement-selfpay'));
+        // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
+        return redirect()->back();
     }
 
     /**

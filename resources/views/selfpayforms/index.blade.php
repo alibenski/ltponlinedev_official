@@ -95,7 +95,7 @@
 			<tr>
 				<td>
 					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
-                    <a href="{{ route('selfpayform.edit', [$form->INDEXID, $form->Te_Code, $form->Term]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
+                    <a href="{{ route('selfpayform.edit', [$form->INDEXID, $form->Te_Code, $form->Term]) }}" target="_blank" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
                 </td>
 				<td>
                 @if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) <span class="alert alert-danger">Disapproved</span> @elseif ($form->selfpay_approval == 1) <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif   
@@ -186,5 +186,13 @@ $(document).on('click', '.show-modal', function() {
   $('#showModal').on('hide.bs.modal', function() {
     location.reload();
   })
+</script>
+<script language="javascript">
+    window.setInterval(function(){
+    if(localStorage["update"] == "1"){
+        localStorage["update"] = "0";
+        window.location.reload();
+    }
+}, 500);
 </script>
 @stop

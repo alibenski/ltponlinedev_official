@@ -509,7 +509,7 @@ class PlacementFormController extends Controller
         //     $admin_comment->save();
         // }
         
-        $request->session()->flash('success', 'Placement form record has been updated.'); 
+        // $request->session()->flash('success', 'Placement form record has been updated.'); 
         return redirect()->back();
     }
 
@@ -534,7 +534,7 @@ class PlacementFormController extends Controller
         $placement_form->save();
 
 
-        $request->session()->flash('success', 'Placement form record has been updated.'); 
+        // $request->session()->flash('success', 'Placement form record has been updated.'); 
         return redirect()->back();
     }
 }
