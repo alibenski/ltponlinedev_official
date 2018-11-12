@@ -448,6 +448,14 @@ class PlacementFormController extends Controller
         return view('placement_forms.edit',compact('placement_form','waitlists'));
     }
 
+        public function editAssignCourse($id)
+    {
+        $placement_form = PlacementForm::find($id);
+        $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
+        // dd($placement_form, $placement_student_index);
+        return view('placement_forms.editAssignCourse',compact('placement_form','waitlists'));
+    }
+
     public function update(Request $request, $id)
     {
         $this->validate($request, array(
@@ -460,6 +468,7 @@ class PlacementFormController extends Controller
 
         $placement_form = PlacementForm::find($id);
         if (isset($placement_form->convoked)) {
+                // $this->assignCourseToPlacement($request, $id);
                 $this->validate($request, array(
                                 'course_id' => 'required|',
                                 'schedule_id' => 'required|',
@@ -491,8 +500,6 @@ class PlacementFormController extends Controller
             }
         }
 
-        
-
         // // save comments in the comments table and associate it to the enrolment form
         // foreach ($forms as $form) {
         //     $admin_comment = new AdminCommentPlacement;
@@ -502,6 +509,31 @@ class PlacementFormController extends Controller
         //     $admin_comment->save();
         // }
         
+        $request->session()->flash('success', 'Placement form record has been updated.'); 
+        return redirect()->back();
+    }
+
+    public function assignCourseToPlacement(Request $request, $id)
+    {
+        $this->validate($request, array(
+                            'Term' => 'required|',
+                            'INDEXID' => 'required|',
+                            'L' => 'required|',
+                            'decision' => 'required|',
+                            'submit-approval' => 'required|',
+                            'course_id' => 'required|',
+                            'schedule_id' => 'required|',
+                        )); 
+        $placement_form = PlacementForm::find($id);
+        $placement_form->convoked = 0;
+        $placement_form->assigned_to_course = 1;
+        $placement_form->schedule_id = $request->schedule_id;
+        $placement_form->Te_Code = $request->course_id;
+        $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
+        $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+        $placement_form->save();
+
+
         $request->session()->flash('success', 'Placement form record has been updated.'); 
         return redirect()->back();
     }

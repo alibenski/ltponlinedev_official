@@ -37,7 +37,8 @@
 			<tr>
 				<td>
 					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
-                    <a href="{{ route('placement-form.edit', [$form->id]) }}" target="_blank" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
+                    <a href="{{ route('placement-form.edit', [$form->id]) }}" target="_blank" class="btn btn-warning" style="margin: 1px;"><span class="glyphicon glyphicon-envelope"></span> Convoke</a> 
+                    <a href="{{ route('placement-form-assign', [$form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><span class="glyphicon glyphicon-edit"></span> Assign Course</a> 
                 </td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif

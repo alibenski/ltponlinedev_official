@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('placement-form', 'PlacementFormController');
     Route::get('send-reminder-emails-placement', 'PlacementFormController@sendReminderEmailsPlacement')->name('send-reminder-emails-placement');
     Route::get('/placement-form-filtered', ['as'=>'placement-form-filtered','uses'=>'PlacementFormController@getFilteredPlacementForms']);
+    Route::get('/placement-form-assign/{id}', ['as'=>'placement-form-assign','uses'=>'PlacementFormController@editAssignCourse']);
+    Route::put('/placement-form-assign-course/{id}', ['as'=>'placement-form-assign-course','uses'=>'PlacementFormController@assignCourseToPlacement']);
 
     Route::resource('teachers', 'TeachersController');
     Route::resource('rooms', 'RoomsController');
