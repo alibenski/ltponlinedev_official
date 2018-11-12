@@ -213,7 +213,7 @@ class HomeController extends Controller
         }
 
         //email notification to Manager    
-        $staff_member_name = Auth::user()->name;
+        $staff_member_name = $forms->first()->users->name;
             Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
         
         //email notification to CLM Partner
@@ -247,7 +247,7 @@ class HomeController extends Controller
             $delform->delete();
         }
 
-        session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
+        session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled. An email has been sent to your supervisor and if necessary, to your HR/Staff Development Office.');
         return redirect()->back();
     }
 
@@ -285,7 +285,7 @@ class HomeController extends Controller
         }
 
         //email notification to Manager    
-        $staff_member_name = Auth::user()->name;
+        $staff_member_name = $forms->first()->users->name;
             Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
         
         //email notification to CLM Partner
@@ -323,7 +323,7 @@ class HomeController extends Controller
             $delform->delete();
         }
 
-        session()->flash('cancel_success', 'Pleacement Form Request for '.$display_language->languages->name. ' has been cancelled.');
+        session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled. An email has been sent to your supervisor and if necessary, to your HR/Staff Development Office.');
         return redirect()->back();
     }
 }

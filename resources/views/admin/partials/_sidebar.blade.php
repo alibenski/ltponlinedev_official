@@ -59,14 +59,14 @@
         </li>  
 
         <li class="treeview {{ Request::is('admin/selfpayform*') ? "active" : ""}}">
-          <a href="#"><i class="fa fa-euro"></i> <span>Selfpay Forms</span>
+          <a href="#"><i class="fa fa-euro"></i> <span>Validate Payment</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{ route('selfpayform.index') }}">Validate Enrolment</a></li>
-            <li><a href="{{ route('index-placement-selfpay') }}">Validate Placement</a></li>
+            <li><a href="{{ route('selfpayform.index') }}">Validate Enrolment Payment</a></li>
+            <li><a href="{{ route('index-placement-selfpay') }}">Validate Placement Payment</a></li>
           </ul>
         </li> 
 
