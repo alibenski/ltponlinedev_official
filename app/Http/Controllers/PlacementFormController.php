@@ -400,12 +400,6 @@ class PlacementFormController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-
-        // $request->session()->put('Term', \Request::input('Term') );
-        // dd($request);
-        // if (is_null($request->Term) && $request->session()->has('Term') ) {
-        //     dd($request->session()->get('Term'));
-        // }
         
         if (is_null($request->Term) ) {
             $placement_forms = null;

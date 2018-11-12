@@ -26,7 +26,7 @@
 	          <label for="Term" class="col-sm-12 control-label">Term Select:</label>
 	          <div class="form-group col-sm-12">
 	            <div class="dropdown">
-	              <select id="Term" name="Term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;">
+	              <select id="Term" name="Term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" required="">
 	                @foreach($terms as $value)
 	                    <option></option>
 	                    <option value="{{ $value->Term_Code }}">{{$value->Comments}} - {{$value->Term_Name}}</option>
@@ -71,7 +71,6 @@
 	        </div>
 
 		</div> {{-- end filter div --}}
-
 
         <div class="form-group">           
 	        <button type="submit" class="btn btn-success" value="UNOG">Submit</button>

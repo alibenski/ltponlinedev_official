@@ -46,7 +46,7 @@
 	        <input type="text" class="form-control" name="org_show" value="{{ $selfpay_student->DEPT }}" readonly>
 	    </div>
 	</div>
-	{{-- <div class="form-group">	
+	<div class="form-group">	
 		<label class="control-label" for="show_sched">Schedule(s):</label>
 		@foreach($show_sched_selfpay as $show_sched)
 	    <div class="col-sm-12">
@@ -58,7 +58,7 @@
 	</div>
 	<div class="form-group">
 	    <label class="control-label" for="flexible_show">Is Flexible: @if($selfpay_student->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
-	</div> --}}
+	</div>
 	{{-- <div class="form-group">
 	    <label class="control-label" for="student_comment_show">Student Comment:</label>
 	    <div class="">

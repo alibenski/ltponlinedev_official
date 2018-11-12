@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-<div class="alert alert-warning col-sm-10 col-sm-offset-1">
+<div class="alert alert-warning col-sm-12">
 	<h4 class="text-center"><strong>Filtered Placement Test Forms</strong></h4>
 </div>
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
@@ -20,7 +20,7 @@
 	        	<th>Operation</th>
 	            <th>Name</th>
 	            <th>Convoked?</th>
-	            <th>Assigned Course?</th>
+	            {{-- <th>Assigned Course?</th> --}}
 	            <th>Organization</th>
 	            <th>Language</th>
 	            {{-- <th>Student Cancelled?</th> --}}
@@ -49,13 +49,13 @@
 					@endif
 				@endif
 				</td>
-				<td>
+				{{-- <td>
 				@if(empty($form->assigned_to_course)) - @else 
 					@if($form->assigned_to_course == 1) Yes 
 					@else No 
 					@endif
 				@endif
-				</td>
+				</td> --}}
 				<td>
 				@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
 				</td>
