@@ -6,13 +6,13 @@
 @section('content')
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li role="presentation" class="active"}}"><a href="{{ route('approved-placement-selfpay') }}" target="_blank">Approved</a></li>
-        <li role="presentation" class="{{ Request::is('cancelled-placement-selfpay') ? "active" : ""}}"><a href="{{ route('cancelled-placement-selfpay') }}" target="_blank">Cancelled</a></li>
-        <li role="presentation" class="{{ Request::is('pending-placement-selfpay') ? "active" : ""}}"><a href="{{ route('pending-placement-selfpay') }}" target="_blank">Pending</a></li>
+        <li role="presentation" class="{{ Request::is('admin/selfpayform/approved-placement-selfpay') ? "active" : ""}}"><a href="{{ route('approved-placement-selfpay') }}" target="_blank">Approved</a></li>
+        <li role="presentation" class="{{ Request::is('admin/selfpayform/cancelled-placement-selfpay') ? "active" : ""}}"><a href="{{ route('cancelled-placement-selfpay') }}" target="_blank">Cancelled</a></li>
+        <li role="presentation" class="{{ Request::is('admin/selfpayform/pending-placement-selfpay') ? "active" : ""}}"><a href="{{ route('pending-placement-selfpay') }}" target="_blank">Pending</a></li>
     </ul>
 </div>
 <div class="alert alert-selfpay col-sm-12">
-    <h4 class="text-center"><strong><u>Viewing Approved Payment-based Placement Forms</u>:</strong></h4>
+    <h4 class="text-center"><strong><u>Viewing Approved Payment-based Placement Forms</u></strong></h4>
 </div>
 <div class="row">
 	<div class="col-sm-12">

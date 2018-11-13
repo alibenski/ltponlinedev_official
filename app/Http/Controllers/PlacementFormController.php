@@ -402,8 +402,19 @@ class PlacementFormController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         
         if (is_null($request->Term) ) {
-            $placement_forms = null;
-            return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            // $placement_forms = null;
+            $placement_forms = new PlacementForm;
+            $queries = [];
+            if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $placement_forms = $placement_forms->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+                }
+            $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
+            return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
             $placement_forms = new PlacementForm;
             // $currentQueries = \Request::query();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\NewUser;
 use App\Services\User\ExistingUserImport;
 use App\Services\User\UserImport;
+use App\Term;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -19,8 +20,9 @@ class AdminController extends Controller
     public function adminIndex()
     {
         $new_user_count = NewUser::where('approved_account', 0)->count();
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        return view('admin.index')->withNew_user_count($new_user_count);   
+        return view('admin.index',compact('terms'))->withNew_user_count($new_user_count);   
     }
 
     public function importUser() 

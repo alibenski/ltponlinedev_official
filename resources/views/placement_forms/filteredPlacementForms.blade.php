@@ -8,6 +8,18 @@
 <div class="alert alert-warning col-sm-12">
 	<h4 class="text-center"><strong>Filtered Placement Test Forms</strong></h4>
 </div>
+<div class="form-group col-sm-12">
+    <form method="GET" action="{{ route('placement-form-filtered') }}">
+        {{-- search by name or email--}}
+            <label for="search" class="control-label">Search by name/email:</label>         
+        <div class="input-group">  
+            <input type="text" name="search" class="form-control" placeholder="Enter name here">
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-info button-prevent-multi-submit"><i class="glyphicon glyphicon-search"></i> Search</button>
+            </div>
+        </div>
+    </form>    
+</div>
 	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
 @if(is_null($placement_forms))
 

@@ -170,7 +170,7 @@ class SelfPayController extends Controller
         $request->session()->put('Term', $request->Term);
         $session_term = $request->session()->get('Term');
         // dd($session_term);
-        echo $session_term;
+        // echo $session_term;
 
         if (is_null($request->Term)) {
             $selfpayforms = null;
