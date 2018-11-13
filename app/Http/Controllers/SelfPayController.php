@@ -167,6 +167,11 @@ class SelfPayController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
+        $request->session()->put('Term', $request->Term);
+        $session_term = $request->session()->get('Term');
+        // dd($session_term);
+        echo $session_term;
+
         if (is_null($request->Term)) {
             $selfpayforms = null;
             return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
@@ -196,6 +201,50 @@ class SelfPayController extends Controller
 
         $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
         return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+    }
+
+    public function approvedPlacementSelfPay(Request $request)
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        if (is_null($request->Term)) {
+            // $selfpayforms = null;
+            $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('Term', $request->session()->get('Term') )
+            ->where('is_self_pay_form', '1')->where('selfpay_approval', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+
+            $selfpayforms = $selfpayforms->paginate(30);
+            return view('selfpayforms.approvedSelfpayPlacementForms')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+
+        $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('is_self_pay_form', '1')->where('selfpay_approval', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+        
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT', 'Term',
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $selfpayforms = $selfpayforms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+            if (\Request::has('sort')) {
+                $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            }
+
+        $selfpayforms = $selfpayforms->paginate(30)->appends($queries);
+        return view('selfpayforms.approvedSelfpayPlacementForms')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
     public function editPlacementSelfPay(Request $request, $indexid, $language, $term)

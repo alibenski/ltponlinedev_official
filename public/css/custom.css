@@ -1,4 +1,12 @@
 /*
+ custom alert message/label colors 
+*/
+.alert-selfpay {
+    background-color: #6b2b63;
+    color: #fff !important;
+}
+
+/*
  text area css
  */
 .pink-border textarea {

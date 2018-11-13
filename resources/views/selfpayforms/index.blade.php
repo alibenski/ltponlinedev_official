@@ -6,7 +6,7 @@
 @section('content')
 <h2>Payment-based Enrolment Forms</h2>
 <div class="row col-sm-12">
-    @if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-info">Please Choose Term</h4> @endif
+    @if(Request::input('Term'))<h4 class="alert alert-selfpay pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-selfpay">Please Choose Term</h4> @endif
     <form id="form-filter" method="GET" action="{{ route('selfpayform.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
         
         <div class="form-group input-group col-sm-12">

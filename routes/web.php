@@ -65,6 +65,12 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('selfpayform', 'SelfPayController', ['only' => ['index', 'update']]);
     Route::get('selfpayform/{indexid}/{tecode}/{term}', ['as'=>'selfpayform.edit','uses'=>'SelfPayController@edit']);
     Route::get('selfpayform/index-placement-selfpay', ['as'=>'index-placement-selfpay','uses'=>'SelfPayController@indexPlacementSelfPay']);
+
+    Route::get('selfpayform/approved-placement-selfpay', ['as'=>'approved-placement-selfpay','uses'=>'SelfPayController@approvedPlacementSelfPay']);
+    Route::get('selfpayform/pending-placement-selfpay', ['as'=>'pending-placement-selfpay','uses'=>'SelfPayController@pendingPlacementSelfPay']);
+    Route::get('selfpayform/cancelled-placement-selfpay', ['as'=>'cancelled-placement-selfpay','uses'=>'SelfPayController@cancelledPlacementSelfPay']);
+
+
     Route::get('selfpayform/edit-placement-selfpay/{indexid}/{language}/{term}', ['as'=>'edit-placement-selfpay','uses'=>'SelfPayController@editPlacementSelfPay']);
     Route::put('selfpayform/post-placement-selfpay/{indexid}', ['as'=>'post-placement-selfpay','uses'=>'SelfPayController@postPlacementSelfPay']);
 
