@@ -349,14 +349,8 @@ class PlacementFormController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-
-        // $request->session()->put('Term', \Request::input('Term') );
-        // dd($request);
-        // if (is_null($request->Term) && $request->session()->has('Term') ) {
-        //     dd($request->session()->get('Term'));
-        // }
         
-        if (is_null($request->Term) ) {
+        if (!Session::has('Term') ) {
             $placement_forms = null;
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
@@ -365,7 +359,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 'Term',
+                'L', 'DEPT',
             ];
 
             foreach ($columns as $column) {
@@ -376,6 +370,13 @@ class PlacementFormController extends Controller
                 }
                 
             } 
+
+
+                if (Session::has('Term')) {
+                    $placement_forms = $placement_forms->where('Term', Session::get('Term') );
+                    $queries['Term'] = Session::get('Term');
+                }
+
                 if (\Request::has('search')) {
                     $name = \Request::input('search');
                     $placement_forms = $placement_forms->with('users')
@@ -401,29 +402,34 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 'Term',
+                'L', 'DEPT', 
             ];
 
             foreach ($columns as $column) {
                 if (\Request::has($column)) {
                     $placement_forms = $placement_forms->where($column, \Request::input($column) );
-                    
                     $queries[$column] = \Request::input($column);
                 }  
             } 
 
-            if (\Request::has('search')) {
-                    $name = \Request::input('search');
-                    $placement_forms = $placement_forms->with('users')
-                        ->whereHas('users', function($q) use ( $name) {
-                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-                        });
-                    $queries['search'] = \Request::input('search');
+                if (Session::has('Term')) {
+                        $placement_forms = $placement_forms->where('Term', Session::get('Term') );
+                        $queries['Term'] = Session::get('Term');
                 }
 
-            $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
+                if (\Request::has('search')) {
+                        $name = \Request::input('search');
+                        $placement_forms = $placement_forms->with('users')
+                            ->whereHas('users', function($q) use ( $name) {
+                                return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                            });
+                        $queries['search'] = \Request::input('search');
+                }
 
-            return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms);            
+            $count = $placement_forms->whereNull('assigned_to_course')->get()->count();
+            
+            $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
+            return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms)->withCount($count);            
     }
 
     public function edit($id)

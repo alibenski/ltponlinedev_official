@@ -56,17 +56,11 @@ class SelfPayController extends Controller
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        // $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        // if(Input::get('submit-approval')) {
-        //     return 'do it';
-        //     dd($request);
-
-        // }else if(is_null(Input::get('submit-filter')) || Input::get('submit-filter')){
-
-        if (is_null($request->Term)) {
+        if (!Session::has('Term')) {
             $selfpayforms = null;
-            return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
         }
 
         $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
@@ -76,9 +70,8 @@ class SelfPayController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 'Term',
+            'L', 'DEPT', 
         ];
-
         
         foreach ($columns as $column) {
             if (\Request::has($column)) {
@@ -87,15 +80,27 @@ class SelfPayController extends Controller
             }
 
         } 
+            if (Session::has('Term')) {
+                $selfpayforms = $selfpayforms->where('Term', Session::get('Term') );
+                $queries['Term'] = Session::get('Term');
+            }
 
+            if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $selfpayforms = $selfpayforms->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+                } 
+            
             if (\Request::has('sort')) {
                 $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
                 $queries['sort'] = \Request::input('sort');
             }
 
         $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
-        return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
-        // }
+        return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
     }
 
     /**
@@ -167,12 +172,7 @@ class SelfPayController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        $request->session()->put('Term', $request->Term);
-        $session_term = $request->session()->get('Term');
-        // dd($session_term);
-        // echo $session_term;
-
-        if (is_null($request->Term)) {
+        if (!Session::has('Term')) {
             $selfpayforms = null;
             return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
@@ -182,7 +182,7 @@ class SelfPayController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 'Term',
+            'L', 'DEPT', 
         ];
 
         
@@ -193,6 +193,20 @@ class SelfPayController extends Controller
             }
 
         } 
+
+            if (Session::has('Term')) {
+                $selfpayforms = $selfpayforms->where('Term', Session::get('Term') );
+                $queries['Term'] = Session::get('Term');
+            }
+
+            if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $selfpayforms = $selfpayforms->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+                } 
 
             if (\Request::has('sort')) {
                 $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );

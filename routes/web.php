@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('user/import', 'AdminController@handleImportUser')->name('bulk-import-user');
     Route::get('user/import-exist', 'AdminController@importExistingUser')->name('import-existing-user');
     Route::post('user/import-exist', 'AdminController@handleImportExistingUser')->name('bulk-import-existing-user');
+    Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
     Route::resource('users', 'UserController');
 
     // separate password reset form

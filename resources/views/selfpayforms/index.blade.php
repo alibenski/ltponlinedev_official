@@ -4,73 +4,45 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
-<h2>Payment-based Enrolment Forms</h2>
-<div class="row col-sm-12">
-    @if(Request::input('Term'))<h4 class="alert alert-selfpay pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else <h4 class="alert alert-selfpay">Please Choose Term</h4> @endif
-    <form id="form-filter" method="GET" action="{{ route('selfpayform.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
-        
-        <div class="form-group input-group col-sm-12">
-            <h4><strong>Filters:</strong></h4>
+<div class="alert bg-purple col-sm-12">
+    <h4 class="text-center"><strong><i class="fa fa-file-o"></i> <span> Payment-based <u>Regular Enrolment Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</span></h4>
+</div>
 
-            <div class="form-group">
-              <label for="Term" class="col-md-12 control-label">Term Select:</label>
-              <div class="form-group col-sm-12">
-                <div class="dropdown">
-                  <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
-                    @foreach($terms as $value)
-                        <option></option>
-                        <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
-                    @endforeach
-                  </select>
-                </div>
-              </div>
+@include('admin.partials._termSessionMsg')
+
+<div class="row">
+    <div class="col-sm-12">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">Filters:</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
             </div>
-
-            <div class="form-group">
-                @foreach ($languages as $id => $name)
-                <div class="col-sm-4">
-                    <div class="input-group"> 
-                      <span class="input-group-addon">       
-                        <input type="radio" name="L" value="{{ $id }}" >                 
-                      </span>
-                        <label type="text" class="form-control">{{ $name }}</label>
-                    </div>
-                </div>
-                @endforeach 
-            </div>
-            
-            <div class="form-group">           
-              <label for="organization" class="col-md-12 control-label"> Organization:</label>
-              <div class="form-group col-sm-12">
-                <div class="dropdown">
-                  <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
-                    @if(!empty($org))
-                      @foreach($org as $value)
-                        <option></option>
-                        <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
-                      @endforeach
-                    @endif
-                  </select>
-                </div>
-              </div>
-            </div>
-
-        </div> {{-- end filter div --}}
-
-
-        <div class="form-group">           
-            <button type="submit" class="btn btn-success filter-submit-btn" name="submit-filter" value="submit-filter">Submit</button>
-            <a href="/admin/selfpayform/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
         </div>
+    <div class="box-body">
+        <form id="form-filter" method="GET" action="{{ route('selfpayform.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}">
+            
+            @include('admin.partials._filterIndex')
 
+            <div class="form-group">           
+                <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
+                <a href="/admin/selfpayform/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+            </div>
+
+        </form>
+    </div>
+    <div class="box-footer">
         <div class="form-group">    
             <div class="input-group-btn">
-                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
-                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Request::input('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
             </div>
         </div>
-    </form>
+    </div>
+    </div>
+    </div>
 </div>
+
 @if(is_null($selfpayforms))
 
 @else

@@ -8,84 +8,43 @@
 <div class="alert alert-warning col-sm-12">
 	<h4 class="text-center"><strong>Placement Test Forms</strong></h4>
 </div>
-<div class="row col-sm-12">
-	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
-	{{-- <ul class="nav nav-pills">
-		<li role="presentation" class="{{ Request::is('home') ? "active" : ""}}"><a href="/home">Approved</a></li>
-		<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">Cancelled</a></li>
-		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">Pending</a></li>
-	</ul> --}}
-	{{-- <a href="{{ route('index-placement-selfpay') }}" class="btn btn-info pull-right">Manage Self-Paying Placement Forms</a> --}}
 
-    <form method="GET" target="_blank" action="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
+@include('admin.partials._termSessionMsg')
+
+<div class="row">
+    <div class="col-sm-12">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title">Filters:</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+    <div class="box-body">
+    <form method="GET" target="_blank" action="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}">
 		
-		<div class="form-group input-group col-sm-12">
-			<h4><strong>Filters:</strong></h4>
-
-			<div class="form-group">
-	          <label for="Term" class="col-sm-12 control-label">Term Select:</label>
-	          <div class="form-group col-sm-12">
-	            <div class="dropdown">
-	              <select id="Term" name="Term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" required="">
-	                @foreach($terms as $value)
-	                    <option></option>
-	                    <option value="{{ $value->Term_Code }}">{{$value->Comments}} - {{$value->Term_Name}}</option>
-	                @endforeach
-	              </select>
-	            </div>
-	          </div>
-	        </div>
-	        
-	        <div class="form-group col-sm-12">
-	        	<label for="search" class="control-label">Search by Name:</label>
-				<input type="text" name="search" class="form-control" placeholder="Enter name here">
-	        </div>
-
-			<div class="form-group">
-	            @foreach ($languages as $id => $name)
-				<div class="col-sm-4">
-					<div class="input-group"> 
-	                  <span class="input-group-addon">       
-	                    <input type="radio" name="L" value="{{ $id }}" >                 
-	                  </span>
-	                    <label type="text" class="form-control">{{ $name }}</label>
-	              	</div>
-				</div>
-	            @endforeach	
-			</div>
-	        
-	        <div class="form-group">           
-		      <label for="organization" class="col-sm-12 control-label"> Organization:</label>
-		      <div class="form-group col-sm-12">
-	            <div class="dropdown">
-	              <select id="input" name="DEPT" class="col-sm-10 form-control select2-basic-single" style="width: 100%;">
-	                @if(!empty($org))
-	                  @foreach($org as $value)
-	                    <option></option>
-	                    <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
-	                  @endforeach
-	                @endif
-	              </select>
-	            </div>
-	          </div>
-	        </div>
-
-		</div> {{-- end filter div --}}
+		@include('admin.partials._filterIndex')
 
         <div class="form-group">           
-	        <button type="submit" class="btn btn-success" value="UNOG">Submit</button>
+	        <button type="submit" class="btn btn-success">Submit</button>
         	<a href="/admin/placement-form/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
         </div>
 
-        <div class="form-group">    
-            <div class="input-group-btn">
-		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Request::input('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
-		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Request::input('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
-            </div>
-        </div>
     </form>
 </div>
+	<div class="box-footer">
+        <div class="form-group">    
+            <div class="input-group-btn">
+				<a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+		    </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</div>
 
+{{-- 
 @if(is_null($placement_forms))
 
 @else
@@ -97,9 +56,9 @@
 	        	<th>Operation</th>
 	            <th>Name</th>
 	            <th>Organization</th>
-	            <th>Language</th>
+	            <th>Language</th> --}}
 	            {{-- <th>Student Cancelled?</th> --}}
-	            <th>Exam Date</th>
+{{-- 	            <th>Exam Date</th>
 	            <th>Manager Approval</th>
 	            <th>HR Approval</th>
 	            <th>ID Proof</th>
@@ -110,9 +69,9 @@
 	    <tbody>
 			@foreach($placement_forms as $form)
 			<tr>
-				<td>
+				<td> --}}
 					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
-                    <a href="{{ route('placement-form.edit', [$form->id]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
+{{--                     <a href="{{ route('placement-form.edit', [$form->id]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
                 </td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
@@ -120,13 +79,13 @@
 				<td>
 				@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
 				</td>
-				<td>{{ $form->L }}</td>
+				<td>{{ $form->L }}</td> --}}
 				{{-- <td>
 					@if( is_null($form->cancelled_by_student))
 					@else <span id="status" class="label label-danger margin-label">YES</span>
 					@endif
 				</td> --}}
-				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
+{{-- 				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
 				<td>
 					@if($form->is_self_pay_form == 1)
 					<span id="status" class="label label-info margin-label">
@@ -182,7 +141,7 @@
 	</table>
 	{{ $placement_forms->links() }}
 </div>
-@endif
+@endif --}}
 @stop
 
 @section('java_script')

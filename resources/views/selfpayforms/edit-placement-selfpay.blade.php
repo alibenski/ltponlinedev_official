@@ -6,7 +6,7 @@
 @section('content')
 <div class="row">
 	<div class="alert alert-selfpay col-sm-10 col-sm-offset-1">
-	<h4 class="text-center"><strong><u>Payment-based Placement Form</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
+	<h4 class="text-center"><strong>Payment-based <u>Placement Form</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
 	</div>
 	<div class="col-sm-10 col-sm-offset-1">
 	<form method="POST" action="{{ route('post-placement-selfpay', $selfpay_student->id) }}">

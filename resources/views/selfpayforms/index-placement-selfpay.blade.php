@@ -6,75 +6,33 @@
 @section('content')
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li role="presentation" class="{{ Request::is('admin/selfpayform/approved-placement-selfpay') ? "active" : ""}}"><a href="{{ route('approved-placement-selfpay') }}" target="_blank">Approved</a></li>
-        <li role="presentation" class="{{ Request::is('admin/selfpayform/cancelled-placement-selfpay') ? "active" : ""}}"><a href="{{ route('cancelled-placement-selfpay') }}" target="_blank">Cancelled</a></li>
+        <li role="presentation" class="{{ Request::is('admin/selfpayform/approved-placement-selfpay') ? "active" : ""}}"><a href="{{ route('approved-placement-selfpay') }}" target="_blank">Validated</a></li>
+        <li role="presentation" class="{{ Request::is('admin/selfpayform/cancelled-placement-selfpay') ? "active" : ""}}"><a href="{{ route('cancelled-placement-selfpay') }}" target="_blank">Disapproved</a></li>
         <li role="presentation" class="{{ Request::is('admin/selfpayform/pending-placement-selfpay') ? "active" : ""}}"><a href="{{ route('pending-placement-selfpay') }}" target="_blank">Pending</a></li>
     </ul>
 </div>
 <div class="alert alert-selfpay col-sm-12">
-    <h4 class="text-center"><strong><u>Payment-based Placement Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
+    <h4 class="text-center"><strong><i class="fa fa-file"></i> <span> Payment-based <u>Placement Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</span></h4>
 </div>
+
+@include('admin.partials._termSessionMsg')
+
 <div class="row">
     <div class="col-sm-12">
     <div class="box box-default">
         <div class="box-header with-border">
             <h3 class="box-title">Filters:</h3>
             <div class="box-tools pull-right">
-            <h4><span class="label label-primary">@if(Request::input('Term'))Currently Viewing: {{ Request::input('Term') }} @else Please Choose Term @endif</span></h4>
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
             </div>
         </div>
     <div class="box-body">
-        <form id="form-filter" method="GET" action="{{ route('index-placement-selfpay',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term')]) }}">
+        <form id="form-filter" method="GET" action="{{ route('index-placement-selfpay',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}">
             
-            <div class="form-group input-group col-sm-12">
-                <div class="form-group">
-                  <label for="Term" class="col-md-12 control-label">Term Select:</label>
-                  <div class="form-group col-sm-12">
-                    <div class="dropdown">
-                      <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
-                        @foreach($terms as $value)
-                            <option></option>
-                            <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                    @foreach ($languages as $id => $name)
-                    <div class="col-sm-4">
-                        <div class="input-group"> 
-                          <span class="input-group-addon">       
-                            <input type="radio" name="L" value="{{ $id }}" >                 
-                          </span>
-                            <label type="text" class="form-control">{{ $name }}</label>
-                        </div>
-                    </div>
-                    @endforeach 
-                </div>
-                
-                <div class="form-group">           
-                  <label for="organization" class="col-md-12 control-label"> Organization:</label>
-                  <div class="form-group col-sm-12">
-                    <div class="dropdown">
-                      <select id="input" name="DEPT" class="col-md-10 form-control select2-basic-single" style="width: 100%;">
-                        @if(!empty($org))
-                          @foreach($org as $value)
-                            <option></option>
-                            <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
-                          @endforeach
-                        @endif
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-            </div> {{-- end filter div --}}
-
+            @include('admin.partials._filterIndex')
 
             <div class="form-group">           
-                <button type="submit" class="btn btn-success filter-submit-btn" name="submit-filter" value="submit-filter">Submit</button>
+                <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
                 <a href="/admin/selfpayform/index-placement-selfpay/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
             </div>
 
@@ -83,8 +41,8 @@
     <div class="box-footer">
         <div class="form-group">    
             <div class="input-group-btn">
-                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Request::input('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
-                <a href="{{ route('selfpayform.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Request::input('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+                <a href="{{ route('index-placement-selfpay', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+                <a href="{{ route('index-placement-selfpay', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
             </div>
         </div>
     </div>

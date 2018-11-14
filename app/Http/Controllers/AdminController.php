@@ -17,13 +17,25 @@ use Session;
 
 class AdminController extends Controller
 {
-    public function adminIndex()
+    public function setSessionTerm(Request $request)
     {
         $new_user_count = NewUser::where('approved_account', 0)->count();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+        
+        $request->session()->put('Term', $request->Term);
+
+        // return view('admin.index',compact('terms'))->withNew_user_count($new_user_count);   
+        return redirect()->back();   
+    }
+    
+    public function adminIndex()
+    {
+        $new_user_count = NewUser::where('approved_account', 0)->count();
+        $terms = Term::orderBy('Term_Code', 'desc')->get();       
 
         return view('admin.index',compact('terms'))->withNew_user_count($new_user_count);   
     }
+
 
     public function importUser() 
     {

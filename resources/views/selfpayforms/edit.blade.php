@@ -5,8 +5,8 @@
 @stop
 @section('content')
 <div class="row">
-	<div class="alert alert-selfpay col-sm-10 col-sm-offset-1">
-	<h4 class="text-center"><strong><u>Regular Enrolment Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
+	<div class="alert bg-purple col-sm-10 col-sm-offset-1">
+	<h4 class="text-center"><strong>Payment-based <u>Regular Enrolment Form</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</h4>
 	</div>
 	<div class="col-sm-10 col-sm-offset-1">
 	<form method="POST" action="{{ route('selfpayform.update', $selfpay_student->INDEXID) }}">
