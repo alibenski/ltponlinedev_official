@@ -10,17 +10,35 @@
 </div>
 <div class="form-group col-sm-12">
     <form method="GET" action="{{ route('placement-form-filtered') }}">
+    	<input name="Term" type="hidden" value="{{ Request::input('Term') }}">
+    	<input name="L" type="hidden" value="{{ Request::input('L') }}">
+    	<input name="DEPT" type="hidden" value="{{ Request::input('DEPT') }}">
         {{-- search by name or email--}}
             <label for="search" class="control-label">Search by name/email:</label>         
         <div class="input-group">  
             <input type="text" name="search" class="form-control" placeholder="Enter name here">
             <div class="input-group-btn">
                 <button type="submit" class="btn btn-info button-prevent-multi-submit"><i class="glyphicon glyphicon-search"></i> Search</button>
+                <button type="submit" class="btn btn-danger button-prevent-multi-submit"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
             </div>
         </div>
     </form>    
 </div>
-	@if(Request::input('Term'))<h4 class="alert alert-info pull-right">Currently Viewing: {{ Request::input('Term') }} </h4>@else @endif
+<div class="col-sm-4 col-xs-12 pull-right">
+	@if(Request::input('Term'))
+	<div class="info-box">
+		<span class="info-box-icon bg-orange"><i class="fa fa-list"></i></span>
+		<div class="info-box-content">
+			<p>Currently Viewing:</p> 
+				@if(Request::has('Term')){{ Request::input('Term') }}@else @endif 	
+				@if(Request::has('L')) / {{ Request::input('L') }} 	@else @endif 
+				@if(Request::has('DEPT')) / {{ Request::input('DEPT') }} @else @endif 
+		</div>
+	</div>
+</div>
+	@else 
+	@endif
+
 @if(is_null($placement_forms))
 
 @else

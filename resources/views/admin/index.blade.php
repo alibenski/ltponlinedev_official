@@ -19,14 +19,14 @@
 
 <h1 class="text-danger">Administrator Dashboard</h1>
 
-{{-- <div class="box box-default" data-widget="box-widget">
+<div class="box box-primary" data-widget="box-widget">
   <div class="box-header">
     <h3 class="box-title">Select Term Session:</h3>
-    <div class="box-tools"> --}}
+    <div class="box-tools">
       <!-- This will cause the box to be removed when clicked -->
-      {{-- <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> --}}
+      <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
       <!-- This will cause the box to collapse when clicked -->
-      {{-- <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+      <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
     </div>
   </div>
   <div class="box-body">
@@ -48,10 +48,10 @@
   <div class="box-footer">
     <div class="form-group">           
         <button type="submit" class="btn btn-success filter-submit-btn" name="submit-filter" value="submit-filter">Submit</button>
-        <a href="/admin" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+        {{-- <a href="/admin" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a> --}}
     </div>
   </div>
-</div> --}}
+</div>
 
 
 <div class="col-sm-4 col-xs-12">
