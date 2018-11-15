@@ -11,241 +11,285 @@
 	<a href="{{ route('users.index') }}" class="btn btn-danger"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
 	<button type="button" class="show-modal btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
 	<button type="button" class="show-modal-history btn btn-primary" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
-
+	<a href="{{ route('enrol-student-to-course-form', $id) }}" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span>  Enrol User</a>
+	
 	<h3>Viewing: <strong>{{ $student->name }}</strong></h3>
 
 	<h3>@if(Request::input('Term'))Term: {{ Request::input('Term') }} @else Please Choose Term @endif</h3>
-   	<div class="row col-sm-12">
-		<form method="GET" action="{{ route('manage-user-enrolment-data', $id) }}">
+   	<div class="row">
+   		<div class="col-sm-12">
+   			<form method="GET" action="{{ route('manage-user-enrolment-data', $id) }}">
 			
-			<div class="form-group input-group col-sm-12">
-				<h4><strong>Filters:</strong></h4>
+				<div class="form-group input-group col-sm-12">
+					<h4><strong>Filters:</strong></h4>
 
-				<div class="form-group">
-		          <label for="Term" class="col-md-12 control-label">Term Select:</label>
-		          <div class="form-group col-sm-12">
-		            <div class="dropdown">
-		              <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
-		                @foreach($terms as $value)
-		                    <option></option>
-		                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
-		                @endforeach
-		              </select>
-		            </div>
-		          </div>
-		        </div>
+					<div class="form-group">
+			          <label for="Term" class="col-md-12 control-label">Term Select:</label>
+			          <div class="form-group col-sm-12">
+			            <div class="dropdown">
+			              <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+			                @foreach($terms as $value)
+			                    <option></option>
+			                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
+			                @endforeach
+			              </select>
+			            </div>
+			          </div>
+			        </div>
 
-			</div> {{-- end filter div --}}
+				</div> {{-- end filter div --}}
 
 
-		    <div class="form-group">           
-		        <button type="submit" class="btn btn-success">View Forms</button>
-		    	<a href="{{ route('manage-user-enrolment-data', $id) }}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
-		    </div>
-		</form>
+			    <div class="form-group">           
+			        <button type="submit" class="btn btn-success">View Forms</button>
+			    	<a href="{{ route('manage-user-enrolment-data', $id) }}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+			    </div>
+			</form>
+   		</div>
 	</div>
-    @if(empty($student_enrolments))
+
+	@if(!Request::has('Term'))
 
 	@else
 		@if(count($student_enrolments) == 0)
+			<div class="row">
+				<div class="col-sm-5 center-block">
+					<div class="alert alert-info alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						<h4><i class="icon fa fa-ban"></i> Alert Message!</h4>
+						No <u>Regular Enrolment form</u>(s) submitted.
+					</div>
+				</div>
+			</div>
 		@else
-		<div class="filtered-table">
-			<h4><strong>Regular Enrolment Form(s) Submitted:</strong></h4>
-			<table class="table table-bordered table-striped">
-			    <thead>
-			        <tr>
-			            <th>Operation</th>
-			            <th>Name</th>
-			            <th>Organization</th>
-			            <th>Language</th>
-			            <th>Course</th>
-			            <th>Schedule</th>
-			            <th>Manager Email</th>
-			            <th>Manager Approval</th>
-			            <th>HR Approval</th>
-			            <th>ID Proof</th>
-			            <th>Payment Proof</th>
-			            <th>Time Stamp</th>
-			        </tr>
-			    </thead>
-			    <tbody>
-					@foreach($student_enrolments as $form)
-					<tr>
-						<td>
-						<form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
-                            <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
-                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
-                            <input type="hidden" name="_token" value="{{ Session::token() }}">
-                            {{ method_field('DELETE') }}
-                        </form>
-						</td>
-						<td>
-						@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
-						<td>{{ $form->DEPT }}</td>
-						<td>{{ $form->L }}</td>
-						<td>{{ $form->courses->Description }}</td>
-						<td>{{ $form->schedule->name }}</td>
-						<td>@if($form->mgr_email){{ $form->mgr_email }} @else - @endif</td>
-						<td>
-							@if($form->is_self_pay_form == 1)
-							<span id="status" class="label label-info margin-label">
-							N/A - Self Payment</span>
-							@elseif(is_null($form->approval))
-							<span id="status" class="label label-warning margin-label">
-							Pending Approval</span>
-							@elseif($form->approval == 1)
-							<span id="status" class="label label-success margin-label">
-							Approved</span>
-							@elseif($form->approval == 0)
-							<span id="status" class="label label-danger margin-label">
-							Disapproved</span>
-							@endif
-						</td>
-						<td>
-						@if(is_null($form->is_self_pay_form))
-							@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-								<span id="status" class="label label-info margin-label">
-								N/A - Non-paying organization</span>
-							@else
-								@if(is_null($form->approval) && is_null($form->approval_hr))
-								<span id="status" class="label label-warning margin-label">
-								Pending Approval</span>
-								@elseif($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr)))
-								<span id="status" class="label label-danger margin-label">
-								N/A - Disapproved by Manager</span>
-								@elseif($form->approval == 1 && is_null($form->approval_hr))
-								<span id="status" class="label label-warning margin-label">
-								Pending Approval</span>
-								@elseif($form->approval == 1 && $form->approval_hr == 1)
-								<span id="status" class="label label-success margin-label">
-								Approved</span>
-								@elseif($form->approval == 1 && $form->approval_hr == 0)
-								<span id="status" class="label label-danger margin-label">
-								Disapproved</span>
-								@endif
-							@endif
-						@else
-						<span id="status" class="label label-info margin-label">
-						N/A - Self Payment</span>
-						@endif
-						</td>
-						<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
-						</td>
-						<td>
-						@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
-						</td>
-						<td>{{ $form->created_at}}</td>
-					</tr>
-					@endforeach
-			    </tbody>
-			</table>
-		</div>
 		@endif
-	@endif
 
-	@if(empty($student_placements))
-	
-	@else
 		@if(count($student_placements) == 0)
+			<div class="row">
+				<div class="col-sm-5 center-block">
+					<div class="alert alert-warning alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						<h4><i class="icon fa fa-ban"></i> Alert Message!</h4>
+						No <u>Placement Test Request form</u>(s) submitted.
+					</div>
+				</div>
+			</div>
 		@else
-		<div class="filtered-table">
-			<h4><strong>Placement Form(s) Submitted:</strong></h4>
-			<table class="table table-bordered table-striped">
-			    <thead>
-			        <tr>
-			            <th>Operation</th>
-			            <th>Name</th>
-			            <th>Organization</th>
-			            <th>Language</th>
-			            <th>Exam Date</th>
-			            <th>Manager Approval</th>
-			            <th>HR Approval</th>
-			            <th>ID Proof</th>
-			            <th>Payment Proof</th>
-			            <th>Time Stamp</th>
-			        </tr>
-			    </thead>
-			    <tbody>
-					@foreach($student_placements as $form)
-					<tr>
-						<td>
-						<form method="POST" action="{{ route('submittedPlacement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
-	                        <input type="submit" @if (is_null($form->deleted_at))
-	                          value="Cancel Placement Test"
-	                        @else
-	                          value="Cancelled"
-	                        @endif  class="btn btn-danger btn-space" @if (is_null($form->deleted_at))
-	                          
-	                        @else
-	                          disabled="" 
-	                        @endif>
-	                        <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
-	                        <input type="hidden" name="_token" value="{{ Session::token() }}">
-	                       {{ method_field('DELETE') }}
-	                    </form>
-						</td>
-						<td>
-						@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
-						<td>{{ $form->DEPT }}</td>
-						<td>{{ $form->L }}</td>
-						<td>{{ $form->placementSchedule->date_of_plexam }}</td>
-						<td>
-							@if($form->is_self_pay_form == 1)
-							<span id="status" class="label label-info margin-label">
-							N/A - Self Payment</span>
-							@elseif(is_null($form->approval))
-							<span id="status" class="label label-warning margin-label">
-							Pending Approval</span>
-							@elseif($form->approval == 1)
-							<span id="status" class="label label-success margin-label">
-							Approved</span>
-							@elseif($form->approval == 0)
-							<span id="status" class="label label-danger margin-label">
-							Disapproved</span>
-							@endif
-						</td>
-						<td>
-							@if(is_null($form->is_self_pay_form))
-								@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-								<span id="status" class="label label-info margin-label">
-								N/A - Non-paying organization</span>
-							@else
-								@if(is_null($form->approval) && is_null($form->approval_hr))
-								<span id="status" class="label label-warning margin-label">
-								Pending Approval</span>
-								@elseif($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr)))
-								<span id="status" class="label label-danger margin-label">
-								N/A - Disapproved by Manager</span>
-								@elseif($form->approval == 1 && is_null($form->approval_hr))
-								<span id="status" class="label label-warning margin-label">
-								Pending Approval</span>
-								@elseif($form->approval == 1 && $form->approval_hr == 1)
-								<span id="status" class="label label-success margin-label">
-								Approved</span>
-								@elseif($form->approval == 1 && $form->approval_hr == 0)
-								<span id="status" class="label label-danger margin-label">
-								Disapproved</span>
-								@endif
-							@endif
-						@else
-						<span id="status" class="label label-info margin-label">
-						N/A - Self Payment</span>
-						@endif
-						</td>
-						<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
-						</td>
-						<td>
-						@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
-						</td>
-						<td>{{ $form->created_at}}</td>
-					</tr>
-					@endforeach
-			    </tbody>
-			</table>
-		</div>
 		@endif
-	@endif
 
+	    @if(empty($student_enrolments))
+
+		@else
+			@if(count($student_enrolments) == 0)
+			
+			@else
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="table-responsive filtered-table">
+						<h4><strong>Regular Enrolment Form(s) Submitted:</strong></h4>
+						<table class="table table-bordered table-striped">
+						    <thead>
+						        <tr>
+						            <th>Operation</th>
+						            <th>Name</th>
+						            <th>Organization</th>
+						            <th>Language</th>
+						            <th>Course</th>
+						            <th>Schedule</th>
+						            <th>Manager Email</th>
+						            <th>Manager Approval</th>
+						            <th>HR Approval</th>
+						            <th>ID Proof</th>
+						            <th>Payment Proof</th>
+						            <th>Time Stamp</th>
+						        </tr>
+						    </thead>
+						    <tbody>
+								@foreach($student_enrolments as $form)
+								<tr>
+									<td>
+									<form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
+			                            <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
+			                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+			                            <input type="hidden" name="_token" value="{{ Session::token() }}">
+			                            {{ method_field('DELETE') }}
+			                        </form>
+									</td>
+									<td>
+									@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
+									<td>{{ $form->DEPT }}</td>
+									<td>{{ $form->L }}</td>
+									<td>{{ $form->courses->Description }}</td>
+									<td>{{ $form->schedule->name }}</td>
+									<td>@if($form->mgr_email){{ $form->mgr_email }} @else - @endif</td>
+									<td>
+										@if($form->is_self_pay_form == 1)
+										<span id="status" class="label label-info margin-label">
+										N/A - Self Payment</span>
+										@elseif(is_null($form->approval))
+										<span id="status" class="label label-warning margin-label">
+										Pending Approval</span>
+										@elseif($form->approval == 1)
+										<span id="status" class="label label-success margin-label">
+										Approved</span>
+										@elseif($form->approval == 0)
+										<span id="status" class="label label-danger margin-label">
+										Disapproved</span>
+										@endif
+									</td>
+									<td>
+									@if(is_null($form->is_self_pay_form))
+										@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+											<span id="status" class="label label-info margin-label">
+											N/A - Non-paying organization</span>
+										@else
+											@if(is_null($form->approval) && is_null($form->approval_hr))
+											<span id="status" class="label label-warning margin-label">
+											Pending Approval</span>
+											@elseif($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr)))
+											<span id="status" class="label label-danger margin-label">
+											N/A - Disapproved by Manager</span>
+											@elseif($form->approval == 1 && is_null($form->approval_hr))
+											<span id="status" class="label label-warning margin-label">
+											Pending Approval</span>
+											@elseif($form->approval == 1 && $form->approval_hr == 1)
+											<span id="status" class="label label-success margin-label">
+											Approved</span>
+											@elseif($form->approval == 1 && $form->approval_hr == 0)
+											<span id="status" class="label label-danger margin-label">
+											Disapproved</span>
+											@endif
+										@endif
+									@else
+									<span id="status" class="label label-info margin-label">
+									N/A - Self Payment</span>
+									@endif
+									</td>
+									<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
+									</td>
+									<td>
+									@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
+									</td>
+									<td>{{ $form->created_at}}</td>
+								</tr>
+								@endforeach
+						    </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			@endif
+		@endif
+
+		@if(empty($student_placements))
+		
+		@else
+			@if(count($student_placements) == 0)
+
+			@else
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="table-responsive filtered-table">
+						<h4><strong>Placement Form(s) Submitted:</strong></h4>
+						<table class="table table-bordered table-striped">
+						    <thead>
+						        <tr>
+						            <th>Operation</th>
+						            <th>Name</th>
+						            <th>Organization</th>
+						            <th>Language</th>
+						            <th>Exam Date</th>
+						            <th>Manager Approval</th>
+						            <th>HR Approval</th>
+						            <th>ID Proof</th>
+						            <th>Payment Proof</th>
+						            <th>Time Stamp</th>
+						        </tr>
+						    </thead>
+						    <tbody>
+								@foreach($student_placements as $form)
+								<tr>
+									<td>
+									<form method="POST" action="{{ route('submittedPlacement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
+				                        <input type="submit" @if (is_null($form->deleted_at))
+				                          value="Cancel Placement Test"
+				                        @else
+				                          value="Cancelled"
+				                        @endif  class="btn btn-danger btn-space" @if (is_null($form->deleted_at))
+				                          
+				                        @else
+				                          disabled="" 
+				                        @endif>
+				                        <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+				                        <input type="hidden" name="_token" value="{{ Session::token() }}">
+				                       {{ method_field('DELETE') }}
+				                    </form>
+									</td>
+									<td>
+									@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
+									<td>{{ $form->DEPT }}</td>
+									<td>{{ $form->L }}</td>
+									<td>{{ $form->placementSchedule->date_of_plexam }}</td>
+									<td>
+										@if($form->is_self_pay_form == 1)
+										<span id="status" class="label label-info margin-label">
+										N/A - Self Payment</span>
+										@elseif(is_null($form->approval))
+										<span id="status" class="label label-warning margin-label">
+										Pending Approval</span>
+										@elseif($form->approval == 1)
+										<span id="status" class="label label-success margin-label">
+										Approved</span>
+										@elseif($form->approval == 0)
+										<span id="status" class="label label-danger margin-label">
+										Disapproved</span>
+										@endif
+									</td>
+									<td>
+										@if(is_null($form->is_self_pay_form))
+											@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+											<span id="status" class="label label-info margin-label">
+											N/A - Non-paying organization</span>
+										@else
+											@if(is_null($form->approval) && is_null($form->approval_hr))
+											<span id="status" class="label label-warning margin-label">
+											Pending Approval</span>
+											@elseif($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr)))
+											<span id="status" class="label label-danger margin-label">
+											N/A - Disapproved by Manager</span>
+											@elseif($form->approval == 1 && is_null($form->approval_hr))
+											<span id="status" class="label label-warning margin-label">
+											Pending Approval</span>
+											@elseif($form->approval == 1 && $form->approval_hr == 1)
+											<span id="status" class="label label-success margin-label">
+											Approved</span>
+											@elseif($form->approval == 1 && $form->approval_hr == 0)
+											<span id="status" class="label label-danger margin-label">
+											Disapproved</span>
+											@endif
+										@endif
+									@else
+									<span id="status" class="label label-info margin-label">
+									N/A - Self Payment</span>
+									@endif
+									</td>
+									<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
+									</td>
+									<td>
+									@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
+									</td>
+									<td>{{ $form->created_at}}</td>
+								</tr>
+								@endforeach
+						    </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			@endif
+		@endif
+	
+	@endif
 </div>
 <!-- Modal form to show student profile -->
 <div id="showModal" class="modal fade" role="dialog">

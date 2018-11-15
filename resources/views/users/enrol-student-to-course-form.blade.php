@@ -1,0 +1,190 @@
+@extends('admin.admin')
+
+@section('customcss')
+	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+@stop
+
+@section('content')
+<div class="row">
+    <div class="col-sm-12">
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <h3 class="box-title">Enrol Student To Course</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+    <div class="box-body">
+		<form method="POST" action="{{ route('enrol-student-to-course-insert') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
+		    {{ csrf_field() }}
+			<div class="form-group">
+				<input type="text" name="INDEXID" value="{{ $student->sddextr->INDEXNO }}" readonly>
+				<input type="text" name="INDEXID" value="{{ $student->name }}" readonly>
+			</div>
+
+			<div class="form-group">
+				<label for="profile">Profile:</label>
+				<select name="profile" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
+				    <option></option>
+				    <option value="STF">Staff Member</option>
+				    <option value="INT">Intern</option>
+				    <option value="CON">Consultant</option>
+				    <option value="JPO">JPO</option>
+				    <option value="MSU">Staff of Permanent Mission</option>
+				    <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
+				    <option value="RET">Retired UN Staff Member</option>
+				    <option value="SERV">Staff of Service Organizations in the Palais</option>
+				    <option value="NGO">Staff of UN-accredited NGO's</option>
+				    <option value="PRESS">Staff of UN Press Corps</option>
+				</select>
+			</div>
+			
+			<div class="form-group">
+				<label for="DEPT">Organization</label>
+				<select name="DEPT" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
+				@foreach($orgs as $org)
+				  <option></option>
+		          <option value="{{ $org['Org Name'] }}">{{ $org['Org Name'] }} - {{ $org['Org Full Name'] }}</option>
+		        @endforeach
+		        </select>
+			</div>
+
+			<div class="form-group">
+				<label for="Term">Term</label>
+				<select name="Term" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
+				@foreach($terms as $term)
+				  <option></option>
+		          <option value="{{ $term->Term_Code}}">{{ $term->Comments }} - {{ $term->Term_Name }}</option>
+		        @endforeach
+		        </select>
+			</div>
+			
+			<div class="form-group">
+		      <label for="L" class="col-sm-12"> Language:</label>
+		        @foreach ($languages as $id => $name)
+		        <div class="col-sm-4">
+		            <div class="input-group"> 
+		              <span class="input-group-addon">       
+		                <input type="radio" name="L" value="{{ $id }}" autocomplete="off">                 
+		              </span>
+		                <label type="text" class="form-control">{{ $name }}</label>
+		            </div>
+		        </div>
+		        @endforeach 
+		    </div>
+
+			<div class="form-group">
+				<label for="Te_Code">Course</label>
+				<select name="Te_Code" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+		          <option></option>
+		        </select>
+			</div>
+
+			<div class="form-group">
+				<label for="schedule_id">Schedule</label>
+				<select name="schedule_id" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+		          <option></option>
+		        </select>
+			</div>
+
+			<div class="form-group">
+				<label for="decision">Self-paying Student?</label>
+				<div class="col-sm-12">
+		                    <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required" autocomplete="off">
+		                    <label for="decision1" class="form-control-static">Yes</label>
+		          </div>
+
+		          <div class="col-sm-12">
+		                    <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required" autocomplete="off">
+		                    <label for="decision2" class="form-control-static">No</label>
+		          </div>
+		    </div>
+
+			<div class="form-group">
+                <div class="alert alert-default alert-block">
+                  <div class="small text-danger col-md-offset-3">
+                    <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
+                  </div>
+                
+                  <div class="form-group">
+                    <label for="identityfile" class="col-md-3 control-label">Upload Proof of Identity: </label>
+                    <input name="identityfile" type="file" class="col-md-9 form-control-static">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="payfile" class="col-md-3 control-label">Upload Proof of Payment: </label>
+                    <input name="payfile" type="file" class="col-md-8 form-control-static">
+                  </div>  
+                </div>
+            </div>
+			
+			<div class="form-group">
+			    <label class="control-label" for="Comments">Admin Comment: </label>
+			    <div class="">
+			        <textarea class="form-control" name="Comments" cols="40" rows="3">Created and approved by CLM Language Administrator</textarea>
+			    </div>
+			</div>
+
+			<div class="col-sm-2 col-sm-offset-5">
+              <button type="submit" class="btn btn-success button-prevent-multi-submit">Add Enrolment Form</button>
+              <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </div>
+		</form>
+    </div>
+    <div class="box-footer">
+        <div class="form-group">    
+
+        </div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+@stop
+
+@section('java_script')
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select2').select2({
+    placeholder: "--- Select Here ---",
+    });
+});
+</script>
+<script type="text/javascript">
+  $("input[name='L']").click(function(){
+      var L = $(this).val();
+      var term = $("select[name='Term']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax') }}", 
+          method: 'POST',
+          data: {L:L, term_id:term, _token:token},
+          success: function(data, status) {
+            $("select[name='Te_Code']").html('');
+            $("select[name='Te_Code']").html(data.options);
+          }
+      });
+  }); 
+</script>
+<script type="text/javascript">
+  $("select[name='Te_Code']").on('change',function(){
+      var course_id = $(this).val();
+      var term = $("select[name='Term']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax2') }}", 
+          method: 'POST',
+          data: {course_id:course_id, term_id:term, _token:token},
+          success: function(data) {
+            $("select[name='schedule_id']").html('');
+            $("select[name='schedule_id']").html(data.options);
+          }
+      });
+  }); 
+</script>
+@stop

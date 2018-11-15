@@ -31,8 +31,7 @@
             
             @include('admin.partials._filterIndex')
 
-            <div class="form-group">           
-                <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
+            <!-- submit button included admin.partials._filterIndex view -->
                 <a href="/admin/selfpayform/index-placement-selfpay/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
             </div>
 

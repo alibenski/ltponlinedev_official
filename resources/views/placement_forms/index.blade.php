@@ -25,9 +25,8 @@
 		
 		@include('admin.partials._filterIndex')
 
-        <div class="form-group">           
-	        <button type="submit" class="btn btn-success">Submit</button>
-        	<a href="/admin/placement-form/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+        <!-- submit button included admin.partials._filterIndex view -->
+        	<a href="/admin/placement-form/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
         </div>
 
     </form>

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Session;
 
 class PreenrolmentController extends Controller
 {
@@ -194,7 +195,7 @@ class PreenrolmentController extends Controller
 
 
 
-        if (is_null($request->Term)) {
+        if (!Session::has('Term')) {
             $enrolment_forms = null;
             return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
@@ -204,7 +205,7 @@ class PreenrolmentController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 'Term',
+            'L', 'DEPT',
         ];
 
         
@@ -215,6 +216,19 @@ class PreenrolmentController extends Controller
             }
 
         } 
+            if (Session::has('Term')) {
+                    $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term') );
+                    $queries['Term'] = Session::get('Term');
+            }
+
+                if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $enrolment_forms = $enrolment_forms->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+            } 
 
             if (\Request::has('sort')) {
                 $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort') );

@@ -2,26 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\User;
+use App\Language;
+use App\PlacementForm;
+use App\Preenrolment;
+use App\Repo;
 use App\TORGAN;
+use App\Term;
+use App\User;
 use Auth;
 use DB;
-use App\Preenrolment;
-use App\PlacementForm;
-use App\Repo;
-use App\Term;
-
-//Importing laravel-permission models
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
-//Enables us to output flash messaging
-use Session;
-
-//Enables BCrypt for password encyption
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Session;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -258,5 +253,21 @@ class UserController extends Controller
         }      
 
         return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data);
+    }
+
+    public function enrolStudentToCourseForm(Request $request, $id)
+    {
+        $student = User::find($id);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $languages = Language::pluck("name","code")->all();
+        $orgs = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+
+        // dd($request, $id);
+        return view('users.enrol-student-to-course-form', compact('languages', 'terms', 'student', 'orgs'));
+    }
+
+    public function enrolStudentToCourseInsert(Request $request)
+    {
+        dd($request);
     }
 }

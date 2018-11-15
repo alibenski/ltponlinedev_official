@@ -24,9 +24,8 @@
             
             @include('admin.partials._filterIndex')
 
-            <div class="form-group">           
-                <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
-                <a href="/admin/selfpayform/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+            <!-- submit button included admin.partials._filterIndex view -->
+                <a href="/admin/selfpayform/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
             </div>
 
         </form>
@@ -47,7 +46,7 @@
 
 @else
 {{ $selfpayforms->links() }}
-<div class="filtered-table">
+<div class="table-responsive col-sm-12 filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
