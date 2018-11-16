@@ -37,7 +37,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/{id}/manage-user-enrolment-data', ['as' => 'manage-user-enrolment-data', 'uses' => 'UserController@manageUserEnrolmentData' ]);
     Route::get('user/{id}/enrol-student-to-course-form', ['as' => 'enrol-student-to-course-form', 'uses' => 'UserController@enrolStudentToCourseForm' ]);
     Route::post('user/enrol-student-to-course-insert', ['as' => 'enrol-student-to-course-insert', 'uses' => 'UserController@enrolStudentToCourseInsert' ]);
-
+    Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm' ]);
+    Route::post('user/enrol-student-to-placement-insert', ['as' => 'enrol-student-to-placement-insert', 'uses' => 'UserController@enrolStudentToPlacementInsert' ]);
 
 
     

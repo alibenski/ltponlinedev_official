@@ -13,12 +13,12 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-    <div class="box box-success">
+    <div class="box box-warning">
         <div class="box-header with-border">
-            <h3 class="box-title">Enrol Student To Course</h3>
+            <h3 class="box-title">Create Placement Test Form</h3>
         </div>
     <div class="box-body">
-		<form method="POST" action="{{ route('enrol-student-to-course-insert') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
+		<form method="POST" action="{{ route('enrol-student-to-placement-insert') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
 		    {{ csrf_field() }}
 		<input type="hidden" name="id" value="{{$student->id}}">
 		<div class="row">
@@ -64,7 +64,7 @@
 			</div>
 			<div class="form-group col-sm-12">
 				<label for="Term">Term</label>
-				<select name="Term" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
+				<select name="Term" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
 				@foreach($terms as $term)
 				  <option></option>
 		          <option value="{{ $term->Term_Code}}">{{ $term->Comments }} - {{ $term->Term_Name }}</option>
@@ -87,16 +87,21 @@
 		    </div>
 
 			<div class="form-group col-sm-12">
-				<label for="Te_Code">Course</label>
-				<select name="Te_Code" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
-		          <option></option>
-		        </select>
+				<div class="place-here col-sm-12">
+				<label for="scheduleChoices">Placement Test Dates</label>
+				<div class="scheduleChoices col-md-12">
+                {{-- insert jquery schedules here --}}
+                </div>
+            	</div>
 			</div>
 
 			<div class="form-group col-sm-12">
-				<label for="schedule_id">Schedule</label>
-				<select name="schedule_id" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
-		          <option></option>
+				<label for="schedule_id">Time of Test</label>
+				<select name="schedule_id" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
+				  <option></option>
+				@foreach($times as $time)
+		          <option value="{{ $time->id }}">{{ date('h:i:sa', strtotime($time->Begin_Time)) }}</option>
+		        @endforeach
 		        </select>
 			</div>
 		</div>
@@ -161,7 +166,9 @@
 @stop
 
 @section('java_script')
+
 <script src="{{ asset('js/select2.min.js') }}"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
     $('.select2').select2({
@@ -170,37 +177,66 @@ $(document).ready(function() {
     $("input[name='decision']").prop('checked', false);
 });
 </script>
+
 <script type="text/javascript">
   $("input[name='L']").click(function(){
+  	$("label[for='scheduleChoices']").remove();
+    $(".scheduleChoices").remove();
+      if ($(this).val() == 'F') {
+        $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is Online:</label>').fadeIn('fast');
+      } else {
+        $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
+      }
+
+      $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
+
       var L = $(this).val();
       var term = $("select[name='Term']").val();
       var token = $("input[name='_token']").val();
-
+      console.log(L);
       $.ajax({
-          url: "{{ route('select-ajax') }}", 
+          url: "{{ route('check-placement-sched-ajax') }}", 
           method: 'POST',
           data: {L:L, term_id:term, _token:token},
-          success: function(data, status) {
-            $("select[name='Te_Code']").html('');
-            $("select[name='Te_Code']").html(data.options);
-          }
-      });
-  }); 
-  $("select[name='Te_Code']").on('change',function(){
-      var course_id = $(this).val();
-      var term = $("select[name='Term']").val();
-      var token = $("input[name='_token']").val();
+          success: function(data) { // get the placement test schedules
+              $.each(data, function(index, val) {
+                  var m_names = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                  var d = new Date(val.date_of_plexam);
+                  var curr_date = d.getDate();
+                  var curr_month = d.getMonth();
+                  var curr_year = d.getFullYear();
+                  var dateString = curr_date + " " + m_names[curr_month] + " " + curr_year;
 
-      $.ajax({
-          url: "{{ route('select-ajax2') }}", 
-          method: 'POST',
-          data: {course_id:course_id, term_id:term, _token:token},
-          success: function(data) {
-            $("select[name='schedule_id']").html('');
-            $("select[name='schedule_id']").html(data.options);
-          }
+                  var dend = new Date(val.date_of_plexam_end);
+                  var curr_date_end = dend.getDate();
+                  var curr_month_end = dend.getMonth();
+                  var curr_year_end = dend.getFullYear();
+                  var dateStringEnd = curr_date_end + " " + m_names[curr_month_end] + " " + curr_year_end;
+
+                  console.log('is online:' + val.is_online)
+                  if (val.is_online == 1) {
+                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label></div>').fadeIn();
+                  } else {
+                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label></div>').fadeIn();
+                  }
+              }); // end of $.each
+              // if no schedule, tell student there is none
+              if (!$("input[name='placementLang']").length){
+                console.log('no schedule input');
+                $("label[for='scheduleChoices']").html("<div class='alert alert-danger'>Either you forgot to set the Term field or there is no placement test schedule available for this language</div>");
+              } 
+
+              // insert message of convocation email
+              $('input[name="placementLang"]').on('click', function() {
+                // $("textarea[name='course_preference_comment']").attr('required', 'required');
+                $('.insert-msg').hide();
+                $('.insert-msg').addClass('col-md-6 col-md-offset-3');     
+                $('.insert-msg').html("<div class='alert alert-info'>You will receive further information from the Language Secretariat regarding the placement test.</div>").fadeIn();
+              });
+            }
       });
   }); 
+ 
   $("input[name='decision']").click(function(){
       if($('#decision1').is(':checked')) {
         $('.file-section').removeClass('hidden');
@@ -209,6 +245,5 @@ $(document).ready(function() {
       }  
     });
 </script>
-
 
 @stop

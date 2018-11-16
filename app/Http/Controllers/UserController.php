@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\File;
 use App\Language;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
 use App\TORGAN;
 use App\Term;
+use App\Time;
 use App\User;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Session;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -77,9 +80,16 @@ class UserController extends Controller
             'password'=>'required|min:6|confirmed'
         ]);
 
+        $this->validate($request, [
+            'indexno' => 'required|unique:SDDEXTR,INDEXNO_old',
+            'indexno' => 'required|unique:SDDEXTR,INDEXNO',
+            'email' => 'required|unique:SDDEXTR,EMAIL',
+        ]);
+
         $user = User::create([ 
             'indexno' => $request->indexno,
             'indexno_old' => $request->indexno,
+            'profile' => $request->profile,
             'email' => $request->email, 
             'nameFirst' => $request->nameFirst,
             'nameLast' => $request->nameLast,
@@ -103,7 +113,7 @@ class UserController extends Controller
             'SEX' => $request->gender,
             'DEPT' => $request->org,
             'PHONE' => $request->contact_num,
-            'CAT' => $request->cat,
+            // 'CAT' => $request->cat,
         ]);
 
         $roles = $request['roles']; //Retrieving the roles field
@@ -267,6 +277,135 @@ class UserController extends Controller
     }
 
     public function enrolStudentToCourseInsert(Request $request)
+    {
+        $code_index_id = $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+        $request->request->add(['CodeIndexID' => $code_index_id]);
+
+        $this->validate($request, [
+                'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+                'INDEXID' => 'required|',
+                'profile' => 'required|',
+                'DEPT' => 'required|',
+                'Term' => 'required|',
+                'L' => 'required|',
+                'Te_Code' => 'required',
+                'schedule_id' => 'required',
+                'decision' => 'nullable',
+                'Comments' => 'required|',
+            ]);
+
+        if (is_null($request->decision)) {
+            $new_enrolment = Preenrolment::create([ 
+                'CodeIndexID' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID,
+                'Code' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term,
+                'schedule_id' => $request->schedule_id,
+                'L' => $request->L,
+                'profile' => $request->profile,
+                'Te_Code' => $request->Te_Code,
+                'Term' => $request->Term,
+                'INDEXID' => $request->INDEXID,
+                'is_self_pay_form' => null,
+                'approval' => 1,
+                'approval_hr' => 1,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                'continue_bool' => 1,
+                'DEPT' => $request->DEPT, 
+                'eform_submit_count' => 1,              
+                'form_counter' => 1,  
+                'agreementBtn' => 1,
+                'flexibleBtn' => 1,
+                'Comments' => $request->Comments,
+                // 'contractDate' => $contractDate,
+            ]); 
+        } else {
+            $this->storeAttachedFiles($request);            
+        }
+
+        $request->session()->flash('success', 'Enrolment saved to the database.');
+        return redirect()->route('manage-user-enrolment-data', $request->id);
+    }
+
+    public function storeAttachedFiles($request)
+    {
+        $this->validate($request, [
+                'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+                'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            ]);
+
+            //Store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $request->INDEXID.'_'.$request->Term.'_'.$request->Te_Code.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$request->INDEXID, $request->file('identityfile'), 'id_'.$request->INDEXID.'_'.$request->Term.'_'.$request->Te_Code.'.'.$request->identityfile->extension());
+            //Create new record in db table
+            $attachment_identity_file = new File([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_identity_file->save();
+        }
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $request->INDEXID.'_'.$request->Term.'_'.$request->Te_Code.'.'.$request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$request->INDEXID, $request->file('payfile'), 'payment_'.$request->INDEXID.'_'.$request->Term.'_'.$request->Te_Code.'.'.$request->payfile->extension());
+            //Create new record in db table
+            $attachment_pay_file = new File([
+                    'filename' => $filename,
+                    'size' => $request->payfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_pay_file->save();
+        } 
+
+        $this->enrolSelfPayStudentToCourseInsert($request, $attachment_identity_file, $attachment_pay_file);
+
+    }
+
+    public function enrolSelfPayStudentToCourseInsert($request, $attachment_identity_file, $attachment_pay_file)
+    {
+        $new_enrolment = Preenrolment::create([ 
+                'CodeIndexID' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID,
+                'Code' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term,
+                'schedule_id' => $request->schedule_id,
+                'L' => $request->L,
+                'profile' => $request->profile,
+                'Te_Code' => $request->Te_Code,
+                'Term' => $request->Term,
+                'INDEXID' => $request->INDEXID,
+                'is_self_pay_form' => 1,
+                'attachment_id' => $attachment_identity_file->id,
+                'attachment_pay' => $attachment_pay_file->id,
+                'selfpay_approval' => 1,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                'continue_bool' => 1,
+                'DEPT' => $request->DEPT, 
+                'eform_submit_count' => 1,              
+                'form_counter' => 1,  
+                'agreementBtn' => 1,
+                'flexibleBtn' => 1,
+                'Comments' => $request->Comments,
+                // 'contractDate' => $contractDate,
+            ]);
+    }
+
+    public function enrolStudentToPlacementForm(Request $request, $id)
+    {
+        $student = User::find($id);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $languages = Language::pluck("name","code")->all();
+        $orgs = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $times = Time::all();
+
+        // dd($request, $id);
+        return view('users.enrol-student-to-placement-form', compact('languages', 'terms', 'student', 'orgs','times'));
+    }
+
+    public function enrolStudentToPlacementInsert(Request $request)
     {
         dd($request);
     }

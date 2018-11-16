@@ -1,6 +1,7 @@
 @extends('admin.admin')
 
 @section('customcss')
+	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 
@@ -8,10 +9,11 @@
 @section('content')
 @include('admin.partials._userAdminNav')
 <div class="row col-sm-12">
-	<a href="{{ route('users.index') }}" class="btn btn-danger"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
-	<button type="button" class="show-modal btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
-	<button type="button" class="show-modal-history btn btn-primary" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
-	<a href="{{ route('enrol-student-to-course-form', $id) }}" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span>  Enrol User</a>
+	<a href="{{ route('users.index') }}" class="btn btn-danger btn-space"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
+	<button type="button" class="show-modal btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
+	<button type="button" class="show-modal-history btn btn-primary btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
+	<a href="{{ route('enrol-student-to-course-form', $id) }}" class="btn btn-success btn-space"><span class="glyphicon glyphicon-pencil"></span>  Create Enrolment Form </a>
+	<a href="{{ route('enrol-student-to-placement-form', $id) }}" class="btn btn-warning btn-space"><span class="glyphicon glyphicon-pencil"></span>  Create Placement Form</a>
 	
 	<h3>Viewing: <strong>{{ $student->name }}</strong></h3>
 

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class='col-lg-4 col-lg-offset-4'>
+<div class='col-sm-10 col-md-offset-1'>
 
     <h1><i class='fa fa-user-plus'></i> Add User (Auth & SDDEXTR)</h1>
     <hr>
@@ -11,6 +11,31 @@
           <div class="form-group">
             <label class="control-label">Index: </label>
             <input name="indexno" type="text" class="form-control" value="">
+          </div>
+
+          <div class="form-group{{ $errors->has('profile') ? ' has-error' : '' }}">
+              <label for="profile">Profile:</label>
+              <select name="profile" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
+                  <option></option>
+                  <option value="STF">Staff Member</option>
+                  <option value="INT">Intern</option>
+                  <option value="CON">Consultant</option>
+                  <option value="JPO">JPO</option>
+                  <option value="MSU">Staff of Permanent Mission</option>
+                  <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
+                  <option value="RET">Retired UN Staff Member</option>
+                  <option value="SERV">Staff of Service Organizations in the Palais</option>
+                  <option value="NGO">Staff of UN-accredited NGO's</option>
+                  <option value="PRESS">Staff of UN Press Corps</option>
+              </select>
+
+              <div class="col-md-6">
+                  @if ($errors->has('profile'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('profile') }}</strong>
+                      </span>
+                  @endif
+              </div>
           </div>
 
           <div class="form-group">
@@ -94,30 +119,6 @@
                           <strong>{{ $errors->first('contact_num') }}</strong>
                       </span>
                   @endif
-          </div>
-
-          <div class="form-group{{ $errors->has('cat') ? ' has-error' : '' }}">
-              <label for="cat" class=" control-label">Category</label>
-                  <div class="dropdown">
-                      <select class="form-control select2-basic-single" style="width: 50%;" name="cat" autocomplete="off" >
-                          <option value="">--- Please Select Category ---</option>
-                              @if(!empty($cat))
-                                @foreach($cat as $key => $value)
-                                  <option class="wx" value="{{ $key }}">{{ $value}}</option>
-                                @endforeach
-                              @endif
-                      </select>
-                  </div>
-
-              <div class="col-md-6">
-                  {{-- <input id="cat" type="text" class="form-control" name="cat" value="{{ old('cat') }}" required autofocus> --}}
-
-                  @if ($errors->has('cat'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('cat') }}</strong>
-                      </span>
-                  @endif
-              </div>
           </div>
 
           <div class="form-group">
