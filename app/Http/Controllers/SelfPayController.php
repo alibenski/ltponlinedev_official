@@ -70,7 +70,7 @@ class SelfPayController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 
+            'L', 'DEPT', 'Te_Code'
         ];
         
         foreach ($columns as $column) {

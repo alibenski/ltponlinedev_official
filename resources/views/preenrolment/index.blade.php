@@ -21,7 +21,7 @@
             </div>
         </div>
     <div class="box-body">
-    <form method="GET" action="{{ route('preenrolment.index',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}">
+    <form method="GET" action="{{ route('preenrolment.index',['L' => \Request::input('L'), 'Te_Code' => \Request::input('Te_Code'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}">
 		
 		@include('admin.partials._filterIndex')
 
@@ -34,8 +34,8 @@
 	<div class="box-footer">
         <div class="form-group">    
             <div class="input-group-btn">
-		        <a href="{{ route('preenrolment.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
-		        <a href="{{ route('preenrolment.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+		        <a href="{{ route('preenrolment.index', ['L' => \Request::input('L'), 'Te_Code' => \Request::input('Te_Code'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+		        <a href="{{ route('preenrolment.index', ['L' => \Request::input('L'), 'Te_Code' => \Request::input('Te_Code'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
 			</div>
         </div>
     </div>
@@ -151,5 +151,22 @@ $(document).ready(function() {
     placeholder: "Select Filter",
     });
 });
+</script>
+<script type="text/javascript">
+  $("input[name='L']").click(function(){
+      var L = $(this).val();
+      var term = $("input[name='term_id']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax') }}", 
+          method: 'POST',
+          data: {L:L, term_id:term, _token:token},
+          success: function(data, status) {
+            $("select[name='Te_Code']").html('');
+            $("select[name='Te_Code']").html(data.options);
+          }
+      });
+  }); 
 </script>
 @stop

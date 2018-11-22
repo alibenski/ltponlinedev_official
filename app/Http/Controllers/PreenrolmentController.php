@@ -205,7 +205,7 @@ class PreenrolmentController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT',
+            'L', 'DEPT', 'Te_Code'
         ];
 
         

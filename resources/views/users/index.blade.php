@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-sm-10 col-sm-offset-1">
+<div class="col-sm-12">
     <h1><i class="fa fa-users"></i> User Administration <a href="{{ route('roles.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Roles</a>
     <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Permissions</a></h1>
     <hr>
@@ -38,6 +38,7 @@
                     <th>Email</th>
                     <th>Contact Number</th>
                     <th>Member Since</th>
+                    <th>Has logged in?</th>
                     <th>User Roles</th>
                 </tr>
             </thead>
@@ -59,7 +60,14 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>@if(empty($user->sddextr->PHONE )) none @else <strong> {{$user->sddextr->PHONE}} </strong>@endif</td>
-                    <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
+                    <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>                    
+                    <td>
+                        @if( $user->created_at != $user->updated_at)
+                            <h4><span class="label label-success">Yes</span></h4>
+                        @else
+                            <h4><span class="label label-danger">Never</span></h4>
+                        @endif
+                    </td>                    
                     <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
                 </tr>
                 @endforeach

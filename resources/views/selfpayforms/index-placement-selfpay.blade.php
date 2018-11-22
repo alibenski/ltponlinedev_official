@@ -172,4 +172,21 @@ $(document).on('click', '.show-modal', function() {
     }
 }, 500);
 </script>
+<script type="text/javascript">
+  $("input[name='L']").click(function(){
+      var L = $(this).val();
+      var term = $("input[name='term_id']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax') }}", 
+          method: 'POST',
+          data: {L:L, term_id:term, _token:token},
+          success: function(data, status) {
+            $("select[name='Te_Code']").html('');
+            $("select[name='Te_Code']").html(data.options);
+          }
+      });
+  }); 
+</script>
 @stop

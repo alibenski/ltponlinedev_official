@@ -141,23 +141,14 @@
 
 			<div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
-				<div class="form-group">
-				    <label for="course_id" class="control-label">Assign Course: </label>
+				<div class="form-group col-sm-12">
+				    <label for="placement_time" class="control-label">Time of Placement Test: </label>
 				    
 				      <div class="dropdown">
-				        <select class="form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off">
-				            <option value="">--- Select ---</option>
-				        </select>
-				      </div>
-				    
-				</div>
-
-				<div class="form-group">
-				    <label for="schedule_id" class="control-label">Assign Schedule: </label>
-				    
-				      <div class="dropdown">
-				        <select class="form-control schedule_select_no wx" style="width: 100%; " name="schedule_id" autocomplete="off">
-				            <option value="">--- Select ---</option>
+				        <select class="form-control wx" style="width: 100%;" name="placement_time" autocomplete="off">
+				        	@foreach($times as $time)
+				            <option value="{{ $time->id }}">{{ date('h:i:sa', strtotime($time->Begin_Time)) }}</option>
+				            @endforeach
 				        </select>
 				      </div>
 				    
@@ -205,47 +196,10 @@
 </script>
 <script>
 	$(document).on('click', '#decision1', function() {
-	    $(".regular-enrol").attr('style', 'display: none;');
+	    $(".regular-enrol").removeAttr('style');
 	    $('.wx').val([]).trigger('change');
 	});
-
-	$(document).on('click', '#decision2', function() {
-	    $(".regular-enrol").removeAttr('style');
-	    var L = $("input[name='L']").val();
-		var term = $("input[name='Term']").val();
-		var token = $("input[name='_token']").val();
-	    console.log(L);
-		$.ajax({
-		  url: "{{ route('select-ajax') }}", 
-		  method: 'POST',
-		  data: {L:L, term_id:term, _token:token},
-		  success: function(data, status) {
-		  	console.log("success");
-		    $("select[name='course_id']").html('');
-		    $("select[name='course_id']").html(data.options);
-		  }
-		});
-	    
-	});
-</script>
-<script>
-	$("select[name='course_id']").on('change',function(){
-		var course_id = $(this).val();
-		var term = $("input[name='Term']").val();
-		var token = $("input[name='_token']").val();
-		console.log(course_id)
-		$.ajax({
-		  url: "{{ route('select-ajax2') }}", 
-		  method: 'POST',
-		  data: {course_id:course_id, term_id:term, _token:token},
-		  success: function(data) {
-		  	console.log("success on schedule");
-		    $("select[name='schedule_id']").html('');
-		    $("select[name='schedule_id']").html(data.options);
-		  }
-		});
-  	}); 
-</script>
+</script>	
 <script>
 	localStorage.setItem("update", "0");
 	$("button[name='submit-approval']").click(function(){//target element and request click event

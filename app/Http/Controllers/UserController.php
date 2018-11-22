@@ -7,6 +7,7 @@ use App\Language;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
+use App\SDDEXTR;
 use App\TORGAN;
 use App\Term;
 use App\Time;
@@ -17,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Session;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -72,20 +74,46 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //Validate name, email and password fields
-        $this->validate($request, [
+        $rules_user = [
             'indexno' => 'required|unique:users',
             'nameFirst'=>'required|max:120',
             'nameLast'=>'required|max:120',
             'email'=>'required|email|unique:users',
             'password'=>'required|min:6|confirmed'
-        ]);
+            ];            
+        $customMessagesUser = [
+                'unique' => 'The :attribute already exists in the Auth Table.'
+                ];
+        $this->validate($request, $rules_user, $customMessagesUser);
 
-        $this->validate($request, [
-            'indexno' => 'required|unique:SDDEXTR,INDEXNO_old',
-            'indexno' => 'required|unique:SDDEXTR,INDEXNO',
-            'email' => 'required|unique:SDDEXTR,EMAIL',
-        ]);
+        // if staff exists in sddextr table, copy data to auth table
+        $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
+        
+        // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
+        if ($query_sddextr_record) {
 
+            $this->validate($query_sddextr_record, [
+                'INDEXNO' => 'required|unique:users,indexno',
+                'EMAIL'=>'required|email|unique:users,email'
+            ]);
+
+            $user = User::create([ 
+                'indexno_old' => $query_sddextr_record->INDEXNO_old,
+                'indexno' => $query_sddextr_record->INDEXNO,
+                'profile' => $request->profile,
+                'email' => $query_sddextr_record->EMAIL, 
+                'nameFirst' => $query_sddextr_record->FIRSTNAME,
+                'nameLast' => $query_sddextr_record->LASTNAME,
+                'name' => $query_sddextr_record->FIRSTNAME.' '.$query_sddextr_record->LASTNAME,
+                'password' => Hash::make('Welcome2CLM'),
+                'must_change_password' => 1,
+                'approved_account' => 1,
+            ]);
+
+            $request->session()->flash('success', 'User successfully added.' );
+            return redirect('login');
+        }
+dd();
         $user = User::create([ 
             'indexno' => $request->indexno,
             'indexno_old' => $request->indexno,
@@ -94,7 +122,7 @@ class UserController extends Controller
             'nameFirst' => $request->nameFirst,
             'nameLast' => $request->nameLast,
             'name' => $request->nameFirst.' '.$request->nameLast,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make('Welcome2CLM'),
             'must_change_password' => 1,
             'approved_account' => 1,
         ]); 
@@ -103,6 +131,12 @@ class UserController extends Controller
         $sddextr_email_address = $request->email;
         // send credential email to user using email from sddextr 
         // Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
+        
+        $this->validate($request, [
+            'indexno' => 'required|unique:SDDEXTR,INDEXNO_old',
+            'indexno' => 'required|unique:SDDEXTR,INDEXNO',
+            'email' => 'required|unique:SDDEXTR,EMAIL',
+        ]);
 
         $user->sddextr()->create([
             'INDEXNO' => $request->indexno,
@@ -361,7 +395,13 @@ class UserController extends Controller
             $attachment_pay_file->save();
         } 
 
-        $this->enrolSelfPayStudentToCourseInsert($request, $attachment_identity_file, $attachment_pay_file);
+        // check if regular or placement selfpay form
+        if ($request->Te_Code) {
+            $this->enrolSelfPayStudentToCourseInsert($request, $attachment_identity_file, $attachment_pay_file);
+        }
+        else {
+            $this->enrolSelfPayPlacementInsert($request, $attachment_identity_file, $attachment_pay_file);
+        }
 
     }
 
@@ -407,6 +447,85 @@ class UserController extends Controller
 
     public function enrolStudentToPlacementInsert(Request $request)
     {
-        dd($request);
+        // to-do: add validation rule for composite fields Term, L, INDEXID
+        $rules = [
+                'INDEXID' => 'required|',
+                'Term' => 'required|',
+                'L' => 'required|',
+                'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use($request) {
+                        $query->where('INDEXID', $request->INDEXID)
+                        ->where('L', $request->L)
+                        ->where('Term', $request->Term);
+
+                        return $query->count() === 0; 
+                    }),
+                'profile' => 'required|',
+                'DEPT' => 'required|',
+                'placementLang' => 'required|integer',
+                'placement_time' => 'required|integer',
+                'decision' => 'nullable',
+                'Comments' => 'required|',
+                ];
+
+        $customMessages = [
+                'unique' => 'Placement form for that language already exists.'
+                ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        if (is_null($request->decision)) {
+            $new_enrolment = PlacementForm::create([ 
+                'L' => $request->L,
+                'placement_schedule_id' => $request->placementLang,
+                'placement_time' => $request->placement_time,
+                'profile' => $request->profile,
+                'Term' => $request->Term,
+                'INDEXID' => $request->INDEXID,
+                'is_self_pay_form' => null,
+                'approval' => 1,
+                'approval_hr' => 1,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                'continue_bool' => 1,
+                'DEPT' => $request->DEPT, 
+                'eform_submit_count' => 1,              
+                'form_counter' => 0,  
+                'agreementBtn' => 1,
+                'flexibleBtn' => 1,
+                'Comments' => $request->Comments,
+                // 'contractDate' => $contractDate,
+            ]); 
+        } else {
+            $this->storeAttachedFiles($request);            
+        }
+
+        $request->session()->flash('success', 'Placement saved to the database.');
+        return redirect()->route('manage-user-enrolment-data', $request->id);
+    }
+
+    public function enrolSelfPayPlacementInsert($request, $attachment_identity_file, $attachment_pay_file)
+    {
+        $new_enrolment = PlacementForm::create([ 
+                'L' => $request->L,
+                'placement_schedule_id' => $request->placementLang,
+                'placement_time' => $request->placement_time,
+                'profile' => $request->profile,
+                'Term' => $request->Term,
+                'INDEXID' => $request->INDEXID,
+                'is_self_pay_form' => 1,
+                'attachment_id' => $attachment_identity_file->id,
+                'attachment_pay' => $attachment_pay_file->id,
+                'selfpay_approval' => 1,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                'continue_bool' => 1,
+                'DEPT' => $request->DEPT, 
+                'eform_submit_count' => 1,              
+                'form_counter' => 0,  
+                'agreementBtn' => 1,
+                'flexibleBtn' => 1,
+                'Comments' => $request->Comments,
+                // 'contractDate' => $contractDate,
+            ]);
     }
 }

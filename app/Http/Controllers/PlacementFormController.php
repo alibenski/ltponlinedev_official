@@ -18,6 +18,7 @@ use App\Repo;
 use App\SDDEXTR;
 use App\Schedule;
 use App\Term;
+use App\Time;
 use App\Torgan;
 use App\User;
 use Carbon\Carbon;
@@ -359,7 +360,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT',
+                'L', 'DEPT', 'Te_Code'
             ];
 
             foreach ($columns as $column) {
@@ -436,8 +437,8 @@ class PlacementFormController extends Controller
     {
         $placement_form = PlacementForm::find($id);
         $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
-        // dd($placement_form, $placement_student_index);
-        return view('placement_forms.edit',compact('placement_form','waitlists'));
+        $times = Time::all();
+        return view('placement_forms.edit',compact('placement_form','waitlists', 'times'));
     }
 
         public function editAssignCourse($id)
@@ -454,6 +455,7 @@ class PlacementFormController extends Controller
                             'Term' => 'required|',
                             'INDEXID' => 'required|',
                             'L' => 'required|',
+                            'placement_time' => 'required',
                             'decision' => 'required|',
                             'submit-approval' => 'required|',
                         )); 
@@ -472,12 +474,15 @@ class PlacementFormController extends Controller
                 $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
                 $placement_form->save();
         } else {
-            $placement_form->convoked = $request->decision;
+            $placement_form->convoked = $request->decision; // 'convoked' field = 1
             if( $request->decision == 1){
+                $placement_form->placement_time = $request->placement_time;
                 $placement_form->save();
+                // send email convocation to student
                 // $staff_email = User::where('indexno', $request->INDEXID)->first();
                 // Mail::to($staff_email)
                 //             ->send(new XXX($request));
+
             } else {
                 $this->validate($request, array(
                                 'course_id' => 'required|',
@@ -507,7 +512,11 @@ class PlacementFormController extends Controller
 
     public function assignCourseToPlacement(Request $request, $id)
     {
+        $code_index_id = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+        $request->request->add(['CodeIndexID' => $code_index_id]);
+
         $this->validate($request, array(
+                            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
                             'Term' => 'required|',
                             'INDEXID' => 'required|',
                             'L' => 'required|',

@@ -122,14 +122,14 @@
           </div>
 
           <div class="form-group">
-            <label class="control-label">Password: </label>
-    				<input name="password" type="password" class="form-control" value="">
+            <label class="control-label">Password is automatically set to <span class="text-danger">"Welcome2CLM"</span></label>
+    				{{-- <input name="password" type="password" class="form-control" value=""> --}}
           </div>
 
-          <div class="form-group">
+          {{-- <div class="form-group">
             <label class="control-label">Confirm Password: </label>
     				<input name="password_confirmation" type="password" class="form-control" value="">
-          </div>
+          </div> --}}
           
           <div class="row">
             <div class="col-sm-4 col-md-offset-2">

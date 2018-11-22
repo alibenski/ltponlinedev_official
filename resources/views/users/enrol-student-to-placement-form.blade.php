@@ -96,8 +96,8 @@
 			</div>
 
 			<div class="form-group col-sm-12">
-				<label for="schedule_id">Time of Test</label>
-				<select name="schedule_id" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
+				<label for="placement_time">Time of Test</label>
+				<select name="placement_time" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
 				  <option></option>
 				@foreach($times as $time)
 		          <option value="{{ $time->id }}">{{ date('h:i:sa', strtotime($time->Begin_Time)) }}</option>
@@ -141,14 +141,14 @@
 			<div class="form-group col-sm-12">
 			    <label class="control-label" for="Comments">Admin Comment: </label>
 			    <div class="">
-			        <textarea class="form-control" name="Comments" cols="40" rows="3">Created and approved by CLM Language Administrator</textarea>
+			        <textarea class="form-control" name="Comments" cols="40" rows="3">Placement form created and approved by CLM Language Administrator</textarea>
 			    </div>
 			</div>
 		</div>
 		</div> <!-- /.row -->
 
 			<div class="col-sm-2 col-sm-offset-5">
-              <button type="submit" class="btn btn-success button-prevent-multi-submit">Add Enrolment Form</button>
+              <button type="submit" class="btn btn-success button-prevent-multi-submit">Add Placement Form</button>
               <input type="hidden" name="_token" value="{{ Session::token() }}">
             </div>
 		</form>
