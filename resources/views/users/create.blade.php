@@ -1,5 +1,10 @@
 @extends('admin.admin')
 
+@section('customcss')
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+@stop
+
 @section('content')
 
 <div class='col-sm-10 col-md-offset-1'>
@@ -8,10 +13,43 @@
     <hr>
 	    <form method="POST" action="{{ route('users.store') }}">
         {{ csrf_field() }}
-          <div class="form-group">
-            <label class="control-label">Index: </label>
-            <input name="indexno" type="text" class="form-control" value="">
+          <!-- MAKE A DECISION SECTION -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Does the student have a valid Index from Umoja?</h3>
           </div>
+          <div class="panel-body">
+          <div class="form-group">
+
+                  <div class="col-sm-12">
+                            <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required" autocomplete="off">
+                            <label for="decision1" class="form-control-static">Yes</label>
+                  </div>
+
+                  <div class="col-sm-12">
+                            <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required" autocomplete="off">
+                            <label for="decision2" class="form-control-static">No</label>
+                  </div>
+            </div>
+
+            <div class="indexno-section hidden"> {{-- start of hidden fields --}}
+
+              <div class="form-group">
+                <label class="control-label">Index: </label>
+                <input name="indexno" type="text" class="form-control" value="">
+              </div>
+
+            </div> {{-- end of hidden fields --}}
+
+            <div class="message-section hidden"> {{-- start of hidden fields --}}
+
+              <div class="form-group">
+                <h4><span class="label label-info">EXT Index will be generated automatically</span></h4>
+              </div>
+
+            </div> {{-- end of hidden fields --}}
+          </div>
+        </div> {{-- end of panel --}}
 
           <div class="form-group{{ $errors->has('profile') ? ' has-error' : '' }}">
               <label for="profile">Profile:</label>
@@ -33,6 +71,23 @@
                   @if ($errors->has('profile'))
                       <span class="help-block">
                           <strong>{{ $errors->first('profile') }}</strong>
+                      </span>
+                  @endif
+              </div>
+          </div>
+
+          <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+              <label for="title">Title:</label>
+              <select name="title" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
+                  <option></option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Ms.">Ms.</option>
+              </select>
+
+              <div class="col-md-6">
+                  @if ($errors->has('title'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('title') }}</strong>
                       </span>
                   @endif
               </div>
@@ -108,6 +163,25 @@
                       </span>
                   @endif
           </div>
+          
+          <div class="form-group{{ $errors->has('dob') ? ' has-error' : '' }}">
+              <label for="dob" class="control-label">Date of Birth <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+
+
+                  <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="dob">
+                  <input class="form-control" size="16" type="text" value="" readonly>
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                  </div>
+                  <input type="hidden" name="dob" id="dob" value="" required=""/>
+
+                  @if ($errors->has('dob'))
+                      <span class="help-block">
+                          <strong>{{ $errors->first('dob') }}</strong>
+                      </span>
+                  @endif
+
+          </div>
 
           <div class="form-group{{ $errors->has('contact_num') ? ' has-error' : '' }}">
               <label for="contact_num" class=" control-label">Contact Number</label>
@@ -143,4 +217,36 @@
       </form>
 </div>
 
+@stop
+
+@section('java_script')
+<script src="{{ asset('js/submit.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+<script>
+  $(document).ready(function() {
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 4,
+        forceParse: 0,
+        showMeridian: 1,
+        minView: 2
+    });
+  });
+</script>
+<script>
+  $("input[name='decision']").click(function(){
+      if($('#decision1').is(':checked')) {
+        $('.indexno-section').removeClass('hidden');
+        $('.message-section').addClass('hidden');
+      } else if ($('#decision2').is(':checked')) {
+        $('.indexno-section').addClass('hidden');
+        $('.message-section').removeClass('hidden');
+      }  
+    });
+</script> 
 @stop

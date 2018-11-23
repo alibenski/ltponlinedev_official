@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\File;
 use App\Language;
+use App\NewUser;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -73,17 +74,66 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->decision == 0) {
+            //validate the data
+            $this->validate($request, array(
+                    'gender' => 'required|string|',
+                    'title' => 'required|',
+                    'profile' => 'required|',
+                    'nameLast' => 'required|string|max:255',
+                    'nameFirst' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+                    'org' => 'required|string|max:255',
+                    'contact_num' => 'required|max:255',
+                    'dob' => 'required',
+            ));
+
+            //store in database
+            $newUser = new NewUser;
+            $newUser->gender = $request->gender;
+            $newUser->title = $request->title;
+            $newUser->profile = $request->profile;
+            $newUser->name = $request->nameFirst.' '.$request->nameLast;
+            $newUser->nameLast = $request->nameLast;
+            $newUser->nameFirst = $request->nameFirst;
+            $newUser->email = $request->email;
+            $newUser->org = $request->org;
+            $newUser->contact_num = $request->contact_num;
+            $newUser->dob = $request->dob;
+            $newUser->save();
+
+            $ext_index = 'EXT'.$newUser->id;
+            $request->merge(['indexno' => $ext_index]); 
+
+            $user = $this->storeValidatedStudent($request);
+
+            return redirect()->route('manage-user-enrolment-data', $user->id)
+            ->with('flash_message',
+             'User successfully added.');
+        } 
+
+        // else if decision == 1, then create with index no. 
+        $user = $this->storeValidatedStudent($request);
+
+        return redirect()->route('manage-user-enrolment-data', $user->id)
+            ->with('flash_message',
+             'User successfully added.');
+    }
+
+    public function storeValidatedStudent($request)
+    {
         //Validate name, email and password fields
         $rules_user = [
             'indexno' => 'required|unique:users',
             'nameFirst'=>'required|max:120',
             'nameLast'=>'required|max:120',
             'email'=>'required|email|unique:users',
-            'password'=>'required|min:6|confirmed'
+            // 'password'=>'required|min:6|confirmed'
             ];            
         $customMessagesUser = [
                 'unique' => 'The :attribute already exists in the Auth Table.'
                 ];
+
         $this->validate($request, $rules_user, $customMessagesUser);
 
         // if staff exists in sddextr table, copy data to auth table
@@ -94,6 +144,7 @@ class UserController extends Controller
 
             $this->validate($query_sddextr_record, [
                 'INDEXNO' => 'required|unique:users,indexno',
+                'INDEXNO_old' => 'required|unique:users,indexno_old',
                 'EMAIL'=>'required|email|unique:users,email'
             ]);
 
@@ -110,10 +161,11 @@ class UserController extends Controller
                 'approved_account' => 1,
             ]);
 
-            $request->session()->flash('success', 'User successfully added.' );
-            return redirect('login');
+            return $user;
         }
-dd();
+
+
+        // if not in auth table and sddextr table, create
         $user = User::create([ 
             'indexno' => $request->indexno,
             'indexno_old' => $request->indexno,
@@ -141,6 +193,7 @@ dd();
         $user->sddextr()->create([
             'INDEXNO' => $request->indexno,
             'INDEXNO_old' => $request->indexno,
+            'TITLE' => $request->title,
             'FIRSTNAME' => $request->nameFirst,
             'LASTNAME' => $request->nameLast,
             'EMAIL' => $request->email,
@@ -160,10 +213,7 @@ dd();
             }
         }
 
-        //Redirect to the users.index view and display message
-        return redirect()->route('users.index')
-            ->with('flash_message',
-             'User successfully added.');
+        return $user;
     }
 
     /**

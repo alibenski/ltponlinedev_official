@@ -140,20 +140,20 @@
 		    </div>
 
 			<div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
-
+				@if($placement_form->L === 'F')
+				@else
 				<div class="form-group col-sm-12">
 				    <label for="placement_time" class="control-label">Time of Placement Test: </label>
 				    
 				      <div class="dropdown">
-				        <select class="form-control wx" style="width: 100%;" name="placement_time" autocomplete="off">
+				        <select class="form-control wx" style="width: 100%;" name="placement_time" autocomplete="off" required="">
 				        	@foreach($times as $time)
 				            <option value="{{ $time->id }}">{{ date('h:i:sa', strtotime($time->Begin_Time)) }}</option>
 				            @endforeach
 				        </select>
-				      </div>
-				    
+				      </div> 
 				</div>
-
+				@endif
 			</div> {{-- end of hidden fields --}}
 
 			<div class="form-group col-sm-12">

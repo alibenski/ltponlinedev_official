@@ -451,16 +451,23 @@ class PlacementFormController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, array(
+        $this->validate($request,[
                             'Term' => 'required|',
                             'INDEXID' => 'required|',
                             'L' => 'required|',
-                            'placement_time' => 'required',
                             'decision' => 'required|',
                             'submit-approval' => 'required|',
-                        )); 
+                        ]); 
 
         $placement_form = PlacementForm::find($id);
+        
+        if($placement_form->L != 'F'){
+
+            $this->validate($request,[
+                                'placement_time' => 'required',
+                            ]);     
+        }
+
         if (isset($placement_form->convoked)) {
                 // $this->assignCourseToPlacement($request, $id);
                 $this->validate($request, array(
