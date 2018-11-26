@@ -94,17 +94,19 @@
                 </div>
             	</div>
 			</div>
-
-			<div class="form-group col-sm-12">
-				<label for="placement_time">Time of Test</label>
-				<select name="placement_time" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
-				  <option></option>
-				@foreach($times as $time)
-		          <option value="{{ $time->id }}">{{ date('h:i:sa', strtotime($time->Begin_Time)) }}</option>
-		        @endforeach
-		        </select>
-			</div>
-		</div>
+			
+			<div class="time-section hidden"> {{-- start of hidden fields --}}
+				<div class="form-group col-sm-12">
+					<label for="placement_time">Time of Test</label>
+					<select name="placement_time" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
+					  <option></option>
+					@foreach($times as $time)
+			          <option value="{{ $time->id }}">{{ date('h:i:sa', strtotime($time->Begin_Time)) }}</option>
+			        @endforeach
+			        </select>
+				</div>
+			</div> {{-- end of hidden fields --}}
+		</div> 
 
 		<div class="col-sm-6">
 			<div class="form-group col-sm-12">
@@ -180,12 +182,16 @@ $(document).ready(function() {
 
 <script type="text/javascript">
   $("input[name='L']").click(function(){
+  	// reset select2 (4.0.3) value to NULL and show placeholder  
+    $("select[name='placement_time']").val([]).trigger('change');
   	$("label[for='scheduleChoices']").remove();
     $(".scheduleChoices").remove();
       if ($(this).val() == 'F') {
         $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is Online:</label>').fadeIn('fast');
+        $(".time-section").addClass('hidden');
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
+        $(".time-section").removeClass('hidden');
       }
 
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');

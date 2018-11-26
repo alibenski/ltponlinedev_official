@@ -100,6 +100,7 @@ class UserController extends Controller
             $newUser->org = $request->org;
             $newUser->contact_num = $request->contact_num;
             $newUser->dob = $request->dob;
+            $newUser->approved_account = 1;
             $newUser->save();
 
             $ext_index = 'EXT'.$newUser->id;
@@ -324,9 +325,9 @@ class UserController extends Controller
         $id = $id;
         $student = User::where('id', $id)->first();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $student_enrolments = Preenrolment::where('INDEXID', $student->indexno)
+        $student_enrolments = Preenrolment::orderBy('id', 'asc')->where('INDEXID', $student->indexno)
             ->where('Term', $request->Term)->get();
-        $student_placements = PlacementForm::where('INDEXID', $student->indexno)
+        $student_placements = PlacementForm::orderBy('id', 'asc')->where('INDEXID', $student->indexno)
             ->where('Term', $request->Term)->get();
         $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();
@@ -497,11 +498,11 @@ class UserController extends Controller
 
     public function enrolStudentToPlacementInsert(Request $request)
     {
-        // to-do: add validation rule for composite fields Term, L, INDEXID
         $rules = [
                 'INDEXID' => 'required|',
                 'Term' => 'required|',
                 'L' => 'required|',
+                // validation rule function for composite fields Term, L, INDEXID
                 'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use($request) {
                         $query->where('INDEXID', $request->INDEXID)
                         ->where('L', $request->L)
@@ -512,7 +513,6 @@ class UserController extends Controller
                 'profile' => 'required|',
                 'DEPT' => 'required|',
                 'placementLang' => 'required|integer',
-                'placement_time' => 'required|integer',
                 'decision' => 'nullable',
                 'Comments' => 'required|',
                 ];
@@ -522,6 +522,13 @@ class UserController extends Controller
                 ];
 
         $this->validate($request, $rules, $customMessages);
+
+        if($request->L != 'F'){
+
+            $this->validate($request,[
+                                'placement_time' => 'required|integer',
+                            ]);     
+        }
 
         if (is_null($request->decision)) {
             $new_enrolment = PlacementForm::create([ 

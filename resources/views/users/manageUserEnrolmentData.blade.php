@@ -93,6 +93,7 @@
 						    <thead>
 						        <tr>
 						            <th>Operation</th>
+						            <th>#</th>
 						            <th>Name</th>
 						            <th>Organization</th>
 						            <th>Language</th>
@@ -110,12 +111,16 @@
 								@foreach($student_enrolments as $form)
 								<tr>
 									<td>
+									<a href="" class="btn btn-warning btn-space">Modify</a>
 									<form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
 			                            <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
 			                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
 			                            <input type="hidden" name="_token" value="{{ Session::token() }}">
 			                            {{ method_field('DELETE') }}
 			                        </form>
+									</td>
+									<td>
+										{{ $form->id }}
 									</td>
 									<td>
 									@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
