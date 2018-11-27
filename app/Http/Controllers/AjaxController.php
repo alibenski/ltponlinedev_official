@@ -24,6 +24,23 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxShowModal(Request $request)
+    {
+        $current_user = $request->indexno;
+        $term_code = $request->term;
+        // query submitted forms based from tblLTP_Enrolment table
+        $schedules = Preenrolment::withTrashed()
+            ->where('Te_Code', $request->tecode)
+            ->where('INDEXID', $current_user)
+            // ->where('approval', '=', $request->approval)
+            ->where('form_counter', $request->form_counter)
+            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT']);
+            // ->pluck('schedule.name', 'approval');
+
+        // render and return data values via AJAX
+        $data = view('form.modalshowinfo', compact('schedules'))->render();
+        return response()->json([$data]);
+    }
     /**
      * show schedules in modal
      */

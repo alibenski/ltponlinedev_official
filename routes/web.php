@@ -148,6 +148,8 @@ Route::get('is-cancelled-ajax', ['as'=>'is-cancelled-ajax','uses'=>'AjaxControll
 
 Route::get('get-term-data-ajax', ['as'=>'get-term-data-ajax','uses'=>'AjaxController@ajaxGetTermData']);
 
+Route::post('ajax-show-modal', ['as' => 'ajax-show-modal', 'uses' => 'AjaxController@ajaxShowModal']);
+
 //placement form routes
 Route::get('/placementinfo', ['as'=>'placementinfo','uses'=>'PlacementFormController@getPlacementInfo']); // ->middleware('prevent-access-placement');
 Route::post('/postplacementinfo-additional', ['as'=>'postplacementinfo-additional','uses'=>'PlacementFormController@postPlacementInfoAdditional']);

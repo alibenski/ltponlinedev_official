@@ -111,7 +111,8 @@
 								@foreach($student_enrolments as $form)
 								<tr>
 									<td>
-									<a href="" class="btn btn-warning btn-space">Modify</a>
+									<a id="modbtn" class="btn btn-warning btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-pencil-square-o"></i></span> Modify</a>
+
 									<form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
 			                            <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
 			                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
@@ -453,6 +454,21 @@
         </div>
     </div>
 </div>
+<div id="modalshow" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body-schedule">
+            </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('java_script')
@@ -473,5 +489,28 @@ $(document).on('click', '.show-modal-history', function() {
 	$('.modal-title-history').text('Past Language Course Enrolment for {{ $student->name }}');
     $('#showModalHistory').modal('show'); 
 });
+</script>
+<script>  
+  $(document).ready(function () {
+    $('#modalshow').on('show.bs.modal', function (event) {
+      var link = $(event.relatedTarget); // Link that triggered the modal
+      var dtitle = link.data('mtitle');
+      var dindexno = link.data('indexno');
+      var dtecode = link.data('tecode');
+      var dterm = link.data('term');
+      var dapproval = link.data('approval');
+      var dFormCounter = link.data('formx');
+      var token = $("input[name='_token']").val();
+      var modal = $(this);
+      modal.find('.modal-title').text(dtitle);
+
+      var token = $("input[name='_token']").val();      
+
+      $.post('{{ route('ajax-show-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
+          console.log(data);
+          $('.modal-body-schedule').html(data)
+      });
+    });
+  });
 </script>
 @stop
