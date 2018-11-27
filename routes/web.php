@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/import-exist', 'AdminController@importExistingUser')->name('import-existing-user');
     Route::post('user/import-exist', 'AdminController@handleImportExistingUser')->name('bulk-import-existing-user');
     Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
+    
     Route::resource('users', 'UserController');
 
     // separate password reset form
@@ -40,8 +41,6 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm' ]);
     Route::post('user/enrol-student-to-placement-insert', ['as' => 'enrol-student-to-placement-insert', 'uses' => 'UserController@enrolStudentToPlacementInsert' ]);
 
-
-    
     // page for tagging students as pass or fail
     Route::get('pashqtcur', ['as' => 'pashqtcur', 'uses' => 'ResultsController@pashqtcur' ]);
 
@@ -57,13 +56,22 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('courses', 'CourseController');
     Route::resource('organizations', 'OrgController');
     Route::resource('placement-schedule', 'PlacementScheduleController');
+
+    // Enrolment forms controller
     Route::resource('preenrolment', 'PreenrolmentController');
     Route::get('send-reminder-emails', 'PreenrolmentController@sendReminderEmails')->name('send-reminder-emails');
+    // Enrolment form cancellation route for administrators
+    Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['as' => 'enrolment.destroy', 'uses' => 'PreenrolmentController@destroy'])->where('tecode', '(.*)');
+        
+    // Placement forms controller
     Route::resource('placement-form', 'PlacementFormController');
     Route::get('send-reminder-emails-placement', 'PlacementFormController@sendReminderEmailsPlacement')->name('send-reminder-emails-placement');
     Route::get('/placement-form-filtered', ['as'=>'placement-form-filtered','uses'=>'PlacementFormController@getFilteredPlacementForms']);
     Route::get('/placement-form-assign/{id}', ['as'=>'placement-form-assign','uses'=>'PlacementFormController@editAssignCourse']);
     Route::put('/placement-form-assign-course/{id}', ['as'=>'placement-form-assign-course','uses'=>'PlacementFormController@assignCourseToPlacement']);
+    // Placement form cancellation route for administrators
+    Route::delete('/delete/user/{staff}/lang/{lang}/term/{term}/{eform}', ['as' => 'placement.destroy', 'uses' => 'PlacementFormController@destroy'])->where('tecode', '(.*)');
+
 
     Route::resource('teachers', 'TeachersController');
     Route::resource('rooms', 'RoomsController');
@@ -149,6 +157,7 @@ Route::get('is-cancelled-ajax', ['as'=>'is-cancelled-ajax','uses'=>'AjaxControll
 Route::get('get-term-data-ajax', ['as'=>'get-term-data-ajax','uses'=>'AjaxController@ajaxGetTermData']);
 
 Route::post('ajax-show-modal', ['as' => 'ajax-show-modal', 'uses' => 'AjaxController@ajaxShowModal']);
+Route::post('ajax-show-modal-placement', ['as' => 'ajax-show-modal-placement', 'uses' => 'AjaxController@ajaxShowModalPlacement']);
 
 //placement form routes
 Route::get('/placementinfo', ['as'=>'placementinfo','uses'=>'PlacementFormController@getPlacementInfo']); // ->middleware('prevent-access-placement');

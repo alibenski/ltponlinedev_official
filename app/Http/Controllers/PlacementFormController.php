@@ -545,4 +545,90 @@ class PlacementFormController extends Controller
         // $request->session()->flash('success', 'Placement form record has been updated.'); 
         return redirect()->back();
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $staff, $lang, $term, $eform)
+    {
+        $admin_id = Auth::user()->id;
+
+        //query submitted forms based from tblLTP_Enrolment table
+        $forms = PlacementForm::orderBy('Term', 'desc')
+                ->where('L', $lang)
+                ->where('INDEXID', '=', $staff)
+                ->where('Term', $term )
+                ->where('eform_submit_count', $eform )
+                ->get();
+        $display_language = PlacementForm::orderBy('Term', 'desc')
+                ->where('L', $lang)
+                ->where('INDEXID', '=', $staff)
+                ->where('Term', $term )
+                ->where('eform_submit_count', $eform )
+                ->first();
+        
+        //get email address of the Manager
+        $mgr_email = $forms->pluck('mgr_email')->first();
+
+        //if self-paying enrolment form
+        if (is_null($mgr_email)){
+            $enrol_form = [];
+            for ($i = 0; $i < count($forms); $i++) {
+                $enrol_form = $forms[$i]->id;
+                $delform = PlacementForm::find($enrol_form);
+                $delform->cancelled_by_student = 1;
+                $delform->cancelled_by_admin = $admin_id;
+                $delform->save();
+                $delform->delete();
+            }
+            session()->flash('cancel_success', 'Placement Test Request for '.$display_language->languages->name. ' has been cancelled.');
+            return redirect()->back();
+        }
+
+        //email notification to Manager    
+        $staff_member_name = $forms->first()->users->name;
+            Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+        
+        //email notification to CLM Partner
+        $org = $display_language->DEPT;
+
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+
+        // if there is a learning partner, email them as well
+        if ($learning_partner == '1'){
+            
+            // email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+
+        }
+
+        $enrol_form = [];
+        for ($i = 0; $i < count($forms); $i++) {
+            $enrol_form = $forms[$i]->id;
+            $delform = PlacementForm::find($enrol_form);
+            $delform->cancelled_by_student = 1;
+            $delform->cancelled_by_admin = $admin_id;
+            $delform->save();
+            $delform->delete();
+        }
+
+        session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled. An email has been sent to your supervisor and if necessary, to your HR/Staff Development Office.');
+        return redirect()->back();
+    }
 }

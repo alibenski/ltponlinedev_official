@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Session;
 use Spatie\Permission\Models\Permission;
@@ -142,8 +143,9 @@ class UserController extends Controller
         
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
         if ($query_sddextr_record) {
+            $query_sddextr_record_array = $query_sddextr_record->toArray();
 
-            $this->validate($query_sddextr_record, [
+            $validator = Validator::make($query_sddextr_record_array, [
                 'INDEXNO' => 'required|unique:users,indexno',
                 'INDEXNO_old' => 'required|unique:users,indexno_old',
                 'EMAIL'=>'required|email|unique:users,email'
@@ -325,10 +327,16 @@ class UserController extends Controller
         $id = $id;
         $student = User::where('id', $id)->first();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $student_enrolments = Preenrolment::orderBy('id', 'asc')->where('INDEXID', $student->indexno)
+        $student_enrolments = Preenrolment::withTrashed()->where('INDEXID', $student->indexno)
+            ->where('Term', $request->Term)
+            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay' ])
+            ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay' ]);
+
+        $student_placements = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('INDEXID', $student->indexno)
             ->where('Term', $request->Term)->get();
-        $student_placements = PlacementForm::orderBy('id', 'asc')->where('INDEXID', $student->indexno)
-            ->where('Term', $request->Term)->get();
+
         $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();
      
@@ -506,7 +514,8 @@ class UserController extends Controller
                 'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use($request) {
                         $query->where('INDEXID', $request->INDEXID)
                         ->where('L', $request->L)
-                        ->where('Term', $request->Term);
+                        ->where('Term', $request->Term)
+                        ->whereNull('deleted_at');
 
                         return $query->count() === 0; 
                     }),

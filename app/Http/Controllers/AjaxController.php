@@ -38,9 +38,23 @@ class AjaxController extends Controller
             // ->pluck('schedule.name', 'approval');
 
         // render and return data values via AJAX
-        $data = view('form.modalshowinfo', compact('schedules'))->render();
+        $data = view('ajax-show-modal', compact('schedules'))->render();
         return response()->json([$data]);
     }
+
+    public function ajaxShowModalPlacement(Request $request)
+    {
+        // query submitted placement forms 
+        $placement_form = PlacementForm::withTrashed()
+            ->where('id', $request->id)
+            ->first();
+        $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
+
+        // render and return data values via AJAX
+        $data = view('ajax-show-modal-placement', compact('placement_form','waitlists'))->render();
+        return response()->json([$data]);
+    }
+
     /**
      * show schedules in modal
      */

@@ -93,15 +93,12 @@
 						    <thead>
 						        <tr>
 						            <th>Operation</th>
-						            <th>#</th>
+						            <th>Cancelled?</th>
 						            <th>Name</th>
 						            <th>Organization</th>
 						            <th>Language</th>
 						            <th>Course</th>
-						            <th>Schedule</th>
-						            <th>Manager Email</th>
-						            <th>Manager Approval</th>
-						            <th>HR Approval</th>
+						            <th>Self-paying?</th>
 						            <th>ID Proof</th>
 						            <th>Payment Proof</th>
 						            <th>Time Stamp</th>
@@ -111,67 +108,39 @@
 								@foreach($student_enrolments as $form)
 								<tr>
 									<td>
-									<a id="modbtn" class="btn btn-warning btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-pencil-square-o"></i></span> Modify</a>
+									<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-eye"></i></span> View Info</a>
 
-									<form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
-			                            <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
+									<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
+			                            <input type="submit" @if (is_null($form->deleted_at))
+				                          value="Cancel Enrolment"
+				                        @else
+				                          value="Cancelled"
+				                        @endif  class="btn btn-danger btn-space" 
+				                        @if (is_null($form->deleted_at))
+				                        @else
+				                          disabled="" 
+				                        @endif>
 			                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
 			                            <input type="hidden" name="_token" value="{{ Session::token() }}">
 			                            {{ method_field('DELETE') }}
 			                        </form>
 									</td>
 									<td>
-										{{ $form->id }}
+										@if($form->cancelled_by_student == 1)
+		                                	<span class="label label-danger margin-label">Yes</span>
+		                                @else
+											-
+		                                @endif
 									</td>
 									<td>
 									@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
 									<td>{{ $form->DEPT }}</td>
 									<td>{{ $form->L }}</td>
 									<td>{{ $form->courses->Description }}</td>
-									<td>{{ $form->schedule->name }}</td>
-									<td>@if($form->mgr_email){{ $form->mgr_email }} @else - @endif</td>
 									<td>
-										@if($form->is_self_pay_form == 1)
-										<span id="status" class="label label-info margin-label">
-										N/A - Self Payment</span>
-										@elseif(is_null($form->approval))
-										<span id="status" class="label label-warning margin-label">
-										Pending Approval</span>
-										@elseif($form->approval == 1)
-										<span id="status" class="label label-success margin-label">
-										Approved</span>
-										@elseif($form->approval == 0)
-										<span id="status" class="label label-danger margin-label">
-										Disapproved</span>
+										@if($form->is_self_pay_form == 1)<span class="label label-success margin-label">Yes</span>
+										@else - 
 										@endif
-									</td>
-									<td>
-									@if(is_null($form->is_self_pay_form))
-										@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-											<span id="status" class="label label-info margin-label">
-											N/A - Non-paying organization</span>
-										@else
-											@if(is_null($form->approval) && is_null($form->approval_hr))
-											<span id="status" class="label label-warning margin-label">
-											Pending Approval</span>
-											@elseif($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr)))
-											<span id="status" class="label label-danger margin-label">
-											N/A - Disapproved by Manager</span>
-											@elseif($form->approval == 1 && is_null($form->approval_hr))
-											<span id="status" class="label label-warning margin-label">
-											Pending Approval</span>
-											@elseif($form->approval == 1 && $form->approval_hr == 1)
-											<span id="status" class="label label-success margin-label">
-											Approved</span>
-											@elseif($form->approval == 1 && $form->approval_hr == 0)
-											<span id="status" class="label label-danger margin-label">
-											Disapproved</span>
-											@endif
-										@endif
-									@else
-									<span id="status" class="label label-info margin-label">
-									N/A - Self Payment</span>
-									@endif
 									</td>
 									<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 									</td>
@@ -218,7 +187,9 @@
 								@foreach($student_placements as $form)
 								<tr>
 									<td>
-									<form method="POST" action="{{ route('submittedPlacement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
+									<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
+
+									<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
 				                        <input type="submit" @if (is_null($form->deleted_at))
 				                          value="Cancel Placement Test"
 				                        @else
@@ -469,6 +440,21 @@
         </div>
     </div>
 </div>
+<div id="modalshowplacementinfo" class="modal fade">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body-schedule">
+            </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('java_script')
@@ -507,6 +493,24 @@ $(document).on('click', '.show-modal-history', function() {
       var token = $("input[name='_token']").val();      
 
       $.post('{{ route('ajax-show-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
+          console.log(data);
+          $('.modal-body-schedule').html(data)
+      });
+    });
+  });
+
+  $(document).ready(function () {
+    $('#modalshowplacementinfo').on('show.bs.modal', function (event) {
+      var link = $(event.relatedTarget); // Link that triggered the modal
+      console.log(link)
+      var did = link.data('mid');
+      var dtitle = link.data('mtitle');
+      var modal = $(this);
+      modal.find('.modal-title').text(dtitle);
+
+      var token = $("input[name='_token']").val();      
+
+      $.post('{{ route('ajax-show-modal-placement') }}', {'id':did, '_token':token}, function(data) {
           console.log(data);
           $('.modal-body-schedule').html(data)
       });

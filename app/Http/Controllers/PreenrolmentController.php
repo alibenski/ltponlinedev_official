@@ -301,8 +301,80 @@ class PreenrolmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $staff, $tecode,  $term, $form)
     {
-        //
+        $current_user = $staff;
+        $admin_id = Auth::user()->id;
+        
+        //query submitted forms based from tblLTP_Enrolment table
+        $forms = Preenrolment::orderBy('Term', 'desc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $term )
+                ->where('form_counter', $form )
+                ->get();
+        $display_language = Preenrolment::orderBy('Term', 'desc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $term )
+                ->where('form_counter', $form )
+                ->first();
+        
+        //get email address of the Manager
+        $mgr_email = $forms->pluck('mgr_email')->first();
+
+        //if self-paying enrolment form
+        if (is_null($mgr_email)){
+            $enrol_form = [];
+            for ($i = 0; $i < count($forms); $i++) {
+                $enrol_form = $forms[$i]->id;
+                $delform = Preenrolment::find($enrol_form);
+                $delform->cancelled_by_student = 1;
+                $delform->cancelled_by_admin = $admin_id;
+                $delform->save();
+                $delform->delete();
+            }
+            session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
+            return redirect()->back();
+        }
+
+        //email notification to Manager    
+        $staff_member_name = $forms->first()->users->name;
+            Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
+        
+        //email notification to CLM Partner
+        $org = $display_language->DEPT;
+        // Add more organizations in the IF statement below
+        if ($org !== 'UNOG'){
+            
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
+
+        }
+
+        $enrol_form = [];
+        for ($i = 0; $i < count($forms); $i++) {
+            $enrol_form = $forms[$i]->id;
+            $delform = Preenrolment::find($enrol_form);
+            $delform->cancelled_by_student = 1;
+            $delform->cancelled_by_admin = $admin_id;
+            $delform->save();
+            $delform->delete();
+        }
+
+        session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled. An email has been sent to your supervisor and if necessary, to your HR/Staff Development Office.');
+        return redirect()->back();
     }
 }

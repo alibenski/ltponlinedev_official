@@ -95,17 +95,17 @@
 
           <div class="form-group">
             <label class="control-label">First Name: </label>
-  				  <input name="nameFirst" type="text" class="form-control" value="">
+  				  <input name="nameFirst" type="text" class="form-control" value="{{ old('nameFirst') }}">
           </div>
 
           <div class="form-group">
             <label class="control-label">Last Name: </label>
-            <input name="nameLast" type="text" class="form-control" value="">
+            <input name="nameLast" type="text" class="form-control" value="{{ old('nameLast') }}">
           </div>
 
           <div class="form-group">
             <label class="control-label">Email: </label>
-  				  <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');">
+  				  <input name="email" type="email" class="form-control" value="{{ old('email') }}" readonly onfocus="this.removeAttribute('readonly');">
           </div>
 
 			    <div class='form-group'>

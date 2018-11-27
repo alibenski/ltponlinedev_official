@@ -1,5 +1,5 @@
 <div class="modal-body">
-    <p>You have chosen the following time schedule(s) for this course:</p>
+    <p>The student has chosen the following time schedule(s):</p>
         @if(!empty($schedules))
             <ul>
               @foreach($schedules as $value)
@@ -8,7 +8,7 @@
                 <p>Supervisor's email: @if($value->is_self_pay_form == 1) N/A - Self Payment @else {{$value->mgr_email}} @endif</p>
                 <p>Supervisor's Approval: 
 					@if($value->is_self_pay_form == 1)
-					<span id="status" class="label label-success margin-label">
+					<span id="status" class="label label-info margin-label">
 					N/A - Self Payment</span>
 					@elseif(is_null($value->approval))
 					<span id="status" class="label label-warning margin-label">
@@ -68,5 +68,5 @@
               @endforeach
             </ul>
         @endif
-    <p class="alert alert-warning"><strong>Note:</strong> Please note that the class schedules are not absolute and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>    
+    {{-- <p class="alert alert-warning"><strong>Note:</strong> Please note that the class schedules are not absolute and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>     --}}
 </div>
