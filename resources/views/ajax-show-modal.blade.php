@@ -66,7 +66,7 @@
 					@endif
                 </p>
                 @if(is_null($value->deleted_at)) 
-					<a href="{{ route('preenrolment.edit', [$value->INDEXID]) }}" class="btn btn-warning">Modify Form</a>
+					<a href="{{ route('edit-enrolment-fields', [$value->INDEXID, $value->Term]) }}" class="btn btn-warning">Modify Form</a>
                 @else
                 @endif
               @endforeach

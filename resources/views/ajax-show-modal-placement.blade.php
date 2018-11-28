@@ -86,6 +86,13 @@
 				<div class="form-group">
 				    <label class="control-label" for="flexible_show">Is Flexible: @if($placement_form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 				</div>
+
+				<div class="form-group">
+				    <label class="control-label" for="">Supervisor's Email:</label>
+				    <div class="">
+				        <input type="text" class="form-control" name="" value="{{ $placement_form->mgr_email }}" readonly>
+				    </div>
+				</div>
 			</div> 
 			{{-- EOF 1st column --}}
 
