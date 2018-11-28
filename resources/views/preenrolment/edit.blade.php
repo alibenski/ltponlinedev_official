@@ -6,21 +6,43 @@
 @stop
 
 @section('content')
-Modifications
-Change field data in the form
-Convert from regular to payment-based
-Convert from payment-based to regular
-Regular to placement
+<div class="row">
+    <div class="col-sm-6">
+        <div class="box box-info">
+            <div class="box-header">Original Fields</div>
+            <div class="box-body">
+                <ul>
+                <li>Language</li> 
+                <li>Course</li>
+                <li>Schedule</li>
+                <li>Organization</li>
+                <li>Supervisor's email</li>
+                <li>Supervisor first name</li>
+                <li>Supervisor last name</li>
+                <li>Supervisor approval</li>
+                <li>HR approval </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-Fields:
-Language 
-Course
-Schedule
-Organization
-Supervisor's email
-Supervisor first name
-Supervisor last name
-Supervisor approval
-HR approval
-
+    <div class="col-sm-6">
+        <div class="box box-success">
+            <div class="box-header">Fields</div>
+            <div class="box-body">
+                <ul>
+                <li>Language</li> 
+                <li>Course</li>
+                <li>Schedule</li>
+                <li>Organization</li>
+                <li>Supervisor's email</li>
+                <li>Supervisor first name</li>
+                <li>Supervisor last name</li>
+                <li>Supervisor approval</li>
+                <li>HR approval </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 @stop

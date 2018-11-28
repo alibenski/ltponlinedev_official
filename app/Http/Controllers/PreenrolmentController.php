@@ -267,9 +267,10 @@ class PreenrolmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($indexno, $term)
     {
-        //
+        
+        return view('preenrolment.show');
     }
 
     /**
@@ -278,17 +279,11 @@ class PreenrolmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($indexno, $term)
+    public function edit($id)
     {
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function editEnrolmentFields($indexno, $term)
     {
         $student_enrolments = Preenrolment::withTrashed()->where('INDEXID', $indexno)

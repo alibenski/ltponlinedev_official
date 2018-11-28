@@ -59,7 +59,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     // Enrolment forms controller
     Route::resource('preenrolment', 'PreenrolmentController');
-    Route::get('/preenrolment/indexno/{indexno}/term/{term}', ['as' => 'edit-enrolment-fields', 'uses' => 'PreenrolmentController@editEnrolmentFields'])->where('tecode', '(.*)');
+    Route::get('/preenrolment/edit-fields/indexno/{indexno}/term/{term}', ['as' => 'edit-enrolment-fields', 'uses' => 'PreenrolmentController@editEnrolmentFields'])->where('tecode', '(.*)');
+    Route::get('/preenrolment/show/indexno/{indexno}/term/{term}', ['as' => 'preenrolment.show', 'uses' => 'PreenrolmentController@show'])->where('tecode', '(.*)');
     Route::get('send-reminder-emails', 'PreenrolmentController@sendReminderEmails')->name('send-reminder-emails');
     // Enrolment form cancellation route for administrators
     Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['as' => 'enrolment.destroy', 'uses' => 'PreenrolmentController@destroy'])->where('tecode', '(.*)');

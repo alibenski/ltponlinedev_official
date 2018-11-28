@@ -13,6 +13,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="{{ asset('jquery-ui-1.12.1/jquery-ui.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 
@@ -261,7 +263,6 @@ desired effect
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-  @include('partials._js')
   @yield('java_script')
 </body>
 </html>

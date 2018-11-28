@@ -66,7 +66,20 @@
 					@endif
                 </p>
                 @if(is_null($value->deleted_at)) 
-					<a href="{{ route('edit-enrolment-fields', [$value->INDEXID, $value->Term]) }}" class="btn btn-warning">Modify Form</a>
+					<div class="btn-group">
+						<button type="button" class="btn btn-warning">Modify Form</button>
+						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+							<span class="caret"></span>
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="{{ route('edit-enrolment-fields', [$value->INDEXID, $value->Term]) }}">Change field data in the form</a></li>
+								<li><a href="#">Convert from regular to payment-based</a></li>
+								<li><a href="#">Convert from payment-based to regular</a></li>
+								<li class="divider"></li>
+								<li><a href="#">Convert regular to placement</a></li>
+							</ul>
+					</div>
                 @else
                 @endif
               @endforeach
