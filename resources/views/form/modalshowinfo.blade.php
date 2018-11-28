@@ -4,7 +4,7 @@
             <ul>
               @foreach($schedules as $value)
                 <p><span><i class="fa fa-clock-o fa-spin fa-lg" style="margin-right: 10px;" aria-hidden="true"></i></span><strong>{{ $value->schedule->name }}</strong></p>
-                <p>Organization: @if(is_null($value->DEPT)) - @else {{ $value->DEPT }} @endif</p>
+                <p>Organization: @if(is_null($value->DEPT)) - @elseif($value->DEPT == 999) SPOUSE @else {{ $value->DEPT }} @endif</p>
                 <p>Supervisor's email: @if($value->is_self_pay_form == 1) N/A - Self Payment @else {{$value->mgr_email}} @endif</p>
                 <p>Supervisor's Approval: 
 					@if($value->is_self_pay_form == 1)

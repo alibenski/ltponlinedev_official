@@ -34,7 +34,7 @@ class AjaxController extends Controller
             ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)
-            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT']);
+            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID']);
             // ->pluck('schedule.name', 'approval');
 
         // render and return data values via AJAX

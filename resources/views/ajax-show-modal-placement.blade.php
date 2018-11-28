@@ -114,6 +114,38 @@
 				        <textarea class="form-control" name="admin_comment_show" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->course_preference_comment }}</textarea>
 				    </div>
 				</div>
+				
+				<div class="form-group">
+				    <label class="control-label" for="">Convoked to placement test:</label>
+				    <div class="form-control">
+				        <p>@if($placement_form->convoked === 1)
+							Yes
+							@elseif($placement_form->convoked === 0)
+							No - Directly assigned to a course
+							@else
+							No - Not administered
+							@endif
+				        </p>
+				    </div>
+				</div>
+				
+				@if(is_null($placement_form->assigned_to_course))
+					<strong class="text-danger">Not assigned to any course</strong>
+				@else
+				<div class="form-group">
+				    <label class="control-label" for="">Assigned Course:</label>
+				    <div class="form-control">
+				        <p>{{ $placement_form->courses->EDescription }}</p>
+				    </div>
+				</div>
+				
+				<div class="form-group">
+				    <label class="control-label" for="">Assigned Schedule:</label>
+				    <div class="form-control">
+				        <p>{{ $placement_form->schedule->name }}</p>
+				    </div>
+				</div>
+				@endif
 			</div> {{-- EOF 2nd column --}}
 		</form>			
 	</div>
