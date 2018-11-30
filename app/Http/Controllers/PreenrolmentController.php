@@ -315,24 +315,52 @@ class PreenrolmentController extends Controller
             ->where('Term', $term)
             ->get();
 
+        $user_id = User::where('indexno', $indexno)->first(['id']);
+
         foreach ($enrolment_to_be_copied as $data) {
+            $data->fill(['modified_by' => Auth::user()->id ])->save();
+
             $arr = $data->attributesToArray();
-            // $clone_forms = ModifiedForms::create($arr);
+            $clone_forms = ModifiedForms::create($arr);
         }
 
-        $input = $request->all();
+        $count_form = $enrolment_to_be_copied->count();
+        if ($count_form > 1) {
+            $delform = Preenrolment::orderBy('id', 'desc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('form_counter', $form_counter)
+            ->where('Term', $term)
+            ->first();
+            $delform->Code = null;
+            $delform->CodeIndexID = null;
+            $delform->Te_Code = null;
+            $delform->INDEXID = null;
+            $delform->Term = null;
+            $delform->schedule_id = null;             
+            $delform->save();
+            $delform->delete();
+        }
 
-        foreach ($enrolment_to_be_copied as $new_data) {
-            $new_data->fill($input)->save();
+        $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('form_counter', $form_counter)
+            ->where('Term', $term)
+            ->get();
+
+        $input = $request->all();
+        $input = array_filter($input, 'strlen');
+        
+        foreach ($enrolment_to_be_modified as $new_data) {
+            $new_data->fill($input)->save();    
 
             $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
             $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
             $new_data->save();
         }
 
-
-        dd($enrolment_to_be_copied);
-
+        return redirect()->route('manage-user-enrolment-data', $user_id);
     }
 
     /**

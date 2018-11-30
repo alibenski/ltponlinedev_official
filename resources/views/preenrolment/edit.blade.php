@@ -44,14 +44,15 @@
                 	<label for="" class="">Schedule(s):</label> 
 					@foreach($enrolment_schedules as $schedule)
 						<div class="form-control-static">{{ $schedule->schedule->name }}</div>
+						<div class="form-control-static">Supervisor approval: {{ $schedule->approval }}</div>
+                		<div class="form-control-static">HR approval: {{$schedule->approval_hr }}  </div>
 					@endforeach
                 </div>
                 <li>Organization: {{ $enrolment_details->DEPT }}</li>
                 <li>Supervisor's email: {{  $enrolment_details->mgr_email }}</li>
                 <li>Supervisor first name: {{ $enrolment_details->mgr_fname }}</li>
                 <li>Supervisor last name: {{ $enrolment_details->mgr_lname }}</li>
-                <li>Supervisor approval: {{ $enrolment_details->approval }}</li>
-                <li>HR approval: {{$enrolment_details->approval_hr }}  </li>
+                
                 </ul>
             </div>
         </div>
@@ -94,7 +95,7 @@
                 <label>Organization</label>
             	<div class="col-sm-12">
                   <div class="dropdown">
-					<select id="input" name="DEPT" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+					<select id="input" name="DEPT" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
 					@if(!empty($org))
 						<option value="">Select</option>
 						@foreach($org as $value)
@@ -107,24 +108,47 @@
 
                 <div class="form-group">
                 	<label>Supervisor's email</label>
+                	<input type="text" name="mgr_email" class="col-sm-12 form-control" placeholder="Leave blank if no change">
 				</div>
                 <div class="form-group">
                 	<label>Supervisor first name</label>
+                	<input type="text" name="mgr_fname" class="col-sm-12 form-control" placeholder="Leave blank if no change">
 				</div>
                 <div class="form-group">
                 	<label>Supervisor last name</label>
+                	<input type="text" name="mgr_lname" class="col-sm-12 form-control" placeholder="Leave blank if no change">
 				</div>
                 <div class="form-group">
                 	<label>Supervisor approval</label>
+                	<div class="col-sm-12">
+                      <div class="dropdown">
+                        <select class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%;" name="approval">
+                            <option value="">--- No Change ---</option>
+                            <option value="1">Approve</option>
+                            <option value="0">Disapprove<option>
+                        </select>
+                      </div>
+                    </div>
 				</div>
                 <div class="form-group">
                 	<label>HR approval </label>
+                	<div class="col-sm-12">
+                      <div class="dropdown">
+                        <select class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%;" name="approval_hr">
+                            <option value="">--- No Change ---</option>
+                            <option value="1">Approve</option>
+                            <option value="0">Disapprove<option>
+                        </select>
+                      </div>
+                    </div>
 				</div>
-                <button type="submit" class="btn btn-success">Save</button>
-                <input type="hidden" name="Term" value="{{ $enrolment_details->Term }}">
-                <input type="hidden" name="form_counter" value="{{ $enrolment_details->form_counter }}">
-                <input type="hidden" name="_token" value="{{ Session::token() }}">
-                {{ method_field('PUT') }}
+                <div class="form-group">
+                	<button type="submit" class="btn btn-success btn-space pull-right">Save</button>
+	                <input type="hidden" name="Term" value="{{ $enrolment_details->Term }}">
+	                <input type="hidden" name="form_counter" value="{{ $enrolment_details->form_counter }}">
+	                <input type="hidden" name="_token" value="{{ Session::token() }}">
+	                {{ method_field('PUT') }}
+                </div>
                 </form>
             </div>
         </div>
@@ -146,7 +170,7 @@
     $('input[type=radio]').prop('checked',false);
     
     $('.select2-basic-single').select2({
-    placeholder: "--- Select ---",
+    placeholder: "--- No Change ---",
     });
 
   });
