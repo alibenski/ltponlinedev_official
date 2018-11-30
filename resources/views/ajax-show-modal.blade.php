@@ -65,7 +65,9 @@
 						@endif
 					@endif
                 </p>
-                @if(is_null($value->deleted_at)) 
+              @endforeach
+              @foreach($query as $button)
+              	@if(is_null($button->deleted_at)) 
 					<div class="btn-group">
 						<button type="button" class="btn btn-warning">Modify Form</button>
 						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
@@ -73,7 +75,7 @@
 							<span class="sr-only">Toggle Dropdown</span>
 						</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="{{ route('edit-enrolment-fields', [$value->INDEXID, $value->Term]) }}">Change field data in the form</a></li>
+								<li><a href="{{ route('edit-enrolment-fields', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}">Change field data in the form</a></li>
 								<li><a href="#">Convert from regular to payment-based</a></li>
 								<li><a href="#">Convert from payment-based to regular</a></li>
 								<li class="divider"></li>

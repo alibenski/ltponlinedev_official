@@ -38,21 +38,24 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
-        $current_term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
-        $student_last_record = Repo::orderBy('Term', 'desc')->where('Term', $current_term->Term_Code)
-                ->where('INDEXID', '17942')->first();
+        $codeSortByCountIndexID = Preenrolment::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'F1R1')->where('INDEXID', 'L21264')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
+        
+        dd($codeSortByCountIndexID);
+        // $current_term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        // $student_last_record = Repo::orderBy('Term', 'desc')->where('Term', $current_term->Term_Code)
+        //         ->where('INDEXID', '17942')->first();
 
-        $select_courses = CourseSchedule::where('L', 'F')
-            ->where('Te_Term', '191')
-            ->orderBy('id', 'asc')
-            ->with('course')
-            // ->whereHas('course', function($q) {
-            //                 return $q->where('id', '<', 11);
-            //             })
-            ->get();
-            // ->pluck("course.Description","Te_Code_New");
+        // $select_courses = CourseSchedule::where('L', 'F')
+        //     ->where('Te_Term', '191')
+        //     ->orderBy('id', 'asc')
+        //     ->with('course')
+        //     // ->whereHas('course', function($q) {
+        //     //                 return $q->where('id', '<', 11);
+        //     //             })
+        //     ->get();
+        //     // ->pluck("course.Description","Te_Code_New");
 
-        dd($select_courses, $student_last_record->Result, $student_last_record->Te_Code_old, $current_term);
+        // dd($select_courses, $student_last_record->Result, $student_last_record->Te_Code_old, $current_term);
     }
     public function sddextr()
     {

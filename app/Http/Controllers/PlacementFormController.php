@@ -8,6 +8,7 @@ use App\Day;
 use App\FocalPoints;
 use App\Language;
 use App\Mail\MailPlacementTesttoApprover;
+use App\Mail\MailaboutPlacementCancel;
 use App\Mail\MailtoApprover;
 use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailPlacementHR;

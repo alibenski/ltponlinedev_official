@@ -174,21 +174,21 @@ desired effect
                 <img src="{{asset('img/spideyman_sample.png')}}" class="img-circle" alt="User Image">
 
                 <p>
-                  Peter Parker - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  {{Auth::user()->name}}
+                  <small>Member since {{ date('d M Y', strtotime(Auth::user()->created_at))}}</small>
                 </p>
               </li>
               <!-- Menu Body -->
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
+                    <a href="#">X</a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
+                    <a href="#">Y</a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
+                    <a href="#">Z</a>
                   </div>
                 </div>
                 <!-- /.row -->
@@ -261,7 +261,6 @@ desired effect
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-  @include('partials._js')
   @yield('java_script')
 </body>
 </html>

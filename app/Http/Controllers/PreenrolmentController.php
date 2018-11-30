@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\FocalPoints;
 use App\Mail\SendMailable;
 use App\Mail\SendReminderEmailHR;
+use App\ModifiedForms;
 use App\Preenrolment;
 use App\Repo;
 use App\Term;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -284,14 +286,53 @@ class PreenrolmentController extends Controller
 
     }
 
-    public function editEnrolmentFields($indexno, $term)
+    public function editEnrolmentFields($indexno, $term, $tecode, $form_counter)
     {
-        $student_enrolments = Preenrolment::withTrashed()->where('INDEXID', $indexno)
+        $enrolment_details = Preenrolment::where('INDEXID', $indexno)
+            ->where('Term', $term)->where('Te_Code', $tecode)->where('form_counter', $form_counter)
+            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ])
+            ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ]);
+        
+        $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('form_counter', $form_counter)
+            ->where('Term', $term)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code' ]);
+
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+
+        return view('preenrolment.edit', compact('enrolment_details', 'enrolment_schedules', 'languages', 'org'));
+    }
+
+
+    public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $form_counter)
+    {   
+        $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('form_counter', $form_counter)
             ->where('Term', $term)
-            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay' ])
-            ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay' ]);
-            
-        return view('preenrolment.edit');
+            ->get();
+
+        foreach ($enrolment_to_be_copied as $data) {
+            $arr = $data->attributesToArray();
+            // $clone_forms = ModifiedForms::create($arr);
+        }
+
+        $input = $request->all();
+
+        foreach ($enrolment_to_be_copied as $new_data) {
+            $new_data->fill($input)->save();
+
+            $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
+            $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
+            $new_data->save();
+        }
+
+
+        dd($enrolment_to_be_copied);
+
     }
 
     /**

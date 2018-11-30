@@ -34,11 +34,18 @@ class AjaxController extends Controller
             ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)
-            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term']);
+            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code' ]);
             // ->pluck('schedule.name', 'approval');
 
+        $query = Preenrolment::withTrashed()->where('INDEXID', $current_user)
+            ->where('Term', $term_code)
+            ->where('Te_Code', $request->tecode)
+            ->where('form_counter', $request->form_counter)
+            ->groupBy(['Te_Code', 'Term', 'INDEXID','form_counter', 'deleted_at'])
+            ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
+
         // render and return data values via AJAX
-        $data = view('ajax-show-modal', compact('schedules'))->render();
+        $data = view('ajax-show-modal', compact('schedules', 'query'))->render();
         return response()->json([$data]);
     }
 

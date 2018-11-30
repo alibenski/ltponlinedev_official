@@ -388,6 +388,31 @@ class UserController extends Controller
             ]);
 
         if (is_null($request->decision)) {
+
+            // control the number of submitted enrolment forms
+            $qryEformCount = Preenrolment::withTrashed()
+                ->where('INDEXID', $request->INDEXID)
+                ->where('Term', $request->Term)
+                ->orderBy('eform_submit_count', 'desc')->first();
+               
+            $eform_submit_count = 1;
+            if(isset($qryEformCount->eform_submit_count)){
+                $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+            }
+
+            // control the number of submitted courses per enrolment form submission
+            // set default value of $form_counter to 1 and then add succeeding
+            $lastValueCollection = Preenrolment::withTrashed()
+                ->where('Te_Code', $request->Te_Code)
+                ->where('INDEXID', $request->INDEXID)
+                ->where('Term', $request->Term)
+                ->orderBy('form_counter', 'desc')->first();
+                
+            $form_counter = 1;
+            if(isset($lastValueCollection->form_counter)){
+                $form_counter = $lastValueCollection->form_counter + 1;    
+            }
+
             $new_enrolment = Preenrolment::create([ 
                 'CodeIndexID' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID,
                 'Code' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term,
@@ -404,8 +429,8 @@ class UserController extends Controller
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
-                'eform_submit_count' => 1,              
-                'form_counter' => 1,  
+                'eform_submit_count' => $eform_submit_count,              
+                'form_counter' => $form_counter,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
                 'Comments' => $request->Comments,
@@ -466,6 +491,30 @@ class UserController extends Controller
 
     public function enrolSelfPayStudentToCourseInsert($request, $attachment_identity_file, $attachment_pay_file)
     {
+        // control the number of submitted enrolment forms
+        $qryEformCount = Preenrolment::withTrashed()
+            ->where('INDEXID', $request->INDEXID)
+            ->where('Term', $request->Term)
+            ->orderBy('eform_submit_count', 'desc')->first();
+           
+        $eform_submit_count = 1;
+        if(isset($qryEformCount->eform_submit_count)){
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+        }
+
+        // control the number of submitted courses per enrolment form submission
+        // set default value of $form_counter to 1 and then add succeeding
+        $lastValueCollection = Preenrolment::withTrashed()
+            ->where('Te_Code', $request->Te_Code)
+            ->where('INDEXID', $request->INDEXID)
+            ->where('Term', $request->Term)
+            ->orderBy('form_counter', 'desc')->first();
+            
+        $form_counter = 1;
+        if(isset($lastValueCollection->form_counter)){
+            $form_counter = $lastValueCollection->form_counter + 1;    
+        }
+
         $new_enrolment = Preenrolment::create([ 
                 'CodeIndexID' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID,
                 'Code' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term,
@@ -483,8 +532,8 @@ class UserController extends Controller
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
-                'eform_submit_count' => 1,              
-                'form_counter' => 1,  
+                'eform_submit_count' => $eform_submit_count,              
+                'form_counter' => $form_counter,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
                 'Comments' => $request->Comments,
@@ -540,6 +589,17 @@ class UserController extends Controller
         }
 
         if (is_null($request->decision)) {
+            // control the number of submitted enrolment forms
+            $qryEformCount = PlacementForm::withTrashed()
+                ->where('INDEXID', $request->INDEXID)
+                ->where('Term', $request->Term)
+                ->orderBy('eform_submit_count', 'desc')->first();
+               
+            $eform_submit_count = 1;
+            if(isset($qryEformCount->eform_submit_count)){
+                $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+            }
+
             $new_enrolment = PlacementForm::create([ 
                 'L' => $request->L,
                 'placement_schedule_id' => $request->placementLang,
@@ -554,7 +614,7 @@ class UserController extends Controller
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
-                'eform_submit_count' => 1,              
+                'eform_submit_count' => $eform_submit_count,              
                 'form_counter' => 0,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
@@ -571,6 +631,17 @@ class UserController extends Controller
 
     public function enrolSelfPayPlacementInsert($request, $attachment_identity_file, $attachment_pay_file)
     {
+        // control the number of submitted enrolment forms
+        $qryEformCount = PlacementForm::withTrashed()
+            ->where('INDEXID', $request->INDEXID)
+            ->where('Term', $request->Term)
+            ->orderBy('eform_submit_count', 'desc')->first();
+           
+        $eform_submit_count = 1;
+        if(isset($qryEformCount->eform_submit_count)){
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+        }
+            
         $new_enrolment = PlacementForm::create([ 
                 'L' => $request->L,
                 'placement_schedule_id' => $request->placementLang,
@@ -586,7 +657,7 @@ class UserController extends Controller
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
-                'eform_submit_count' => 1,              
+                'eform_submit_count' => $eform_submit_count,              
                 'form_counter' => 0,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
