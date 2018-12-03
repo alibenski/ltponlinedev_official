@@ -70,8 +70,8 @@
               @foreach($query as $button)
               	@if(is_null($button->deleted_at)) 
 					<div class="btn-group">
-						<button type="button" class="btn btn-warning" disabled>Modify Form</button>
-						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" disabled>
+						<button type="button" class="btn btn-warning">Modify Form</button>
+						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
 							<span class="caret"></span>
 							<span class="sr-only">Toggle Dropdown</span>
 						</button>
