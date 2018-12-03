@@ -60,17 +60,18 @@
 						<span id="status" class="label label-warning margin-label">Pending Approval</span>
 						@elseif($value->selfpay_approval === 0)
 						<span id="status" class="label label-danger margin-label">Disapproved</span>
-						@else 
+						@elseif(is_null($value->selfpay_approval)) 
 						<span id="status" class="label label-info margin-label">Waiting</span>
 						@endif
 					@endif
                 </p>
               @endforeach
+
               @foreach($query as $button)
               	@if(is_null($button->deleted_at)) 
 					<div class="btn-group">
-						<button type="button" class="btn btn-warning">Modify Form</button>
-						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+						<button type="button" class="btn btn-warning" disabled>Modify Form</button>
+						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" disabled>
 							<span class="caret"></span>
 							<span class="sr-only">Toggle Dropdown</span>
 						</button>

@@ -43,9 +43,66 @@
                 <div class="form-group">
                 	<label for="" class="">Schedule(s):</label> 
 					@foreach($enrolment_schedules as $schedule)
-						<div class="form-control-static">{{ $schedule->schedule->name }}</div>
-						<div class="form-control-static">Supervisor approval: {{ $schedule->approval }}</div>
-                		<div class="form-control-static">HR approval: {{$schedule->approval_hr }}  </div>
+						<div class="form-control-static"><strong>{{ $schedule->schedule->name }}</strong></div>
+						<p>Supervisor's Approval: 
+							@if($schedule->is_self_pay_form == 1)
+							<span id="status" class="label label-info margin-label">
+							N/A - Self Payment</span>
+							@elseif(is_null($schedule->approval))
+							<span id="status" class="label label-warning margin-label">
+							Pending Approval</span>
+							@elseif($schedule->approval == 1)
+							<span id="status" class="label label-success margin-label">
+							Approved</span>
+							@elseif($schedule->approval == 0)
+							<span id="status" class="label label-danger margin-label">
+							Disapproved</span>
+							@endif
+		                </p>
+		                <p>HR Staff and Development Section Approval:
+							@if(is_null($schedule->is_self_pay_form))
+								@if(in_array($schedule->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+									<span id="status" class="label label-info margin-label">
+									N/A - Non-paying organization</span>
+								@else
+									@if(is_null($schedule->approval) && is_null($schedule->approval_hr))
+									<span id="status" class="label label-warning margin-label">
+									Pending Approval</span>
+									@elseif($schedule->approval == 0 && (is_null($schedule->approval_hr) || isset($schedule->approval_hr)))
+									<span id="status" class="label label-danger margin-label">
+									N/A - Disapproved by Manager</span>
+									@elseif($schedule->approval == 1 && is_null($schedule->approval_hr))
+									<span id="status" class="label label-warning margin-label">
+									Pending Approval</span>
+									@elseif($schedule->approval == 1 && $schedule->approval_hr == 1)
+									<span id="status" class="label label-success margin-label">
+									Approved</span>
+									@elseif($schedule->approval == 1 && $schedule->approval_hr == 0)
+									<span id="status" class="label label-danger margin-label">
+									Disapproved</span>
+									@endif
+								@endif
+							@else
+							<span id="status" class="label label-info margin-label">
+							N/A - Self Payment</span>
+							@endif
+		                </p>
+		                <p>
+		                	Language Secretariat Payment Validation: 
+							@if(is_null($schedule->is_self_pay_form))
+							<span id="status" class="label label-info margin-label">N/A</span>
+							@else
+								@if($schedule->selfpay_approval === 1)
+								<span id="status" class="label label-success margin-label">Approved</span>
+								@elseif($schedule->selfpay_approval === 2)
+								<span id="status" class="label label-warning margin-label">Pending Approval</span>
+								@elseif($schedule->selfpay_approval === 0)
+								<span id="status" class="label label-danger margin-label">Disapproved</span>
+								@else 
+								<span id="status" class="label label-info margin-label">Waiting</span>
+								@endif
+							@endif
+		                </p>
 					@endforeach
                 </div>
                 <li>Organization: {{ $enrolment_details->DEPT }}</li>
@@ -92,7 +149,7 @@
                     </div>
                 </div>
 
-                <label>Organization</label>
+                {{-- <label>Organization</label>
             	<div class="col-sm-12">
                   <div class="dropdown">
 					<select id="input" name="DEPT" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
@@ -141,7 +198,7 @@
                         </select>
                       </div>
                     </div>
-				</div>
+				</div> --}}
                 <div class="form-group">
                 	<button type="submit" class="btn btn-success btn-space pull-right">Save</button>
 	                <input type="hidden" name="Term" value="{{ $enrolment_details->Term }}">
