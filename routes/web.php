@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/import-exist', 'AdminController@importExistingUser')->name('import-existing-user');
     Route::post('user/import-exist', 'AdminController@handleImportExistingUser')->name('bulk-import-existing-user');
     Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
+    Route::get('user/preview-course', 'AdminController@previewCourse')->name('preview-course');
     
     Route::resource('users', 'UserController');
 

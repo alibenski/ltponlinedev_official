@@ -6,6 +6,7 @@ use App\NewUser;
 use App\Services\User\ExistingUserImport;
 use App\Services\User\UserImport;
 use App\Term;
+use App\Torgan;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Session;
+use App\Preenrolment;
 
 
 class AdminController extends Controller
@@ -28,6 +30,59 @@ class AdminController extends Controller
         return redirect()->back();   
     }
     
+    public function previewCourse(Request $request)
+    {
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name', 'Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+
+
+        if (!Session::has('Term')) {
+            $enrolment_forms = null;
+            return view('preview-course')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+
+        $enrolment_forms = new Preenrolment;
+        // $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT', 'Te_Code'
+        ];
+
+
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $enrolment_forms = $enrolment_forms->where($column, \Request::input($column));
+                $queries[$column] = \Request::input($column);
+            }
+
+        }
+        if (Session::has('Term')) {
+            $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term'));
+            $queries['Term'] = Session::get('Term');
+        }
+
+        if (\Request::has('search')) {
+            $name = \Request::input('search');
+            $enrolment_forms = $enrolment_forms->with('users')
+                ->whereHas('users', function ($q) use ($name) {
+                    return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                });
+            $queries['search'] = \Request::input('search');
+        }
+
+        if (\Request::has('sort')) {
+            $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort'));
+            $queries['sort'] = \Request::input('sort');
+        }
+
+        // $allQueries = array_merge($queries, $currentQueries);
+        $enrolment_forms = $enrolment_forms->orderBy('schedule_id', 'asc')->paginate(10)->appends($queries);
+        return view('preview-course')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+    }
+
     public function adminIndex()
     {
         $new_user_count = NewUser::where('approved_account', 0)->count();
