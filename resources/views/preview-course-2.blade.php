@@ -5,7 +5,7 @@
 <div class="alert bg-black col-sm-12">
   <h4 class="text-center"><strong>Preview</strong></h4>
 </div>
-@include('admin.partials._termSessionMsg')
+{{-- @include('admin.partials._termSessionMsg') --}}
 
 <h3>Step 2:</h3>
 <h4>Term: @if (is_null($term)) TempSort Table empty!  @else {{$term->Term}} @endif</h4>

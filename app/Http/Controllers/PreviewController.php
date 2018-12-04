@@ -34,9 +34,25 @@ use Session;
 
 class PreviewController extends Controller
 {
+    public function ajaxPreview(Request $request)
+    {
+        
+        $student = Preview::where('schedule_id', $request->schedule_id)->get();
+        foreach ($student as $value) {
+            $form_info[] = Preenrolment::where('INDEXID', $value->INDEXID)
+                ->where('Te_Code', $request->Te_Code) 
+                ->where('Term', $request->Term) 
+                ->where('schedule_id', $request->schedule_id)
+                ->get();
+        }
+
+        $data = view('preview-ajax', compact('student', 'form_info'))->render();
+        return response()->json([$data]);
+    }
+
 	public function previewCourse3(Request $request)
     {
-    	$preview = Preview::select(['schedule_id', 'Code', 'INDEXID', 'id'])->groupBy(['schedule_id', 'Code', 'INDEXID', 'id'])->get(['schedule_id', 'Code', 'INDEXID', 'id']);
+    	$preview = Preview::select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
     	
     	$preview_course = Preview::first();
 

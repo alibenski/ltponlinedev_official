@@ -9,7 +9,7 @@
 	<h4 class="text-center"><strong>Preview</strong></h4>
 </div>
 
-@include('admin.partials._termSessionMsg')
+{{-- @include('admin.partials._termSessionMsg') --}}
 
 <form method="POST" action="{{ route('preview-validate-page') }}">
 	{{ csrf_field() }}

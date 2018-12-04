@@ -29,7 +29,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('user/import-exist', 'AdminController@handleImportExistingUser')->name('bulk-import-existing-user');
     Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
 
-
+    /*
+     Preview Routes
+     */
     Route::get('preview-course-3', 'PreviewController@previewCourse3')->name('preview-course-3');
 
     Route::get('preview-vsa-page-1', ['as'=>'preview-vsa-page-1','uses'=>'PreviewController@vsaPage1']);
@@ -39,6 +41,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::post('preview-sort-page', ['as'=>'preview-sort-page','uses'=>'PreviewController@orderCodes']);
     
+    Route::post('ajax-preview', ['as'=>'ajax-preview','uses'=>'PreviewController@ajaxPreview']);
 
     Route::resource('users', 'UserController');
 
