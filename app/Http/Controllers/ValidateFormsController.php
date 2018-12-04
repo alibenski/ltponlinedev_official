@@ -143,7 +143,7 @@ class ValidateFormsController extends Controller
         $countArrValue = count($arrValue);
         for ($i=0; $i < $countArrValue; $i++) {
         	// collect priority 1 enrolment forms 
-            $enrolment_forms_reenrolled = Preenrolment::where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
             // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
             $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
@@ -177,6 +177,11 @@ class ValidateFormsController extends Controller
         }
 
         /*
+        Priority 2 
+         */
+
+
+        /*
         Priority 3 
          */
         $arrPriority3 = [];
@@ -187,7 +192,7 @@ class ValidateFormsController extends Controller
         $countPriority3 = count($priority3);
         for ($i=0; $i < $countPriority3; $i++) {
             // collect priority 3 enrolment forms 
-            $enrolment_forms_priority3 = Preenrolment::where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
             $arrPriority3[] = $enrolment_forms_priority3 ;
 
             foreach ($enrolment_forms_priority3 as $value) {

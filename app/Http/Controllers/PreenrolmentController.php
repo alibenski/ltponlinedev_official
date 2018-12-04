@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FocalPoints;
+use App\Mail\MailaboutCancel;
 use App\Mail\SendMailable;
 use App\Mail\SendReminderEmailHR;
 use App\ModifiedForms;

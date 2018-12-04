@@ -57,6 +57,10 @@ class User extends Authenticatable
     return $this->hasMany('App\Repo'); 
     }
 
+    public function preview() {
+    return $this->hasMany('App\Preview'); 
+    }
+
     public function sddextr() {
     return $this->hasOne('App\SDDEXTR', 'INDEXNO', 'indexno'); 
     }

@@ -28,8 +28,18 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/import-exist', 'AdminController@importExistingUser')->name('import-existing-user');
     Route::post('user/import-exist', 'AdminController@handleImportExistingUser')->name('bulk-import-existing-user');
     Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
-    Route::get('user/preview-course', 'AdminController@previewCourse')->name('preview-course');
+
+
+    Route::get('preview-course-3', 'PreviewController@previewCourse3')->name('preview-course-3');
+
+    Route::get('preview-vsa-page-1', ['as'=>'preview-vsa-page-1','uses'=>'PreviewController@vsaPage1']);
+    Route::get('preview-vsa-page-2', ['as'=>'preview-vsa-page-2','uses'=>'PreviewController@vsaPage2']);
+
+    Route::any('preview-validate-page', ['as'=>'preview-validate-page','uses'=>'PreviewController@getApprovedEnrolmentForms']);
+
+    Route::post('preview-sort-page', ['as'=>'preview-sort-page','uses'=>'PreviewController@orderCodes']);
     
+
     Route::resource('users', 'UserController');
 
     // separate password reset form
