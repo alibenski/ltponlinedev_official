@@ -69,66 +69,10 @@ class PreviewController extends Controller
 	            $arr_count = array_combine($arr_key, $arr_count);
 	            // var_dump($count_enrolment_forms);
 	        }
-
-
+            
     	return view('preview-course-3')->withPreview($preview)
     		->withPreview_course($preview_course)
     		->withArr_count($arr_count);
-
-        // $languages = DB::table('languages')->pluck("name", "code")->all();
-        // $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name', 'Org Full Name']);
-        // $terms = Term::orderBy('Term_Code', 'desc')->get();
-
-
-
-        // if (!Session::has('Term')) {
-        //     $enrolment_forms = null;
-        //     return view('preview-course')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
-        // }
-
-        // $enrolment_forms = new Preenrolment;
-        // $count_enrolment = new Preenrolment;
-        // // $currentQueries = \Request::query();
-        // $queries = [];
-
-        // $columns = [
-        //     'L', 'DEPT', 'Te_Code'
-        // ];
-
-
-        // foreach ($columns as $column) {
-        //     if (\Request::has($column)) {
-        //         $enrolment_forms = $enrolment_forms->where($column, \Request::input($column));
-        //         $count_enrolment = $count_enrolment->where($column, \Request::input($column));
-        //         $queries[$column] = \Request::input($column);
-        //     }
-
-        // }
-        // if (Session::has('Term')) {
-        //     $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term'));
-        //     $count_enrolment = $count_enrolment->where('Term', Session::get('Term'));
-        //     $queries['Term'] = Session::get('Term');
-        // }
-
-        // if (\Request::has('search')) {
-        //     $name = \Request::input('search');
-        //     $enrolment_forms = $enrolment_forms->with('users')
-        //         ->whereHas('users', function ($q) use ($name) {
-        //             return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-        //         });
-        //     $queries['search'] = \Request::input('search');
-        // }
-
-        // if (\Request::has('sort')) {
-        //     $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort'));
-        //     $queries['sort'] = \Request::input('sort');
-        // }
-
-        
-        
-        // // $allQueries = array_merge($queries, $currentQueries);
-        // $enrolment_forms = $enrolment_forms->orderBy('schedule_id', 'asc')->paginate(20)->appends($queries);
-        // return view('preview-course')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms)->withArr_count($arr_count);
     }
 
     public function vsaPage1()

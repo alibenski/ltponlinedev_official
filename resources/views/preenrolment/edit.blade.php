@@ -42,68 +42,68 @@
                 <li>Course: {{ $enrolment_details->courses->Description }}</li>
                 <div class="form-group">
                 	<label for="" class="">Schedule(s):</label> 
-					@foreach($enrolment_schedules as $schedule)
-						<div class="form-control-static"><strong>{{ $schedule->schedule->name }}</strong></div>
-						<p>Supervisor's Approval: 
-							@if($schedule->is_self_pay_form == 1)
-							<span id="status" class="label label-info margin-label">
-							N/A - Self Payment</span>
-							@elseif(is_null($schedule->approval))
-							<span id="status" class="label label-warning margin-label">
-							Pending Approval</span>
-							@elseif($schedule->approval == 1)
-							<span id="status" class="label label-success margin-label">
-							Approved</span>
-							@elseif($schedule->approval == 0)
-							<span id="status" class="label label-danger margin-label">
-							Disapproved</span>
-							@endif
-		                </p>
-		                <p>HR Staff and Development Section Approval:
-							@if(is_null($schedule->is_self_pay_form))
-								@if(in_array($schedule->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-									<span id="status" class="label label-info margin-label">
-									N/A - Non-paying organization</span>
-								@else
-									@if(is_null($schedule->approval) && is_null($schedule->approval_hr))
-									<span id="status" class="label label-warning margin-label">
-									Pending Approval</span>
-									@elseif($schedule->approval == 0 && (is_null($schedule->approval_hr) || isset($schedule->approval_hr)))
-									<span id="status" class="label label-danger margin-label">
-									N/A - Disapproved by Manager</span>
-									@elseif($schedule->approval == 1 && is_null($schedule->approval_hr))
-									<span id="status" class="label label-warning margin-label">
-									Pending Approval</span>
-									@elseif($schedule->approval == 1 && $schedule->approval_hr == 1)
-									<span id="status" class="label label-success margin-label">
-									Approved</span>
-									@elseif($schedule->approval == 1 && $schedule->approval_hr == 0)
-									<span id="status" class="label label-danger margin-label">
-									Disapproved</span>
-									@endif
-								@endif
-							@else
-							<span id="status" class="label label-info margin-label">
-							N/A - Self Payment</span>
-							@endif
-		                </p>
-		                <p>
-		                	Language Secretariat Payment Validation: 
-							@if(is_null($schedule->is_self_pay_form))
-							<span id="status" class="label label-info margin-label">N/A</span>
-							@else
-								@if($schedule->selfpay_approval === 1)
-								<span id="status" class="label label-success margin-label">Approved</span>
-								@elseif($schedule->selfpay_approval === 2)
-								<span id="status" class="label label-warning margin-label">Pending Approval</span>
-								@elseif($schedule->selfpay_approval === 0)
-								<span id="status" class="label label-danger margin-label">Disapproved</span>
-								@else 
-								<span id="status" class="label label-info margin-label">Waiting</span>
-								@endif
-							@endif
-		                </p>
-					@endforeach
+        					@foreach($enrolment_schedules as $schedule)
+        						<div class="form-control-static"><strong>{{ $schedule->schedule->name }}</strong></div>
+        						<p>Supervisor's Approval: 
+        							@if($schedule->is_self_pay_form == 1)
+        							<span id="status" class="label label-info margin-label">
+        							N/A - Self Payment</span>
+        							@elseif(is_null($schedule->approval))
+        							<span id="status" class="label label-warning margin-label">
+        							Pending Approval</span>
+        							@elseif($schedule->approval == 1)
+        							<span id="status" class="label label-success margin-label">
+        							Approved</span>
+        							@elseif($schedule->approval == 0)
+        							<span id="status" class="label label-danger margin-label">
+        							Disapproved</span>
+        							@endif
+        		                </p>
+        		                <p>HR Staff and Development Section Approval:
+        							@if(is_null($schedule->is_self_pay_form))
+        								@if(in_array($schedule->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+        									<span id="status" class="label label-info margin-label">
+        									N/A - Non-paying organization</span>
+        								@else
+        									@if(is_null($schedule->approval) && is_null($schedule->approval_hr))
+        									<span id="status" class="label label-warning margin-label">
+        									Pending Approval</span>
+        									@elseif($schedule->approval == 0 && (is_null($schedule->approval_hr) || isset($schedule->approval_hr)))
+        									<span id="status" class="label label-danger margin-label">
+        									N/A - Disapproved by Manager</span>
+        									@elseif($schedule->approval == 1 && is_null($schedule->approval_hr))
+        									<span id="status" class="label label-warning margin-label">
+        									Pending Approval</span>
+        									@elseif($schedule->approval == 1 && $schedule->approval_hr == 1)
+        									<span id="status" class="label label-success margin-label">
+        									Approved</span>
+        									@elseif($schedule->approval == 1 && $schedule->approval_hr == 0)
+        									<span id="status" class="label label-danger margin-label">
+        									Disapproved</span>
+        									@endif
+        								@endif
+        							@else
+        							<span id="status" class="label label-info margin-label">
+        							N/A - Self Payment</span>
+        							@endif
+        		                </p>
+        		                <p>
+        		                	Language Secretariat Payment Validation: 
+        							@if(is_null($schedule->is_self_pay_form))
+        							<span id="status" class="label label-info margin-label">N/A</span>
+        							@else
+        								@if($schedule->selfpay_approval === 1)
+        								<span id="status" class="label label-success margin-label">Approved</span>
+        								@elseif($schedule->selfpay_approval === 2)
+        								<span id="status" class="label label-warning margin-label">Pending Approval</span>
+        								@elseif($schedule->selfpay_approval === 0)
+        								<span id="status" class="label label-danger margin-label">Disapproved</span>
+        								@else 
+        								<span id="status" class="label label-info margin-label">Waiting</span>
+        								@endif
+        							@endif
+        		                </p>
+        					@endforeach
                 </div>
                 <li>Organization: {{ $enrolment_details->DEPT }}</li>
                 <li>Supervisor's email: {{  $enrolment_details->mgr_email }}</li>

@@ -306,9 +306,33 @@ class PreenrolmentController extends Controller
         return view('preenrolment.edit', compact('enrolment_details', 'enrolment_schedules', 'languages', 'org'));
     }
 
+    public function nothingToModify(Request $request, $indexno, $term, $tecode, $form_counter)
+    {
+        $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('form_counter', $form_counter)
+            ->where('Term', $term)
+            ->get();
+
+        $user_id = User::where('indexno', $indexno)->first(['id']);
+        
+        foreach ($enrolment_to_be_copied as $data) {
+            $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+
+            // $arr = $data->attributesToArray();
+            // $clone_forms = ModifiedForms::create($arr);
+        }
+        $request->session()->flash('success', 'Admin confirmation successful!');
+        return redirect()->route('manage-user-enrolment-data', $user_id);
+    }
 
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $form_counter)
     {   
+        if (is_null($request->L)) {
+            $request->session()->flash('warning', 'Nothing to change, Nothing to update...');
+            return back();
+        }
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
@@ -319,11 +343,12 @@ class PreenrolmentController extends Controller
         $user_id = User::where('indexno', $indexno)->first(['id']);
 
         foreach ($enrolment_to_be_copied as $data) {
-            $data->fill(['modified_by' => Auth::user()->id ])->save();
+            $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
 
             $arr = $data->attributesToArray();
             $clone_forms = ModifiedForms::create($arr);
         }
+
 
         $count_form = $enrolment_to_be_copied->count();
         if ($count_form > 1) {

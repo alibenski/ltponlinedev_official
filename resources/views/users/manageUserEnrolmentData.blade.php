@@ -93,6 +93,7 @@
 						    <thead>
 						        <tr>
 						            <th>Operation</th>
+						            <th>Treated by Admin?</th>
 						            <th>Cancelled?</th>
 						            <th>Name</th>
 						            <th>Organization</th>
@@ -124,6 +125,13 @@
 			                            <input type="hidden" name="_token" value="{{ Session::token() }}">
 			                            {{ method_field('DELETE') }}
 			                        </form>
+									</td>
+									<td>
+										@if($form->updated_by_admin == 1)
+		                                	<span class="label label-success margin-label">Yes by {{ $form->modifyUser->name}}</span>
+		                                @else
+											-
+		                                @endif
 									</td>
 									<td>
 										@if($form->cancelled_by_student == 1)

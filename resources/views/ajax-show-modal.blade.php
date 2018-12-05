@@ -70,17 +70,20 @@
               @foreach($query as $button)
               	@if(is_null($button->deleted_at)) 
 					<div class="btn-group">
+						<a href="{{ route('nothing-to-modify', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}" class="btn btn-success">Nothing to Modify</a>
+					</div>
+					<div class="btn-group">
 						<button type="button" class="btn btn-warning">Modify Form</button>
 						<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
 							<span class="caret"></span>
 							<span class="sr-only">Toggle Dropdown</span>
 						</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="{{ route('edit-enrolment-fields', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}">Change field data in the form</a></li>
-								<li><a href="#">Convert from regular to payment-based</a></li>
-								<li><a href="#">Convert from payment-based to regular</a></li>
-								<li class="divider"></li>
-								<li><a href="#">Convert regular to placement</a></li>
+								<li><a href="{{ route('edit-enrolment-fields', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}">Assign End of Term Results</a></li>
+								{{-- <li><a href="#">Convert from regular to payment-based</a></li> --}}
+								{{-- <li><a href="#">Convert from payment-based to regular</a></li> --}}
+								{{-- <li class="divider"></li> --}}
+								{{-- <li><a href="#">Convert regular to placement</a></li> --}}
 							</ul>
 					</div>
                 @else
