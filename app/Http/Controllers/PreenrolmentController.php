@@ -324,7 +324,8 @@ class PreenrolmentController extends Controller
             // $clone_forms = ModifiedForms::create($arr);
         }
         $request->session()->flash('success', 'Admin confirmation successful!');
-        return redirect()->route('manage-user-enrolment-data', $user_id);
+        // return redirect()->route('manage-user-enrolment-data', $user_id);
+        return redirect()->route('users.index');
     }
 
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $form_counter)
@@ -385,8 +386,9 @@ class PreenrolmentController extends Controller
             $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
             $new_data->save();
         }
-
-        return redirect()->route('manage-user-enrolment-data', $user_id);
+        $request->session()->flash('success', 'Update successful!');
+        // return redirect()->route('manage-user-enrolment-data', $user_id);
+        return redirect()->route('users.index');
     }
 
     /**

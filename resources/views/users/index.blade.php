@@ -79,3 +79,11 @@
 
 
 @stop
+
+@section('java_script')
+<script>
+$(document).ready(function(){
+    $('input[name=search]').focus();
+});
+</script>
+@stop
