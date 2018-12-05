@@ -10,7 +10,7 @@
 <h3>Step 2:</h3>
 <h4>Term: @if (is_null($term)) TempSort Table empty!  @else {{$term->Term}} @endif</h4>
 <a href="{{ route('preview-vsa-page-1') }}" class="btn btn-danger" @if (is_null($term)) @else style="display: none;" @endif>Back to Step 1</a>
-<form method="POST" action="{{ route('preview-sort-page') }}">
+<form method="GET" action="{{ route('preview-course-3') }}">
 	{{ csrf_field() }}
 	<input type="hidden" name="term_id" value=@if (is_null($term)) ""  @else "{{$term->Term}}" @endif>
 	<div class="form-group">
@@ -35,7 +35,7 @@
         </div>
     </div>
 	<div class="form-group col-sm-12 add-margin">           
-        <button type="submit" class="btn btn-success button-prevent-multi-submit" @if (is_null($term)) disabled="" @endif>Sort and Assign</button>
+        <button type="submit" class="btn btn-success button-prevent-multi-submit" @if (is_null($term)) disabled="" @endif>Preview</button>
 		<input type="hidden" name="_token" value="{{ Session::token() }}">
 	</div>
 </form>

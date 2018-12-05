@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('preview-sort-page', ['as'=>'preview-sort-page','uses'=>'PreviewController@orderCodes']);
     
     Route::post('ajax-preview', ['as'=>'ajax-preview','uses'=>'PreviewController@ajaxPreview']);
+    Route::post('ajax-preview-modal', ['as'=>'ajax-preview-modal','uses'=>'PreviewController@ajaxPreviewModal']);
+    Route::post('ajax-get-priority', ['as'=>'ajax-get-priority','uses'=>'PreviewController@ajaxGetPriority']);
 
     Route::resource('users', 'UserController');
 

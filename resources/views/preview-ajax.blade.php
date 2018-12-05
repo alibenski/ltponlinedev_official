@@ -4,34 +4,35 @@
 	    <thead>
 	        <tr>
 	            <th>Name</th>
-	            <th>Self-paying?</th>
-	            <th>Flexible?</th>
-	            <th>Schedules</th>
+	            <th>Priority</th>
+              <th>Flexible?</th>
+              <th>Schedules</th>
 	        </tr>
 	    </thead>
 	    <tbody>
 			@foreach($form_info as $form_in)
-			@foreach($form_in as $form)
-			<tr>
-				<td>
-				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
-				<td>
-					@if($form->is_self_pay_form == 1)<span class="label label-success margin-label">Yes</span>
-					@else - 
-					@endif
-				</td>
-				<td>
-					@if($form->flexibleBtn == 1)
-                    	<span class="label label-success margin-label">Yes</span>
-                    @else
-						-
-                    @endif
-				</td>
-				<td>
-					<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-eye"></i></span> Schedule Info</a>
-				</td>
-			</tr>
-			@endforeach
+  			@foreach($form_in as $form)
+  			<tr>
+  				<td>
+  				  @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
+  				<td>
+            <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
+            <input name="Term" type="hidden" value="{{ $form->Term }}">
+            <input name="L" type="hidden" value="{{ $form->L }}">
+  					<div class="priority-status"></div>
+  				</td>
+  				<td>
+  					@if($form->flexibleBtn == 1)
+                      	<span class="label label-success margin-label">Yes</span>
+                      @else
+  						-
+                      @endif
+  				</td>
+  				<td>
+  					<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
+  				</td>
+  			</tr>
+  			@endforeach
 			@endforeach
 	    </tbody>
 	</table>
@@ -52,7 +53,7 @@
     </div>
 </div>
 <script>
-  $(document).ready(function () {
+$(document).ready(function () {
     $('#modalshow').on('show.bs.modal', function (event) {
       var link = $(event.relatedTarget); // Link that triggered the modal
       var dtitle = link.data('mtitle');
@@ -67,10 +68,22 @@
 
       var token = $("input[name='_token']").val();      
 
-      $.post('{{ route('ajax-show-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
+      $.post('{{ route('ajax-preview-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
           console.log(data);
           $('.modal-body-schedule').html(data)
       });
     });
-  });
+
+
+    var INDEXID = $("input[name='INDEXID']").val();
+    var Term = $("input[name='Term']").val();
+    var L = $("input[name='L']").val();
+    var token = $("input[name='_token']").val();
+
+    $.post('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID,  'Term':Term, 'L':L, '_token':token}, function(data) {
+          console.log(data);
+          $('.priority-status').html(data)
+      });
+    
+});
 </script>

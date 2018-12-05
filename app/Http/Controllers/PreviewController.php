@@ -9,6 +9,7 @@ use App\Day;
 use App\Language;
 use App\Mail\MailPlacementTesttoApprover;
 use App\Mail\MailtoApprover;
+use App\ModifiedForms;
 use App\PlacementForm;
 use App\PlacementSchedule;
 use App\Preenrolment;
@@ -34,6 +35,47 @@ use Session;
 
 class PreviewController extends Controller
 {
+    /**
+     * @param  Request
+     * @return \Illuminate\Http\Response
+     */
+    public function ajaxGetPriority(Request $request)
+    {
+        // get previous term
+        $selectedTerm = $request->Term; // No need of type casting
+        // echo substr($selectedTerm, 0, 1); // get first value
+        // echo substr($selectedTerm, -1); // get last value
+        $lastDigit = substr($selectedTerm, -1);
+
+        if ($lastDigit == 9) {
+            $prev_term = $selectedTerm - 5;
+        }
+        // if last digit is 1, check Term table for previous term value or subtract 2 from selectedTerm value
+        if ($lastDigit == 1) {
+            $prev_term = $selectedTerm - 2;
+        }
+        // if last digit is 4, check Term table for previous term value or subtract 3 from selectedTerm value
+        if ($lastDigit == 4) {
+            $prev_term = $selectedTerm - 3;
+        }
+        if ($lastDigit == 8) {
+            $prev_term = $selectedTerm - 4;
+        }
+
+        // check if re-enrolled student or not
+        $student_reenrolled = Repo::where('Term', $prev_term)
+                ->where('L', $request->L)
+                ->where('INDEXID', $request->INDEXID)
+                ->count();
+        if ($student_reenrolled > 0) {
+            $data = 're-enrolment';
+        } else {
+            $data = 'not a re-enrolment';
+        }
+
+        return response()->json($data);
+    }
+
     public function ajaxPreview(Request $request)
     {
         
@@ -50,21 +92,80 @@ class PreviewController extends Controller
         return response()->json([$data]);
     }
 
+    public function ajaxPreviewModal(Request $request)
+    {
+        if($request->ajax()){
+            $current_user = $request->indexno;
+            $term_code = $request->term;
+
+            // check the original wishlist of student in modified forms table first 
+            $check_modified_forms = ModifiedForms::where('INDEXID', $current_user)->count();
+
+            if ($check_modified_forms > 0) {
+                // query submitted forms based from Modified Forms table
+                $schedules = ModifiedForms::withTrashed()
+                    ->where('Te_Code', $request->tecode)
+                    ->where('INDEXID', $current_user)
+                    ->where('form_counter', $request->form_counter)
+                    ->where('Term', $term_code)
+                    ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'selfpay_approval' ]);
+
+                $query = ModifiedForms::withTrashed()
+                    ->where('INDEXID', $current_user)
+                    ->where('Term', $term_code)
+                    ->where('Te_Code', $request->tecode)
+                    ->where('form_counter', $request->form_counter)
+                    ->groupBy(['Te_Code', 'Term', 'INDEXID','form_counter', 'deleted_at'])
+                    ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
+
+                // render and return data values via AJAX
+                $data = view('ajax-preview-modal', compact('schedules', 'query'))->render();
+                return response()->json([$data]);
+            }
+
+            // query submitted forms based from tblLTP_Enrolment table
+            $schedules = Preenrolment::withTrashed()
+                ->where('Te_Code', $request->tecode)
+                ->where('INDEXID', $current_user)
+                ->where('form_counter', $request->form_counter)
+                ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'selfpay_approval' ]);
+
+            $query = Preenrolment::withTrashed()->where('INDEXID', $current_user)
+                ->where('Term', $term_code)
+                ->where('Te_Code', $request->tecode)
+                ->where('form_counter', $request->form_counter)
+                ->groupBy(['Te_Code', 'Term', 'INDEXID','form_counter', 'deleted_at'])
+                ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
+
+            // render and return data values via AJAX
+            $data = view('ajax-preview-modal', compact('schedules', 'query'))->render();
+            return response()->json([$data]);
+            
+        }
+    }
+
+    public function vsaPage2()
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $term = PreviewTempSort::orderBy('id', 'desc')->first();
+        return view('preview-course-2')->withLanguages($languages)->withTerm($term);
+    }
+
 	public function previewCourse3(Request $request)
     {
-    	$preview = Preview::select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
+    	$preview = Preview::where('Te_Code', $request->course_id)->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
     	
-    	$preview_course = Preview::first();
+    	$preview_course = Preview::where('Te_Code', $request->course_id)->first();
 
     	$arr_key =[];
         $arr_count = [];
-        $code = Preview::select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
+        $code = Preview::where('Te_Code', $request->course_id)->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
 
 	        foreach ($code as $key => $value) {
 	            $arr_key[] = $value->schedules->name;
 	            // var_dump($value->schedule_id);
 	            // var_dump($value->Code);
-	            $count_enrolment_forms = Preview::where('Code', $value->Code)->where('schedule_id', $value->schedule_id)->count();
+	            $count_enrolment_forms = Preview::where('Te_Code', $request->course_id)->where('Code', $value->Code)->where('schedule_id', $value->schedule_id)->count();
 	            $arr_count[] = $count_enrolment_forms;
 	            $arr_count = array_combine($arr_key, $arr_count);
 	            // var_dump($count_enrolment_forms);
@@ -77,10 +178,11 @@ class PreviewController extends Controller
 
     public function vsaPage1()
     {
-    	// DB::table('tblLTP_preview_TempSort')->truncate();
+    	DB::table('tblLTP_preview_TempSort')->truncate();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         return view('preview-course')->withTerms($terms);
     }
+
 
 	public function getApprovedEnrolmentForms(Request $request)
     {
@@ -179,51 +281,73 @@ class PreviewController extends Controller
             }
         }
 
-        $arr_enrolment_forms_reenrolled = [];
-        $ingredients = []; 
-        $countArrValue = count($arrValue);
-        for ($i=0; $i < $countArrValue; $i++) {
-        	// collect priority 1 enrolment forms 
-            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
-            // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
-            $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
+        // $arr_enrolment_forms_reenrolled = [];
+        // $ingredients = []; 
+        // $countArrValue = count($arrValue);
+        // for ($i=0; $i < $countArrValue; $i++) {
+        // 	// collect priority 1 enrolment forms 
+        //     $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
+        //     // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
+        //     $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
-            // assigning of students to classes and saved in TempSort table
-            foreach ($enrolment_forms_reenrolled as $value) {
-                $ingredients[] = new  PreviewTempSort([
-                'CodeIndexID' => $value->CodeIndexID,
-                'Code' => $value->Code,
-                'schedule_id' => $value->schedule_id,
-                'L' => $value->L,
-                'profile' => $value->profile,
-                'Te_Code' => $value->Te_Code,
-                'Term' => $value->Term,
-                'INDEXID' => $value->INDEXID,
-                "created_at" =>  $value->created_at,
-                "UpdatedOn" =>  $value->UpdatedOn,
-                'mgr_email' =>  $value->mgr_email,
-                'mgr_lname' => $value->mgr_lname,
-                'mgr_fname' => $value->mgr_fname,
-                'continue_bool' => $value->continue_bool,
-                'DEPT' => $value->DEPT, 
-                'eform_submit_count' => $value->eform_submit_count,              
-                'form_counter' => $value->form_counter,  
-                'agreementBtn' => $value->agreementBtn,
-                'flexibleBtn' => $value->flexibleBtn,
-                ]); 
-                    foreach ($ingredients as $data) {
-                        $data->save();
-                    }     
-            }   
+        //     // assigning of students to classes and saved in Preview TempSort table
+        //     foreach ($enrolment_forms_reenrolled as $value) {
+        //         $ingredients[] = new  PreviewTempSort([
+        //         'CodeIndexID' => $value->CodeIndexID,
+        //         'Code' => $value->Code,
+        //         'schedule_id' => $value->schedule_id,
+        //         'L' => $value->L,
+        //         'profile' => $value->profile,
+        //         'Te_Code' => $value->Te_Code,
+        //         'Term' => $value->Term,
+        //         'INDEXID' => $value->INDEXID,
+        //         "created_at" =>  $value->created_at,
+        //         "UpdatedOn" =>  $value->UpdatedOn,
+        //         'mgr_email' =>  $value->mgr_email,
+        //         'mgr_lname' => $value->mgr_lname,
+        //         'mgr_fname' => $value->mgr_fname,
+        //         'continue_bool' => $value->continue_bool,
+        //         'DEPT' => $value->DEPT, 
+        //         'eform_submit_count' => $value->eform_submit_count,              
+        //         'form_counter' => $value->form_counter,  
+        //         'agreementBtn' => $value->agreementBtn,
+        //         'flexibleBtn' => $value->flexibleBtn,
+        //         ]); 
+        //             foreach ($ingredients as $data) {
+        //                 $data->save();
+        //             }     
+        //     }   
+        // }
+
+        /**
+         * Priority 2 query enrolment forms/placement forms and check if they exist in waitlist table of 
+         * 2 previous terms
+         */
+        $arrPriority2 = [];
+        $ingredients2 = [];
+        // get the INDEXID's which are not existing
+        $priority2_not_reset = array_diff($arrINDEXID,$arrValue);
+        $priority2 = array_values($priority2_not_reset) ;
+        $countPriority2 = count($priority2);    
+        
+        $waitlist_indexids = Waitlist::select('INDEXID')->groupBy('INDEXID')->get();
+        foreach ($waitlist_indexids as $waitlisted) {
+            $enrolment_forms_priority2 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $waitlisted->INDEXID)->orderBy('created_at', 'asc')->get();
+            $arrPriority2[] = $enrolment_forms_priority2->toArray();
+        }
+        $arrPriority2 = array_filter($arrPriority2);
+        dd(array_values($arrPriority2));
+        
+        // get matching INDEXID's from $priority2 and INDEXID's from waitlist table
+        for ($c=0; $c < $countPriority2; $c++) {
+            $enrolment_forms_priority2 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority2[$i])->orderBy('created_at', 'asc')->get();
+            $arrPriority2[] = $enrolment_forms_priority2;
         }
 
-        /*
-        Priority 2 
-         */
-
-
-        /*
-        Priority 3 
+        /**
+         * Priority 3
+         * [$arrPriority3 description]
+         * @var array
          */
         $arrPriority3 = [];
         $ingredients3 = [];
@@ -269,8 +393,12 @@ class PreviewController extends Controller
          */
         
 
+        DB::table('tblLTP_preview_TempOrder')->truncate();
+        DB::table('tblLTP_preview')->truncate();
+
         // collect the courses offered for the term entered
-        $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
+        $te_code_collection = CourseSchedule::where('Te_Term', '191')->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
+    
 
         foreach ($te_code_collection as $te_code) {
             $codeSortByCountIndexID = PreviewTempSort::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
@@ -280,7 +408,6 @@ class PreviewController extends Controller
             );
             }
         }
-
         foreach ($te_code_collection as $te_code) {
             $getCode = PreviewTempSort::select('Code')->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code')->get()->toArray();
 
@@ -298,69 +425,182 @@ class PreviewController extends Controller
                 $arrPerCode[] = $perCode;
                 $arrPerTerm[] = $perTerm;
                 $arrCodeCount[] = $countPerCode;
-
             }
 
-            //  get the min of the counts for each Code
-            $minValue = min($arrCodeCount);       
-            $arr = [];
-            $arrSaveToPash = [];
+            if (!empty($arrCodeCount)) {
+                
+                //  get the min of the counts for each Code
+                $minValue = min($arrCodeCount);       
+                $arr = [];
+                $arrSaveToPash = [];
 
-            // use min to determine the first course-schedule assignment
-            for ($i=0; $i < count($arrPerCode); $i++) { 
+                // use min to determine the first course-schedule assignment
+                for ($i=0; $i < count($arrPerCode); $i++) { 
 
-                if ($minValue >= $arrCodeCount[$i]) {
-                    // $arr = $arrPerCode[$i]; 
-                    
-                    // if there are 2 or more codes with equal count
-                    // run query with leftJoin() to remove duplicates
-                    $queryEnrolForms = DB::table('tblLTP_preview_TempSort')
-                        ->select('tblLTP_preview_TempSort.*')
-                        ->where('tblLTP_preview_TempSort.Term', "=",$arrPerTerm[$i])
-                        ->where('tblLTP_preview_TempSort.Code', "=",$arrPerCode[$i])
-                        // leftjoin sql statement with subquery using raw statement
-                        ->leftJoin(DB::raw("(SELECT 
-                              tblLTP_preview.INDEXID FROM tblLTP_preview
-                              WHERE tblLTP_preview.Term = '$arrPerTerm[$i]') as items"),function($q){
-                                $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
-                                ;
-                          })
-                        ->whereNull('items.INDEXID')        
-                        ->get();
+                    if ($minValue >= $arrCodeCount[$i]) {
+                        // $arr = $arrPerCode[$i]; 
+                        
+                        // if there are 2 or more codes with equal count
+                        // run query with leftJoin() to remove duplicates
+                        $queryEnrolForms = DB::table('tblLTP_preview_TempSort')
+                            ->select('tblLTP_preview_TempSort.*')
+                            ->where('tblLTP_preview_TempSort.Term', "=",$arrPerTerm[$i])
+                            ->where('tblLTP_preview_TempSort.Code', "=",$arrPerCode[$i])
+                            // leftjoin sql statement with subquery using raw statement
+                            ->leftJoin(DB::raw("(SELECT 
+                                  tblLTP_preview.INDEXID FROM tblLTP_preview
+                                  WHERE tblLTP_preview.Term = '$arrPerTerm[$i]') as items"),function($q){
+                                    $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
+                                    ;
+                              })
+                            ->whereNull('items.INDEXID')        
+                            ->get();
 
-                    // $queryEnrolForms = PreviewTempSort::where('Code', $arrPerCode[$i])->get();
-                    // assign course-schedule to student and save in PASHQTcur
-                    foreach ($queryEnrolForms as $value) {
-                        $arrSaveToPash[] = new  Preview([
-                        'CodeIndexID' => $value->CodeIndexID,
-                        'Code' => $value->Code,
-                        'schedule_id' => $value->schedule_id,
-                        'L' => $value->L,
-                        'profile' => $value->profile,
-                        'Te_Code' => $value->Te_Code,
-                        'Term' => $value->Term,
-                        'INDEXID' => $value->INDEXID,
-                        "created_at" =>  $value->created_at,
-                        "UpdatedOn" =>  $value->UpdatedOn,
-                        'mgr_email' =>  $value->mgr_email,
-                        'mgr_lname' => $value->mgr_lname,
-                        'mgr_fname' => $value->mgr_fname,
-                        'continue_bool' => $value->continue_bool,
-                        'DEPT' => $value->DEPT, 
-                        'eform_submit_count' => $value->eform_submit_count,              
-                        'form_counter' => $value->form_counter,  
-                        'agreementBtn' => $value->agreementBtn,
-                        'flexibleBtn' => $value->flexibleBtn,
-                        ]); 
-                        foreach ($arrSaveToPash as $data) {
-                            $data->save();
-                        }     
-                    }   
+                        // $queryEnrolForms = PreviewTempSort::where('Code', $arrPerCode[$i])->get();
+                        // assign course-schedule to student and save in PASHQTcur
+                        foreach ($queryEnrolForms as $value) {
+                            $arrSaveToPash[] = new  Preview([
+                            'CodeIndexID' => $value->CodeIndexID,
+                            'Code' => $value->Code,
+                            'schedule_id' => $value->schedule_id,
+                            'L' => $value->L,
+                            'profile' => $value->profile,
+                            'Te_Code' => $value->Te_Code,
+                            'Term' => $value->Term,
+                            'INDEXID' => $value->INDEXID,
+                            "created_at" =>  $value->created_at,
+                            "UpdatedOn" =>  $value->UpdatedOn,
+                            'mgr_email' =>  $value->mgr_email,
+                            'mgr_lname' => $value->mgr_lname,
+                            'mgr_fname' => $value->mgr_fname,
+                            'continue_bool' => $value->continue_bool,
+                            'DEPT' => $value->DEPT, 
+                            'eform_submit_count' => $value->eform_submit_count,              
+                            'form_counter' => $value->form_counter,  
+                            'agreementBtn' => $value->agreementBtn,
+                            'flexibleBtn' => $value->flexibleBtn,
+                            ]); 
+                            foreach ($arrSaveToPash as $data) {
+                                $data->save();
+                            }     
+                        }   
+                    } 
+                }
+            } // end of if statement
+        } // end of foreach statement
+
+        $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Term')->orderBy('id')->get()->toArray();
+        $arr = [];
+        $arrStd = [];
+        foreach ($checkCodeIfExisting as $value) {
+            $queryPashForCodesArr = Preview::where('Code', $value->Code)->get()->toArray();
+            $arr[] = $queryPashForCodesArr;
+            $queryPashForCodes = Preview::where('Code', $value->Code)->get();
+            
+            if (empty($queryPashForCodesArr)) {
+                echo 'none exists';
+                echo '<br>';
+                // check INDEXID of students if existing in Preview table
+                $students = DB::table('tblLTP_preview_TempSort')
+                    ->select('tblLTP_preview_TempSort.*')
+                    ->where('tblLTP_preview_TempSort.Term', "=",$value->Term)
+                    ->where('tblLTP_preview_TempSort.Code', "=",$value->Code)
+                    // leftjoin sql statement with subquery using raw statement
+                    ->leftJoin(DB::raw("(SELECT 
+                          tblLTP_preview.INDEXID FROM tblLTP_preview
+                          WHERE tblLTP_preview.Term = '$value->Term') as items"),function($q){
+                            $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
+                            ;
+                      })
+                    ->whereNull('items.INDEXID')        
+                    ->get();
+                // $arrStd[] = $students;
+                // save the queried students above to Preview table 
+                foreach ($students as $value) {
+                    $arrStd[] = new  Preview([
+                    'CodeIndexID' => $value->CodeIndexID,
+                    'Code' => $value->Code,
+                    'schedule_id' => $value->schedule_id,
+                    'L' => $value->L,
+                    'profile' => $value->profile,
+                    'Te_Code' => $value->Te_Code,
+                    'Term' => $value->Term,
+                    'INDEXID' => $value->INDEXID,
+                    "created_at" =>  $value->created_at,
+                    "UpdatedOn" =>  $value->UpdatedOn,
+                    'mgr_email' =>  $value->mgr_email,
+                    'mgr_lname' => $value->mgr_lname,
+                    'mgr_fname' => $value->mgr_fname,
+                    'continue_bool' => $value->continue_bool,
+                    'DEPT' => $value->DEPT, 
+                    'eform_submit_count' => $value->eform_submit_count,              
+                    'form_counter' => $value->form_counter,  
+                    'agreementBtn' => $value->agreementBtn,
+                    'flexibleBtn' => $value->flexibleBtn,
+                    ]); 
+                    foreach ($arrStd as $data) {
+                        $data->save();
+                    }     
                 } 
             }
         }
         
-        dd($te_code_collection);
+        $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Term')->orderBy('id')->get()->toArray();
+        $arr = [];
+        $arrStd = [];
+        foreach ($checkCodeIfExisting as $value) {
+            $queryPashForCodesArr = Preview::where('Code', $value->Code)->get()->toArray();
+            $arr[] = $queryPashForCodesArr;
+            $queryPashForCodes = Preview::where('Code', $value->Code)->get();
+            
+            if (empty($queryPashForCodesArr)) {
+                echo 'none exists';
+                echo '<br>';
+                // check INDEXID of students if existing in Preview table
+                $students = DB::table('tblLTP_preview_TempSort')
+                    ->select('tblLTP_preview_TempSort.*')
+                    ->where('tblLTP_preview_TempSort.Term', "=",$value->Term)
+                    ->where('tblLTP_preview_TempSort.Code', "=",$value->Code)
+                    // leftjoin sql statement with subquery using raw statement
+                    ->leftJoin(DB::raw("(SELECT 
+                          tblLTP_preview.INDEXID FROM tblLTP_preview
+                          WHERE tblLTP_preview.Term = '$value->Term') as items"),function($q){
+                            $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
+                            ;
+                      })
+                    ->whereNull('items.INDEXID')        
+                    ->get();
+                // $arrStd[] = $students;
+                // save the queried students above to Preview table 
+                foreach ($students as $value) {
+                    $arrStd[] = new  Preview([
+                    'CodeIndexID' => $value->CodeIndexID,
+                    'Code' => $value->Code,
+                    'schedule_id' => $value->schedule_id,
+                    'L' => $value->L,
+                    'profile' => $value->profile,
+                    'Te_Code' => $value->Te_Code,
+                    'Term' => $value->Term,
+                    'INDEXID' => $value->INDEXID,
+                    "created_at" =>  $value->created_at,
+                    "UpdatedOn" =>  $value->UpdatedOn,
+                    'mgr_email' =>  $value->mgr_email,
+                    'mgr_lname' => $value->mgr_lname,
+                    'mgr_fname' => $value->mgr_fname,
+                    'continue_bool' => $value->continue_bool,
+                    'DEPT' => $value->DEPT, 
+                    'eform_submit_count' => $value->eform_submit_count,              
+                    'form_counter' => $value->form_counter,  
+                    'agreementBtn' => $value->agreementBtn,
+                    'flexibleBtn' => $value->flexibleBtn,
+                    ]); 
+                    foreach ($arrStd as $data) {
+                        $data->save();
+                    }     
+                } 
+            }
+        }
+
         // dd($approved_1,$approved_2,$approved_3);
         // PreviewTempSort::truncate();
         $request->session()->flash('success', 'Validation done!');
@@ -381,13 +621,6 @@ class PreviewController extends Controller
         }
         
         dd($approved_1,$approved_2,$approved_3, $arr);
-    }
-
-    public function vsaPage2()
-    {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $term = PreviewTempSort::orderBy('id', 'desc')->first();
-        return view('preview-course-2')->withLanguages($languages)->withTerm($term);
     }
 
 	public function orderCodes(Request $request)
@@ -509,7 +742,7 @@ class PreviewController extends Controller
     		if (empty($queryPashForCodesArr)) {
     			echo 'none exists';
     			echo '<br>';
-    			// check INDEXID of students if existing in PASHQTcur
+    			// check INDEXID of students if existing in Preview table
 				$students = DB::table('tblLTP_preview_TempSort')
 			        ->select('tblLTP_preview_TempSort.*')
 			        ->where('tblLTP_preview_TempSort.Term', "=",$value->Term)
@@ -524,7 +757,7 @@ class PreviewController extends Controller
 			        ->whereNull('items.INDEXID')        
 			        ->get();
 		        // $arrStd[] = $students;
-		        // save the queried students above to PASHQTcur table 
+		        // save the queried students above to Preview table 
 		        foreach ($students as $value) {
                     $arrStd[] = new  Preview([
                     'CodeIndexID' => $value->CodeIndexID,

@@ -23,7 +23,7 @@
 	</div>
 
 	<div class="form-group col-sm-12 add-margin">           
-        <button type="submit" class="btn btn-success button-prevent-multi-submit">Validate Forms</button>
+        <button type="submit" class="btn btn-success button-prevent-multi-submit">Execute Preview Forms</button>
 		<input type="hidden" name="_token" value="{{ Session::token() }}">
 	</div>
 </form>

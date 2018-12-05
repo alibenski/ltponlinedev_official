@@ -16,10 +16,35 @@ class ModifiedForms extends Model
 
     public $timestamps = false;
 
-     /**
-     * The name of the "updated at" column.
-     *
-     * @var string
-     */
-    // const UPDATED_AT = 'UpdatedOn';
+    public function courses() {
+    return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code_New'); 
+    }
+    public function schedule() {
+    return $this->belongsTo('App\Schedule', 'schedule_id'); 
+    }
+    public function languages() {
+    return $this->belongsTo('App\Language', 'L', 'code'); 
+    }
+    public function users() {
+    return $this->belongsTo('App\User', 'INDEXID', 'indexno'); 
+    }
+    
+    public function modifyUser() {
+    return $this->belongsTo('App\User', 'modified_by', 'id'); 
+    }
+
+    public function terms() {
+    return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
+    }
+    public function filesId() {
+    return $this->belongsTo('App\File', 'attachment_id'); 
+    }   
+    public function filesPay() {
+    return $this->belongsTo('App\File', 'attachment_pay'); 
+    }
+    public function adminComment() {
+        return $this->hasMany('App\AdminComment', 'CodeIndexID', 'CodeIndexID'); 
+    }
+
+     
 }
