@@ -40,12 +40,42 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
+        // sort enrolment forms by date of submission
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->orderBy('created_at', 'asc')->get();
+
+        $approved_0_1_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->orderBy('created_at', 'asc')->get();
+        // apply unique() method to remove dupes 
+        // apply values() method to reset key series of the array 
+        $approved_1_placement = $approved_0_1_placement->unique('INDEXID')->values()->all(); // becomes an array
+
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
         
+        $approved_0_2_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_2_placement = $approved_0_2_placement->unique('INDEXID')->values()->all();
+
+        // !!!!!! add where selfpay_approval == 1 !!!!!!
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_3_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->orderBy('created_at', 'asc')->get();
+        $approved_3_placement = $approved_0_3_placement->unique('INDEXID')->values()->all(); 
         
 
-        $codeSortByCountIndexID = Preenrolment::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'F1R1')->where('INDEXID', 'L21264')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
+        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        $approved_collections_placement = $approved_collections_placement->unique('INDEXID')->values()->all();
+
+        foreach ($approved_collections_placement as $key => $value) {
+            print_r($value->CodeIndexID); 
+            print_r($value->created_at); 
+            echo "<br>";
+        }
+
         
-        dd($codeSortByCountIndexID);
+        dd($approved_collections_placement);
+
+        // $codeSortByCountIndexID = Preenrolment::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'F1R1')->where('INDEXID', 'L21264')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
+        
+        // dd($codeSortByCountIndexID);
+
         // $current_term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
         // $student_last_record = Repo::orderBy('Term', 'desc')->where('Term', $current_term->Term_Code)
         //         ->where('INDEXID', '17942')->first();

@@ -16,7 +16,7 @@
   				<td>
   				  @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
   				<td>
-            <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
+            <input name="INDEXID" type="text" value="{{ $form->INDEXID }}">
             <input name="Term" type="hidden" value="{{ $form->Term }}">
             <input name="L" type="hidden" value="{{ $form->L }}">
   					<div class="priority-status"></div>
@@ -80,10 +80,14 @@ $(document).ready(function () {
     var L = $("input[name='L']").val();
     var token = $("input[name='_token']").val();
 
-    $.post('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID,  'Term':Term, 'L':L, '_token':token}, function(data) {
-          console.log(data);
-          $('.priority-status').html(data)
-      });
-    
+    $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID,  'Term':Term, 'L':L, '_token':token}, function(data) {
+          $.each(data, function(index, val) {
+          console.log(val);
+          // console.log('placementFormLang = ' + val.L);
+          //   $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form
+          //   $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='label label-danger'>Scheduled for Placement Test");
+        });
+          // $('.priority-status').html(data)
+      });    
 });
 </script>

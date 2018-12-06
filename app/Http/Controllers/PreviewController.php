@@ -66,7 +66,8 @@ class PreviewController extends Controller
         $student_reenrolled = Repo::where('Term', $prev_term)
                 ->where('L', $request->L)
                 ->where('INDEXID', $request->INDEXID)
-                ->count();
+                ->get();
+
         if ($student_reenrolled > 0) {
             $data = 're-enrolment';
         } else {
@@ -81,7 +82,7 @@ class PreviewController extends Controller
         
         $student = Preview::where('schedule_id', $request->schedule_id)->get();
         foreach ($student as $value) {
-            $form_info[] = Preenrolment::where('INDEXID', $value->INDEXID)
+            $form_info[] = Preview::where('INDEXID', $value->INDEXID)
                 ->where('Te_Code', $request->Te_Code) 
                 ->where('Term', $request->Term) 
                 ->where('schedule_id', $request->schedule_id)
@@ -201,9 +202,9 @@ class PreviewController extends Controller
         $approved_2 = $approved_0_2->unique('INDEXID')->values()->all();
 
         // !!!!!! add where selfpay_approval == 1 !!!!!!
-        $approved_0_3_collect = Preenrolment::whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_0_3_collect = Preenrolment::where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         
-        $approved_0_3 = Preenrolment::select('INDEXID')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_0_3 = Preenrolment::select('INDEXID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         $approved_3 = $approved_0_3->unique('INDEXID')->values()->all(); 
         
 
@@ -435,7 +436,60 @@ class PreviewController extends Controller
         Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
          */
         
+        // sort enrolment forms by date of submission
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
 
+        $approved_0_1_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        // apply unique() method to remove dupes 
+        // apply values() method to reset key series of the array 
+        $approved_1_placement = $approved_0_1_placement->unique('INDEXID')->values()->all(); // becomes an array
+
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_2_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_2_placement = $approved_0_2_placement->unique('INDEXID')->values()->all();
+
+        // !!!!!! add where selfpay_approval == 1 !!!!!!
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_3_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_3_placement = $approved_0_3_placement->unique('INDEXID')->values()->all(); 
+        
+
+        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        $approved_collections_placement = $approved_collections_placement->unique('INDEXID')->values()->all();
+
+        $ingredients4 =[];
+        foreach ($approved_collections_placement as $value4) {
+            $ingredients4[] = new  PreviewTempSort([
+            'CodeIndexID' => $value4->CodeIndexID,
+            'Code' => $value4->Code,
+            'schedule_id' => $value4->schedule_id,
+            'L' => $value4->L,
+            'profile' => $value4->profile,
+            'Te_Code' => $value4->Te_Code,
+            'Term' => $value4->Term,
+            'INDEXID' => $value4->INDEXID,
+            "created_at" =>  $value4->created_at,
+            "UpdatedOn" =>  $value4->UpdatedOn,
+            'mgr_email' =>  $value4->mgr_email,
+            'mgr_lname' => $value4->mgr_lname,
+            'mgr_fname' => $value4->mgr_fname,
+            'continue_bool' => $value4->continue_bool,
+            'DEPT' => $value4->DEPT, 
+            'eform_submit_count' => $value4->eform_submit_count,              
+            'form_counter' => $value4->form_counter,  
+            'agreementBtn' => $value4->agreementBtn,
+            'flexibleBtn' => $value4->flexibleBtn,
+            ]); 
+                foreach ($ingredients4 as $data4) {
+                    $data4->save();
+                }     
+        }
+
+        /**
+         * Order Codes by count per code
+         */
         DB::table('tblLTP_preview_TempOrder')->truncate();
         DB::table('tblLTP_preview')->truncate();
 
@@ -653,17 +707,7 @@ class PreviewController extends Controller
 
     public function getApprovedPlacementForms(Request $request)
     {
-        $approved_1 = PlacementForm::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('approval','1')->get();
-        $approved_2 = PlacementForm::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('approval','1')->where('approval_hr', '1')->get();
-        $approved_3 = PlacementForm::select('INDEXID')->whereNotNull('is_self_pay_form')->get();
         
-        $placement_forms = $approved_1->merge($approved_2)->merge($approved_3);
-        $arr = [];
-        foreach ($approved_2 as $value) {
-        	$arr[] = $value->INDEXID;
-        }
-        
-        dd($approved_1,$approved_2,$approved_3, $arr);
     }
 
 	public function orderCodes(Request $request)
