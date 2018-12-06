@@ -2,6 +2,7 @@
 
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
 @stop
 
 @section('content')
@@ -11,7 +12,7 @@
 
 {{-- @include('admin.partials._termSessionMsg') --}}
 
-<form method="POST" action="{{ route('preview-validate-page') }}">
+<form method="POST" action="{{ route('preview-validate-page') }}" class="form-prevent-multi-submit">
 	{{ csrf_field() }}
 	<div class="form-group col-sm-12 add-margin">
 		<select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 100%">
@@ -31,6 +32,7 @@
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/submit.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('.select2-basic-single').select2({

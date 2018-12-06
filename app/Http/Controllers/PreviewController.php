@@ -281,43 +281,43 @@ class PreviewController extends Controller
             }
         }
 
-        // $arr_enrolment_forms_reenrolled = [];
-        // $ingredients = []; 
-        // $countArrValue = count($arrValue);
-        // for ($i=0; $i < $countArrValue; $i++) {
-        // 	// collect priority 1 enrolment forms 
-        //     $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
-        //     // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
-        //     $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
+        $arr_enrolment_forms_reenrolled = [];
+        $ingredients = []; 
+        $countArrValue = count($arrValue);
+        for ($i=0; $i < $countArrValue; $i++) {
+        	// collect priority 1 enrolment forms 
+            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
+            // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
+            $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
-        //     // assigning of students to classes and saved in Preview TempSort table
-        //     foreach ($enrolment_forms_reenrolled as $value) {
-        //         $ingredients[] = new  PreviewTempSort([
-        //         'CodeIndexID' => $value->CodeIndexID,
-        //         'Code' => $value->Code,
-        //         'schedule_id' => $value->schedule_id,
-        //         'L' => $value->L,
-        //         'profile' => $value->profile,
-        //         'Te_Code' => $value->Te_Code,
-        //         'Term' => $value->Term,
-        //         'INDEXID' => $value->INDEXID,
-        //         "created_at" =>  $value->created_at,
-        //         "UpdatedOn" =>  $value->UpdatedOn,
-        //         'mgr_email' =>  $value->mgr_email,
-        //         'mgr_lname' => $value->mgr_lname,
-        //         'mgr_fname' => $value->mgr_fname,
-        //         'continue_bool' => $value->continue_bool,
-        //         'DEPT' => $value->DEPT, 
-        //         'eform_submit_count' => $value->eform_submit_count,              
-        //         'form_counter' => $value->form_counter,  
-        //         'agreementBtn' => $value->agreementBtn,
-        //         'flexibleBtn' => $value->flexibleBtn,
-        //         ]); 
-        //             foreach ($ingredients as $data) {
-        //                 $data->save();
-        //             }     
-        //     }   
-        // }
+            // assigning of students to classes and saved in Preview TempSort table
+            foreach ($enrolment_forms_reenrolled as $value) {
+                $ingredients[] = new  PreviewTempSort([
+                'CodeIndexID' => $value->CodeIndexID,
+                'Code' => $value->Code,
+                'schedule_id' => $value->schedule_id,
+                'L' => $value->L,
+                'profile' => $value->profile,
+                'Te_Code' => $value->Te_Code,
+                'Term' => $value->Term,
+                'INDEXID' => $value->INDEXID,
+                "created_at" =>  $value->created_at,
+                "UpdatedOn" =>  $value->UpdatedOn,
+                'mgr_email' =>  $value->mgr_email,
+                'mgr_lname' => $value->mgr_lname,
+                'mgr_fname' => $value->mgr_fname,
+                'continue_bool' => $value->continue_bool,
+                'DEPT' => $value->DEPT, 
+                'eform_submit_count' => $value->eform_submit_count,              
+                'form_counter' => $value->form_counter,  
+                'agreementBtn' => $value->agreementBtn,
+                'flexibleBtn' => $value->flexibleBtn,
+                ]); 
+                    foreach ($ingredients as $data) {
+                        $data->save();
+                    }     
+            }   
+        }
 
         /**
          * Priority 2 query enrolment forms/placement forms and check if they exist in waitlist table of 
@@ -325,24 +325,66 @@ class PreviewController extends Controller
          */
         $arrPriority2 = [];
         $ingredients2 = [];
-        // get the INDEXID's which are not existing
-        $priority2_not_reset = array_diff($arrINDEXID,$arrValue);
+        $arrValue2 = [];
+
+        $priority2_not_reset = array_diff($arrINDEXID,$arrValue); // get the difference of INDEXID's between reenrolled and others
+
         $priority2 = array_values($priority2_not_reset) ;
         $countPriority2 = count($priority2);    
-        
-        $waitlist_indexids = Waitlist::select('INDEXID')->groupBy('INDEXID')->get();
-        foreach ($waitlist_indexids as $waitlisted) {
-            $enrolment_forms_priority2 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $waitlisted->INDEXID)->orderBy('created_at', 'asc')->get();
-            $arrPriority2[] = $enrolment_forms_priority2->toArray();
+        for ($y=0; $y < $countPriority2; $y++) { 
+            $waitlist_indexids = Waitlist::where('INDEXID', $priority2[$y])->select('INDEXID')->groupBy('INDEXID')->get()->toArray(); 
+            $arrPriority2[] = $waitlist_indexids;
+            $arrPriority2_filtered = array_filter($arrPriority2);
+
+            // iterate to get the index id of staff who are waitlisted
+            foreach($waitlist_indexids as $item2) {
+                foreach ($item2 as $value2) {
+                    $arrValue2[] = $value2; // store the waitlisted INDEXID values in array
+                }
+            }
         }
-        $arrPriority2 = array_filter($arrPriority2);
-        dd(array_values($arrPriority2));
-        
-        // get matching INDEXID's from $priority2 and INDEXID's from waitlist table
-        for ($c=0; $c < $countPriority2; $c++) {
-            $enrolment_forms_priority2 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority2[$i])->orderBy('created_at', 'asc')->get();
-            $arrPriority2[] = $enrolment_forms_priority2;
+
+        $arr_enrolment_forms_waitlisted = [];
+        $ingredients2 = []; 
+        $countArrValue2 = count($arrValue2);
+
+        for ($z=0; $z < $countArrValue2; $z++) {
+            // collect priority 2 enrolment forms 
+            $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])->orderBy('created_at', 'asc')->get();
+
+            $arr_enrolment_forms_waitlisted[] = $enrolment_forms_waitlisted;
+
+            // assigning of students to classes and saved in Preview TempSort table
+            foreach ($enrolment_forms_waitlisted as $value) {
+                $ingredients2[] = new  PreviewTempSort([
+                'CodeIndexID' => $value->CodeIndexID,
+                'Code' => $value->Code,
+                'schedule_id' => $value->schedule_id,
+                'L' => $value->L,
+                'profile' => $value->profile,
+                'Te_Code' => $value->Te_Code,
+                'Term' => $value->Term,
+                'INDEXID' => $value->INDEXID,
+                "created_at" =>  $value->created_at,
+                "UpdatedOn" =>  $value->UpdatedOn,
+                'mgr_email' =>  $value->mgr_email,
+                'mgr_lname' => $value->mgr_lname,
+                'mgr_fname' => $value->mgr_fname,
+                'continue_bool' => $value->continue_bool,
+                'DEPT' => $value->DEPT, 
+                'eform_submit_count' => $value->eform_submit_count,              
+                'form_counter' => $value->form_counter,  
+                'agreementBtn' => $value->agreementBtn,
+                'flexibleBtn' => $value->flexibleBtn,
+                ]); 
+                    foreach ($ingredients2 as $data2) {
+                        $data2->save();
+                    }     
+            }   
         }
+
+        $arrValue1_2 = [];
+        $arrValue1_2 = array_merge($arrValue, $arrValue2);
 
         /**
          * Priority 3
@@ -351,10 +393,11 @@ class PreviewController extends Controller
          */
         $arrPriority3 = [];
         $ingredients3 = [];
-        // get the INDEXID's which are not existing
-        $priority3_not_reset = array_diff($arrINDEXID,$arrValue);
+        // get the INDEXID's which are not existing in priority 1 & 2
+        $priority3_not_reset = array_diff($arrINDEXID,$arrValue1_2);
         $priority3 = array_values($priority3_not_reset) ;
         $countPriority3 = count($priority3);
+
         for ($i=0; $i < $countPriority3; $i++) {
             // collect priority 3 enrolment forms 
             $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
@@ -397,7 +440,7 @@ class PreviewController extends Controller
         DB::table('tblLTP_preview')->truncate();
 
         // collect the courses offered for the term entered
-        $te_code_collection = CourseSchedule::where('Te_Term', '191')->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
+        $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
     
 
         foreach ($te_code_collection as $te_code) {
