@@ -40,6 +40,44 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('INDEXID', '990973')->where('approval','1')->orderBy('created_at', 'asc')->get();
+
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('INDEXID', '990973')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->where('INDEXID', '990973')->orderBy('created_at', 'asc')->get();
+
+        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); 
+        $approved_collections_placement = $approved_collections_placement->unique('Te_Code')->values()->all();
+
+        $ingredients4 =[];
+        foreach ($approved_collections_placement as $value4) {
+            $ingredients4[] = new  PreviewTempSort([
+            'CodeIndexID' => $value4->CodeIndexID,
+            'Code' => $value4->Code,
+            'schedule_id' => $value4->schedule_id,
+            'L' => $value4->L,
+            'profile' => $value4->profile,
+            'Te_Code' => $value4->Te_Code,
+            'Term' => $value4->Term,
+            'INDEXID' => $value4->INDEXID,
+            "created_at" =>  $value4->created_at,
+            "UpdatedOn" =>  $value4->UpdatedOn,
+            'mgr_email' =>  $value4->mgr_email,
+            'mgr_lname' => $value4->mgr_lname,
+            'mgr_fname' => $value4->mgr_fname,
+            'continue_bool' => $value4->continue_bool,
+            'DEPT' => $value4->DEPT, 
+            'eform_submit_count' => $value4->eform_submit_count,              
+            'form_counter' => $value4->form_counter,  
+            'agreementBtn' => $value4->agreementBtn,
+            'flexibleBtn' => $value4->flexibleBtn,
+            ]); 
+                foreach ($ingredients4 as $data4) {
+                    // $data4->save();
+                }     
+        }
+        dd($ingredients4);
+
         $getCode = PreviewTempSort::select('Code')->where('Te_Code', 'S7R1')->groupBy('Code')->get()->toArray();
 
             $arrCodeCount = [];

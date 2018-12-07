@@ -484,6 +484,7 @@ class PreviewController extends Controller
         
 
         $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        // uniwue query should be 'Code' not 'INDEXID' to separate enrolments to different language course and schedule 
         $approved_collections_placement = $approved_collections_placement->unique('INDEXID')->values()->all();
 
         $ingredients4 =[];
@@ -636,7 +637,7 @@ class PreviewController extends Controller
                     // leftjoin sql statement with subquery using raw statement
                     ->leftJoin(DB::raw("(SELECT 
                           tblLTP_preview.INDEXID FROM tblLTP_preview
-                          WHERE tblLTP_preview.Term = '$value->Term' AND tblLTP_preview.Term = '$value->Te_Code') as items"),function($q){
+                          WHERE tblLTP_preview.Term = '$value->Term' AND tblLTP_preview.Te_Code = '$value->Te_Code') as items"),function($q){
                             $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
                             ;
                       })
