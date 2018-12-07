@@ -85,7 +85,20 @@
 	</a>
 	@endif
 </div>
-
+<div class="col-sm-4 col-xs-12">
+	<a href="{{ route('preview-vsa-page-2') }}">
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-purple"><i class="fa fa-bar-chart"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Preview Classes </span>
+		    <span class="info-box-number"></span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+</div>
 @endsection
 @section('java_script')
 <script src="{{ asset('js/submit.js') }}"></script>
