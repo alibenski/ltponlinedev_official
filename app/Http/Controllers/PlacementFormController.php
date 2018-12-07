@@ -442,7 +442,7 @@ class PlacementFormController extends Controller
         return view('placement_forms.edit',compact('placement_form','waitlists', 'times'));
     }
 
-        public function editAssignCourse($id)
+    public function editAssignCourse($id)
     {
         $placement_form = PlacementForm::find($id);
         $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
@@ -533,14 +533,28 @@ class PlacementFormController extends Controller
                             'course_id' => 'required|',
                             'schedule_id' => 'required|',
                         )); 
-        $placement_form = PlacementForm::find($id);
-        $placement_form->convoked = 0;
-        $placement_form->assigned_to_course = 1;
-        $placement_form->schedule_id = $request->schedule_id;
-        $placement_form->Te_Code = $request->course_id;
-        $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
-        $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
-        $placement_form->save();
+        if (isset($placement_form->convoked)) {
+                // $this->assignCourseToPlacement($request, $id);
+                $this->validate($request, array(
+                                'course_id' => 'required|',
+                                'schedule_id' => 'required|',
+                            ));
+                $placement_form->assigned_to_course = 1;
+                $placement_form->schedule_id = $request->schedule_id;
+                $placement_form->Te_Code = $request->course_id;
+                $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
+                $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+                $placement_form->save();
+        } else {
+                $placement_form = PlacementForm::find($id);
+                $placement_form->convoked = 0;
+                $placement_form->assigned_to_course = 1;
+                $placement_form->schedule_id = $request->schedule_id;
+                $placement_form->Te_Code = $request->course_id;
+                $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
+                $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+                $placement_form->save();
+        }
 
 
         // $request->session()->flash('success', 'Placement form record has been updated.'); 

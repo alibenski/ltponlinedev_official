@@ -9,6 +9,21 @@
 		<h4>Assign Language Courses</h4>
 	</div>
 </div>
+
+@if($placement_form->assigned_to_course == 1)
+<div class="row">
+	<div class="callout callout-info col-sm-12">
+		<h4>Course Currently Assigned to {{ $placement_form->courses->Description }} - {{ $placement_form->schedule->name }}</h4>
+	</div>
+</div>
+@else
+<div class="row">
+	<div class="callout callout-warning col-sm-12">
+		<h4>No language course assigned yet</h4>
+	</div>
+</div>
+@endif
+
 <div class="row">
 	<form method="POST" action="{{ route('placement-form-assign-course', $placement_form->id) }}">
 	{{ csrf_field() }}
@@ -28,7 +43,7 @@
 		    <div class="form-group">
 				<div class="col-sm-12">
 				        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-				        <label for="decision2" class="form-control-static">Assign course to student</label>
+				        <label for="decision2" class="form-control-static">Assign course</label>
 				</div>
 		    </div>
 

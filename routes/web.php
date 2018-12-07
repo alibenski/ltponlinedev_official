@@ -83,12 +83,17 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // Enrolment form cancellation route for administrators
     Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['as' => 'enrolment.destroy', 'uses' => 'PreenrolmentController@destroy'])->where('tecode', '(.*)');
         
-    // Placement forms controller
+    /**
+     * Placement forms controller
+     */
     Route::resource('placement-form', 'PlacementFormController');
     Route::get('send-reminder-emails-placement', 'PlacementFormController@sendReminderEmailsPlacement')->name('send-reminder-emails-placement');
     Route::get('/placement-form-filtered', ['as'=>'placement-form-filtered','uses'=>'PlacementFormController@getFilteredPlacementForms']);
+    // route of assign course form to placement view 
     Route::get('/placement-form-assign/{id}', ['as'=>'placement-form-assign','uses'=>'PlacementFormController@editAssignCourse']);
+    
     Route::put('/placement-form-assign-course/{id}', ['as'=>'placement-form-assign-course','uses'=>'PlacementFormController@assignCourseToPlacement']);
+
     // Placement form cancellation route for administrators
     Route::delete('/delete/user/{staff}/lang/{lang}/term/{term}/{eform}', ['as' => 'placement.destroy', 'uses' => 'PlacementFormController@destroy'])->where('tecode', '(.*)');
 

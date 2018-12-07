@@ -433,6 +433,7 @@
         </div>
     </div>
 </div>
+{{-- modal for enrolments forms --}}
 <div id="modalshow" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -448,6 +449,7 @@
         </div>
     </div>
 </div>
+{{-- modal for placement forms --}}
 <div id="modalshowplacementinfo" class="modal fade">
     <div class="modal-dialog  modal-lg">
         <div class="modal-content">

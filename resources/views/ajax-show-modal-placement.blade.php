@@ -153,6 +153,7 @@
 				    </div>
 				</div>
 				@endif
+				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><span class="glyphicon glyphicon-edit"></span> Modify Assigned Course</a> 
 			</div> {{-- EOF 2nd column --}}
 		</form>			
 	</div>
