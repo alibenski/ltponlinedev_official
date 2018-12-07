@@ -3,6 +3,9 @@
         @if(!empty($schedules))
             <ul>
               @foreach($schedules as $value)
+              	<p>
+              		@if($value->assigned_to_course) <h4><strong><span class="label label-danger">Course and Schedule assigned by Admin</span></strong></h4> @else @endif
+              	</p>
                 <p><span><i class="fa fa-clock-o fa-spin fa-lg" style="margin-right: 10px;" aria-hidden="true"></i></span><strong>{{ $value->schedule->name }}</strong></p>
                 <p>Organization: @if(is_null($value->DEPT)) - @elseif($value->DEPT == 999) SPOUSE @else {{ $value->DEPT }} @endif</p>
                 <p>Supervisor's email: @if($value->is_self_pay_form == 1) N/A - Self Payment @else {{$value->mgr_email}} @endif</p>
@@ -66,8 +69,15 @@
 					@endif
                 </p>
               @endforeach
-
-              @foreach($query as $button)
+			
+				<div class="btn-group">
+					<button type="button" class="btn btn-warning" disabled="">Modify Not Available</button>
+					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" disabled="">
+						<span class="caret"></span>
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+				</div>
+              {{-- @foreach($query as $button)
               	@if(is_null($button->deleted_at)) 
 					<div class="btn-group">
 						<button type="button" class="btn btn-warning">Modify Form</button>
@@ -76,16 +86,16 @@
 							<span class="sr-only">Toggle Dropdown</span>
 						</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="{{ route('edit-enrolment-fields', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}">Assign End of Term Results</a></li>
+								<li><a href="{{ route('edit-enrolment-fields', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}">Assign End of Term Results</a></li> --}}
 								{{-- <li><a href="#">Convert from regular to payment-based</a></li> --}}
 								{{-- <li><a href="#">Convert from payment-based to regular</a></li> --}}
 								{{-- <li class="divider"></li> --}}
 								{{-- <li><a href="#">Convert regular to placement</a></li> --}}
-							</ul>
+							{{-- </ul>
 					</div>
                 @else
                 @endif
-              @endforeach
+              @endforeach --}}
             </ul>
         @endif
 </div>

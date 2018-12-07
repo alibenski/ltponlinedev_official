@@ -7,19 +7,23 @@
 	            <th>Priority</th>
               <th>Flexible?</th>
               <th>Schedules</th>
+              <th>Submission Date</th>
 	        </tr>
 	    </thead>
 	    <tbody>
-			@foreach($form_info as $form_in)
-  			@foreach($form_in as $form)
+      {{-- @foreach($form_info as $form_in) --}}
+        @foreach($form_info as $form)
+
   			<tr>
   				<td>
   				  @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
   				<td>
-            <input name="INDEXID" type="text" value="{{ $form->INDEXID }}">
+            <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
             <input name="Term" type="hidden" value="{{ $form->Term }}">
             <input name="L" type="hidden" value="{{ $form->L }}">
-  					<div class="priority-status"></div>
+            <strong>
+  					 <div id="{{ $form->INDEXID }}" class="priority-status"></div> 
+            </strong>
   				</td>
   				<td>
   					@if($form->flexibleBtn == 1)
@@ -31,9 +35,12 @@
   				<td>
   					<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
   				</td>
+          <td>
+            {{$form->created_at}}
+          </td>
   			</tr>
   			@endforeach
-			@endforeach
+			{{-- @endforeach --}}
 	    </tbody>
 	</table>
 </div>
@@ -73,21 +80,23 @@ $(document).ready(function () {
           $('.modal-body-schedule').html(data)
       });
     });
-
-
-    var INDEXID = $("input[name='INDEXID']").val();
-    var Term = $("input[name='Term']").val();
-    var L = $("input[name='L']").val();
-    var token = $("input[name='_token']").val();
-
-    $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID,  'Term':Term, 'L':L, '_token':token}, function(data) {
-          $.each(data, function(index, val) {
-          console.log(val);
-          // console.log('placementFormLang = ' + val.L);
-          //   $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form
-          //   $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='label label-danger'>Scheduled for Placement Test");
+});
+</script>
+<script>
+$(document).ready(function () {
+    var arr = [];
+    $('input[name="INDEXID"]').each(function(){
+        var INDEXID = $(this).val();
+        var Term = $("input[name='Term']").val();
+        var L = $("input[name='L']").val();
+        var token = $("input[name='_token']").val();
+        console.log(INDEXID)
+        $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID, 'L':L, 'Term':Term, '_token':token }, function(data) {
+          console.log(data)
+          $('#'+INDEXID).html(data)
         });
-          // $('.priority-status').html(data)
-      });    
+        arr.push(INDEXID); //insert values to array per iteration
+    });
+    console.log(arr)
 });
 </script>

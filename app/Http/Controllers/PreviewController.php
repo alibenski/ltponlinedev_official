@@ -66,7 +66,7 @@ class PreviewController extends Controller
         $student_reenrolled = Repo::where('Term', $prev_term)
                 ->where('L', $request->L)
                 ->where('INDEXID', $request->INDEXID)
-                ->get();
+                ->count();
 
         if ($student_reenrolled > 0) {
             $data = 're-enrolment';
@@ -79,15 +79,17 @@ class PreviewController extends Controller
 
     public function ajaxPreview(Request $request)
     {
+        $form_info_arr = [];
+        $student = Preview::where('Te_Code', $request->Te_Code)->where('schedule_id', $request->schedule_id)->get();
         
-        $student = Preview::where('schedule_id', $request->schedule_id)->get();
         foreach ($student as $value) {
-            $form_info[] = Preview::where('INDEXID', $value->INDEXID)
-                ->where('Te_Code', $request->Te_Code) 
-                ->where('Term', $request->Term) 
-                ->where('schedule_id', $request->schedule_id)
+            $form = PreviewTempSort::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
+                foreach ($form as $value) {
+                    $form_info_arr[] = $value;
+                }
         }
+        $form_info = collect($form_info_arr)->sortBy('created_at');
 
         $data = view('preview-ajax', compact('student', 'form_info'))->render();
         return response()->json([$data]);
@@ -99,13 +101,38 @@ class PreviewController extends Controller
             $current_user = $request->indexno;
             $term_code = $request->term;
 
+            // check the original wishlist of student in placement forms table
+            $check_placement_forms = PlacementForm::where('INDEXID', $current_user)->count();
+
+            if ($check_placement_forms > 0) {
+                // query submitted forms based from Modified Forms table
+                $schedules = PlacementForm::withTrashed()
+                    ->where('Te_Code', $request->tecode)
+                    ->where('INDEXID', $current_user)
+                    ->where('form_counter', $request->form_counter)
+                    ->where('Term', $term_code)
+                    ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'selfpay_approval', 'assigned_to_course' ]);
+
+                $query = PlacementForm::withTrashed()
+                    ->where('INDEXID', $current_user)
+                    ->where('Term', $term_code)
+                    ->where('Te_Code', $request->tecode)
+                    ->where('form_counter', $request->form_counter)
+                    ->groupBy(['Te_Code', 'Term', 'INDEXID','form_counter', 'deleted_at'])
+                    ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
+
+                // render and return data values via AJAX
+                $data = view('ajax-preview-modal', compact('schedules', 'query'))->render();
+                return response()->json([$data]);
+            }
+
             // check the original wishlist of student in modified forms table first 
             $check_modified_forms = ModifiedForms::where('INDEXID', $current_user)->count();
 
             if ($check_modified_forms > 0) {
                 // query submitted forms based from Modified Forms table
                 $schedules = ModifiedForms::withTrashed()
-                    ->where('Te_Code', $request->tecode)
+                    // ->where('Te_Code', $request->tecode)
                     ->where('INDEXID', $current_user)
                     ->where('form_counter', $request->form_counter)
                     ->where('Term', $term_code)
@@ -114,7 +141,7 @@ class PreviewController extends Controller
                 $query = ModifiedForms::withTrashed()
                     ->where('INDEXID', $current_user)
                     ->where('Term', $term_code)
-                    ->where('Te_Code', $request->tecode)
+                    // ->where('Te_Code', $request->tecode)
                     ->where('form_counter', $request->form_counter)
                     ->groupBy(['Te_Code', 'Term', 'INDEXID','form_counter', 'deleted_at'])
                     ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
@@ -496,31 +523,35 @@ class PreviewController extends Controller
         // collect the courses offered for the term entered
         $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
     
-
+        // insert Codes in Preview TempOrder Table
         foreach ($te_code_collection as $te_code) {
-            $codeSortByCountIndexID = PreviewTempSort::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
+            $codeSortByCountIndexID = PreviewTempSort::select('Code', 'Te_Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code', 'Te_Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
             foreach ($codeSortByCountIndexID as $value) {
             DB::table('tblLTP_preview_TempOrder')->insert(
-                ['Term' => $value->Term, 'Code' => $value->Code, 'CountIndexID' => $value->CountIndexID]
+                ['Term' => $value->Term, 'Code' => $value->Code, 'Te_Code' => $value->Te_Code, 'CountIndexID' => $value->CountIndexID]
             );
             }
         }
+
         foreach ($te_code_collection as $te_code) {
             $getCode = PreviewTempSort::select('Code')->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code')->get()->toArray();
 
             $arrCodeCount = [];
             $arrPerCode = [];
             $arrPerTerm = [];
+            $arrPerTeCode = [];
             $ingredients = [];
             // get the count for each Code
             $j = count($getCode);
             for ($i=0; $i < $j; $i++) { 
                 $perCode = PreviewTempSort::where('Code', $getCode[$i])->value('Code');
                 $perTerm = PreviewTempSort::where('Code', $getCode[$i])->value('Term');
+                $perTeCode = PreviewTempSort::where('Code', $getCode[$i])->value('Te_Code');
                 $countPerCode = PreviewTempSort::where('Code', $getCode[$i])->get()->count();
 
                 $arrPerCode[] = $perCode;
                 $arrPerTerm[] = $perTerm;
+                $arrPerTeCode[] = $perTeCode;
                 $arrCodeCount[] = $countPerCode;
             }
 
@@ -546,7 +577,7 @@ class PreviewController extends Controller
                             // leftjoin sql statement with subquery using raw statement
                             ->leftJoin(DB::raw("(SELECT 
                                   tblLTP_preview.INDEXID FROM tblLTP_preview
-                                  WHERE tblLTP_preview.Term = '$arrPerTerm[$i]') as items"),function($q){
+                                  WHERE tblLTP_preview.Term = '$arrPerTerm[$i]' AND tblLTP_preview.Te_Code = '$arrPerTeCode[$i]') as items"),function($q){
                                     $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
                                     ;
                               })
@@ -586,7 +617,7 @@ class PreviewController extends Controller
             } // end of if statement
         } // end of foreach statement
 
-        $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Term')->orderBy('id')->get()->toArray();
+        $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Te_Code', 'Term')->orderBy('id')->get()->toArray();
         $arr = [];
         $arrStd = [];
         foreach ($checkCodeIfExisting as $value) {
@@ -605,7 +636,7 @@ class PreviewController extends Controller
                     // leftjoin sql statement with subquery using raw statement
                     ->leftJoin(DB::raw("(SELECT 
                           tblLTP_preview.INDEXID FROM tblLTP_preview
-                          WHERE tblLTP_preview.Term = '$value->Term') as items"),function($q){
+                          WHERE tblLTP_preview.Term = '$value->Term' AND tblLTP_preview.Term = '$value->Te_Code') as items"),function($q){
                             $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
                             ;
                       })
@@ -642,65 +673,10 @@ class PreviewController extends Controller
             }
         }
         
-        $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Term')->orderBy('id')->get()->toArray();
-        $arr = [];
-        $arrStd = [];
-        foreach ($checkCodeIfExisting as $value) {
-            $queryPashForCodesArr = Preview::where('Code', $value->Code)->get()->toArray();
-            $arr[] = $queryPashForCodesArr;
-            $queryPashForCodes = Preview::where('Code', $value->Code)->get();
-            
-            if (empty($queryPashForCodesArr)) {
-                echo 'none exists';
-                echo '<br>';
-                // check INDEXID of students if existing in Preview table
-                $students = DB::table('tblLTP_preview_TempSort')
-                    ->select('tblLTP_preview_TempSort.*')
-                    ->where('tblLTP_preview_TempSort.Term', "=",$value->Term)
-                    ->where('tblLTP_preview_TempSort.Code', "=",$value->Code)
-                    // leftjoin sql statement with subquery using raw statement
-                    ->leftJoin(DB::raw("(SELECT 
-                          tblLTP_preview.INDEXID FROM tblLTP_preview
-                          WHERE tblLTP_preview.Term = '$value->Term') as items"),function($q){
-                            $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
-                            ;
-                      })
-                    ->whereNull('items.INDEXID')        
-                    ->get();
-                // $arrStd[] = $students;
-                // save the queried students above to Preview table 
-                foreach ($students as $value) {
-                    $arrStd[] = new  Preview([
-                    'CodeIndexID' => $value->CodeIndexID,
-                    'Code' => $value->Code,
-                    'schedule_id' => $value->schedule_id,
-                    'L' => $value->L,
-                    'profile' => $value->profile,
-                    'Te_Code' => $value->Te_Code,
-                    'Term' => $value->Term,
-                    'INDEXID' => $value->INDEXID,
-                    "created_at" =>  $value->created_at,
-                    "UpdatedOn" =>  $value->UpdatedOn,
-                    'mgr_email' =>  $value->mgr_email,
-                    'mgr_lname' => $value->mgr_lname,
-                    'mgr_fname' => $value->mgr_fname,
-                    'continue_bool' => $value->continue_bool,
-                    'DEPT' => $value->DEPT, 
-                    'eform_submit_count' => $value->eform_submit_count,              
-                    'form_counter' => $value->form_counter,  
-                    'agreementBtn' => $value->agreementBtn,
-                    'flexibleBtn' => $value->flexibleBtn,
-                    ]); 
-                    foreach ($arrStd as $data) {
-                        $data->save();
-                    }     
-                } 
-            }
-        }
-
+        
         // dd($approved_1,$approved_2,$approved_3);
         // PreviewTempSort::truncate();
-        $request->session()->flash('success', 'Validation done!');
+        $request->session()->flash('success', 'Preview done!');
         return redirect()->route('preview-vsa-page-2');
         // dd('Count '.count($approved_collections),$arrPriority3, $arrValue,$ingredients, $ingredients3);
     }
