@@ -516,7 +516,7 @@ class PreviewController extends Controller
                     $data4->save();
                 }     
         }
-dd($ingredients4);
+
         /**
          * Order Codes by count per code
          */

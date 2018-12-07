@@ -22,6 +22,7 @@
             <input name="Term" type="hidden" value="{{ $form->Term }}">
             <input name="L" type="hidden" value="{{ $form->L }}">
             <strong>
+             <div><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></div>
   					 <div id="{{ $form->INDEXID }}" class="priority-status"></div> 
             </strong>
   				</td>
@@ -77,7 +78,7 @@ $(document).ready(function () {
 
       $.post('{{ route('ajax-preview-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
           console.log(data);
-          $('.modal-body-schedule').html(data)
+          $('.modal-body-schedule').html(data);
       });
     });
 });
@@ -93,7 +94,8 @@ $(document).ready(function () {
         console.log(INDEXID)
         $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID, 'L':L, 'Term':Term, '_token':token }, function(data) {
           console.log(data)
-          $('#'+INDEXID).html(data)
+          $('.fa-spin').addClass('hidden');
+          $('#'+INDEXID).html(data);
         });
         arr.push(INDEXID); //insert values to array per iteration
     });

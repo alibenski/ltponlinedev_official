@@ -5,6 +5,11 @@
 @stop
 @section('content')
 <div class="row">
+	<div class="callout callout-warning col-sm-12">
+		<h4>Page to convoke students to take a placement examination</h4>
+	</div>
+</div>
+<div class="row">
 	<div class="col-sm-6">
 	<form method="POST" action="{{ route('placement-form.update', $placement_form->id) }}">
 	{{ csrf_field() }}
