@@ -484,8 +484,10 @@ class PreviewController extends Controller
         
 
         $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
-        // uniwue query should be 'Code' not 'INDEXID' to separate enrolments to different language course and schedule 
-        $approved_collections_placement = $approved_collections_placement->unique('INDEXID')->values()->all();
+        // unique query should not be implemented to separate enrolments to different language course and schedule in placement test forms
+        $approved_collections_placement = $approved_collections_placement
+                                            // ->unique('INDEXID')
+                                            ->values()->all();
 
         $ingredients4 =[];
         foreach ($approved_collections_placement as $value4) {
@@ -514,7 +516,7 @@ class PreviewController extends Controller
                     $data4->save();
                 }     
         }
-
+dd($ingredients4);
         /**
          * Order Codes by count per code
          */

@@ -40,15 +40,15 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
-        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('INDEXID', '990973')->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->orderBy('created_at', 'asc')->get();
 
-        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('INDEXID', '990973')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
 
-        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->where('INDEXID', '990973')->orderBy('created_at', 'asc')->get();
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->orderBy('created_at', 'asc')->get();
 
         $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); 
-        $approved_collections_placement = $approved_collections_placement->unique('Te_Code')->values()->all();
-
+        $approved_collections_placement = $approved_collections_placement->values()->all();
+dd($approved_collections_placement);
         $ingredients4 =[];
         foreach ($approved_collections_placement as $value4) {
             $ingredients4[] = new  PreviewTempSort([
