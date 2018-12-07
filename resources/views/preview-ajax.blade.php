@@ -3,7 +3,9 @@
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
-	            <th>Name</th>
+              <th>Name</th>
+              <th>Email</th>
+	            <th>Contact No.</th>
 	            <th>Priority</th>
               <th>Flexible?</th>
               <th>Schedules</th>
@@ -16,11 +18,16 @@
 
   			<tr>
   				<td>
-  				  @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
+            @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
+          <td>
+  				  @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
+          <td>
+            @if(empty($form->users->sddextr->PHONE)) None @else {{ $form->users->sddextr->PHONE }} @endif </td>
   				<td>
             <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
             <input name="Term" type="hidden" value="{{ $form->Term }}">
             <input name="L" type="hidden" value="{{ $form->L }}">
+            <input name="CodeIndexID" type="hidden" value="{{ $form->CodeIndexID }}">
             <strong>
              <div><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></div>
   					 <div id="{{ $form->INDEXID }}" class="priority-status"></div> 
@@ -90,9 +97,10 @@ $(document).ready(function () {
         var INDEXID = $(this).val();
         var Term = $("input[name='Term']").val();
         var L = $("input[name='L']").val();
+        var CodeIndexID = $("input[name='CodeIndexID']").val();
         var token = $("input[name='_token']").val();
         console.log(INDEXID)
-        $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID, 'L':L, 'Term':Term, '_token':token }, function(data) {
+        $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID, 'L':L, 'Term':Term, 'CodeIndexID':CodeIndexID, '_token':token }, function(data) {
           console.log(data)
           $('.fa-spin').addClass('hidden');
           $('#'+INDEXID).html(data);

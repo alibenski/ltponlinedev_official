@@ -68,11 +68,16 @@ class PreviewController extends Controller
                 ->where('INDEXID', $request->INDEXID)
                 ->count();
 
-        if ($student_reenrolled > 0) {
-            $data = 're-enrolment';
-        } else {
-            $data = 'not a re-enrolment';
-        }
+        $priority_status = Preview::where('CodeIndexID', $request->CodeIndexID)->first();
+        $data = $priority_status->PS;
+        // if ($priority_status->PS == 1) {
+        //     $data = 're-enrolment';
+        
+        // // if ($student_reenrolled > 0) {
+        // //     $data = 're-enrolment';
+        // } else {
+        //     $data = 'not a re-enrolment';
+        // }
 
         return response()->json($data);
     }
@@ -89,7 +94,8 @@ class PreviewController extends Controller
                     $form_info_arr[] = $value;
                 }
         }
-        $form_info = collect($form_info_arr)->sortBy('created_at');
+        // $form_info = collect($form_info_arr)->sortBy('created_at');
+        $form_info = collect($form_info_arr);
 
         $data = view('preview-ajax', compact('student', 'form_info'))->render();
         return response()->json([$data]);
@@ -340,6 +346,7 @@ class PreviewController extends Controller
                 'form_counter' => $value->form_counter,  
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
+                'PS' => 1,
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -404,6 +411,7 @@ class PreviewController extends Controller
                 'form_counter' => $value->form_counter,  
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
+                'PS' => 2,
                 ]); 
                     foreach ($ingredients2 as $data2) {
                         $data2->save();
@@ -452,6 +460,7 @@ class PreviewController extends Controller
                 'form_counter' => $value->form_counter,  
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
+                'PS' => 3,
                 ]); 
                     foreach ($ingredients3 as $data) {
                         $data->save();
@@ -511,6 +520,7 @@ class PreviewController extends Controller
             'form_counter' => $value4->form_counter,  
             'agreementBtn' => $value4->agreementBtn,
             'flexibleBtn' => $value4->flexibleBtn,
+            'PS' => 4,
             ]); 
                 foreach ($ingredients4 as $data4) {
                     $data4->save();
@@ -610,6 +620,7 @@ class PreviewController extends Controller
                             'form_counter' => $value->form_counter,  
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
+                            'PS' => $value->PS,
                             ]); 
                             foreach ($arrSaveToPash as $data) {
                                 $data->save();
@@ -668,6 +679,7 @@ class PreviewController extends Controller
                     'form_counter' => $value->form_counter,  
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'PS' => $value->PS,
                     ]); 
                     foreach ($arrStd as $data) {
                         $data->save();
