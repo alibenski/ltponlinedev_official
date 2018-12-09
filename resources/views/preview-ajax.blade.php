@@ -3,6 +3,7 @@
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
+              <th>#</th>
               <th>Name</th>
               <th>Email</th>
 	            <th>Contact No.</th>
@@ -17,6 +18,9 @@
         @foreach($form_info as $form)
 
   			<tr>
+          <td>
+            <div class="counter"></div>
+          </td>
   				<td>
             @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
           <td>
@@ -30,7 +34,7 @@
             <input name="CodeIndexID" type="hidden" value="{{ $form->CodeIndexID }}">
             <strong>
              <div><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></div>
-  					 <div id="{{ $form->INDEXID }}" class="priority-status"></div> 
+  					 <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
             </strong>
   				</td>
   				<td>
@@ -84,7 +88,7 @@ $(document).ready(function () {
       var token = $("input[name='_token']").val();      
 
       $.post('{{ route('ajax-preview-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
-          console.log(data);
+          // console.log(data);
           $('.modal-body-schedule').html(data);
       });
     });
@@ -92,20 +96,28 @@ $(document).ready(function () {
 </script>
 <script>
 $(document).ready(function () {
+    var counter = 0;
+    $('.counter').each(function() {
+        counter++;
+        $(this).attr('id', counter);
+        $('#'+counter).html(counter);
+        console.log(counter)
+    });    
+
     var arr = [];
-    $('input[name="INDEXID"]').each(function(){
-        var INDEXID = $(this).val();
+    $('input[name="CodeIndexID"]').each(function(){
+        var CodeIndexID = $(this).val();
         var Term = $("input[name='Term']").val();
         var L = $("input[name='L']").val();
-        var CodeIndexID = $("input[name='CodeIndexID']").val();
+        var INDEXID = $("input[name='INDEXID']").val();
         var token = $("input[name='_token']").val();
-        console.log(INDEXID)
+        console.log(CodeIndexID)
         $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID, 'L':L, 'Term':Term, 'CodeIndexID':CodeIndexID, '_token':token }, function(data) {
           console.log(data)
           $('.fa-spin').addClass('hidden');
-          $('#'+INDEXID).html(data);
+          $('#'+CodeIndexID).html(data);
         });
-        arr.push(INDEXID); //insert values to array per iteration
+        arr.push(CodeIndexID); //insert values to array per iteration
     });
     console.log(arr)
 });

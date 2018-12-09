@@ -69,15 +69,19 @@ class PreviewController extends Controller
                 ->count();
 
         $priority_status = Preview::where('CodeIndexID', $request->CodeIndexID)->first();
-        $data = $priority_status->PS;
-        // if ($priority_status->PS == 1) {
-        //     $data = 're-enrolment';
-        
-        // // if ($student_reenrolled > 0) {
-        // //     $data = 're-enrolment';
-        // } else {
-        //     $data = 'not a re-enrolment';
-        // }
+        // $data = $priority_status->PS;
+        if ($priority_status->PS == 1) {
+            $data = '1: Re-enrolment';
+        } 
+        if ($priority_status->PS == 2) {
+            $data = '2: In Waitlist';
+        }
+        if ($priority_status->PS == 3){
+            $data = '3: Within 2 Terms/Not Re-enrolment';
+        }
+        if ($priority_status->PS == 4) {
+            $data = '4: Placement Forms/Others';
+        }
 
         return response()->json($data);
     }
@@ -94,8 +98,8 @@ class PreviewController extends Controller
                     $form_info_arr[] = $value;
                 }
         }
-        // $form_info = collect($form_info_arr)->sortBy('created_at');
-        $form_info = collect($form_info_arr);
+        $form_info = collect($form_info_arr)->sortBy('id');
+        // $form_info = collect($form_info_arr);
 
         $data = view('preview-ajax', compact('student', 'form_info'))->render();
         return response()->json([$data]);
