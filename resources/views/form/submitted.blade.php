@@ -102,8 +102,8 @@
                                         @endslot
                                         @slot('buttonoperation')
                                           <button type="button" class="btn btn-default btn-space" data-dismiss="modal">Back</button>
-                                          <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
-                                              <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space">
+                                          <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}" class="form-prevent-multi-submit">
+                                              <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space button-prevent-multi-submit">
                                               <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
                                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                                              {{ method_field('DELETE') }}
@@ -133,12 +133,12 @@
                     <h5>@if($plform->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif</h5> 
                     <h5>Language: <strong>{{ $plform->languages->name }}</strong></h5>
                     <h5>@if($plform->L == 'F')Test Date: Online from <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> to <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam_end)) }}</strong> @else Test Date: <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> @endif</h5>
-                    <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}">
+                    <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}" class="form-prevent-multi-submit">
                         <input type="submit" @if (is_null($plform->deleted_at))
                           value="Cancel Placement Test"
                         @else
                           value="Cancelled"
-                        @endif  class="btn btn-danger btn-space" @if (is_null($plform->deleted_at))
+                        @endif  class="btn btn-danger btn-space button-prevent-multi-submit" @if (is_null($plform->deleted_at))
                           
                         @else
                           disabled="" 
