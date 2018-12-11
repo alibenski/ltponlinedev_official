@@ -691,7 +691,98 @@ class PreviewController extends Controller
                 } 
             }
         }
+   
+/******************************************************************************/
+    
+        /*
+         Start process of creating classes based on number of students assigned per course-schedule 
+         */
+        $getCodeForSectionNo = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get();
+
+        $arrCountStdPerCode = [];
+        foreach ($getCodeForSectionNo as $value) {
+            // query student count who are not yet assigned to a class section (null)
+            $countStdPerCode = Preview::where('Code', $value->Code)->where('CodeIndexIDClass', null)->get()->count();
+            $arrCountStdPerCode[] = $countStdPerCode;
+        }
         
+        // calculate sum per code and divide by 14 or 15 for number of classes
+        $num_classes =[];
+        for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
+            $num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
+        }
+        
+        $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+        $arrGetCode = [];
+        $arrGetDetails = [];
+        
+        foreach ($getCode as $valueCode) {
+            $arrGetCode[] = $valueCode->Code;
+            
+            // update record in CourseSchedule table to indicate that classroom has been created for this cs_unique 
+            // $updateCourseSchedule = CourseSchedule::where('cs_unique', $valueCode->Code)->update(['Code' => 'Y']);
+
+            $getDetails = CourseSchedule::where('cs_unique', $valueCode->Code)->get();
+            foreach ($getDetails as $valueDetails) {
+                $arrGetDetails[] = $valueDetails;
+            }
+        }
+
+        // $num_classes=[5,2];
+        $ingredients = [];
+        $k = count($num_classes);
+        $arrExistingSection = [];
+        $arr = [];
+        
+        for ($i=0; $i < count($num_classes); $i++) { 
+            // check existing section(s) first
+            // value of section is 1, if $existingSection is empty
+            $counter = $num_classes[$i];
+            $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
+            $arrExistingSection[] = $existingSection;
+            // if not, get existing value of sectionNo
+            if (!empty($existingSection)) {
+                $sectionNo = $existingSection[0]['sectionNo'] + 1;
+                $sectionNo2 = $existingSection[0]['sectionNo'] + 1;
+                $arr[] = $sectionNo;
+                // var_dump($sectionNo);
+
+                for ($i2=0; $i2 < $counter; $i2++) { 
+                    $ingredients[] = new  Classroom([
+                        'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                        'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                        'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                        'L' => $arrGetDetails[$i]->L, 
+                        'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                        'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                        'sectionNo' => $sectionNo2++,
+                        ]);
+                    foreach ($ingredients as $data) {
+                                $data->save();
+                    }
+                }
+            } 
+            else {
+                $sectionNo = 1;
+                $sectionNo2 = 1;
+                for ($i2=0; $i2 < $counter; $i2++) { 
+                    $ingredients[] = new  Classroom([
+                        'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                        'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                        'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                        'L' => $arrGetDetails[$i]->L, 
+                        'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                        'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                        'sectionNo' => $sectionNo2++,
+                        ]);
+                    foreach ($ingredients as $data) {
+                                $data->save();
+                    }
+                }
+            }
+                // var_dump('section value starts at: '.$sectionNo);
+        }
+        $this->assignAndAnalyze($getCode);
         
         // dd($approved_1,$approved_2,$approved_3);
         // PreviewTempSort::truncate();
@@ -869,7 +960,7 @@ class PreviewController extends Controller
     		}
     	}
 		
-return redirect()->route('preview-course-3');
+        return redirect()->route('preview-course-3');
 
 		/*
 		 Start process of creating classes based on number of students assigned per course-schedule 
@@ -1051,5 +1142,19 @@ return redirect()->route('preview-course-3');
         }
         // else statement if necessary
         // dd($arrCountCodeClass,$arrGetOrphanStudents, $arrNotCompleteClasses, $arrNotCompleteCount, $arrjNotCompleteCount, $c);
+    }
+
+    public function previewClassrooms(Request $request)
+    {
+        $arr = [];
+        $classrooms = Preview::where('Code', 'F9R1-8-191')->select('CodeClass')->groupBy('CodeClass')->get();
+        foreach ($classrooms as $class) {
+            $students = Preview::where('CodeClass', $class->CodeClass)->get();
+            $arr[] = $students;
+            // var_dump($arr);
+        }
+
+        
+        return view('preview-classrooms', compact('arr'));
     }
 }

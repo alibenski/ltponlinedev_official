@@ -12,33 +12,55 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-sm-12">
-			<h1>Classes - Assign Rooms and Teachers</h1>
-		</div>
-
-		<div class="form-group">
-        <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
-          <label name="Te_Term" class="col-sm-4 control-label" style="margin: 5px 5px;">Term: </label>
-            <select class="col-sm-8 form-control select2-filter" name="Te_Term" autocomplete="off" required="required" style="width: 100%">
-                <option value="">--- Select Term ---</option>
-                @foreach ($terms as $value)
-                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
-                @endforeach
-            </select>
-            <div class="form-group col-sm-12 add-margin">           
-                <button type="submit" class="btn btn-success">Submit</button>
-                <a href="/admin/classrooms/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
-            </div>
-        </form>
+        <div class="alert bg-gray col-sm-12">
+            <h4 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Classes - Assign Rooms and Teachers</strong></h4>
         </div>
-		{{-- <div class="col-md-2">
-			<a href="{{ route('classrooms.create') }}" class="btn btn-block btn-primary btn-h1-spacing">Create Classes</a>
 
-		</div> --}}
-		<div class="col-sm-12">
-			<hr>
-		</div>
-	</div>
+        @include('admin.partials._termSessionMsg')
+        
+        <div class="col-sm-12">
+            <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
+
+                @if(Session::has('Term'))
+                <input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
+                    
+                    <div class="form-group">
+                        <label for="L" class="control-label"> Language:</label>
+                        <div class="col-sm-12">
+                        @foreach ($languages as $id => $name)
+                        <div class="col-sm-4">
+                            <div class="input-group"> 
+                              <span class="input-group-addon">       
+                                <input type="radio" name="L" value="{{ $id }}" >                 
+                              </span>
+                                <label type="text" class="form-control">{{ $name }}</label>
+                            </div>
+                        </div>
+                        @endforeach 
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Te_Code_New" class="control-label"> Course: </label>
+                        <div class="form-group">
+                          <div class="dropdown">
+                            <select class="col-md-10 form-control select2-basic-single" style="width: 100%;" name="Te_Code_New" autocomplete="off">
+                                <option value="">--- Select ---</option>
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+
+                <div class="form-group col-sm-12 add-margin">           
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <a href="/admin/classrooms/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+                @endif
+            </form>
+        </div>
+
+	</div> 
+    {{-- End of Filter Row --}}
 
 	<div class="row">
 		<div class="col-sm-10 class-sm-offset-2">
@@ -72,7 +94,7 @@
 								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
                             </td>
 							<td>
-								<button class="edit-modal btn btn-info" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-edit"></span> Create</button>
+								<button class="edit-modal btn btn-info" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-edit"></span> Add Section</button>
 							</td>
 						</tr>
 					@endforeach
@@ -436,11 +458,33 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <!-- icheck checkboxes -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select2-basic-single').select2({
+    placeholder: "Select Filter",
+    });
+});
+</script>
+<script type="text/javascript">
+  $("input[name='L']").click(function(){
+      var L = $(this).val();
+      var term = $("input[name='term_id']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax') }}", 
+          method: 'POST',
+          data: {L:L, term_id:term, _token:token},
+          success: function(data, status) {
+            $("select[name='Te_Code_New']").html('');
+            $("select[name='Te_Code_New']").html(data.options);
+          }
+      });
+  }); 
+</script>
 
 <script>
-        $(document).ready(function() {
-            $('.select2-filter').select2({placeholder: "Select Here",});
-        });
     // Show a post
         $(document).on('click', '.show-modal', function() {
             $('.modal-title').text('Show');

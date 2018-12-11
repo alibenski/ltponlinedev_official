@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('preview-vsa-page-1', ['as'=>'preview-vsa-page-1','uses'=>'PreviewController@vsaPage1']);
     Route::get('preview-vsa-page-2', ['as'=>'preview-vsa-page-2','uses'=>'PreviewController@vsaPage2']);
+    Route::get('preview-classrooms', ['as'=>'preview-classrooms','uses'=>'PreviewController@previewClassrooms']);
 
     Route::any('preview-validate-page', ['as'=>'preview-validate-page','uses'=>'PreviewController@getApprovedEnrolmentForms']);
 

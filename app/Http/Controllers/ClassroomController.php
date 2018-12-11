@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Classroom;
+use App\Course;
+use App\CourseSchedule;
+use App\Day;
+use App\Room;
+use App\Schedule;
+use App\Teachers;
+use App\Term;
+use App\Time;
+use App\User;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use App\Course;
-use App\User;
-use App\Schedule;
-use App\Classroom;
-use App\CourseSchedule;
-use App\Term;
-use App\Room;
-use App\Teachers;
-use DB;
-use Carbon\Carbon;
-use Validator;
+use Illuminate\Support\Facades\Session;
 use Response;
-use App\Day;
-use App\Time;
+use Validator;
 
 class ClassroomController extends Controller
 {
@@ -28,13 +29,13 @@ class ClassroomController extends Controller
      */
     public function index(Request $request)
     {
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $languages = DB::table('languages')->pluck("name","code")->all();
         $classrooms = new CourseSchedule;
         // $currentQueries = \Request::query();
         $queries = [];
 
         $columns = [
-            'Te_Term',
+            'L', 'Te_Code_New'
         ];
 
         foreach ($columns as $column) {
@@ -45,13 +46,17 @@ class ClassroomController extends Controller
 
         } 
 
-        $classrooms = $classrooms->orderBy('id','desc')->paginate(10)->appends($queries);
+            if (Session::has('Term')) {
+                    $classrooms = $classrooms->where('Te_Term', Session::get('Term') );
+                    $queries['Term'] = Session::get('Term');
+            }
+        $classrooms = $classrooms->orderBy('id','asc')->paginate(10)->appends($queries);
 
         $rooms = Room::all();
         $teachers = Teachers::where('In_Out', '1')->get();
         $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
         $etimes = Time::pluck("End_Time","End_Time")->all(); 
-        return view('classrooms.index')->withClassrooms($classrooms)->withRooms($rooms)->withTeachers($teachers)->withTerms($terms)->withBtimes($btimes)->withEtimes($etimes);
+        return view('classrooms.index')->withClassrooms($classrooms)->withRooms($rooms)->withTeachers($teachers)->withBtimes($btimes)->withEtimes($etimes)->withLanguages($languages);
     }
 
     /**
