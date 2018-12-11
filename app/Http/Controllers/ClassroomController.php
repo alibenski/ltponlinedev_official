@@ -75,6 +75,7 @@ class ClassroomController extends Controller
         $rooms = Room::pluck("Rl_Room","Rl_Room")->all();
         return view('classrooms.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withRooms($rooms);
     }
+    
     protected $rules =
     [
         'sectionNo' => 'required|',

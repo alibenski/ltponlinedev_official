@@ -70,8 +70,9 @@
                 </div>
 
 				<div class="days-rooms-section">
-					<label class="col-sm-12">Choose Days:</label>
+					<label class="col-sm-12">Assign Room and Time:</label>
 
+					@if(!empty($classroom->Te_Mon_BTime))
 					<div class="form-group monday col-sm-12">
 	                    <div class="col-sm-12">
 	                        <div class="checkbox">
@@ -123,7 +124,9 @@
 	                        </div>
 	                    </div>
                     </div>
+					@endif
 
+					@if(!empty($classroom->Te_Tue_BTime))
                     <div class="form-group tuesday col-sm-12">
 	                    <div class="col-sm-12">
 	                        <div class="checkbox">    
@@ -174,7 +177,9 @@
                             </div>
                         </div>
                     </div>
-
+					@endif
+					
+					@if(!empty($classroom->Te_Wed_BTime))
                     <div class="form-group wednesday col-sm-12">
                     	<div class="col-sm-12">
 	                        <div class="checkbox">    
@@ -225,7 +230,9 @@
                             </div>
                         </div>
                     </div>
+                    @endif
 
+                    @if(!empty($classroom->Te_Thu_BTime))
                     <div class="form-group thursday col-sm-12">
 	                    <div class="col-sm-12">
 	                        <div class="checkbox"> 
@@ -276,7 +283,9 @@
                             </div>
                         </div>
                     </div>
+                    @endif
 
+                    @if(!empty($classroom->Te_Fri_BTime))
                     <div class="form-group friday col-sm-12">
 	                    <div class="col-sm-12">
 	                        <div class="checkbox"> 
@@ -327,6 +336,8 @@
                             </div>
                         </div>
                 	</div>
+                	@endif
+
                 </div> 
 			</div> 
         </div>

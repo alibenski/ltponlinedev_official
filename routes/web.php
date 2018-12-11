@@ -216,6 +216,7 @@ Route::get('check-selfpay-placement-entries-ajax', ['as'=>'check-selfpay-placeme
 Route::get('get-section-no-ajax', ['as'=>'get-section-no-ajax','uses'=>'AjaxController@ajaxGetSectionNo']);
 Route::get('show-section-ajax', ['as'=>'show-section-ajax','uses'=>'AjaxController@ajaxShowSection']);
 Route::post('delete-day-param-ajax', ['as'=>'delete-day-param-ajax','uses'=>'AjaxController@ajaxDeleteDayParam']);
+Route::get('get-section-param-ajax', ['as'=>'get-section-param-ajax','uses'=>'AjaxController@ajaxGetSectionParam']);
 
 Route::group(['middleware' => 'open-close-approval-routes'],function(){
     //url routing for manager approval page

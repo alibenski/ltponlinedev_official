@@ -164,6 +164,17 @@ class AjaxController extends Controller
         return response()->json($data); 
     }
 
+    public function ajaxGetSectionParam(Request $request)
+    {
+        if($request->ajax()){            
+            $show_classrooms = Classroom::where('cs_unique', $request->cs_unique)
+            ->first();
+
+            $data = $show_classrooms;
+            return response()->json(['options'=>$data]);
+        }
+    }
+
     /**
      * check if enrolment form is cancelled in submitted forms view
      */

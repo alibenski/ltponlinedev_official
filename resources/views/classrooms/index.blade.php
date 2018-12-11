@@ -552,6 +552,45 @@ $(document).ready(function() {
             })
             .always(function() {
                 console.log("complete");
+            });
+
+
+            $('.monday').removeClass('hidden');
+            $('.tuesday').removeClass('hidden');
+            $('.wednesday').removeClass('hidden');
+            $('.thursday').removeClass('hidden');
+            $('.friday').removeClass('hidden');
+
+            $.ajax({
+                url: '{{ route('get-section-param-ajax') }}',
+                type: 'GET',
+                data: {'cs_unique' : $('#cs_unique').val(),
+                },
+            })
+            .done(function(data) {
+                console.log("get classroom param success");
+                console.log(data.options);
+                        if (!data.options.Te_Mon_BTime) {
+                            $('.monday').addClass('hidden');
+                        }
+                        if (!data.options.Te_Tue_BTime) {
+                            $('.tuesday').addClass('hidden');
+                        }
+                        if (!data.options.Te_Wed_BTime) {
+                            $('.wednesday').addClass('hidden');
+                        }
+                        if (!data.options.Te_Thu_BTime) {
+                            $('.thursday').addClass('hidden');
+                        }
+                        if (!data.options.Te_Fri_BTime) {
+                            $('.friday').addClass('hidden');
+                        }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
             });     
         });
 
