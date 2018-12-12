@@ -423,6 +423,100 @@ class PreviewController extends Controller
             }   
         }
 
+        /**
+         * Get all approved/ validated placement forms 
+         * and compare to waitlist table to set priority 2
+         */
+        // sort enrolment forms by date of submission
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+
+        $approved_0_1_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        // apply unique() method to remove dupes 
+        // apply values() method to reset key series of the array 
+        $approved_1_placement = $approved_0_1_placement->unique('INDEXID')->values()->all(); // becomes an array
+
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_2_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_2_placement = $approved_0_2_placement->unique('INDEXID')->values()->all();
+
+        // !!!!!! add where selfpay_approval == 1 !!!!!!
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_3_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_3_placement = $approved_0_3_placement->unique('INDEXID')->values()->all(); 
+        
+
+        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        // unique query should not be implemented to separate enrolments to different language course and schedule in placement test forms
+        $approved_collections_placement = $approved_collections_placement
+                                            // ->unique('INDEXID')
+                                            ->values()->all();
+dd(count($approved_collections_placement));
+
+        $arrINDEXIDPlacement = [];
+        $arrLPlacement = [];
+        $arrWaitlistedIndexPlacement = [];
+        $arrValuePlacement = [];
+        $countApprovedCollectionsPlacement = count($approved_collections_placement);
+
+        for ($p=0; $p < $countApprovedCollectionsPlacement; $p++) { 
+            $arrINDEXIDPlacement[] = $approved_collections_placement[$p]['INDEXID'];
+        
+            // placement forms priority 2: check each index id if they are in the waitlist table
+            $waitlist_indexids_placement = Waitlist::where('INDEXID', $arrINDEXIDPlacement[$p])->select('INDEXID')->groupBy('INDEXID')->get()->toArray(); 
+
+            $arrWaitlistedIndexPlacement[] = $waitlist_indexids_placement;
+            $waitlist_indexids_placement_filtered = array_filter($waitlist_indexids_placement);
+
+            // iterate to get the index id of staff who are waitlisted
+            foreach($waitlist_indexids_placement_filtered as $item_placement) {
+                foreach ($item_placement as $value_placement) {
+                    $arrValuePlacement[] = $value_placement; // store the waitlisted placement INDEXID values in array
+                }
+            }
+        }
+
+        $arr_placement_forms_waitlisted = [];
+        $placement_ingredients2 = []; 
+        $countArrValuePlacement = count($arrValuePlacement);
+
+        for ($h=0; $h < $countArrValuePlacement; $h++) {
+            // collect priority 2 placement forms 
+            $placement_forms_waitlisted = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $arrValuePlacement[$h])->orderBy('created_at', 'asc')->get();
+
+            $arr_placement_forms_waitlisted[] = $placement_forms_waitlisted;
+
+            // assigning of students to classes and saved in Preview TempSort table
+            foreach ($placement_forms_waitlisted as $value_placement) {
+                $placement_ingredients2[] = new  PreviewTempSort([
+                'CodeIndexID' => $value_placement->CodeIndexID,
+                'Code' => $value_placement->Code,
+                'schedule_id' => $value_placement->schedule_id,
+                'L' => $value_placement->L,
+                'profile' => $value_placement->profile,
+                'Te_Code' => $value_placement->Te_Code,
+                'Term' => $value_placement->Term,
+                'INDEXID' => $value_placement->INDEXID,
+                "created_at" =>  $value_placement->created_at,
+                "UpdatedOn" =>  $value_placement->UpdatedOn,
+                'mgr_email' =>  $value_placement->mgr_email,
+                'mgr_lname' => $value_placement->mgr_lname,
+                'mgr_fname' => $value_placement->mgr_fname,
+                'continue_bool' => $value_placement->continue_bool,
+                'DEPT' => $value_placement->DEPT, 
+                'eform_submit_count' => $value_placement->eform_submit_count,              
+                'form_counter' => $value_placement->form_counter,  
+                'agreementBtn' => $value_placement->agreementBtn,
+                'flexibleBtn' => $value_placement->flexibleBtn,
+                'PS' => 2,
+                ]); 
+                    foreach ($placement_ingredients2 as $placement_data2) {
+                        $placement_data2->save();
+                    }     
+            }   
+        }
+
         $arrValue1_2 = [];
         $arrValue1_2 = array_merge($arrValue, $arrValue2);
 
@@ -475,60 +569,42 @@ class PreviewController extends Controller
         /*
         Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
          */
-        
-        // sort enrolment forms by date of submission
-        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
-
-        $approved_0_1_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
-        // apply unique() method to remove dupes 
-        // apply values() method to reset key series of the array 
-        $approved_1_placement = $approved_0_1_placement->unique('INDEXID')->values()->all(); // becomes an array
-
-        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
-        
-        $approved_0_2_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
-        $approved_2_placement = $approved_0_2_placement->unique('INDEXID')->values()->all();
-
-        // !!!!!! add where selfpay_approval == 1 !!!!!!
-        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
-        
-        $approved_0_3_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
-        $approved_3_placement = $approved_0_3_placement->unique('INDEXID')->values()->all(); 
-        
-
-        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
-        // unique query should not be implemented to separate enrolments to different language course and schedule in placement test forms
-        $approved_collections_placement = $approved_collections_placement
-                                            // ->unique('INDEXID')
-                                            ->values()->all();
-
+        $priority4_not_reset = array_diff($arrINDEXIDPlacement,$arrValuePlacement); // get the difference of INDEXID's between placement waitlisted and other placement forms
+        $priority4 = array_values($priority4_not_reset) ;
+        $countPriority4 = count($priority4); 
         $ingredients4 =[];
-        foreach ($approved_collections_placement as $value4) {
-            $ingredients4[] = new  PreviewTempSort([
-            'CodeIndexID' => $value4->CodeIndexID,
-            'Code' => $value4->Code,
-            'schedule_id' => $value4->schedule_id,
-            'L' => $value4->L,
-            'profile' => $value4->profile,
-            'Te_Code' => $value4->Te_Code,
-            'Term' => $value4->Term,
-            'INDEXID' => $value4->INDEXID,
-            "created_at" =>  $value4->created_at,
-            "UpdatedOn" =>  $value4->UpdatedOn,
-            'mgr_email' =>  $value4->mgr_email,
-            'mgr_lname' => $value4->mgr_lname,
-            'mgr_fname' => $value4->mgr_fname,
-            'continue_bool' => $value4->continue_bool,
-            'DEPT' => $value4->DEPT, 
-            'eform_submit_count' => $value4->eform_submit_count,              
-            'form_counter' => $value4->form_counter,  
-            'agreementBtn' => $value4->agreementBtn,
-            'flexibleBtn' => $value4->flexibleBtn,
-            'PS' => 4,
-            ]); 
-                foreach ($ingredients4 as $data4) {
-                    $data4->save();
-                }     
+        
+        for ($d=0; $d < $countPriority4; $d++) {
+            // collect leftover priority 4 enrolment forms 
+            $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->orderBy('created_at', 'asc')->get();
+
+            foreach ($placement_forms_priority4 as $value4) {
+                $ingredients4[] = new  PreviewTempSort([
+                'CodeIndexID' => $value4->CodeIndexID,
+                'Code' => $value4->Code,
+                'schedule_id' => $value4->schedule_id,
+                'L' => $value4->L,
+                'profile' => $value4->profile,
+                'Te_Code' => $value4->Te_Code,
+                'Term' => $value4->Term,
+                'INDEXID' => $value4->INDEXID,
+                "created_at" =>  $value4->created_at,
+                "UpdatedOn" =>  $value4->UpdatedOn,
+                'mgr_email' =>  $value4->mgr_email,
+                'mgr_lname' => $value4->mgr_lname,
+                'mgr_fname' => $value4->mgr_fname,
+                'continue_bool' => $value4->continue_bool,
+                'DEPT' => $value4->DEPT, 
+                'eform_submit_count' => $value4->eform_submit_count,              
+                'form_counter' => $value4->form_counter,  
+                'agreementBtn' => $value4->agreementBtn,
+                'flexibleBtn' => $value4->flexibleBtn,
+                'PS' => 4,
+                ]); 
+                    foreach ($ingredients4 as $data4) {
+                        $data4->save();
+                    }     
+            }
         }
 
         /**
