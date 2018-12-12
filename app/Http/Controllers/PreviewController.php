@@ -112,7 +112,7 @@ class PreviewController extends Controller
             $term_code = $request->term;
 
             // check the original wishlist of student in placement forms table
-            $check_placement_forms = PlacementForm::where('INDEXID', $current_user)->count();
+            $check_placement_forms = PlacementForm::where('INDEXID', $current_user)->where('Te_Code', $request->tecode)->where('Term', $term_code)->count();
 
             if ($check_placement_forms > 0) {
                 // query submitted forms based from Modified Forms table
@@ -137,7 +137,7 @@ class PreviewController extends Controller
             }
 
             // check the original wishlist of student in modified forms table first 
-            $check_modified_forms = ModifiedForms::where('INDEXID', $current_user)->count();
+            $check_modified_forms = ModifiedForms::where('INDEXID', $current_user)->where('Te_Code', $request->tecode)->where('Term', $term_code)->count();
 
             if ($check_modified_forms > 0) {
                 // query submitted forms based from Modified Forms table
@@ -166,7 +166,8 @@ class PreviewController extends Controller
                 ->where('Te_Code', $request->tecode)
                 ->where('INDEXID', $current_user)
                 ->where('form_counter', $request->form_counter)
-                ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'selfpay_approval' ]);
+                ->where('Term', $term_code)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'selfpay_approval' ]);
 
             $query = Preenrolment::withTrashed()->where('INDEXID', $current_user)
                 ->where('Term', $term_code)
@@ -766,7 +767,7 @@ class PreviewController extends Controller
                 } 
             }
         }
-        
+
         $request->session()->flash('success', 'Preview done!');
         return redirect()->route('preview-vsa-page-2');
 /******************************************************************************/
