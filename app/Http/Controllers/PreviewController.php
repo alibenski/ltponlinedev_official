@@ -451,7 +451,7 @@ class PreviewController extends Controller
         $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
         // unique query should not be implemented to separate enrolments to different language course and schedule in placement test forms
         $approved_collections_placement = $approved_collections_placement
-                                            // ->unique('INDEXID')
+                                            ->unique('INDEXID')
                                             ->values()->all();
 
         $arrINDEXIDPlacement = [];
@@ -573,7 +573,7 @@ class PreviewController extends Controller
         $priority4 = array_values($priority4_not_reset) ;
         $countPriority4 = count($priority4); 
         $ingredients4 =[];
-        
+  
         for ($d=0; $d < $countPriority4; $d++) {
             // collect leftover priority 4 enrolment forms 
             $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->orderBy('created_at', 'asc')->get();
