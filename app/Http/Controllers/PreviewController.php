@@ -452,7 +452,6 @@ class PreviewController extends Controller
         $approved_collections_placement = $approved_collections_placement
                                             // ->unique('INDEXID')
                                             ->values()->all();
-dd(count($approved_collections_placement));
 
         $arrINDEXIDPlacement = [];
         $arrLPlacement = [];
@@ -767,7 +766,9 @@ dd(count($approved_collections_placement));
                 } 
             }
         }
-   
+        
+        $request->session()->flash('success', 'Preview done!');
+        return redirect()->route('preview-vsa-page-2');
 /******************************************************************************/
     
         /*
