@@ -768,8 +768,6 @@ class PreviewController extends Controller
             }
         }
 
-        $request->session()->flash('success', 'Preview done!');
-        return redirect()->route('preview-vsa-page-2');
 /******************************************************************************/
     
         /*
@@ -825,7 +823,7 @@ class PreviewController extends Controller
                 $arr[] = $sectionNo;
                 // var_dump($sectionNo);
 
-                for ($i2=0; $i2 < $counter; $i2++) { 
+                for ($i2=1; $i2 < $counter; $i2++) { 
                     $ingredients[] = new  Classroom([
                         'Code' => $arrGetCode[$i].'-'.$sectionNo++,
                         'Te_Term' => $arrGetDetails[$i]->Te_Term,
@@ -834,12 +832,35 @@ class PreviewController extends Controller
                         'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
                         'schedule_id' => $arrGetDetails[$i]->schedule_id,
                         'sectionNo' => $sectionNo2++,
+                        'Te_Mon' => 2,
+                        'Te_Mon_Room' => $existingSection[0]['Te_Mon_Room'],
+                        'Te_Mon_BTime' => $existingSection[0]['Te_Mon_BTime'],
+                        'Te_Mon_ETime' => $existingSection[0]['Te_Mon_ETime'],
+                        'Te_Tue' => 3,
+                        'Te_Tue_Room' => $existingSection[0]['Te_Tue_Room'],
+                        'Te_Tue_BTime' => $existingSection[0]['Te_Tue_BTime'],
+                        'Te_Tue_ETime' => $existingSection[0]['Te_Tue_ETime'],
+                        'Te_Wed' => 4,
+                        'Te_Wed_Room' => $existingSection[0]['Te_Wed_Room'],
+                        'Te_Wed_BTime' => $existingSection[0]['Te_Wed_BTime'],
+                        'Te_Wed_ETime' => $existingSection[0]['Te_Wed_ETime'],
+                        'Te_Thu' => 5,
+                        'Te_Thu_Room' => $existingSection[0]['Te_Thu_Room'],
+                        'Te_Thu_BTime' => $existingSection[0]['Te_Thu_BTime'],
+                        'Te_Thu_ETime' => $existingSection[0]['Te_Thu_ETime'],
+                        'Te_Fri' => 6,
+                        'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
+                        'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
+                        'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
                         ]);
                     foreach ($ingredients as $data) {
                                 $data->save();
                     }
                 }
             } 
+    /**
+     * debug and refactor else state so that it gets the attributes from schedules table
+     */
             else {
                 $sectionNo = 1;
                 $sectionNo2 = 1;
