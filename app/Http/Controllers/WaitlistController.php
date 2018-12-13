@@ -40,182 +40,258 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
-        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->orderBy('created_at', 'asc')->get();
+        /*
+         Start process of creating classes based on number of students assigned per course-schedule 
+         */
+        $getCodeForSectionNo = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get();
 
-        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
-
-        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->orderBy('created_at', 'asc')->get();
-
-        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); 
-        $approved_collections_placement = $approved_collections_placement->values()->all();
-dd($approved_collections_placement);
-        $ingredients4 =[];
-        foreach ($approved_collections_placement as $value4) {
-            $ingredients4[] = new  PreviewTempSort([
-            'CodeIndexID' => $value4->CodeIndexID,
-            'Code' => $value4->Code,
-            'schedule_id' => $value4->schedule_id,
-            'L' => $value4->L,
-            'profile' => $value4->profile,
-            'Te_Code' => $value4->Te_Code,
-            'Term' => $value4->Term,
-            'INDEXID' => $value4->INDEXID,
-            "created_at" =>  $value4->created_at,
-            "UpdatedOn" =>  $value4->UpdatedOn,
-            'mgr_email' =>  $value4->mgr_email,
-            'mgr_lname' => $value4->mgr_lname,
-            'mgr_fname' => $value4->mgr_fname,
-            'continue_bool' => $value4->continue_bool,
-            'DEPT' => $value4->DEPT, 
-            'eform_submit_count' => $value4->eform_submit_count,              
-            'form_counter' => $value4->form_counter,  
-            'agreementBtn' => $value4->agreementBtn,
-            'flexibleBtn' => $value4->flexibleBtn,
-            ]); 
-                foreach ($ingredients4 as $data4) {
-                    // $data4->save();
-                }     
+        $arrCountStdPerCode = [];
+        foreach ($getCodeForSectionNo as $value) {
+            // query student count who are not yet assigned to a class section (null)
+            $countStdPerCode = Preview::where('Code', $value->Code)->where('CodeIndexIDClass', null)->get()->count();
+            $arrCountStdPerCode[] = $countStdPerCode;
         }
-        dd($ingredients4);
+        
 
-        $getCode = PreviewTempSort::select('Code')->where('Te_Code', 'S7R1')->groupBy('Code')->get()->toArray();
+        // calculate sum per code and divide by 14 or 15 for number of classes
+    $num_classes =[];
 
-            $arrCodeCount = [];
-            $arrPerCode = [];
-            $arrPerTerm = [];
-            $arrPerTeCode = [];
-            $ingredients = [];
-            // get the count for each Code
-            $j = count($getCode);
-            for ($i=0; $i < $j; $i++) { 
-                $perCode = PreviewTempSort::where('Code', $getCode[$i])->value('Code');
-                $perTerm = PreviewTempSort::where('Code', $getCode[$i])->value('Term');
-                $perTeCode = PreviewTempSort::where('Code', $getCode[$i])->value('Te_Code');
-                $countPerCode = PreviewTempSort::where('Code', $getCode[$i])->get()->count();
+        for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
+            $num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
+        }
+dd($num_classes);
+        // divide total number of students by $num_class of the Code
+    $num_students_per_class = [];
+        for ($q=0; $q < count($arrCountStdPerCode); $q++) { 
+            $num_students_per_class[] = intval(ceil($arrCountStdPerCode[$q]/$num_classes[$q]));
+        }
+   
+    $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+        $arrGetCode = [];
+        $arrGetDetails = [];
+        
+        foreach ($getCode as $valueCode) {
+            $arrGetCode[] = $valueCode->Code;
+            
+            // update record in CourseSchedule table to indicate that classroom has been created for this cs_unique 
+            // $updateCourseSchedule = CourseSchedule::where('cs_unique', $valueCode->Code)->update(['Code' => 'Y']);
 
-                $arrPerCode[] = $perCode;
-                $arrPerTerm[] = $perTerm;
-                $arrPerTeCode[] = $perTeCode;
-                $arrCodeCount[] = $countPerCode;
+            $getDetails = CourseSchedule::where('cs_unique', $valueCode->Code)->get();
+            foreach ($getDetails as $valueDetails) {
+                $arrGetDetails[] = $valueDetails;
             }
+        }
 
-            if (!empty($arrCodeCount)) {
+        // $num_classes=[5,2];
+        $ingredients = [];
+        $k = count($num_classes);
+        $arrExistingSection = [];
+        $arr = [];
+        
+        for ($i=0; $i < count($num_classes); $i++) { 
+            // check existing section(s) first
+            // value of section is 1, if $existingSection is empty
+            $counter = $num_classes[$i];
+            $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
+
+            $arrExistingSection[] = $existingSection;
+            // if not, get existing value of sectionNo
+            if (count($existingSection) < $counter) {
+                $sectionNo = $existingSection[0]['sectionNo'] + 1;
+                $sectionNo2 = $existingSection[0]['sectionNo'] + 1;
+                $arr[] = $sectionNo;
+                // var_dump($sectionNo);
+
+                for ($i2=1; $i2 < $counter; $i2++) { 
+                    $ingredients[] = new  Classroom([
+                        'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+                        'Te_Term' => $arrGetDetails[$i]->Te_Term,
+                        'cs_unique' => $arrGetDetails[$i]->cs_unique,
+                        'L' => $arrGetDetails[$i]->L, 
+                        'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+                        'schedule_id' => $arrGetDetails[$i]->schedule_id,
+                        'sectionNo' => $sectionNo2++,
+                        'Te_Mon' => 2,
+                        'Te_Mon_Room' => $existingSection[0]['Te_Mon_Room'],
+                        'Te_Mon_BTime' => $existingSection[0]['Te_Mon_BTime'],
+                        'Te_Mon_ETime' => $existingSection[0]['Te_Mon_ETime'],
+                        'Te_Tue' => 3,
+                        'Te_Tue_Room' => $existingSection[0]['Te_Tue_Room'],
+                        'Te_Tue_BTime' => $existingSection[0]['Te_Tue_BTime'],
+                        'Te_Tue_ETime' => $existingSection[0]['Te_Tue_ETime'],
+                        'Te_Wed' => 4,
+                        'Te_Wed_Room' => $existingSection[0]['Te_Wed_Room'],
+                        'Te_Wed_BTime' => $existingSection[0]['Te_Wed_BTime'],
+                        'Te_Wed_ETime' => $existingSection[0]['Te_Wed_ETime'],
+                        'Te_Thu' => 5,
+                        'Te_Thu_Room' => $existingSection[0]['Te_Thu_Room'],
+                        'Te_Thu_BTime' => $existingSection[0]['Te_Thu_BTime'],
+                        'Te_Thu_ETime' => $existingSection[0]['Te_Thu_ETime'],
+                        'Te_Fri' => 6,
+                        'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
+                        'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
+                        'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                        ]);
+                    foreach ($ingredients as $data) {
+                                $data->save();
+                    }
+                }
+            }
+            // if (!empty($existingSection)) {
+            //     $sectionNo = $existingSection[0]['sectionNo'] + 1;
+            //     $sectionNo2 = $existingSection[0]['sectionNo'] + 1;
+            //     $arr[] = $sectionNo;
+            //     // var_dump($sectionNo);
+
+            //     for ($i2=1; $i2 < $counter; $i2++) { 
+            //         $ingredients[] = new  Classroom([
+            //             'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+            //             'Te_Term' => $arrGetDetails[$i]->Te_Term,
+            //             'cs_unique' => $arrGetDetails[$i]->cs_unique,
+            //             'L' => $arrGetDetails[$i]->L, 
+            //             'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+            //             'schedule_id' => $arrGetDetails[$i]->schedule_id,
+            //             'sectionNo' => $sectionNo2++,
+            //             'Te_Mon' => 2,
+            //             'Te_Mon_Room' => $existingSection[0]['Te_Mon_Room'],
+            //             'Te_Mon_BTime' => $existingSection[0]['Te_Mon_BTime'],
+            //             'Te_Mon_ETime' => $existingSection[0]['Te_Mon_ETime'],
+            //             'Te_Tue' => 3,
+            //             'Te_Tue_Room' => $existingSection[0]['Te_Tue_Room'],
+            //             'Te_Tue_BTime' => $existingSection[0]['Te_Tue_BTime'],
+            //             'Te_Tue_ETime' => $existingSection[0]['Te_Tue_ETime'],
+            //             'Te_Wed' => 4,
+            //             'Te_Wed_Room' => $existingSection[0]['Te_Wed_Room'],
+            //             'Te_Wed_BTime' => $existingSection[0]['Te_Wed_BTime'],
+            //             'Te_Wed_ETime' => $existingSection[0]['Te_Wed_ETime'],
+            //             'Te_Thu' => 5,
+            //             'Te_Thu_Room' => $existingSection[0]['Te_Thu_Room'],
+            //             'Te_Thu_BTime' => $existingSection[0]['Te_Thu_BTime'],
+            //             'Te_Thu_ETime' => $existingSection[0]['Te_Thu_ETime'],
+            //             'Te_Fri' => 6,
+            //             'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
+            //             'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
+            //             'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+            //             ]);
+            //         foreach ($ingredients as $data) {
+            //                     $data->save();
+            //         }
+            //     }
+            // } 
+            // /**
+            //  * debug and refactor else state so that it gets the attributes from schedules table
+            //  */
+            // else {
+            //     $sectionNo = 1;
+            //     $sectionNo2 = 1;
+            //     for ($i2=0; $i2 < $counter; $i2++) { 
+            //         $ingredients[] = new  Classroom([
+            //             'Code' => $arrGetCode[$i].'-'.$sectionNo++,
+            //             'Te_Term' => $arrGetDetails[$i]->Te_Term,
+            //             'cs_unique' => $arrGetDetails[$i]->cs_unique,
+            //             'L' => $arrGetDetails[$i]->L, 
+            //             'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
+            //             'schedule_id' => $arrGetDetails[$i]->schedule_id,
+            //             'sectionNo' => $sectionNo2++,
+            //             ]);
+            //         foreach ($ingredients as $data) {
+            //                     $data->save();
+            //         }
+            //     }
+            // }
+                // var_dump('section value starts at: '.$sectionNo);
+        }
+
+dd($num_classes);
+        // query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
+        $arrGetClassRoomDetails = [];
+        $arrCountCodeClass = [];
+        $arrGetOrphanStudents =[];
+        $arrNotCompleteClasses = [];
+        $arrNotCompleteCount = [];
+        $arrjNotCompleteCount = [];
+        $arrNotCompleteCode = [];
+        $arrGetOrphanIndexID = [];
+        $arrNotCompleteScheduleID = []; 
+
+        foreach ($getCode as $valueCode2) {
+            // code from PreviewTempSort, put in array
+            $arrGetCode[] = $valueCode2->Code; 
+            
+            $getClassRoomDetails = Classroom::where('cs_unique', $valueCode2->Code)->get();
+            foreach ($getClassRoomDetails as $valueClassRoomDetails) {
+                $arrGetClassRoomDetails[] = $valueClassRoomDetails;
                 
-                //  get the min of the counts for each Code
-                $minValue = min($arrCodeCount);       
-                $arr = [];
-                $arrSaveToPash = [];
+                
+                // query student count who are not yet assigned to a class section (null)
+                $getPashStudents = Preview::where('Code', $valueCode2->Code)->where('CodeIndexIDClass', null)->get()->take(15);
 
-                // use min to determine the first course-schedule assignment
-                for ($i=0; $i < count($arrPerCode); $i++) { 
+                foreach ($getPashStudents as $valuePashStudents) {
+                    $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
+                    // update record with classroom assigned
+                    $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+                }
 
-                    if ($minValue >= $arrCodeCount[$i]) {
-                        // $arr = $arrPerCode[$i]; 
+                // query PASH entries to get CodeClass count
+                $checkCountCodeClass = Preview::select('Te_Code', 'Code','CodeClass', 'schedule_id', 'L', DB::raw('count(*) as CountCodeClass'))->where('Code', $valueClassRoomDetails->cs_unique)->where('CodeClass', $valueClassRoomDetails->Code)->groupBy('Te_Code','Code','CodeClass','schedule_id','L')->orderBy('CountCodeClass', 'asc')->get();
+                $checkCountCodeClass->sortBy('CountCodeClass');
+
+                // query count of CodeClass which did not meet the minimum number of students
+                foreach ($checkCountCodeClass as $valueCountCodeClass) {
+                        $arrCountCodeClass[] = $valueCountCodeClass->CountCodeClass;
+                    
+                    // if the count is less than 6 where L = Ar,Ch,Ru 
+                    $language_group_1 = ['A','C','R'];
+                    if (in_array($valueCountCodeClass->L, $language_group_1) && $valueCountCodeClass->CountCodeClass < 6) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
                         
-                        // if there are 2 or more codes with equal count
-                        // run query with leftJoin() to remove duplicates
-                        $queryEnrolForms = DB::table('tblLTP_preview_TempSort')
-                            ->select('tblLTP_preview_TempSort.*')
-                            ->where('tblLTP_preview_TempSort.Term', "=",$arrPerTerm[$i])
-                            ->where('tblLTP_preview_TempSort.Code', "=",$arrPerCode[$i])
-                            // leftjoin sql statement with subquery using raw statement
-                            ->leftJoin(DB::raw("(SELECT 
-                                  tblLTP_preview.INDEXID FROM tblLTP_preview
-                                  WHERE tblLTP_preview.Term = '$arrPerTerm[$i]' AND tblLTP_preview.Te_Code = '$arrPerTeCode[$i]') as items"),function($q){
-                                    $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
-                                    ;
-                              })
-                            ->whereNull('items.INDEXID')        
-                            ->get();
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                        }
+                    }
+                    // if the count is less than 8 where L = Fr,En,Sp
+                    $language_group_2 = ['E','F','S'];
+                    if (in_array($valueCountCodeClass->L, $language_group_2) && $valueCountCodeClass->CountCodeClass < 8) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
                         
-                        // $queryEnrolForms = PreviewTempSort::where('Code', $arrPerCode[$i])->get();
-                        // assign course-schedule to student and save in PASHQTcur
-                        foreach ($queryEnrolForms as $value) {
-                            $arrSaveToPash[] = new  Preview([
-                            'CodeIndexID' => $value->CodeIndexID,
-                            'Code' => $value->Code,
-                            'schedule_id' => $value->schedule_id,
-                            'L' => $value->L,
-                            'profile' => $value->profile,
-                            'Te_Code' => $value->Te_Code,
-                            'Term' => $value->Term,
-                            'INDEXID' => $value->INDEXID,
-                            "created_at" =>  $value->created_at,
-                            "UpdatedOn" =>  $value->UpdatedOn,
-                            'mgr_email' =>  $value->mgr_email,
-                            'mgr_lname' => $value->mgr_lname,
-                            'mgr_fname' => $value->mgr_fname,
-                            'continue_bool' => $value->continue_bool,
-                            'DEPT' => $value->DEPT, 
-                            'eform_submit_count' => $value->eform_submit_count,              
-                            'form_counter' => $value->form_counter,  
-                            'agreementBtn' => $value->agreementBtn,
-                            'flexibleBtn' => $value->flexibleBtn,
-                            ]); 
-                            foreach ($arrSaveToPash as $data) {
-                                // $data->save();
-                            }     
-                        }   
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                            // $setNullToOrphans = Preview::where('id', $valueOrphanStudents->id)->update(['CodeIndexIDClass' => null]);
+                        }
+                        
+                        // $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+                    }
+
+                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 15) {
+                        $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
+                        $arrNotCompleteCode[] = $valueCountCodeClass->Code;
+                        $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
+                        $arrNotCompleteScheduleID[] = $valueCountCodeClass->schedule_id;
                     } 
                 }
-            } // end of if statement
-        dd();
-        $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Term')->orderBy('id')->get()->toArray();
-        $arr = [];
-        $arrStd = [];
-        foreach ($checkCodeIfExisting as $value) {
-            $queryPashForCodesArr = Preview::where('Code', $value->Code)->get()->toArray();
-            $arr[] = $queryPashForCodesArr;
-            $queryPashForCodes = Preview::where('Code', $value->Code)->get();
-            
-            if (empty($queryPashForCodesArr)) {
-                echo 'none exists';
-                echo '<br>';
-                // check INDEXID of students if existing in Preview table
-                $students = DB::table('tblLTP_preview_TempSort')
-                    ->select('tblLTP_preview_TempSort.*')
-                    ->where('tblLTP_preview_TempSort.Term', "=",$value->Term)
-                    ->where('tblLTP_preview_TempSort.Code', "=",$value->Code)
-                    // leftjoin sql statement with subquery using raw statement
-                    ->leftJoin(DB::raw("(SELECT 
-                          tblLTP_preview.INDEXID FROM tblLTP_preview
-                          WHERE tblLTP_preview.Term = '$value->Term') as items"),function($q){
-                            $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
-                            ;
-                      })
-                    ->whereNull('items.INDEXID')        
-                    ->get();
-                // $arrStd[] = $students;
-                // save the queried students above to Preview table 
-                foreach ($students as $value) {
-                    $arrStd[] = new  Preview([
-                    'CodeIndexID' => $value->CodeIndexID,
-                    'Code' => $value->Code,
-                    'schedule_id' => $value->schedule_id,
-                    'L' => $value->L,
-                    'profile' => $value->profile,
-                    'Te_Code' => $value->Te_Code,
-                    'Term' => $value->Term,
-                    'INDEXID' => $value->INDEXID,
-                    "created_at" =>  $value->created_at,
-                    "UpdatedOn" =>  $value->UpdatedOn,
-                    'mgr_email' =>  $value->mgr_email,
-                    'mgr_lname' => $value->mgr_lname,
-                    'mgr_fname' => $value->mgr_fname,
-                    'continue_bool' => $value->continue_bool,
-                    'DEPT' => $value->DEPT, 
-                    'eform_submit_count' => $value->eform_submit_count,              
-                    'form_counter' => $value->form_counter,  
-                    'agreementBtn' => $value->agreementBtn,
-                    'flexibleBtn' => $value->flexibleBtn,
-                    ]); 
-                    foreach ($arrStd as $data) {
-                        // $data->save();
-                    }     
-                } 
             }
         }
-        dd($arrStd);
+
+        // then change CodeClass and assign to same Te_Code with a Code count which is less than 15
+        // assign orphaned students with classrooms which are not at max capacity
+        $c = count($arrNotCompleteClasses);
+        if ($c != 0) {
+            for ($iCount=0; $iCount < $c; $iCount++) {
+            // $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
+            $jNotCompleteCount = intVal(15 - $arrNotCompleteCount[$iCount]);
+            $arrjNotCompleteCount[] = $jNotCompleteCount;
+
+                for ($iCounter2=0; $iCounter2 < $jNotCompleteCount; $iCounter2++) { 
+                    if (!empty($arrGetOrphanStudents[$iCounter2])) {                
+                        $setClassToOrphans = Preview::where('id', $arrGetOrphanStudents[$iCounter2])->update(['CodeClass' => $arrNotCompleteClasses[$iCount], 'CodeIndexIDClass' => $arrNotCompleteClasses[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 'CodeIndexID' => $arrNotCompleteCode[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 'Code' => $arrNotCompleteCode[$iCount], 'schedule_id' => $arrNotCompleteScheduleID[$iCount]]);
+                    } 
+                }
+            }
+        }
+dd();        
+
 
         // $codeSortByCountIndexID = Preenrolment::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'F1R1')->where('INDEXID', 'L21264')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
         

@@ -768,7 +768,6 @@ class PreviewController extends Controller
             }
         }
 
-/******************************************************************************/
     
         /*
          Start process of creating classes based on number of students assigned per course-schedule 
@@ -817,7 +816,8 @@ class PreviewController extends Controller
             $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
             $arrExistingSection[] = $existingSection;
             // if not, get existing value of sectionNo
-            if (!empty($existingSection)) {
+            // if (!empty($existingSection)) {
+            if (count($existingSection) < $counter) {
                 $sectionNo = $existingSection[0]['sectionNo'] + 1;
                 $sectionNo2 = $existingSection[0]['sectionNo'] + 1;
                 $arr[] = $sectionNo;
@@ -858,10 +858,10 @@ class PreviewController extends Controller
                     }
                 }
             } 
-    /**
-     * debug and refactor else state so that it gets the attributes from schedules table
-     */
-            else {
+            /**
+             * debug and refactor statement below so that it gets the attributes from schedules table
+             */
+            if(empty($existingSection)) {
                 $sectionNo = 1;
                 $sectionNo2 = 1;
                 for ($i2=0; $i2 < $counter; $i2++) { 
@@ -1173,8 +1173,12 @@ class PreviewController extends Controller
 			foreach ($getClassRoomDetails as $valueClassRoomDetails) {
 				$arrGetClassRoomDetails[] = $valueClassRoomDetails;
 				
-				// query student count who are not yet assigned to a class section (null)
-				$getPashStudents = Preview::where('Code', $valueCode2->Code)->where('CodeIndexIDClass', null)->get()->take(15);
+				// query student count who are not yet assigned to a class section (null) and order by priority
+				$getPashStudents = Preview::where('Code', $valueCode2->Code)
+                    ->where('CodeIndexIDClass', null)
+                    ->orderBy('PS', 'asc')
+                    ->get()
+                    ->take(15);
 				foreach ($getPashStudents as $valuePashStudents) {
 					$pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
 					// update record with classroom assigned
@@ -1246,9 +1250,9 @@ class PreviewController extends Controller
     public function previewClassrooms(Request $request)
     {
         $arr = [];
-        $classrooms = Preview::where('Code', 'F9R1-8-191')->select('CodeClass')->groupBy('CodeClass')->get();
+        $classrooms = Preview::where('Code', 'F1R1-15-191')->select('CodeClass')->groupBy('CodeClass')->get();
         foreach ($classrooms as $class) {
-            $students = Preview::where('CodeClass', $class->CodeClass)->get();
+            $students = Preview::where('CodeClass', $class->CodeClass)->orderBy('PS', 'asc')->get();
             $arr[] = $students;
             // var_dump($arr);
         }

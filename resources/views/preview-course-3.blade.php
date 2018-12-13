@@ -48,6 +48,9 @@
                   <input type="hidden" name="_token" value="{{ Session::token() }}">             
                 </span>
           <label type="text" class="form-control">{{ $data->schedules->name }}</label>
+          <a href="#" target="_blank" class="small-box-footer">
+              More info on {{$data->Code}} <i class="fa fa-arrow-circle-right"></i>
+            </a>
         </div>
         <div class="icon">
           <i class="ion ion-person-add"></i>
