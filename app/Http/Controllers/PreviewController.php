@@ -99,7 +99,6 @@ class PreviewController extends Controller
                 }
         }
         $form_info = collect($form_info_arr)->sortBy('id');
-        // $form_info = collect($form_info_arr);
 
         $data = view('preview-ajax', compact('student', 'form_info'))->render();
         return response()->json([$data]);
@@ -674,7 +673,9 @@ class PreviewController extends Controller
                                     $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
                                     ;
                               })
-                            ->whereNull('items.INDEXID')        
+                            ->whereNull('items.INDEXID')
+                            ->orderBy('PS', 'asc')        
+                            ->orderBy('created_at', 'asc')        
                             ->get();
 
                         // $queryEnrolForms = PreviewTempSort::where('Code', $arrPerCode[$i])->get();
@@ -734,7 +735,9 @@ class PreviewController extends Controller
                             $q->on("tblLTP_preview_TempSort.INDEXID","=","items.INDEXID")
                             ;
                       })
-                    ->whereNull('items.INDEXID')        
+                    ->whereNull('items.INDEXID')   
+                    ->orderBy('PS', 'asc')   
+                    ->orderBy('created_at', 'asc')    
                     ->get();
                 // $arrStd[] = $students;
                 // save the queried students above to Preview table 
@@ -1176,6 +1179,7 @@ class PreviewController extends Controller
 				// query student count who are not yet assigned to a class section (null) and order by priority
 				$getPashStudents = Preview::where('Code', $valueCode2->Code)
                     ->where('CodeIndexIDClass', null)
+                    ->orderBy('id', 'asc')
                     ->orderBy('PS', 'asc')
                     ->get()
                     ->take(15);
@@ -1249,15 +1253,18 @@ class PreviewController extends Controller
 
     public function previewClassrooms($code)
     {
-        $arr = [];
-        $classrooms = Preview::where('Code', $code)->select('CodeClass')->groupBy('CodeClass')->get();
-        foreach ($classrooms as $class) {
-            $students = Preview::where('CodeClass', $class->CodeClass)->orderBy('PS', 'asc')->get();
-            $arr[] = $students;
-            // var_dump($arr);
-        }
+        $classrooms = Classroom::where('cs_unique', $code)->get();
 
-        
-        return view('preview-classrooms', compact('arr'));
+        $arr = [];
+        $classrooms_2 = Classroom::where('cs_unique', $code)->select('Code')->groupBy('Code')->get();
+
+            foreach ($classrooms_2 as $class) {
+                $students = Preview::where('CodeClass', $class->Code)->orderBy('PS', 'asc')->get();
+                foreach ($students as $value) {
+                    $arr[] = $value;
+                }
+            }
+
+        return view('preview-classrooms', compact('arr','classrooms'));
     }
 }

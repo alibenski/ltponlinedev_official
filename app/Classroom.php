@@ -57,4 +57,8 @@ class Classroom extends Model
     public function teachers() {
     return $this->belongsTo('App\Teachers', 'Tch_ID', 'Tch_ID'); 
     }
+
+    public function previews() {
+    return $this->belongsToMany('App\Preview', 'CodeClass', 'Code'); 
+    }
 }

@@ -44,4 +44,8 @@ class Preview extends Model
     public function schedules() {
     return $this->belongsTo('App\Schedule', 'schedule_id'); 
     }
+
+    public function classrooms() {
+    return $this->belongsTo('App\Classroom', 'CodeClass', 'Code'); 
+    }
 }
