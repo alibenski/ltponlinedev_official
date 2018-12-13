@@ -1247,10 +1247,10 @@ class PreviewController extends Controller
         // dd($arrCountCodeClass,$arrGetOrphanStudents, $arrNotCompleteClasses, $arrNotCompleteCount, $arrjNotCompleteCount, $c);
     }
 
-    public function previewClassrooms(Request $request)
+    public function previewClassrooms($code)
     {
         $arr = [];
-        $classrooms = Preview::where('Code', 'F1R1-15-191')->select('CodeClass')->groupBy('CodeClass')->get();
+        $classrooms = Preview::where('Code', $code)->select('CodeClass')->groupBy('CodeClass')->get();
         foreach ($classrooms as $class) {
             $students = Preview::where('CodeClass', $class->CodeClass)->orderBy('PS', 'asc')->get();
             $arr[] = $students;

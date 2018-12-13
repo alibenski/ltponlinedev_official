@@ -46,19 +46,16 @@
                   <input type="hidden" name="Term" value="{{ $preview_course->Term }}" >    
                   <input type="hidden" name="L" value="{{ $preview_course->L }}" >    
                   <input type="hidden" name="_token" value="{{ Session::token() }}">             
-                </span>
+          </span>
           <label type="text" class="form-control">{{ $data->schedules->name }}</label>
-          <a href="#" target="_blank" class="small-box-footer">
-              More info on {{$data->Code}} <i class="fa fa-arrow-circle-right"></i>
-            </a>
         </div>
         <div class="icon">
           <i class="ion ion-person-add"></i>
         </div>
         
-        {{-- <a href="#" class="small-box-footer">
-          More info <i class="fa fa-arrow-circle-right"></i>
-        </a> --}}
+        <a href="{{ route('preview-classrooms', ['Code' => $data->Code]) }}" target="_blank" class="small-box-footer">
+              More info on {{$data->Code}} <i class="fa fa-arrow-circle-right"></i>
+            </a>
 
       </div>
     </div> 
