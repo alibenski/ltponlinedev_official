@@ -40,6 +40,102 @@ class WaitlistController extends Controller
 {
     public function testMethod()
     {
+        $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+
+        $arrGetClassRoomDetails = [];
+        $arrCountCodeClass = [];
+        $arrGetOrphanStudents =[];
+        $arrNotCompleteClasses = [];
+        $arrNotCompleteCount = [];
+        $arrjNotCompleteCount = [];
+        $arrNotCompleteCode = [];
+        $arrGetOrphanIndexID = [];
+        $arrNotCompleteScheduleID = []; 
+        foreach ($getCode as $valueCode2) {
+            // code from PreviewTempSort, put in array
+            $arrGetCode[] = $valueCode2->Code; 
+            $getClassRoomDetails = Classroom::where('cs_unique', $valueCode2->Code)->get();
+            foreach ($getClassRoomDetails as $valueClassRoomDetails) {
+                $arrGetClassRoomDetails[] = $valueClassRoomDetails;
+                
+                // query student count who are not yet assigned to a class section (null) and order by priority
+                $getPashStudents = Preview::where('Code', $valueCode2->Code)
+                    ->where('CodeIndexIDClass', null)
+                    ->orderBy('id', 'asc')
+                    ->orderBy('PS', 'asc')
+                    ->get()
+                    ->take(15);
+                foreach ($getPashStudents as $valuePashStudents) {
+                    $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
+                    // update record with classroom assigned
+                    $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+                }
+
+                // query PASH entries to get CodeClass count
+                $checkCountCodeClass = Preview::select('Te_Code', 'Code','CodeClass', 'schedule_id', 'L', DB::raw('count(*) as CountCodeClass'))->where('Code', $valueClassRoomDetails->cs_unique)->where('CodeClass', $valueClassRoomDetails->Code)->groupBy('Te_Code','Code','CodeClass','schedule_id','L')->orderBy('CountCodeClass', 'asc')->get();
+                $checkCountCodeClass->sortBy('CountCodeClass');
+
+                // query count of CodeClass which did not meet the minimum number of students
+                foreach ($checkCountCodeClass as $valueCountCodeClass) {
+                        $arrCountCodeClass[] = $valueCountCodeClass->CountCodeClass;
+                    
+                    // if the count is less than 6 where L = Ar,Ch,Ru 
+                    $language_group_1 = ['A','C','R'];
+                    if (in_array($valueCountCodeClass->L, $language_group_1) && $valueCountCodeClass->CountCodeClass < 6) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
+                        
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                        }
+                    }
+                    // if the count is less than 8 where L = Fr,En,Sp
+                    $language_group_2 = ['E','F','S'];
+                    if (in_array($valueCountCodeClass->L, $language_group_2) && $valueCountCodeClass->CountCodeClass < 8) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
+                        
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                            // $setNullToOrphans = Preview::where('id', $valueOrphanStudents->id)->update(['CodeIndexIDClass' => null]);
+                        }
+                        
+                        // $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+                    }
+
+                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 15) {
+                        $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
+                        $arrNotCompleteCode[] = $valueCountCodeClass->Code;
+                        $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
+                        $arrNotCompleteScheduleID[] = $valueCountCodeClass->schedule_id;
+                    } 
+                }
+            }
+        }
+
+        $c = count($arrNotCompleteClasses);
+        if ($c != 0) {
+            for ($iCount=0; $iCount < $c; $iCount++) {
+            // $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
+            $jNotCompleteCount = intVal(15 - $arrNotCompleteCount[$iCount]);
+            $arrjNotCompleteCount[] = $jNotCompleteCount;
+
+                for ($iCounter2=0; $iCounter2 < $jNotCompleteCount; $iCounter2++) { 
+                    if (!empty($arrGetOrphanStudents[$iCounter2])) {                
+                        $setClassToOrphans = Preview::where('id', $arrGetOrphanStudents[$iCounter2])
+                            ->where('Code', $arrNotCompleteCode[$iCounter2])
+                            ->update([
+                                'Comments' => 'WL',
+                                'CodeClass' => $arrNotCompleteClasses[$iCount], 
+                                'CodeIndexIDClass' => $arrNotCompleteClasses[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
+                                'CodeIndexID' => $arrNotCompleteCode[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
+                                'Code' => $arrNotCompleteCode[$iCount], 
+                                'schedule_id' => $arrNotCompleteScheduleID[$iCount]]);
+                    } 
+                }
+            }
+        }
+        dd('done',$arrGetClassRoomDetails, $arrGetOrphanStudents, $arrGetOrphanIndexID);
         /*
          Start process of creating classes based on number of students assigned per course-schedule 
          */
@@ -48,10 +144,10 @@ class WaitlistController extends Controller
         $arrCountStdPerCode = [];
         foreach ($getCodeForSectionNo as $value) {
             // query student count who are not yet assigned to a class section (null)
-            $countStdPerCode = Preview::where('Code', $value->Code)->where('CodeIndexIDClass', null)->get()->count();
+            $countStdPerCode = Preview::where('Code', 'E1R1')->where('CodeIndexIDClass', null)->get();
             $arrCountStdPerCode[] = $countStdPerCode;
+        dd($arrCountStdPerCode);
         }
-        
 
         // calculate sum per code and divide by 14 or 15 for number of classes
     $num_classes =[];

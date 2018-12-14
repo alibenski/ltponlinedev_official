@@ -1242,7 +1242,15 @@ class PreviewController extends Controller
 
 	            for ($iCounter2=0; $iCounter2 < $jNotCompleteCount; $iCounter2++) { 
 	            	if (!empty($arrGetOrphanStudents[$iCounter2])) {          		
-	            		$setClassToOrphans = Preview::where('id', $arrGetOrphanStudents[$iCounter2])->update(['CodeClass' => $arrNotCompleteClasses[$iCount], 'CodeIndexIDClass' => $arrNotCompleteClasses[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 'CodeIndexID' => $arrNotCompleteCode[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 'Code' => $arrNotCompleteCode[$iCount], 'schedule_id' => $arrNotCompleteScheduleID[$iCount]]);
+	            		$setClassToOrphans = Preview::where('id', $arrGetOrphanStudents[$iCounter2])
+                            ->where('Code', $arrNotCompleteCode[$iCounter2])
+                            ->update([
+                                'Comments' => 'WL',
+                                'CodeClass' => $arrNotCompleteClasses[$iCount], 
+                                'CodeIndexIDClass' => $arrNotCompleteClasses[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
+                                'CodeIndexID' => $arrNotCompleteCode[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
+                                'Code' => $arrNotCompleteCode[$iCount], 
+                                'schedule_id' => $arrNotCompleteScheduleID[$iCount]]);
 	            	} 
 	            }
         	}
