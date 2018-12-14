@@ -194,7 +194,10 @@ class PreviewController extends Controller
     	$preview = Preview::where('Te_Code', $request->course_id)->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
     	
     	$preview_course = Preview::where('Te_Code', $request->course_id)->first();
-
+        if (empty($preview_course)) {
+            $request->session()->flash('interdire-msg', 'No students assigned to this Course');
+            return back();
+        }
     	$arr_key =[];
         $arr_count = [];
         $code = Preview::where('Te_Code', $request->course_id)->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);

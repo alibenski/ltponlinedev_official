@@ -1,5 +1,5 @@
 <div class="modal-body">
-    <p>The student has chosen the following time schedule(s):</p>
+    <h4><strong>Original time schedule(s) the student chose:</strong></h4>
         @if(!empty($schedules))
             <ul>
               @foreach($schedules as $value)
