@@ -104,6 +104,58 @@ class PreviewController extends Controller
         return response()->json([$data]);
     }
 
+
+    public function previewClassrooms($code)
+    {
+        $classrooms = Classroom::where('cs_unique', $code)->get();
+
+        $arr = [];
+        $classrooms_2 = Classroom::where('cs_unique', $code)->select('Code')->groupBy('Code')->get();
+
+            foreach ($classrooms_2 as $class) {
+                $students = Preview::where('CodeClass', $class->Code)->orderBy('PS', 'asc')->get();
+                foreach ($students as $value) {
+                    $arr[] = $value;
+                }
+            }
+
+        $classroom_3 = Classroom::where('cs_unique', $code)->first();
+
+        $form_info_arr = [];
+        $student = Preview::where('Te_Code', $classroom_3->Te_Code_New)->where('schedule_id', $classroom_3->schedule_id)->get();
+        
+
+        foreach ($student as $value) {
+            $form = PreviewTempSort::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
+                ->get();
+                foreach ($form as $value) {
+                    $form_info_arr[] = $value;
+                }
+        }
+        $form_info = collect($form_info_arr)->sortBy('id');
+
+        return view('preview-classrooms', compact('arr','classrooms','form_info', 'classroom_3'));
+    }
+
+    public function ajaxMoveStudentsForm(Request $request)
+    {
+        if ($request->ajax()) {
+            $ids = $request->ids;
+            $student_to_move = Preview::whereIn('id',explode(",",$ids))->get();
+            $languages = DB::table('languages')->pluck("name","code")->all();
+
+            $data = view('preview-move-students-form', compact('student_to_move', 'languages'))->render();
+            return response()->json([$data]);
+        }
+    }
+
+    public function ajaxMoveStudents(Request $request)
+    {
+        if ($request->ajax()) {
+            
+        }
+    }
+
     public function ajaxPreviewModal(Request $request)
     {
         if($request->ajax()){
@@ -888,6 +940,7 @@ class PreviewController extends Controller
                 // var_dump('section value starts at: '.$sectionNo);
         }
         $this->assignAndAnalyze($getCode);
+        $this->getOrphans($getCode);
         
         // dd($approved_1,$approved_2,$approved_3);
         // PreviewTempSort::truncate();
@@ -1248,7 +1301,6 @@ class PreviewController extends Controller
 	            		$setClassToOrphans = Preview::where('id', $arrGetOrphanStudents[$iCounter2])
                             ->where('Code', $arrNotCompleteCode[$iCounter2])
                             ->update([
-                                'Comments' => 'WL',
                                 'CodeClass' => $arrNotCompleteClasses[$iCount], 
                                 'CodeIndexIDClass' => $arrNotCompleteClasses[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
                                 'CodeIndexID' => $arrNotCompleteCode[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
@@ -1262,20 +1314,67 @@ class PreviewController extends Controller
         // dd($arrCountCodeClass,$arrGetOrphanStudents, $arrNotCompleteClasses, $arrNotCompleteCount, $arrjNotCompleteCount, $c);
     }
 
-    public function previewClassrooms($code)
+    public function getOrphans($getCode)
     {
-        $classrooms = Classroom::where('cs_unique', $code)->get();
+        // query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
+        $arrGetClassRoomDetails = [];
+        $arrCountCodeClass = [];
+        $arrGetOrphanStudents =[];
+        $arrNotCompleteClasses = [];
+        $arrNotCompleteCount = [];
+        $arrjNotCompleteCount = [];
+        $arrNotCompleteCode = [];
+        $arrGetOrphanIndexID = [];
+        $arrNotCompleteScheduleID = []; 
 
-        $arr = [];
-        $classrooms_2 = Classroom::where('cs_unique', $code)->select('Code')->groupBy('Code')->get();
+        foreach ($getCode as $valueCode2) {
+            // code from PreviewTempSort, put in array
+            $arrGetCode[] = $valueCode2->Code; 
+            
+            $getClassRoomDetails = Classroom::where('cs_unique', $valueCode2->Code)->get();
+            foreach ($getClassRoomDetails as $valueClassRoomDetails) {
+                $arrGetClassRoomDetails[] = $valueClassRoomDetails;
+                
 
-            foreach ($classrooms_2 as $class) {
-                $students = Preview::where('CodeClass', $class->Code)->orderBy('PS', 'asc')->get();
-                foreach ($students as $value) {
-                    $arr[] = $value;
+                // query PASH entries to get CodeClass count
+                $checkCountCodeClass = Preview::select('Te_Code', 'Code','CodeClass', 'schedule_id', 'L', DB::raw('count(*) as CountCodeClass'))->where('Code', $valueClassRoomDetails->cs_unique)->where('CodeClass', $valueClassRoomDetails->Code)->groupBy('Te_Code','Code','CodeClass','schedule_id','L')->orderBy('CountCodeClass', 'asc')->get();
+                $checkCountCodeClass->sortBy('CountCodeClass');
+
+                // query count of CodeClass which did not meet the minimum number of students
+                foreach ($checkCountCodeClass as $valueCountCodeClass) {
+                        $arrCountCodeClass[] = $valueCountCodeClass->CountCodeClass;
+                    
+                    // if the count is less than 6 where L = Ar,Ch,Ru 
+                    $language_group_1 = ['A','C','R'];
+                    if (in_array($valueCountCodeClass->L, $language_group_1) && $valueCountCodeClass->CountCodeClass < 3) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
+                        
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                        }
+                    }
+                    // if the count is less than 8 where L = Fr,En,Sp
+                    $language_group_2 = ['E','F','S'];
+                    if (in_array($valueCountCodeClass->L, $language_group_2) && $valueCountCodeClass->CountCodeClass < 5) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
+                        
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                        }
+                    }
                 }
             }
-
-        return view('preview-classrooms', compact('arr','classrooms'));
+        }
+        // get the students who are orphans and 
+        // put in waitlist table
+        // update field with 'WL'
+        foreach ($arrGetOrphanStudents as $id) {
+            $update_as_waitlist = Preview::where('id', $id)->first();
+            $update_as_waitlist->Comments = 'WL';
+            $update_as_waitlist->save();
+        }
     }
+
 }

@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('ajax-preview', ['as'=>'ajax-preview','uses'=>'PreviewController@ajaxPreview']);
     Route::post('ajax-preview-modal', ['as'=>'ajax-preview-modal','uses'=>'PreviewController@ajaxPreviewModal']);
     Route::get('ajax-get-priority', ['as'=>'ajax-get-priority','uses'=>'PreviewController@ajaxGetPriority']);
+    Route::get('ajax-move-students-form', ['as'=>'ajax-move-students-form','uses'=>'PreviewController@ajaxMoveStudentsForm']);
+    Route::post('ajax-move-students', ['as'=>'ajax-move-students','uses'=>'PreviewController@ajaxMoveStudents']);
 
     Route::resource('users', 'UserController');
 

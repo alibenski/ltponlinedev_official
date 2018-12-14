@@ -62,5 +62,7 @@ class PreviewTempSort extends Model
     public function filesPay() {
     return $this->belongsTo('App\File', 'attachment_pay'); 
     }
-
+    public function preview() {
+    return $this->hasOne('App\Preview', 'CodeIndexID', 'CodeIndexID'); 
+    }
 }

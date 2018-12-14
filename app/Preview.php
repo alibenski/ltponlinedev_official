@@ -48,4 +48,8 @@ class Preview extends Model
     public function classrooms() {
     return $this->belongsTo('App\Classroom', 'CodeClass', 'Code'); 
     }
+
+    public function previewTempSort() {
+    return $this->belongsTo('App\PreviewTempSort', 'CodeIndexID', 'CodeIndexID'); 
+    }
 }
