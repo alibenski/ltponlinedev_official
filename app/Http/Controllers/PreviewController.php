@@ -152,8 +152,15 @@ class PreviewController extends Controller
     public function ajaxMoveStudents(Request $request)
     {   
         if ($request->ajax()) {
+            $ids = $request->ids;
+            // get classroom details from teventcur table via $request->classroom_id
+            $classroom_details = Classroom::where('Code', $request->classroom_id)->first();
+            $student_to_move = Preview::whereIn('id',explode(",",$ids))->update([
+                'CodeClass' => $request->classroom_id,
+                'Code' => $classroom_details->cs_unique,
+            ]);
+            
             $data = $request->all();
-
             return response()->json([$data]);
         }
     }
@@ -1254,7 +1261,10 @@ class PreviewController extends Controller
 				foreach ($getPashStudents as $valuePashStudents) {
 					$pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
 					// update record with classroom assigned
-					$pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
+					$pashUpdate->update([
+                        'CodeClass' => $valueClassRoomDetails->Code, 
+                        'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID
+                    ]);
                 }
 
                 // query PASH entries to get CodeClass count

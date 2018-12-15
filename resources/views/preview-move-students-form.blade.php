@@ -4,7 +4,6 @@
 		<p>	{{ $student->users->name}} </p>
 	@endforeach
 
-	{{-- <form action="{{ route('ajax-move-students') }}" method="POST" class="form-horizontal" role="form">{{ csrf_field() }} --}}
 		<div class="form-group col-sm-12">
 	      <label for="L" class="control-label"> Language:</label>
 	      <div class="col-sm-12">
@@ -49,7 +48,7 @@
 		<input type="hidden" name="_token" value="{{ Session::token() }}">
 		<input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
 		{{ method_field('PUT') }}
-	{{-- </form> --}}
+
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
@@ -98,10 +97,16 @@
       	var term = $("input[name='term_id']").val();
       	var token = $("input[name='_token']").val();
 		
+      	var allVals = [];  
+          $(".sub_chk:checked").each(function() {  
+              allVals.push($(this).attr('data-id'));
+          });  
+        var join_selected_values = allVals.join(",");
+        
 		$.ajax({
           url: "{{ route('ajax-move-students') }}", 
           method: 'POST',
-          data: {classroom_id:classroom_id, term_id:term, _token:token},
+          data: {ids:join_selected_values,classroom_id:classroom_id, term_id:term, _token:token},
           success: function(data) {
           	console.log(data)
 			}
