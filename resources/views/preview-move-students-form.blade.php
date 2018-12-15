@@ -1,10 +1,10 @@
-<div class="col-sm-12">
-@include('admin.partials._termSessionMsg')
+<div class="modal-body">
+	@include('admin.partials._termSessionMsg')
 	@foreach ($student_to_move as $student)
 		<p>	{{ $student->users->name}} </p>
 	@endforeach
 
-	<form action="{{ route('ajax-move-students') }}" method="POST" class="form-horizontal" role="form">{{ csrf_field() }}
+	{{-- <form action="{{ route('ajax-move-students') }}" method="POST" class="form-horizontal" role="form">{{ csrf_field() }} --}}
 		<div class="form-group col-sm-12">
 	      <label for="L" class="control-label"> Language:</label>
 	      <div class="col-sm-12">
@@ -32,14 +32,24 @@
 	        </div>
 	    </div>
 
-		<button type="submit" class="btn btn-success"><span class='glyphicon glyphicon-check'></span> 
-			Save
+		<div class="form-group col-sm-12">
+	        <label for="CodeClass" class="control-label"> Classes: </label>
+	        <div class="form-group col-sm-12">
+	          <div class="dropdown">
+	            <select class="col-md-10 form-control select2-basic-single" style="width: 100%;" name="CodeClass" autocomplete="off">
+	                <option value="">--- Select ---</option>
+	            </select>
+	          </div>
+	        </div>
+	    </div>
+
+		<button type="submit" class="btn btn-success btn-move-student"><span class='fa fa-arrow-right'></span> 
+			Move
 		</button>
 		<input type="hidden" name="_token" value="{{ Session::token() }}">
 		<input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
 		{{ method_field('PUT') }}
-
-	</form>
+	{{-- </form> --}}
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
@@ -57,6 +67,7 @@
           method: 'POST',
           data: {L:L, term_id:term, _token:token},
           success: function(data, status) {
+          	console.log(data)
             $("select[name='Te_Code']").html('');
             $("select[name='Te_Code']").html(data.options);
           }
@@ -68,18 +79,34 @@
       var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
 
-      console.log(course_id);
-      // $.ajax({
-      //     url: "{{ route('select-ajax2') }}", 
-      //     method: 'POST',
-      //     data: {course_id:course_id, term_id:term, _token:token},
-      //     success: function(data) {
-      //       $("select[name='schedule_id[]']").html('');
-      //       $("select[name='schedule_id[]']").html(data.options);
-      //     }
-      // });
+      $.ajax({
+          url: "{{ route('ajax-select-classroom') }}", 
+          method: 'POST',
+          data: {course_id:course_id, term_id:term, _token:token},
+          success: function(data) {
+          	console.log(data)
+            $("select[name='CodeClass']").html('');
+            $("select[name='CodeClass']").html(data.options);
+          }
+      });
   }); 
 </script>
 
+<script>
+	$('.btn-move-student').on('click', function () {
+		var classroom_id = $("select[name='CodeClass']").val();
+      	var term = $("input[name='term_id']").val();
+      	var token = $("input[name='_token']").val();
+		
+		$.ajax({
+          url: "{{ route('ajax-move-students') }}", 
+          method: 'POST',
+          data: {classroom_id:classroom_id, term_id:term, _token:token},
+          success: function(data) {
+          	console.log(data)
+			}
+		});
+	});
+</script>
 
 

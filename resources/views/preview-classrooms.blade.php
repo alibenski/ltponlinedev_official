@@ -39,7 +39,9 @@
 
           <div class="table-responsive filtered-table">
             <h4><strong>Students</strong></h4>
-            <button style="margin-bottom: 10px" class="btn btn-primary delete_all" data-url="{{ url('myproductsDeleteAll') }}" data-toggle="modal" data-target="#modalshowform">Move Selected</button>
+
+            <button style="margin-bottom: 10px" class="btn btn-primary delete_all">Move Selected</button>
+            
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -134,11 +136,11 @@
 </div>
 {{-- modal to edit --}}
 <div id="modalshowform" class="modal fade">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"></h4>
+                <h4 class="modal-title">Move Students</h4>
             </div>
             <div class="modal-body-move-student">
             </div>
@@ -250,17 +252,19 @@ $(document).ready(function () {
           var join_selected_values = allVals.join(",");
 
           var token = $("input[name='_token']").val();
-          $.get('{{ route('ajax-move-students-form') }}', {'ids':join_selected_values,  '_token':token}, function(data) {
-            // console.log(data);
-            $('.modal-body-move-student').html(data);
-          });
+          
 
-          // if(allVals.length <=0)  
-          // {  
-          //     alert("Please select at least 1 student.");  
+          if(allVals.length <=0)  
+          {  
+              alert("Please select at least 1 student.");  
 
-          // }  else {  
-
+          }  else {  
+              $('#modalshowform').modal('show');
+              $.get('{{ route('ajax-move-students-form') }}', {'ids':join_selected_values,  '_token':token}, function(data) {
+                // console.log(data);
+                $('.modal-body-move-student').html(data);
+              });
+          }
           //     // var check = confirm("Are you sure you want to delete this row?");  
           //     // if(check == true){  
 

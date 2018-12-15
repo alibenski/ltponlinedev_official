@@ -150,9 +150,21 @@ class PreviewController extends Controller
     }
 
     public function ajaxMoveStudents(Request $request)
+    {   
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            return response()->json([$data]);
+        }
+    }
+
+    public function ajaxSelectClassroom(Request $request)
     {
         if ($request->ajax()) {
-            
+            $collection = Classroom::where('Te_Code_New', $request->course_id)->where('Te_Term', $request->term_id )->get();
+
+            $data = view('ajax-select5',compact('collection'))->render();
+            return response()->json(['options'=>$data]);
         }
     }
 
