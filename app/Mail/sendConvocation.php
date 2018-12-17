@@ -17,14 +17,15 @@ class sendConvocation extends Mailable
     public $staff; 
     public $room; 
     public $teacher;
-    public $term;
+    public $term_en;
+    public $term_fr;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($course_name_en, $course_name_fr, $schedule, $staff, $room, $teacher, $term)
+    public function __construct($course_name_en, $course_name_fr, $schedule, $staff, $room, $teacher, $term_en, $term_fr)
     {
         $this->course_name_en = $course_name_en;
         $this->course_name_fr = $course_name_fr;
@@ -32,7 +33,8 @@ class sendConvocation extends Mailable
         $this->staff = $staff;
         $this->room = $room;
         $this->teacher = $teacher;
-        $this->term = $term;
+        $this->term_en = $term_en;
+        $this->term_fr = $term_fr;
     }
 
     /**

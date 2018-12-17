@@ -19,6 +19,7 @@ use App\PreviewTempSort;
 use App\Repo;
 use App\SDDEXTR;
 use App\Schedule;
+use App\Teachers;
 use App\Term;
 use App\Torgan;
 use App\User;
@@ -42,7 +43,7 @@ class PreviewController extends Controller
      */
     public function sendConvocation()
     {
-        $convocation = Preview::all()->take(3);
+        $convocation = Preview::all()->take(1);
 
         foreach ($convocation as $value) {
             
@@ -51,14 +52,20 @@ class PreviewController extends Controller
             $course_name_fr = $course_name->FDescription; 
 
             $schedule = $value->schedules->name; 
-            $staff = $value->users->name; 
+
             $room = $value->CodeClass; 
 
             $teacher = $value->classrooms->Tch_ID;
-            $staff_email = $value->users->email;
-            $term = $value->Term;
+            $teacher = Teachers::where('Tch_ID', $teacher)->first()->Tch_Name;
 
-            Mail::to($staff_email)->send(new sendConvocation($course_name_en, $course_name_fr, $schedule, $staff, $room, $teacher, $term));
+            $term = $value->Term;
+            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+
+            $staff = $value->users->name; 
+            $staff_email = $value->users->email;
+            
+            Mail::to($staff_email)->send(new sendConvocation($course_name_en, $course_name_fr, $schedule, $staff, $room, $teacher, $term_en, $term_fr));
         }
         
         return 'test';
@@ -913,7 +920,7 @@ class PreviewController extends Controller
         // calculate sum per code and divide by 14 or 15 for number of classes
         $num_classes =[];
         for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
-            $num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
+            $num_classes[] = intval(ceil($arrCountStdPerCode[$i]/14));
         }
         
         $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();

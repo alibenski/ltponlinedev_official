@@ -194,17 +194,17 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                     <p>Dear participant of the Language Training Programme, </p>
                                     <p>
-                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from {{ $term }}.  Please see below the information about your course:
+                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>.  Please see below the information about your course:
                                     </p>
                                     
                                     <p>
-                                        Name of the course: {{ $course_name_en }}
+                                        Name of the course: <strong>{{ $course_name_en }}</strong>
                                         <br>
                                         Schedule: {{ $schedule }}
                                         <br> 
                                         Room: {{ $room }}
                                         <br>
-                                        Teacher: {{ $teacher }}
+                                        Teacher: <strong>{{ $teacher }}</strong>
                                         <br> 
                                     </p>
                                     <p>
@@ -228,17 +228,17 @@
                                     <hr>
                                     <p>Cher participant ou chère participante au Programme de formation linguistique,</p>
                                     <p>
-                                        Nous avons le plaisir de vous informer que vous êtes inscrit·e avec succès à un cours de langue pour le trimestre prochain du {{ $term }}. Voici ci-dessous les informations relatives à votre cours :
+                                        Nous avons le plaisir de vous informer que vous êtes inscrit·e avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
                                     </p>
                                     
                                     <p>
-                                        Nom du cours : {{ $course_name_fr }}
+                                        Nom du cours : <strong>{{ $course_name_fr }}</strong>
                                         <br>
                                         Horaires : {{ $schedule }}
                                         <br> 
                                         Salle : {{ $room }}
                                         <br>
-                                        Professeur : {{ $teacher }}
+                                        Professeur : <strong>{{ $teacher }}</strong>
                                         <br> 
                                     </p>
                                     <p>
