@@ -951,6 +951,7 @@ class PreviewController extends Controller
             $counter = $num_classes[$i];
             $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
             $arrExistingSection[] = $existingSection;
+            $countExistingSection = count($existingSection);
             // if not, get existing value of sectionNo
             // if (!empty($existingSection)) {
             if (count($existingSection) < $counter) {
@@ -959,7 +960,7 @@ class PreviewController extends Controller
                 $arr[] = $sectionNo;
                 // var_dump($sectionNo);
 
-                for ($i2=1; $i2 < $counter; $i2++) { 
+                for ($i2=$countExistingSection; $i2 < $counter; $i2++) { 
                     $ingredients[] = new  Classroom([
                         'Code' => $arrGetCode[$i].'-'.$sectionNo++,
                         'Te_Term' => $arrGetDetails[$i]->Te_Term,
