@@ -67,7 +67,7 @@ class PreviewController extends Controller
             $staff = $value->users->name; 
             $staff_email = $value->users->email;
             
-            Mail::to($staff_email)->send(new sendConvocation($course_name_en, $course_name_fr, $staff, $classrooms, $teacher, $term_en, $term_fr));
+            Mail::to('allyson.frias@un.org')->send(new sendConvocation($course_name_en, $course_name_fr, $staff, $classrooms, $teacher, $term_en, $term_fr));
         }
         
         return 'test';

@@ -143,8 +143,10 @@
     <![endif]-->
 
 </head>
-<body width="100%" bgcolor="#4286f4" style="margin: 0; mso-line-height-rule: exactly;">
-    <center style="width: 100%; background: #4286f4; text-align: left;">
+<body width="100%" bgcolor="#ffffff" style="margin: 0; mso-line-height-rule: exactly;">
+{{-- <body width="100%" bgcolor="#4286f4" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; background: #4286f4; text-align: left;"> --}}
+    <center style="width: 100%; background: #ffffff; text-align: left;">
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
