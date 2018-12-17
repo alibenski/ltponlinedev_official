@@ -35,7 +35,6 @@
           <p>Friday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_BTime ))}}</strong></p>
           <p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
           @endif
-          <p>Students: </p>
 
           <div class="table-responsive filtered-table">
             <h4><strong>Students</strong></h4>
