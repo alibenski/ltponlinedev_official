@@ -109,7 +109,21 @@
           data: {ids:join_selected_values,classroom_id:classroom_id, term_id:term, _token:token},
           success: function(data) {
           	console.log(data)
-			}
+          	if (data['success']) {
+                $(".sub_chk:checked").each(function() {  
+                    $(this).parents("tr").remove();
+                });
+                	window.location.reload();
+                    alert(data['success']);
+                } else if (data['error']) {
+                    alert(data['error']);
+                } else {
+                    alert('Whoops Something went wrong!!');
+                }
+            },
+	        error: function (data) {
+	            alert(data.responseText);
+	        }
 		});
 	});
 </script>

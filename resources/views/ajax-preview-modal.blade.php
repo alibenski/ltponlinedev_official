@@ -1,5 +1,5 @@
 <div class="modal-body">
-    <h4><strong>Original time schedule(s) the student chose:</strong></h4>
+    <h4><strong>Original time schedule(s) {{ $user }} chose:</strong></h4>
         @if(!empty($schedules))
             <ul>
               @foreach($schedules as $value)
@@ -70,13 +70,13 @@
                 </p>
               @endforeach
 			
-				<div class="btn-group">
+				{{-- <div class="btn-group">
 					<button type="button" class="btn btn-warning" disabled="">Modify Not Available</button>
 					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" disabled="">
 						<span class="caret"></span>
 						<span class="sr-only">Toggle Dropdown</span>
 					</button>
-				</div>
+				</div> --}}
               {{-- @foreach($query as $button)
               	@if(is_null($button->deleted_at)) 
 					<div class="btn-group">

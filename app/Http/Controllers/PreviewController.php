@@ -92,7 +92,7 @@ class PreviewController extends Controller
         $student = Preview::where('Te_Code', $request->Te_Code)->where('schedule_id', $request->schedule_id)->get();
         
         foreach ($student as $value) {
-            $form = PreviewTempSort::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
+            $form = Preview::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
                 foreach ($form as $value) {
                     $form_info_arr[] = $value;
@@ -126,13 +126,14 @@ class PreviewController extends Controller
         
 
         foreach ($student as $value) {
-            $form = PreviewTempSort::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
+            $form = Preview::orderBy('created_at', 'asc')
+                ->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
                 foreach ($form as $value) {
                     $form_info_arr[] = $value;
                 }
         }
-        $form_info = collect($form_info_arr)->sortBy('id');
+        $form_info = collect($form_info_arr)->sortBy('PS');
 
         return view('preview-classrooms', compact('arr','classrooms','form_info', 'classroom_3'));
     }
@@ -156,19 +157,29 @@ class PreviewController extends Controller
             // get classroom details from teventcur table via $request->classroom_id
             $classroom_details = Classroom::where('Code', $request->classroom_id)->first();
             
-            $student_to_move = Preview::whereIn('id',explode(",",$ids))->update([
-                // 'CodeIndexIDClass' => ,
-                'CodeClass' => $request->classroom_id,
-                'CodeIndexID' => $classroom_details->cs_unique.'-',
-                'Code' => $classroom_details->cs_unique,
-                // 'schedule_id' => ,
-                // 'Te_Code' => ,
-                // 'L' => ,
-
-            ]);
             
-            $data = $request->all();
-            return response()->json([$data]);
+            $data_details = [];
+            $student_to_move = Preview::whereIn('id',explode(",",$ids))->get();
+
+            foreach ($student_to_move as $value) {
+                $data_details[] = $value['id'];
+
+                $data_update = Preview::find($value['id']);
+                $data_update->update([
+                    'CodeIndexIDClass' => $request->classroom_id.'-'.$value['INDEXID'],
+                    'CodeClass' => $request->classroom_id,
+                    'CodeIndexID' => $classroom_details->cs_unique.'-'.$value['INDEXID'],
+                    'Code' => $classroom_details->cs_unique,
+                    'schedule_id' => $classroom_details->schedule_id,
+                    'Te_Code' => $classroom_details->Te_Code_New,
+                    'L' => $classroom_details->L,
+                    'Term' => $classroom_details->Te_Term,
+
+                ]); 
+            }
+
+            $data = $data_details;
+            return response()->json(['success'=>"Student(s) moved successfully. Click OK to refresh the page."]);
         }
     }
 
@@ -187,6 +198,9 @@ class PreviewController extends Controller
         if($request->ajax()){
             $current_user = $request->indexno;
             $term_code = $request->term;
+
+            $user = User::where('indexno', $current_user)->first();
+            $user = $user->name;
 
             // check the original wishlist of student in placement forms table
             $check_placement_forms = PlacementForm::where('INDEXID', $current_user)->where('Te_Code', $request->tecode)->where('Term', $term_code)->count();
@@ -209,7 +223,7 @@ class PreviewController extends Controller
                     ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
 
                 // render and return data values via AJAX
-                $data = view('ajax-preview-modal', compact('schedules', 'query'))->render();
+                $data = view('ajax-preview-modal', compact('schedules', 'query', 'user'))->render();
                 return response()->json([$data]);
             }
 
@@ -234,7 +248,7 @@ class PreviewController extends Controller
                     ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
 
                 // render and return data values via AJAX
-                $data = view('ajax-preview-modal', compact('schedules', 'query'))->render();
+                $data = view('ajax-preview-modal', compact('schedules', 'query', 'user'))->render();
                 return response()->json([$data]);
             }
 
@@ -254,7 +268,7 @@ class PreviewController extends Controller
                 ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
 
             // render and return data values via AJAX
-            $data = view('ajax-preview-modal', compact('schedules', 'query'))->render();
+            $data = view('ajax-preview-modal', compact('schedules', 'query', 'user'))->render();
             return response()->json([$data]);
             
         }
@@ -1401,8 +1415,8 @@ class PreviewController extends Controller
         // update field with 'WL'
         foreach ($arrGetOrphanStudents as $id) {
             $update_as_waitlist = Preview::where('id', $id)->first();
-            $update_as_waitlist->Comments = 'WL';
-            $update_as_waitlist->save();
+            // $update_as_waitlist->Comments = 'WL';
+            // $update_as_waitlist->save();
         }
     }
 

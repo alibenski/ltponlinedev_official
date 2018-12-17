@@ -59,13 +59,13 @@
                 <tbody>
                 {{-- @foreach($form_info as $form_in) --}}
                   @foreach($form_info as $form)
-                    @if ($form->preview->CodeClass === $classroom->Code)
-                    <tr id="tr_{{$form->preview->id}}">
+                    @if ($form->CodeClass === $classroom->Code)
+                    <tr id="tr_{{$form->id}}">
                       <td>
                         <div class="counter"></div>
                       </td>
                       <td>
-                        <input type="checkbox" class="sub_chk" data-id="{{ $form->preview->id }}">
+                        <input type="checkbox" class="sub_chk" data-id="{{ $form->id }}">
                         <input type="hidden" name="_token" value="{{ Session::token() }}">
                       </td>
                       <td>
@@ -92,7 +92,7 @@
                                   @endif
                       </td>
                       <td>
-                        <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
+                        <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
                       </td>
                       <td>
                         {{$form->created_at}}
