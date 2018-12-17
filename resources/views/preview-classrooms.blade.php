@@ -9,7 +9,7 @@
         @foreach($classrooms as $classroom)
         <div class="col-sm-12">
         <h3>Section # {{ $classroom->sectionNo }}</h3>
-          <p>Teacher: @if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned</span> @endif</p>
+          <p>Teacher: <h4>@if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned / waitlisted</span> @endif</h4></p>
           @if(!empty($classroom->Te_Mon_Room))
           <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
           <p>Monday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_BTime)) }}</strong></p>
