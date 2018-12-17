@@ -43,7 +43,43 @@ class PreviewController extends Controller
      */
     public function sendConvocation()
     {
-        $convocation = Preview::all()->take(1);
+        $convocation_all = Preview::with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
+        
+        // query students who will be put in waitlist
+        $convocation_waitlist = Preview::whereHas('classrooms', function ($query) {
+                    $query->whereNull('Tch_ID')
+                            ->orWhere('Tch_ID', '=', 'TBD')
+                            ;
+                    })
+                    // ->get();
+                    ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
+
+        $convocation = Preview::whereHas('classrooms', function ($query) {
+                    $query->whereNotNull('Tch_ID')
+                            ->orWhere('Tch_ID', '!=', 'TBD')
+                            ;
+                    })
+                    ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
+                    // ->get();
+
+
+        $convocation_diff = $convocation_all->diff($convocation);
+        $convocation_diff2 = $convocation_waitlist->diff($convocation_diff);
+        $convocation_diff3 = $convocation->diff($convocation_waitlist);
+
+        $cours3 = Preview::where('Te_Code','=','F3R2')->get();
+
+
+        dd($convocation_all, $convocation_waitlist, $convocation, $convocation_diff,$convocation_diff2,$convocation_diff3);
+        // query students who will receive convocation
+        $convocation = Preview::whereHas('classrooms', function ($query) {
+                    $query->whereNotNull('Tch_ID')
+                            ->orWhere('Tch_ID', '!=', 'TBD')
+                            ;
+                    })
+                    ->where('Te_Code','!=','F3R2') // exclude Cours 3 as requested by Fabienne
+                    ->get();
+
 
         foreach ($convocation as $value) {
             
