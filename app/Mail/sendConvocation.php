@@ -12,10 +12,9 @@ class sendConvocation extends Mailable
     use Queueable, SerializesModels;
 
     public $course_name_en; 
-    public $course_name_fr; 
-    public $schedule; 
+    public $course_name_fr;  
     public $staff; 
-    public $room; 
+    public $classrooms;
     public $teacher;
     public $term_en;
     public $term_fr;
@@ -25,13 +24,12 @@ class sendConvocation extends Mailable
      *
      * @return void
      */
-    public function __construct($course_name_en, $course_name_fr, $schedule, $staff, $room, $teacher, $term_en, $term_fr)
+    public function __construct($course_name_en, $course_name_fr, $staff, $classrooms, $teacher, $term_en, $term_fr)
     {
         $this->course_name_en = $course_name_en;
         $this->course_name_fr = $course_name_fr;
-        $this->schedule = $schedule;
         $this->staff = $staff;
-        $this->room = $room;
+        $this->classrooms = $classrooms;
         $this->teacher = $teacher;
         $this->term_en = $term_en;
         $this->term_fr = $term_fr;

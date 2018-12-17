@@ -200,10 +200,31 @@
                                     <p>
                                         Name of the course: <strong>{{ $course_name_en }}</strong>
                                         <br>
-                                        Schedule: {{ $schedule }}
-                                        <br> 
-                                        Room: {{ $room }}
                                         <br>
+                                        Schedule / Room: 
+                                        <br> 
+                                        @foreach($classrooms as $classroom)
+                                          @if(!empty($classroom->Te_Mon_Room))
+                                          <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+                                          <p>Monday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Tue_Room))
+                                          <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+                                          <p>Tuesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Wed_Room))
+                                          <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+                                          <p>Wednesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Thu_Room))
+                                          <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+                                          <p>Thursday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Fri_Room))
+                                          <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+                                          <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
+                                          @endif
+                                        @endforeach
                                         Teacher: <strong>{{ $teacher }}</strong>
                                         <br> 
                                     </p>
@@ -234,10 +255,31 @@
                                     <p>
                                         Nom du cours : <strong>{{ $course_name_fr }}</strong>
                                         <br>
-                                        Horaires : {{ $schedule }}
-                                        <br> 
-                                        Salle : {{ $room }}
                                         <br>
+                                        Horaires / Salle : 
+                                        <br> 
+                                        @foreach($classrooms as $classroom)
+                                          @if(!empty($classroom->Te_Mon_Room))
+                                          <p>salle lundi : <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+                                          <p>horaire lundi : <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Tue_Room))
+                                          <p>salle mardi : <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+                                          <p>horaire mardi : <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Wed_Room))
+                                          <p>salle mercredi : <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+                                          <p>horaire mercredi : <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Thu_Room))
+                                          <p>salle jeudi : <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+                                          <p>horaire jeudi : <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
+                                          @endif
+                                          @if(!empty($classroom->Te_Fri_Room))
+                                          <p>salle vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+                                          <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
+                                          @endif
+                                        @endforeach
                                         Professeur : <strong>{{ $teacher }}</strong>
                                         <br> 
                                     </p>
@@ -268,7 +310,7 @@
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
                                                 <a href="{{ route('login') }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Go to Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>

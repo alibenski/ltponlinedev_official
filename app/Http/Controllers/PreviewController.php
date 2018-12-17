@@ -51,9 +51,11 @@ class PreviewController extends Controller
             $course_name_en = $course_name->EDescription; 
             $course_name_fr = $course_name->FDescription; 
 
-            $schedule = $value->schedules->name; 
+            // $schedule = $value->schedules->name; 
+            // $room = $value->CodeClass; 
+            // get schedule and room details from classroom table
+            $classrooms = Classroom::where('Code', $value->CodeClass)->get();
 
-            $room = $value->CodeClass; 
 
             $teacher = $value->classrooms->Tch_ID;
             $teacher = Teachers::where('Tch_ID', $teacher)->first()->Tch_Name;
@@ -65,7 +67,7 @@ class PreviewController extends Controller
             $staff = $value->users->name; 
             $staff_email = $value->users->email;
             
-            Mail::to($staff_email)->send(new sendConvocation($course_name_en, $course_name_fr, $schedule, $staff, $room, $teacher, $term_en, $term_fr));
+            Mail::to($staff_email)->send(new sendConvocation($course_name_en, $course_name_fr, $staff, $classrooms, $teacher, $term_en, $term_fr));
         }
         
         return 'test';
