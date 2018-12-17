@@ -203,7 +203,9 @@ class PreviewController extends Controller
             $user = $user->name;
 
             // check the original wishlist of student in placement forms table
-            $check_placement_forms = PlacementForm::where('INDEXID', $current_user)->where('Te_Code', $request->tecode)->where('Term', $term_code)->count();
+            $check_placement_forms = PlacementForm::where('INDEXID', $current_user)
+                ->where('Te_Code', $request->tecode)
+                ->where('Term', $term_code)->count();
 
             if ($check_placement_forms > 0) {
                 // query submitted forms based from Modified Forms table
