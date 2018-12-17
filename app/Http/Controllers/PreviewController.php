@@ -155,9 +155,16 @@ class PreviewController extends Controller
             $ids = $request->ids;
             // get classroom details from teventcur table via $request->classroom_id
             $classroom_details = Classroom::where('Code', $request->classroom_id)->first();
+            
             $student_to_move = Preview::whereIn('id',explode(",",$ids))->update([
+                // 'CodeIndexIDClass' => ,
                 'CodeClass' => $request->classroom_id,
+                'CodeIndexID' => $classroom_details->cs_unique.'-',
                 'Code' => $classroom_details->cs_unique,
+                // 'schedule_id' => ,
+                // 'Te_Code' => ,
+                // 'L' => ,
+
             ]);
             
             $data = $request->all();
