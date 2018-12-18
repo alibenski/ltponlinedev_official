@@ -99,6 +99,20 @@
 		<!-- /.info-box -->
 	</a>
 </div>
+<div class="col-sm-4 col-xs-12">
+	<a href="{{ route('preview-waitlisted') }}">
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-teal"><i class="fa  fa-exclamation-circle"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Waitlisted Students </span>
+		    <span class="info-box-number"></span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+</div>
 @endsection
 @section('java_script')
 <script src="{{ asset('js/submit.js') }}"></script>

@@ -1,5 +1,6 @@
 <div class="modal-body">
 	@include('admin.partials._termSessionMsg')
+	
 	@foreach ($student_to_move as $student)
 		<p>	{{ $student->users->name}} </p>
 	@endforeach

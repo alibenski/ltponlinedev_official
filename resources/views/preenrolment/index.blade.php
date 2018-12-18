@@ -50,7 +50,7 @@
 
 	@else
 	{{ $enrolment_forms->links() }}
-	<div class="filtered-table">
+	<div class="filtered-table table-responsive">
 		<table class="table table-bordered table-striped">
 		    <thead>
 		        <tr>

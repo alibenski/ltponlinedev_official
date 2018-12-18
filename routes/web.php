@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('ajax-move-students', ['as'=>'ajax-move-students','uses'=>'PreviewController@ajaxMoveStudents']);
     Route::post('ajax-select-classroom', ['as'=>'ajax-select-classroom','uses'=>'PreviewController@ajaxSelectClassroom']);
     Route::get('send-convocation', 'PreviewController@sendConvocation')->name('send-convocation');
+    Route::get('preview-waitlisted', 'PreviewController@previewWaitlisted')->name('preview-waitlisted');
 
     Route::resource('users', 'UserController');
 

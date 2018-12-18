@@ -37,6 +37,40 @@ use Session;
 
 class PreviewController extends Controller
 {
+    public function previewWaitlisted()
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+
+        $convocation_waitlist = new Preview;
+        // $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'L', 
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $convocation_waitlist = $convocation_waitlist->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+            if (Session::has('Term')) {
+                    $convocation_waitlist = $convocation_waitlist->where('Term', Session::get('Term') );
+                    $queries['Term'] = Session::get('Term');
+            }
+
+        $convocation_waitlist = $convocation_waitlist->whereHas('classrooms', function ($query) {
+                    $query->whereNull('Tch_ID')
+                            ->orWhere('Tch_ID', '=', 'TBD')
+                            ;
+                    })
+                    ->get();
+
+        return view('preview-waitlisted', compact('convocation_waitlist', 'languages'));
+    }
     /**
      * sends convocation emails
      * @return \Illuminate\Http\Response reroute to admin dashboard
