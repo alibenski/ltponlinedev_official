@@ -68,7 +68,9 @@
                         <input type="hidden" name="_token" value="{{ Session::token() }}">
                       </td>
                       <td>
-                        @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
+                        @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif 
+                        @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
+                      </td>
                       <td>
                         @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
                       <td>

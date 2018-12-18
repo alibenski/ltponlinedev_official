@@ -8,7 +8,9 @@ use App\CourseSchedule;
 use App\Day;
 use App\Language;
 use App\Mail\MailPlacementTesttoApprover;
+use App\Mail\MailaboutCancel;
 use App\Mail\MailtoApprover;
+use App\Mail\cancelConvocation;
 use App\Mail\sendConvocation;
 use App\ModifiedForms;
 use App\PlacementForm;
@@ -37,6 +39,23 @@ use Session;
 
 class PreviewController extends Controller
 {
+    public function cancelConvocation($codeindexidclass)
+    {
+        $record = Preview::where('CodeIndexIDClass', $codeindexidclass)->first();
+        $staff_name = $record->users->name;
+        $display_language_en = $record->courses->EDescription;
+        $display_language_fr = $record->courses->FDescription;
+        $schedule = $record->schedules->name;
+        $std_email = $record->users->email;
+
+        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
+
+        $record_delete = Preview::where('CodeIndexIDClass', $codeindexidclass)->delete();
+        
+        session()->flash('cancel_success', 'Your enrolment has been successfully cancelled. ');
+        return back();
+    }
+
     public function previewWaitlisted()
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
@@ -106,7 +125,7 @@ class PreviewController extends Controller
 
         // dd($cours3,$convocation_all, $convocation_waitlist, $convocation, $convocation_diff,$convocation_diff2,$convocation_diff3);
         
-        $convocation_diff3 = $convocation_diff3->take(1);
+        $convocation_diff3 = $convocation_diff3->where('INDEXID', '17942');
 
         foreach ($convocation_diff3 as $value) {
             
@@ -140,6 +159,10 @@ class PreviewController extends Controller
             $staff_email = $value->users->email;
             
             Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
+
+            $convocation_email_sent = Preview::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
+                        'convocation_email_sent' => 1,
+                        ]);
         }
         
         return count($convocation_diff3);
@@ -232,11 +255,11 @@ class PreviewController extends Controller
         $classroom_3 = Classroom::where('cs_unique', $code)->first();
 
         $form_info_arr = [];
-        $student = Preview::where('Te_Code', $classroom_3->Te_Code_New)->where('schedule_id', $classroom_3->schedule_id)->get();
+        $student = Preview::withTrashed()->where('Te_Code', $classroom_3->Te_Code_New)->where('schedule_id', $classroom_3->schedule_id)->get();
         
 
         foreach ($student as $value) {
-            $form = Preview::orderBy('created_at', 'asc')
+            $form = Preview::withTrashed()->orderBy('created_at', 'asc')
                 ->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
                 foreach ($form as $value) {
@@ -284,7 +307,7 @@ class PreviewController extends Controller
                     'Te_Code' => $classroom_details->Te_Code_New,
                     'L' => $classroom_details->L,
                     'Term' => $classroom_details->Te_Term,
-
+                    'convocation_email_sent' => null,
                 ]); 
             }
 

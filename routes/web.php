@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('ajax-select-classroom', ['as'=>'ajax-select-classroom','uses'=>'PreviewController@ajaxSelectClassroom']);
     Route::get('send-convocation', 'PreviewController@sendConvocation')->name('send-convocation');
     Route::get('preview-waitlisted', 'PreviewController@previewWaitlisted')->name('preview-waitlisted');
+    Route::delete('cancel-convocation/{codeindexidclass}', ['as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
 
     Route::resource('users', 'UserController');
 

@@ -8,8 +8,7 @@
     <link href="{{ asset('jquery-ui-1.12.1/jquery-ui.css') }}" rel="stylesheet">
 @stop
 @section('content')
-<div id="loader">
-</div>
+<div id="loader"></div>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -40,6 +39,53 @@
       </div>
     </div>
   </div>
+  @if ($next_term->Term_Code == '001')
+ 
+  @else
+  
+  @if (count($student_convoked) > 0)
+      
+  <div class="row">
+      <div class="col-sm-12">
+          <div class="panel panel-success">
+              <div class="panel-heading"><strong>Your Language Training Course for {{ $next_term->Term_Name }}</strong></div>
+
+              <div class="panel-body">
+                  <p>
+                    @foreach ($student_convoked as $element)
+                    <h3><strong>{{ $element->courses->Description }}</strong></h3>
+                    
+                    <p>Schedule: <strong>{{$element->schedules->name}}</strong></p>  
+
+                      @if(!empty($element->classrooms->Te_Mon_Room))
+                      <p>Monday Room: <strong>{{ $element->classrooms->roomsMon->Rl_Room }}</strong></p>
+                      @endif
+                      @if(!empty($element->classrooms->Te_Tue_Room))
+                      <p>Tuesday Room: <strong>{{ $element->classrooms->roomsTue->Rl_Room }}</strong></p>
+                      @endif
+                      @if(!empty($element->classrooms->Te_Wed_Room))
+                      <p>Wednesday Room: <strong>{{ $element->classrooms->roomsWed->Rl_Room }}</strong></p>
+                      @endif
+                      @if(!empty($element->classrooms->Te_Thu_Room))
+                      <p>Thursday Room: <strong>{{ $element->classrooms->roomsThu->Rl_Room }}</strong></p>
+                      @endif
+                      @if(!empty($element->classrooms->Te_Fri_Room))
+                      <p>Friday Room: <strong>{{ $element->classrooms->roomsFri->Rl_Room }}</strong></p>
+                      @endif
+
+                    <p>Teacher: <strong>@if($element->classrooms->Tch_ID){{ $element->classrooms->teachers->Tch_Name }} @else None @endif</strong></p>
+                    <br> 
+                      <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
+                          <input type="submit" value="@if($element->deleted_at) Cancelled @else Cancel Enrolment @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($element->deleted_at) disabled="" @else @endif>
+                          <input type="hidden" name="_token" value="{{ Session::token() }}">
+                         {{ method_field('DELETE') }}
+                      </form>
+                    @endforeach
+                </p>
+              </div>
+      </div>
+  </div>
+  @else
   <div class="row">
         <div class="col-md-6">
             <div class="panel panel-info">
@@ -156,6 +202,8 @@
         </div>
 
       </div>
+      @endif  
+    @endif
     </div>
   </div>
 </div>

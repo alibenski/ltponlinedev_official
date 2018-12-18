@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
+use App\FocalPoints;
+use App\Language;
+use App\Mail\MailaboutCancel;
+use App\Mail\MailaboutPlacementCancel;
+use App\PlacementForm;
+use App\Preenrolment;
+use App\Preview;
+use App\Repo;
+use App\SDDEXTR;
+use App\Term;
+use App\Torgan;
+use App\User;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
-use App\Mail\MailaboutCancel;
-use App\Mail\MailaboutPlacementCancel;
-use App\Torgan;
-use App\FocalPoints;
-use App\Language;
-use App\Course;
-use App\User;
-use App\Repo;
-use App\Preenrolment;
-use App\Term;
 use Session;
-use Carbon\Carbon;
-use DB;
-use App\SDDEXTR;
-use App\PlacementForm;
 
 class HomeController extends Controller
 {
@@ -90,7 +91,10 @@ class HomeController extends Controller
         //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $termValue)->get()->min();
         
-        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term)->withTerm_select($term_select);
+        $student_convoked = Preview::withTrashed()->where('INDEXID', $current_user)->where('Term', $termValue)->get(); 
+
+
+        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term)->withTerm_select($term_select)->withStudent_convoked($student_convoked);
     }
 
     public function showMod(Request $request)

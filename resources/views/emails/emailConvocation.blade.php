@@ -193,7 +193,7 @@
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
+                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;"></h1>
                                     <p>Dear {{ $staff_name }}, </p>
                                     <p>
                                         We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>.  Please see below the information about your course:
@@ -241,19 +241,6 @@
                                     <p> 
                                         To cancel, log into the platform <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, go to “Submitted Forms”, select the appropriate term and click ”View Forms” to display your applications. Click the red button “Cancel Enrolment” on the registration form you wish to cancel.
                                     </p>
-                                    
-                                        <!-- Button : BEGIN -->
-                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
-                                            <tr>
-                                                <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                                    <a href="{{ route('login') }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                        <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Go to Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <!-- Button : END -->
-
                                     <p>
                                         A technical reason for not having been able to cancel on time will not be considered as a valid reason for re-imbursement nor a reason for not charging your organization. Thank you for your understanding.
                                     </p>
@@ -315,7 +302,7 @@
                                         <br> 
                                     </p>
                                     <p>
-                                        Veuillez lire attentivement <strong>les informations avant le début du trimestre</strong> disponibles sur notre site web en cliquant (<a href="https://learning.unog.ch/fr/node/1472">ici</a>).
+                                        Veuillez lire attentivement <strong>les informations avant le début du trimestre</strong> disponibles sur notre site web en cliquant (<a href="https://learning.unog.ch/fr/node/1472"> ici </a>).
                                     </p>
                                     <p>
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse clm_language@un.org 
@@ -326,19 +313,6 @@
                                     <p> 
                                         Pour annuler, connectez-vous à la plate-forme <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, allez à «Submitted Forms», sélectionnez le trimestre approprié, puis cliquez sur «View Forms» pour afficher vos formulaires. Cliquez sur le bouton rouge "Cancel Enrolment" sur le formulaire d'inscription que vous souhaitez annuler.
                                     </p>
-
-                                            <!-- Button : BEGIN -->
-                                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
-                                                <tr>
-                                                    <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                                        <a href="{{ route('login') }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                            <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Go to Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <!-- Button : END -->
-
                                     <p>
                                         En cas de retard dans l’annulation, la raison technique ne sera pas considérée comme valable pour le remboursement, ni pour une non-facturation de votre organisation. Merci de votre compréhension.
                                     </p>
