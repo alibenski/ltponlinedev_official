@@ -43,7 +43,8 @@ class PreviewController extends Controller
      */
     public function sendConvocation()
     {
-        $convocation_all = Preview::with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
+        $convocation_all = Preview::all();
+        // with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
         
         // query students who will be put in waitlist
         $convocation_waitlist = Preview::whereHas('classrooms', function ($query) {
@@ -51,26 +52,26 @@ class PreviewController extends Controller
                             ->orWhere('Tch_ID', '=', 'TBD')
                             ;
                     })
-                    // ->get();
-                    ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
+                    ->get();
+                    // ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
 
         $convocation = Preview::whereHas('classrooms', function ($query) {
                     $query->whereNotNull('Tch_ID')
                             ->orWhere('Tch_ID', '!=', 'TBD')
                             ;
                     })
-                    ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
-                    // ->get();
+                    // ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
+                    ->where('Te_Code','!=','F3R2')
+                    ->get();
 
 
         $convocation_diff = $convocation_all->diff($convocation);
         $convocation_diff2 = $convocation_waitlist->diff($convocation_diff);
-        $convocation_diff3 = $convocation->diff($convocation_waitlist);
+        $convocation_diff3 = $convocation->diff($convocation_waitlist); // send email convocation to this collection
 
         $cours3 = Preview::where('Te_Code','=','F3R2')->get();
 
-
-        dd($convocation_all, $convocation_waitlist, $convocation, $convocation_diff,$convocation_diff2,$convocation_diff3);
+        dd($cours3,$convocation_all, $convocation_waitlist, $convocation, $convocation_diff,$convocation_diff2,$convocation_diff3);
         // query students who will receive convocation
         $convocation = Preview::whereHas('classrooms', function ($query) {
                     $query->whereNotNull('Tch_ID')
@@ -81,7 +82,7 @@ class PreviewController extends Controller
                     ->get();
 
 
-        foreach ($convocation as $value) {
+        foreach ($convocation_diff3 as $value) {
             
             $course_name = Course::where('Te_code_New', $value->Te_Code)->first(); 
             $course_name_en = $course_name->EDescription; 
