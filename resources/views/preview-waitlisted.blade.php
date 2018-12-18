@@ -59,6 +59,8 @@
 			        	<th>#</th>
 			            <th>Name</th>
 			            <th>Course</th>
+			            <th>Email</th>
+			            <th>Contact #</th>
 			        </tr>
 			    </thead>
 			    <tbody>
@@ -71,6 +73,8 @@
 						@if(empty($element->users->name)) None @else {{$element->users->name }} @endif	
 						</td>
 						<td>{{$element->courses->Description }}</td>
+						<td>@if(empty($element->users->email)) None @else {{$element->users->email }} @endif</td>
+						<td>@if(empty($element->users->sddextr->PHONE)) None @else {{$element->users->sddextr->PHONE }} @endif</td>
 					</tr>
 					@endforeach
 			    </tbody>

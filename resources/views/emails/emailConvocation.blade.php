@@ -150,7 +150,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Convocation CLM Language Training Online Registration Platform
+            CLM Language Training Online Registration Platform
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -192,39 +192,38 @@
                     <td bgcolor="#ffffff">
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
-                                    <p>Dear participant of the Language Training Programme, </p>
+                                    <p>Dear {{ $staff_name }}, </p>
                                     <p>
                                         We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>.  Please see below the information about your course:
                                     </p>
                                     
                                     <p>
-                                        Name of the course: <strong>{{ $course_name_en }}</strong>
-                                        <br>
-                                        <br>
-                                        Schedule / Room: 
+                                        <h3><strong>{{ $course_name_en }}</strong></h3>
+                                        
+                                        Schedule: <strong>{{$schedule}}</strong> 
                                         <br> 
                                         @foreach($classrooms as $classroom)
                                           @if(!empty($classroom->Te_Mon_Room))
                                           <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
-                                          <p>Monday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
+                                          {{-- <p>Monday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Tue_Room))
                                           <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
-                                          <p>Tuesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
+                                          {{-- <p>Tuesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Wed_Room))
                                           <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
-                                          <p>Wednesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
+                                          {{-- <p>Wednesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Thu_Room))
                                           <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
-                                          <p>Thursday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
+                                          {{-- <p>Thursday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Fri_Room))
                                           <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
-                                          <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
+                                          {{-- <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
                                         Teacher: <strong>{{ $teacher }}</strong>
@@ -236,50 +235,80 @@
                                     <p>
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at clm_language@un.org 
                                     </p>
-                                    <p>
+                                    <p style="color: red;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before 30 December 2018. No course fees will be refunded after this date.
                                     </p>
                                     <p> 
                                         To cancel, log into the platform <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, go to “Submitted Forms”, select the appropriate term and click ”View Forms” to display your applications. Click the red button “Cancel Enrolment” on the registration form you wish to cancel.
                                     </p>
+                                    
+                                        <!-- Button : BEGIN -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
+                                            <tr>
+                                                <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
+                                                    <a href="{{ route('login') }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                                                        <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Go to Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- Button : END -->
+
                                     <p>
                                         A technical reason for not having been able to cancel on time will not be considered as a valid reason for re-imbursement nor a reason for not charging your organization. Thank you for your understanding.
                                     </p>
+                                    <p style="margin: 0;">
+                                        If you have any question please contact us at: clm_language@un.org
+                                    </p>    
                                     <p>
                                         The Language Training Programme wishes you a rich learning experience next term.
                                     </p>
+                                    <br><br>
+                                    <p>
+                                        <h4><strong>Language Training Secretariat</strong></h4>
+                                        For French Annex Bocage 2 - Room 5 (ground floor)<br>
+                                        For all other languages Annex Bocage 2 - Room 108 (1st floor)<br>
+                                        <br>
+                                        Opening hours : 9:00-12:30 from Monday to Friday.<br>
+                                        Telephone: 00 41 22 917 44 09<br><br>
+                                        <a href="https://learning.unog.ch/">https://learning.unog.ch/</a>
+                                    </p>
                                     <hr>
-                                    <p>Cher participant ou chère participante au Programme de formation linguistique,</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
+                                    <p>Cher / Chère {{ $staff_name }},</p>
                                     <p>
                                         Nous avons le plaisir de vous informer que vous êtes inscrit·e avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
                                     </p>
                                     
                                     <p>
-                                        Nom du cours : <strong>{{ $course_name_fr }}</strong>
-                                        <br>
-                                        <br>
-                                        Horaires / Salle : 
+                                        <h3><strong>{{ $course_name_fr }}</strong></h3>
+
+                                        Horaire : <strong>{{$schedule}}</strong> 
                                         <br> 
                                         @foreach($classrooms as $classroom)
                                           @if(!empty($classroom->Te_Mon_Room))
-                                          <p>salle lundi : <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
-                                          <p>horaire lundi : <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
+                                          <p>Salle du lundi : <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+                                          {{-- <p>horaire lundi : <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Tue_Room))
-                                          <p>salle mardi : <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
-                                          <p>horaire mardi : <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
+                                          <p>Salle du mardi : <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+                                          {{-- <p>horaire mardi : <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Wed_Room))
-                                          <p>salle mercredi : <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
-                                          <p>horaire mercredi : <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
+                                          <p>Salle du mercredi : <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+                                          {{-- <p>horaire mercredi : <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Thu_Room))
-                                          <p>salle jeudi : <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
-                                          <p>horaire jeudi : <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
+                                          <p>Salle du jeudi : <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+                                          {{-- <p>horaire jeudi : <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Fri_Room))
-                                          <p>salle vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
-                                          <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
+                                          <p>Salle du vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+                                          {{-- <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
                                         Professeur : <strong>{{ $teacher }}</strong>
@@ -291,40 +320,43 @@
                                     <p>
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse clm_language@un.org 
                                     </p>
-                                    <p>
+                                    <p style="color: red;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit·e à deux cours), vous devez le faire avant le 30 décembre 2018. Aucun frais de cours ne sera remboursé après cette date. 
                                     </p>
                                     <p> 
                                         Pour annuler, connectez-vous à la plate-forme <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, allez à «Submitted Forms», sélectionnez le trimestre approprié, puis cliquez sur «View Forms» pour afficher vos formulaires. Cliquez sur le bouton rouge "Cancel Enrolment" sur le formulaire d'inscription que vous souhaitez annuler.
                                     </p>
+
+                                            <!-- Button : BEGIN -->
+                                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
+                                                <tr>
+                                                    <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
+                                                        <a href="{{ route('login') }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                                                            <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Go to Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <!-- Button : END -->
+
                                     <p>
                                         En cas de retard dans l’annulation, la raison technique ne sera pas considérée comme valable pour le remboursement, ni pour une non-facturation de votre organisation. Merci de votre compréhension.
+                                    </p>
+                                    <p style="margin: 0;">
+                                        Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : clm_language@un.org
                                     </p>
                                     <p>
                                         Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage pour le prochain trimestre.
                                     </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <!-- Button : BEGIN -->
-                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
-                                        <tr>
-                                            <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                                <a href="{{ route('login') }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Go to Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <!-- Button : END -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;"></h2>
-                                    <p style="margin: 0;">If you have any question please contact us at: clm_language@un.org<hr>
-                                    Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : clm_language@un.org
+                                    <br><br>
+                                    <p>
+                                        <h4><strong>Secrétariat du Programme de formation linguistique</strong></h4>
+                                        Pour les cours de français : Annexe Bocage II - bureau 5 (Rez-de-chaussée) <br>
+                                        Pour les autres cours de langues : Annexe Bocage II - bureau 108 (1er étage) <br>
+                                        <br>
+                                        Heures d’ouverture: 9:00-12:30 du lundi au vendredi.<br>
+                                        Téléphone: + 41 22 917 44 09<br><br>
+                                        <a href="https://learning.unog.ch/">https://learning.unog.ch/</a>
                                     </p>
                                 </td>
                             </tr>
@@ -374,8 +406,8 @@
 
                 <!-- Clear Spacer : BEGIN -->
                 <tr>
-                    <td aria-hidden="true" height="40" style="font-size: 0; line-height: 0;">
-                        &nbsp;
+                    <td aria-hidden="true" height="20" style="font-size: 0; line-height: 0;">
+                        <hr>
                     </td>
                 </tr>
                 <!-- Clear Spacer : END -->
@@ -385,9 +417,12 @@
                     <td bgcolor="#ffffff">
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <p style="margin: 0;text-align:center;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
-                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <p style="margin: 0;text-align:left;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
+                                    <p style="margin: 0;text-align: left;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                    <br>
+                                    <p style="margin: 0;text-align:left;"><strong>Le Programme de formation linguistique à l'Office des Nations Unies à Genève</strong></p> 
+                                    <p style="margin: 0;text-align: left;">Nous croyons au multilinguisme et au multiculturalisme en tant qu'éléments clés de la compréhension mutuelle dans un contexte mondial. À cette fin, nous proposons des cours de langues dans les six langues officielles des Nations Unies (anglais, arabe, chinois, espagnol, français et russe).</p>
                                 </td>
                             </tr>
                         </table>
@@ -403,12 +438,7 @@
                 <tr>
                     <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #222222;" class="x-gmail-data-detectors">
                         <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>
-                        <br><br>
-                        Language Training Secretariat<br>
-                        For French Annex Bocage 2 - Room 5 (ground floor)<br>
-                        For all other languages Annex Bocage 2 - Room 108 (1st floor)<br>
-                        Telephone: 00 41 22 917 44 09
-                        <br><br>
+                        
                         <hr>
                         {{date("Y")}} All Rights Reserved. <br><br>
                         <unsubscribe style="color: #222222; text-decoration: underline;"></unsubscribe>

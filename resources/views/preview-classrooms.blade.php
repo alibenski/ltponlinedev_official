@@ -4,9 +4,9 @@
 
 <div class="row">
   <div class="col-sm-12">
-    <h3><strong>{{ $classroom_3->course->Description}}</strong></h3>
     <div id="accordion">
         @foreach($classrooms as $classroom)
+        <h3><strong>{{ $classroom_3->course->Description}}</strong></h3>
         <div class="col-sm-12">
         <h3>Section # {{ $classroom->sectionNo }}</h3>
           <p>Teacher: <h4>@if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned / waitlisted</span> @endif</h4></p>
@@ -37,7 +37,7 @@
           @endif
 
           <div class="table-responsive filtered-table">
-            <h4><strong>Students</strong></h4>
+            <h4><strong>{{ $classroom_3->course->Description}} Students</strong></h4>
 
             <button style="margin-bottom: 10px" class="btn btn-primary delete_all">Move Selected</button>
             

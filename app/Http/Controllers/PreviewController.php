@@ -87,14 +87,13 @@ class PreviewController extends Controller
                             ;
                     })
                     ->get();
-                    // ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
 
+        // query students who will receive convocation
         $convocation = Preview::whereHas('classrooms', function ($query) {
                     $query->whereNotNull('Tch_ID')
                             ->orWhere('Tch_ID', '!=', 'TBD')
                             ;
                     })
-                    // ->with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
                     ->where('Te_Code','!=','F3R2')
                     ->get();
 
@@ -103,18 +102,11 @@ class PreviewController extends Controller
         $convocation_diff2 = $convocation_waitlist->diff($convocation_diff);
         $convocation_diff3 = $convocation->diff($convocation_waitlist); // send email convocation to this collection
 
-        $cours3 = Preview::where('Te_Code','=','F3R2')->get();
+        // $cours3 = Preview::where('Te_Code','=','F3R2')->get();
 
-        dd($cours3,$convocation_all, $convocation_waitlist, $convocation, $convocation_diff,$convocation_diff2,$convocation_diff3);
-        // query students who will receive convocation
-        $convocation = Preview::whereHas('classrooms', function ($query) {
-                    $query->whereNotNull('Tch_ID')
-                            ->orWhere('Tch_ID', '!=', 'TBD')
-                            ;
-                    })
-                    ->where('Te_Code','!=','F3R2') // exclude Cours 3 as requested by Fabienne
-                    ->get();
-
+        // dd($cours3,$convocation_all, $convocation_waitlist, $convocation, $convocation_diff,$convocation_diff2,$convocation_diff3);
+        
+        $convocation_diff3 = $convocation_diff3->take(1);
 
         foreach ($convocation_diff3 as $value) {
             
@@ -122,7 +114,7 @@ class PreviewController extends Controller
             $course_name_en = $course_name->EDescription; 
             $course_name_fr = $course_name->FDescription; 
 
-            // $schedule = $value->schedules->name; 
+            $schedule = $value->schedules->name; 
             // $room = $value->CodeClass; 
             // get schedule and room details from classroom table
             $classrooms = Classroom::where('Code', $value->CodeClass)->get();
@@ -131,17 +123,26 @@ class PreviewController extends Controller
             $teacher = $value->classrooms->Tch_ID;
             $teacher = Teachers::where('Tch_ID', $teacher)->first()->Tch_Name;
 
+            // get term values
             $term = $value->Term;
+            // get term values and convert to strings
             $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
             $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            
+            $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+            $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
 
-            $staff = $value->users->name; 
+            $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+            $term_year = new Carbon($term_date_time);
+            $term_year = $term_year->year;
+
+            $staff_name = $value->users->name; 
             $staff_email = $value->users->email;
             
-            Mail::to('allyson.frias@un.org')->send(new sendConvocation($course_name_en, $course_name_fr, $staff, $classrooms, $teacher, $term_en, $term_fr));
+            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
         }
         
-        return 'test';
+        return count($convocation_diff3);
     }
 
     /**
