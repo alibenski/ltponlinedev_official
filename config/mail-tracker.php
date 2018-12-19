@@ -28,8 +28,8 @@ return [
      * Where should the admin route be?
      */
     'admin-route' => [
-        'prefix' => 'email-manager',
-        'middleware' => ['web','super'],
+        'prefix' => 'admin/email-manager',
+        'middleware' => ['web','isAdmin'],
     ],
 
     /**

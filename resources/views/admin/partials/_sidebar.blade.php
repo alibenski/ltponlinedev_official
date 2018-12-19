@@ -101,6 +101,7 @@
             <li><a href="#">Create</a></li>
           </ul>
         </li>
+        <li class="{{ Request::is('admin/email-manager*') ? "active" : ""}}"><a href="{{ route('mailTracker_Index') }}" target="_blank"><i class="fa fa-envelope"></i> <span>Emails</span></a></li>
         <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-btn fa-sign-out btn-space" aria-hidden="true"></i>
               <span>Logout</span>
             </a>

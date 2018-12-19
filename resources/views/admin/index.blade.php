@@ -61,7 +61,7 @@
 	<a href="{{ route('newuser.index') }}">
 		<div class="info-box">
 		  <!-- Apply any bg-* class to to the icon to color it -->
-		  <span class="info-box-icon bg-aqua"><i class="fa fa-star-o"></i></span>
+		  <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">New User Access Request </span>
 		    <span class="info-box-number">{{ $new_user_count }}</span>
