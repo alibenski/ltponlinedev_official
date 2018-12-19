@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('ajax-select-classroom', ['as'=>'ajax-select-classroom','uses'=>'PreviewController@ajaxSelectClassroom']);
     Route::get('send-convocation', 'PreviewController@sendConvocation')->name('send-convocation');
     Route::get('preview-waitlisted', 'PreviewController@previewWaitlisted')->name('preview-waitlisted');
-    Route::delete('cancel-convocation/{codeindexidclass}', ['as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
+
 
     Route::resource('users', 'UserController');
 
@@ -171,6 +171,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('password.expired');
     Route::post('password/post_expired', 'FirstTimeLoginController@postExpired')
         ->name('password.post_expired');
+    Route::delete('cancel-convocation/{codeindexidclass}', ['as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
 });
 // route to update email of student - this should be outside of auth middleware for the student to have access to this route 
 Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
