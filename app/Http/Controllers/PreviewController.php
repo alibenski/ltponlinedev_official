@@ -202,7 +202,7 @@ class PreviewController extends Controller
                 ->where('INDEXID', $request->INDEXID)
                 ->count();
 
-        $priority_status = Preview::where('CodeIndexID', $request->CodeIndexID)->first();
+        $priority_status = Preview::withTrashed()->where('CodeIndexID', $request->CodeIndexID)->first();
         // $data = $priority_status->PS;
         if ($priority_status->PS == 1) {
             $data = '1: Re-enrolment';
