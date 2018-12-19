@@ -1,0 +1,50 @@
+@extends('admin.no_sidebar_admin')
+
+@section('content')
+<div class="row">
+	<div class="col-sm-12">
+		<div class="filtered-table table-responsive">
+			<table class="table table-bordered table-striped">
+			    <thead>
+			        <tr>
+			        	<th>#</th>
+			            <th>Name</th>
+			            <th>Course</th>
+			            <th>Date/Time Cancelled</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+					@foreach($cancelled_convocations as $element)
+					<tr id="tr_{{$element->id}}">
+						<td>
+                        	<div class="counter"></div>
+                      	</td>
+						<td>
+						@if(empty($element->users->name)) None @else {{$element->users->name }} @endif	
+						</td>
+						<td><a href="{{ route('preview-classrooms', ['Code' => $element->Code]) }}" target="_blank" class="small-box-footer" title="Go to the class list">{{$element->courses->Description }} <i class="fa fa-external-link-square"></i></a></td>
+						<td>@if(empty($element->deleted_at)) None @else {{$element->deleted_at }} @endif</td>
+					</tr>
+					@endforeach
+			    </tbody>
+			</table>
+		</div>	
+	</div>
+</div>
+
+
+@stop
+
+@section('java_script')
+<script>
+$(document).ready(function () {
+	var counter = 0;
+	$('.counter').each(function() {
+	    counter++;
+	    $(this).attr('id', counter);
+	    $('#'+counter).html(counter);
+	    // console.log(counter)
+	});
+});
+</script>
+@stop

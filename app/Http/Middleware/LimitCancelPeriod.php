@@ -47,7 +47,7 @@ class LimitCancelPeriod
             } 
         } elseif (is_null($cancellationDateLimit)) {
             return redirect()->route('home')
-                ->with('interdire-msg','Cancellation of enrolment forms has been disabled. Please contact the Language Secretariat if you really want to cancel.');
+                ->with('interdire-msg','Cancellation of enrolment forms has been disabled. Please contact the Language Secretariat.');
         } 
         
         return $next($request);

@@ -53,19 +53,23 @@
                         <th>Flexible?</th>
                         <th>Schedules</th>
                         <th>Submission Date</th>
+                        <th>Operation</th>
                     </tr>
                 </thead>
                 <tbody>
                 {{-- @foreach($form_info as $form_in) --}}
                   @foreach($form_info as $form)
                     @if ($form->CodeClass === $classroom->Code)
-                    <tr id="tr_{{$form->id}}">
+                    <tr id="tr_{{$form->id}}" @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
                       <td>
                         <div class="counter"></div>
                       </td>
                       <td>
+                        @if($form->deleted_at) 
+                        @else 
                         <input type="checkbox" class="sub_chk" data-id="{{ $form->id }}">
                         <input type="hidden" name="_token" value="{{ Session::token() }}">
+                        @endif
                       </td>
                       <td>
                         @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif 
@@ -97,6 +101,14 @@
                       </td>
                       <td>
                         {{$form->created_at}}
+                      </td>
+                      <td>
+                        @if(is_null($form->convocation_email_sent))
+                          @if(!is_null($form->classrooms->Tch_ID) && $form->classrooms->Tch_ID != 'TBD')
+                            <button type="button" value="{{ $form->CodeIndexIDClass }}" id="sendEmailConvocation" class="btn btn-success"><i class="fa fa-send"></i> Send Email Convocation</button>
+                          @endif
+                        @else --
+                        @endif
                       </td>
                     </tr>  
                     @endif
@@ -227,6 +239,39 @@ $(document).ready(function () {
           }
       });
   }); 
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#sendEmailConvocation').on('click', function() {
+      $(this).attr('disabled', 'disabled');
+      var CodeIndexIDClass = $(this).val();
+      console.log(CodeIndexIDClass)
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+        url: '{{ route('send-individual-convocation') }}',
+        type: 'POST',
+        data: {CodeIndexIDClass:CodeIndexIDClass, _token:token},
+      })
+
+      .done(function(data) {
+        console.log(data);
+        if (["success"]) {
+          window.location.reload();
+        }
+      })
+
+      .fail(function(data) {
+         if (["fail"]) { 
+          alert('Error sending. Please contact System Administrator.');
+          window.location.reload();
+        }
+      })
+      
+    });
+  });  
+
 </script>
 
 <script type="text/javascript">

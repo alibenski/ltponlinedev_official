@@ -220,11 +220,11 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <a href="{{ route('admin_dashboard') }}">CLM Online Enrolment Administration</a>
+        <a href="{{ route('admin_dashboard') }}"><i class="fa fa-dashboard"></i> CLM Online Enrolment Administration</a>
         <small>Language Training Programme</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="{{ route('admin_dashboard') }}"><i class="fa fa-dashboard"></i> Admin Home</a></li>
+        <li><a href="{{ route('admin_dashboard') }}"><i class="fa fa-dashboard"></i> Admin Dashboard</a></li>
         <li class="active">Here</li>
       </ol>
     </section>

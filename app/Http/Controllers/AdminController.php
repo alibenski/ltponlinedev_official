@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\NewUser;
+use App\Preenrolment;
+use App\Preview;
 use App\Services\User\ExistingUserImport;
 use App\Services\User\UserImport;
 use App\Term;
@@ -14,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Session;
-use App\Preenrolment;
 
 
 class AdminController extends Controller
@@ -34,8 +35,9 @@ class AdminController extends Controller
     {
         $new_user_count = NewUser::where('approved_account', 0)->count();
         $terms = Term::orderBy('Term_Code', 'desc')->get();       
+        $cancelled_convocations = Preview::onlyTrashed()->count();
 
-        return view('admin.index',compact('terms'))->withNew_user_count($new_user_count);   
+        return view('admin.index',compact('terms','cancelled_convocations','new_user_count'));   
     }
 
 

@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
 
     /*
-     Preview Routes
+     * Preview Routes
      */
     Route::get('preview-course-3', 'PreviewController@previewCourse3')->name('preview-course-3');
 
@@ -48,12 +48,15 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('ajax-move-students-form', ['as'=>'ajax-move-students-form','uses'=>'PreviewController@ajaxMoveStudentsForm']);
     Route::post('ajax-move-students', ['as'=>'ajax-move-students','uses'=>'PreviewController@ajaxMoveStudents']);
     Route::post('ajax-select-classroom', ['as'=>'ajax-select-classroom','uses'=>'PreviewController@ajaxSelectClassroom']);
+    Route::post('send-individual-convocation', ['as'=>'send-individual-convocation','uses'=>'PreviewController@sendIndividualConvocation']);
     Route::get('send-convocation', 'PreviewController@sendConvocation')->name('send-convocation');
     Route::get('preview-waitlisted', 'PreviewController@previewWaitlisted')->name('preview-waitlisted');
-
-
+    Route::get('cancelled-convocation-view', 'PreviewController@cancelledConvocaitonView')->name('cancelled-convocation-view');
+    
+    /**
+     * User Routes
+     */
     Route::resource('users', 'UserController');
-
     // separate password reset form
     Route::get('/user/{id}/passwordreset', ['as' => 'users.passwordreset', 'uses' => 'UserController@passwordReset' ]);
     Route::put('/user/{id}/resetpassword', ['as' => 'users.resetpassword', 'uses' => 'UserController@resetPassword' ]);
@@ -171,7 +174,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('password.expired');
     Route::post('password/post_expired', 'FirstTimeLoginController@postExpired')
         ->name('password.post_expired');
-    Route::delete('cancel-convocation/{codeindexidclass}', ['as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
+    
+    // route to cancel of convoked course class 
+    Route::delete('cancel-convocation/{codeindexidclass}', ['middleware' => 'limit-cancel','as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
 });
 // route to update email of student - this should be outside of auth middleware for the student to have access to this route 
 Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);

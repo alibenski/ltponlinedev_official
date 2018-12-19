@@ -77,6 +77,8 @@
                     <br> 
                       <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
                           <input type="submit" value="@if($element->deleted_at) Cancelled @else Cancel Enrolment @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($element->deleted_at) disabled="" @else @endif>
+                          {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
+                          <input type="hidden" name="deleteTerm" value="{{ $element->Term }}">
                           <input type="hidden" name="_token" value="{{ Session::token() }}">
                          {{ method_field('DELETE') }}
                       </form>

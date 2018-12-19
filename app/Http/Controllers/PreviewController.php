@@ -39,6 +39,13 @@ use Session;
 
 class PreviewController extends Controller
 {
+    public function cancelledConvocaitonView()
+    {
+        $cancelled_convocations = Preview::onlyTrashed()->orderBy('UpdatedOn', 'asc')->get();
+
+        return view('admin.cancelled-convocation-view', compact('cancelled_convocations'));
+    }
+
     public function cancelConvocation($codeindexidclass)
     {
         $record = Preview::where('CodeIndexIDClass', $codeindexidclass)->first();
@@ -167,6 +174,53 @@ class PreviewController extends Controller
         }
         
         return count($convocation_diff3);
+    }
+
+    public function sendIndividualConvocation(Request $request)
+    {
+        if($request->ajax()){
+            $select_student =  Preview::where('CodeIndexIDClass', $request->CodeIndexIDClass)->first();
+                
+                $course_name = Course::where('Te_code_New', $select_student->Te_Code)->first(); 
+                $course_name_en = $course_name->EDescription; 
+                $course_name_fr = $course_name->FDescription; 
+
+                $schedule = $select_student->schedules->name; 
+
+                $classrooms = Classroom::where('Code', $select_student->CodeClass)->get();
+
+
+                $teacher = $select_student->classrooms->Tch_ID;
+                $teacher = Teachers::where('Tch_ID', $teacher)->first()->Tch_Name;
+
+                // get term values
+                $term = $select_student->Term;
+                // get term values and convert to strings
+                $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+                $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+                
+                $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+                $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+                $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+                $term_year = new Carbon($term_date_time);
+                $term_year = $term_year->year;
+
+                $staff_name = $select_student->users->name; 
+                $staff_email = $select_student->users->email;
+                
+            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
+
+            $convocation_email_sent = Preview::where('CodeIndexIDClass', $select_student->CodeIndexIDClass)->update([
+                    'convocation_email_sent' => 1,
+                ]);
+
+            $data = 'success';
+            return response()->json([$data]);
+            
+        }
+        $data = 'fail';
+        return response()->json([$data]);
     }
 
     /**
