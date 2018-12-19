@@ -126,6 +126,7 @@ class PreviewController extends Controller
         // dd($cours3,$convocation_all, $convocation_waitlist, $convocation, $convocation_diff,$convocation_diff2,$convocation_diff3);
         
         $convocation_diff3 = $convocation_diff3->whereNull('convocation_email_sent');
+        // $convocation_diff3 = $convocation_diff3->where('INDEXID', '17942');
 
         foreach ($convocation_diff3 as $value) {
             
