@@ -3,6 +3,11 @@
 @section('content')
 <div class="row">
 	<div class="col-sm-12">
+		
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
 		<div class="filtered-table table-responsive">
 			<table class="table table-bordered table-striped">
 			    <thead>
@@ -46,5 +51,10 @@ $(document).ready(function () {
 	    // console.log(counter)
 	});
 });
+</script>
+<script type="text/javascript">
+   setTimeout(function(){
+       location.reload();
+   },3000);
 </script>
 @stop

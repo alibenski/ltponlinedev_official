@@ -72,7 +72,7 @@
 						<td>
 						@if(empty($element->users->name)) None @else {{$element->users->name }} @endif	
 						</td>
-						<td>{{$element->courses->Description }}</td>
+						<td><a href="{{ route('preview-classrooms', ['Code' => $element->Code]) }}" target="_blank" class="small-box-footer" title="Go to the class list">{{$element->courses->Description }}  <i class="fa fa-external-link-square"></i></a></td>
 						<td>@if(empty($element->users->email)) None @else {{$element->users->email }} @endif</td>
 						<td>@if(empty($element->users->sddextr->PHONE)) None @else {{$element->users->sddextr->PHONE }} @endif</td>
 					</tr>
