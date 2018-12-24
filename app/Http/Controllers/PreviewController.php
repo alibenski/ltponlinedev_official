@@ -314,14 +314,15 @@ class PreviewController extends Controller
         
 
         foreach ($student as $value) {
-            $form = Preview::withTrashed()->orderBy('created_at', 'asc')
+            $form = Preview::withTrashed()->orderBy('created_at', 'asc')->orderBy('PS', 'asc')
                 ->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
                 foreach ($form as $value) {
                     $form_info_arr[] = $value;
                 }
         }
-        $form_info = collect($form_info_arr)->sortBy('PS');
+        $form_info = collect($form_info_arr);
+        // ->sortBy('id');
 
         return view('preview-classrooms', compact('arr','classrooms','form_info', 'classroom_3'));
     }
