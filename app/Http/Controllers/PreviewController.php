@@ -26,6 +26,7 @@ use App\Term;
 use App\Torgan;
 use App\User;
 use App\Waitlist;
+use PDF;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -39,6 +40,54 @@ use Session;
 
 class PreviewController extends Controller
 {
+    public function pdfView(Request $request)
+    {
+        $code = 'F1R1-14-191';
+        $classrooms = Classroom::where('cs_unique', $code)->get();
+
+        $arr = [];
+        $classrooms_2 = Classroom::where('cs_unique', $code)->select('Code')->groupBy('Code')->get();
+
+            foreach ($classrooms_2 as $class) {
+                $students = Preview::where('CodeClass', $class->Code)->orderBy('PS', 'asc')->get();
+                foreach ($students as $value) {
+                    $arr[] = $value;
+                }
+            }
+
+        $classroom_3 = Classroom::where('cs_unique', $code)->first();
+
+        $form_info_arr = [];
+
+        $student = Preview::withTrashed()
+            ->where('Te_Code', $classroom_3->Te_Code_New)
+            ->where('schedule_id', $classroom_3->schedule_id)
+            ->orderBy('PS', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        
+
+        foreach ($student as $value) {
+            $form = Preview::withTrashed()
+                ->where('CodeIndexID', $value->CodeIndexID)
+                ->get();
+                foreach ($form as $value) {
+                    $form_info_arr[] = $value;
+                }
+        }
+        $form_info = collect($form_info_arr);
+        // ->sortBy('id');
+
+        if($request->has('download')){
+            $pdf = PDF::loadView('pdfview', compact('arr','classrooms','form_info', 'classroom_3'));
+            return $pdf->download('pdfview.pdf');
+        }
+
+        return view('pdfview', compact('arr','classrooms','form_info', 'classroom_3'));
+
+
+    }
+
     public function cancelledConvocaitonView()
     {
         $cancelled_convocations = Preview::onlyTrashed()->orderBy('UpdatedOn', 'asc')->get();

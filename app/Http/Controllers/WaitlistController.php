@@ -444,10 +444,6 @@ class WaitlistController extends Controller
                         ]);
                         $arrayCheck[] = $pashUpdate->get();
                     }
-
-
-
-
             }
         }
 

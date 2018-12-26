@@ -18,6 +18,7 @@ Route::get('sddextr', 'WaitlistController@sddextr')->name('sddextr');
 Route::get('test-method', 'WaitlistController@testMethod')->name('test-method');
 Route::get('insert-record-to-preview', 'WaitlistController@insertRecordToPreview')->name('insert-record-to-preview');
 
+Route::get('pdfview', ['as'=>'pdfview','uses'=>'PreviewController@pdfView']);
 
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
     //admin routes
