@@ -43,6 +43,14 @@
 	        </div>
 	    </div>
 
+    <div class="form-group">
+      <div class="col-sm-12"><button type="button" class="show-modal btn btn-info pull-right" data-toggle="modal"><span class="fa fa-comment"></span>  View All Admin Notes</button></div>
+      <label class="control-label" for="admin_comment">Admin Comment/Notes Tracker:</label>
+      <div class="">
+          <textarea class="form-control" name="admin_comment" cols="40" rows="5"></textarea>
+      </div>
+    </div>
+
 		<button type="submit" class="btn btn-success btn-move-student"><span class='fa fa-arrow-right'></span> 
 			Move
 		</button>
