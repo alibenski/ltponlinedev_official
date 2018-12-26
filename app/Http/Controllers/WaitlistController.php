@@ -38,6 +38,39 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function insertRecordToPreview()
+    {
+        $request = (object) [
+            'Term' => '191',
+            'INDEXID' => '',
+            ];
+
+        // sort enrolment forms by date of submission
+        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        // apply unique() method to remove dupes 
+        // apply values() method to reset key series of the array 
+        $approved_1 = $approved_0_1->unique('INDEXID')->values()->all(); // becomes an array
+
+        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_2 = $approved_0_2->unique('INDEXID')->values()->all();
+
+        // !!!!!! add where selfpay_approval == 1 !!!!!!
+        $approved_0_3_collect = Preenrolment::where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_3 = Preenrolment::select('INDEXID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_3 = $approved_0_3->unique('INDEXID')->values()->all(); 
+        
+
+        $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        $approved_collections = $approved_collections->unique('INDEXID')->values()->all(); 
+
+        dd($approved_collections);
+    }
+
     public function testMethod()
     {
         $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
@@ -155,7 +188,7 @@ class WaitlistController extends Controller
         for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
             $num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
         }
-dd($num_classes);
+    dd($num_classes);
         // divide total number of students by $num_class of the Code
     $num_students_per_class = [];
         for ($q=0; $q < count($arrCountStdPerCode); $q++) { 
