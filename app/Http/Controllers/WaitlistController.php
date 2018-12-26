@@ -42,7 +42,7 @@ class WaitlistController extends Controller
     {
         $request = (object) [
             'Term' => '191',
-            'INDEXID' => 'L21199',
+            'INDEXID' => 'L21438',
             'L' => 'F',
             ];
 
@@ -429,7 +429,6 @@ class WaitlistController extends Controller
                     ->orderBy('id', 'asc')
                     ->orderBy('PS', 'asc')
                     ->get();
-                // $arrayCheck[] = $getPashStudents->values()->all();
 
                 foreach ($getPashStudents as $valuePashStudents) {
                     $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
@@ -438,6 +437,7 @@ class WaitlistController extends Controller
                         'CodeClass' => $valueClassRoomDetails->Code, 
                         'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID
                     ]);
+                    $arrayCheck[] = $pashUpdate->get();
                 }
 
                 // query PASH entries to get CodeClass count
@@ -505,7 +505,7 @@ class WaitlistController extends Controller
         }
 
 
-        dd($approved_collections, $approved_collections_placement);
+        dd($approved_collections, $approved_collections_placement, $arrayCheck);
     }
 
     public function testMethod()
