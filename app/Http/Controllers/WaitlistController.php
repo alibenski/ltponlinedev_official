@@ -42,33 +42,470 @@ class WaitlistController extends Controller
     {
         $request = (object) [
             'Term' => '191',
-            'INDEXID' => '',
+            'INDEXID' => 'L21199',
+            'L' => 'F',
             ];
 
         // sort enrolment forms by date of submission
-        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('L',$request->L)->orderBy('created_at', 'asc')->get();
         
-        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
-        // apply unique() method to remove dupes 
-        // apply values() method to reset key series of the array 
-        $approved_1 = $approved_0_1->unique('INDEXID')->values()->all(); // becomes an array
+        $approved_0_2_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('L',$request->L)->orderBy('created_at', 'asc')->get();
+        
 
-        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
-        
-        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
-        $approved_2 = $approved_0_2->unique('INDEXID')->values()->all();
-
-        // !!!!!! add where selfpay_approval == 1 !!!!!!
-        $approved_0_3_collect = Preenrolment::where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
-        
-        $approved_0_3 = Preenrolment::select('INDEXID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
-        $approved_3 = $approved_0_3->unique('INDEXID')->values()->all(); 
+        $approved_0_3_collect = Preenrolment::where('INDEXID', $request->INDEXID)->where('L',$request->L)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         
 
         $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections with sorting by submission date and time
         $approved_collections = $approved_collections->unique('INDEXID')->values()->all(); 
 
-        dd($approved_collections);
+        $selectedTerm = $request->Term; // No need of type casting
+        // echo substr($selectedTerm, 0, 1); // get first value
+        // echo substr($selectedTerm, -1); // get last value
+        $lastDigit = substr($selectedTerm, -1);
+
+        if ($lastDigit == 9) {
+            $prev_term = $selectedTerm - 5;
+            // dd($term);
+        }
+        // if last digit is 1, check Term table for previous term value or subtract 2 from selectedTerm value
+        if ($lastDigit == 1) {
+            $prev_term = $selectedTerm - 2;
+        }
+        // if last digit is 4, check Term table for previous term value or subtract 3 from selectedTerm value
+        if ($lastDigit == 4) {
+            $prev_term = $selectedTerm - 3;
+        }
+        if ($lastDigit == 8) {
+            $prev_term = $selectedTerm - 4;
+        }
+
+        $arrINDEXID = [];
+        $arrL = [];
+        $arrStudentReEnrolled = [];
+        $arrValue = [];
+        $countApprovedCollections = count($approved_collections);
+        for ($i=0; $i < $countApprovedCollections; $i++) { 
+            $arrINDEXID[] = $approved_collections[$i]['INDEXID'];
+            $arrL[] = $approved_collections[$i]['L'];
+            // echo $i. " - " .$arrINDEXID[$i] ;
+            // echo "<br>";
+        
+            // priority 1: check each index id if they are already in re-enroling students from previous term via PASHQTcur table
+            $student_reenrolled = Repo::select('INDEXID')
+                ->where('Term', $prev_term)
+                ->where('L', $arrL[$i])
+                ->where('INDEXID', $arrINDEXID[$i])
+                ->groupBy('INDEXID')
+                ->get()->toArray();
+
+            $arrStudentReEnrolled[] = $student_reenrolled;
+            $student_reenrolled_filtered = array_filter($student_reenrolled);
+
+            // iterate to get the index id of staff who are re-enroling
+            foreach($student_reenrolled_filtered as $item) {
+                // to know what's in $item
+                // echo '<pre>'; var_dump($item);
+                foreach ($item as $value) {
+                    $arrValue[] = $value; // store the reenrolled INDEXID values in array
+                    // echo $value['INDEXID'];
+                    // echo "<br>";
+                    // echo '<pre>'; var_dump($value['INDEXID']);
+                }
+            }
+        }
+
+        $arr_enrolment_forms_reenrolled = [];
+        $ingredients = []; 
+        $countArrValue = count($arrValue);
+
+        if ($countArrValue > 0) {
+            for ($i=0; $i < $countArrValue; $i++) {
+                // collect priority 1 enrolment forms 
+                $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
+                // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
+                $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
+
+                // assigning of students to classes and saved in Preview TempSort table
+                foreach ($enrolment_forms_reenrolled as $value) {
+                    $ingredients[] = new  Preview([
+                    'CodeIndexID' => $value->CodeIndexID,
+                    'Code' => $value->Code,
+                    'schedule_id' => $value->schedule_id,
+                    'L' => $value->L,
+                    'profile' => $value->profile,
+                    'Te_Code' => $value->Te_Code,
+                    'Term' => $value->Term,
+                    'INDEXID' => $value->INDEXID,
+                    "created_at" =>  $value->created_at,
+                    "UpdatedOn" =>  $value->UpdatedOn,
+                    'mgr_email' =>  $value->mgr_email,
+                    'mgr_lname' => $value->mgr_lname,
+                    'mgr_fname' => $value->mgr_fname,
+                    'continue_bool' => $value->continue_bool,
+                    'DEPT' => $value->DEPT, 
+                    'eform_submit_count' => $value->eform_submit_count,              
+                    'form_counter' => $value->form_counter,  
+                    'agreementBtn' => $value->agreementBtn,
+                    'flexibleBtn' => $value->flexibleBtn,
+                    'PS' => 1,
+                    ]); 
+                        foreach ($ingredients as $data) {
+                            $data->save();
+                        }     
+                }   
+            }
+        }
+
+        /**
+         * Priority 2 query enrolment forms/placement forms and check if they exist in waitlist table of 
+         * 2 previous terms
+         */
+        $arrPriority2 = [];
+        $ingredients2 = [];
+        $arrValue2 = [];
+
+        $priority2_not_reset = array_diff($arrINDEXID,$arrValue); // get the difference of INDEXID's between reenrolled and others
+
+        $priority2 = array_values($priority2_not_reset) ;
+        $countPriority2 = count($priority2);    
+        for ($y=0; $y < $countPriority2; $y++) { 
+            $waitlist_indexids = Waitlist::where('INDEXID', $priority2[$y])->select('INDEXID')->groupBy('INDEXID')->get()->toArray(); 
+            $arrPriority2[] = $waitlist_indexids;
+            $arrPriority2_filtered = array_filter($arrPriority2);
+
+            // iterate to get the index id of staff who are waitlisted
+            foreach($waitlist_indexids as $item2) {
+                foreach ($item2 as $value2) {
+                    $arrValue2[] = $value2; // store the waitlisted INDEXID values in array
+                }
+            }
+        }
+
+        $arr_enrolment_forms_waitlisted = [];
+        $ingredients2 = []; 
+        $countArrValue2 = count($arrValue2);
+
+        if ($countArrValue2 > 0) {
+            for ($z=0; $z < $countArrValue2; $z++) {
+                // collect priority 2 enrolment forms 
+                $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])->orderBy('created_at', 'asc')->get();
+
+                $arr_enrolment_forms_waitlisted[] = $enrolment_forms_waitlisted;
+
+                // assigning of students to classes and saved in Preview TempSort table
+                foreach ($enrolment_forms_waitlisted as $value) {
+                    $ingredients2[] = new  Preview([
+                    'CodeIndexID' => $value->CodeIndexID,
+                    'Code' => $value->Code,
+                    'schedule_id' => $value->schedule_id,
+                    'L' => $value->L,
+                    'profile' => $value->profile,
+                    'Te_Code' => $value->Te_Code,
+                    'Term' => $value->Term,
+                    'INDEXID' => $value->INDEXID,
+                    "created_at" =>  $value->created_at,
+                    "UpdatedOn" =>  $value->UpdatedOn,
+                    'mgr_email' =>  $value->mgr_email,
+                    'mgr_lname' => $value->mgr_lname,
+                    'mgr_fname' => $value->mgr_fname,
+                    'continue_bool' => $value->continue_bool,
+                    'DEPT' => $value->DEPT, 
+                    'eform_submit_count' => $value->eform_submit_count,              
+                    'form_counter' => $value->form_counter,  
+                    'agreementBtn' => $value->agreementBtn,
+                    'flexibleBtn' => $value->flexibleBtn,
+                    'PS' => 2,
+                    ]); 
+                        foreach ($ingredients2 as $data2) {
+                            $data2->save();
+                        }     
+                }   
+            }
+        }
+
+        /**
+         * Get all approved/ validated placement forms 
+         * and compare to waitlist table to set priority 2
+         */
+        // sort enrolment forms by date of submission
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('INDEXID', $request->INDEXID)->where('Term', $request->Term)->where('L',$request->L)->orderBy('created_at', 'asc')->get();
+
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('INDEXID', $request->INDEXID)->where('Term', $request->Term)->where('L',$request->L)->orderBy('created_at', 'asc')->get();
+
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('L',$request->L)->whereNotNull('is_self_pay_form')->where('INDEXID', $request->INDEXID)->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        
+
+        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        // unique query should not be implemented to separate enrolments to different language course and schedule in placement test forms
+        $approved_collections_placement = $approved_collections_placement
+                                            ->unique('INDEXID')
+                                            ->values()->all();
+
+        $arrINDEXIDPlacement = [];
+        $arrLPlacement = [];
+        $arrWaitlistedIndexPlacement = [];
+        $arrValuePlacement = [];
+        $countApprovedCollectionsPlacement = count($approved_collections_placement);
+
+        for ($p=0; $p < $countApprovedCollectionsPlacement; $p++) { 
+            $arrINDEXIDPlacement[] = $approved_collections_placement[$p]['INDEXID'];
+        
+            // placement forms priority 2: check each index id if they are in the waitlist table
+            $waitlist_indexids_placement = Waitlist::where('INDEXID', $arrINDEXIDPlacement[$p])->select('INDEXID')->groupBy('INDEXID')->get()->toArray(); 
+
+            $arrWaitlistedIndexPlacement[] = $waitlist_indexids_placement;
+            $waitlist_indexids_placement_filtered = array_filter($waitlist_indexids_placement);
+
+            // iterate to get the index id of staff who are waitlisted
+            foreach($waitlist_indexids_placement_filtered as $item_placement) {
+                foreach ($item_placement as $value_placement) {
+                    $arrValuePlacement[] = $value_placement; // store the waitlisted placement INDEXID values in array
+                }
+            }
+        }
+
+        $arr_placement_forms_waitlisted = [];
+        $placement_ingredients2 = []; 
+        $countArrValuePlacement = count($arrValuePlacement);
+
+        if ($countArrValuePlacement > 0) {
+            for ($h=0; $h < $countArrValuePlacement; $h++) {
+                // collect priority 2 placement forms 
+                $placement_forms_waitlisted = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $arrValuePlacement[$h])->orderBy('created_at', 'asc')->get();
+
+                $arr_placement_forms_waitlisted[] = $placement_forms_waitlisted;
+
+                // assigning of students to classes and saved in Preview TempSort table
+                foreach ($placement_forms_waitlisted as $value_placement) {
+                    $placement_ingredients2[] = new  Preview([
+                    'CodeIndexID' => $value_placement->CodeIndexID,
+                    'Code' => $value_placement->Code,
+                    'schedule_id' => $value_placement->schedule_id,
+                    'L' => $value_placement->L,
+                    'profile' => $value_placement->profile,
+                    'Te_Code' => $value_placement->Te_Code,
+                    'Term' => $value_placement->Term,
+                    'INDEXID' => $value_placement->INDEXID,
+                    "created_at" =>  $value_placement->created_at,
+                    "UpdatedOn" =>  $value_placement->UpdatedOn,
+                    'mgr_email' =>  $value_placement->mgr_email,
+                    'mgr_lname' => $value_placement->mgr_lname,
+                    'mgr_fname' => $value_placement->mgr_fname,
+                    'continue_bool' => $value_placement->continue_bool,
+                    'DEPT' => $value_placement->DEPT, 
+                    'eform_submit_count' => $value_placement->eform_submit_count,              
+                    'form_counter' => $value_placement->form_counter,  
+                    'agreementBtn' => $value_placement->agreementBtn,
+                    'flexibleBtn' => $value_placement->flexibleBtn,
+                    'PS' => 2,
+                    ]); 
+                        foreach ($placement_ingredients2 as $placement_data2) {
+                            $placement_data2->save();
+                        }     
+                }   
+            }
+        }
+
+        $arrValue1_2 = [];
+        $arrValue1_2 = array_merge($arrValue, $arrValue2);
+
+        /**
+         * Priority 3
+         * [$arrPriority3 description]
+         * @var array
+         */
+        $arrPriority3 = [];
+        $ingredients3 = [];
+        // get the INDEXID's which are not existing in priority 1 & 2
+        $priority3_not_reset = array_diff($arrINDEXID,$arrValue1_2);
+        $priority3 = array_values($priority3_not_reset) ;
+        $countPriority3 = count($priority3);
+
+        if ($countPriority3 > 0) {
+            for ($i=0; $i < $countPriority3; $i++) {
+                // collect priority 3 enrolment forms 
+                $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
+                $arrPriority3[] = $enrolment_forms_priority3 ;
+
+                foreach ($enrolment_forms_priority3 as $value) {
+                    $ingredients3[] = new  Preview([
+                    'CodeIndexID' => $value->CodeIndexID,
+                    'Code' => $value->Code,
+                    'schedule_id' => $value->schedule_id,
+                    'L' => $value->L,
+                    'profile' => $value->profile,
+                    'Te_Code' => $value->Te_Code,
+                    'Term' => $value->Term,
+                    'INDEXID' => $value->INDEXID,
+                    "created_at" =>  $value->created_at,
+                    "UpdatedOn" =>  $value->UpdatedOn,
+                    'mgr_email' =>  $value->mgr_email,
+                    'mgr_lname' => $value->mgr_lname,
+                    'mgr_fname' => $value->mgr_fname,
+                    'continue_bool' => $value->continue_bool,
+                    'DEPT' => $value->DEPT, 
+                    'eform_submit_count' => $value->eform_submit_count,              
+                    'form_counter' => $value->form_counter,  
+                    'agreementBtn' => $value->agreementBtn,
+                    'flexibleBtn' => $value->flexibleBtn,
+                    'PS' => 3,
+                    ]); 
+                        foreach ($ingredients3 as $data) {
+                            $data->save();
+                        }     
+                }  
+            }
+        }
+        
+        /*
+        Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
+         */
+        $priority4_not_reset = array_diff($arrINDEXIDPlacement,$arrValuePlacement); // get the difference of INDEXID's between placement waitlisted and other placement forms
+        $priority4 = array_values($priority4_not_reset) ;
+        $countPriority4 = count($priority4); 
+        $ingredients4 =[];
+  
+        if ($countPriority4 > 0) {
+            for ($d=0; $d < $countPriority4; $d++) {
+                // collect leftover priority 4 enrolment forms 
+                $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->orderBy('created_at', 'asc')->get();
+
+                foreach ($placement_forms_priority4 as $value4) {
+                    $ingredients4[] = new  Preview([
+                    'CodeIndexID' => $value4->CodeIndexID,
+                    'Code' => $value4->Code,
+                    'schedule_id' => $value4->schedule_id,
+                    'L' => $value4->L,
+                    'profile' => $value4->profile,
+                    'Te_Code' => $value4->Te_Code,
+                    'Term' => $value4->Term,
+                    'INDEXID' => $value4->INDEXID,
+                    "created_at" =>  $value4->created_at,
+                    "UpdatedOn" =>  $value4->UpdatedOn,
+                    'mgr_email' =>  $value4->mgr_email,
+                    'mgr_lname' => $value4->mgr_lname,
+                    'mgr_fname' => $value4->mgr_fname,
+                    'continue_bool' => $value4->continue_bool,
+                    'DEPT' => $value4->DEPT, 
+                    'eform_submit_count' => $value4->eform_submit_count,              
+                    'form_counter' => $value4->form_counter,  
+                    'agreementBtn' => $value4->agreementBtn,
+                    'flexibleBtn' => $value4->flexibleBtn,
+                    'PS' => 4,
+                    ]); 
+                        foreach ($ingredients4 as $data4) {
+                            $data4->save();
+                        }     
+                }
+            }
+        }
+
+
+
+        $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+
+        $arrGetClassRoomDetails = [];
+        $arrCountCodeClass = [];
+        $arrGetOrphanStudents =[];
+        $arrNotCompleteClasses = [];
+        $arrNotCompleteCount = [];
+        $arrjNotCompleteCount = [];
+        $arrNotCompleteCode = [];
+        $arrGetOrphanIndexID = [];
+        $arrNotCompleteScheduleID = []; 
+
+        $arrayCheck = [];
+        foreach ($getCode as $valueCode2) {
+            
+            $arrGetCode[] = $valueCode2->Code; 
+            
+            $getClassRoomDetails = Classroom::where('cs_unique', $valueCode2->Code)->get();
+            foreach ($getClassRoomDetails as $valueClassRoomDetails) {
+                $arrGetClassRoomDetails[] = $valueClassRoomDetails;
+                
+                // query student count who are not yet assigned to a class section (null) and order by priority
+                $getPashStudents = Preview::where('Code', $valueCode2->Code)
+                    ->where('CodeIndexIDClass', null)
+                    ->orderBy('id', 'asc')
+                    ->orderBy('PS', 'asc')
+                    ->get();
+                // $arrayCheck[] = $getPashStudents->values()->all();
+
+                foreach ($getPashStudents as $valuePashStudents) {
+                    $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
+                    // update record with classroom assigned
+                    $pashUpdate->update([
+                        'CodeClass' => $valueClassRoomDetails->Code, 
+                        'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID
+                    ]);
+                }
+
+                // query PASH entries to get CodeClass count
+                $checkCountCodeClass = Preview::select('Te_Code', 'Code','CodeClass', 'schedule_id', 'L', DB::raw('count(*) as CountCodeClass'))->where('Code', $valueClassRoomDetails->cs_unique)->where('CodeClass', $valueClassRoomDetails->Code)->groupBy('Te_Code','Code','CodeClass','schedule_id','L')->orderBy('CountCodeClass', 'asc')->get();
+                $checkCountCodeClass->sortBy('CountCodeClass');
+
+                // query count of CodeClass which did not meet the minimum number of students
+                foreach ($checkCountCodeClass as $valueCountCodeClass) {
+                        $arrCountCodeClass[] = $valueCountCodeClass->CountCodeClass;
+                    
+                    // if the count is less than 6 where L = Ar,Ch,Ru 
+                    $language_group_1 = ['A','C','R'];
+                    if (in_array($valueCountCodeClass->L, $language_group_1) && $valueCountCodeClass->CountCodeClass < 6) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
+                        
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                        }
+                    }
+                    // if the count is less than 8 where L = Fr,En,Sp
+                    $language_group_2 = ['E','F','S'];
+                    if (in_array($valueCountCodeClass->L, $language_group_2) && $valueCountCodeClass->CountCodeClass < 8) {
+                        $getOrphanStudents = Preview::where('CodeClass', $valueCountCodeClass->CodeClass)->where('Te_Code', $valueCountCodeClass->Te_Code)->where('L', $valueCountCodeClass->L)->get();
+                        
+                        foreach ($getOrphanStudents as $valueOrphanStudents) {
+                            $arrGetOrphanStudents[] = $valueOrphanStudents->id;
+                            $arrGetOrphanIndexID[] = $valueOrphanStudents->INDEXID;
+                        }
+                        
+                    }
+
+                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 14) {
+                        $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
+                        $arrNotCompleteCode[] = $valueCountCodeClass->Code;
+                        $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
+                        $arrNotCompleteScheduleID[] = $valueCountCodeClass->schedule_id;
+                    } 
+                }
+            }
+        }
+
+        // then change CodeClass and assign to same Te_Code with a Code count which is less than 14
+        // assign orphaned students with classrooms which are not at max capacity
+        $c = count($arrNotCompleteClasses);
+        if ($c != 0) {
+            for ($iCount=0; $iCount < $c; $iCount++) {
+            // $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
+            $jNotCompleteCount = intVal(14 - $arrNotCompleteCount[$iCount]);
+            $arrjNotCompleteCount[] = $jNotCompleteCount;
+
+                for ($iCounter2=0; $iCounter2 < $jNotCompleteCount; $iCounter2++) { 
+                    if (!empty($arrGetOrphanStudents[$iCounter2])) {                
+                        $setClassToOrphans = Preview::where('id', $arrGetOrphanStudents[$iCounter2])
+                            ->where('Code', $arrNotCompleteCode[$iCounter2])
+                            ->update([
+                                'CodeClass' => $arrNotCompleteClasses[$iCount], 
+                                'CodeIndexIDClass' => $arrNotCompleteClasses[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
+                                'CodeIndexID' => $arrNotCompleteCode[$iCount].'-'.$arrGetOrphanIndexID[$iCounter2], 
+                                'Code' => $arrNotCompleteCode[$iCount], 
+                                'schedule_id' => $arrNotCompleteScheduleID[$iCount]]);
+                    } 
+                }
+            }
+        }
+
+
+        dd($approved_collections, $approved_collections_placement);
     }
 
     public function testMethod()

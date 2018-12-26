@@ -310,11 +310,17 @@ class PreviewController extends Controller
         $classroom_3 = Classroom::where('cs_unique', $code)->first();
 
         $form_info_arr = [];
-        $student = Preview::withTrashed()->where('Te_Code', $classroom_3->Te_Code_New)->where('schedule_id', $classroom_3->schedule_id)->get();
+
+        $student = Preview::withTrashed()
+            ->where('Te_Code', $classroom_3->Te_Code_New)
+            ->where('schedule_id', $classroom_3->schedule_id)
+            ->orderBy('PS', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->get();
         
 
         foreach ($student as $value) {
-            $form = Preview::withTrashed()->orderBy('created_at', 'asc')->orderBy('PS', 'asc')
+            $form = Preview::withTrashed()
                 ->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
                 foreach ($form as $value) {
