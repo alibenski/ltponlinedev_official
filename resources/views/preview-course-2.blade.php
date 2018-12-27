@@ -5,14 +5,14 @@
 <div class="alert bg-black col-sm-12">
   <h4 class="text-center"><strong>Preview</strong></h4>
 </div>
-{{-- @include('admin.partials._termSessionMsg') --}}
 
-<h3>Step 2:</h3>
-<h4>Term: @if (is_null($term)) TempSort Table empty!  @else {{$term->Term}} @endif</h4>
-<a href="{{ route('preview-vsa-page-1') }}" class="btn btn-danger" @if (is_null($term)) @else style="display: none;" @endif>Back to Step 1</a>
+@include('admin.partials._termSessionMsg')
+
 <form method="GET" action="{{ route('preview-course-3') }}">
 	{{ csrf_field() }}
-	<input type="hidden" name="term_id" value=@if (is_null($term)) ""  @else "{{$term->Term}}" @endif>
+
+	<input type="hidden" name="term_id" value=@if (is_null($term)) ""  @else "{{$term}}" @endif>
+
 	<div class="form-group">
         <label class="col-md-3 control-label">Choose language:</label>
           <div class="col-md-8">

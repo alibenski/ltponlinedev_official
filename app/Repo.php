@@ -44,11 +44,22 @@ class Repo extends Model
     }
 
     public function users() {
-    return $this->belongsTo('App\User', 'INDEXID'); 
+    return $this->belongsTo('App\User', 'INDEXID','indexno'); 
     }
 
 	public function terms() {
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
     }
 
+    public function schedules() {
+    return $this->belongsTo('App\Schedule', 'schedule_id'); 
+    }
+
+    public function classrooms() {
+    return $this->belongsTo('App\Classroom', 'CodeClass', 'Code'); 
+    }
+
+    public function previewTempSort() {
+    return $this->belongsTo('App\PreviewTempSort', 'CodeIndexID', 'CodeIndexID'); 
+    }
 }

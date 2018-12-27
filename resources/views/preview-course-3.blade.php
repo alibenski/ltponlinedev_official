@@ -8,7 +8,7 @@
 {{-- @include('admin.partials._termSessionMsg') --}}
 
 <div class="form-group">
-  <a href="{{ route('preview-vsa-page-2') }}" class="btn btn-danger btn-space"><i class="fa fa-arrow-left"></i> Back to Step 2</a>
+  <a href="{{ route('preview-vsa-page-2') }}" class="btn btn-danger btn-space"><i class="fa fa-arrow-left"></i> Back to Preview Filters</a>
 </div>
 
 <div class="row">

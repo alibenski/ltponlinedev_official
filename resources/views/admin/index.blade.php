@@ -100,6 +100,7 @@
 	</a>
 </div>
 <div class="col-sm-4 col-xs-12">
+	@if(Session::has('Term')) 
 	<a href="{{ route('preview-waitlisted') }}">
 		<div class="info-box">
 		  <!-- Apply any bg-* class to to the icon to color it -->
@@ -112,6 +113,18 @@
 		</div>
 		<!-- /.info-box -->
 	</a>
+	@else 
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-teal"><i class="fa  fa-exclamation-circle"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Waitlisted Students </span>
+		    <span class="info-box-number">Set the Term</span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	@endif
 </div>
 <div class="col-sm-4 col-xs-12">
 	<a href="{{ route('cancelled-convocation-view') }}">
@@ -120,7 +133,7 @@
 		  <span class="info-box-icon bg-red"><i class="fa fa-remove"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Cancelled Convocations </span>
-		    <span class="info-box-number">{{$cancelled_convocations}}</span>
+		    <span class="info-box-number">@if(Session::has('Term')){{$cancelled_convocations}} @else Set the Term @endif</span>
 		  </div>
 		  <!-- /.info-box-content -->
 		</div>

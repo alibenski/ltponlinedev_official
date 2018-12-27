@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\NewUser;
 use App\Preenrolment;
 use App\Preview;
+use App\Repo;
 use App\Services\User\ExistingUserImport;
 use App\Services\User\UserImport;
 use App\Term;
@@ -40,7 +41,7 @@ class AdminController extends Controller
     {
         $new_user_count = NewUser::where('approved_account', 0)->count();
         $terms = Term::orderBy('Term_Code', 'desc')->get();       
-        $cancelled_convocations = Preview::onlyTrashed()->count();
+        $cancelled_convocations = Repo::onlyTrashed()->where('Term', Session::get('Term'))->count();
 
         return view('admin.index',compact('terms','cancelled_convocations','new_user_count'));   
     }

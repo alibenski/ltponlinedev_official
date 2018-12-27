@@ -40,6 +40,67 @@ use Session;
 
 class PreviewController extends Controller
 {
+    public function vsaPage1()
+    {
+        DB::table('tblLTP_preview_TempSort')->truncate();
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        return view('preview-course')->withTerms($terms);
+    }
+
+    public function vsaPage2()
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $term = Session::get('Term');
+        return view('preview-course-2')->withLanguages($languages)->withTerm($term);
+    }
+
+    public function previewCourse3(Request $request)
+    {       
+        $preview_course = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->first();
+
+            if (empty($preview_course)) {
+                $request->session()->flash('interdire-msg', 'No students assigned to this Course');
+                return back();
+        }
+        $arr_key =[];
+        $arr_count = [];
+        $code = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
+
+            foreach ($code as $key => $value) {
+                $arr_key[] = $value->schedules->name;
+                // var_dump($value->schedule_id);
+                // var_dump($value->Code);
+                $count_enrolment_forms = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->where('Code', $value->Code)->where('schedule_id', $value->schedule_id)->count();
+                $arr_count[] = $count_enrolment_forms;
+                $arr_count = array_combine($arr_key, $arr_count);
+                // var_dump($count_enrolment_forms);
+            }
+        
+        $preview = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
+
+        return view('preview-course-3')->withPreview($preview)
+            ->withPreview_course($preview_course)
+            ->withArr_count($arr_count);
+    }
+
+    public function ajaxPreview(Request $request)
+    {
+        $form_info_arr = [];
+        $student = Preview::where('Te_Code', $request->Te_Code)->where('schedule_id', $request->schedule_id)->get();
+        
+        foreach ($student as $value) {
+            $form = Preview::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
+                ->get();
+                foreach ($form as $value) {
+                    $form_info_arr[] = $value;
+                }
+        }
+        $form_info = collect($form_info_arr)->sortBy('id');
+
+        $data = view('preview-ajax', compact('student', 'form_info'))->render();
+        return response()->json([$data]);
+    }
+
     public function pdfView(Request $request)
     {
         $code = 'F1R1-14-191';
@@ -90,14 +151,14 @@ class PreviewController extends Controller
 
     public function cancelledConvocaitonView()
     {
-        $cancelled_convocations = Preview::onlyTrashed()->orderBy('UpdatedOn', 'asc')->get();
+        $cancelled_convocations = Repo::onlyTrashed()->where('Term', Session::get('Term'))->orderBy('UpdatedOn', 'asc')->get();
 
         return view('admin.cancelled-convocation-view', compact('cancelled_convocations'));
     }
 
     public function cancelConvocation($codeindexidclass)
     {
-        $record = Preview::where('CodeIndexIDClass', $codeindexidclass)->first();
+        $record = Repo::where('CodeIndexIDClass', $codeindexidclass)->first();
         $staff_name = $record->users->name;
         $display_language_en = $record->courses->EDescription;
         $display_language_fr = $record->courses->FDescription;
@@ -106,7 +167,7 @@ class PreviewController extends Controller
 
         Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
 
-        $record_delete = Preview::where('CodeIndexIDClass', $codeindexidclass)->delete();
+        $record_delete = Repo::where('CodeIndexIDClass', $codeindexidclass)->delete();
         
         session()->flash('cancel_success', 'Your enrolment has been successfully cancelled. ');
         return back();
@@ -116,7 +177,7 @@ class PreviewController extends Controller
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
 
-        $convocation_waitlist = new Preview;
+        $convocation_waitlist = new Repo;
         // $currentQueries = \Request::query();
         $queries = [];
 
@@ -323,25 +384,6 @@ class PreviewController extends Controller
         return response()->json($data);
     }
 
-    public function ajaxPreview(Request $request)
-    {
-        $form_info_arr = [];
-        $student = Preview::where('Te_Code', $request->Te_Code)->where('schedule_id', $request->schedule_id)->get();
-        
-        foreach ($student as $value) {
-            $form = Preview::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
-                ->get();
-                foreach ($form as $value) {
-                    $form_info_arr[] = $value;
-                }
-        }
-        $form_info = collect($form_info_arr)->sortBy('id');
-
-        $data = view('preview-ajax', compact('student', 'form_info'))->render();
-        return response()->json([$data]);
-    }
-
-
     public function previewClassrooms($code)
     {
         $classrooms = Classroom::where('cs_unique', $code)->get();
@@ -520,48 +562,7 @@ class PreviewController extends Controller
         }
     }
 
-    public function vsaPage2()
-    {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $term = PreviewTempSort::orderBy('id', 'desc')->first();
-        return view('preview-course-2')->withLanguages($languages)->withTerm($term);
-    }
-
-	public function previewCourse3(Request $request)
-    {
-    	$preview = Preview::where('Te_Code', $request->course_id)->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
-    	
-    	$preview_course = Preview::where('Te_Code', $request->course_id)->first();
-        if (empty($preview_course)) {
-            $request->session()->flash('interdire-msg', 'No students assigned to this Course');
-            return back();
-        }
-    	$arr_key =[];
-        $arr_count = [];
-        $code = Preview::where('Te_Code', $request->course_id)->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
-
-	        foreach ($code as $key => $value) {
-	            $arr_key[] = $value->schedules->name;
-	            // var_dump($value->schedule_id);
-	            // var_dump($value->Code);
-	            $count_enrolment_forms = Preview::where('Te_Code', $request->course_id)->where('Code', $value->Code)->where('schedule_id', $value->schedule_id)->count();
-	            $arr_count[] = $count_enrolment_forms;
-	            $arr_count = array_combine($arr_key, $arr_count);
-	            // var_dump($count_enrolment_forms);
-	        }
-            
-    	return view('preview-course-3')->withPreview($preview)
-    		->withPreview_course($preview_course)
-    		->withArr_count($arr_count);
-    }
-
-    public function vsaPage1()
-    {
-    	DB::table('tblLTP_preview_TempSort')->truncate();
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
-        return view('preview-course')->withTerms($terms);
-    }
-
+	
 
 	public function getApprovedEnrolmentForms(Request $request)
     {
@@ -1229,11 +1230,13 @@ class PreviewController extends Controller
         $this->assignAndAnalyze($getCode);
         $this->getOrphans($getCode);
         
-        // dd($approved_1,$approved_2,$approved_3);
+        // move everything to PASHQTCur table
+        app('App\Http\Controllers\AdminController')->moveToPash();
+
         // PreviewTempSort::truncate();
+
         $request->session()->flash('success', 'Preview done!');
         return redirect()->route('preview-vsa-page-2');
-        // dd('Count '.count($approved_collections),$arrPriority3, $arrValue,$ingredients, $ingredients3);
     }
 
     public function getApprovedPlacementForms(Request $request)
