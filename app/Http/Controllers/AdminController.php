@@ -20,6 +20,11 @@ use Session;
 
 class AdminController extends Controller
 {
+    public function moveToPash()
+    {
+        $results = \DB::select( "INSERT into ltp_pashqtcur (INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments) SELECT INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments FROM tblltp_preview" );
+    }
+
     public function setSessionTerm(Request $request)
     {
         $new_user_count = NewUser::where('approved_account', 0)->count();

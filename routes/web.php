@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('user/import-exist', 'AdminController@handleImportExistingUser')->name('bulk-import-existing-user');
     Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
 
+    Route::get('move-to-pash', 'AdminController@moveToPash')->name('move-to-pash');
+
     /*
      * Preview Routes
      */
