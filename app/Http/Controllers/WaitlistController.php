@@ -402,7 +402,7 @@ class WaitlistController extends Controller
 
 
 
-        $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+        $getCode = Preview::select('Code')->where('INDEXID', $request->INDEXID)->where('L', $request->L)->orderBy('id')->get();
 
         $arrGetClassRoomDetails = [];
         $arrCountCodeClass = [];
@@ -420,6 +420,7 @@ class WaitlistController extends Controller
             $arrGetCode[] = $valueCode2->Code; 
             
             $getClassRoomDetails = Classroom::where('cs_unique', $valueCode2->Code)->get();
+
             foreach ($getClassRoomDetails as $valueClassRoomDetails) {
                 $arrGetClassRoomDetails[] = $valueClassRoomDetails;
                 
@@ -430,11 +431,14 @@ class WaitlistController extends Controller
                     ->orderBy('PS', 'asc')
                     ->get();
 
-                // get the count of CodeClass 
+                // get the count of CodeClass
+                $checkCountCodeClass = Preview::where('Code', $valueClassRoomDetails->cs_unique)
+                    ->where('CodeClass', $valueClassRoomDetails->Code)
+                    ->get();
+                $countCodeClass = $checkCountCodeClass->count();
+
                 // if less than 14, insert student
-                // if more than 14, look for existing orphan section
-                // if there is no orphan section, then create one
-                
+                if ($countCodeClass < 14) {
                     foreach ($getPashStudents as $valuePashStudents) {
                         $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
                         // update record with classroom assigned
@@ -444,9 +448,64 @@ class WaitlistController extends Controller
                         ]);
                         $arrayCheck[] = $pashUpdate->get();
                     }
-            }
-        }
 
+                    dd($arrayCheck);
+                }
+
+            }
+            
+            // if all are full and no orphan section, then create one
+            $existingSection = Classroom::where('cs_unique', $valueCode2->Code)->orderBy('sectionNo', 'desc')->get()->toArray();  
+
+            $sectionNo = $existingSection[0]['sectionNo'] + 1;
+            $sectionNo2 = $existingSection[0]['sectionNo'] + 1;                  
+            
+            $ingredients = new  Classroom([
+                'Code' => $existingSection[0]['cs_unique'].'-'.$sectionNo++,
+                'Te_Term' => $existingSection[0]['Te_Term'],
+                'cs_unique' => $existingSection[0]['cs_unique'],
+                'L' => $existingSection[0]['L'], 
+                'Te_Code_New' => $existingSection[0]['Te_Code_New'], 
+                'schedule_id' => $existingSection[0]['schedule_id'],
+                'sectionNo' => $sectionNo2++,
+                'Te_Mon' => 2,
+                'Te_Mon_Room' => $existingSection[0]['Te_Mon_Room'],
+                'Te_Mon_BTime' => $existingSection[0]['Te_Mon_BTime'],
+                'Te_Mon_ETime' => $existingSection[0]['Te_Mon_ETime'],
+                'Te_Tue' => 3,
+                'Te_Tue_Room' => $existingSection[0]['Te_Tue_Room'],
+                'Te_Tue_BTime' => $existingSection[0]['Te_Tue_BTime'],
+                'Te_Tue_ETime' => $existingSection[0]['Te_Tue_ETime'],
+                'Te_Wed' => 4,
+                'Te_Wed_Room' => $existingSection[0]['Te_Wed_Room'],
+                'Te_Wed_BTime' => $existingSection[0]['Te_Wed_BTime'],
+                'Te_Wed_ETime' => $existingSection[0]['Te_Wed_ETime'],
+                'Te_Thu' => 5,
+                'Te_Thu_Room' => $existingSection[0]['Te_Thu_Room'],
+                'Te_Thu_BTime' => $existingSection[0]['Te_Thu_BTime'],
+                'Te_Thu_ETime' => $existingSection[0]['Te_Thu_ETime'],
+                'Te_Fri' => 6,
+                'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
+                'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
+                'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                ]);
+            $ingredients->save();
+
+            $getIndividualStudent = Preview::where('Code', $valueCode2->Code)
+                    ->where('CodeIndexIDClass', null)
+                    ->where('INDEXID', $request->INDEXID)
+                    ->first();
+            // then assign it to the student
+
+            $insertStudentRecord = Preview::where('INDEXID', $getIndividualStudent->INDEXID)->where('Code', $valueCode2->Code);
+            // update record with classroom assigned
+            $insertStudentRecord->update([
+                'CodeClass' => $ingredients->Code, 
+                'CodeIndexIDClass' => $ingredients->Code.'-'.$getIndividualStudent->INDEXID
+            ]);
+
+            dd($ingredients, $insertStudentRecord->get());
+        }
 
         dd($approved_collections, $approved_collections_placement, $arrayCheck);
     }

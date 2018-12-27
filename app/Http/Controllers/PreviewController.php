@@ -951,7 +951,7 @@ class PreviewController extends Controller
          * Order Codes by count per code
          */
         DB::table('tblLTP_preview_TempOrder')->truncate();
-        DB::table('tblLTP_preview')->truncate();
+        // DB::table('tblLTP_preview')->truncate();
 
         // collect the courses offered for the term entered
         $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
@@ -1139,7 +1139,7 @@ class PreviewController extends Controller
             $arrGetCode[] = $valueCode->Code;
             
             // update record in CourseSchedule table to indicate that classroom has been created for this cs_unique 
-            // $updateCourseSchedule = CourseSchedule::where('cs_unique', $valueCode->Code)->update(['Code' => 'Y']);
+            $updateCourseSchedule = CourseSchedule::where('cs_unique', $valueCode->Code)->update(['Code' => 'Y']);
 
             $getDetails = CourseSchedule::where('cs_unique', $valueCode->Code)->get();
             foreach ($getDetails as $valueDetails) {
