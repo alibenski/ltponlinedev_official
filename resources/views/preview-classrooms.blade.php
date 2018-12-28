@@ -7,6 +7,9 @@
     <div id="accordion">
         @foreach($classrooms as $classroom)
         <h3><strong>{{ $classroom_3->course->Description}}</strong></h3>
+
+        <a class="btn btn-success" href="{{ route('pdfview',['download'=>'pdf', 'code'=> $classroom->Code]) }}" target="_blank"><i class="fa fa-print"></i> Print/Download</a>
+        
         <div class="col-sm-12">
         <h3>Section # {{ $classroom->sectionNo }}</h3>
           <p>Teacher: <h4>@if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned / waitlisted</span> @endif</h4></p>

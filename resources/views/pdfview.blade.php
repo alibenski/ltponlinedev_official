@@ -1,50 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="referrer" content="origin-when-cross-origin">
+  <title>Class List</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+  <style>
+    h4,h3 {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  
 <div class="row">
   <div class="col-sm-12">
-    <div id="accordion">
-      <a href="{{ route('pdfview',['download'=>'pdf']) }}">Download PDF</a>
+      
         @foreach($classrooms as $classroom)
-        <h3><strong>{{ $classroom_3->course->Description}}</strong></h3>
+
+        <table>
+          <tbody>
+            <tr>
+              <td>
+               <img src="https://learning.unog.ch/sites/all/themes/sdlstheme/images/CLM-TextRight_En.jpg" width="260" height="93" alt="CLM Language Training" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; margin-right: 50px;"> 
+              </td>
+              <td class="pull-right" style="padding-left: 100px;">
+                <h4 class="text-right"><strong>Language Training Programme</strong></h4>
+                <h4 class="text-right"><strong>{{ $classroom_3->course->Description}}</strong></h4>
+                <h4 class="text-right">{{$term_name}}</h4>
+              </td>
+            </tr>
+          </tbody>
+          
+        </table>
+        
+        
+        
+
+        <table>
+          <tbody>
+            <tr>
+              <td class="item1" style="margin: 5px; padding: 10px;">
+                <p>Teacher: <span>@if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned / waitlisted</span> @endif</span></p>
+              </td>
+              @if(!empty($classroom->Te_Mon_Room))
+              <td class="item2" style="margin: 5px; padding: 10px;">
+              <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+              <p>Monday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_BTime)) }}</strong></p>
+              <p>Monday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
+              </td>
+              @endif
+
+              @if(!empty($classroom->Te_Tue_Room))
+              <td class="item3" style="margin: 5px; padding: 10px;">
+              <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+              <p>Tuesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_BTime)) }}</strong></p>
+              <p>Tuesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
+              </td>  
+              @endif
+
+              @if(!empty($classroom->Te_Wed_Room))
+              <td class="item4" style="margin: 5px; padding: 10px;">
+              <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+              <p>Wednesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_BTime ))}}</strong></p>
+              <p>Wednesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
+              </td>
+              @endif
+
+              @if(!empty($classroom->Te_Thu_Room))
+              <td class="item5" style="margin: 5px; padding: 10px;">
+              <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+              <p>Thursday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_BTime)) }}</strong></p>
+              <p>Thursday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
+              </td>
+              @endif
+
+              @if(!empty($classroom->Te_Fri_Room))
+              <td class="item6" style="margin: 5px; padding: 10px;">
+              <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+              <p>Friday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_BTime ))}}</strong></p>
+              <p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
+              </td>
+              @endif
+            </tr>
+          </tbody>
+        </table>
+          
+      <div class="row">
         <div class="col-sm-12">
-        <h3>Section # {{ $classroom->sectionNo }}</h3>
-          <p>Teacher: <h4>@if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned / waitlisted</span> @endif</h4></p>
-          @if(!empty($classroom->Te_Mon_Room))
-          <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
-          <p>Monday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_BTime)) }}</strong></p>
-          <p>Monday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Tue_Room))
-          <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
-          <p>Tuesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_BTime)) }}</strong></p>
-          <p>Tuesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Wed_Room))
-          <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
-          <p>Wednesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_BTime ))}}</strong></p>
-          <p>Wednesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Thu_Room))
-          <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
-          <p>Thursday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_BTime)) }}</strong></p>
-          <p>Thursday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Fri_Room))
-          <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
-          <p>Friday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_BTime ))}}</strong></p>
-          <p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
-          @endif
-
           <div class="table-responsive filtered-table">
-            <h4><strong>{{ $classroom_3->course->Description}} Students</strong></h4>
+            {{-- <h4><strong>{{ $classroom_3->course->Description}} Students</strong></h4> --}}
 
-            <button style="margin-bottom: 10px" class="btn btn-primary delete_all">Move Selected</button>
+            {{-- <button style="margin-bottom: 10px" class="btn btn-primary delete_all">Move Selected</button> --}}
             
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th><input type="checkbox" id="master"></th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Contact Number</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,21 +113,14 @@
                     @if ($form->CodeClass === $classroom->Code)
                     <tr id="tr_{{$form->id}}" @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
                       <td>
-                        <div class="counter"></div>
-                      </td>
-                      <td>
-                        @if($form->deleted_at) 
-                        @else 
-                        <input type="checkbox" class="sub_chk" data-id="{{ $form->id }}">
-                        <input type="hidden" name="_token" value="{{ Session::token() }}">
-                        @endif
-                      </td>
-                      <td>
                         @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif 
                         @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
                       </td>
                       <td>
                         @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif 
+                      </td>
+                      <td>
+                        @if(empty($form->users->sddextr)) None @else {{ $form->users->sddextr->PHONE }} @endif
                       </td>
                     </tr>  
                     @endif
@@ -77,62 +130,18 @@
             </table>
           </div>
         </div>
+      </div>
+          
+
         @endforeach
-    </div>
   </div>
 </div>
 
-@section('java_script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-confirmation/1.0.5/bootstrap-confirmation.min.js"></script>
-<script>
-$(document).ready(function () {
-    var counter = 0;
-    $('.counter').each(function() {
-        counter++;
-        $(this).attr('id', counter);
-        $('#'+counter).html(counter);
-        // console.log(counter)
-    });    
-});
-</script>
+<div class="row">
+  <div class="col-sm-12">
+    <h5><strong>Total: {{ $student_count }}</strong></h5>
+  </div>
+</div>
 
-<script type="text/javascript">
-  $(document).ready(function () {
-
-
-      $('#master').on('click', function(e) {
-       if($(this).is(':checked',true))  
-       {
-          $(".sub_chk").prop('checked', true);  
-       } else {  
-          $(".sub_chk").prop('checked',false);  
-       }  
-      });
-
-
-      $('.delete_all').on('click', function(e) {
-
-          var allVals = [];  
-          $(".sub_chk:checked").each(function() {  
-              allVals.push($(this).attr('data-id'));
-          });  
-
-          var join_selected_values = allVals.join(",");
-
-          var token = $("input[name='_token']").val();
-          
-
-          if(allVals.length <=0)  
-          {  
-              alert("Please select at least 1 student.");  
-
-          }  else {  
-              $('#modalshowform').modal('show');
-              $.get('{{ route('ajax-move-students-form') }}', {'ids':join_selected_values,  '_token':token}, function(data) {
-                // console.log(data);
-                $('.modal-body-move-student').html(data);
-              });
-          }
-  });
-</script>
-@stop
+</body>
+</html>
