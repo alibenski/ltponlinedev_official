@@ -20,10 +20,11 @@
 		<div class="col-md-10 class-md-offset-2">
 			<table class="table">
 				<thead>
-					<th>Title</th>
 					<th>Last Name</th>
 					<th>First Name</th>
+					<th>Email</th>
 					<th>Language</th>
+					<th>Active</th>
 					<th>Operation</th>
 				</thead>
 
@@ -31,10 +32,11 @@
 					@foreach($teachers as $teacher)
 						
 						<tr>
-							<th>{{ $teacher->Tch_Title }}</th>
 							<td>{{ $teacher->Tch_Lastname }}</td>
 							<td>{{ $teacher->Tch_Firstname }}</td>
+							<td>{{ $teacher->email }}</td>
 							<td>{{ $teacher->Tch_L }}</td>
+							<td>@if($teacher->In_Out == 1) <i class="fa fa-check text-success"></i>@else <i class="fa fa-remove text-danger"></i>@endif</td>
 							<td><a href="#" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach

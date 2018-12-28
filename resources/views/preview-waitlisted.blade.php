@@ -43,7 +43,7 @@
 	</div>
 	</div>
 </div>
-
+@if(Session::has('Term'))
 <div class="row">
 	<div class="col-sm-12">
 		<h3>Total Number of Waitlisted Students: <span class="label label-primary">{{ count($convocation_waitlist) }}</span></h3>
@@ -82,7 +82,8 @@
 		</div>	
 	</div>
 </div>
-
+@else
+@endif
 
 @stop
 

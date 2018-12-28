@@ -51,38 +51,47 @@
               <div class="panel-heading"><strong>Your Language Training Course for {{ $next_term->Term_Name }}</strong></div>
 
               <div class="panel-body">
+                <p>
+                  @foreach ($student_convoked as $element)
+                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong></h3>
+                  
+                  <p>Schedule: <strong>@if(!empty($element->schedules->name)){{$element->schedules->name}}@endif</strong></p>  
+
+                    @if(!empty($element->classrooms->Te_Mon_Room))
+                    <p>Monday Room: <strong>{{ $element->classrooms->roomsMon->Rl_Room }}</strong></p>
+                    @endif
+                    @if(!empty($element->classrooms->Te_Tue_Room))
+                    <p>Tuesday Room: <strong>{{ $element->classrooms->roomsTue->Rl_Room }}</strong></p>
+                    @endif
+                    @if(!empty($element->classrooms->Te_Wed_Room))
+                    <p>Wednesday Room: <strong>{{ $element->classrooms->roomsWed->Rl_Room }}</strong></p>
+                    @endif
+                    @if(!empty($element->classrooms->Te_Thu_Room))
+                    <p>Thursday Room: <strong>{{ $element->classrooms->roomsThu->Rl_Room }}</strong></p>
+                    @endif
+                    @if(!empty($element->classrooms->Te_Fri_Room))
+                    <p>Friday Room: <strong>{{ $element->classrooms->roomsFri->Rl_Room }}</strong></p>
+                    @endif
+
                   <p>
-                    @foreach ($student_convoked as $element)
-                    <h3><strong>{{ $element->courses->Description }}</strong></h3>
-                    
-                    <p>Schedule: <strong>{{$element->schedules->name}}</strong></p>  
-
-                      @if(!empty($element->classrooms->Te_Mon_Room))
-                      <p>Monday Room: <strong>{{ $element->classrooms->roomsMon->Rl_Room }}</strong></p>
-                      @endif
-                      @if(!empty($element->classrooms->Te_Tue_Room))
-                      <p>Tuesday Room: <strong>{{ $element->classrooms->roomsTue->Rl_Room }}</strong></p>
-                      @endif
-                      @if(!empty($element->classrooms->Te_Wed_Room))
-                      <p>Wednesday Room: <strong>{{ $element->classrooms->roomsWed->Rl_Room }}</strong></p>
-                      @endif
-                      @if(!empty($element->classrooms->Te_Thu_Room))
-                      <p>Thursday Room: <strong>{{ $element->classrooms->roomsThu->Rl_Room }}</strong></p>
-                      @endif
-                      @if(!empty($element->classrooms->Te_Fri_Room))
-                      <p>Friday Room: <strong>{{ $element->classrooms->roomsFri->Rl_Room }}</strong></p>
-                      @endif
-
-                    <p>Teacher: <strong>@if($element->classrooms->Tch_ID){{ $element->classrooms->teachers->Tch_Name }} @else None @endif</strong></p>
-                    <br> 
-                      <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
-                          <input type="submit" value="@if($element->deleted_at) Cancelled @else Cancel Enrolment @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($element->deleted_at) disabled="" @else @endif>
-                          {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
-                          <input type="hidden" name="deleteTerm" value="{{ $element->Term }}">
-                          <input type="hidden" name="_token" value="{{ Session::token() }}">
-                         {{ method_field('DELETE') }}
-                      </form>
-                    @endforeach
+                    @if(!empty($element->classrooms->Tch_ID))
+                    Teacher: <strong>{{ $element->classrooms->teachers->Tch_Name }} </strong>
+                    @else 
+                    <h4><span class="label label-danger">Waitlisted</span></h4> 
+                    @endif
+                  </p>
+                  <br> 
+                    @if(!empty($element->classrooms->Tch_ID))
+                    <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
+                        <input type="submit" value="@if($element->deleted_at) Cancelled @else Cancel Enrolment @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($element->deleted_at) disabled="" @else @endif>
+                        {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
+                        <input type="hidden" name="deleteTerm" value="{{ $element->Term }}">
+                        <input type="hidden" name="_token" value="{{ Session::token() }}">
+                       {{ method_field('DELETE') }}
+                    </form>
+                    @else
+                    @endif
+                  @endforeach
                 </p>
               </div>
       </div>
@@ -102,6 +111,7 @@
                       <input id="termIdSubmitted" type="hidden" value="@if(is_null($next_term->Term_Code)) @else {{ $next_term->Term_Code }} @endif">
                     </div>
                         <div class="panel-body">
+                        @if(count($forms_submitted) > 0)
                           @foreach($forms_submitted as $form)
                             <div class="row">
                             <div class="col-sm-12">
@@ -162,7 +172,10 @@
                               </div>
                               </div>
                               <hr>
-                          @endforeach  
+                          @endforeach 
+                        @else
+                          <h5>No Forms Submitted</h5>
+                        @endif 
                         </div>
             </div>
         </div>
@@ -171,6 +184,7 @@
           <div class="panel panel-warning">
             <div class="panel-heading"><strong>Placement Test Request Forms</strong></div>
             <div class="panel-body">
+            @if(count($plforms_submitted) > 0)
               @foreach($plforms_submitted as $plform)
                 <div class="row">
                 <div class="col-sm-12">
@@ -198,7 +212,10 @@
                 </div>
                 </div>
                 <hr>
-              @endforeach                  
+              @endforeach  
+            @else
+              <h5>No Forms Submitted</h5>
+            @endif                
             </div>
           </div>
         </div>

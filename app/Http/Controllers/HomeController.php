@@ -91,7 +91,7 @@ class HomeController extends Controller
         //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $termValue)->get()->min();
         
-        $student_convoked = Preview::withTrashed()->where('INDEXID', $current_user)->where('Term', $termValue)->get(); 
+        $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $current_user)->where('Term', $termValue)->get(); 
 
 
         return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term)->withTerm_select($term_select)->withStudent_convoked($student_convoked);

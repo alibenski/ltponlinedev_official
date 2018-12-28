@@ -16,6 +16,7 @@ class sendConvocation extends Mailable
     public $course_name_fr;  
     public $classrooms;
     public $teacher;
+    public $teacher_email;
     public $term_en;
     public $term_fr;
     public $schedule;
@@ -28,13 +29,14 @@ class sendConvocation extends Mailable
      *
      * @return void
      */
-    public function __construct($staff_name,$course_name_en, $course_name_fr, $classrooms, $teacher, $term_en, $term_fr,$schedule, $term_season_en, $term_season_fr, $term_year)
+    public function __construct($staff_name,$course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr,$schedule, $term_season_en, $term_season_fr, $term_year)
     {
         $this->staff_name = $staff_name;
         $this->course_name_en = $course_name_en;
         $this->course_name_fr = $course_name_fr;
         $this->classrooms = $classrooms;
         $this->teacher = $teacher;
+        $this->teacher_email = $teacher_email;
         $this->term_en = $term_en;
         $this->term_fr = $term_fr;
         $this->schedule = $schedule;

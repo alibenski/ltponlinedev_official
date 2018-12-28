@@ -97,7 +97,7 @@
                                   @endif
                       </td>
                       <td>
-                        <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
+                        <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
                       </td>
                       <td>
                         {{$form->created_at}}

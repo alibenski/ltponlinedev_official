@@ -56,7 +56,7 @@ class PreviewController extends Controller
 
     public function previewCourse3(Request $request)
     {       
-        $preview_course = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->first();
+        $preview_course = Repo::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->first();
 
             if (empty($preview_course)) {
                 $request->session()->flash('interdire-msg', 'No students assigned to this Course');
@@ -64,19 +64,19 @@ class PreviewController extends Controller
         }
         $arr_key =[];
         $arr_count = [];
-        $code = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
+        $code = Repo::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
 
             foreach ($code as $key => $value) {
                 $arr_key[] = $value->schedules->name;
                 // var_dump($value->schedule_id);
                 // var_dump($value->Code);
-                $count_enrolment_forms = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->where('Code', $value->Code)->where('schedule_id', $value->schedule_id)->count();
+                $count_enrolment_forms = Repo::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->where('Code', $value->Code)->where('schedule_id', $value->schedule_id)->count();
                 $arr_count[] = $count_enrolment_forms;
                 $arr_count = array_combine($arr_key, $arr_count);
                 // var_dump($count_enrolment_forms);
             }
         
-        $preview = Preview::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
+        $preview = Repo::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
 
         return view('preview-course-3')->withPreview($preview)
             ->withPreview_course($preview_course)
@@ -86,16 +86,23 @@ class PreviewController extends Controller
     public function ajaxPreview(Request $request)
     {
         $form_info_arr = [];
-        $student = Preview::where('Te_Code', $request->Te_Code)->where('schedule_id', $request->schedule_id)->get();
+        $student = Repo::where('Te_Code', $request->Te_Code)
+            ->where('Term', Session::get('Term'))
+            ->where('schedule_id', $request->schedule_id)
+            ->orderBy('PS', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->get();
         
         foreach ($student as $value) {
-            $form = Preview::orderBy('created_at', 'asc')->where('CodeIndexID', $value->CodeIndexID)
+            $form = Repo::where('Term', Session::get('Term'))
+                ->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
+                
                 foreach ($form as $value) {
                     $form_info_arr[] = $value;
                 }
         }
-        $form_info = collect($form_info_arr)->sortBy('id');
+        $form_info = collect($form_info_arr);
 
         $data = view('preview-ajax', compact('student', 'form_info'))->render();
         return response()->json([$data]);
@@ -207,17 +214,18 @@ class PreviewController extends Controller
 
         return view('preview-waitlisted', compact('convocation_waitlist', 'languages'));
     }
+
     /**
      * sends convocation emails
      * @return \Illuminate\Http\Response reroute to admin dashboard
      */
     public function sendConvocation()
     {
-        $convocation_all = Preview::all();
+        $convocation_all = Repo::where('Term', Session::get('Term'))->get();
         // with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
         
         // query students who will be put in waitlist
-        $convocation_waitlist = Preview::whereHas('classrooms', function ($query) {
+        $convocation_waitlist = Repo::where('Term', Session::get('Term'))->whereHas('classrooms', function ($query) {
                     $query->whereNull('Tch_ID')
                             ->orWhere('Tch_ID', '=', 'TBD')
                             ;
@@ -225,7 +233,7 @@ class PreviewController extends Controller
                     ->get();
 
         // query students who will receive convocation
-        $convocation = Preview::whereHas('classrooms', function ($query) {
+        $convocation = Repo::where('Term', Session::get('Term'))->whereHas('classrooms', function ($query) {
                     $query->whereNotNull('Tch_ID')
                             ->orWhere('Tch_ID', '!=', 'TBD')
                             ;
@@ -257,8 +265,9 @@ class PreviewController extends Controller
             $classrooms = Classroom::where('Code', $value->CodeClass)->get();
 
 
-            $teacher = $value->classrooms->Tch_ID;
-            $teacher = Teachers::where('Tch_ID', $teacher)->first()->Tch_Name;
+            $teacher_id = $value->classrooms->Tch_ID;
+            $teacher = Teachers::where('Tch_ID', $teacher_id)->first()->Tch_Name;
+            $teacher_email = Teachers::where('Tch_ID', $teacher_id)->first()->email;
 
             // get term values
             $term = $value->Term;
@@ -276,9 +285,9 @@ class PreviewController extends Controller
             $staff_name = $value->users->name; 
             $staff_email = $value->users->email;
             
-            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
+            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
 
-            $convocation_email_sent = Preview::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
+            $convocation_email_sent = Repo::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
                         'convocation_email_sent' => 1,
                         ]);
         }
@@ -289,7 +298,7 @@ class PreviewController extends Controller
     public function sendIndividualConvocation(Request $request)
     {
         if($request->ajax()){
-            $select_student =  Preview::where('CodeIndexIDClass', $request->CodeIndexIDClass)->first();
+            $select_student =  Repo::where('CodeIndexIDClass', $request->CodeIndexIDClass)->first();
                 
                 $course_name = Course::where('Te_code_New', $select_student->Te_Code)->first(); 
                 $course_name_en = $course_name->EDescription; 
@@ -300,8 +309,9 @@ class PreviewController extends Controller
                 $classrooms = Classroom::where('Code', $select_student->CodeClass)->get();
 
 
-                $teacher = $select_student->classrooms->Tch_ID;
-                $teacher = Teachers::where('Tch_ID', $teacher)->first()->Tch_Name;
+                $teacher_id = $select_student->classrooms->Tch_ID;
+                $teacher = Teachers::where('Tch_ID', $teacher_id)->first()->Tch_Name;
+                $teacher_email = Teachers::where('Tch_ID', $teacher_id)->first()->email;
 
                 // get term values
                 $term = $select_student->Term;
@@ -319,9 +329,9 @@ class PreviewController extends Controller
                 $staff_name = $select_student->users->name; 
                 $staff_email = $select_student->users->email;
                 
-            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
+            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
 
-            $convocation_email_sent = Preview::where('CodeIndexIDClass', $select_student->CodeIndexIDClass)->update([
+            $convocation_email_sent = Repo::where('CodeIndexIDClass', $select_student->CodeIndexIDClass)->update([
                     'convocation_email_sent' => 1,
                 ]);
 
@@ -339,34 +349,7 @@ class PreviewController extends Controller
      */
     public function ajaxGetPriority(Request $request)
     {
-        // get previous term
-        $selectedTerm = $request->Term; // No need of type casting
-        // echo substr($selectedTerm, 0, 1); // get first value
-        // echo substr($selectedTerm, -1); // get last value
-        $lastDigit = substr($selectedTerm, -1);
-
-        if ($lastDigit == 9) {
-            $prev_term = $selectedTerm - 5;
-        }
-        // if last digit is 1, check Term table for previous term value or subtract 2 from selectedTerm value
-        if ($lastDigit == 1) {
-            $prev_term = $selectedTerm - 2;
-        }
-        // if last digit is 4, check Term table for previous term value or subtract 3 from selectedTerm value
-        if ($lastDigit == 4) {
-            $prev_term = $selectedTerm - 3;
-        }
-        if ($lastDigit == 8) {
-            $prev_term = $selectedTerm - 4;
-        }
-
-        // check if re-enrolled student or not
-        $student_reenrolled = Repo::where('Term', $prev_term)
-                ->where('L', $request->L)
-                ->where('INDEXID', $request->INDEXID)
-                ->count();
-
-        $priority_status = Preview::withTrashed()->where('CodeIndexID', $request->CodeIndexID)->first();
+        $priority_status = Repo::withTrashed()->where('Term', Session::get('Term'))->where('CodeIndexID', $request->CodeIndexID)->first();
         // $data = $priority_status->PS;
         if ($priority_status->PS == 1) {
             $data = '1: Re-enrolment';
@@ -392,7 +375,7 @@ class PreviewController extends Controller
         $classrooms_2 = Classroom::where('cs_unique', $code)->select('Code')->groupBy('Code')->get();
 
             foreach ($classrooms_2 as $class) {
-                $students = Preview::where('CodeClass', $class->Code)->orderBy('PS', 'asc')->get();
+                $students = Repo::where('Term', Session::get('Term'))->where('CodeClass', $class->Code)->orderBy('PS', 'asc')->get();
                 foreach ($students as $value) {
                     $arr[] = $value;
                 }
@@ -402,7 +385,8 @@ class PreviewController extends Controller
 
         $form_info_arr = [];
 
-        $student = Preview::withTrashed()
+        $student = Repo::withTrashed()
+            ->where('Term', Session::get('Term'))
             ->where('Te_Code', $classroom_3->Te_Code_New)
             ->where('schedule_id', $classroom_3->schedule_id)
             ->orderBy('PS', 'asc')
@@ -411,7 +395,8 @@ class PreviewController extends Controller
         
 
         foreach ($student as $value) {
-            $form = Preview::withTrashed()
+            $form = Repo::withTrashed()
+                ->where('Term', Session::get('Term'))
                 ->where('CodeIndexID', $value->CodeIndexID)
                 ->get();
                 foreach ($form as $value) {
@@ -428,7 +413,7 @@ class PreviewController extends Controller
     {
         if ($request->ajax()) {
             $ids = $request->ids;
-            $student_to_move = Preview::whereIn('id',explode(",",$ids))->get();
+            $student_to_move = Repo::whereIn('id',explode(",",$ids))->get();
             $languages = DB::table('languages')->pluck("name","code")->all();
 
             $data = view('preview-move-students-form', compact('student_to_move', 'languages'))->render();
@@ -445,12 +430,12 @@ class PreviewController extends Controller
             
             
             $data_details = [];
-            $student_to_move = Preview::whereIn('id',explode(",",$ids))->get();
+            $student_to_move = Repo::whereIn('id',explode(",",$ids))->get();
 
             foreach ($student_to_move as $value) {
                 $data_details[] = $value['id'];
 
-                $data_update = Preview::find($value['id']);
+                $data_update = Repo::find($value['id']);
                 $data_update->update([
                     'CodeIndexIDClass' => $request->classroom_id.'-'.$value['INDEXID'],
                     'CodeClass' => $request->classroom_id,

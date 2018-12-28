@@ -226,7 +226,7 @@
                                           {{-- <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
-                                        Teacher: <strong>{{ $teacher }}</strong>
+                                        Teacher: <strong>{{ $teacher }}</strong> ({{ $teacher_email }})
                                         <br> 
                                     </p>
                                     <p>
@@ -298,7 +298,7 @@
                                           {{-- <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
-                                        Professeur : <strong>{{ $teacher }}</strong>
+                                        Professeur : <strong>{{ $teacher }}</strong> ({{ $teacher_email }})
                                         <br> 
                                     </p>
                                     <p>
