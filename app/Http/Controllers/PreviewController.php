@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classroom;
+use App\Comment;
 use App\Course;
 use App\CourseSchedule;
 use App\Day;
@@ -26,7 +27,6 @@ use App\Term;
 use App\Torgan;
 use App\User;
 use App\Waitlist;
-use PDF;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use PDF;
 use Session;
 
 class PreviewController extends Controller
@@ -416,7 +417,13 @@ class PreviewController extends Controller
             $student_to_move = Repo::whereIn('id',explode(",",$ids))->get();
             $languages = DB::table('languages')->pluck("name","code")->all();
 
-            $data = view('preview-move-students-form', compact('student_to_move', 'languages'))->render();
+            $comments = [];
+            foreach ($student_to_move as $key => $value) {
+                    $comments[] = $value->comments;
+
+            }
+
+            $data = view('preview-move-students-form', compact('student_to_move', 'languages', 'comments'))->render();
             return response()->json([$data]);
         }
     }
@@ -424,6 +431,8 @@ class PreviewController extends Controller
     public function ajaxMoveStudents(Request $request)
     {   
         if ($request->ajax()) {
+            
+
             $ids = $request->ids;
             // get classroom details from teventcur table via $request->classroom_id
             $classroom_details = Classroom::where('Code', $request->classroom_id)->first();
@@ -448,6 +457,15 @@ class PreviewController extends Controller
                     'convocation_email_sent' => null,
                 ]); 
             }
+
+            foreach ($student_to_move as $value) {
+                $admin_comment = new Comment;
+                $admin_comment->comments = $request->admin_comment;
+                $admin_comment->pash_id = $value['id'];
+                $admin_comment->user_id = Auth::user()->id;
+                $admin_comment->save();
+            }
+
 
             $data = $data_details;
             return response()->json(['success'=>"Student(s) moved successfully. Click OK to refresh the page."]);

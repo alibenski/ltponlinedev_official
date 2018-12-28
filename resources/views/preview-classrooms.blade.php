@@ -167,6 +167,7 @@
 
 @section('java_script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-confirmation/1.0.5/bootstrap-confirmation.min.js"></script>
+
 <script>
 $(document).ready(function () {
     $('#modalshow').on('show.bs.modal', function (event) {

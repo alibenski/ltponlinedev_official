@@ -62,4 +62,8 @@ class Repo extends Model
     public function previewTempSort() {
     return $this->belongsTo('App\PreviewTempSort', 'CodeIndexID', 'CodeIndexID'); 
     }
+
+    public function comments() {
+        return $this->hasMany('App\Comment', 'pash_id', 'id'); 
+    }
 }
