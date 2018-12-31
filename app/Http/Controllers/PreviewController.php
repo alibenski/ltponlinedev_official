@@ -84,6 +84,50 @@ class PreviewController extends Controller
             ->withArr_count($arr_count);
     }
 
+    public function previewClassStatus(Request $request)
+    {
+        if(Session::has('Term')) {
+
+            $languages = DB::table('languages')->pluck("name","code")->all();
+
+            $classrooms = Classroom::where('Te_Term', Session::get('Term'))->orderBy('Code', 'asc')->get();
+            $cancelled = Repo::where('Term', Session::get('Term'))->onlyTrashed()->get();
+ 
+            return view('preview-class-status', compact('classrooms', 'languages','cancelled', 'cancelled_count'));
+            $classrooms = new Classroom;
+            // $currentQueries = \Request::query();
+            $queries = [];
+
+            $columns = [
+                'L', 
+            ];
+
+            
+            foreach ($columns as $column) {
+                if (\Request::has($column)) {
+                    $classrooms = $classrooms->where($column, \Request::input($column) );
+                    $queries[$column] = \Request::input($column);
+                }
+
+            } 
+                if (Session::has('Term')) {
+                        $classrooms = $classrooms->where('Term', Session::get('Term') );
+                        $queries['Term'] = Session::get('Term');
+                }
+
+            $classrooms = $classrooms->whereHas('classrooms', function ($query) {
+                        $query->whereNull('Tch_ID')
+                                ->orWhere('Tch_ID', '=', 'TBD')
+                                ;
+                        })
+                        ->get();
+
+            return view('preview-class-status', compact('classrooms', 'languages'));
+        }
+        session()->flash('warning', 'No term has been set.');
+        return back();
+    }
+
     public function ajaxPreview(Request $request)
     {
         $form_info_arr = [];

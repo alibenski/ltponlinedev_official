@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     /*
      * Preview Routes
      */
+    Route::get('preview-class-status', 'PreviewController@previewClassStatus')->name('preview-class-status');
     Route::get('preview-course-3', 'PreviewController@previewCourse3')->name('preview-course-3');
 
     Route::get('preview-vsa-page-1', ['as'=>'preview-vsa-page-1','uses'=>'PreviewController@vsaPage1']);

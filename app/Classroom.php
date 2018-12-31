@@ -61,4 +61,8 @@ class Classroom extends Model
     public function previews() {
     return $this->belongsToMany('App\Preview', 'CodeClass', 'Code'); 
     }
+
+    public function pash() {
+    return $this->hasMany('App\Repo', 'CodeClass', 'Code'); 
+    }
 }
