@@ -140,6 +140,20 @@
 		<!-- /.info-box -->
 	</a>
 </div>
+<div class="col-sm-4 col-xs-12">
+	<a href="{{ route('preview-class-status') }}">
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-aqua"><i class="fa fa-list"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Class Table </span>
+		    <span class="info-box-number">@if(Session::has('Term')) @else Set the Term @endif</span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+</div>
 @endsection
 @section('java_script')
 <script src="{{ asset('js/submit.js') }}"></script>

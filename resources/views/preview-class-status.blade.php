@@ -14,7 +14,7 @@
             </div>
         </div>
 	    <div class="box-body">
-	    <form method="GET" action="{{ route('preview-waitlisted',['L' => \Request::input('L'), 'Term' => Session::get('Term')]) }}">
+	    <form method="GET" action="{{ route('preview-class-status',['L' => \Request::input('L'), 'Term' => Session::get('Term')]) }}">
 			
 			<div class="form-group col-sm-12">
 		      <label for="L" class="control-label"> Language:</label>
@@ -64,7 +64,7 @@
 			    <tbody>
 					@foreach($classrooms as $element)
 					@if(count($element->pash) > 0) <!-- only show clasrooms with students -->
-					<tr id="tr_{{$element->id}}">
+					<tr class="table-row" id="tr_{{$element->id}}">
 						<td>
                         	<div class="counter"></div>
                       	</td>
@@ -77,9 +77,10 @@
 						<td>
 							@foreach($cancelled as $value_cancelled)
 								@if($element->Code == $value_cancelled->CodeClass)
-									<i class="fa fa-remove"></i>
+									<span class="cancelled"></span>
 								@endif
 							@endforeach
+							<span class="count_c"></span>
 						</td>
 					</tr>
 					@endif
@@ -91,6 +92,9 @@
 </div>
 @else
 @endif
+
+<span></span>
+  <div></div>
 
 @stop
 
@@ -106,4 +110,18 @@ $(document).ready(function () {
     });    
 });
 </script>
+
+<script>
+$(document).ready(function () {
+	// get the count of .cancelled as cancelled students
+    $('.table-row').each(function() {
+    	var tr_id = $(this).attr('id');
+    	$('.count_c', $(this)).attr('id', tr_id);
+	    var c =$('.cancelled', $(this)).length;
+	    $('.count_c', $(this)).text(c);
+
+	});
+});
+</script>
+
 @stop

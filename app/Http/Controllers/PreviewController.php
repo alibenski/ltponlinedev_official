@@ -90,12 +90,8 @@ class PreviewController extends Controller
 
             $languages = DB::table('languages')->pluck("name","code")->all();
 
-            $classrooms = Classroom::where('Te_Term', Session::get('Term'))->orderBy('Code', 'asc')->get();
-            $cancelled = Repo::where('Term', Session::get('Term'))->onlyTrashed()->get();
- 
-            return view('preview-class-status', compact('classrooms', 'languages','cancelled', 'cancelled_count'));
             $classrooms = new Classroom;
-            // $currentQueries = \Request::query();
+ 
             $queries = [];
 
             $columns = [
@@ -111,18 +107,19 @@ class PreviewController extends Controller
 
             } 
                 if (Session::has('Term')) {
-                        $classrooms = $classrooms->where('Term', Session::get('Term') );
+                        $classrooms = $classrooms->where('Te_Term', Session::get('Term') );
                         $queries['Term'] = Session::get('Term');
                 }
 
-            $classrooms = $classrooms->whereHas('classrooms', function ($query) {
-                        $query->whereNull('Tch_ID')
-                                ->orWhere('Tch_ID', '=', 'TBD')
-                                ;
-                        })
-                        ->get();
+            $classrooms = $classrooms->orderBy('Code', 'asc')->get();
 
-            return view('preview-class-status', compact('classrooms', 'languages'));
+
+            $cancelled = Repo::where('Term', Session::get('Term'))->onlyTrashed()->get();
+ 
+            return view('preview-class-status', compact('classrooms', 'languages','cancelled', 'cancelled_count'));
+            
+            // $currentQueries = \Request::query();
+
         }
         session()->flash('warning', 'No term has been set.');
         return back();
