@@ -52,40 +52,24 @@
 
 				<tbody>
 					@foreach($teachers as $teacher)
-						
 						<tr id="{{ $teacher->Tch_ID}}" @if($teacher->In_Out == 0) style="background-color: #eed5d2;" @endif>
-							<td>@if(is_null($teacher->IndexNo))
-								<input type="text" name="IndexNo" value=""> 
-								@else {{ $teacher->IndexNo }}
-								@endif
-							</td>
-							<td>{{ $teacher->Tch_Lastname }}</td>
-							<td>{{ $teacher->Tch_Firstname }}</td>
-							<td>{{ $teacher->email }}</td>
-							<td>@if(is_null($teacher->Tch_L))
-								<select class="form-control" style="width: 100%;" name="Tch_L" autocomplete="off">
-					                <option value="">--- Select ---</option>
-					                <option value="A">A</option>
-					                <option value="C">C</option>
-					                <option value="E">E</option>
-					                <option value="F">F</option>
-					                <option value="R">R</option>
-					                <option value="S">S</option>
-					            </select>
-								@else {{ $teacher->Tch_L }}
-								@endif
+							<td class="input-IndexNo">{{ $teacher->IndexNo }}</td>
+							<td class="input-Tch_Lastname">{{ $teacher->Tch_Lastname }}</td>
+							<td class="input-Tch_Firstname">{{ $teacher->Tch_Firstname }}</td>
+							<td class="input-email">{{ $teacher->email }}</td>
+							<td class="input-Tch_L">{{ $teacher->Tch_L }}</td>
+							<td>
+								<input value="" type="checkbox" name="In_Out" @if($teacher->In_Out == 1) checked="checked" @else @endif>
 							</td>
 							<td>
-								<input id="chk-{{ $teacher->Tch_ID}}" value="" type="checkbox" name="In_Out" @if($teacher->In_Out == 1) checked="checked" @else @endif>
-							</td>
-							<td>
-								<button id="{{ $teacher->Tch_ID}}" type="button" class="btn btn-success btn-sm quick-save">Quick Save</button>
+								<button type="button" class="btn btn-warning btn-sm quick-edit">Quick edit</button>
+								<button type="button" class="btn btn-success btn-sm quick-save hidden" disabled="">Quick Save</button>
+								<a href="#"  class="btn btn-default btn-sm" disabled>Edit</a>
 								<input type="hidden" name="_token" value="{{ Session::token() }}">
-								<a href="#" class="btn btn-warning btn-sm">Edit</a>
+								</form>
 							</td>
 						</tr>
 					@endforeach
-
 				</tbody>
 			</table>	
 		</div>
@@ -95,45 +79,57 @@
 
 @section('java_script')
 <script>
+$(".quick-edit").click(function(){
+	$(this).attr('disabled', 'true');
+	var textIndexNo = $(this).closest("tr").find(".input-IndexNo").text();
+	var textTch_Lastname = $(this).closest("tr").find(".input-Tch_Lastname").text();
+	var textTch_Firstname = $(this).closest("tr").find(".input-Tch_Firstname").text();
+	var textemail = $(this).closest("tr").find(".input-email").text();
+	console.log(textIndexNo)
+	$(this).closest("tr").find(".input-IndexNo").html('<input type="text" name="IndexNo" value="" placeholder="'+textIndexNo+'">');
+	$(this).closest("tr").find(".input-Tch_Lastname").html('<input type="text" name="Tch_Lastname" value="" placeholder="'+textTch_Lastname+'">');
+	$(this).closest("tr").find(".input-Tch_Firstname").html('<input type="text" name="Tch_Firstname" value="" placeholder="'+textTch_Firstname+'">');
+	$(this).closest("tr").find(".input-email").html('<input type="email" name="email" value="" placeholder="'+textemail+'">');
+	$(this).closest("tr").find(".input-Tch_L").html('<select class="form-control" style="width: 100%;" name="Tch_L" autocomplete="off"><option value="">--- Select ---</option><option value="A">A</option><option value="C">C</option><option value="E">E</option><option value="F">F</option><option value="R">R</option><option value="S">S</option></select>');
+	$(this).closest("tr").find("button.quick-save").removeClass('hidden');
+	$(this).closest("tr").find("button.quick-save").removeAttr('disabled');
+
+}); 
+</script>
+<script>
 $("input[name='In_Out']").change(function() {
-		var In_Out_chk = $(this).prop('checked');
-		if (In_Out_chk) {
-			var In_Out = $(this).val('1');
-		} else{
-			var In_Out = $(this).val('0');
-		}
-	console.log(In_Out)		
+	var In_Out_chk = $(this).prop('checked');
+	console.log(In_Out_chk)		
+	if (In_Out_chk) {
+		var In_Out = $(this).val('1');
+	} else{
+		var In_Out = $(this).val('0');
+	}
 });
 	
 </script>
 <script>
 $(".quick-save").click(function(){
-  
-  var Tch_ID = $(this).attr('id');
-
+  $(this).attr('disabled', 'true');
+  var Tch_ID = $(this).closest("tr").attr('id');
+  var Tch_L = $(this).closest("tr").find("select[name='Tch_L']").val();
+  var IndexNo = $(this).closest("tr").find("input[name='IndexNo']").val();
+  var In_Out = $(this).closest("tr").find("input[name='In_Out']").val();
   var token = $("input[name='_token']").val();
-
-  $("tr[id="+Tch_ID+"]").find("td select[name='Tch_L'],td input[name='IndexNo'],td input[name='In_Out']").each(function() {
-  			  Tch_L = $("select[name='Tch_L']").val();
-			  var IndexNo = $("input[name='IndexNo']").val();
-			   In_Out = $("input[name='In_Out']").val();
-            	console.log(In_Out)
-        });
-
-
-  // $.ajax({
-  //     url: "", 
-  //     method: 'PUT',
-  //     data: { Tch_ID:Tch_ID, _token:token, Tch_L:Tch_L, IndexNo:IndexNo, In_Out:In_Out},
-  //     success: function(data, status) {
-  //       console.log(data)
-  //   //     setTimeout(function(){
-	 //   //     location.reload();
-	 //   // },500);
-  //       // $(".preview-here").html(data);
-  //       // $(".preview-here").html(data.options);
-  //     }
-  // });
+  console.log(Tch_ID)
+  $.ajax({
+      url: "{{ route('ajax-teacher-update') }}", 
+      method: 'PUT',
+      data: { Tch_ID:Tch_ID, _token:token, Tch_L:Tch_L, IndexNo:IndexNo, In_Out:In_Out},
+      success: function(data, status) {
+        console.log(data)
+        setTimeout(function(){
+	       	location.reload();
+	   		},500);
+        // $(".preview-here").html(data);
+        // $(".preview-here").html(data.options);
+      }
+  });
 }); 	
 </script>
 
