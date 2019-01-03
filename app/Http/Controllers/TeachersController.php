@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Teachers;
 use Illuminate\Http\Request;
+use DB;
 
 class TeachersController extends Controller
 {
@@ -12,11 +13,40 @@ class TeachersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = Teachers::all();
+        $languages = DB::table('languages')->pluck("name","code")->all();
 
-        return view('teachers.index')->withTeachers($teachers);
+        $teachers = new Teachers;
+        // $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'Tch_L', 
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $teachers = $teachers->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+
+                if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $teachers = $teachers->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+            } 
+
+        $teachers = $teachers->get();
+
+
+        return view('teachers.index')->withTeachers($teachers)->withLanguages($languages);
     }
 
     /**
@@ -71,7 +101,21 @@ class TeachersController extends Controller
      */
     public function update(Request $request, Teachers $teachers)
     {
-        //
+        
+    }
+
+    public function ajaxTeacherUpdate(Request $request)
+    {
+        $teacher = Teachers::where('Tch_ID', $request->Tch_ID)->first();
+
+        $input = $request->all();
+        $input = array_filter($input, 'strlen');
+
+        $teacher->fill($input)->save(); 
+
+
+        $data = $input;
+        return response()->json($data);
     }
 
     /**

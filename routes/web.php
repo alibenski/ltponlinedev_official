@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
 
     Route::resource('teachers', 'TeachersController');
+    Route::put('ajax-teacher-update', ['as'=>'ajax-teacher-update','uses'=>'TeachersController@ajaxTeacherUpdate']);
     Route::resource('rooms', 'RoomsController');
     Route::resource('waitlist', 'WaitlistController');
     

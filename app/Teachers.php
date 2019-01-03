@@ -8,6 +8,16 @@ class Teachers extends Model
 {
     protected $table = 'LTP_TEACHERS';
     protected $primaryKey = 'Tch_ID';
+    protected $fillable = [
+        'Tch_L', 'IndexNo', 'In_Out',
+    ];
     //so Eloquent does not expect primary key to be auto-incrementing 
     public $incrementing = false;
+
+    /**
+     * The name of the "updated at" column.
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'Updated';
 }
