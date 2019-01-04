@@ -24,4 +24,8 @@ class Teachers extends Model
     public function users() {
         return $this->belongsTo('App\User','IndexNo','indexno'); 
     }
+
+    public function classrooms() {
+        return $this->hasMany('App\Classroom', 'Tch_ID', 'Tch_ID'); 
+    }
 }

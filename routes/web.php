@@ -33,6 +33,15 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('move-to-pash', 'AdminController@moveToPash')->name('move-to-pash');
 
+    /**
+     * Teachers Routes
+     */
+    Route::resource('teachers', 'TeachersController');
+    Route::put('ajax-teacher-update', ['as'=>'ajax-teacher-update','uses'=>'TeachersController@ajaxTeacherUpdate']);
+
+    Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard');
+
+
     /*
      * Preview Routes
      */
@@ -113,8 +122,6 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::delete('/delete/user/{staff}/lang/{lang}/term/{term}/{eform}', ['as' => 'placement.destroy', 'uses' => 'PlacementFormController@destroy'])->where('tecode', '(.*)');
 
 
-    Route::resource('teachers', 'TeachersController');
-    Route::put('ajax-teacher-update', ['as'=>'ajax-teacher-update','uses'=>'TeachersController@ajaxTeacherUpdate']);
     Route::resource('rooms', 'RoomsController');
     Route::resource('waitlist', 'WaitlistController');
     

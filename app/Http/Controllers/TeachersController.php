@@ -2,12 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\NewUser;
+use App\Repo;
 use App\Teachers;
-use Illuminate\Http\Request;
+use App\Term;
 use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class TeachersController extends Controller
 {
+    public function teacherDashboard()
+    {
+        
+        $terms = Term::orderBy('Term_Code', 'desc')->get();       
+        $assigned_classes = Teachers::where('IndexNo', Auth::user()->indexno)->classrooms()->get();
+        dd($assigned_classes);
+        return view('teachers.teacher_dashboard',compact('terms'));
+    }
+
     /**
      * Display a listing of the resource.
      *
