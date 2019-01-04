@@ -116,13 +116,16 @@ $(".quick-save").click(function(){
   var Tch_ID = $(this).closest("tr").attr('id');
   var Tch_L = $(this).closest("tr").find("select[name='Tch_L']").val();
   var IndexNo = $(this).closest("tr").find("input[name='IndexNo']").val();
+  var Tch_Lastname = $(this).closest("tr").find("input[name='Tch_Lastname']").val();
+  var Tch_Firstname = $(this).closest("tr").find("input[name='Tch_Firstname']").val();
+  var email = $(this).closest("tr").find("input[name='email']").val();
   var In_Out = $(this).closest("tr").find("input[name='In_Out']").val();
   var token = $("input[name='_token']").val();
   console.log(Tch_ID)
   $.ajax({
       url: "{{ route('ajax-teacher-update') }}", 
       method: 'PUT',
-      data: { Tch_ID:Tch_ID, _token:token, Tch_L:Tch_L, IndexNo:IndexNo, In_Out:In_Out},
+      data: { Tch_ID:Tch_ID, _token:token, Tch_L:Tch_L, IndexNo:IndexNo, In_Out:In_Out, Tch_Lastname:Tch_Lastname, Tch_Firstname:Tch_Firstname, email:email},
       success: function(data, status) {
         console.log(data)
         setTimeout(function(){
