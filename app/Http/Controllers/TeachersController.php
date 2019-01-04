@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classroom;
 use App\NewUser;
 use App\Repo;
 use App\Teachers;
@@ -17,9 +18,11 @@ class TeachersController extends Controller
     {
         
         $terms = Term::orderBy('Term_Code', 'desc')->get();       
-        $assigned_classes = Teachers::where('IndexNo', Auth::user()->indexno)->classrooms()->get();
-        dd($assigned_classes);
-        return view('teachers.teacher_dashboard',compact('terms'));
+        $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
+            ->where('Te_Term', Session::get('Term'))
+            ->get();
+        
+        return view('teachers.teacher_dashboard',compact('terms', 'assigned_classes'));
     }
 
     /**
