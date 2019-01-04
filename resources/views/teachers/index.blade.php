@@ -41,6 +41,7 @@
 		<div class="filtered-table table-responsive">
 			<table class="table table-bordered table-striped">
 				<thead>
+					<th>U</th>
 					<th>Index No</th>
 					<th>Last Name</th>
 					<th>First Name</th>
@@ -53,6 +54,7 @@
 				<tbody>
 					@foreach($teachers as $teacher)
 						<tr id="{{ $teacher->Tch_ID}}" @if($teacher->In_Out == 0) style="background-color: #eed5d2;" @endif>
+							<td>@if($teacher->users) <i class="fa fa-check text-success"></i>@endif</td>
 							<td class="input-IndexNo">{{ $teacher->IndexNo }}</td>
 							<td class="input-Tch_Lastname">{{ $teacher->Tch_Lastname }}</td>
 							<td class="input-Tch_Firstname">{{ $teacher->Tch_Firstname }}</td>

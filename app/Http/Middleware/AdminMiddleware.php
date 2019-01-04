@@ -16,7 +16,7 @@ class AdminMiddleware
     {
         $user = User::all()->count();
         if (!($user == 1)) {
-            if (!Auth::user()->hasPermissionTo('Administer roles & permissions')) {
+            if (!Auth::user()->hasPermissionTo('Administer roles & permissions') && !Auth::user()->hasPermissionTo('Teacher administration')) {
                 //abort('401'); //redeirect to home with flash message instead of 401 error
                 return redirect('home')->with('interdire-msg', 'You are not authorized to access that page.');
             }

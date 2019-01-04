@@ -20,4 +20,8 @@ class Teachers extends Model
      * @var string
      */
     const UPDATED_AT = 'Updated';
+
+    public function users() {
+        return $this->belongsTo('App\User','IndexNo','indexno'); 
+    }
 }

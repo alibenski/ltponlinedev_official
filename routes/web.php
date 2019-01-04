@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-// test route for test queries
+// test routes for test queries
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
 Route::get('send-auth-email', 'WaitlistController@sendAuthEmailIndividual')->name('send-auth-email');
 Route::get('query-term', 'WaitlistController@queryTerm')->name('query-term');
