@@ -137,7 +137,11 @@ class TeachersController extends Controller
 
     public function teacherViewClassrooms()
     {
-        return view('teachers.teacher_view_classrooms');
+        $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
+            ->where('Te_Term', Session::get('Term'))
+            ->get();
+
+        return view('teachers.teacher_view_classrooms', compact('assigned_classes'));
     }
 
     /**
