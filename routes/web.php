@@ -38,7 +38,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
      */
     Route::resource('teachers', 'TeachersController');
     Route::put('ajax-teacher-update', ['as'=>'ajax-teacher-update','uses'=>'TeachersController@ajaxTeacherUpdate']);
-
+    
+    Route::get('teacher-view-classrooms', ['as'=>'teacher-view-classrooms','uses'=>'TeachersController@teacherViewClassrooms']);
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard');
 
 

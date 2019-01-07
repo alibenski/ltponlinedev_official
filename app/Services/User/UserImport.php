@@ -143,7 +143,7 @@ class UserImport
                     'SEX' => $row['gender'],
                     'DEPT' => $row['org'],
                     'PHONE' => $row['contact_num'],
-                    'CAT' => $row['cat'],
+                    // 'CAT' => $row['cat'],
                 ]);
             }
             DB::commit();

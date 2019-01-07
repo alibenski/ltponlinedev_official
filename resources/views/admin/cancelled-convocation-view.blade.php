@@ -53,8 +53,8 @@ $(document).ready(function () {
 });
 </script>
 <script type="text/javascript">
-   setTimeout(function(){
-       location.reload();
-   },3000);
+   // setTimeout(function(){
+   //     location.reload();
+   // },3000);
 </script>
 @stop

@@ -60,7 +60,7 @@ class TeachersController extends Controller
                     $queries['search'] = \Request::input('search');
             } 
 
-        $teachers = $teachers->get();
+        $teachers = $teachers->orderBy('In_Out', 'desc')->orderBy('Tch_Lastname', 'asc')->get();
 
 
         return view('teachers.index')->withTeachers($teachers)->withLanguages($languages);
@@ -133,6 +133,11 @@ class TeachersController extends Controller
 
         $data = $input;
         return response()->json($data);
+    }
+
+    public function teacherViewClassrooms()
+    {
+        return view('teachers.teacher_view_classrooms');
     }
 
     /**
