@@ -144,6 +144,20 @@ class TeachersController extends Controller
         return view('teachers.teacher_view_classrooms', compact('assigned_classes'));
     }
 
+    public function teacherShowStudents(Request $request)
+    {
+        $form_info = Repo::where('CodeClass', $request->Code)
+            ->where('Term', Session::get('Term'))
+            ->get();
+
+        $course = Repo::where('CodeClass', $request->Code)
+            ->where('Term', Session::get('Term'))
+            ->first();
+        
+        $data = view('teachers.teacher_show_students', compact('course', 'form_info'))->render();
+        return response()->json([$data]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

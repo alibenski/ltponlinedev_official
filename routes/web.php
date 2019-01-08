@@ -40,6 +40,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::put('ajax-teacher-update', ['as'=>'ajax-teacher-update','uses'=>'TeachersController@ajaxTeacherUpdate']);
     
     Route::get('teacher-view-classrooms', ['as'=>'teacher-view-classrooms','uses'=>'TeachersController@teacherViewClassrooms']);
+
+    Route::post('teacher-show-students', ['as'=>'teacher-show-students','uses'=>'TeachersController@teacherShowStudents']);
+
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard');
 
 
