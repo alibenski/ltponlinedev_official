@@ -180,19 +180,22 @@ class TeachersController extends Controller
         return response()->json([$data]);
     }
 
-    public function teacherManageAttendances($code, Request $request)
-    {
-        $form_info = Repo::where('CodeClass', $code)
+    public function teacherManageAttendances(Request $request)
+    {   
+        $form_info = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
             ->get();
 
-        $course = Repo::where('CodeClass', $code)
+        $course = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
             ->first();
 
-        $classroom = Classroom::where('Code', $code)->first();
+        $classroom = Classroom::where('Code', $request->Code)->first();
+        $day = $request->day;
+        $time = $request->time;
+        $week = $request->wk;
 
-        return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom'));
+        return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'));
         // $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info'))->render();
         // return response()->json([$data]);
     }

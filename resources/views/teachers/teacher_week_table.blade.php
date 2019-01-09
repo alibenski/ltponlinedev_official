@@ -5,6 +5,7 @@
           <th>Week</th>
           <th>Day</th>
           <th>Time</th>  
+          <th>Operation</th>  
         </tr>
       </thead>
       <tbody>
@@ -13,13 +14,18 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>
-            {{ $wk }} <input type="hidden" name="wk" value="{{ $wk }}">
-          </td>
+          <td>{{ $wk }}</td>
           <td>Monday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Mon_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Mon_ETime)) }}</td>
           <td>
-            <a href="{{ route('teacher-manage-attendances', ['Code' => $day_time->Code]) }}" class="btn btn-info btn-sm">Log Attendance</a>
+            <form method="GET" action="{{ route('teacher-manage-attendances') }}">
+                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
+                <input type="hidden" name="day" value="Monday">
+                <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Mon_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Mon_ETime)) }}">
+                <input type="hidden" name="Code" value="{{ $day_time->Code }}">
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </form>
           </td>
         </tr>
         @endif
@@ -33,7 +39,14 @@
           <td>Tuesday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Tue_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Tue_ETime)) }}</td>
           <td>
-            <a href="{{ route('teacher-manage-attendances', ['Code' => $day_time->Code]) }}" class="btn btn-info btn-sm">Log Attendance</a>
+            <form method="GET" action="{{ route('teacher-manage-attendances') }}">
+                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
+                <input type="hidden" name="day" value="Tuesday">
+                <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Tue_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Tue_ETime)) }}">
+                <input type="hidden" name="Code" value="{{ $day_time->Code }}">
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </form>
           </td>
         </tr>
         @endif
@@ -47,7 +60,14 @@
           <td>Wednesday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Wed_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Wed_ETime)) }}</td>
           <td>
-            <a href="{{ route('teacher-manage-attendances', ['Code' => $day_time->Code]) }}" class="btn btn-info btn-sm">Log Attendance</a>
+            <form method="GET" action="{{ route('teacher-manage-attendances') }}">
+                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
+                <input type="hidden" name="day" value="Wednesday">
+                <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Wed_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Wed_ETime)) }}">
+                <input type="hidden" name="Code" value="{{ $day_time->Code }}">
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </form>
           </td>
         </tr>
         @endif
@@ -61,7 +81,14 @@
           <td>Thursday</td>
             <td>{{ date('h:i a', strtotime($day_time->Te_Thu_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Thu_ETime)) }}</td>
             <td>
-            <a href="{{ route('teacher-manage-attendances', ['Code' => $day_time->Code]) }}" class="btn btn-info btn-sm">Log Attendance</a>
+            <form method="GET" action="{{ route('teacher-manage-attendances') }}">
+                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
+                <input type="hidden" name="day" value="Thursday">
+                <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Thu_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Thu_ETime)) }}">
+                <input type="hidden" name="Code" value="{{ $day_time->Code }}">
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </form>
           </td>
         </tr>
         @endif
@@ -71,11 +98,18 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>{{ $wk }}</td>
+          <td>{{ $wk }} </td>
           <td>Friday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Fri_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Fri_ETime)) }}</td>
           <td>
-            <a href="{{ route('teacher-manage-attendances', ['Code' => $day_time->Code]) }}" class="btn btn-info btn-sm">Log Attendance</a>
+            <form method="GET" action="{{ route('teacher-manage-attendances') }}">
+                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
+                <input type="hidden" name="day" value="Friday">
+                <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Fri_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Fri_ETime)) }}">
+                <input type="hidden" name="Code" value="{{ $day_time->Code }}">
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </form>
           </td>
         </tr>
         @endif
@@ -91,12 +125,16 @@ $(document).ready(function () {
         counter++;
         $(this).attr('id', counter);
         $('#'+counter).html(counter);
-
-        var wk = $(this).closest("tr").find("input[name='wk']").val();
-        console.log(wk)
-        // $(this).closest("tr").find("input[name='wk']").;
         // console.log(counter)
-    });    
-
+    });
+    var wkcounter = 0;
+    $('.wkCounter').each(function() {
+        wkcounter++;
+        $(this).attr('id', wkcounter);
+        var wkVal = $(this).attr('id');
+        var wkSubVal = $(this).attr('for');
+        $(this).val(wkSubVal+'_'+wkVal);
+        // console.log(wkcounter)
+    }); 
 });
 </script>
