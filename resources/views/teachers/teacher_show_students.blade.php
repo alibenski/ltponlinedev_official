@@ -1,5 +1,5 @@
 <div class="table-responsive filtered-table">
-  <h4><strong>Students of {{ $course->courses->Description}}</strong></h4>
+  <h4><strong>Students of {{ $course->courses->Description}} - {{ $course->schedules->name }}</strong></h4>
   <table class="table table-bordered table-striped">
       <thead>
           <tr>

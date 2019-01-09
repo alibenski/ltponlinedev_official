@@ -158,6 +158,45 @@ class TeachersController extends Controller
         return response()->json([$data]);
     }
 
+    public function teacherSelectWeek($code)
+    {
+        $term = Term::where('Term_Code', Session::get('Term'))->first();
+
+        $course = Repo::where('CodeClass', $code)
+            ->where('Term', Session::get('Term'))
+            ->first();
+
+        return view('teachers.teacher_select_week', compact('course', 'term'));
+        // $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info'))->render();
+        // return response()->json([$data]);
+    }
+
+    public function teacherWeekTable(Request $request)
+    {
+        $day_time = Classroom::where('Code', $request->CodeClass)->first();
+        $wk = $request->Wk;
+
+        $data = view('teachers.teacher_week_table', compact('day_time', 'wk'))->render();
+        return response()->json([$data]);
+    }
+
+    public function teacherManageAttendances($code, Request $request)
+    {
+        $form_info = Repo::where('CodeClass', $code)
+            ->where('Term', Session::get('Term'))
+            ->get();
+
+        $course = Repo::where('CodeClass', $code)
+            ->where('Term', Session::get('Term'))
+            ->first();
+
+        $classroom = Classroom::where('Code', $code)->first();
+
+        return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom'));
+        // $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info'))->render();
+        // return response()->json([$data]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

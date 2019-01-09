@@ -56,7 +56,15 @@
 					</div>
 				</div>
 				<div class="box-footer">
+						
 						<button id="showStudentsBtn" value="{{ $classroom->Code}}" class="btn btn-default">Show Students</button>
+						{{-- <button id="manageAttendanceBtn" value="{{ $classroom->Code}}" class="btn btn-default">Manage Attendance</button> --}}
+						<a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-default" target="_blank">Manage Attendance</a>
+						{{-- <form action="{{ route('teacher-manage-attendance') }}" method="GET">
+							<button type="submit" class="btn btn-default btn-space">Manage Attendance</button>
+							<input type="hidden" value="{{ $classroom->Code}}" name="Code">
+							<input type="hidden" name="_token" value="{{ Session::token() }}">
+						</form> --}}
 				</div>
 			</div>
 		</div>
@@ -77,18 +85,36 @@
 
 @section('java_script')
 <script type="text/javascript">
+$("button[id='manageAttendanceBtn']").click(function(){
+  var Code = $(this).val();
+  var token = $("input[name='_token']").val();
 
+  $("button[id='manageAttendanceBtn'][value='"+Code+"']").addClass('btn-success');
+  $("button[id='manageAttendanceBtn'][value='"+Code+"']").removeClass('btn-default');
+  $("button").not("button[id='manageAttendanceBtn'][value='"+Code+"']").addClass('btn-default');
+  $("button").not("button[id='manageAttendanceBtn'][value='"+Code+"']").removeClass('btn-success');
+
+
+  $.ajax({
+      url: "", 
+      method: 'GET',
+      data: {Code:Code, _token:token},
+      success: function(data, status) {
+        // console.log(data)
+        $(".students-here").html(data);
+        $(".students-here").html(data.options);
+      }
+  });
+}); 
 
 $("button[id='showStudentsBtn']").click(function(){
   var Code = $(this).val();
   var token = $("input[name='_token']").val();
 
-	
-
-  $("button[value='"+Code+"']").addClass('btn-success');
-  $("button[value='"+Code+"']").removeClass('btn-default');
-  $("button").not("button[value='"+Code+"']").addClass('btn-default');
-  	$("button").not("button[value='"+Code+"']").removeClass('btn-success');
+  $("button[id='showStudentsBtn'][value='"+Code+"']").addClass('btn-success');
+  $("button[id='showStudentsBtn'][value='"+Code+"']").removeClass('btn-default');
+  $("button").not("button[id='showStudentsBtn'][value='"+Code+"']").addClass('btn-default');
+  $("button").not("button[id='showStudentsBtn'][value='"+Code+"']").removeClass('btn-success');
 
 
   $.ajax({

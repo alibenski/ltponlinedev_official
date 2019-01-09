@@ -37,13 +37,21 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
      * Teachers Routes
      */
     Route::resource('teachers', 'TeachersController');
+    Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard');
+    
     Route::put('ajax-teacher-update', ['as'=>'ajax-teacher-update','uses'=>'TeachersController@ajaxTeacherUpdate']);
     
     Route::get('teacher-view-classrooms', ['as'=>'teacher-view-classrooms','uses'=>'TeachersController@teacherViewClassrooms']);
 
     Route::post('teacher-show-students', ['as'=>'teacher-show-students','uses'=>'TeachersController@teacherShowStudents']);
 
-    Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard');
+    Route::get('teacher-select-week/{code}', ['as'=>'teacher-select-week','uses'=>'TeachersController@teacherSelectWeek']);
+
+    Route::get('teacher-week-table', ['as'=>'teacher-week-table','uses'=>'TeachersController@teacherWeekTable']);
+
+
+    Route::get('teacher-manage-attendances/{code}', ['as'=>'teacher-manage-attendances','uses'=>'TeachersController@teacherManageAttendances']);
+
 
 
     /*
