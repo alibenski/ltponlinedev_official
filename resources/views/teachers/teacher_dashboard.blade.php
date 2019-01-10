@@ -73,19 +73,39 @@
   </form>
 </div>
 
+@if(count($assigned_classes) > 0)
+<a href="{{ route('teacher-view-classrooms') }}"> 
+  <div class="col-sm-4 col-xs-12">
+      <div class="info-box">
+        <!-- Apply any bg-* class to to the icon to color it -->
+        <span class="info-box-icon bg-purple"><i class="fa fa-bar-chart"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Assigned Classes </span>
+          <span class="info-box-number"> {{ count($assigned_classes) }} </span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+  </div>
+</a>
 
+@else
 <div class="col-sm-4 col-xs-12">
     <div class="info-box">
       <!-- Apply any bg-* class to to the icon to color it -->
       <span class="info-box-icon bg-purple"><i class="fa fa-bar-chart"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Assigned Classes </span>
-        <span class="info-box-number">@if(count($assigned_classes) > 0) {{ count($assigned_classes) }} @else Set Term @endif</span>
+        <span class="info-box-number">Set Term</span>
       </div>
       <!-- /.info-box-content -->
     </div>
     <!-- /.info-box -->
 </div>
+@endif
+
+
+
 @endsection
 
 @section('java_script')

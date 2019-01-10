@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Attendance;
+use App\AttendanceRemarks;
 use App\Classroom;
 use App\NewUser;
 use App\Repo;
@@ -195,9 +197,81 @@ class TeachersController extends Controller
         $time = $request->time;
         $week = $request->wk;
 
+        // $arr = [];
+        // foreach ($form_info as $value) {
+        //     $remark = Attendance::where('pash_id', $value->id)->whereHas('attendanceRemarks', function($q){
+        //             $q->whereNotNull('remarks')->orderBy('created_at', 'desc');
+        //     })
+        //     ->get();
+        //     foreach ($remark as $key => $valueR) {
+        //         $arr[] = $valueR->attendanceRemarks[$key]['id'];
+                
+        //     }
+        // }
+        // dd($arr);
         return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'));
         // $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info'))->render();
         // return response()->json([$data]);
+    }
+
+    public function ajaxTeacherAttendanceUpdate(Request $request)
+    {
+        $ids = $request->ids;
+        $week = $request->wk;
+        
+        $data_details = [];
+        $student_to_update = Repo::whereIn('id',explode(",",$ids))->get();
+
+        $attendance_status = explode(",", $request->attendanceStatus);
+        $countAttendanceStatus = count($attendance_status);
+
+        $remarks = explode(",", $request->remarks);
+
+        for ($i=0; $i < $countAttendanceStatus; $i++) { 
+            $data_details[] = $student_to_update[$i]['id'];
+
+            $data_update = Attendance::where('pash_id', $student_to_update[$i]['id'])->get();
+
+            if (count($data_update) > 0 ) {
+
+                // update record
+                $record_update = Attendance::where('pash_id', $student_to_update[$i]['id']);
+                $record_update->update([
+                    $request->wk => $attendance_status[$i],
+                ]); 
+
+                $query = Attendance::where('pash_id', $student_to_update[$i]['id'])->first();
+                if (!empty($remarks[$i])) {
+
+                    $attendance_remark = new AttendanceRemarks;
+                    $attendance_remark->attendance_id = $query->id;
+                    $attendance_remark->wk_id = $week;
+                    $attendance_remark->remarks = $remarks[$i];
+                    $attendance_remark->save();
+                }
+
+                
+            } 
+                else {
+
+                // insert to attendance table
+                $record = new Attendance;
+                $record->pash_id = $student_to_update[$i]['id'];
+                $record->$week = $attendance_status[$i];
+                $record->save();
+
+                if (!empty($remarks[$i])) {
+                    $attendance_remark = new AttendanceRemarks;
+                    $attendance_remark->attendance_id = $record->id;
+                    $attendance_remark->wk_id = $week;
+                    $attendance_remark->remarks = $remarks[$i];
+                    $attendance_remark->save();
+                }
+            }
+        }
+
+        $data = 'success';
+        return response()->json($data);
     }
 
     /**

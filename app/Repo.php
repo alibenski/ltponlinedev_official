@@ -11,7 +11,7 @@ class Repo extends Model
 
     protected $table = 'LTP_PASHQTcur';
     protected $fillable = [
-        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'flexibleBtn', 'form_counter', 'convocation_email_sent',
+        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'flexibleBtn', 'form_counter', 'convocation_email_sent', 
     ];
     
     /**
@@ -65,5 +65,9 @@ class Repo extends Model
 
     public function comments() {
         return $this->hasMany('App\Comment', 'pash_id', 'id'); 
+    }
+
+    public function attendances() {
+        return $this->hasOne('App\Attendance', 'pash_id', 'id'); 
     }
 }

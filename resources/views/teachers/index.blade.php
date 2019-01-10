@@ -68,7 +68,6 @@
 								<button type="button" class="btn btn-success btn-sm quick-save hidden" disabled="">Quick Save</button>
 								<a href="#"  class="btn btn-default btn-sm" disabled>Edit</a>
 								<input type="hidden" name="_token" value="{{ Session::token() }}">
-								</form>
 							</td>
 						</tr>
 					@endforeach

@@ -59,7 +59,7 @@
 						
 						<button id="showStudentsBtn" value="{{ $classroom->Code}}" class="btn btn-default">Show Students</button>
 						{{-- <button id="manageAttendanceBtn" value="{{ $classroom->Code}}" class="btn btn-default">Manage Attendance</button> --}}
-						<a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-default" target="_blank">Manage Attendance</a>
+						<a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-default">Manage Attendance</a>
 						{{-- <form action="{{ route('teacher-manage-attendance') }}" method="GET">
 							<button type="submit" class="btn btn-default btn-space">Manage Attendance</button>
 							<input type="hidden" value="{{ $classroom->Code}}" name="Code">
@@ -84,6 +84,8 @@
 @stop
 
 @section('java_script')
+<script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+
 <script type="text/javascript">
 $("button[id='manageAttendanceBtn']").click(function(){
   var Code = $(this).val();

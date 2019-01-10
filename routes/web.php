@@ -49,8 +49,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('teacher-week-table', ['as'=>'teacher-week-table','uses'=>'TeachersController@teacherWeekTable']);
 
-
     Route::get('teacher-manage-attendances', ['as'=>'teacher-manage-attendances','uses'=>'TeachersController@teacherManageAttendances']);
+
+    Route::put('ajax-teacher-attendance-update', ['as'=>'ajax-teacher-attendance-update','uses'=>'TeachersController@ajaxTeacherAttendanceUpdate']);
 
 
 

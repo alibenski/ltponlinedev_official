@@ -45,6 +45,8 @@
     </div>
 </div>
 
+<script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+
 <script>
 $(document).ready(function () {
     var counter = 0;

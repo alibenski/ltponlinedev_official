@@ -8,8 +8,14 @@
 @section('content')
 
 <div class="row">
-  <h4 class="text-center"><strong>Manage Attedance for {{ $course->courses->Description}} - {{ $course->schedules->name }}</strong></h4>
-  <input type="hidden" name="CodeClass" value="{{ $course->CodeClass }}">
+  <div class="col-md-1">
+    <a href="{{ route('teacher-view-classrooms') }}" class="btn btn-danger"><i class="fa fa-arrow-circle-left"></i> Back</a>
+  </div>
+
+  <div class="col-md-11">
+    <h3 class="text-center" style="margin-top: 3px;"><strong>Manage Attedance for {{ $course->courses->Description}} - {{ $course->schedules->name }}</strong></h3>
+    <input type="hidden" name="CodeClass" value="{{ $course->CodeClass }}">
+  </div>
 
   <div class="row">
     <div class="col-md-12">
@@ -35,6 +41,8 @@
 @stop
 
 @section('java_script')
+<script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+
 <script>
   $("button").click(function(){
     var Wk = $(this).attr('id');
