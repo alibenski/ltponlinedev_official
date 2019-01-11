@@ -19,6 +19,7 @@ Route::get('test-method', 'WaitlistController@testMethod')->name('test-method');
 Route::get('insert-record-to-preview', 'WaitlistController@insertRecordToPreview')->name('insert-record-to-preview');
 
 Route::get('pdfview', ['as'=>'pdfview','uses'=>'PreviewController@pdfView']);
+Route::get('release-notes', function () { return view('release_notes'); })->name('release-notes');
 
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
     //admin routes
