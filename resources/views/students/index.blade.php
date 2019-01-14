@@ -36,6 +36,29 @@
                                 <p>@if(empty ( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->TITLE }} @endif</p>
                             </div>
                         </div>
+                        
+
+                        <div class="form-group">
+                            <label for="fullName" class="col-md-4 control-label">Profile:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p> 
+                                    @if(empty( Auth::user()->profile )) Update Needed 
+                                    @else
+                                        @if( Auth::user()->profile == "STF") Staff Member @endif
+                                        @if( Auth::user()->profile == "INT") Intern @endif
+                                        @if( Auth::user()->profile == "CON") Consultant @endif
+                                        @if( Auth::user()->profile == "JPO") JPO @endif
+                                        @if( Auth::user()->profile == "MSU") Staff of Permanent Mission @endif
+                                        @if( Auth::user()->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif
+                                        @if( Auth::user()->profile == "RET") Retired UN Staff Member @endif
+                                        @if( Auth::user()->profile == "SERV") Staff of Service Organizations in the Palais @endif
+                                        @if( Auth::user()->profile == "NGO") Staff of UN-accredited NGO's @endif
+                                        @if( Auth::user()->profile == "PRESS") Staff of UN Press Corps @endif 
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label for="fullName" class="col-md-4 control-label">Full Name:</label>
@@ -109,7 +132,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="col-md-4 col-md-offset-4"><a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-block btn-info btn-md">Edit my CLM Online Profile</a>
+                        <div class="col-md-4 col-md-offset-4"><a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-block btn-info btn-md">Edit CLM Online Profile</a>
                         </div>
                     </form>
                 </div>

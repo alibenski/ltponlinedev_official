@@ -35,13 +35,27 @@
 				@if(is_null($placement_form->is_self_pay_form))
 				@else
 				<div class="form-group">
-					<label class="control-label" for="org_show">ID Proof:</label>
+					<label class="control-label">ID Proof:</label>
 					<td>@if(empty($placement_form->filesId->path)) None @else <a href="{{ Storage::url($placement_form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>	
 				</div>
 				<div class="form-group">	
-					<label class="control-label" for="org_show">Payment Proof:</label>
+					<label class="control-label">Payment Proof:</label>
 					<td>@if(empty($placement_form->filesPay->path)) None @else <a href="{{ Storage::url($placement_form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
 				</div>
+					<div class="form-group">
+                	<label class="control-label">Language Secretariat Payment Validation:</label> 
+
+						@if($placement_form->selfpay_approval === 1)
+						<h4><span id="status" class="label label-success margin-label">Approved</span></h4>
+						@elseif($placement_form->selfpay_approval === 2)
+						<h4><a href="{{ route('index-placement-selfpay') }}"><span id="status" class="label label-warning margin-label">Pending Approval</span></a></h4>
+						@elseif($placement_form->selfpay_approval === 0)
+						<h4><span id="status" class="label label-danger margin-label">Disapproved</span></h4>
+						@elseif(is_null($placement_form->selfpay_approval)) 
+						<h4><span id="status" class="label label-info margin-label">Waiting</span></h4>
+						@endif
+
+                	</div>
 				@endif	
 
 				<div class="form-group">

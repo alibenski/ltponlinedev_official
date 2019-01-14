@@ -46,6 +46,7 @@ section { font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-s
 	<li>Enter text explaining 1 form is for 1 language before submit button</li>
 	<li>Explanation of "flexible" button</li>
 		<li class="tab">Get text</li>
+	<li>Selfpay approval status in placement form view info</li>
 
 	<h4>Development Freeze: 4-22 February 2019</h4>
 
