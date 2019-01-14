@@ -60,11 +60,11 @@
   </form>
 </div>
 
-<div id="commentModal" class="modal fade" role="dialog">
+<div id="commentModal" class="modal modal-comment fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
+                {{-- <button type="button" class="close" data-dismiss="modal">×</button> --}}
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">
@@ -89,9 +89,7 @@
               </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">
-                    <span class='glyphicon glyphicon-remove'></span> Close
-                </button>
+                <button type="button" class="btn btn-warning btn-close"><span class='glyphicon glyphicon-remove'></span> Close </button>
             </div>
         </div>
     </div>
@@ -102,7 +100,16 @@ $(document).on('click', '.show-modal', function() {
     $('.modal-title').text('Admin Notes');
     console.log('click');
     $('#commentModal').modal('show'); 
+    $('#commentModal').show('slow'); 
 });
+</script>
+
+<script>
+  $(document).ready(function(){
+    $(".btn-close").click(function(){
+     $('.modal-comment').hide('slow'); 
+    });   
+  });   
 </script>
 
 <script>
@@ -119,6 +126,7 @@ $(document).ready(function () {
   }
 });
 </script>
+
 
 <script type="text/javascript">
   $(document).ready(function(){
