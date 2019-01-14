@@ -51,7 +51,7 @@
       </div>
     </div>
 
-		<button id="moveStudent" type="submit" class="btn btn-success btn-move-student" disabled=""><span class='fa fa-arrow-right'></span> 
+		<button id="moveStudent" type="button" class="btn btn-success btn-move-student" disabled=""><span class='fa fa-arrow-right'></span> 
 			Move
 		</button>
 		<input type="hidden" name="_token" value="{{ Session::token() }}">
