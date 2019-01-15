@@ -281,7 +281,6 @@ $(document).ready(function() {
 <script type="text/javascript">
   $(document).ready(function () {
 
-
       $('#master').on('click', function(e) {
        if($(this).is(':checked',true))  
        {
