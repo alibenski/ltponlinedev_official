@@ -247,7 +247,7 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function() {
-    $('#sendEmailConvocation').on('click', function() {
+    $('button#sendEmailConvocation').on('click', function() {
       $(this).attr('disabled', 'disabled');
       var CodeIndexIDClass = $(this).val();
       console.log(CodeIndexIDClass)
@@ -309,7 +309,7 @@ $(document).ready(function() {
               alert("Please select at least 1 student.");  
 
           }  else {  
-              $('#modalshowform').modal('show');
+              $('#modalshowform').modal({backdrop: 'static', keyboard: false});
               $.get('{{ route('ajax-move-students-form') }}', {'ids':join_selected_values,  '_token':token}, function(data) {
                 // console.log(data);
                 $('.modal-body-move-student').html(data);

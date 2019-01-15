@@ -89,7 +89,7 @@
               </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning btn-close"><span class='glyphicon glyphicon-remove'></span> Close </button>
+                {{-- <button type="button" class="btn btn-warning btn-close"><span class='glyphicon glyphicon-remove'></span> Close </button> --}}
             </div>
         </div>
     </div>
@@ -100,17 +100,16 @@ $(document).on('click', '.show-modal', function() {
     $('.modal-title').text('Admin Notes');
     console.log('click');
     $('#commentModal').modal('show'); 
-    $('#commentModal').show('slow'); 
 });
 </script>
 
-<script>
+{{-- <script>
   $(document).ready(function(){
     $(".btn-close").click(function(){
      $('.modal-comment').hide('slow'); 
     });   
   });   
-</script>
+</script> --}}
 
 <script>
 $(document).ready(function () {
