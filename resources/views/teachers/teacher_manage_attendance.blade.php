@@ -89,9 +89,8 @@
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_l sub_chk" data-id="{{ $form->id }}" value="L"></td>
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_e sub_chk" data-id="{{ $form->id }}" value="E"></td>
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_a sub_chk" data-id="{{ $form->id }}" value="A"></td>
-
             <td>
-              <textarea name="remarks{{ $form->id }}" class="remarks" cols="30" rows="1" placeholder="@foreach ($form->attendances->attendanceRemarks as $element) @if($loop->last){{ $element->remarks }}@endif @endforeach"></textarea>
+              <textarea name="remarks{{ $form->id }}" class="remarks" cols="30" rows="1" placeholder="@if(empty($form->attendances->attendanceRemarks)) @else @foreach ($form->attendances->attendanceRemarks as $element) @if($loop->last) {{ $element->remarks }} @endif @endforeach @endif"></textarea>
             </td>
           </tr>
           @endforeach
