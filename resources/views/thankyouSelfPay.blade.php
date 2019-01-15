@@ -50,7 +50,7 @@
             <div class="row">
               <div class="col-md-12">
 
-                <p class="text-center"><strong>Copyright &copy; {{date("Y")}} <a href="https://learning.unog.ch">UNOG CLM</a></strong> rev.0.1 All rights reserved.</p>
+                <p class="text-center"><strong>Copyright &copy; {{date("Y")}} <a href="https://learning.unog.ch">UNOG CLM</a></strong> All rights reserved.</p>
 
               </div>
             </div>

@@ -134,13 +134,18 @@ class StudentController extends Controller
 
     public function updateNoEmail($student, $request)
     {
+            if (!is_null($request->input('profile'))) {
+                $student->profile = $request->input('profile');
+            }
             if (!is_null($request->input('TITLE'))) {
                 $student->sddextr->TITLE = $request->input('TITLE');
             }
             if (!is_null($request->input('firstName'))) {
+                $student->nameFirst = $request->input('firstName');
                 $student->sddextr->FIRSTNAME = $request->input('firstName');
             }
             if (!is_null($request->input('lastName'))) {
+                $student->nameLast = $request->input('lastName');
                 $student->sddextr->LASTNAME = $request->input('lastName');
             }
             if (!is_null($request->input('organization'))) {
@@ -156,6 +161,8 @@ class StudentController extends Controller
                         $student->sddextr->LEVEL = $request->input('gradeLevel');
                     }
 
+            $student->name = $student->nameFirst.' '.$student->nameLast;
+            $student->save();
             $student->sddextr->save();
     }
 

@@ -279,12 +279,12 @@
                       <div class="well">
                         <div class="row">        
                             <div class="form-group">
-                              <label for="first" class="col-md-2 control-label" style="color: green;">Schedule 1st Choice:</label> 
+                              <label for="first" class="col-md-2 control-label" style="color: green;">Student availability 1:</label> 
                               <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
                             </div>
 
                             <div class="form-group">
-                              <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Schedule 2nd Choice:</label>
+                              <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Student availability 2:</label>
                               <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>
                             </div>
                         </div>    
@@ -294,7 +294,15 @@
                   </div> {{-- end of hidden fields --}}   
 
                   <div class="submission-part" style="display: none"> 
-                    <div class="form-group">
+
+                    <div class="form-group col-md-12">
+                      <div class="disclaimer alert col-md-8 col-md-offset-2">
+                        <p class="small text-danger"><strong>Required field</strong></p>
+                        <input id="approval" name="approval" class="with-font" type="radio" value="1" required="required">
+                        <label for="approval" class="form-control-static">Insert disclaimer text on manager approval here</label>
+                      </div>
+                    </div>
+                    {{-- <div class="form-group">
                         <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
                         
                         <div class="col-md-4">
@@ -320,7 +328,7 @@
                             </div>
                              <p class="small text-danger"><strong>Enter the <u>correct email address</u> of your manager because this form will be sent to this email address for approval.</strong></p>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form-group col-md-12">
                           <div class="disclaimer alert col-md-8 col-md-offset-2">
@@ -328,6 +336,13 @@
                                     <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
                                     <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular</a> regarding language courses at UNOG.</label>
                           </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                      <div class="disclaimer alert alert-danger col-md-8 col-md-offset-2">
+                        <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
+                        <p><strong></strong>Enter text explaining 1 form is for 1 language before submit button</p>
+                      </div>
                     </div>
 
                     <div class="col-sm-2 col-sm-offset-5">

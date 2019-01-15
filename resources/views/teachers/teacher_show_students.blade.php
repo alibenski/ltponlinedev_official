@@ -7,6 +7,7 @@
               <th>Name</th>
               <th>Email</th>
               <th>Contact No.</th>
+              <th>Action</th>
           </tr>
       </thead>
       <tbody>
@@ -22,6 +23,9 @@
             @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
           <td>
             @if(empty($form->users->sddextr->PHONE)) None @else {{ $form->users->sddextr->PHONE }} @endif 
+          </td>
+          <td>
+            <button class="btn btn-default"> Result</button>
           </td>
         </tr>
         @endforeach

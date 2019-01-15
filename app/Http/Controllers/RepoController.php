@@ -142,15 +142,16 @@ class RepoController extends Controller
         $term_id = $request->input('term_id');
         //$schedule_id is an array 
         $schedule_id = $request->input('schedule_id');
-        $mgr_email = $request->input('mgr_email');
-        $mgr_fname = $request->input('mgr_fname');
-        $mgr_lname = $request->input('mgr_lname');
+        // $mgr_email = $request->input('mgr_email');
+        // $mgr_fname = $request->input('mgr_fname');
+        // $mgr_lname = $request->input('mgr_lname');
         $uniquecode = $request->input('CodeIndexID');
         $decision = $request->input('decision');
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
         // $contractDate = $request->input('contractDate');
+        
         $codex = [];     
         //concatenate (implode) Code input before validation   
         //check if $code has no input
@@ -227,7 +228,7 @@ class RepoController extends Controller
                             'schedule_id' => 'required|',
                             'course_id' => 'required|',
                             'L' => 'required|',
-                            'mgr_email' => 'required|email',
+                            // 'mgr_email' => 'required|email',
                             'org' => 'required',
                             'agreementBtn' => 'required|',
                         )); 
@@ -246,9 +247,10 @@ class RepoController extends Controller
                 'INDEXID' => $index_id,
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
-                'mgr_email' =>  $mgr_email,
-                'mgr_lname' => $mgr_lname,
-                'mgr_fname' => $mgr_fname,
+                // 'mgr_email' =>  $mgr_email,
+                // 'mgr_lname' => $mgr_lname,
+                // 'mgr_fname' => $mgr_fname,
+                'approval' => $request->approval,
                 'continue_bool' => 1,
                 'DEPT' => $org, 
                 'eform_submit_count' => $eform_submit_count,              
@@ -262,36 +264,44 @@ class RepoController extends Controller
                     }
         }
        
-        //execute Mail class before redirect         
-        $mgr_email = $request->mgr_email;
-        $staff = Auth::user();
+        //execute Mail class before redirect
+          
+            // $mgr_email = $request->mgr_email;
+            // $staff = Auth::user();
         $current_user = Auth::user()->indexno;
+            
         // $now_date = Carbon::now()->toDateString();
         // $terms = Term::orderBy('Term_Code', 'desc')
         //         ->whereDate('Term_End', '>=', $now_date)
         //         ->get()->min();
         // $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->value('Te_Code');
-        //query from Preenrolment table the needed information data to include in email
-        $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->first();
-        $input_schedules = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $current_user)
-                                ->where('Term', $term_id)
-                                ->where('Te_Code', $course)
-                                ->where('form_counter', $form_counter)
-                                ->get();
+        
+            // $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->value('Te_Code');
+            // //query from Preenrolment table the needed information data to include in email
+            // $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->first();
+            // $input_schedules = Preenrolment::orderBy('Term', 'desc')
+            //                         ->where('INDEXID', $current_user)
+            //                         ->where('Term', $term_id)
+            //                         ->where('Te_Code', $course)
+            //                         ->where('form_counter', $form_counter)
+            //                         ->get();
 
-        Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
+            // Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
+        
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
         $sddextr_org = $sddextr_query->DEPT;
         if ($org == $sddextr_org){
+            
             // flash session success or errorBags 
-            $request->session()->flash('success', 'Enrolment Form has been submitted for approval'); //laravel 5.4 version
+            $request->session()->flash('success', 'Enrolment Form has been submitted.'); //laravel 5.4 version
 
             return redirect()->route('thankyou');
         }else{
             
-            return $this->update($request, $org, $current_user);
+            $this->update($request, $org, $current_user);
+            $request->session()->flash('success', 'Enrolment Form has been submitted.'); //laravel 5.4 version
+            $request->session()->flash('org_change_success', 'Organization has been updated'); 
+            return redirect()->route('home');
         }
     }
 
@@ -332,9 +342,7 @@ class RepoController extends Controller
         $sddextr_org->DEPT = $org;
         $sddextr_org->save();  
 
-        $request->session()->flash('success', 'Enrolment Form has been submitted for approval'); //laravel 5.4 version
-        $request->session()->flash('org_change_success', 'Organization has been updated'); 
-        return redirect()->route('home');
+        
     }
 
     /**

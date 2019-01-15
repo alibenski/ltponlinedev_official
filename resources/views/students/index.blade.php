@@ -30,15 +30,6 @@
                     <form class="form-horizontal">
                         
                         <div class="form-group">
-                            <label for="title" class="col-md-4 control-label">Title:</label>
-
-                            <div class="col-md-8 form-control-static">
-                                <p>@if(empty ( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->TITLE }} @endif</p>
-                            </div>
-                        </div>
-                        
-
-                        <div class="form-group">
                             <label for="fullName" class="col-md-4 control-label">Profile:</label>
 
                             <div class="col-md-8 form-control-static">
@@ -57,6 +48,14 @@
                                         @if( Auth::user()->profile == "PRESS") Staff of UN Press Corps @endif 
                                     @endif
                                 </p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="title" class="col-md-4 control-label">Title:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p>@if(empty ( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->TITLE }} @endif</p>
                             </div>
                         </div>
 

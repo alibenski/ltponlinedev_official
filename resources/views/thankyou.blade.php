@@ -31,8 +31,8 @@
             <div class="row">
               <div class="col-md-10 col-md-offset-1"> 
                 <div class="left-text col-md-8">
-                  <h4><em>Thank You</em><br>Your request has been sent to your manager</h4>
-                  <p>Once your manager has made the decision, you will receive email notifications to let you know about the status of your request and other information.</p>
+                  <h4><em>Thank You</em><br>Your enrolment form request has been submitted </h4>
+                  <p>You will receive further email notifications to let you know about the status of your request and other information.</p>
 	                <div>
 	                	<a href="/home" class="btn btn-success">Back to Home Page</a>
 	                </div>
@@ -50,7 +50,7 @@
             <div class="row">
               <div class="col-md-12">
 
-                <p class="text-center"><strong>Copyright &copy; {{date("Y")}} <a href="https://learning.unog.ch">UNOG CLM</a></strong> rev.0.1 All rights reserved.</p>
+                <p class="text-center"><strong>Copyright &copy; {{date("Y")}} <a href="https://learning.unog.ch">UNOG CLM</a></strong> All rights reserved.</p>
 
               </div>
             </div>

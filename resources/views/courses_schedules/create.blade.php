@@ -106,7 +106,7 @@
 
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="format_id" value="{{ $id }}" /> {{ $name }}
+                                        <input type="radio" name="format_id" value="{{ $id }}" required="" /> {{ $name }}
                                     </label>
                                 </div>
 
@@ -117,7 +117,7 @@
 
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="duration_id" value="{{ $id }}" /> {{ $name }}
+                                        <input type="radio" name="duration_id" value="{{ $id }}" required="" /> {{ $name }}
                                     </label>
                                 </div>
 
@@ -252,20 +252,20 @@
       });
   }); 
 
-  $("select[name='L']").change(function(){
-      var L = $(this).val();
-      var token = $("input[name='_token']").val();
+  // $("select[name='L']").change(function(){
+  //     var L = $(this).val();
+  //     var token = $("input[name='_token']").val();
 
-      $.ajax({
-          url: "{{ route('select-ajax') }}", 
-          method: 'POST',
-          data: {L:L, _token:token},
-          success: function(data, status) {
-            $("select[name='course_id']").html('');
-            $("select[name='course_id']").html(data.options);
-          }
-      });
-  }); 
+  //     $.ajax({
+  //         url: "{{ route('select-ajax') }}", 
+  //         method: 'POST',
+  //         data: {L:L, _token:token},
+  //         success: function(data, status) {
+  //           $("select[name='course_id']").html('');
+  //           $("select[name='course_id']").html(data.options);
+  //         }
+  //     });
+  // }); 
 </script>
 
 <script type="text/javascript">
