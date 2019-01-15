@@ -143,8 +143,8 @@
     <![endif]-->
 
 </head>
-<body width="100%" bgcolor="#4286f4" style="margin: 0; mso-line-height-rule: exactly;">
-    <center style="width: 100%; background: #4286f4; text-align: left;">
+<body width="100%" bgcolor="#ffffff" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; background: #ffffff; text-align: left;">
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
@@ -191,13 +191,13 @@
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
+                                    
                                      <p> Dear CLM Learning Partner, </p>
                                      <p> Staff Member, {{ $staff_name }}, would like to enrol to CLM language course: <strong> {{ $input_course->courses->Description }} </strong></p>
                                      <p> The staff member chose the following options for class schedule(s):</p>
                                      <ol>
                                      @foreach($formItems as $form)   
-                                     <li><strong>{{ $form->schedule->name }}</strong> -  Manager's Decision: 
+                                     <li><strong>{{ $form->schedule->name }}</strong>: 
                                         <strong>
                                         @if( $form->approval == 1)
                                                 Approved 
@@ -208,7 +208,7 @@
                                      </li>
                                      @endforeach
                                      </ol>
-                                     <p>Please note that the enrolment above has initially been decided by your staff member's manager/supervisor with email address:<strong> {{ $mgr_email }}</strong></p>
+                                     <p>Please note that the enrolment above has initially been agreed on by the staff and the staff member's supervisor.</strong></p>
                                      <p>Please click on the button below to access the decision page.</p>
                                 </td>
                             </tr>
@@ -229,13 +229,13 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                    
                                      <p> Chère ou cher Partenaire de formation, </p>
                                      <p> Le membre du personnel, {{ $staff_name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant : <strong> {{ $input_course->courses->Description }} </strong></p>
                                      <p> Le membre du personnel a indiqué comme options possibles les horaires suivants :</p>
                                      <ol>
                                      @foreach($formItems as $form)   
-                                     <li><strong>{{ $form->schedule->name }}</strong> -  Décision du superviseur :  
+                                     <li><strong>{{ $form->schedule->name }}</strong> :  
                                         <strong>
                                         @if( $form->approval == 1)
                                                 approuvé 
@@ -246,7 +246,7 @@
                                      </li>
                                      @endforeach
                                      </ol>
-                                     <p>Les choix d’horaires ci-dessus ont été approuvés ou désapprouvés par le ou la superviseur dont l’adresse électronique est : <strong> {{ $mgr_email }}</strong></p>
+                                     <p>Les choix d’horaires ci-dessus has initially been agreed on by the staff and par le ou la superviseur.</strong></p>
                                      <p>Veuillez cliquer sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
                                 </td>
                             </tr>
@@ -319,9 +319,12 @@
                     <td bgcolor="#ffffff">
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <p style="margin: 0;text-align:center;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
-                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                    <p style="margin: 0;text-align:left;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
+                                    <p style="margin: 0;text-align: left;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                    <br>
+                                    <p style="margin: 0;text-align:left;"><strong>Le Programme de formation linguistique à l'Office des Nations Unies à Genève</strong></p> 
+                                    <p style="margin: 0;text-align: left;">Nous croyons au multilinguisme et au multiculturalisme en tant qu'éléments clés de la compréhension mutuelle dans un contexte mondial. À cette fin, nous proposons des cours de langues dans les six langues officielles des Nations Unies (anglais, arabe, chinois, espagnol, français et russe).</p>
                                 </td>
                             </tr>
                         </table>
@@ -333,7 +336,7 @@
             <!-- Email Body : END -->
 
             <!-- Email Footer : BEGIN -->
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: whitesmoke; font-size: 12px; line-height: 140%;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: black; font-size: 12px; line-height: 140%;">
                 <tr>
                     <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #222222;" class="x-gmail-data-detectors">
                         <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Classroom;
 use App\Course;
 use App\Day;
+use App\FocalPoints;
 use App\Http\Controllers\PlacementFormController;
 use App\Language;
 use App\Mail\MailtoApprover;
+use App\Mail\MailtoApproverHR;
 use App\Preenrolment;
 use App\Repo;
 use App\SDDEXTR;
@@ -36,9 +38,8 @@ class NoFormController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
         $this->middleware('opencloseenrolment');
+
     }
-
-
 
     /**
      * Display a listing of the resource.
@@ -143,17 +144,18 @@ class NoFormController extends Controller
         $term_id = $request->input('term_id');
         //$schedule_id is an array 
         $schedule_id = $request->input('schedule_id');
-        $mgr_email = $request->input('mgr_email');
-        $mgr_fname = $request->input('mgr_fname');
-        $mgr_lname = $request->input('mgr_lname');
+        // $mgr_email = $request->input('mgr_email');
+        // $mgr_fname = $request->input('mgr_fname');
+        // $mgr_lname = $request->input('mgr_lname');
         $uniquecode = $request->input('CodeIndexID');
+
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
         // $contractDate = $request->input('contractDate');
+        
         $codex = [];     
         //concatenate (implode) Code input before validation 
-          
         //check if $code has no input
         if ( empty( $uniquecode ) ) {
             //loop based on $room_id count and store in $codex array
@@ -229,6 +231,7 @@ class NoFormController extends Controller
                             'course_id' => 'required|',
                             'L' => 'required|',
                             // 'mgr_email' => 'required|email',
+                            'approval' => 'required',
                             'org' => 'required',
                             'agreementBtn' => 'required|',
                         ));
@@ -268,6 +271,7 @@ class NoFormController extends Controller
             // $mgr_email = $request->mgr_email;
             // $staff = Auth::user();
         $current_user = Auth::user()->indexno;
+        
         // $now_date = Carbon::now()->toDateString();
         // $terms = Term::orderBy('Term_Code', 'desc')
         //         ->whereDate('Term_End', '>=', $now_date)
@@ -286,6 +290,13 @@ class NoFormController extends Controller
 
             // Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
+        $staff = $index_id;
+        $next_term_code = $term_id;
+        $tecode = $course_id;
+        $formcount = $form_counter;
+
+        $this->sendApprovalEmailToHR($staff, $tecode, $formcount, $next_term_code);
+
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
         $sddextr_org = $sddextr_query->DEPT;
         //check if there is a change in Organization based on the input of student
@@ -301,6 +312,58 @@ class NoFormController extends Controller
             $request->session()->flash('success', 'Enrolment Form has been submitted.'); //laravel 5.4 version
             $request->session()->flash('org_change_success', 'Organization has been updated'); 
             return redirect()->route('home');
+        }
+    }
+
+    public function sendApprovalEmailToHR($staff, $tecode, $formcount, $next_term_code)
+    {
+        // query from the table with the saved data and then
+        // execute Mail class before redirect
+        $formfirst = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
+                                ->first();
+
+        $formItems = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
+                                ->get();
+
+        // query student email from users model via index nmber in preenrolment model
+        $staff_name = $formfirst->users->name;
+        $staff_email = $formfirst->users->email;
+        $staff_index = $formfirst->INDEXID;   
+        $mgr_email = $formfirst->mgr_email;
+        
+        // query from Preenrolment table the needed information data to include in email
+        $input_course = $formfirst; 
+
+        // check the organization of the student to know which email process is followed by the system
+        $org = $formfirst->DEPT; 
+
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+
+        if ($learning_partner == '1') {
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
+                       
         }
     }
 

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Classroom;
 use App\Course;
 use App\Day;
+use App\FocalPoints;
 use App\Language;
 use App\Mail\MailtoApprover;
+use App\Mail\MailtoApproverHR;
 use App\Preenrolment;
 use App\Repo;
 use App\SDDEXTR;
@@ -229,6 +231,7 @@ class RepoController extends Controller
                             'course_id' => 'required|',
                             'L' => 'required|',
                             // 'mgr_email' => 'required|email',
+                            'approval' => 'required',
                             'org' => 'required',
                             'agreementBtn' => 'required|',
                         )); 
@@ -288,10 +291,17 @@ class RepoController extends Controller
 
             // Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
         
+        $staff = $index_id;
+        $next_term_code = $term_id;
+        $tecode = $course_id;
+        $formcount = $form_counter;
+
+        $this->sendApprovalEmailToHR($staff, $tecode, $formcount, $next_term_code);
+
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
         $sddextr_org = $sddextr_query->DEPT;
         if ($org == $sddextr_org){
-            
+
             // flash session success or errorBags 
             $request->session()->flash('success', 'Enrolment Form has been submitted.'); //laravel 5.4 version
 
@@ -302,6 +312,58 @@ class RepoController extends Controller
             $request->session()->flash('success', 'Enrolment Form has been submitted.'); //laravel 5.4 version
             $request->session()->flash('org_change_success', 'Organization has been updated'); 
             return redirect()->route('home');
+        }
+    }
+
+    public function sendApprovalEmailToHR($staff, $tecode, $formcount, $next_term_code)
+    {
+        // query from the table with the saved data and then
+        // execute Mail class before redirect
+        $formfirst = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
+                                ->first();
+
+        $formItems = Preenrolment::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('Te_Code', $tecode)
+                                ->where('form_counter', $formcount)
+                                ->get();
+
+        // query student email from users model via index nmber in preenrolment model
+        $staff_name = $formfirst->users->name;
+        $staff_email = $formfirst->users->email;
+        $staff_index = $formfirst->INDEXID;   
+        $mgr_email = $formfirst->mgr_email;
+        
+        // query from Preenrolment table the needed information data to include in email
+        $input_course = $formfirst; 
+
+        // check the organization of the student to know which email process is followed by the system
+        $org = $formfirst->DEPT; 
+
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+
+        if ($learning_partner == '1') {
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
+                       
         }
     }
 
