@@ -12,7 +12,10 @@
                         <div class="alert alert-success">
                             {{ session('status') }}
                         </div>
-                        <a href="/">Continue to the enrolment platform</a>
+                        @hasrole('Teacher')
+                        <a href="{{ route('teacher-dashboard') }}" class="btn btn-primary">Continue to Teacher Dashboard</a>
+                        @endhasrole
+                        <a href="/" class="btn btn-success">Continue to the enrolment platform</a>
                     @else
                     <div class="alert alert-info">
                         For security reasons, you are required to change your password upon first login.

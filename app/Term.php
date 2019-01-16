@@ -42,4 +42,8 @@ class Term extends Model
     public function repos() {
     return $this->hasMany('App\Repo'); 
     }
+
+    public function seasons() {
+    return $this->hasOne('App\Season', 'ESEASON', 'Comments'); 
+    }
 }

@@ -81,6 +81,13 @@ class TermController extends Controller
         $termEndStr = date('d F Y', strtotime($request->Term_End));
         $termNameStr = $termBeginStr.' - '.$termEndStr;
 
+        // translate 
+        $termBeginMonth = date('F', strtotime($request->Term_Begin));
+        $termEndMonth = date('F', strtotime($request->Term_End));
+        $termBeginMonthFr = __('months.'.$termBeginMonth, [], 'fr');
+        $termEndMonthFr = __('months.'.$termEndMonth, [], 'fr');
+        dd($termBeginMonthFr,$termEndMonthFr);
+
         // store in database
         $term = new Term;
         $term->Term_Code = $request->Term_Code;
@@ -97,6 +104,7 @@ class TermController extends Controller
         $term->Remind_Mgr_After = $request->Remind_Mgr_After;
         $term->Remind_HR_After = $request->Remind_HR_After;
         $term->Comments = $request->Comments;
+        $term->Comments_fr = $term->seasons->FSEASON;
         $term->Activ = 0;
 
         $term->save();
@@ -159,6 +167,7 @@ class TermController extends Controller
             $termNameStr = $termBeginStr.' - '.$termEndStr;
             $term->Term_Name = $termNameStr;
         }
+        $term->Comments_fr = $term->seasons->FSEASON;
         $term->save();
         $term->update($fliteredInput);
 
