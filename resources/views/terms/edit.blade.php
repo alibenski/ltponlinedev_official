@@ -93,7 +93,7 @@
           </div>
 
           <div class="form-group">
-            <label for="Term_Begin" class="control-label">Term Begin Date: </label>
+            <label for="Term_Begin" class="control-label">Term Begin Date: <span class="small text-danger">Required</span> </label>
             <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Term_Begin">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -103,7 +103,7 @@
           </div>
 
           <div class="form-group">
-            <label for="Term_End" class="control-label">Term End Date: </label>
+            <label for="Term_End" class="control-label">Term End Date: <span class="small text-danger">Required</span> </label>
   				  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Term_End">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>

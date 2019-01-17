@@ -16,6 +16,7 @@
 				<thead>
 					<th>Term Code</th>
 					<th>Term Name</th>
+					<th>Term Name Fr</th>
 					<th>Term Begin Date</th>
 					<th>Term End Date</th>
 					<th>Enrolment Date Begin</th>
@@ -27,6 +28,7 @@
 					<th>Remind Mgr</th>
 					<th>Remind HR</th>
 					<th>Operation</th>
+					<th>Updated By</th>
 				</thead>
 
 				<tbody>
@@ -35,6 +37,7 @@
 						<tr>
 							<th>{{ $term->Term_Code }}</th>
 							<td>{{ $term->Term_Name }}</td>
+							<td>{{ $term->Term_Name_Fr }}</td>
 							<td>{{ date('d M Y', strtotime($term->Term_Begin)) }}</td>
 							<td>{{ date('d M Y', strtotime($term->Term_End)) }}</td>
 							<td>
@@ -76,6 +79,7 @@
 							<td>{{ $term->Remind_Mgr_After }} days</td>
 							<td>{{ $term->Remind_HR_After }} days</td>
 							<td><a href="{{ route('terms.edit', $term->Term_Code)}}" class="btn btn-info pull-left">Edit</a></td>
+							<td>@if(empty($term->users)) @else {{ $term->users->name }} @endif</td>
 						</tr>
 					@endforeach
 

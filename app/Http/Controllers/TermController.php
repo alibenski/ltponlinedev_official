@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Term;
 use App\Season;
+use App\Term;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TermController extends Controller
 {
@@ -84,14 +85,22 @@ class TermController extends Controller
         // translate 
         $termBeginMonth = date('F', strtotime($request->Term_Begin));
         $termEndMonth = date('F', strtotime($request->Term_End));
+        $termBeginDate = date('d', strtotime($request->Term_Begin));
+        $termEndDate = date('d', strtotime($request->Term_End));
+        $termBeginYear = date('Y', strtotime($request->Term_Begin));
+        $termEndYear = date('Y', strtotime($request->Term_End));
+        
         $termBeginMonthFr = __('months.'.$termBeginMonth, [], 'fr');
         $termEndMonthFr = __('months.'.$termEndMonth, [], 'fr');
-        dd($termBeginMonthFr,$termEndMonthFr);
+
+        $termNameFr = $termBeginDate.' '.$termBeginMonthFr.' au '.$termEndDate.' '.$termEndMonthFr.' '.$termEndYear;
+        
 
         // store in database
         $term = new Term;
         $term->Term_Code = $request->Term_Code;
         $term->Term_Name = $termNameStr;
+        $term->Term_Name_Fr = $termNameFr; 
         $term->Term_Begin = $request->Term_Begin;
         $term->Term_End = $request->Term_End;
         $term->Term_Prev = $request->Term_Prev;
@@ -105,6 +114,7 @@ class TermController extends Controller
         $term->Remind_HR_After = $request->Remind_HR_After;
         $term->Comments = $request->Comments;
         $term->Comments_fr = $term->seasons->FSEASON;
+        $term->updated_by = Auth::user()->id;
         $term->Activ = 0;
 
         $term->save();
@@ -166,8 +176,24 @@ class TermController extends Controller
             $termEndStr = date('d F Y', strtotime($request->Term_End));
             $termNameStr = $termBeginStr.' - '.$termEndStr;
             $term->Term_Name = $termNameStr;
+
+            // translate 
+            $termBeginMonth = date('F', strtotime($request->Term_Begin));
+            $termEndMonth = date('F', strtotime($request->Term_End));
+            $termBeginDate = date('d', strtotime($request->Term_Begin));
+            $termEndDate = date('d', strtotime($request->Term_End));
+            $termBeginYear = date('Y', strtotime($request->Term_Begin));
+            $termEndYear = date('Y', strtotime($request->Term_End));
+            
+            $termBeginMonthFr = __('months.'.$termBeginMonth, [], 'fr');
+            $termEndMonthFr = __('months.'.$termEndMonth, [], 'fr');
+
+            $termNameFr = $termBeginDate.' '.$termBeginMonthFr.' au '.$termEndDate.' '.$termEndMonthFr.' '.$termEndYear;
+
         }
+        $term->Term_Name_Fr = $termNameFr; 
         $term->Comments_fr = $term->seasons->FSEASON;
+        $term->updated_by = Auth::user()->id;
         $term->save();
         $term->update($fliteredInput);
 
