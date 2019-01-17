@@ -19,7 +19,7 @@
           <td>{{ date('h:i a', strtotime($day_time->Te_Mon_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Mon_ETime)) }}</td>
           <td>
             <form method="GET" action="{{ route('teacher-manage-attendances') }}">
-                <button type="submit" class="btn btn-info">Log Attendance</button>
+                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
                 <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
                 <input type="hidden" name="day" value="Monday">
                 <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Mon_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Mon_ETime)) }}">

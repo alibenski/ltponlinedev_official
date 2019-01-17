@@ -259,7 +259,7 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <a href="{{ route('teacher-dashboard') }}"><i class="fa fa-home"></i> CLM Language Training Programme</a>
+        <a href="{{ route('teacher-dashboard') }}"><i class="fa fa-home"></i> CLM Student Management System (SMS)</a>
       </h1>
       {{-- <ol class="breadcrumb">
         <li><a href="{{ route('teacher-dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>

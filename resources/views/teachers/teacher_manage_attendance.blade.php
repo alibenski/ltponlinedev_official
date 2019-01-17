@@ -26,7 +26,7 @@
       <!-- /.box-header -->
       <div class="box-body">
         <p>P = Present</p>
-        <p>L = Late</p>
+        {{-- <p>L = Late</p> --}}
         <p>E = Excused</p>
         <p>A = Absent</p>
       </div>
@@ -55,7 +55,7 @@
                 <th>Email</th>
                 <th>Existing Status</th>
                 <th>P</th>   
-                <th>L</th>   
+                {{-- <th>L</th>    --}}
                 <th>E</th>   
                 <th>A</th>   
             </tr>
@@ -65,7 +65,7 @@
                 <th></th>
                 <th class="pull-right">Set status for all students <i class="fa fa-arrow-circle-right"></i></th>
                 <th><input name="allStatus" type="checkbox" class="masterBtn" id="masterP"></th>
-                <th><input name="allStatus" type="checkbox" class="masterBtn" id="masterL"></th>
+                {{-- <th><input name="allStatus" type="checkbox" class="masterBtn" id="masterL"></th> --}}
                 <th><input name="allStatus" type="checkbox" class="masterBtn" id="masterE"></th>
                 <th><input name="allStatus" type="checkbox" class="masterBtn" id="masterA"></th>
                 
@@ -86,7 +86,7 @@
               @if(empty($form->attendances->$week)) <span class="label label-danger">None</span> @else <strong>{{ $form->attendances->$week }}</strong> @endif 
             </td>  
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_p sub_chk" data-id="{{ $form->id }}" value="P"></td>
-            <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_l sub_chk" data-id="{{ $form->id }}" value="L"></td>
+            {{-- <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_l sub_chk" data-id="{{ $form->id }}" value="L"></td> --}}
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_e sub_chk" data-id="{{ $form->id }}" value="E"></td>
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_a sub_chk" data-id="{{ $form->id }}" value="A"></td>
             <td>
