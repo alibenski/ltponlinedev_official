@@ -47,6 +47,11 @@ section { font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-s
 	<li>Explanation of "flexible" button</li>
 		<li class="tab">Get text</li>
 	<li>Selfpay approval status in placement form view info</li>
+	<li>Include Term details in email template of HR FP's </li>
+	<li>Hotfix: Attendance Remarks shows in other weeks</li>
+	<li>Hotfix: Multiple classes due to incorrect db input</li>
+	<li>Hotfix: Te_Code fetch of course description is null</li>
+	<li>Take out L from attendance choices</li>
 
 	<h4>Development Freeze: 4-22 February 2019</h4>
 
