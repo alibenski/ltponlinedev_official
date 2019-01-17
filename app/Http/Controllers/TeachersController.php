@@ -214,6 +214,33 @@ class TeachersController extends Controller
         // return response()->json([$data]);
     }
 
+    public function ajaxGetRemark(Request $request)
+    {
+        $attendance_id_check = Attendance::where('pash_id', $request->id)->get();
+        $count_attendance_id = $attendance_id_check->count();
+
+        if ($count_attendance_id > 0){
+            $attendance_id = Attendance::where('pash_id', $request->id)->first()->id;
+            
+            $remark = AttendanceRemarks::where('attendance_id', $attendance_id)
+                ->where('wk_id', $request->wk)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if (!empty($remark)) {
+                $data = $remark->remarks;
+                return response()->json($data);
+            }
+            
+            $data = '';
+            return response()->json($data);  
+        }
+
+        $data = '';
+        return response()->json($data);        
+
+    }
+
     public function ajaxTeacherAttendanceUpdate(Request $request)
     {
         $ids = $request->ids;

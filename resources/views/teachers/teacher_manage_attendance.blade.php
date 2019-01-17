@@ -7,7 +7,7 @@
 <div id="loader2"></div>
 <div class="row">
   <div class="col-md-12">
-    <h3><strong>Log Student Attedance for {{ $course->courses->Description}} - {{ $day }}: {{ $time }} ({{ $week }})</strong></h3>
+    <h3><strong>Log Student Attedance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $day }}: {{ $time }} ({{ $week }})</strong></h3>
   </div>
 </div>
 
@@ -74,7 +74,7 @@
         </thead>
         <tbody>
           @foreach($form_info as $key => $form)
-          <tr id="{{$form->id}}">
+          <tr id="{{$form->id}}" class="table-row">
             <td>
               <div class="counter"></div>
             </td>
@@ -90,7 +90,8 @@
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_e sub_chk" data-id="{{ $form->id }}" value="E"></td>
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_a sub_chk" data-id="{{ $form->id }}" value="A"></td>
             <td>
-              <textarea name="remarks{{ $form->id }}" class="remarks" cols="30" rows="1" placeholder="@if(empty($form->attendances->attendanceRemarks)) @else @foreach ($form->attendances->attendanceRemarks as $element) @if($loop->last) {{ $element->remarks }} @endif @endforeach @endif"></textarea>
+              {{-- <textarea name="remarks{{ $form->id }}" class="remarks" cols="30" rows="1" placeholder="@if(empty($form->attendances->attendanceRemarks)) @else @foreach ($form->attendances->attendanceRemarks as $element) @if($loop->last) {{ $element->remarks }} @endif @endforeach @endif"></textarea> --}}
+              <textarea name="remarks{{ $form->id }}" class="remarks" cols="30" rows="1" value=""></textarea>
             </td>
           </tr>
           @endforeach
@@ -119,7 +120,31 @@
         $(this).attr('id', counter);
         $('#'+counter).html(counter);
         // console.log(counter)
-    });    
+    });
+
+    $('tr.table-row').each(function(){
+      var id = $(this).attr('id');
+      var wk = $("input[name='wk']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+            url: '{{ route('ajax-get-remark') }}',
+            type: 'GET',
+            data: {id:id, wk:wk, _token:token},
+          })
+          .done(function(data) {
+            console.log("success");
+            console.log(data);
+            $("tr#"+id).find("textarea.remarks").attr('placeholder', data);;
+          })
+          .fail(function() {
+            console.log("error");
+          })
+          .always(function() {
+            // console.log("complete");
+          });
+    });
+            
   });
 </script>
 

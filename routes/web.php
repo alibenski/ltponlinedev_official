@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::put('ajax-teacher-attendance-update', ['as'=>'ajax-teacher-attendance-update','uses'=>'TeachersController@ajaxTeacherAttendanceUpdate']);
 
-
+    Route::get('ajax-get-remark', ['as'=>'ajax-get-remark','uses'=>'TeachersController@ajaxGetRemark']);
 
     /*
      * Preview Routes
