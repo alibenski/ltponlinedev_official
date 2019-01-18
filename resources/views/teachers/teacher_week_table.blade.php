@@ -19,7 +19,7 @@
           <td>{{ date('h:i a', strtotime($day_time->Te_Mon_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Mon_ETime)) }}</td>
           <td>
             <form method="GET" action="{{ route('teacher-manage-attendances') }}">
-                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <button type="submit" class="btn btn-info btn-sm btn-log hidden">Log Attendance</button>
                 <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
                 <input type="hidden" name="day" value="Monday">
                 <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Mon_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Mon_ETime)) }}">
@@ -40,7 +40,7 @@
           <td>{{ date('h:i a', strtotime($day_time->Te_Tue_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Tue_ETime)) }}</td>
           <td>
             <form method="GET" action="{{ route('teacher-manage-attendances') }}">
-                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <button type="submit" class="btn btn-info btn-sm btn-log hidden">Log Attendance</button>
                 <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
                 <input type="hidden" name="day" value="Tuesday">
                 <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Tue_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Tue_ETime)) }}">
@@ -61,7 +61,7 @@
           <td>{{ date('h:i a', strtotime($day_time->Te_Wed_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Wed_ETime)) }}</td>
           <td>
             <form method="GET" action="{{ route('teacher-manage-attendances') }}">
-                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <button type="submit" class="btn btn-info btn-sm btn-log hidden">Log Attendance</button>
                 <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
                 <input type="hidden" name="day" value="Wednesday">
                 <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Wed_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Wed_ETime)) }}">
@@ -82,7 +82,7 @@
             <td>{{ date('h:i a', strtotime($day_time->Te_Thu_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Thu_ETime)) }}</td>
             <td>
             <form method="GET" action="{{ route('teacher-manage-attendances') }}">
-                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <button type="submit" class="btn btn-info btn-sm btn-log hidden">Log Attendance</button>
                 <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
                 <input type="hidden" name="day" value="Thursday">
                 <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Thu_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Thu_ETime)) }}">
@@ -103,7 +103,7 @@
           <td>{{ date('h:i a', strtotime($day_time->Te_Fri_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Fri_ETime)) }}</td>
           <td>
             <form method="GET" action="{{ route('teacher-manage-attendances') }}">
-                <button type="submit" class="btn btn-info btn-sm">Log Attendance</button>
+                <button type="submit" class="btn btn-info btn-sm btn-log hidden">Log Attendance</button>
                 <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
                 <input type="hidden" name="day" value="Friday">
                 <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Fri_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Fri_ETime)) }}">
@@ -135,6 +135,7 @@ $(document).ready(function () {
         var wkSubVal = $(this).attr('for');
         $(this).val(wkSubVal+'_'+wkVal);
         // console.log(wkcounter)
+    $('button.btn-log').removeClass('hidden');
     }); 
 });
 </script>

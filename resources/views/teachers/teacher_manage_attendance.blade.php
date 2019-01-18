@@ -83,7 +83,7 @@
             <td>
               @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
             <td>
-              @if(empty($form->attendances->$week)) <span class="label label-danger">None</span> @else <strong>{{ $form->attendances->$week }}</strong> @endif 
+              @if(empty($form->attendances->$week)) <span class="label label-danger">None</span> @else <strong> @if($form->attendances->$week == 'P') <span class="label label-success"> Present </span> @endif @if($form->attendances->$week == 'E') <span class="label label-warning"> Excused </span> @endif @if($form->attendances->$week == 'A') <span class="label label-danger"> Absent </span> @endif </strong> @endif 
             </td>  
             <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_p sub_chk" data-id="{{ $form->id }}" value="P"></td>
             {{-- <td><input name="indivStatus{{ $form->id }}" type="radio" class="sub_chk_l sub_chk" data-id="{{ $form->id }}" value="L"></td> --}}
@@ -108,7 +108,7 @@
 <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
 <script>
  $(window).load(function(){
-    $("#loader2").fadeOut(600);
+    // $("#loader2").fadeOut(600);
  });
 </script>
 
@@ -121,18 +121,19 @@
         $('#'+counter).html(counter);
         // console.log(counter)
     });
+    var promises = [];
 
     $('tr.table-row').each(function(){
       var id = $(this).attr('id');
       var wk = $("input[name='wk']").val();
       var token = $("input[name='_token']").val();
 
-      $.ajax({
+      promises.push($.ajax({
             url: '{{ route('ajax-get-remark') }}',
             type: 'GET',
             data: {id:id, wk:wk, _token:token},
           })
-          .done(function(data) {
+          .then(function(data) {
             console.log("success");
             console.log(data);
             $("tr#"+id).find("textarea.remarks").attr('placeholder', data);;
@@ -142,9 +143,12 @@
           })
           .always(function() {
             // console.log("complete");
-          });
-    });
-            
+          })); 
+    }); //end of $.each
+    
+    $.when.apply($('tr.table-row'), promises).then(function() {
+        $("#loader2").fadeOut(600);
+    });    
   });
 </script>
 
