@@ -294,6 +294,13 @@
                   </div> {{-- end of hidden fields --}}
                     
                   <div class="submission-part" style="display: none">
+                    
+                    <div class="form-group col-md-12">
+                      <div class="col-md-8 col-md-offset-2">
+                        <label class="control-label">Comment: <i>(optional)</i></label>
+                        <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder="Put your concerns regarding..."></textarea>
+                      </div>
+                    </div>
 
                     <div class="form-group col-md-12">
                       <div class="disclaimer alert col-md-8 col-md-offset-2">
@@ -302,6 +309,7 @@
                         <label for="approval" class="form-control-static">Insert disclaimer text on manager approval here</label>
                       </div>
                     </div>
+
                     {{-- <div class="form-group">
                         <label for="mgr_name" class="col-md-3 control-label">Manager's Name:</label>
                         

@@ -20,7 +20,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        Online Enrolment
+                        CLM Online Enrolment
                     </a>
                 </div>
 
@@ -42,10 +42,22 @@
                 <div class="site-wrapper-inner">
                     <div class="cover-container">
                         <div class="inner cover">
-                        @include('partials._messages')
+                            <img src="ziggy/img/Logo2016_transparent.png" alt="clm-logo">
+
+                            @include('partials._messages')
+
                             <h1 class="cover-heading">Thank you very much</h1>
-                            <p class="lead">You are brought to this page either because... <br>(1) you are <strong>the HR Learning Partner of CLM UNOG</strong> and have made a decision to approve or disapprove an enrolment course, if that is the case, thank you for your decision and have a great day,</p>
-                            <p class="lead">or (2) you have already made a decision and unfortunately, you cannot change it anymore.</p>
+                            <p class="lead">You are brought to this page either because... <br>
+                                <ol>
+                                    <h3>
+                                        <p><i class="fa fa-star"></i> You are <strong>the HR Learning Partner of CLM UNOG</strong> and have made a decision to approve or disapprove an enrolment course of your staff member or,</p>
+                                    </h3>
+                                    <h3>
+                                        <p><i class="fa fa-star"></i> You have already made a decision and unfortunately, you cannot change it anymore.</p>
+                                    </h3>
+                                    <br>
+                                </ol>
+                            </p>
                         </div>
                         <!-- Footer Section -->
                         @include('partials._foot')
