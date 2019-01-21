@@ -34,6 +34,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('move-to-pash', 'AdminController@moveToPash')->name('move-to-pash');
 
+    Route::get('edit-text', 'TextController@editText')->name('edit-text');
+
     /**
      * Teachers Routes
      */

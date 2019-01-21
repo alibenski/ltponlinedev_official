@@ -565,7 +565,7 @@ class ApprovalController extends Controller
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
         
-        //query from Preenrolment table the needed information data to include in email
+        // query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst;
 
         // query org and clm hr partner emails addresses 
@@ -580,7 +580,7 @@ class ApprovalController extends Controller
         $org_email_arr = $org_email->toArray(); 
 
         Mail::to($staff_email)
-                ->cc($mgr_email)
+                // ->cc($mgr_email)
                 ->bcc($org_email_arr)
                 ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request));
         

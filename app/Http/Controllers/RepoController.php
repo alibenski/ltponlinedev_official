@@ -339,6 +339,19 @@ class RepoController extends Controller
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
         
+        // get term values
+        $term = $next_term_code;
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         // query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst; 
 
@@ -362,7 +375,7 @@ class RepoController extends Controller
             $org_email_arr = $org_email->toArray(); 
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email));
+                    ->send(new MailtoApproverHR($formItems, $input_course, $staff_name, $mgr_email,$term_en, $term_fr,$term_season_en, $term_season_fr,$term_year));
                        
         }
     }

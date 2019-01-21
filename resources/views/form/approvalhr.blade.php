@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="email" class="col-md-3 control-label">Manager/supervisor's Email Address:</label>
                     
                     <div class="col-md-8 inputGroupContainer">
@@ -62,7 +62,7 @@
                         </div>
                         <p class="small text-danger"><strong>This is the email address of the manager/supervisor who has approved the enrolment.</strong></p>
                     </div>
-                </div>
+                </div> --}}
                 
                 {{-- <div class="form-group">
                     <label for="" class="col-md-3 control-label">Contract Expiry Date:</label>

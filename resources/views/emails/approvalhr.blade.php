@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     
                                      <p> Dear CLM Learning Partner, </p>
-                                     <p> Staff Member, {{ $staff_name }}, would like to enrol to CLM language course: <strong> {{ $input_course->courses->Description }} </strong></p>
+                                     <p> Staff Member, {{ $staff_name }}, would like to enrol to CLM language course: <strong> {{ $input_course->courses->Description }} ({{ $term_en }} {{ $term_season_en }})</strong></p>
                                      <p> The staff member chose the following options for class schedule(s):</p>
                                      <ol>
                                      @foreach($formItems as $form)   
@@ -231,7 +231,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     
                                      <p> Chère ou cher Partenaire de formation, </p>
-                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant : <strong> {{ $input_course->courses->Description }} </strong></p>
+                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant : <strong> {{ $input_course->courses->Description }} ({{ $term_fr }} {{ $term_season_fr }}) </strong></p>
                                      <p> Le membre du personnel a indiqué comme options possibles les horaires suivants :</p>
                                      <ol>
                                      @foreach($formItems as $form)   

@@ -143,8 +143,8 @@
     <![endif]-->
 
 </head>
-<body width="100%" bgcolor="#4286f4" style="margin: 0; mso-line-height-rule: exactly;">
-    <center style="width: 100%; background: #4286f4; text-align: left;">
+<body width="100%" bgcolor="#ffffff" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; background: #ffffff; text-align: left;">
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
@@ -191,7 +191,7 @@
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
+                                    {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear {{ $staff_name }}, </p>
                                      <p> Your enrolment in the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. </p>
 
@@ -199,7 +199,7 @@
                                           <div class="col-md-12">
                                             <table class="table">
                                               <thead>
-                                                <th>Chosen Course Schedule(s)</th>
+                                                <th>Possible Schedule(s):</th>
                                               </thead>
 
                                               <tbody>
@@ -209,14 +209,14 @@
                                                       @if(empty($array))
                                                       null
                                                       @else
-                                                      <strong>{{ $array->schedule->name }}</strong> - Manager's decision:
+                                                      <strong>{{ $array->schedule->name }}</strong> {{-- - Manager's decision:
                                                         <strong>
                                                           @if($array->approval)
                                                           Approved
                                                           @else
                                                           Disapproved
                                                           @endif
-                                                        </strong>
+                                                        </strong> --}}
                                                        @endif
                                                     </td>
                                                   </tr>
@@ -230,7 +230,7 @@
                                         @if( $input_course->approval_hr == 1)
                                                 approved 
                                         @else
-                                                disapproved
+                                                <span style="color: red;">disapproved</span>
                                         @endif
                                       </strong> your enrolment.</p>
                                       <p><strong>Comment/Reason:</strong>
@@ -247,15 +247,15 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
-                                     <p> Dear {{ $staff_name }}, </p>
+                                    {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
+                                     <p> Cher/Chère {{ $staff_name }}, </p>
                                      <p> Votre inscription au cours de langue du CFM, <strong>{{ $input_course->courses->Description }}</strong>, a été décidée. </p>
 
                                         <div class="row">
                                           <div class="col-md-12">
                                             <table class="table">
                                               <thead>
-                                                <th>Calendrier du ou des cours choisi(s)</th>
+                                                <th>Calendrier possible : </th>
                                               </thead>
 
                                               <tbody>
@@ -265,14 +265,14 @@
                                                       @if(empty($array))
                                                       null
                                                       @else
-                                                      <strong>{{ $array->schedule->name }}</strong> - Décision du superviseur :
+                                                      <strong>{{ $array->schedule->name }}</strong> {{-- - Décision du superviseur :
                                                         <strong>
                                                           @if($array->approval)
                                                           approuvé
                                                           @else
                                                           désapprouvé
                                                           @endif
-                                                        </strong>
+                                                        </strong> --}}
                                                        @endif
                                                     </td>
                                                   </tr>
@@ -282,11 +282,11 @@
                                           </div>
                                         </div>
 
-                                     <p> <strong>Les ressources humaines ou le bureau du développement du personnel de votre organisation </strong> ont <strong>  
+                                     <p> <strong>Les ressources humaines ou le bureau du développement du personnel de votre organisation </strong> <span style="color: red;">ont</span> <strong>  
                                         @if( $input_course->approval_hr == 1)
                                                 approuvé 
                                         @else
-                                                désapprouvé
+                                                <span style="color: red;">désapprouvé</span>
                                         @endif
                                       </strong> votre inscription.</p>
                                       <p><strong>Commentaires/Raisons :</strong>
@@ -399,7 +399,7 @@
             <!-- Email Body : END -->
 
             <!-- Email Footer : BEGIN -->
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: whitesmoke; font-size: 12px; line-height: 140%;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: black; font-size: 12px; line-height: 140%;">
                 <tr>
                     <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #222222;" class="x-gmail-data-detectors">
                         <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>
