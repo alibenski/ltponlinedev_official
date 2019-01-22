@@ -196,7 +196,7 @@
                                      <p> The staff member, {{ $staff_name }}, would like to take a placement test for a language course at CLM in <strong>{{ $input_course->languages->name }}</strong> to attend classes <strong>from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
                                      <p>The placement test will be <strong> @if ($input_course->L == 'F') from {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else on {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
-                                    <p>The request above has initially been approved by your staff member's manager/supervisor with the following email address:<strong> {{ $mgr_email }}</strong></p>
+                                    <p>The request above has initially been agreed on by the staff member and the staff member's supervisor.</p>
                                      <p>Please click on the button below to access the validation page.</p>
                                 </td>
                             </tr>
@@ -217,12 +217,12 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                    {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Chère ou cher Partenaire de formation, </p>
-                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait passer un test de placement pour suivre un  cours de langue dispensé par le CFM  en <strong>{{ $input_course->languages->name }}</strong><strong>du {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} au {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
+                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait passer un test de placement pour suivre un  cours de langue dispensé par le CFM  en <strong>{{ $input_course->languages->name }}</strong><strong> du {{ $term_fr }}</strong></p>
                                      <p>Le test de placement aura lieu au moment <strong> @if ($input_course->L == 'F') du {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} au {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else le {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
-                                    <p>Veuillez noter que la demande pour le test de placement a été approuvée par le superviseur avec l’adresse mail suivante :<strong> {{ $mgr_email }}</strong></p>
+                                    <p>Veuillez noter que la demande pour le test de placement a été agreed on by the staff and the staff member's supervisor.</p>
                                      <p>Veuillez cliquez s'il vous plaît sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
                                 </td>
                             </tr>

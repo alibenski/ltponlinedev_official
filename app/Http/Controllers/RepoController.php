@@ -222,7 +222,7 @@ class RepoController extends Controller
             return redirect()->route('thankyouSelfPay');
             } 
             $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
-            return redirect()->route('thankyou');
+            return redirect()->route('thankyouPlacement');
         }
 
                     //validate other input fields outside of above loop

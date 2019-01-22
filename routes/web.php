@@ -288,6 +288,7 @@ Route::get('confirmationLinkExpired', function () { return view('confirmationLin
 Route::get('new_user_msg', function () { return view('new_user_msg'); })->name('new_user_msg');
 Route::get('page_not_available', function () { return view('page_not_available'); })->name('page_not_available');
 Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
+Route::get('thankyouPlacement', function () { return view('thankyouPlacement'); })->name('thankyouPlacement');
 Route::get('thankyouSelfPay', function () { return view('thankyouSelfPay'); })->name('thankyouSelfPay');
 // route for verification of UN staff
 Route::resource('newuser', 'NewUserController',['only' => ['create', 'store']]);
