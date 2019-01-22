@@ -161,7 +161,7 @@
                               <div class="col-md-12 form-group">
                                 <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
                                 <div class="col-md-8 ">
-                                <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="concerns about the placement test"></textarea>
+                                <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="concerns about the placement test e.g. date/time constraints, etc."></textarea>
                                 </div>
                               </div>
 
@@ -223,7 +223,7 @@
                             <div class="col-md-12 form-group">
                               <label class="col-md-3 control-label">Comment: <i>(required)</i></label>
                               <div class="col-md-8 pink-border">
-                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, etc." required=""></textarea>
+                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, passed LPE, etc." required=""></textarea>
                               </div>
                             </div>
 
@@ -274,6 +274,14 @@
                         </label>
                       </div>
                     </div> 
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                        <div class="col-md-8">
+                          <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder="Put your concerns regarding..."></textarea>
+                        </div>
+                    </div>
+
                             <!-- SHOW CHOICES REAL TIME -->
                     <div class="col-md-12">
                       <div class="well">
@@ -295,13 +303,6 @@
                     
                   <div class="submission-part" style="display: none">
                     
-                    <div class="form-group col-md-12">
-                      <div class="col-md-8 col-md-offset-2">
-                        <label class="control-label">Comment: <i>(optional)</i></label>
-                        <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder="Put your concerns regarding..."></textarea>
-                      </div>
-                    </div>
-
                     <div class="form-group col-md-12">
                       <div class="disclaimer alert col-md-8 col-md-offset-2">
                         <p class="small text-danger"><strong>Required field</strong></p>

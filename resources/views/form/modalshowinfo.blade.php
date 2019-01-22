@@ -68,5 +68,5 @@
               @endforeach
             </ul>
         @endif
-    <p class="alert alert-warning"><strong>Note:</strong> Please note that the class schedules are not absolute and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>    
+    <p class="alert alert-warning"><strong>Note:</strong> Please note that the class schedules are <strong><u><span class="text-danger">not</span></u></strong> final and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>    
 </div>

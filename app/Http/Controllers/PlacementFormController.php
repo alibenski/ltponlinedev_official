@@ -8,6 +8,7 @@ use App\Day;
 use App\FocalPoints;
 use App\Language;
 use App\Mail\MailPlacementTesttoApprover;
+use App\Mail\MailPlacementTesttoApproverHR;
 use App\Mail\MailaboutPlacementCancel;
 use App\Mail\MailtoApprover;
 use App\Mail\SendMailableReminderPlacement;
@@ -200,19 +201,22 @@ class PlacementFormController extends Controller
         $term_id = $request->input('term_id');
         //$schedule_id is an array 
         $schedule_id = $request->input('schedule_id');
-        $mgr_email = $request->input('mgr_email');
-        $mgr_fname = $request->input('mgr_fname');
-        $mgr_lname = $request->input('mgr_lname');
+        // $mgr_email = $request->input('mgr_email');
+        // $mgr_fname = $request->input('mgr_fname');
+        // $mgr_lname = $request->input('mgr_lname');
         $uniquecode = $request->input('CodeIndexID');
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         // $contractDate = $request->input('contractDate');
 
         $this->validate($request, array(
-            'mgr_email' => 'required|email',
+            // 'mgr_email' => 'required|email',
             'placementLang' => 'required|integer',
-            'course_preference_comment' => 'required|',
+            'approval' => 'required',
             'agreementBtn' => 'required|',
+            'dayInput' => 'required|',
+            'timeInput' => 'required|',
+            'course_preference_comment' => 'required|',
         ));
 
         $qryEformCount = PlacementForm::withTrashed()
@@ -232,21 +236,30 @@ class PlacementFormController extends Controller
         $placementForm->INDEXID = $index_id;
         $placementForm->DEPT = $org;
         $placementForm->eform_submit_count = $eform_submit_count;
-        $placementForm->mgr_email = $mgr_email;
-        $placementForm->mgr_fname = $mgr_fname;
-        $placementForm->mgr_lname = $mgr_lname;        
+        // $placementForm->mgr_email = $mgr_email;
+        // $placementForm->mgr_fname = $mgr_fname;
+        // $placementForm->mgr_lname = $mgr_lname;   
+        $placementForm->approval = $request->approval;   
         $placementForm->placement_schedule_id = $request->placementLang;
         $placementForm->std_comments = $request->std_comment;
         $placementForm->agreementBtn = $request->agreementBtn;
         // $placementForm->contractDate = $request->contractDate;
         $placementForm->save();
         
-        // mail student regarding placement form information
-        $staff = Auth::user();
-        $current_user = Auth::user()->indexno;
-        $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $term_id)->where('INDEXID', $current_user)->where('L', $language_id)->first();
+        // execute mail class to send email to HR focal point if needed
+        $staff = $index_id;
+        $next_term_code = $term_id;
+        $lang = $language_id;
+        $formcount = $eform_submit_count;
 
-        Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
+        $this->sendPlacementApprovalEmailToHR($staff, $next_term_code, $lang, $formcount);
+
+            // $staff = Auth::user();
+            // $current_user = Auth::user()->indexno;
+            // $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $term_id)->where('INDEXID', $current_user)->where('L', $language_id)->first();
+
+            // Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
+        
         // get newly created placement form record
         $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->where('Term', $term_id)->where('L', $language_id)->first();
         $placement_form_id = $latest_placement_form->id;
@@ -339,6 +352,70 @@ class PlacementFormController extends Controller
             $request->request->add(['is_self_pay_form' => 1]);
             return $request;
         }       
+    }
+
+    public function sendPlacementApprovalEmailToHR($staff, $next_term_code, $lang, $formcount)
+    {
+        // query from the table with the saved data and then
+        // execute Mail class before redirect
+        $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->first();
+
+        $formItems = PlacementForm::orderBy('Term', 'desc')
+                                ->where('INDEXID', $staff)
+                                ->where('Term', $next_term_code)
+                                ->where('L', $lang)
+                                ->where('eform_submit_count', $formcount)
+                                ->get();
+
+        // query student email from users model via index number in placement form model
+        $staff_name = $formfirst->users->name;
+        $staff_email = $formfirst->users->email;
+        $staff_index = $formfirst->INDEXID;   
+        $mgr_email = $formfirst->mgr_email;
+        
+        // get term values
+        $term = $next_term_code;
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
+        // query from placement form table the needed information data to include in email
+        $input_course = $formfirst; 
+
+        // check the organization of the student to know which email process is followed by the system
+        $org = $formfirst->DEPT; 
+
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+
+        if ($learning_partner == '1') {
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray(); 
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                    ->send(new MailPlacementTesttoApproverHR($formItems, $input_course, $staff_name, $mgr_email,$term_en, $term_fr,$term_season_en, $term_season_fr,$term_year));
+        }
     }
 
     /**

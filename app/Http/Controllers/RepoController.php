@@ -153,6 +153,7 @@ class RepoController extends Controller
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
         // $contractDate = $request->input('contractDate');
+        $std_comments = $request->input('regular_enrol_comment');
         
         $codex = [];     
         //concatenate (implode) Code input before validation   
@@ -261,6 +262,7 @@ class RepoController extends Controller
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
                 // 'contractDate' => $contractDate,
+                'std_comments' => $std_comments,
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
