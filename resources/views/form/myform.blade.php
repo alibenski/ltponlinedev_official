@@ -439,6 +439,9 @@
 
       if ($(this).val() == 'F') {
         $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
+      } 
+      else if ($(this).val() == 'E') {
+        $(".place-here").hide().append('<label for="scheduleChoices">If you are in Geneva, please select one of the dates shown. If you are outside Geneva, please select the <em>online</em> option.</label>').fadeIn('fast');
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
       }
@@ -468,15 +471,16 @@
                   var curr_year_end = dend.getFullYear();
                   var dateStringEnd = curr_date_end + " " + m_names[curr_month_end] + " " + curr_year_end;
 
-                  console.log('is online:' + val.is_online)
+                  console.log('is online: ' + val.is_online)
                   // $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
                   // $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" >').fadeIn();
                   if (val.is_online == 1) {
                     $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label></div>').fadeIn();
                   } else {
-                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label></div>').fadeIn();
+                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +' (in person)</label></div>').fadeIn();
                   }
               }); // end of $.each
+
               // if no schedule, tell student there is none
               if (!$("input[name='placementLang']").length){
                 console.log('no schedule input');

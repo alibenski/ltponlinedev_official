@@ -106,11 +106,6 @@
 
 @section('java_script')
 <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
-<script>
- $(window).load(function(){
-    // $("#loader2").fadeOut(600);
- });
-</script>
 
 <script>
   $(document).ready(function () {
@@ -231,10 +226,10 @@
                 success: function(data, status) {
                   console.log(data)
                   if (data == 'success') {
-                    location.reload();
+                    window.location.reload();
                   } else {
                     alert('Something went wrong!');
-                    location.reload();
+                    window.location.reload();
                   }
                   // $(".preview-here").html(data);
                   // $(".preview-here").html(data.options);

@@ -143,8 +143,8 @@
     <![endif]-->
 
 </head>
-<body width="100%" bgcolor="#4286f4" style="margin: 0; mso-line-height-rule: exactly;">
-    <center style="width: 100%; background: #4286f4; text-align: left;">
+<body width="100%" bgcolor="#ffffff" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; background: #ffffff; text-align: left;">
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
@@ -191,9 +191,9 @@
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
+                                    {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your  <strong>placement test</strong> request for CLM language, <strong>{{ $input_course->languages->name }}</strong>, has been <strong>@if( $input_course->approval_hr == 1) approved @else disapproved @endif </strong> by your HR Staff and Development Section.</p>
+                                     <p> Your  <strong>placement test</strong> request for CLM language, <strong>{{ $input_course->languages->name }}</strong>, has been <strong>@if( $input_course->approval_hr == 1)  approved @else  disapproved @endif </strong> by your HR Staff and Development Section.</p>
 
                                       <p><strong>Comment/Reason:</strong>
                                         <br>                                      
@@ -209,9 +209,9 @@
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
+                                    {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Cher/Chère {{ $staff_name }}, </p>
-                                     <p> Votre <strong>test de placement </strong> demandé par le CFM, pour la langue <strong>{{ $input_course->languages->name }}</strong>, a été  <strong>@if( $input_course->approval_hr == 1) approuvé @else désapprouvé @endif </strong> par le bureau des Ressources Humaines.</p>
+                                     <p> Votre <strong>test de placement </strong> demandé par le CFM, pour la langue <strong>{{ $input_course->languages->name }}</strong>, a été  <strong>@if( $input_course->approval_hr == 1)  approuvé @else  désapprouvé @endif </strong> par le bureau des Ressources Humaines.</p>
 
                                       <p><strong>Commentaires/Raisons :</strong>
                                         <br>                                      
@@ -323,7 +323,7 @@
             <!-- Email Body : END -->
 
             <!-- Email Footer : BEGIN -->
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: whitesmoke; font-size: 12px; line-height: 140%;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px; font-family: sans-serif; color: black; font-size: 12px; line-height: 140%;">
                 <tr>
                     <td style="padding: 40px 10px; width: 100%; font-family: sans-serif; font-size: 12px; line-height: 140%; text-align: center; color: #222222;" class="x-gmail-data-detectors">
                         <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>

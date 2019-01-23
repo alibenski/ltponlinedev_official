@@ -202,8 +202,11 @@ class HomeController extends Controller
         //get email address of the Manager
         $mgr_email = $forms->pluck('mgr_email')->first();
 
-        //if self-paying enrolment form
-        if (is_null($mgr_email)){
+        // get is_self_pay_form value
+        $is_self_pay_form = $forms->pluck('is_self_pay_form')->first();
+
+        //if self-paying enrolment form do this
+        if ($is_self_pay_form == 1){
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
@@ -216,14 +219,17 @@ class HomeController extends Controller
             return redirect()->back();
         }
 
-        //email notification to Manager    
         $staff_member_name = $forms->first()->users->name;
-            Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
+        //email notification to Manager    
+            //     Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
         
         //email notification to CLM Partner
         $org = $display_language->DEPT;
+        // check if org has learning partner
+        $check_learning_partner = Torgan::where('Org name', $org)->first();
+        $learning_partner = $check_learning_partner->has_learning_partner;
         // Add more organizations in the IF statement below
-        if ($org !== 'UNOG'){
+        if ($org !== 'UNOG' && $learning_partner == '1'){
             
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
@@ -251,7 +257,7 @@ class HomeController extends Controller
             $delform->delete();
         }
 
-        session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled. An email has been sent to your supervisor and if necessary, to your HR/Staff Development Office.');
+        session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
         return redirect()->back();
     }
 
@@ -274,8 +280,11 @@ class HomeController extends Controller
         //get email address of the Manager
         $mgr_email = $forms->pluck('mgr_email')->first();
 
+        // get is_self_pay_form value
+        $is_self_pay_form = $forms->pluck('is_self_pay_form')->first();
+
         //if self-paying enrolment form
-        if (is_null($mgr_email)){
+        if ($is_self_pay_form == 1){
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
@@ -288,9 +297,9 @@ class HomeController extends Controller
             return redirect()->back();
         }
 
-        //email notification to Manager    
         $staff_member_name = $forms->first()->users->name;
-            Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+        //email notification to Manager    
+            //     Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
         
         //email notification to CLM Partner
         $org = $display_language->DEPT;
@@ -327,7 +336,7 @@ class HomeController extends Controller
             $delform->delete();
         }
 
-        session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled. An email has been sent to your supervisor and if necessary, to your HR/Staff Development Office.');
+        session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled.');
         return redirect()->back();
     }
 }

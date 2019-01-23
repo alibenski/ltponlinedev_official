@@ -155,7 +155,7 @@
                                         @slot('body')
                                           <p>Cancel enrolment for <strong>{{ $form->courses->EDescription }}</strong></p>
                                           <p class="text-danger"><strong>IMPORTANT:</strong> You can be reimbursed or your organization will not be billed <strong><u>only if you cancel your enrolment 4 working days before the start of the term or 2 weeks before the start of Summer courses.</u></strong>  If you cancel your enrolment at any time after the deadline, the fees of the course will not be reimbursed.</p>
-                                          <p>If you are a UN staff member, your Manager and/or HR Learning Department will be notified of this cancellation via e-mail.</p>
+                                          <p>If you are a UN staff member, your HR Learning Department will be notified of this cancellation via e-mail.</p>
                                           <p>Please double check your decision. Thank you for your kind attention.</p>
                                         @endslot
                                         @slot('buttonoperation')

@@ -422,6 +422,9 @@
 
       if ($(this).val() == 'F') {
         $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
+      } 
+      else if ($(this).val() == 'E') {
+        $(".place-here").hide().append('<label for="scheduleChoices">If you are in Geneva, please select one of the dates shown. If you are outside Geneva, please select the <em>online</em> option.</label>').fadeIn('fast');
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
       }

@@ -12,7 +12,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
 
-        <div class="panel-heading">CLM Learning Partner Approval Page Placement Test for: <strong>{{ $next_term_name }}</strong></div>
+        <div class="panel-heading">CLM Learning Partner Approval Page Placement Test: <strong>{{ $next_term_name }}</strong></div>
           <div class="panel-body">
             <form method="POST" action="{{ route('approval.updateplacementformdata2hr', [$input_staff->INDEXID, $input_staff->L, $input_staff->eform_submit_count,$next_term_code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="email" class="col-md-3 control-label">Manager/supervisor's Email Address:</label>
                     
                     <div class="col-md-8 inputGroupContainer">
@@ -60,7 +60,7 @@
                         </div>
                         <p class="small text-danger"><strong>This is the email address of the manager/supervisor who has approved the enrolment.</strong></p>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="row">
                   <div class="col-md-12">

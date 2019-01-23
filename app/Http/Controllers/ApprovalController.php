@@ -266,7 +266,7 @@ class ApprovalController extends Controller
         $org_email_arr = $org_email->toArray(); 
 
         Mail::to($staff_email)
-                ->cc($mgr_email)
+                // ->cc($mgr_email)
                 ->bcc($org_email_arr)
                 ->send(new MailPlacementHRApprovaltoStudent($formItems, $input_course, $staff_name, $request));
         

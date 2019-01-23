@@ -41,10 +41,10 @@
 	        <div class="site-wrapper">
                 <div class="site-wrapper-inner">
                     <div class="cover-container">
+                            @include('partials._messages')
                         <div class="inner cover">
                             <img src="ziggy/img/Logo2016_transparent.png" alt="clm-logo">
 
-                            @include('partials._messages')
 
                             <h1 class="cover-heading">Thank you very much</h1>
                             <p class="lead">You are brought to this page either because... <br>
