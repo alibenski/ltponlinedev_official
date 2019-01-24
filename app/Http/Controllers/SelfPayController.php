@@ -103,6 +103,11 @@ class SelfPayController extends Controller
         return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
     }
 
+    public function FunctionName()
+    {
+        # code...
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -465,9 +470,9 @@ class SelfPayController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')){
             $request->file('identityfile');
-            $filename = $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
                     'filename' => $filename,
@@ -478,9 +483,9 @@ class SelfPayController extends Controller
         }
         if ($request->hasFile('payfile')){
             $request->file('payfile');
-            $filename = $index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension();
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
                     'filename' => $filename,
