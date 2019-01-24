@@ -21,8 +21,13 @@ Route::get('insert-record-to-preview', 'WaitlistController@insertRecordToPreview
 Route::get('pdfview', ['as'=>'pdfview','uses'=>'PreviewController@pdfView']);
 Route::get('release-notes', function () { return view('release_notes'); })->name('release-notes');
 
+/**
+ * Authenticated User Routes
+ */
 Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(){
-    //admin routes
+    /**
+     * Admin Routes
+     */
     Route::resource('newuser', 'NewUserController',['only' => ['index', 'show', 'update']]);
     Route::get('edit-new-user', ['as'=>'edit-new-user','uses'=>'NewUserController@editNewUser']);
     Route::get('/', 'AdminController@adminIndex')->name('admin_dashboard');
@@ -206,7 +211,11 @@ Route::middleware(['auth'])->group(function () {
     
     // route to cancel of convoked course class 
     Route::delete('cancel-convocation/{codeindexidclass}', ['middleware' => 'limit-cancel','as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
+
+    // route to add attachments for SelfPayment forms
+    
 });
+
 // route to update email of student - this should be outside of auth middleware for the student to have access to this route 
 Route::get('/verify/{student}/{temp_email}/{update_token}', ['as' => 'verify.updateProfileConfirmed', 'uses' => 'StudentController@updateProfileConfirmed' ]);
 // route for ajax select on vsa-page-2

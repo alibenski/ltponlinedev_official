@@ -103,9 +103,14 @@ class SelfPayController extends Controller
         return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
     }
 
-    public function FunctionName()
+    public function addAttachmentsView()
     {
-        # code...
+        
+    }
+
+    public function addAttachmentsStore()
+    {
+        
     }
 
     /**
