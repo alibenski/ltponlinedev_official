@@ -119,7 +119,59 @@ class SelfPayController extends Controller
 
     public function addAttachmentsStore(Request $request)
     {
-        dd($request);
+        $this->validate($request, [
+            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+        ]);
+
+        $index_id = $request->INDEXID;
+        $term_id = $request->Term;
+        $language_id = $request->L; 
+        $course_id = $request->Te_Code;
+        
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            //Create new record in db table
+            // $attachment_identity_file = new File([
+            //         'filename' => $filename,
+            //         'size' => $request->identityfile->getClientSize(),
+            //         'path' => $filestore,
+            //                 ]); 
+            // $attachment_identity_file->save();
+            $attachment_identity_file = File::find($request->identity_id);
+            $attachment_identity_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+
+        }
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            //Create new record in db table
+            // $attachment_pay_file = new File([
+            //         'filename' => $filename,
+            //         'size' => $request->payfile->getClientSize(),
+            //         'path' => $filestore,
+            //                 ]); 
+            // $attachment_pay_file->save();
+            $attachment_pay_file = File::find($request->payment_id);
+            $attachment_pay_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+        }
+
+        return redirect()->back();
+
     }
 
     /**
