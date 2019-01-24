@@ -8,6 +8,7 @@ use App\NewUser;
 use App\SDDEXTR;
 use App\TORGAN;
 use App\User;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -44,8 +45,19 @@ class NewUserController extends Controller
      */
     public function create()
     {
-        // return view('page_not_available');
-        return view('users_new.new_user');
+        $now_date = Carbon::now();
+        $enrol_object = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        if ( is_null($enrol_object) ) {
+            return view('page_not_available');
+        }
+        
+        $enrol_object_start_date = $enrol_object->Enrol_Date_Begin;
+        $enrol_object_end_date = $enrol_object->Enrol_Date_End;
+        
+        if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
+            return view('users_new.new_user');
+        }
+        return view('page_not_available');
     }
 
     /**
@@ -159,8 +171,19 @@ class NewUserController extends Controller
 
     public function getNewOutsideUser()
     {
-        // return view('page_not_available');
-        return view('users_new.new_outside_user');
+        $now_date = Carbon::now();
+        $enrol_object = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        if ( is_null($enrol_object) ) {
+            return view('page_not_available');
+        }
+
+        $enrol_object_start_date = $enrol_object->Enrol_Date_Begin;
+        $enrol_object_end_date = $enrol_object->Enrol_Date_End;
+        
+        if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
+            return view('users_new.new_outside_user');
+        }
+        return view('page_not_available');
     }
 
     public function postNewOutsideUser(Request $request)

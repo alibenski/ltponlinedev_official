@@ -19,6 +19,7 @@ class GlobalFunction
         
         return "$current_term_begin";
       }
+
       public function currentTermObject()
       {
         //get current year and date
@@ -31,7 +32,8 @@ class GlobalFunction
                         ->whereDate('Term_End', '>=', $now_date)
                         ->get()->min();
         return $currentTermObject;                
-      }      
+      }     
+
       public function currentEnrolTermObject()
       {
         $now_date = Carbon::now()->toDateString();
@@ -41,6 +43,7 @@ class GlobalFunction
                         ->get()->min();
         return $currentEnrolTermObject;                
       }
+
       public function nextTermCode()
       {
         //get current year and date
@@ -59,14 +62,17 @@ class GlobalFunction
 
         return "$next_term";                
       }
+
       public function startQueryLog()
       {
         \DB::enableQueryLog();
       }
+
       public function showQueries()
       {
         dd(\DB::getQueryLog());
       }
+      
       public static function instance()
       {
          return new GlobalFunction();
