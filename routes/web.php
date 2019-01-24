@@ -212,8 +212,9 @@ Route::middleware(['auth'])->group(function () {
     // route to cancel of convoked course class 
     Route::delete('cancel-convocation/{codeindexidclass}', ['middleware' => 'limit-cancel','as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
 
-    // route to add attachments for SelfPayment forms
-    
+    // route to re-attach documents for SelfPayment forms
+    Route::get('add-attachments', ['as'=>'add-attachments','uses'=>'SelfPayController@addAttachmentsView']);
+    Route::put('add-attachments-store', ['as'=>'add-attachments-store','uses'=>'SelfPayController@addAttachmentsStore']);
 });
 
 // route to update email of student - this should be outside of auth middleware for the student to have access to this route 

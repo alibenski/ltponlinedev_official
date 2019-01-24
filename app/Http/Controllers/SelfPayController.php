@@ -105,12 +105,21 @@ class SelfPayController extends Controller
 
     public function addAttachmentsView()
     {
-        
+        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('INDEXID','17942')
+            ->where('L', 'F')
+            ->where('Term', '194')
+            ->where('is_self_pay_form', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->get();
+            
+        // dd($selfpayforms);
+        return view('selfpayforms.add-attachments', compact('selfpayforms'));
     }
 
-    public function addAttachmentsStore()
+    public function addAttachmentsStore(Request $request)
     {
-        
+        dd($request);
     }
 
     /**
