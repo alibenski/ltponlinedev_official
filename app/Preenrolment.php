@@ -11,7 +11,7 @@ class Preenrolment extends Model
 
     protected $table = 'tblLTP_Enrolment';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'mgr_fname', 'mgr_lname', 'L', 'profile', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form', 'selfpay_approval', 'form_counter', 'eform_submit_count', 'cancelled_by_student', 'agreementBtn', 'consentBtn', 'flexibleBtn', 'contractDate', 'Comments', 'modified_by', 'updated_by_admin', 'std_comments',
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'mgr_fname', 'mgr_lname', 'L', 'profile', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form', 'selfpay_approval', 'form_counter', 'eform_submit_count', 'cancelled_by_student', 'agreementBtn', 'consentBtn', 'flexibleBtn', 'contractDate', 'Comments', 'modified_by', 'updated_by_admin', 'std_comments', 'overall_approval',
     ];
     /**
      * The storage format of the model's date columns.

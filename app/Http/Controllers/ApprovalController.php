@@ -228,6 +228,7 @@ class ApprovalController extends Controller
             $course = PlacementForm::find($enrol_form);
             $course->approval_hr = $decision;
             $course->hr_comments = $hr_comment;
+            $course->overall_approval = $decision;
             $course->save();
 
         // execute Mail class before redirect
@@ -541,6 +542,7 @@ class ApprovalController extends Controller
             $course = Preenrolment::find($enrol_form);
             $course->approval_hr = $decision;
             $course->hr_comments = $hr_comment;
+            $course->overall_approval = $decision;
             $course->save();
         }
 

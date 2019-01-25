@@ -153,6 +153,7 @@ class NoFormController extends Controller
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
         // $contractDate = $request->input('contractDate');
+        $std_comments = $request->input('regular_enrol_comment');
         
         $codex = [];     
         //concatenate (implode) Code input before validation 
@@ -260,10 +261,15 @@ class NoFormController extends Controller
                 'form_counter' => $form_counter,  
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
-                // 'contractDate' => $contractDate,            
+                // 'contractDate' => $contractDate,  
+                'std_comments' => $std_comments,          
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
+                        if (in_array($data->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO'])) {
+                            $data->update([
+                                'overall_approval' => 1,
+                            ]);
                     }
         } 
 

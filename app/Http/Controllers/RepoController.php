@@ -266,6 +266,11 @@ class RepoController extends Controller
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
+                        if (in_array($data->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO'])) {
+                            $data->update([
+                                'overall_approval' => 1,
+                            ]);
+                        }
                     }
         }
        
