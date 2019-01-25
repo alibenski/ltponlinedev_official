@@ -112,8 +112,12 @@ class SelfPayController extends Controller
             ->where('is_self_pay_form', '1')
             ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->get();
-            
-        // dd($selfpayforms);
+        
+        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('is_self_pay_form', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->get();
+        
         return view('selfpayforms.add-attachments', compact('selfpayforms'));
     }
 
@@ -135,13 +139,7 @@ class SelfPayController extends Controller
             $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
-            //Create new record in db table
-            // $attachment_identity_file = new File([
-            //         'filename' => $filename,
-            //         'size' => $request->identityfile->getClientSize(),
-            //         'path' => $filestore,
-            //                 ]); 
-            // $attachment_identity_file->save();
+
             $attachment_identity_file = File::find($request->identity_id);
             $attachment_identity_file->update([
                     'filename' => $filename,
@@ -155,13 +153,7 @@ class SelfPayController extends Controller
             $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
-            //Create new record in db table
-            // $attachment_pay_file = new File([
-            //         'filename' => $filename,
-            //         'size' => $request->payfile->getClientSize(),
-            //         'path' => $filestore,
-            //                 ]); 
-            // $attachment_pay_file->save();
+
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
                     'filename' => $filename,
@@ -170,7 +162,8 @@ class SelfPayController extends Controller
             ]);
         }
 
-        return redirect()->back();
+        $request->session()->flash('success', 'Thank you. Files successfully uploaded.');
+        return redirect()->route('home');
 
     }
 

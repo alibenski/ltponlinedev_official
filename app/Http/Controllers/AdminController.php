@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\NewUser;
+use App\PlacementForm;
 use App\Preenrolment;
 use App\Preview;
 use App\Repo;
@@ -21,6 +22,9 @@ use Session;
 
 class AdminController extends Controller
 {
+    /**
+     * Copy Preview table to PASH table
+     */
     public function moveToPash()
     {
         $results = \DB::select( "INSERT into LTP_PASHQTcur (INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments) SELECT INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments FROM tblLTP_preview" );
@@ -39,11 +43,82 @@ class AdminController extends Controller
 
     public function adminIndex()
     {
-        $new_user_count = NewUser::where('approved_account', 0)->count();
-        $terms = Term::orderBy('Term_Code', 'desc')->get();       
-        $cancelled_convocations = Repo::onlyTrashed()->where('Term', Session::get('Term'))->count();
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        return view('admin.index',compact('terms','cancelled_convocations','new_user_count'));   
+        $new_user_count = NewUser::where('approved_account', 0)->count();
+        $cancelled_convocations = Repo::onlyTrashed()->where('Term', Session::get('Term'))->count();
+        $enrolment_forms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->get()->count();
+        $selfpay_enrolment_forms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->get()->count();
+
+        $selfpay_enrolment_forms_validated = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', '1')
+            ->get()->count();
+        $selfpay_enrolment_forms_pending = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', '2')
+            ->get()->count();
+        $selfpay_enrolment_forms_disapproved = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', '0')
+            ->get()->count();
+        $selfpay_enrolment_forms_waiting = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', null)
+            ->get()->count();
+
+
+        $placement_forms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->get()->count();
+        $selfpay_placement_forms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->get()->count();
+        $selfpay_placement_forms_validated = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', '1')
+            ->get()->count();
+        $selfpay_placement_forms_pending = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', '2')
+            ->get()->count();
+        $selfpay_placement_forms_disapproved = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', '0')
+            ->get()->count();
+        $selfpay_placement_forms_waiting = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->where('is_self_pay_form', '1')
+            ->where('selfpay_approval', null)
+            ->get()->count();
+
+
+        return view('admin.index',compact('terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
     }
 
 
