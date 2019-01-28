@@ -122,7 +122,7 @@
                                 <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
                                 
                                     <div class="col-sm-6">
-                                        <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}">View Info</a>
+                                        <a id="modbtn" class="btn btn-sm btn-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><i class="fa fa-eye"></i> View Status</a>
                                     </div> 
                                     
                                     <div class="col-sm-6">
@@ -188,13 +188,66 @@
               @foreach($plforms_submitted as $plform)
                 <div class="row">
                 <div class="col-sm-12">
+
                     @if($plform->cancelled_by_student == 1)
-                      <span class="label label-danger margin-label">Placement Test Request Cancelled By Student</span>
-                    @endif 
+                      <span class="label label-danger margin-label">Placement Test Request Cancelled By Student</span> 
+                    @endif
+
                     <h4><strong>Placement Test Request Form # {{ $plform->eform_submit_count }}</strong></h4>
                     <h5>@if($plform->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif</h5> 
                     <h5>Language: <strong>{{ $plform->languages->name }}</strong></h5>
-                    <h5>@if($plform->L == 'F')Test Date: Online from <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> to <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam_end)) }}</strong> @else Test Date: <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> @endif</h5>
+                    <h5>@if($plform->placementSchedule->is_online == 1)Test Date: Online from <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> to <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam_end)) }}</strong> @else Test Date: <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> @endif</h5>
+                    
+                    <p>Organization: @if(is_null($plform->DEPT)) - @elseif($plform->DEPT == 999) SPOUSE @else {{ $plform->DEPT }} @endif
+                    </p>
+
+                    <p>
+                      HR Staff and Development Section Approval:
+                    @if(is_null($plform->is_self_pay_form))
+                      @if(in_array($plform->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+                        <span id="status" class="label label-info margin-label">
+                        N/A - Non-paying organization</span>
+                      @else
+                        @if(is_null($plform->approval) && is_null($plform->approval_hr))
+                        <span id="status" class="label label-warning margin-label">
+                        Pending Approval</span>
+                        @elseif($plform->approval == 0 && (is_null($plform->approval_hr) || isset($plform->approval_hr)))
+                        <span id="status" class="label label-danger margin-label">
+                        N/A - Disapproved by Manager</span>
+                        @elseif($plform->approval == 1 && is_null($plform->approval_hr))
+                        <span id="status" class="label label-warning margin-label">
+                        Pending Approval</span>
+                        @elseif($plform->approval == 1 && $plform->approval_hr == 1)
+                        <span id="status" class="label label-success margin-label">
+                        Approved</span>
+                        @elseif($plform->approval == 1 && $plform->approval_hr == 0)
+                        <span id="status" class="label label-danger margin-label">
+                        Disapproved</span>
+                        @endif
+                      @endif
+                    @else
+                    <span id="status" class="label label-info margin-label">
+                    N/A - Self Payment</span>
+                    @endif
+                    </p>
+
+                    <p>
+                      Language Secretariat Payment Validation: 
+                    @if(is_null($plform->is_self_pay_form))
+                    <span id="status" class="label label-info margin-label">N/A</span>
+                    @else
+                      @if($plform->selfpay_approval === 1)
+                      <span id="status" class="label label-success margin-label">Approved</span>
+                      @elseif($plform->selfpay_approval === 2)
+                      <span id="status" class="label label-warning margin-label">Pending Valid Document</span>
+                      @elseif($plform->selfpay_approval === 0)
+                      <span id="status" class="label label-danger margin-label">Disapproved</span>
+                      @else 
+                      <span id="status" class="label label-info margin-label">Waiting</span>
+                      @endif
+                    @endif
+                    </p>
+
                     <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}" class="form-prevent-multi-submit">
                         <input type="submit" @if (is_null($plform->deleted_at))
                           value="Cancel Placement Test"

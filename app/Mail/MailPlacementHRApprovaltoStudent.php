@@ -15,18 +15,22 @@ class MailPlacementHRApprovaltoStudent extends Mailable
     public $input_course;
     public $staff_name;
     public $request;
+    public $term_season_en; 
+    public $term_year;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($formItems, $input_course, $staff_name, $request)
+    public function __construct($formItems, $input_course, $staff_name, $request, $term_season_en, $term_year)
     {
         $this->formItems = $formItems;
         $this->input_course = $input_course;
         $this->staff_name = $staff_name;
         $this->request = $request;
+        $this->term_season_en = $term_season_en;
+        $this->term_year = $term_year;
     }
 
     /**
@@ -40,6 +44,6 @@ class MailPlacementHRApprovaltoStudent extends Mailable
                     ->from('clm_language@unog.ch', 'CLM Language')
                     // ->bcc('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Notification: CLM Learning Partner Decision Made on CLM Language Placement Test - '.$this->input_course->languages->name.' for '.$this->staff_name);
+                    ->subject('Notification: CLM Learning Partner Decision Made on CLM Language Placement Test - '.$this->input_course->languages->name.' for '.$this->staff_name.' ('.$this->term_season_en.' '.$this->term_year.')');
     }
 }

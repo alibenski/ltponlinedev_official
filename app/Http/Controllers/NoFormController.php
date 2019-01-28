@@ -270,6 +270,7 @@ class NoFormController extends Controller
                             $data->update([
                                 'overall_approval' => 1,
                             ]);
+                        }    
                     }
         } 
 

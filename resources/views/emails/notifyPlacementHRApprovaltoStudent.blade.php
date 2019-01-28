@@ -203,7 +203,7 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
-                                      <p>Your request will be processed by the Language Training secretariat, and you will receive further information about your registration.</p>
+                                      <p>If approved, your request will be processed by the Language Training secretariat, and you will receive further information about your registration.</p>
                                       <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
                                 </td>
                             </tr>
@@ -221,7 +221,7 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
-                                      <p>Votre demande d’inscription sera traitée par le secrétariat du Programme de formation linguistique et vous recevrez un email avec toutes l’information nécessaire afin de continuer l’inscription.</p>
+                                      <p>Si approuvé, votre demande d’inscription sera traitée par le secrétariat du Programme de formation linguistique et vous recevrez un email avec toutes l’information nécessaire afin de continuer l’inscription.</p>
                                       <p><strong>NOTE: </strong>Pour toute question quant à la décision ci-dessus, veuillez contacter directement les ressources humaines ou le bureau du développement du personnel de votre organisation.</p>
                                 </td>
                             </tr>

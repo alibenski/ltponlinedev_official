@@ -223,6 +223,17 @@ class HomeController extends Controller
         //email notification to Manager    
             //     Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
         
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         //email notification to CLM Partner
         $org = $display_language->DEPT;
         // check if org has learning partner
@@ -244,7 +255,7 @@ class HomeController extends Controller
             $org_email_arr = $org_email->toArray(); 
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
+                    ->send(new MailaboutCancel($forms, $display_language, $staff_member_name, $term_season_en, $term_year));
 
         }
 
@@ -301,6 +312,17 @@ class HomeController extends Controller
         //email notification to Manager    
             //     Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
         
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         //email notification to CLM Partner
         $org = $display_language->DEPT;
 
@@ -323,7 +345,7 @@ class HomeController extends Controller
             $org_email_arr = $org_email->toArray(); 
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+                    ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name, $term_season_en, $term_year));
 
         }
 

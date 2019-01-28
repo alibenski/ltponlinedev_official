@@ -252,6 +252,17 @@ class ApprovalController extends Controller
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
         
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         //query from PlacementForm table the needed information data to include in email
         $input_course = $formfirst;
 
@@ -269,7 +280,7 @@ class ApprovalController extends Controller
         Mail::to($staff_email)
                 // ->cc($mgr_email)
                 ->bcc($org_email_arr)
-                ->send(new MailPlacementHRApprovaltoStudent($formItems, $input_course, $staff_name, $request));
+                ->send(new MailPlacementHRApprovaltoStudent($formItems, $input_course, $staff_name, $request, $term_season_en, $term_year));
         
         if($decision == 1){
             $decision_text = 'Yes, you approved the request.';
@@ -566,7 +577,18 @@ class ApprovalController extends Controller
         $staff_email = $formfirst->users->email;
         $staff_index = $formfirst->INDEXID;   
         $mgr_email = $formfirst->mgr_email;
+
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
         
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         // query from Preenrolment table the needed information data to include in email
         $input_course = $formfirst;
 
@@ -584,7 +606,7 @@ class ApprovalController extends Controller
         Mail::to($staff_email)
                 // ->cc($mgr_email)
                 ->bcc($org_email_arr)
-                ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request));
+                ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request, $term_season_en, $term_year));
         
         if($decision == 1){
             $decision_text = 'Yes, you approved the enrolment.';

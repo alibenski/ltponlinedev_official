@@ -241,7 +241,7 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
-                                      <p>Please be reminded that <strong style="color: red;">this is not a convocation email.</strong> Your enrolment will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
+                                      <p>Please be reminded that <strong style="color: red;">this is not a convocation email.</strong> If approved, your enrolment will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
                                       <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
                                 </td>
                             </tr>
@@ -282,7 +282,7 @@
                                           </div>
                                         </div>
 
-                                     <p> <strong>Les ressources humaines ou le bureau du développement du personnel de votre organisation </strong> <span style="color: red;">ont</span> <strong>  
+                                     <p> <strong>Les ressources humaines ou le bureau du développement du personnel de votre organisation </strong> ont <strong>  
                                         @if( $input_course->approval_hr == 1)
                                                 approuvé 
                                         @else
@@ -297,7 +297,7 @@
                                             {{$request->hr_comment}}
                                         @endif
                                       </p>
-                                      <p>Veuillez noter que <strong style="color: red;">ceci n’est pas un email de convocation.</strong> Votre inscription sera maintenant traitée par le secrétariat du Programme de formation linguistique et vous recevrez ensuite de plus amples informations quant à votre inscription.</p>
+                                      <p>Veuillez noter que <strong style="color: red;">ceci n’est pas un email de convocation.</strong> Si approuvé, votre inscription sera maintenant traitée par le secrétariat du Programme de formation linguistique et vous recevrez ensuite de plus amples informations quant à votre inscription.</p>
                                       <p><strong>NOTE: </strong>Pour toute question quant à la décision ci-dessus, veuillez contacter directement les ressources humaines ou le bureau du développement du personnelde votre organisation.</p>
                                 </td>
                             </tr>
