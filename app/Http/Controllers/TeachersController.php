@@ -168,6 +168,14 @@ class TeachersController extends Controller
             ->where('Term', Session::get('Term'))
             ->first();
 
+        if (is_null($course)) {
+            return view('errors.404_custom');
+        }
+
+        if (is_null($term)) {
+            return view('errors.404_custom');
+        }
+
         return view('teachers.teacher_select_week', compact('course', 'term'));
         // $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info'))->render();
         // return response()->json([$data]);
@@ -191,6 +199,10 @@ class TeachersController extends Controller
         $course = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
             ->first();
+
+        if (is_null($course)) {
+            return view('errors.404_custom');
+        }
 
         $classroom = Classroom::where('Code', $request->Code)->first();
         $day = $request->day;

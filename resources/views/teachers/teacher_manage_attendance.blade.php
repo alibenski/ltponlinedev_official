@@ -4,7 +4,8 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
 @section('content')
-<div id="loader2"></div>
+{{-- <div id="loader2"></div> --}}
+<div class="preloader"></div>
 <div class="row">
   <div class="col-md-12">
     <h3><strong>Log Student Attedance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $day }}: {{ $time }} ({{ $week }})</strong></h3>
@@ -142,7 +143,7 @@
     }); //end of $.each
     
     $.when.apply($('tr.table-row'), promises).then(function() {
-        $("#loader2").fadeOut(600);
+        $(".preloader").fadeOut(600);
     });    
   });
 </script>
