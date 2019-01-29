@@ -59,6 +59,23 @@
 	<div class="form-group">
 	    <label class="control-label" for="flexible_show">Is Flexible: @if($selfpay_student->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 	</div>
+	<div class="form-group">
+		<label class="control-label" for="optradio">Choose Default Text:</label>
+		<div class="col-md-12">
+                  <input id="option1" name="optionRadio" class="with-font" type="radio" value="1">
+                  <label for="option1" class="form-control-static">Option 1</label>
+        </div>
+
+        <div class="col-md-12">
+                  <input id="option2" name="optionRadio" class="with-font" type="radio" value="2">
+                  <label for="option2" class="form-control-static">Option 2</label>
+        </div>
+
+        <div class="col-md-12">
+                  <input id="option3" name="optionRadio" class="with-font" type="radio" value="3">
+                  <label for="option3" class="form-control-static">Option 3</label>
+        </div>
+	</div>
 	{{-- <div class="form-group">
 	    <label class="control-label" for="student_comment_show">Student Comment:</label>
 	    <div class="">

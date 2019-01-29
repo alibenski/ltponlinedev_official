@@ -175,11 +175,11 @@ class SelfPayController extends Controller
      */
     public function edit(Request $request, $indexid, $tecode, $term)
     {
-        $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn','attachment_id', 'attachment_pay')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
+        $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn','attachment_id', 'attachment_pay')->where('is_self_pay_form', '1')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
            
-        $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term',$term)->get();
+        $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('Te_Code', $tecode)->where('Term',$term)->get();
 
-        $show_admin_comments = Preenrolment::select('CodeIndexID', 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first()->adminComment;
+        $show_admin_comments = Preenrolment::select('CodeIndexID', 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('is_self_pay_form', '1')->where('Term', $term)->first()->adminComment;
 
         return view('selfpayforms.edit',compact('selfpay_student','show_sched_selfpay', 'show_admin_comments'));
     }
@@ -327,11 +327,11 @@ class SelfPayController extends Controller
 
     public function editPlacementSelfPay(Request $request, $indexid, $language, $term)
     {
-        $selfpay_student = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term', $term)->first();
+        $selfpay_student = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term', $term)->first();
            
-        $show_sched_selfpay = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term',$term)->get();
+        $show_sched_selfpay = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term',$term)->get();
 
-        $show_admin_comments = PlacementForm::where('INDEXID', $indexid)->where('L', $language)->where('Term', $term)->first()->adminCommentPlacement;
+        $show_admin_comments = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term', $term)->first()->adminCommentPlacement;
 
         return view('selfpayforms.edit-placement-selfpay',compact('selfpay_student','show_sched_selfpay', 'show_admin_comments'));
     }
