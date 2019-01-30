@@ -203,6 +203,7 @@
                                         
                                     @else 
                                         pending. </strong> </p>
+                                        <p><a href="{{ route('add-attachments') }}">Please click here to upload your valid documents.</a></p> 
 
                                     @endif 
 
