@@ -57,7 +57,7 @@
 						@if($value->selfpay_approval === 1)
 						<span id="status" class="label label-success margin-label">Approved</span>
 						@elseif($value->selfpay_approval === 2)
-						<span id="status" class="label label-warning margin-label">Pending Approval</span>
+						<span id="status" class="label label-warning margin-label">Pending Valid Document</span>
 						@elseif($value->selfpay_approval === 0)
 						<span id="status" class="label label-danger margin-label">Disapproved</span>
 						@else 

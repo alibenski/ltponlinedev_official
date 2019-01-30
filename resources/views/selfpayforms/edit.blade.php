@@ -59,7 +59,7 @@
 	<div class="form-group">
 	    <label class="control-label" for="flexible_show">Is Flexible: @if($selfpay_student->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 	</div>
-	<div class="form-group">
+	{{-- <div class="form-group">
 		<label class="control-label" for="optradio">Choose Default Text:</label>
 		<div class="col-md-12">
                   <input id="option1" name="optionRadio" class="with-font" type="radio" value="1">
@@ -75,7 +75,7 @@
                   <input id="option3" name="optionRadio" class="with-font" type="radio" value="3">
                   <label for="option3" class="form-control-static">Option 3</label>
         </div>
-	</div>
+	</div> --}}
 	{{-- <div class="form-group">
 	    <label class="control-label" for="student_comment_show">Student Comment:</label>
 	    <div class="">
@@ -84,7 +84,8 @@
 	</div> --}}
 	<div class="form-group">
 	    <div class="col-sm-12"><button type="button" class="show-modal btn btn-info pull-right" data-toggle="modal"><span class="glyphicon glyphicon-comment"></span>  View All Admin Notes</button></div>
-	    <label class="control-label" for="admin_comment_show">Admin Comment: (This text will be included in the email)</label>
+	    <label class="control-label" for="admin_comment_show">Admin Comment: </label>
+	    <p class="text-danger"><strong>If pending/disapproved status, please write the reason on the text area below. The text below will be included in the email communication to the student. </strong></p>
 	    <div class="">
 	        <textarea class="form-control" name="admin_comment_show" cols="40" rows="5"></textarea>
 	    </div>

@@ -211,6 +211,7 @@ class SelfPayController extends Controller
             $enrolment_record = Preenrolment::where('id', $form->id)->first();
             $enrolment_record->Comments = $request->admin_comment_show;
             $enrolment_record->selfpay_approval = $request['submit-approval'];
+            $enrolment_record->overall_approval = $request['submit-approval'];
             $enrolment_record->save();
         }
 
@@ -223,8 +224,20 @@ class SelfPayController extends Controller
             $admin_comment->save();
         }
 
+        // get term values and convert to strings
+        $term = $request->Term;
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         $staff_email = User::where('indexno', $request->INDEXID)->first();
-        Mail::to($staff_email)->send(new MailtoStudentSelfpay($request));
+        Mail::to($staff_email)->send(new MailtoStudentSelfpay($request, $term_season_en, $term_year));
         
         // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
         return redirect(route('selfpayform.index'));
@@ -356,6 +369,7 @@ class SelfPayController extends Controller
             $enrolment_record = PlacementForm::where('id', $form->id)->first();
             $enrolment_record->Comments = $request->admin_comment_show;
             $enrolment_record->selfpay_approval = $request['submit-approval'];
+            $enrolment_record->overall_approval = $request['submit-approval'];
             $enrolment_record->save();
         }
 
@@ -368,9 +382,21 @@ class SelfPayController extends Controller
             $admin_comment->save();
         }
         
+        // get term values and convert to strings
+        $term = $request->Term;
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         $staff_email = User::where('indexno', $request->INDEXID)->first();
         Mail::to($staff_email)
-                    ->send(new MailtoStudentSelfpayPlacement($request));
+                    ->send(new MailtoStudentSelfpayPlacement($request, $term_season_en, $term_year));
         // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
         return redirect()->back();
     }
