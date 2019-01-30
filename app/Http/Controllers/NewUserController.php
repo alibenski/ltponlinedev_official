@@ -238,9 +238,22 @@ class NewUserController extends Controller
 
     public function getNewOutsideUserForm()
     {
-        return view('page_not_available');
         $org = TORGAN::get(["Org Full Name","Org name"]);
-        return view('users_new.new_outside_user_form')->withOrg($org);
+        
+        $now_date = Carbon::now();
+        $enrol_object = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        if ( is_null($enrol_object) ) {
+            return view('page_not_available');
+        }
+        
+        $enrol_object_start_date = $enrol_object->Enrol_Date_Begin;
+        $enrol_object_end_date = $enrol_object->Enrol_Date_End;
+        
+        if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
+            return view('users_new.new_outside_user_form')->withOrg($org);
+        }
+
+        return view('page_not_available');
     }
 
     public function postNewOutsideUserForm(Request $request)
