@@ -191,9 +191,98 @@ class SelfPayController extends Controller
             ]);
         }
 
-        Mail::raw("Selfpay Student Attachment Update: ".Auth::user()->name.' ( '.$index_id.' )', function($message) {
+        Mail::raw("Selfpay Student Attachment Update (Regular Form): ".Auth::user()->name.' ( '.$index_id.' )', function($message) {
                 $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
-                $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update');
+                $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update (Regular Form)');
+            });
+
+        $request->session()->flash('success', 'Thank you. Files successfully uploaded.');
+        return redirect()->route('home');
+
+    }
+
+    public function addAttachmentsPlacementView($indexid, $lang, $term, $date, $eform)
+    {
+        if (Auth::user()->indexno != $indexid) {
+            abort('401');
+        }
+
+        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID',$indexid)
+            ->where('L', $lang)
+            ->where('Term', $term)
+            ->where('UpdatedOn', $date)
+            ->where('eform_submit_count', $eform)
+            ->where('is_self_pay_form', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->get();
+
+        if (count($selfpayforms_placement) < 1) {
+            return redirect()->route('updateLinkExpired');
+        }      
+        
+        return view('selfpayforms.add-attachments-placement', compact('selfpayforms_placement'));
+    }
+
+    public function addAttachmentsPlacementStore(Request $request)
+    {
+        $this->validate($request, [
+            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+        ]);
+
+        $index_id = $request->INDEXID;
+        $term_id = $request->Term;
+        $language_id = $request->L; 
+        $course_id = $request->Te_Code;
+        $eform_submit_count = $request->eform_submit_count;
+
+        $selfpayforms = PlacementForm::where('INDEXID',$index_id)
+            ->where('L', $language_id)
+            ->where('Term', $term_id)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('is_self_pay_form', '1')
+            ->get();
+
+        // save who modified the form
+        foreach ($selfpayforms as $value) {
+            $value->modified_by = Auth::user()->id;
+            $value->UpdatedOn = Carbon::now();
+            $value->save(['timestamps' => FALSE]);
+        }
+        
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+
+            $attachment_identity_file = File::find($request->identity_id);
+            $attachment_identity_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+
+        }
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+
+            $attachment_pay_file = File::find($request->payment_id);
+            $attachment_pay_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+        }
+
+        Mail::raw("Selfpay Student Attachment Update (Placement Form): ".Auth::user()->name.' ( '.$index_id.' )', function($message) {
+                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+                $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update (Placement Form)');
             });
 
         $request->session()->flash('success', 'Thank you. Files successfully uploaded.');
@@ -239,6 +328,7 @@ class SelfPayController extends Controller
                                 ->where('INDEXID', $request->INDEXID)
                                 ->where('Term', $request->Term)
                                 ->where('Te_Code', $request->Te_Code)
+                                ->where('eform_submit_count', $request->eform_submit_count)
                                 ->where('is_self_pay_form', '1')
                                 ->get();
                                 
@@ -401,6 +491,7 @@ class SelfPayController extends Controller
                                 ->where('INDEXID', $request->INDEXID)
                                 ->where('Term', $request->Term)
                                 ->where('L', $request->L)
+                                ->where('eform_submit_count', $request->eform_submit_count)
                                 ->where('is_self_pay_form', '1')
                                 ->get();
 

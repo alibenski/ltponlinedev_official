@@ -11,8 +11,12 @@
 	<div class="col-sm-10 col-sm-offset-1">
 	<form method="POST" action="{{ route('post-placement-selfpay', $selfpay_student->id) }}">
 	{{ csrf_field() }}
+
 	<input name="INDEXID" type="hidden" value="{{ $selfpay_student->INDEXID }}">
 	<input name="Term" type="hidden" value="{{ $selfpay_student->Term }}">
+	<input name="L" type="hidden" value="{{ $selfpay_student->L }}">
+	<input name="eform_submit_count" type="hidden" value="{{ $selfpay_student->eform_submit_count }}">
+	
 	<div class="form-group">
 	    <label class="control-label" for="id_show">Name:</label>
 	    <div class="">

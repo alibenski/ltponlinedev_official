@@ -102,6 +102,7 @@
 						            <th>Self-paying?</th>
 						            <th>ID Proof</th>
 						            <th>Payment Proof</th>
+						            <th>Comment</th>
 						            <th>Time Stamp</th>
 						        </tr>
 						    </thead>
@@ -154,6 +155,9 @@
 									</td>
 									<td>
 									@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
+									</td>
+									<td>
+										<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
 									</td>
 									<td>{{ $form->created_at}}</td>
 								</tr>
@@ -465,6 +469,37 @@
         </div>
     </div>
 </div>
+<!-- Modal form to show student comments on regular forms -->
+<div id="showStdComments" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title-std-comments">Student Comments</h4>
+            </div>
+            <div class="modal-body">
+				@if(empty($student_enrolments))
+
+				@else
+					@if(count($student_enrolments) == 0)
+					
+					@else
+	                <div class="panel-body">
+                        @foreach($student_enrolments as $form)    
+                        	<p><span><i class="fa fa-comment fa-2x"></i></span> {{$form->std_comments}}</p>
+                        @endforeach
+	                </div>
+                	@endif
+                @endif	  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                    <span class='glyphicon glyphicon-remove'></span> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('java_script')
@@ -484,6 +519,9 @@ $(document).on('click', '.show-modal', function() {
 $(document).on('click', '.show-modal-history', function() {
 	$('.modal-title-history').text('Past Language Course Enrolment for {{ $student->name }}');
     $('#showModalHistory').modal('show'); 
+});
+$(document).on('click', '.show-std-comments', function() {
+    $('#showStdComments').modal('show'); 
 });
 </script>
 <script>  

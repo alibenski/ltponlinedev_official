@@ -197,7 +197,7 @@
                                     @if($request['submit-approval'] == 1 )  approved. You will receive an email with regard to the test in due course. 
                                     @elseif($request['submit-approval'] == 0) disapproved. 
                                     @else pending. 
-                                        <p><a href="{{ route('add-attachments', [$request->INDEXID, $request->L, $request->Te_Code, $request->Term, $request->UpdatedOn, $request->eform_submit_count]) }}">Please click here to upload your valid documents</a></p>
+                                        <p><a href="{{ route('add-attachments-placement', [$request->INDEXID, $request->L,  $request->Term, $request->UpdatedOn, $request->eform_submit_count]) }}">Please click here to upload your valid documents</a></p>
                                     @endif </strong> </p>
 
                                     @if(is_null($request->admin_comment_show))
