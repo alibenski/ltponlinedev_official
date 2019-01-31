@@ -48,6 +48,7 @@
 			                	{{ $form->courses->Description }}
 								<input type="hidden" name="L" value="{{$form->L}}">
 								<input type="hidden" name="Te_Code" value="{{$form->Te_Code}}">
+								<input type="hidden" name="eform_submit_count" value="{{$form->eform_submit_count}}">
 			                </td>
 							<td>
 								@if(empty($form->filesId->path)) None 

@@ -203,7 +203,7 @@
                                         
                                     @else 
                                         pending. </strong> </p>
-                                        <p><a href="{{ route('add-attachments') }}">Please click here to upload your valid documents.</a></p> 
+                                        <p><a href="{{ route('add-attachments', [$request->INDEXID, $request->L, $request->Te_Code, $request->Term, $request->UpdatedOn, $request->eform_submit_count]) }}">Please click here to upload your valid documents</a></p> 
 
                                     @endif 
 

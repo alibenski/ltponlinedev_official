@@ -11,9 +11,14 @@
 	<div class="col-sm-10 col-sm-offset-1">
 	<form method="POST" action="{{ route('selfpayform.update', $selfpay_student->INDEXID) }}">
 	{{ csrf_field() }}
+
 	<input name="INDEXID" type="hidden" value="{{ $selfpay_student->INDEXID }}">
+	<input name="L" type="hidden" value="{{ $selfpay_student->L }}">
 	<input name="Te_Code" type="hidden" value="{{ $selfpay_student->Te_Code }}">
 	<input name="Term" type="hidden" value="{{ $selfpay_student->Term }}">
+	<input name="eform_submit_count" type="hidden" value="{{ $selfpay_student->eform_submit_count }}">
+	{{-- <input name="UpdatedOn" type="hidden" value="{{ $selfpay_student->UpdatedOn }}"> --}}
+
 	<div class="form-group">
 	    <label class="control-label" for="id_show">Name:</label>
 	    <div class="">

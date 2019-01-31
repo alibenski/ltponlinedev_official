@@ -103,22 +103,34 @@ class SelfPayController extends Controller
         return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
     }
 
-    public function addAttachmentsView()
+    public function addAttachmentsView($indexid, $lang, $tecode, $term, $date, $eform)
     {
-        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
-            ->where('INDEXID','17942')
-            ->where('L', 'F')
-            ->where('Te_Code', 'F2R1')
-            ->where('Term', '194')
+        if (Auth::user()->indexno != $indexid) {
+            abort('401');
+        }
+
+        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID',$indexid)
+            ->where('L', $lang)
+            ->where('Te_Code', $tecode)
+            ->where('Term', $term)
+            ->where('UpdatedOn', $date)
+            ->where('eform_submit_count', $eform)
             ->where('is_self_pay_form', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
             ->get();
-        
+
+        if (count($selfpayforms) < 1) {
+            return redirect()->route('updateLinkExpired');
+        }
+
         $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
             ->where('is_self_pay_form', '1')
             ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->get();
         
+        
+
         return view('selfpayforms.add-attachments', compact('selfpayforms'));
     }
 
@@ -133,6 +145,22 @@ class SelfPayController extends Controller
         $term_id = $request->Term;
         $language_id = $request->L; 
         $course_id = $request->Te_Code;
+        $eform_submit_count = $request->eform_submit_count;
+
+        $selfpayforms = Preenrolment::where('INDEXID',$index_id)
+            ->where('L', $language_id)
+            ->where('Te_Code', $course_id)
+            ->where('Term', $term_id)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('is_self_pay_form', '1')
+            ->get();
+
+        // save who modified the form
+        foreach ($selfpayforms as $value) {
+            $value->modified_by = Auth::user()->id;
+            $value->UpdatedOn = Carbon::now();
+            $value->save(['timestamps' => FALSE]);
+        }
         
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')){
@@ -163,6 +191,11 @@ class SelfPayController extends Controller
             ]);
         }
 
+        Mail::raw("Selfpay Student Attachment Update: ".Auth::user()->name.' ( '.$index_id.' )', function($message) {
+                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+                $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update');
+            });
+
         $request->session()->flash('success', 'Thank you. Files successfully uploaded.');
         return redirect()->route('home');
 
@@ -176,7 +209,7 @@ class SelfPayController extends Controller
      */
     public function edit(Request $request, $indexid, $tecode, $term)
     {
-        $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn','attachment_id', 'attachment_pay')->where('is_self_pay_form', '1')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
+        $selfpay_student = Preenrolment::select( 'INDEXID', 'L', 'Te_Code', 'Term', 'eform_submit_count', 'profile', 'DEPT', 'flexibleBtn','attachment_id', 'attachment_pay')->where('is_self_pay_form', '1')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
            
         $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('Te_Code', $tecode)->where('Term',$term)->get();
 
@@ -206,6 +239,7 @@ class SelfPayController extends Controller
                                 ->where('INDEXID', $request->INDEXID)
                                 ->where('Term', $request->Term)
                                 ->where('Te_Code', $request->Te_Code)
+                                ->where('is_self_pay_form', '1')
                                 ->get();
                                 
         foreach ($forms as $form) {
@@ -216,6 +250,9 @@ class SelfPayController extends Controller
             $enrolment_record->save();
         }
 
+        $update_element = $enrolment_record->UpdatedOn->toDateTimeString(); // convert Carbon to string
+        $request->request->add([ 'UpdatedOn' => $update_element ]); //add to request
+        
         // save comments in the comments table and associate it to the enrolment form
         foreach ($forms as $form) {
             $admin_comment = new AdminComment;
@@ -224,7 +261,7 @@ class SelfPayController extends Controller
             $admin_comment->user_id = Auth::user()->id;
             $admin_comment->save();
         }
-
+        
         // get term values and convert to strings
         $term = $request->Term;
         $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
@@ -364,6 +401,7 @@ class SelfPayController extends Controller
                                 ->where('INDEXID', $request->INDEXID)
                                 ->where('Term', $request->Term)
                                 ->where('L', $request->L)
+                                ->where('is_self_pay_form', '1')
                                 ->get();
 
         foreach ($forms as $form) {
@@ -373,6 +411,9 @@ class SelfPayController extends Controller
             $enrolment_record->overall_approval = $request['submit-approval'];
             $enrolment_record->save();
         }
+
+        $update_element = $enrolment_record->UpdatedOn->toDateTimeString(); // convert Carbon to string
+        $request->request->add([ 'UpdatedOn' => $update_element ]); //add to request
 
         // save comments in the comments table and associate it to the enrolment form
         foreach ($forms as $form) {

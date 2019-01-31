@@ -193,7 +193,13 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                     <p> Dear {{ $request->nom }}, </p>
-                                    <p> Your registration for the {{ $request->Lstring }} placement test has a status of <strong> @if($request['submit-approval'] == 1 )  approved. You will receive an email with regard to the test in due course. @elseif($request['submit-approval'] == 0) disapproved. @else pending. @endif </strong> </p>
+                                    <p> Your registration for the {{ $request->Lstring }} placement test has a status of <strong> 
+                                    @if($request['submit-approval'] == 1 )  approved. You will receive an email with regard to the test in due course. 
+                                    @elseif($request['submit-approval'] == 0) disapproved. 
+                                    @else pending. 
+                                        <p><a href="{{ route('add-attachments', [$request->INDEXID, $request->L, $request->Te_Code, $request->Term, $request->UpdatedOn, $request->eform_submit_count]) }}">Please click here to upload your valid documents</a></p>
+                                    @endif </strong> </p>
+
                                     @if(is_null($request->admin_comment_show))
                                     @else
                                         <p> CLM Language Secretariat comment: </p>

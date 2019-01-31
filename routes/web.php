@@ -213,7 +213,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('cancel-convocation/{codeindexidclass}', ['middleware' => 'limit-cancel','as' => 'cancel-convocation', 'uses' => 'PreviewController@cancelConvocation']);
 
     // route to re-attach documents for SelfPayment forms
-    Route::get('add-attachments', ['as'=>'add-attachments','uses'=>'SelfPayController@addAttachmentsView']);
+    Route::get('add-attachments/{indexid}/{lang}/{tecode}/{term}/{date}/{eform}', ['as'=>'add-attachments','uses'=>'SelfPayController@addAttachmentsView']);
     Route::put('add-attachments-store', ['as'=>'add-attachments-store','uses'=>'SelfPayController@addAttachmentsStore']);
 });
 
@@ -295,6 +295,7 @@ Route::get('eform', function () { return view('confirmation_page_unog'); })->nam
 Route::get('eform2', function () { return view('confirmation_page_hr'); })->name('eform2');
 Route::get('confirmationLinkUsed', function () { return view('confirmationLinkUsed'); })->name('confirmationLinkUsed');
 Route::get('confirmationLinkExpired', function () { return view('confirmationLinkExpired'); })->name('confirmationLinkExpired');
+Route::get('updateLinkExpired', function () { return view('updateLinkExpired'); })->name('updateLinkExpired');
 Route::get('new_user_msg', function () { return view('new_user_msg'); })->name('new_user_msg');
 Route::get('page_not_available', function () { return view('page_not_available'); })->name('page_not_available');
 Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
