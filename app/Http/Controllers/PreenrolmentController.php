@@ -24,6 +24,23 @@ use Session;
 
 class PreenrolmentController extends Controller
 {
+    public function ajaxStdComments(Request $request)
+    {
+        if($request->ajax()){
+            $student_enrolments = Preenrolment::withTrashed()
+            ->where('INDEXID', $request->indexno)
+            ->where('Term', $request->term)
+            ->where('Te_Code', $request->tecode)
+            ->where('eform_submit_count', $request->eform_submit_count)
+            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'modified_by', 'updated_by_admin', 'std_comments' ])
+            ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'modified_by', 'updated_by_admin', 'std_comments' ]);
+
+            $data = $student_enrolments->first()->std_comments;
+            return response()->json($data);
+        }
+        
+    }
+
     /**
      * Send reminder emails to manager and HR focalpoints.
      *

@@ -158,6 +158,10 @@
 									</td>
 									<td>
 										<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
+										<input type="hidden" name="eform_submit_count" value="{{$form->eform_submit_count}}">
+										<input type="hidden" name="term" value="{{$form->Term}}">
+										<input type="hidden" name="indexno" value="{{$form->INDEXID}}">
+										<input type="hidden" name="tecode" value="{{$form->Te_Code}}">
 									</td>
 									<td>{{ $form->created_at}}</td>
 								</tr>
@@ -475,7 +479,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title-std-comments">Student Comments</h4>
+                <h4 class="modal-title-std-comments"><i class="fa fa-comment fa-2x text-primary"></i> Student Comment</h4>
             </div>
             <div class="modal-body">
 				@if(empty($student_enrolments))
@@ -484,11 +488,7 @@
 					@if(count($student_enrolments) == 0)
 					
 					@else
-	                <div class="panel-body">
-                        @foreach($student_enrolments as $form)    
-                        	<p><span><i class="fa fa-comment fa-2x"></i></span> {{$form->std_comments}}</p>
-                        @endforeach
-	                </div>
+	                <div class="panel-body modal-body-std-comments"></div>
                 	@endif
                 @endif	  
             </div>
@@ -521,7 +521,16 @@ $(document).on('click', '.show-modal-history', function() {
     $('#showModalHistory').modal('show'); 
 });
 $(document).on('click', '.show-std-comments', function() {
+	var indexno = $(this).closest("tr").find("input[name='indexno']").val();
+	var tecode = $(this).closest("tr").find("input[name='tecode']").val();
+	var eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
+	var term = $(this).closest("tr").find("input[name='term']").val();
+	var token = $("input[name='_token']").val();
     $('#showStdComments').modal('show'); 
+
+    $.post('{{ route('ajax-std-comments') }}', {'indexno':indexno, 'tecode':tecode, 'term':term,  'eform_submit_count':eform_submit_count, '_token':token}, function(data) {
+          $('.modal-body-std-comments').html(data);
+      });
 });
 </script>
 <script>  

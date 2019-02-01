@@ -327,6 +327,7 @@ class UserController extends Controller
         $id = $id;
         $student = User::where('id', $id)->first();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+        
         $student_enrolments = Preenrolment::withTrashed()->where('INDEXID', $student->indexno)
             ->where('Term', $request->Term)
             ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'modified_by', 'updated_by_admin', 'std_comments' ])
