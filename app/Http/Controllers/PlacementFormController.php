@@ -146,10 +146,24 @@ class PlacementFormController extends Controller
                         // $staff_name = $formfirst->users->name;
                         $staff_name = $formfirst->users->name;
                         $arr[] = $staff_name;
-                        $mgr_email = $formfirst->mgr_email;    
+                        $mgr_email = $formfirst->mgr_email;   
+
+                        // get term values
+                        $term = $enrolment_term;
+                        // get term values and convert to strings
+                        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+                        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+                        
+                        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+                        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+                        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+                        $term_year = new Carbon($term_date_time);
+                        $term_year = $term_year->year;
+
                         $input_course = $formfirst; 
                         // Mail::to($fp_email_arr);
-                        Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+                        Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email,$term_en, $term_fr,$term_season_en, $term_season_fr,$term_year));
                     }
                 }
             }
@@ -181,10 +195,24 @@ class PlacementFormController extends Controller
                     // $staff_name = $formfirst->users->name;
                     $staff_name = $formfirst->users->name;
                     $arr[] = $staff_name;
-                    $mgr_email = $formfirst->mgr_email;    
+                    $mgr_email = $formfirst->mgr_email;   
+
+                    // get term values
+                    $term = $enrolment_term;
+                    // get term values and convert to strings
+                    $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+                    $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+                    
+                    $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+                    $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+                    $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+                    $term_year = new Carbon($term_date_time);
+                    $term_year = $term_year->year;
+                         
                     $input_course = $formfirst; 
                     // Mail::to($fp_email_arr);
-                    Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email));
+                    Mail::to($fp_email_arr)->send(new SendReminderEmailPlacementHR($formItems, $input_course, $staff_name, $mgr_email,$term_en, $term_fr,$term_season_en, $term_season_fr,$term_year));
                 }
             }            
         } // end of foreach loop

@@ -956,7 +956,7 @@ dd();
         if (empty($enrolment_term)) {
             Log::info("Auto-sending of reminder emails failed. Term is null. No Emails sent.");
             echo "Term is null. No Emails sent.";
-            // return exit();
+            return exit();
         }
 
         $enrolment_term_object = Term::findOrFail($enrolment_term);

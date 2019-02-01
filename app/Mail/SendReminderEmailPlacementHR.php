@@ -15,18 +15,28 @@ class SendReminderEmailPlacementHR extends Mailable
     public $input_course; 
     public $staff_name; 
     public $mgr_email;
+    public $term_en; 
+    public $term_fr;
+    public $term_season_en; 
+    public $term_season_fr;
+    public $term_year;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($formItems, $input_course, $staff_name, $mgr_email)
+    public function __construct($formItems, $input_course, $staff_name, $mgr_email, $term_en, $term_fr,$term_season_en, $term_season_fr,$term_year)
     {
         $this->formItems = $formItems; 
         $this->input_course = $input_course; 
         $this->staff_name = $staff_name; 
         $this->mgr_email = $mgr_email; 
+        $this->term_en =  $term_en; 
+        $this->term_fr = $term_fr;
+        $this->term_season_en =  $term_season_en; 
+        $this->term_season_fr = $term_season_fr;
+        $this->term_year = $term_year;
     }
 
     /**
@@ -38,8 +48,8 @@ class SendReminderEmailPlacementHR extends Mailable
     {
         return $this->view('emails.placementApprovalHR')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@un.org')
+                    // ->bcc('clm_language@un.org')
                     ->priority(1)
-                    ->subject('Reminder - CLM Learning Partner Approval Needed for: '.$this->staff_name.' on Language Placement Test - '.$this->input_course->languages->name);
+                    ->subject('Reminder - CLM Learning Partner Approval Needed for: '.$this->staff_name.' on Language Placement Test - '.$this->input_course->languages->name.' ('.$this->term_season_en.' '.$this->term_year.')');
     }
 }
