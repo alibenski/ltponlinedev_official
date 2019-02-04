@@ -105,21 +105,21 @@ class PreenrolmentController extends Controller
             }
 
             // else if $now_date = Approval Date Limit then do send to all enrolment forms without manager approval    
-            if ($now_date->toDateString() == Carbon::parse($enrolment_term_object->Approval_Date_Limit)->toDateString()) {
-                echo "send to all";
-                $recipient = $valueMgrEmails->mgr_email;
+        //     if ($now_date->toDateString() == Carbon::parse($enrolment_term_object->Approval_Date_Limit)->toDateString()) {
+        //         echo "send to all";
+        //         $recipient = $valueMgrEmails->mgr_email;
 
-                $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
-                $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $valueMgrEmails->INDEXID)->where('Term', $enrolment_term)->first();
-                $input_schedules = Preenrolment::orderBy('Term', 'desc')
-                                    ->where('INDEXID', $valueMgrEmails->INDEXID)
-                                    ->where('Term', $enrolment_term)
-                                    ->where('Te_Code', $valueMgrEmails->Te_Code)
-                                    ->where('form_counter', $valueMgrEmails->form_counter)
-                                    ->get();
-                Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
-            }
-        } // end of foreach loop
+        //         $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+        //         $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $valueMgrEmails->INDEXID)->where('Term', $enrolment_term)->first();
+        //         $input_schedules = Preenrolment::orderBy('Term', 'desc')
+        //                             ->where('INDEXID', $valueMgrEmails->INDEXID)
+        //                             ->where('Term', $enrolment_term)
+        //                             ->where('Te_Code', $valueMgrEmails->Te_Code)
+        //                             ->where('form_counter', $valueMgrEmails->form_counter)
+        //                             ->get();
+        //         Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
+        //     }
+        // } // end of foreach loop
 
         $remind_hr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_HR_After');
 

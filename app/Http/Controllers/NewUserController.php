@@ -11,6 +11,7 @@ use App\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -365,6 +366,15 @@ class NewUserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if ($request->submit == 2) {
+            $newUser = NewUser::findOrFail($id);
+            $newUser->approved_account = 2;
+            $newUser->updated_by = Auth::user()->id;
+            $newUser->save();
+
+            return redirect()->route('newuser.index');
+        }
+
         // check if there is a duplicate in Auth users table
         $this->validate($request, array(
                 'indexno' => 'required|unique:users,indexno',
@@ -379,6 +389,7 @@ class NewUserController extends Controller
 
         $newUser = NewUser::findOrFail($id);
         $newUser->approved_account = 1;
+        $newUser->updated_by = Auth::user()->id;
         $newUser->save();
 
         // save entry to Auth table
@@ -421,8 +432,8 @@ class NewUserController extends Controller
      * @param  \App\NewUser  $newUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(NewUser $newUser)
+    public function destroy(Request $request)
     {
-        //
+        dd($request);
     }
 }

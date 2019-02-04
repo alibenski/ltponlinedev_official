@@ -99,15 +99,15 @@ class PlacementFormController extends Controller
                     echo '<br>';
                 }
             }
-            if ($now_date->toDateString() == Carbon::parse($enrolment_term_object->Approval_Date_Limit)->toDateString()) {
-                $recipient = $valueMgrEmails->mgr_email;
+        //     if ($now_date->toDateString() == Carbon::parse($enrolment_term_object->Approval_Date_Limit)->toDateString()) {
+        //         $recipient = $valueMgrEmails->mgr_email;
 
-                $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
-                $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $enrolment_term)->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
+        //         $staff = User::where('indexno', $valueMgrEmails->INDEXID)->first();
+        //         $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $enrolment_term)->where('INDEXID', $valueMgrEmails->INDEXID)->where('L', $valueMgrEmails->L)->first();
 
-                Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
-            }
-        } // end of foreach loop
+        //         Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
+        //     }
+        // } // end of foreach loop
 
         $remind_hr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_HR_After');
 

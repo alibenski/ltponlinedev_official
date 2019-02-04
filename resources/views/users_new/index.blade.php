@@ -92,7 +92,7 @@ $(document).on('click', '.show-modal', function() {
 	    })
 	    .done(function(data) {
 	        console.log("success");
-	        console.log(data);
+	        // console.log(data);
 	        $(".class-list").html('');
 	        $(".class-list").html(data.options);
 	        $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});

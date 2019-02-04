@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
      */
     Route::resource('newuser', 'NewUserController',['only' => ['index', 'show', 'update']]);
     Route::get('edit-new-user', ['as'=>'edit-new-user','uses'=>'NewUserController@editNewUser']);
+
     Route::get('/', 'AdminController@adminIndex')->name('admin_dashboard');
     Route::get('user/import', 'AdminController@importUser')->name('import-user');
     Route::post('user/import', 'AdminController@handleImportUser')->name('bulk-import-user');
@@ -304,18 +305,24 @@ Route::get('page_not_available', function () { return view('page_not_available')
 Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
 Route::get('thankyouPlacement', function () { return view('thankyouPlacement'); })->name('thankyouPlacement');
 Route::get('thankyouSelfPay', function () { return view('thankyouSelfPay'); })->name('thankyouSelfPay');
+
 // route for verification of UN staff
 Route::resource('newuser', 'NewUserController',['only' => ['create', 'store']]);
+
 // route for web form request to create new account of UN staff
 Route::get('get-new-new-user', ['as' => 'get-new-new-user','uses' => 'NewUserController@getNewNewUser' ]);
 Route::post('post-new-new-user', ['as' => 'post-new-new-user','uses' => 'NewUserController@postNewNewUser' ]);
+
 // route for verification of non-UN staff
 Route::get('get-new-outside-user', ['as' => 'get-new-outside-user','uses' => 'NewUserController@getNewOutsideUser' ]);
 Route::post('post-new-outside-user', ['as' => 'post-new-outside-user','uses' => 'NewUserController@postNewOutsideUser' ]);
+
 // route for web form request to create new account of non-UN staff
 Route::get('get-new-outside-user-form', ['as' => 'get-new-outside-user-form','uses' => 'NewUserController@getNewOutsideUserForm' ]);
 Route::post('post-new-outside-user-form', ['as' => 'post-new-outside-user-form','uses' => 'NewUserController@postNewOutsideUserForm' ]);
+
 //Route::get('/', function () { return view('welcome'); });
+
 Auth::routes();
 
     // Authentication Routes...

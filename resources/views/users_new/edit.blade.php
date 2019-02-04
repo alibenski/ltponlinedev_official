@@ -1,6 +1,7 @@
 <div class="row">
 	<div class="col-sm-12">
-		<form method="POST" action="{{ route('newuser.update', $new_user_info->id) }}">
+		<form method="POST" action="{{ route('newuser.update', $new_user_info->id) }}" class="form-prevent-multi-submit">
+			<input type="hidden" name="id" value="{{$new_user_info->id}}">
 	        {{ csrf_field() }}
 	        <div class="form-group">
 	            <label class="control-label text-danger">Possible duplicates (Please review before approving): {{ count($possible_dupes) }}</label>
@@ -75,14 +76,20 @@
 	            <label class="control-label">Attachment: </label>
 	            @if(empty($new_user_info->filesId->path)) <strong>None</strong> @else <a href="{{ Storage::url($new_user_info->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
 	        </div>
+			<div class="alert alert-danger">
+				<span><i class="fa fa-info-circle"></i> Please reject if duplicate</span>
+			</div>
 
-	        <button type="button" data-dismiss="modal" class="btn btn-danger btn-space button-prevent-multi-submit"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button>
-			<button type="submit" class="btn btn-success btn-space button-prevent-multi-submit"><span class="glyphicon glyphicon-check"></span>  Save and Approve</button>	
+	        <button type="submit" name="submit" value="2" class="btn btn-danger btn-space "><span class="glyphicon glyphicon-remove"></span>  Reject</button>
+
+			<button type="submit" name="submit" value="1" class="btn btn-success btn-space "><span class="glyphicon glyphicon-check"></span>  Save and Approve</button>
+
 	        <input type="hidden" name="_token" value="{{ Session::token() }}">
 	        {{ method_field('PUT') }}
 	    </form>	
 	</div>
 </div>
+
 <script>
 	$('.select2-basic-single').select2({
 	dropdownParent: $('#showModal')

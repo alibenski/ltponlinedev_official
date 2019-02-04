@@ -11,7 +11,7 @@
     <h1><i class='fa fa-snowflake-o'></i> Edit Semester Term {{ $term->Term_Code }} - {{ $term->Comments }}</h1>
     <hr>
     <div class="row">
-      <div class="col-md-8 well pull-right">
+      <div class="col-md-12 well">
         <div class="form-group col-md-3">
             <label for="title" class="control-label">Term Begin:</label>
 
@@ -62,19 +62,26 @@
             </div>
         </div>
         <div class="form-group col-md-3">
+            <label for="title" class="control-label">Approval Date Limit for HR:</label>
+
+            <div class="form-control-static">
+                <p>@if(empty ( $term->Approval_Date_Limit_HR )) Update Needed @else {{ date('d M Y', strtotime($term->Approval_Date_Limit_HR)) }} @endif</p>
+            </div>
+        </div>
+        {{-- <div class="form-group col-md-3">
             <label for="title" class="control-label">Approval Date Limit:</label>
 
             <div class="form-control-static">
                 <p>@if(empty ( $term->Approval_Date_Limit )) Update Needed @else {{ date('d M Y', strtotime($term->Approval_Date_Limit)) }} @endif</p>
             </div>
-        </div>
-        <div class="form-group col-md-3">
+        </div> --}}
+        {{-- <div class="form-group col-md-3">
             <label for="title" class="control-label">Send reminder emails to managers after:</label>
 
             <div class="form-control-static">
                 <p>{{ $term->Remind_Mgr_After }} days</p>
             </div>
-        </div>
+        </div> --}}
         <div class="form-group col-md-3">
             <label for="title" class="control-label">Send reminder emails to HR partner after:</label>
 
@@ -112,10 +119,10 @@
                   <input type="hidden" name="Term_End" id="Term_End" value="" />
           </div>
 
-          <div class="form-group">
+          {{-- <div class="form-group">
             <label for="Remind_Mgr_After" class="control-label">Send reminder emails to managers after how many days? </label>
             <input name="Remind_Mgr_After" type="number" class="form-control" value="">
-          </div>
+          </div> --}}
         </div>
 
         {{-- Select Dropdown for SEASON --}}
@@ -143,7 +150,7 @@
           </div>
 
           <div class="form-group">
-            <label for="Remind_HR_After" class="control-label">Send reminder emails to HR partner after how many days? </label>
+            <label for="Remind_HR_After" class="control-label">Send reminder emails to HR partner: How many days after student form submission? </label>
             <input name="Remind_HR_After" type="number" class="form-control" value="">
           </div>
         </div>
@@ -180,13 +187,13 @@
           </div>  
 
           <div class="form-group">
-                  <label for="Approval_Date_Limit" class="control-label">Approval Date Limit: </label>
-                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Approval_Date_Limit">
+                  <label for="Approval_Date_Limit_HR" class="control-label">Approval Date Limit for HR: </label>
+                  <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Approval_Date_Limit_HR">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
-                  <input type="hidden" name="Approval_Date_Limit" id="Approval_Date_Limit" value="" />
+                  <input type="hidden" name="Approval_Date_Limit_HR" id="Approval_Date_Limit_HR" value="" />
           </div>  
         </div>
 

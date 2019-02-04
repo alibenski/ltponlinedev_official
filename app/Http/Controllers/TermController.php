@@ -46,7 +46,16 @@ class TermController extends Controller
         // validate the data 
         $this->validate($request, array(
                 'Term_Code' => 'required|unique:LTP_Terms',
-                'Remind_Mgr_After' => 'required|integer',
+                'Term_Begin' => 'required|', 
+                'Term_End' => 'required|',
+                'Comments' => 'required|',
+                'Term_Prev' => 'required|',
+                'Term_Next' => 'required|',
+                'Enrol_Date_Begin' => 'required|',
+                'Enrol_Date_End' => 'required|',
+                'Cancel_Date_Limit' => 'required|',
+                'Approval_Date_Limit_HR' => 'required|',
+                // 'Remind_Mgr_After' => 'required|integer',
                 'Remind_HR_After' => 'required|integer',
             ));
 
@@ -108,9 +117,11 @@ class TermController extends Controller
         $term->Enrol_Date_Begin = $request->Enrol_Date_Begin;
         $term->Enrol_Date_End = $request->Enrol_Date_End;
         $term->Cancel_Date_Limit = $request->Cancel_Date_Limit;
-        $term->Approval_Date_Limit = $request->Approval_Date_Limit;
+        // $term->Approval_Date_Limit = $request->Approval_Date_Limit;
+        $term->Approval_Date_Limit = $request->Approval_Date_Limit_HR;
         $term->Approval_Date_Limit_HR = $request->Approval_Date_Limit_HR;
-        $term->Remind_Mgr_After = $request->Remind_Mgr_After;
+        // $term->Remind_Mgr_After = $request->Remind_Mgr_After;
+        $term->Remind_Mgr_After = $request->Remind_HR_After;
         $term->Remind_HR_After = $request->Remind_HR_After;
         $term->Comments = $request->Comments;
         $term->Comments_fr = $term->seasons->FSEASON;

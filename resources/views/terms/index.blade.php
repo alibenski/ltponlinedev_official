@@ -22,10 +22,10 @@
 					<th>Enrolment Date Begin</th>
 					<th>Enrolment Date End</th>
 					<th>Cancellation Date Limit</th>
-					<th>Approval Date Limit</th>
+					{{-- <th>Approval Date Limit</th> --}}
 					<th>Approval Date Limit HR</th>
 					<th>Season</th>
-					<th>Remind Mgr</th>
+					{{-- <th>Remind Mgr</th> --}}
 					<th>Remind HR</th>
 					<th>Operation</th>
 					<th>Updated By</th>
@@ -61,13 +61,13 @@
 								{{ date('d M Y - H:ia', strtotime($term->Cancel_Date_Limit)) }}
 							@endif
 							</td>
-							<td>
+							{{-- <td>
 							@if(empty($term->Approval_Date_Limit))
 					            <span class="label label-danger">NONE</span>
 							@else
 								{{ date('d M Y - H:ia', strtotime($term->Approval_Date_Limit)) }}
 							@endif
-							</td>
+							</td> --}}
 							<td>
 							@if(empty($term->Approval_Date_Limit_HR))
 					            <span class="label label-danger">NONE</span>
@@ -76,7 +76,7 @@
 							@endif
 							</td>
 							<td>{{ $term->Comments }}</td>
-							<td>{{ $term->Remind_Mgr_After }} days</td>
+							{{-- <td>{{ $term->Remind_Mgr_After }} days</td> --}}
 							<td>{{ $term->Remind_HR_After }} days</td>
 							<td><a href="{{ route('terms.edit', $term->Term_Code)}}" class="btn btn-info pull-left">Edit</a></td>
 							<td>@if(empty($term->users)) @else {{ $term->users->name }} @endif</td>

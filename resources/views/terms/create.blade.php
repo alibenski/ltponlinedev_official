@@ -38,10 +38,10 @@
                   <input type="hidden" name="Term_End" id="Term_End" value="" required=""/>
           </div>
 
-          <div class="form-group">
+          {{-- <div class="form-group">
             <label for="Remind_Mgr_After" class="control-label">Send reminder emails to managers after how many days? </label>
             <input name="Remind_Mgr_After" type="number" class="form-control" value="" required="">
-          </div>
+          </div> --}}
         </div>
 
         <div class="col-md-4">
@@ -68,7 +68,7 @@
           </div>
           
           <div class="form-group">
-            <label for="Remind_HR_After" class="control-label">Send reminder emails to HR partner after how many days? </label>
+            <label for="Remind_HR_After" class="control-label">Send reminder emails to HR partner: How many days after student form submission? </label>
             <input name="Remind_HR_After" type="number" class="form-control" value="" required="">
           </div>
         </div>
@@ -104,7 +104,7 @@
                   <input type="hidden" name="Cancel_Date_Limit" id="Cancel_Date_Limit" value="" />
           </div>
 
-          <div class="form-group">
+          {{-- <div class="form-group">
                   <label for="Approval_Date_Limit" class="control-label">Approval Date Limit for Manager: </label>
                   <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Approval_Date_Limit">
                     <input class="form-control" size="16" type="text" value="" readonly>
@@ -112,7 +112,7 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                   </div>
                   <input type="hidden" name="Approval_Date_Limit" id="Approval_Date_Limit" value="" />
-          </div>
+          </div> --}}
 
           <div class="form-group">
                   <label for="Approval_Date_Limit_HR" class="control-label">Approval Date Limit for HR: </label>
