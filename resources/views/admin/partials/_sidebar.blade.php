@@ -8,7 +8,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{asset('img/spideyman_sample.png')}}" class="img-circle" alt="User Image">
+          <img src="{{asset('img/generic-profile-icon-10.jpg')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->name}}</p>
@@ -34,6 +34,11 @@
         <li class="header"><i class="fa fa-tachometer"></i> ADMIN OPERATIONS</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="{{ Request::is('admin/users') ? "active" : ""}}"><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>User Administration</span></a></li>
+        
+        @hasrole('Admin')
+        <li class="{{ Request::is(route('system-index')) ? "active" : ""}}"><a href="{{ route('system-index') }}"><i class="fa fa-cogs"></i> <span>System Operations</span></a></li>
+        @endhasrole
+
         <li class="{{ Request::is('admin-stats/stats') ? "active" : ""}}"><a href="{{ route('stats') }}"><i class="fa fa-bar-chart"></i> <span>Admin Stats</span></a></li>
 
         <li class="treeview {{ Request::is('admin/preenrolment') ? "active" : ""}}">

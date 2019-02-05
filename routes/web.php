@@ -28,6 +28,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     /**
      * Admin Routes
      */
+    Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
+    Route::get('system-index', 'SystemController@systemIndex')->name('system-index');
+
     Route::resource('newuser', 'NewUserController',['only' => ['index', 'show', 'update']]);
     Route::get('edit-new-user', ['as'=>'edit-new-user','uses'=>'NewUserController@editNewUser']);
 

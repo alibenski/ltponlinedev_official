@@ -54,7 +54,7 @@ class User extends Authenticatable
     }
     
     public function repos() {
-    return $this->hasMany('App\Repo'); 
+    return $this->hasMany('App\Repo', 'INDEXID', 'indexno'); 
     }
 
     public function preview() {
