@@ -55,13 +55,14 @@
                             @endif
                             <div class="col-md-12">
                                 <img src="/img/Logo2016_transparent.png" alt="CLM_logo">
-                            <h1 class="cover-heading tlt" style="margin-bottom: 50px;"> CLM Language Training Online Registration Platform</h1>
+                            <h1 class="cover-heading tlt" style="margin-bottom: 50px;"> UNOG-CLM  Language Training Programme (LTP) Online Enrolment Platform</h1>
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-6 b1">
                                     <div class="panel panel-success">
                                       <div class="panel-body btn-bg-img b1">
-                                        <p>You are already a CLM student and you received an email from CLM Language with your credentials. Click “Login” to enrol in courses.</p>
+                                        <p>You are already an UNOG-CLM Language Training Programme participant.
+                                        Click “login” to enrol on the language courses.</p>
                                         <p class="lead btn-bottom">
                                         <a href="{{ url('/login') }}" class="btn btn-lg btn-success">Login</a>
                                         </p>
@@ -72,7 +73,10 @@
                                 <div class="col-md-6 b1">
                                     <div class="panel panel-primary">
                                       <div class="panel-body btn-welcome-img b1">
-                                        <p>You are a new student and you have not received your credentials by email. Click “join” to create an account and enrol in CLM language courses.</p>
+                                        <p>
+                                        You are a new UNOG-CLM Language Training Programme participant.
+                                        Click “join” to create an account and enrol on the language courses.
+                                        </p>
                                         <p class="lead btn-bottom">
                                         {{-- <a href="/newuser/create" class="btn btn-lg btn-primary">Join</a> --}}
                                         <button class="btn btn-lg btn-primary show-modal">Join</button>
@@ -108,7 +112,7 @@
                         <div class="modal-body">
                             <form class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-5 question" for="id">Are you a UN Staff Member with an Umoja profile?</label>
+                                    <label class="control-label col-sm-5 question" for="id">Are you a UN staff member with an Umoja profile?</label>
                                     <a href="{{ url('/newuser/create') }}" class="btn btn-default">Yes</a>
                                     <a href="{{ route('get-new-outside-user') }}" class="btn btn-default">No </a>
                                 </div>                                

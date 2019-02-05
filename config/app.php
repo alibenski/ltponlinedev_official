@@ -12,8 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'CLM Language Training Online Registration Platform',
-
+    'name' => 'UNOG-CLM LTP Online Enrolment Platform',
     /*
     |--------------------------------------------------------------------------
     | Application Environment

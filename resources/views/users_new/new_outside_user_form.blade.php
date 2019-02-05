@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Registeration External</div>
+                <div class="panel-heading">External Registeration</div>
 
                 <div class="panel-body">
                     <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('post-new-outside-user-form') }}">
@@ -41,7 +41,7 @@
                         </div>
                         
                         <div class="form-group{{ $errors->has('contractfile') ? ' has-error' : '' }}">
-                            <label for="contractfile" class="col-md-4 control-label">Copy of Badge ID / Carte de Légitimation <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="contractfile" class="col-md-4 control-label">Copy of badge ID / Carte de légitimation <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6">
                             <input name="contractfile" type="file" class="col-md-12 form-control-static" required="required">
                                 @if ($errors->has('contractfile'))
@@ -120,7 +120,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('nameLast') ? ' has-error' : '' }}">
-                            <label for="nameLast" class="col-md-4 control-label">Last Name <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="nameLast" class="col-md-4 control-label">Last name <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
                                 <input id="nameLast" type="text" class="form-control" name="nameLast" value="{{ old('nameLast') }}" required autofocus>
@@ -134,7 +134,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('nameFirst') ? ' has-error' : '' }}">
-                            <label for="nameFirst" class="col-md-4 control-label">First Name <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="nameFirst" class="col-md-4 control-label">First name <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
                                 <input id="nameFirst" type="text" class="form-control" name="nameFirst" value="{{ old('nameFirst') }}" required autofocus>
@@ -148,7 +148,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Email Address <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="email" class="col-md-4 control-label">Professional email address <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
@@ -187,7 +187,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('contact_num') ? ' has-error' : '' }}">
-                            <label for="contact_num" class="col-md-4 control-label">Contact Number <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="contact_num" class="col-md-4 control-label">Contact number <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
                                 <input id="contact_num" type="text" class="form-control" name="contact_num" value="{{ old('contact_num') }}" required autofocus>
@@ -201,7 +201,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('dob') ? ' has-error' : '' }}">
-                            <label for="dob" class="col-md-4 control-label">Date of Birth <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="dob" class="col-md-4 control-label">Date of birth <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
                                 <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="dob">

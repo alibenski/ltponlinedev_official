@@ -25,7 +25,13 @@ class SystemController extends Controller
     		->get()
     		->pluck('email');
 
-    	$query_students_current_year = Repo::where('Term', '191' )
+    	$term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+    	if (count($term) < 1) {
+    		$request->session()->flash('warning', 'No emails sent! Create a valid term.');
+    		return redirect()->back();
+    	}
+
+    	$query_students_current_year = Repo::where('Term', $term->Term_Code )
     		->select('INDEXID')
     		->groupBy('INDEXID')
     		->with('users')

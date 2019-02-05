@@ -59,6 +59,7 @@
 
           <div class="form-group">
             <label for="Term_Prev" class="control-label">Previous Term Code: </label>
+            <p><small class="text-danger">For Winter Term, enter Spring Term Code</small></p>
             <input name="Term_Prev" type="text" class="form-control" value="">
           </div>          
 

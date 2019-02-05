@@ -5,10 +5,10 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading">Validation of Account</div>
+                <div class="panel-heading">Validation of account</div>
                 <div class="panel-body">
                     <div class="alert alert-info col-md-8 col-md-offset-2">
-                        <p class="small text-center"><strong>If you are an existing student of the UNOG Language Training Programme, please enter the email address you are using to receive convocation emails from CLM Language.</strong></p>
+                        <p class="small text-center"><strong>If you are an existing UNOG-CLM Language Training Programme participant, please enter the email address you are using to receive convocation emails from CLM Language.</strong></p>
                     </div>
                     <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('post-new-outside-user') }}">
                         {{ csrf_field() }}
