@@ -119,7 +119,7 @@ class PreenrolmentController extends Controller
         //                             ->get();
         //         Mail::to($recipient)->send(new SendMailable($input_course, $input_schedules, $staff));
         //     }
-        // } // end of foreach loop
+        } // end of foreach loop
 
         $remind_hr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_HR_After');
 
