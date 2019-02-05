@@ -107,7 +107,7 @@ class PlacementFormController extends Controller
 
         //         Mail::to($recipient)->send(new SendMailableReminderPlacement($input_course, $staff));
         //     }
-        // } // end of foreach loop
+        } // end of foreach loop
 
         $remind_hr_param = Term::where('Term_Code', $enrolment_term)->value('Remind_HR_After');
 
