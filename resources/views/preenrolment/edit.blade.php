@@ -47,7 +47,7 @@
         						<p>Supervisor's Approval: 
         							@if($schedule->is_self_pay_form == 1)
         							<span id="status" class="label label-info margin-label">
-        							N/A - Self Payment</span>
+        							N/A - Self-Payment</span>
         							@elseif(is_null($schedule->approval))
         							<span id="status" class="label label-warning margin-label">
         							Pending Approval</span>
@@ -84,7 +84,7 @@
         								@endif
         							@else
         							<span id="status" class="label label-info margin-label">
-        							N/A - Self Payment</span>
+        							N/A - Self-Payment</span>
         							@endif
         		                </p>
         		                <p>

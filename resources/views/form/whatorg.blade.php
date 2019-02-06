@@ -13,7 +13,7 @@
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="panel panel-info">
-          <div class="panel-heading">Enrolment Form for Semester: 
+          <div class="panel-heading">Enrolment Form for: 
             <strong>
               @if(empty($next_term))
               Enrolment Period Closed
@@ -27,8 +27,8 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
-                  <p class="text-justify">Welcome to the <strong>CLM Online Language Training Programme (LTP) Enrolment</strong> page. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
-                  <p>Please find and choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank"><strong>HERE</strong></a> before proceeding below. </p>                  
+                  <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
+                  <p>Please find and choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank"><strong>HERE</strong></a> before proceeding below. </p>                  
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
@@ -38,29 +38,29 @@
 
                       <div class="col-md-5">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
-                                <label for="decision1" class="form-control-static">I am paying for my enrolment / I am initially paying then my organization will reimburse</label>
+                                <label for="decision1" class="form-control-static">I am paying for my course / I am initially paying then my organization will reimburse</label>
                       </div>
 
                       <div class="col-md-4">
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-                                <label for="decision2" class="form-control-static">My organization is paying for my enrolment</label>
+                                <label for="decision2" class="form-control-static">My organization is paying for my course</label>
                       </div>
                 </div>
 
                 <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
                   <p>Before continuing, please follow the following instructions:</p>
                   <ol>
-                    <li>Choose from the latest available courses and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank">HERE</a></li>
-                    <li>Prepare a copy of proof of payment</li>
+                    <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank">HERE</a></li>
+                    <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
                     <li>Prepare a copy of your carte de légitimation or work certificate</li>
                   </ol>
-                  <p>After following the instructions, please answer the field(s) below and click the Next button to continue.</p>
+                  <p>After following the instructions, please fill in the fields below and click the "Next" button to continue.</p>
                   {{-- end of id="secretMsg1"  --}}
                 </div>
 
 
                 <div id="secretMsg2" class="col-md-12 alert alert-info" style="display: none">
-                  <p class='text-justify'>You confirmed that you work for a UN organization who is paying for your enrolment. Please answer the field(s) below. You can directly search your organization or scroll through the box. When done, click the Next button to continue.</p>
+                  <p class='text-justify'>You confirmed that you work for a UN organization which is paying for your enrolment. Please fill in the fields below. You can directly search for your organization or scroll through the box. When done, click the "Next" button to continue.</p>
                   {{-- end of id="secretMsg2"  --}}
                 </div>
                 
@@ -99,7 +99,7 @@
                         @endif
                       </select>
                     </div>
-                    <p class="small text-danger"><strong>Please check that you select the correct Organization in this field.</strong></p>
+                    <p class="small text-danger"><strong>You can search for your organization directly or scroll through the box / drop-down menu.</strong></p>
                   </div>
                 </div>
 

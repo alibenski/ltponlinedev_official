@@ -193,16 +193,16 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear CLM Learning Partner, </p>
-                                     <p> You are receiving this message to notify you that staff member, <strong>{{ $staff_member_name }}</strong>, has <strong>cancelled</strong> the placement test request for: <strong>{{ $display_language->languages->name }}</strong></p>
-                                     <p> Thank you very much for your kind attention.</p>
+                                     <p> You are receiving this message to notify you that staff member, <strong>{{ $staff_member_name }}</strong>, has <strong>cancelled</strong> their placement test request for: <strong>{{ $display_language->languages->name }}</strong></p>
+                                     <p> Kind regards,</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Chère ou cher partenaire de formation, </p>
-                                     <p> Vous recevez ce message pour vous informer que le membre du personnel, <strong>{{ $staff_member_name }}</strong>, a <strong>annulé</strong> sa demande de test de placement pour un cours dans la langue suivante : <strong>{{ $display_language->languages->name }}</strong></p>
-                                     <p> Bien cordialement.</p>
+                                     <p> Vous recevez ce message pour vous informer que le membre du personnel, <strong>{{ $staff_member_name }}</strong>, a <strong>annulé</strong> sa demande de test de placement pour un cours dans la langue suivante : <strong>{{ $display_language->languages->name_fr }}</strong></p>
+                                     <p> Cordialement.</p>
                                 </td>
                             </tr>
                             <!-- <tr>
@@ -285,7 +285,7 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <p style="margin: 0;text-align:center;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
-                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. To meet this goal, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
                                 </td>
                             </tr>
                         </table>

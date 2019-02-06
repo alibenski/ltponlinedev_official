@@ -88,7 +88,7 @@
 				<td>
 					@if($form->is_self_pay_form == 1)
 					<span id="status" class="label label-info margin-label">
-					N/A - Self Payment</span>
+					N/A - Self-Payment</span>
 					@elseif(is_null($form->approval))
 					<span id="status" class="label label-warning margin-label">
 					Pending Approval</span>
@@ -125,7 +125,7 @@
 						@endif
 					@else
 					<span id="status" class="label label-info margin-label">
-					N/A - Self Payment</span>
+					N/A - Self-Payment</span>
 					@endif
 				</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif

@@ -64,14 +64,14 @@
 					</div>
 					
 					<div class="form-group">
-						<label for="">Course Description</label>
+						<label for="">Course Name</label>
 						<div>
 							<input name="Description" type="text" style="width: 100%" required="">
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label for="">Course Description (French)</label>
+						<label for="">Course Name (French)</label>
 						<div>
 							<input name="FDescription" type="text" style="width: 100%" required="">
 						</div>

@@ -15,12 +15,12 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-          <div class="panel-heading"><strong>Self Payment</strong> Enrolment Form for Semester: 
+          <div class="panel-heading"><strong>Self-Payment</strong> Enrolment Form for: 
             <strong>
               @if(empty($next_term && $terms)) 
               NO DB ENTRY
               @else 
-              {{ $terms->Term_Code.' - '.$terms->Term_Name.' - '.$terms->Comments.' Season' }}
+              {{ $terms->Term_Code.' - '.$terms->Term_Name.' - '.$terms->Comments.' Term' }}
               @endif
             </strong>
           </div>
@@ -87,7 +87,7 @@
                 </div>
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Enrol to which language:</label>
+                        <label class="col-md-3 control-label">Select language:</label>
                               <div class="col-md-8">
                                   @foreach ($languages as $id => $name)
                                 <div class="input-group col-md-9">
@@ -119,7 +119,7 @@
                                 <div class="disclaimer-consent alert alert-default alert-block col-md-10 col-md-offset-1">
                                   <p class="small text-danger"><strong>Required field</strong></p>
                                   <input id="consentBtn" name="consentBtn" class="with-font" type="radio" value="1" required="required">
-                                  <label for="consentBtn" class="form-control-static">@if($user->sddextr->torgan['Org name'] != '999') By attaching the proof of payment and checking this option, I confirm and assure that my manager and/or HR Staff and Development office approved this payment-based enrolment. @else By attaching the proof of payment and checking this option, I confirm and assure that I am a spouse of a UN staff member. @endif
+                                  <label for="consentBtn" class="form-control-static">@if($user->sddextr->torgan['Org name'] != '999') By ticking this option, I confirm that my manager and/or HR Staff and Development office has/have agreed that I will be able to attend the course. @else By ticking this option, I confirm I am  the spouse of a UN staff member. @endif
                                   </label>
                                 </div>
                           </div>  
@@ -132,7 +132,7 @@
                     <div class="placementTestMsg " style="display: none">
                       <div class="alert alert-warning">
                         <p>Our records show that either you are a new student or you have not been enrolled on the selected language course during the past two terms.</p>
-                        <p>You are required to take a <strong>Placement Test</strong> unless you are a complete beginner.</p>
+                        <p>You are required to take a <strong>placement test</strong> unless you are a complete beginner.</p>
                         
                         <div class="form-group">
                               <label class="col-md-4 control-label">Are you a complete beginner?</label>
@@ -152,13 +152,12 @@
                   <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
                     <div class="col-md-12">
                       <div class="panel panel-info">
-                        <div class="panel-heading col-md-12"><strong>Placement Test Dates</strong></div>
+                        <div class="panel-heading col-md-12"><strong>Placement test dates</strong></div>
                         <div class="panel-body">
                           <div class="row col-md-10 col-md-offset-1">
-                            <div class="alert alert-info alert-dismissible">
+                            <div class="alert alert-info alert-dismissible alert-placement-instruction">
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                              <p>Please select a date for your placement test from the options available. If you are unable to take the test on the given dates, then apply again in the next enrolment period.</p> 
-                                <p>Fill out the <em>optional</em> comment box for any concerns about the placement test.</p>
+                              <p>Please select a date (required) for your placement test from the options available. If you are unable to take the placement test on the given dates, then please write the reason in the comments box and indicate your availability.  Where possible, we will try to accommodate your wishes.  If it is not possible, you will need to apply again for the following term.</p> 
                             </div>
                           </div>
                           
@@ -175,9 +174,9 @@
                               <div class="insert-msg"></div>
 
                               <div class="col-md-12 form-group">
-                                <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                                <label class="col-md-3 control-label">Comments: <i>(optional)</i></label>
                                 <div class="col-md-8 ">
-                                <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="concerns about the placement test e.g. date/time constraints, etc."></textarea>
+                                <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="For queries or comments about the placement test e.g. time, place, date, constraints, etc."></textarea>
                                 </div>
                               </div>
 
@@ -189,12 +188,11 @@
 
                     <div class="col-md-12">
                       <div class="panel panel-danger">
-                        <div class="panel-heading col-md-12"><strong>Information About Your Course Preference</strong></div>
+                        <div class="panel-heading col-md-12"><strong>Information about your course preference</strong></div>
                         <div class="panel-body">
                           <div class="row col-md-10 col-md-offset-1">
                             <div class="alert alert-danger">
-                            <p>Please indicate the time(s) and the date(s) of your availability to attend the course. Check all that apply. <br><br> 
-                            Merci de préciser les heures et les jours auxquel vous êtes disponible d'assister aux cours. Sélectionnez toutes les réponses appropriées.</p>
+                            <p>Please indicate the time and the days you are available to attend the course. Check/tick all that apply.</p>
                             </div>
                           </div>
                           <div class="row panel panel-danger col-md-10 col-md-offset-1">
@@ -204,7 +202,7 @@
                                 <div class="col-md-12">
                                       <div class="input-group col-md-12">                             
                                         <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
-                                        <label for="morning" class="form-control-static">morning</label>
+                                        <label for="morning" class="form-control-static">Morning (8 to 9.30 or 10 a.m.) </label>
                                       </div>
                                       {{-- <div class="input-group col-md-12">
                                         <input id="lunchtime1" name="timeInput[]" class="with-font" type="checkbox" value="lunchtime1">
@@ -216,7 +214,7 @@
                                       </div> --}}
                                       <div class="input-group col-md-12">
                                         <input id="afternoon" name="timeInput[]" class="with-font" type="checkbox" value="afternoon">
-                                        <label for="afternoon" class="form-control-static">afternoon</label>
+                                        <label for="afternoon" class="form-control-static">Afternoon (12.30 to 2 or 2.30 p.m.)</label>
                                       </div>
                                  </div>
                               </div>
@@ -237,7 +235,7 @@
                             </div>
 
                             <div class="col-md-12 form-group">
-                              <label class="col-md-3 control-label">Comment: <i>(required)</i></label>
+                              <label class="col-md-3 control-label">Comments: <i>(required)</i></label>
                               <div class="col-md-8 pink-border">
                               <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, passed LPE, etc." required=""></textarea>
                               </div>
@@ -254,14 +252,14 @@
                     <div class="alert alert-info alert-dismissible">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Thank you for your response, {{Auth::user()->sddextr->FIRSTNAME}}.</p>
-                      <p>You have answered <strong>YES</strong>. The beginner course for your selected language has been automatically filled in. Click the "Available class schedule" field to check their availability.</p>
+                      <p>You have answered <strong>YES</strong>. The beginner course for your selected language has been automatically filled in. Click the "Available for the following schedule(s)" field to check its availability.</p>
                     </div>
                   </div>
 
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
                     <div class="form-group">
-                        <label for="course_id" class="col-md-3 control-label">Available course: </label>
+                        <label for="course_id" class="col-md-3 control-label">Course selected: </label>
                         <div class="col-md-8">
                           <div class="dropdown">
                             <select class="col-md-8 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
@@ -272,7 +270,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="schedule_id" class="col-md-3 control-label">Available schedules (2 max): </label>
+                        <label for="schedule_id" class="col-md-3 control-label">Available for the following schedule(s): </label>
                         <button type="button" class="multi-clear button btn btn-danger" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
                         <div class="col-md-8">
                           <div class="dropdown">
@@ -286,15 +284,16 @@
                     <div class="form-group col-md-12">
                       <div class="disclaimer-flexible alert alert-default alert-block col-md-8 col-md-offset-3">
                         <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleBtn" class="form-control-static">Please check this box if you will be flexible to take another schedule should the classes be full for this course. 
+                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another schedule (days/times) if the selected class is full. 
                         </label>
                       </div>
                     </div> 
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Comment: <i>(optional)</i></label>
+                        <label class="col-md-3 control-label">Comments: <i>(optional)</i></label>
                         <div class="col-md-8">
-                          <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder="Put your concerns regarding..."></textarea>
+                          <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder="Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints."></textarea>
+                          <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small>
                         </div>
                     </div>
 
@@ -323,14 +322,14 @@
                           <div class="disclaimer alert col-md-8 col-md-offset-2">
                                     <p class="small text-danger"><strong>Required field</strong></p>
                                     <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
-                                    <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular</a> regarding language courses at UNOG.</label>
+                                    <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular</a> regarding the Language Training Programme at UNOG.</label>
                           </div>
                     </div>
 
                     <div class="form-group col-md-12">
                       <div class="disclaimer alert alert-danger col-md-8 col-md-offset-2">
                         <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
-                        <p><strong></strong>Enter text explaining 1 form is for 1 language before submit button</p>
+                        <p><strong>If you wish to enrol on two courses for the same term, you need to submit another form.</strong> However, if you wish to take one course, but are not sure which one to select, please indicate it in the comments box above. Do not fill in several forms. <strong>One form = one course</strong>.</p>
                       </div>
                     </div>
 
@@ -402,7 +401,7 @@
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
         $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form
-        $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='label label-danger'>Scheduled for Placement Test");
+        $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='label label-danger'>Scheduled for placement test");
       });
     }); 
   });
@@ -421,12 +420,15 @@
       $('.insert-container').append('<div class="insert-msg"></div>')
 
       if ($(this).val() == 'F') {
-        $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
+        $(".alert-placement-instruction").addClass('hidden');
+        $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is online. You may take the test online any time in the indicated period below. Click on the button if you agree.</label>').fadeIn('fast');
       } 
       else if ($(this).val() == 'E') {
+        $(".alert-placement-instruction").removeClass('hidden');
         $(".place-here").hide().append('<label for="scheduleChoices">If you are in Geneva, please select one of the dates shown. If you are outside Geneva, please select the <em>online</em> option.</label>').fadeIn('fast');
       } else {
-        $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
+        $(".alert-placement-instruction").removeClass('hidden');
+        $(".place-here").hide().append('<label for="scheduleChoices">Placement test date(s):</label>').fadeIn('fast');
       }
 
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');

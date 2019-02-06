@@ -8,11 +8,11 @@
               	</p>
                 <p><span><i class="fa fa-clock-o fa-spin fa-lg" style="margin-right: 10px;" aria-hidden="true"></i></span><strong>{{ $value->schedule->name }}</strong></p>
                 <p>Organization: @if(is_null($value->DEPT)) - @elseif($value->DEPT == 999) SPOUSE @else {{ $value->DEPT }} @endif</p>
-                <p>Supervisor's email: @if($value->is_self_pay_form == 1) N/A - Self Payment @else {{$value->mgr_email}} @endif</p>
+                <p>Supervisor's email: @if($value->is_self_pay_form == 1) N/A - Self-Payment @else {{$value->mgr_email}} @endif</p>
                 <p>Supervisor's Approval: 
 					@if($value->is_self_pay_form == 1)
 					<span id="status" class="label label-info margin-label">
-					N/A - Self Payment</span>
+					N/A - Self-Payment</span>
 					@elseif(is_null($value->approval))
 					<span id="status" class="label label-warning margin-label">
 					Pending Approval</span>
@@ -49,7 +49,7 @@
 						@endif
 					@else
 					<span id="status" class="label label-info margin-label">
-					N/A - Self Payment</span>
+					N/A - Self-Payment</span>
 					@endif
                 </p>
                 <p>

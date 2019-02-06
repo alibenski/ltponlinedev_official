@@ -31,7 +31,7 @@
             <div class="row">
               <div class="col-md-10 col-md-offset-1"> 
                 <div class="left-text col-md-8">
-                  <h4><em>Thank You</em><br>Your request has been submitted to the Language Secretariat for processing</h4>
+                  <h4><em>Thank You</em><br>Your self-payment form has been submitted to the Language Secretariat for processing</h4>
                   <p>You will receive email notifications to let you know about the status of your request and other information.</p>
 	                <div>
 	                	<a href="/home" class="btn btn-success">Back to Home Page</a>

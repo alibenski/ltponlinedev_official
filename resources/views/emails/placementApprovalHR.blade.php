@@ -193,10 +193,11 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear CLM Learning Partner, </p>
-                                     <p> The staff member, {{ $staff_name }}, would like to take a placement test for a language course at CLM in <strong>{{ $input_course->languages->name }}</strong> to attend classes <strong>from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
-                                     <p>The placement test will be <strong> @if ($input_course->L == 'F') from {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else on {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
+                                     <p> The staff member, {{ $staff_name }}, would like to take a placement test for a/an <strong>{{ $input_course->languages->name }}</strong> language course at CLM  and attend classes <strong> from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
+
+                                     <p>The placement test will be <strong> @if ($input_course->placementSchedule->is_online == 1) online from {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else on {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
-                                    <p>The request above has initially been agreed on by the staff member and the staff member's supervisor.</p>
+                                    <p>The request above was made by the staff member and has been provisionally approved by their supervisor.</p>
                                      <p>Please click on the button below to access the validation page.</p>
                                 </td>
                             </tr>
@@ -219,17 +220,17 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Chère ou cher Partenaire de formation, </p>
-                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait passer un test de placement pour suivre un  cours de langue dispensé par le CFM  en <strong>{{ $input_course->languages->name }}</strong><strong> du {{ $term_fr }}</strong></p>
-                                     <p>Le test de placement aura lieu au moment <strong> @if ($input_course->L == 'F') du {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} au {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else le {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
+                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait passer un test de placement pour suivre un  cours de langue dispensé par le CFM en <strong>{{ $input_course->languages->name_fr }}</strong><strong> du {{ $term_fr }}</strong></p>
+                                     <p>Le test de placement aura lieu au moment <strong> @if ($input_course->placementSchedule->is_online == 1) du {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} au {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }} en ligne. @else le {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
-                                    <p>Veuillez noter que la demande pour le test de placement a été agreed on by the staff and the staff member's supervisor.</p>
+                                    <p>Veuillez noter que la demande pour le test de placement a été initialement approuvée par le ou la superviseur.e du membre du personnel.</p>
                                      <p>Veuillez cliquez s'il vous plaît sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Once you submit your decision, you will receive an email confirming your choice. Should you change your decision, please contact the Language Training Secretariat via email: clm_language@un.org</p>
+                                    <p style="margin: 0;">Once you have submitted your decision, you will receive an email confirming your choice. Should you change your decision, please contact the Language Training Secretariat via email: clm_language@un.org</p>
                                 </td>
                             </tr>
                             <tr>
@@ -297,7 +298,7 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <p style="margin: 0;text-align:center;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
-                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. To meet this goal, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
                                 </td>
                             </tr>
                         </table>

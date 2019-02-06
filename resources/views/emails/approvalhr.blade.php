@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     
                                      <p> Dear CLM Learning Partner, </p>
-                                     <p> Staff Member, {{ $staff_name }}, would like to enrol to CLM language course: <strong> {{ $input_course->courses->Description }} ({{ $term_en }} {{ $term_season_en }})</strong></p>
+                                     <p> Staff Member, {{ $staff_name }}, would like to enrol on a CLM language course: <strong> {{ $input_course->courses->Description }} ({{ $term_en }} {{ $term_season_en }})</strong></p>
                                      <p> The staff member chose the following options for class schedule(s):</p>
                                      <ol>
                                      @foreach($formItems as $form)   
@@ -208,8 +208,8 @@
                                      </li>
                                      @endforeach
                                      </ol>
-                                     <p>Please note that the enrolment above has initially been agreed on by the staff and the staff member's supervisor.</strong></p>
-                                     <p>Please click on the button below to access the decision page.</p>
+                                     <p>Please note that the enrolment above has received initial approval  from the staff member's supervisor.</strong></p>
+                                     <p>Please click on the button below to access the validation page.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -231,7 +231,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     
                                      <p> Chère ou cher Partenaire de formation, </p>
-                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant : <strong> {{ $input_course->courses->Description }} ({{ $term_fr }} {{ $term_season_fr }}) </strong></p>
+                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant : <strong> {{ $input_course->courses->FDescription }} ({{ $term_fr }} {{ $term_season_fr }}) </strong></p>
                                      <p> Le membre du personnel a indiqué comme options possibles les horaires suivants :</p>
                                      <ol>
                                      @foreach($formItems as $form)   
@@ -246,14 +246,14 @@
                                      </li>
                                      @endforeach
                                      </ol>
-                                     <p>Les choix d’horaires ci-dessus has initially been agreed on by the staff and par le ou la superviseur.</strong></p>
+                                     <p>Les choix d’horaires ci-dessus ont été initialement approuvés par le ou la superviseur(e).</strong></p>
                                      <p>Veuillez cliquer sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further evaluation of the Language Secretariat.</p>
+                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change when the Language Training Programme secretariat finalises the programme for the term.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -321,7 +321,7 @@
                             <tr>
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <p style="margin: 0;text-align:left;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
-                                    <p style="margin: 0;text-align: left;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                    <p style="margin: 0;text-align: left;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. To meet this goal, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
                                     <br>
                                     <p style="margin: 0;text-align:left;"><strong>Le Programme de formation linguistique à l'Office des Nations Unies à Genève</strong></p> 
                                     <p style="margin: 0;text-align: left;">Nous croyons au multilinguisme et au multiculturalisme en tant qu'éléments clés de la compréhension mutuelle dans un contexte mondial. À cette fin, nous proposons des cours de langues dans les six langues officielles des Nations Unies (anglais, arabe, chinois, espagnol, français et russe).</p>

@@ -118,7 +118,7 @@
                                 @if($form->cancelled_by_student == 1)
                                   <span class="label label-danger margin-label">Enrolment Form Cancelled By Student</span>
                                 @endif 
-                                <h4><strong>Enrolment Form # {{ $form->eform_submit_count }}</strong> @if($form->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif </h4>
+                                <h4><strong>Enrolment Form # {{ $form->eform_submit_count }}</strong> @if($form->is_self_pay_form == 1)<span class="label label-default margin-label">Self-Payment-based Form</span> @endif </h4>
                                 <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
                                 
                                     <div class="col-sm-6">
@@ -194,7 +194,7 @@
                     @endif
 
                     <h4><strong>Placement Test Request Form # {{ $plform->eform_submit_count }}</strong></h4>
-                    <h5>@if($plform->is_self_pay_form == 1)<span class="label label-default margin-label">Self Payment-based Form</span> @endif</h5> 
+                    <h5>@if($plform->is_self_pay_form == 1)<span class="label label-default margin-label">Self-Payment-based Form</span> @endif</h5> 
                     <h5>Language: <strong>{{ $plform->languages->name }}</strong></h5>
                     <h5>@if($plform->placementSchedule->is_online == 1)Test Date: Online from <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> to <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam_end)) }}</strong> @else Test Date: <strong>{{ date('d M Y', strtotime($plform->placementSchedule->date_of_plexam)) }}</strong> @endif</h5>
                     
@@ -227,7 +227,7 @@
                       @endif
                     @else
                     <span id="status" class="label label-info margin-label">
-                    N/A - Self Payment</span>
+                    N/A - Self-Payment</span>
                     @endif
                     </p>
 

@@ -5,18 +5,18 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>A kind reminder to Self Paying Students</h4></span>
+                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>Reminder for self-paying students</h4></span>
             </div>
             <div class="modal-body">
                 <p>This enrolment form is on a fee-paying basis. Please have the following ready:</p>
                 <ul>
-                    <li>Course and schedule of your choice</li>
-                    <li>Copy of proof of payment</li>
+                    <li>The course and schedule selected</li>
+                    <li>Copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
                     <li>Copy of your carte de légitimation or employee attestation</li>
                 </ul>
-                <p>You are eligible to this enrolment form if you are a member of:</p>
+                <p>You are eligible to use this enrolment form if you are a member of:</p>
                 <ul>
-                    <li>Staff of permanent Missions, including observer Missions
+                    <li>Staff of permanent missions, including observer missions
                     <li>Staff of service organizations in the Palais des Nations</li></li>
                     <li>UNOG tour guides</li>
                     <li>Employees of NGOs accredited to the UN</li>
@@ -25,7 +25,7 @@
                     <li>Consultants working with UN organizations and agencies</li>
                     <li>Spouses of international civil servants</li>
                     <li>UN Secretariat retirees</li>
-                    <li>Interns (only considered if their internship covers the term. Interns have no priority over the above categories)</li>
+                    <li>Interns (only considered if their internship covers the term. Interns have no priority over the categories above)</li>
                 </ul>
                 <p>Read more about <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>eligibility</strong> HERE</a>. Thank you for your cooperation.</p>
             </div>

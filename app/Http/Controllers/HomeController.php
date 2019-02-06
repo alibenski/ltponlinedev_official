@@ -161,19 +161,19 @@ class HomeController extends Controller
             ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
 
         if ($request->decision == 1) {
-            session()->flash('success','Please fill up the payment-based enrolment form');
+            session()->flash('success','Please fill in the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
         } 
         elseif ($request->decision == 0 && $org_status == 1) {
-            session()->flash('success','Please fill up the payment-based enrolment form');
+            session()->flash('success','Please fill in the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
         } 
         elseif ($request->decision == 0 && $org_status == 0) {
-            session()->flash('success','Please fill up the enrolment form');
+            session()->flash('success','Please fill in the enrolment form');
             return redirect(route('myform.create'));
         } 
         // elseif ($request->decision == 0) {
-        //     session()->flash('success','Please fill up the enrolment form');
+        //     session()->flash('success','Please fill in the enrolment form');
         //     return redirect(route('myform.create'));
         // } 
         else 

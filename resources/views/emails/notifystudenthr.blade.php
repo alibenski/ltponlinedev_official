@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your enrolment in the CLM language course, <strong>{{ $input_course->courses->Description }}</strong>, has been decided. </p>
+                                     <p> Your enrolment in <strong>{{ $input_course->courses->Description }}</strong> has been reviewed.</p>
 
                                         <div class="row">
                                           <div class="col-md-12">
@@ -230,18 +230,18 @@
                                         @if( $input_course->approval_hr == 1)
                                                 approved 
                                         @else
-                                                <span style="color: red;">disapproved</span>
+                                                <span style="color: red;">rejected</span>
                                         @endif
-                                      </strong> your enrolment.</p>
-                                      <p><strong>Comment/Reason:</strong>
-                                        <br>                                      
+                                      </strong> your enrolment for the following reasons:</p>
+                                      <p><strong>                                   
                                         @if( empty($request->hr_comment))
                                             None
                                         @else 
                                             {{$request->hr_comment}}
                                         @endif
+                                        </strong>
                                       </p>
-                                      <p>Please be reminded that <strong style="color: red;">this is not a convocation email.</strong> If approved, your enrolment will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
+                                      <p>Please note that <strong style="color: red;">this is not a convocation email.</strong> If approved, your enrolment will be processed by the Language Training Secretariat, and you will receive further information about your registration.</p>
                                       <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
                                 </td>
                             </tr>
@@ -249,13 +249,13 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Cher/Chère {{ $staff_name }}, </p>
-                                     <p> Votre inscription au cours de langue du CFM, <strong>{{ $input_course->courses->Description }}</strong>, a été décidée. </p>
+                                     <p> Votre inscription au cours de langue du CFM, <strong>{{ $input_course->courses->Description }}</strong>, a été examinée. </p>
 
                                         <div class="row">
                                           <div class="col-md-12">
                                             <table class="table">
                                               <thead>
-                                                <th>Calendrier possible : </th>
+                                                <th>Horaires possibles : </th>
                                               </thead>
 
                                               <tbody>
@@ -288,17 +288,17 @@
                                         @else
                                                 <span style="color: red;">désapprouvé</span>
                                         @endif
-                                      </strong> votre inscription.</p>
-                                      <p><strong>Commentaires/Raisons :</strong>
-                                        <br>                                      
+                                      </strong> votre inscription pour la raison suivante :</p>
+                                      <p><strong>                               
                                         @if( empty($request->hr_comment))
                                             Aucun
                                         @else 
                                             {{$request->hr_comment}}
                                         @endif
+                                        </strong>
                                       </p>
                                       <p>Veuillez noter que <strong style="color: red;">ceci n’est pas un email de convocation.</strong> Si approuvé, votre inscription sera maintenant traitée par le secrétariat du Programme de formation linguistique et vous recevrez ensuite de plus amples informations quant à votre inscription.</p>
-                                      <p><strong>NOTE: </strong>Pour toute question quant à la décision ci-dessus, veuillez contacter directement les ressources humaines ou le bureau du développement du personnelde votre organisation.</p>
+                                      <p><strong>NOTE: </strong>Pour toute question relative à la décision ci-dessus, veuillez contacter directement les ressources humaines ou le bureau du développement du personnelde votre organisation.</p>
                                 </td>
                             </tr>
                             <tr>
@@ -319,13 +319,13 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Disclaimer</h2>
-                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change upon further modification made by the secretariat of the Language Training Programme.</p>
+                                    <p style="margin: 0;">Please note that the class schedules are not fixed and there is a possibility that they could change when the secretariat finalises the programme.</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">Avertissement </h2>
-                                    <p style="margin: 0;">Veuillez noter la possibilité que les horaires des cours changent suite à une modification du secrétariat du Programme de formation linguistique.</p>
+                                    <p style="margin: 0;">Veuillez noter la possibilité que les horaires des cours changent lors de la finalisation de l’emploi du temps.</p>
                                 </td>
                             </tr>
                         </table>
@@ -387,7 +387,7 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <p style="margin: 0;text-align:center;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
-                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. To meet this goal, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
                                 </td>
                             </tr>
                         </table>

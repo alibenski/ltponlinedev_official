@@ -5,7 +5,7 @@
         placeholder: 'Select Course Here',
         "language": {
             "noResults": function(){
-                return "<strong class='text-danger'>Sorry No Courses Offered for this Language this Semester. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the availability of courses and classes</a>";
+                return "<strong class='text-danger'>Sorry no schedule offered for this course this term. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the available courses and their schedules</a>";
                 }
         },
         escapeMarkup: function (markup) {
@@ -27,7 +27,7 @@
         placeholder: 'Choose Here',
         "language": {
             "noResults": function(){
-                return "<strong class='text-danger'>Sorry No Classes Offered for this Course this Semester. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the availability of courses and classes</a>";
+                return "<strong class='text-danger'>Sorry no schedule offered for this course this term. </strong><br> <a href='https://learning.unog.ch/language-index' target='_blank' class='btn btn-info'>click here to see the available courses and their schedules</a>";
                 }
         },
         escapeMarkup: function (markup) {

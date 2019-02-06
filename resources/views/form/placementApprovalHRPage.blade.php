@@ -68,7 +68,7 @@
                       <thead>
                         <th>Language Course</th>
                         <th>Date Duration of Classes</th>
-                        <th>Manager's Decision</th>
+                        <th>Manager's Approval</th>
                       </thead>
 
                       <tbody>                       
@@ -96,7 +96,7 @@
 
                 <!-- MAKE A DECISION SECTION -->
                 <div class="alert alert-warning col-md-6 col-md-offset-3 text-center">
-                  <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once a decision has been submitted. Thank you for your kind attention. 
+                  <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once your decision is submitted.
                 </div>
                 <div class="form-group col-md-12">
                     <label class="col-md-3 control-label">Do you approve the request?</label>
@@ -132,8 +132,7 @@
                       Confirmation
                     @endslot
                     @slot('body')
-                      <p>Once you submit your decision, you agree that this is final and cannot be revoked. You are also responsible for any financial implications this may have for your organization.</p>
-                      <p>Please double check your decision as this may implicate possible billing to your organization. Thank you for your kind attention.</p>
+                      <p>Please double check before submitting your decision as this may implicate your organization being billed. Once you have submitted your decision, you agree that this is final and cannot be revoked. </p>
                     @endslot
                     @slot('buttonoperation')
                       <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
