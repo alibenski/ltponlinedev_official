@@ -70,6 +70,13 @@
 						</div>
 					</div>
 
+					<div class="form-group">
+						<label for="">Course Description (French)</label>
+						<div>
+							<input name="FDescription" type="text" style="width: 100%" required="">
+						</div>
+					</div>
+
 					<div class="row">
 			          <div class="col-md-2 col-md-offset-4">
 			            <a href="{{ route('courses.index') }}" class="btn btn-danger btn-block">Back</a>

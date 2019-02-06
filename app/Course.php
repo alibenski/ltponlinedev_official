@@ -14,7 +14,7 @@ class Course extends Model
     }
 
     public function users() {
-    return $this->hasMany('App\User'); 
+    return $this->hasOne('App\User','id', 'created_by'); 
     }
     
     public function language() {

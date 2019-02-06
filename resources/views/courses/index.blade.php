@@ -46,7 +46,9 @@
 					{{-- <th>#</th> --}}
 					<th>Code</th>
 					<th>Course Name</th>
+					<th>Course Name (Fr)</th>
 					<th>Language</th>
+					<th>Created By</th>
 					<th>Operation</th>
 				</thead>
 
@@ -57,7 +59,9 @@
 							{{-- <th>{{ $course->id }}</th> --}}
 							<td>{{ $course->Te_Code_New }}</td>
 							<td>{{ $course->Description }}</td>
+							<td>{{ $course->FDescription }}</td>
 							<td>{{ $course->language->name }}</td>
+							<td>@if(empty($course->users)) @else {{ $course->users->name }} @endif</td>
 							<td><a href="{{ route('courses.edit', $course->id)}}" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach

@@ -46,7 +46,7 @@ class User extends Authenticatable
     }
 
     public function courses() {
-    return $this->belongsTo('App\Course', 'course_id'); 
+    return $this->belongsTo('App\Course', 'created_by'); 
     }
 
     public function languages() {

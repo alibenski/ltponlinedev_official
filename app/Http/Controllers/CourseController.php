@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Course;
-use App\User;
-use App\Schedule;
 use App\Classroom;
+use App\Course;
+use App\Schedule;
 use App\Term;
+use App\User;
 use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -88,12 +89,24 @@ class CourseController extends Controller
     {
         // validate the data
         $this->validate($request, array(
-                //'name' => 'required|max:255',
+                'L' => 'required|',
+                'CourseType' => 'required|',
+                'LevelType' => 'required|',
+                'Order' => 'required|',
+                'Description' => 'required|',
+                'FDescription' => 'required|',
             ));
 
         // store in database
         $course = new Course;
-        
+        $course->Te_Code = $request->L.$request->LevelType.$request->CourseType.$request->Order;
+        $course->Te_Code_New = $request->L.$request->LevelType.$request->CourseType.$request->Order;
+        $course->L = $request->L;
+        $course->Description = $request->Description;
+        $course->EDescription = $request->Description;
+        $course->FDescription = $request->FDescription;
+        $course->created_by = Auth::user()->id;
+        $course->save();
         // variable course refers to schedule function in Course.php model
         // then syncs the data to schedules MySQL table
         // $course->schedule()->sync($request->schedules, false);
