@@ -87,8 +87,12 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        $TeCodeNew = $request->L.$request->LevelType.$request->CourseType.$request->Order;
+        $request->request->add(['Course_Code' => $TeCodeNew]); //add to $request
+
         // validate the data
         $this->validate($request, array(
+                'Course_Code' => 'unique:LTP_CR_LIST,Te_Code_New|',
                 'L' => 'required|',
                 'CourseType' => 'required|',
                 'LevelType' => 'required|',
