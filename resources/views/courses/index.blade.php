@@ -41,33 +41,33 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<table class="table">
-				<thead>
-					{{-- <th>#</th> --}}
-					<th>Code</th>
-					<th>Course Name</th>
-					<th>Course Name (Fr)</th>
-					<th>Language</th>
-					<th>Created By</th>
-					<th>Operation</th>
-				</thead>
+			<div class="filtered-table table-responsive">
+				<table class="table table-bordered table-striped">
+					<thead>
+						{{-- <th>#</th> --}}
+						<th>Operation</th>
+						<th>Code</th>
+						<th>Course Name</th>
+						<th>Course Name (Fr)</th>
+						<th>Language</th>
+						<th>Created By</th>
+					</thead>
 
-				<tbody>
-					@foreach($courses as $course)
-						
-						<tr>
-							{{-- <th>{{ $course->id }}</th> --}}
-							<td>{{ $course->Te_Code_New }}</td>
-							<td>{{ $course->Description }}</td>
-							<td>{{ $course->FDescription }}</td>
-							<td>{{ $course->language->name }}</td>
-							<td>@if(empty($course->users)) @else {{ $course->users->name }} @endif</td>
-							<td><a href="{{ route('courses.edit', $course->id)}}" class="btn btn-default btn-sm">Edit</a></td>
-						</tr>
-					@endforeach
-
-				</tbody>
-			</table>
+					<tbody>
+						@foreach($courses as $course)
+							<tr>
+								{{-- <th>{{ $course->id }}</th> --}}
+								<td><a href="{{ route('courses.edit', $course->id)}}" class="btn btn-warning btn-sm">Edit</a></td>
+								<td>{{ $course->Te_Code_New }}</td>
+								<td>{{ $course->Description }}</td>
+								<td>{{ $course->FDescription }}</td>
+								<td>{{ $course->language->name }}</td>
+								<td>@if(empty($course->users)) @else {{ $course->users->name }} @endif</td>
+							</tr>
+						@endforeach
+					</tbody>
+				</table>
+			</div>
 			{{ $courses->links() }}		
 		</div>
 	</div>

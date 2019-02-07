@@ -51,7 +51,7 @@ class CourseController extends Controller
                 $courses = $courses->orderBy('created_at', \Request::input('sort') );
                 $queries['sort'] = \Request::input('sort');
             }
-        $courses = $courses->whereNotNull('Te_Code_New')->paginate(10)->appends($queries);
+        $courses = $courses->whereNotNull('Te_Code_New')->paginate(20)->appends($queries);
 
         return view('courses.index')->withCourses($courses)->withLanguages($languages);
     }
@@ -154,13 +154,16 @@ class CourseController extends Controller
         // Validate data
         $course = Course::find($id);
             $this->validate($request, array(
-                'name' => 'required|max:255',
+                'CourseName' => 'required|max:255',
+                'FrenchCourseName' => 'required|max:255',
             )); 
 
         // Save the data to db
         $course = Course::find($id);
 
-        $course->name = $request->input('name');
+        $course->Description = $request->CourseName;
+        $course->FDescription = $request->FrenchCourseName;
+        $course->updated_by = $request->user_id;
         $course->save();         
         // Set flash data with message
         $request->session()->flash('success', 'Changes have been saved!');
