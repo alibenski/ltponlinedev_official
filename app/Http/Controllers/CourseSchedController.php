@@ -226,7 +226,17 @@ class CourseSchedController extends Controller
      */
     public function edit($id)
     {
-        return view('courses_schedules.edit');
+        $course_schedule = CourseSchedule::find($id);
+        $languages = Language::pluck("name","code")->all();
+        $schedules = Schedule::pluck("name","id")->all();
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en","id")->all();
+        $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en","id")->all();
+        $teachers = Teachers::where('In_Out', '1')->get();
+        $rooms = Room::all();
+
+        return view('courses_schedules.edit', compact('course_schedule', 'languages', 'schedules', 'teachers', 'rooms'));
     }
 
     /**
@@ -238,7 +248,7 @@ class CourseSchedController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request);
     }
 
     /**

@@ -34,7 +34,9 @@ class PlacementScheduleController extends Controller
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        $placement_schedule = PlacementSchedule::orderBy('id', 'desc')->orderBy('term', 'desc')->paginate(10);
+        $placement_schedule = PlacementSchedule::orderBy('term', 'desc')
+            ->orderBy('language_id', 'asc')
+            ->paginate(20);
 
         return view('placement_schedule.index')->withPlacement_schedule($placement_schedule)->withTerms($terms);
     }

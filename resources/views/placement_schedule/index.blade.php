@@ -22,7 +22,7 @@
 					<th>Term</th>					
 					<th>Date</th>
 					<th>Date End (Online)</th>
-					<th>Time</th>
+					<th>Online</th>
 					<th>Operation</th>
 				</thead>
 
@@ -33,7 +33,11 @@
 							<td>{{ $pschedule->term }}</td>
 							<td>{{ $pschedule->date_of_plexam}}</td>
 							<td>{{ $pschedule->date_of_plexam_end}}</td>
-							<td>{{ $pschedule->time_of_plexam}}</td>
+							<td>
+								@if($pschedule->is_online == 1)
+								<i class="fa fa-check text-success"></i>
+								@endif
+							</td>
 							<td><a href="#" class="btn btn-default btn-sm">Edit</a></td>
 						</tr>
 					@endforeach
