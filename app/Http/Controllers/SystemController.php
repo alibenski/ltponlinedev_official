@@ -39,7 +39,7 @@ class SystemController extends Controller
     		->pluck('users.email');
 
     	$merge = $query_email_addresses->merge($query_students_current_year);
-    	$unique_email_address = $merge->unique();
+    	$unique_email_address = $merge->unique()->take(2);
 
     	// dd($merge->unique());
     	

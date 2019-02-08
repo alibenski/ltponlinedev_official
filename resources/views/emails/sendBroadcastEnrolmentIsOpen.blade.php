@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                     <p>Dear student, </p>
-                                    <p>The enrolment period for the 2019 Spring term, from 23 April to 12 July 2019, is now open until 5 March 2019. </p>
+                                    <p><strong>The enrolment period for the 2019 Spring term, from 23 April to 12 July 2019, is now open until 5 March 2019. </strong></p>
                                     <p>To enrol on the UNOG Language Training Programme: 
                                         <ol>
                                             <li>        Please consult our course offering <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf">here</a> or below by language offered. </li>
@@ -206,18 +206,18 @@
                                         </ol>
                                     </p>
                                     <hr>
-                                    <p>Cancellation:</p>
+                                    <p><strong>Cancellation:</strong></p>
                                     <p>Participants who wish to cancel their enrolment need to do so via the online platform.  </p>
-                                    <p>Deadline for cancellation: Midnight 14 April 2019. </p>
+                                    <p><strong>Deadline for cancellation: Midnight 14 April 2019.</strong> </p>
                                     <hr>
                                     <p>List of courses offered in each language: Please see below the names of specialized courses for each language.</p>
-                                        <p>Arabic programme</p>
-                                        <p>Chinese programme</p>
+                                        <p><strong>Arabic programme</strong></p>
+                                        <p><strong>Chinese programme</strong></p>
                                         <p>Specialized course: </p>
                                         <ul>
                                         <li>Advanced reading comprehension (B2) </li>
                                         </ul>
-                                        <p>English programme</p>
+                                        <p><strong>English programme</strong></p>
                                         <p>Specialized courses: </p>
                                         <ul>
                                         <li>Level 8 Skills - Reading and writing (B2+)</li>
@@ -229,7 +229,7 @@
                                         <li>Language Proficiency Examination preparation (C1)</li>
                                         <li>Write, edit, publish (C1 - C2)</li>
                                         </ul>
-                                        <p>French programme</p>
+                                        <p><strong>French programme</strong></p>
                                         <p>Specialized courses: </p>
                                         <ul>
                                         <li>Elementary oral expression (A2)</li>
@@ -244,13 +244,13 @@
                                         <li>Language Proficiency Examination preparation - written part (B2 - C1)</li>
                                         <li>Language Proficiency Examination preparation - oral part (B2 - C1)</li>
                                         </ul>
-                                        <p>Russian programme</p>
+                                        <p><strong>Russian programme</strong></p>
                                         <p>Specialized courses: </p>
                                         <ul>
                                         <li>Russian language and people through the mirror of culture (B2 - C1)</li>
                                         <li>Language Proficiency Examination preparation (B2 - C1)</li>
                                         </ul>
-                                        <p>Spanish programme  </p>
+                                        <p><strong>Spanish programme</strong>  </p>
                                         <p>Specialized courses: </p>
                                         <ul>
                                         <li>Spanish in context: focus on Spain (B2)</li>
@@ -261,7 +261,7 @@
 
 
                                     <p>Chère / cher étudiante / étudiant, </p>
-                                    <p>La période d'inscription pour les cours du trimestre de printemps 2019, du 23 avril au 12 juillet, est à présent ouverte et ce jusqu'au 5 mars 2019. </p>
+                                    <p><strong>La période d'inscription pour les cours du trimestre de printemps 2019, du 23 avril au 12 juillet, est à présent ouverte et ce jusqu'au 5 mars 2019. </strong></p>
                                     <p>Pour vous inscrire aux cours de langues de l'ONUG : 
                                         <ol>
                                             <li>        Veuillez consulter notre offre de cours <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_fr.pdf">ici</a> ou ci-dessous dans chaque langue proposée. </li>
@@ -274,18 +274,18 @@
                                         </ol>
                                     </p>
                                     <hr>
-                                    <p>Annulation :</p>
+                                    <p><strong>Annulation :</strong></p>
                                     <p>Les participants souhaitant annuler leur inscription devront le faire via la plateforme en ligne.  </p>
-                                    <p>Date limite pour l'annulation: 14 avril 2019 à minuit.   </p>
+                                    <p><strong>Date limite pour l'annulation: 14 avril 2019 à minuit.</strong>   </p>
                                     <hr>
                                     <p>Liste des cours offerts dans chaque langue :  Trouvez ci-dessous la liste des cours de spécialité.</p>
-                                        <p>Programme d'arabe</p>
-                                        <p>Programme de chinois</p>
+                                        <p><strong>Programme d'arabe</strong></p>
+                                        <p><strong>Programme de chinois</strong></p>
                                         <p>Cours de spécialité :</p>
                                         <ul>
                                         <li>Compréhension écrite (B2)</li>
                                         </ul>
-                                        <p>English programme</p>
+                                        <p><strong>Programme d'anglais</strong></p>
                                         <p>Cours de spécialité :</p>
                                         <ul>
                                         <li>Compréhension & expression écrites du niveau 8 (B2+)
@@ -297,7 +297,7 @@
                                         <li>Préparation à L'examen d'aptitude liguistique (C1)</li>
                                         <li>Écrire, éditer et publier (C1 - C2)</li>
                                         </ul>
-                                        <p>French programme</p>
+                                        <p><strong>Programme de français</strong></p>
                                         <p>Cours de spécialité :</p>
                                         <ul>
                                         <li>Expression orale - niveau élémentaire (A2)</li>
@@ -312,13 +312,13 @@
                                         <li>Préparation à l'EAL - partie écrite (B2 - C1)</li>
                                         <li>Préparation à l'EAL - partie orale (B2 - C1)</li>
                                         </ul>
-                                        <p>Russian programme</p>
+                                        <p><strong>Programme de russe</strong></p>
                                         <p>Cours de spécialité :</p>
                                         <ul>
                                         <li>Langue et société russes dans le miroir de la culture (B2 - C1)</li>
                                         <li>Péparation à l'examen d'aptitude linguistique (B2 - C1)</li>
                                         </ul>
-                                        <p>Spanish programme  </p>
+                                        <p><strong>Programme d'espagnol</strong>  </p>
                                         <p>Cours de spécialité :</p>
                                         <ul>
                                         <li>Espagnol en contexte : focus sur l'Espagne (B2)</li>
