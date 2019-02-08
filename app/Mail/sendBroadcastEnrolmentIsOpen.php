@@ -32,6 +32,6 @@ class sendBroadcastEnrolmentIsOpen extends Mailable
         return $this->view('emails.sendBroadcastEnrolmentIsOpen')
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->priority(1)
-                    ->subject("CLM Language Registration Open - CFM Inscription Ouverte");
+                    ->subject("Language Training Programme: Enrolment Period Open / Programme de formation linguistique : Période d'inscription Ouverte");
     }
 }

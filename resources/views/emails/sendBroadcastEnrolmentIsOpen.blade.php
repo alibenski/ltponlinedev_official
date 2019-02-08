@@ -193,28 +193,139 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                     <p>Dear student, </p>
-                                    <p>As announced, CLM has developed a new online registration tool with the objective to update and make the registration process smoother. All the registration steps will be done online, removing the paperwork and the physical signatures.</p>
-                                    <p>You can already access the platform and check your profile; however, you will only be able to enrol in courses once registration is open.</p>
-                                    <p>Your credentials are: 
-                                        <ul>
-                                            <li>Email Address: {{$sddextr_email_address}}</li>
-                                        </ul>
+                                    <p>The enrolment period for the 2019 Spring term, from 23 April to 12 July 2019, is now open until 5 March 2019. </p>
+                                    <p>To enrol on the UNOG Language Training Programme: 
+                                        <ol>
+                                            <li>        Please consult our course offering <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf">here</a> or below by language offered. </li>
+                                            <li>        For information on the eligibility criteria and enrolment procedures, see <a href="https://learning.unog.ch/node/1301#position1">here</a> and read the circular <a href="https://iseek-geneva.un.org/system/files/stic_gva_2018_no3_language_training_programme_at_unog_-_2019.pdf">ST/IC/Geneva/2018/3</a>.  </li>
+                                            <li>        Please note that all applications for enrolment should be completed on the online platform at <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a> . No paper application form will be accepted. </li>
+                                            <li>     <strong>You will need your supervisor’s approval prior to enrolment.</strong> If required, the learning focal point from your organization will need to approve your registration via an email that they will receive.</li>
+                                            <li>        Applicants who are not staff of the UN Secretariat, Funds and Programmes or other UN organizations or agencies must provide a copy of their Carte de legitimation or employer attestation and a proof of payment of the tuition fees at the time of their application.</li>
+                                            <li>        Applications are processed on a first come, first served basis.</li>
+
+                                        </ol>
                                     </p>
-                                    <p>If you have forgotten your password you can click the button “Forgot Your Password?” to reset it.</p>
-                                    <p>For security reasons, you will be asked to change the password the first time you access the platform.</p>
-                                    <p>All the information for registration will be available on the website (https://learning.unog.ch) when enrolment opens. </p>
                                     <hr>
-                                    <p>Chère / cher étudiante / étudiant, </p>
-                                    <p>Comme annoncé récemment, nous avons développé un nouveau système d'inscription en ligne qui a l'objectif étant d'actualiser et de simplifier le processus d'inscription. Chaque étape de ce nouveau processus sera réalisée en ligne, permettant ainsi la suppression des formalités administratives et de la signature manuscrite </p>
-                                    <p>Vous pouvez d'ores et déjà accéder à la plateforme et vérifier votre profile ; toutefois, vous ne pourrez vous inscrire qu'une fois la période d'inscription ouverte.</p>
-                                    <p>Vos identifiants sont :  
+                                    <p>Cancellation:</p>
+                                    <p>Participants who wish to cancel their enrolment need to do so via the online platform.  </p>
+                                    <p>Deadline for cancellation: Midnight 14 April 2019. </p>
+                                    <hr>
+                                    <p>List of courses offered in each language: Please see below the names of specialized courses for each language.</p>
+                                        <p>Arabic programme</p>
+                                        <p>Chinese programme</p>
+                                        <p>Specialized course: </p>
                                         <ul>
-                                            <li>Adresse électronique : {{$sddextr_email_address}}</li>
+                                        <li>Advanced reading comprehension (B2) </li>
                                         </ul>
+                                        <p>English programme</p>
+                                        <p>Specialized courses: </p>
+                                        <ul>
+                                        <li>Level 8 Skills - Reading and writing (B2+)</li>
+                                        <li>Level 8 Skills - Listening and speaking (B2+)</li>
+                                        <li>Writing for professional purposes (B2 - C1) - Online course</li>
+                                        <li>Grammar in action (B2 - C1)</li>
+                                        <li>Writing skills for administrative writers (B2 - C1)</li>
+                                        <li>Advanced oral skills (C1)</li>
+                                        <li>Language Proficiency Examination preparation (C1)</li>
+                                        <li>Write, edit, publish (C1 - C2)</li>
+                                        </ul>
+                                        <p>French programme</p>
+                                        <p>Specialized courses: </p>
+                                        <ul>
+                                        <li>Elementary oral expression (A2)</li>
+                                        <li>Elementary grammar in action (A2)</li>
+                                        <li>Intermediate oral expression (B1)</li>
+                                        <li>Grammar in action - intermediate level (B1)</li>
+                                        <li>Practical life through French (B1 - B2)</li>
+                                        <li>Advanced oral expression (B2)</li>
+                                        <li>Write, edit, publish (B2)</li>
+                                        <li>Views on the French-speaking world (B2 - C1)</li>
+                                        <li>Administrative writing skills (B2 - C1)</li>
+                                        <li>Language Proficiency Examination preparation - written part (B2 - C1)</li>
+                                        <li>Language Proficiency Examination preparation - oral part (B2 - C1)</li>
+                                        </ul>
+                                        <p>Russian programme</p>
+                                        <p>Specialized courses: </p>
+                                        <ul>
+                                        <li>Russian language and people through the mirror of culture (B2 - C1)</li>
+                                        <li>Language Proficiency Examination preparation (B2 - C1)</li>
+                                        </ul>
+                                        <p>Spanish programme  </p>
+                                        <p>Specialized courses: </p>
+                                        <ul>
+                                        <li>Spanish in context: focus on Spain (B2)</li>
+                                        <li>Spanish revision (A2)</li>
+                                        </ul>
+                                        <p>For more information, visit our website: <a href="http://learning.unog.ch/language-index">http://learning.unog.ch/language-index</a></p>
+                                        <hr>
+
+
+                                    <p>Chère / cher étudiante / étudiant, </p>
+                                    <p>La période d'inscription pour les cours du trimestre de printemps 2019, du 23 avril au 12 juillet, est à présent ouverte et ce jusqu'au 5 mars 2019. </p>
+                                    <p>Pour vous inscrire aux cours de langues de l'ONUG : 
+                                        <ol>
+                                            <li>        Veuillez consulter notre offre de cours <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_fr.pdf">ici</a> ou ci-dessous dans chaque langue proposée. </li>
+                                            <li>        Pour toute information concernant les critères d’admission ou la procédure d’inscription, veuillez cliquer <a href="https://learning.unog.ch/fr/node/1301#position1">ici</a> et lire la circulaire <a href="https://iseek-geneva.un.org/system/files/stic_gva_2018_no3_programme_de_formation_linguistique_de_l_onug_2019_0.pdf">ST/IC/Geneva/2018/3</a>.  </li>
+                                            <li>        Veuillez noter que toutes les demandes d’inscription doivent être complétées et soumises via la plateforme d’inscription en ligne à l’adresse suivante  <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a> . Aucun formulaire d’inscription papier ne sera accepté. </li>
+                                            <li>     <strong>Vous devez obtenir avant de vous inscrire l’accord de votre superviseur. </strong>Si nécessaire, le service de la formation du personnel de votre organisation/institution recevra un courrier électronique afin d’approuver votre demande d’inscription.</li>
+                                            <li>        Les candidats qui ne sont pas membres du personnel du Secrétariat, fonds, programmes et autres agences ou organisations de l’ONU, doivent fournir une copie de leur Carte de légitimation ou une attestation de leur employeur ainsi qu’une copie de la preuve de paiement au moment de leur inscription.</li>
+                                            <li>        Les demandes d’inscription sont traitées dans leur ordre de réception.</li>
+
+                                        </ol>
                                     </p>
-                                    <p>Si vous avez oublié votre mot de passe, vous pouvez cliquer sur le bouton "Mot de passe oublié?" pour le réinitialiser.</p>
-                                    <p>Pour des raisons de sécurité, il vous sera demandé de changer de mot de passe lors de votre premier accès à la plateforme.</p>
-                                    <p>Toutes les informations utiles à votre inscription seront disponibles sur le site Internet (https://learning.unog.ch) dès l'ouverture de la période d'inscription.</p>
+                                    <hr>
+                                    <p>Annulation :</p>
+                                    <p>Les participants souhaitant annuler leur inscription devront le faire via la plateforme en ligne.  </p>
+                                    <p>Date limite pour l'annulation: 14 avril 2019 à minuit.   </p>
+                                    <hr>
+                                    <p>Liste des cours offerts dans chaque langue :  Trouvez ci-dessous la liste des cours de spécialité.</p>
+                                        <p>Programme d'arabe</p>
+                                        <p>Programme de chinois</p>
+                                        <p>Cours de spécialité :</p>
+                                        <ul>
+                                        <li>Compréhension écrite (B2)</li>
+                                        </ul>
+                                        <p>English programme</p>
+                                        <p>Cours de spécialité :</p>
+                                        <ul>
+                                        <li>Compréhension & expression écrites du niveau 8 (B2+)
+                                        <li>Compréhension & expression orales du niveau 8 (B2+)</li>
+                                        <li>Rédaction administrative (B2 - C1)- cours en ligne</li>
+                                        <li>Grammaire en action (B2 - C1)</li>
+                                        <li>Rédaction de documents administratif (B2 - C1)</li>
+                                        <li>Perfectionnement de l'oral (C1)</li>
+                                        <li>Préparation à L'examen d'aptitude liguistique (C1)</li>
+                                        <li>Écrire, éditer et publier (C1 - C2)</li>
+                                        </ul>
+                                        <p>French programme</p>
+                                        <p>Cours de spécialité :</p>
+                                        <ul>
+                                        <li>Expression orale - niveau élémentaire (A2)</li>
+                                        <li>Grammaire en action - niveau élémentaire (A2)</li>
+                                        <li>Expression orale - niveau intermédiaire (B1)</li>
+                                        <li>Grammaire en action - niveau intermédiaire (B1)</li>
+                                        <li>Le français de la vie quotidienne (B1 - B2)</li>
+                                        <li>Expression orale - niveau avancé (B2)</li>
+                                        <li>Écrire, éditer et publier (B2)</li>
+                                        <li>Regards sur le monde francophone (B2 - C1)</li>
+                                        <li>Rédaction administrative (B2 - C1)</li>
+                                        <li>Préparation à l'EAL - partie écrite (B2 - C1)</li>
+                                        <li>Préparation à l'EAL - partie orale (B2 - C1)</li>
+                                        </ul>
+                                        <p>Russian programme</p>
+                                        <p>Cours de spécialité :</p>
+                                        <ul>
+                                        <li>Langue et société russes dans le miroir de la culture (B2 - C1)</li>
+                                        <li>Péparation à l'examen d'aptitude linguistique (B2 - C1)</li>
+                                        </ul>
+                                        <p>Spanish programme  </p>
+                                        <p>Cours de spécialité :</p>
+                                        <ul>
+                                        <li>Espagnol en contexte : focus sur l'Espagne (B2)</li>
+                                        <li>Cours de révision (A2)</li>
+                                        </ul>
+                                        <p>Pour plus d’informations, merci de visiter notre site web à l’adresse suivante <a href="http://learning.unog.ch/fr/language-index">http://learning.unog.ch/fr/language-index</a></p>
+                                        <hr>
                                 </td>
                             </tr>
                             <tr>
@@ -224,7 +335,7 @@
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
                                                 <a href="{{ route('login') }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Login Page&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                    <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Go to Online Platform&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                                 </a>
                                             </td>
                                         </tr>
