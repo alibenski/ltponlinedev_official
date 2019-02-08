@@ -113,7 +113,7 @@
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="student_comment_show">Student Comment:</label>
+	    <label class="control-label" for="student_comment_show">Comment on Placement Test:</label>
 	    <div class="">
 	        <textarea class="form-control" name="student_comment_show" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->std_comments }}</textarea>
 	    </div>

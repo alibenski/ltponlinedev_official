@@ -396,22 +396,25 @@ class PreviewController extends Controller
      */
     public function ajaxGetPriority(Request $request)
     {
-        $priority_status = Repo::withTrashed()->where('Term', Session::get('Term'))->where('CodeIndexID', $request->CodeIndexID)->first();
-        // $data = $priority_status->PS;
-        if ($priority_status->PS == 1) {
-            $data = '1: Re-enrolment';
-        } 
-        if ($priority_status->PS == 2) {
-            $data = '2: In Waitlist';
-        }
-        if ($priority_status->PS == 3){
-            $data = '3: Within 2 Terms/Not Re-enrolment';
-        }
-        if ($priority_status->PS == 4) {
-            $data = '4: Placement Forms/Others';
-        }
+        if ($request->ajax()) {
+            
+            $priority_status = Repo::withTrashed()->where('Term', Session::get('Term'))->where('CodeIndexID', $request->CodeIndexID)->first();
+            // $data = $priority_status->PS;
+            if ($priority_status->PS == 1) {
+                $data = '1: Re-enrolment';
+            } 
+            if ($priority_status->PS == 2) {
+                $data = '2: In Waitlist';
+            }
+            if ($priority_status->PS == 3){
+                $data = '3: Within 2 Terms/Not Re-enrolment';
+            }
+            if ($priority_status->PS == 4) {
+                $data = '4: Placement Forms/Others';
+            }
 
-        return response()->json($data);
+            return response()->json($data);
+        }
     }
 
     public function previewClassrooms($code)

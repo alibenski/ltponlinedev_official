@@ -11,6 +11,7 @@ use App\Term;
 use DB;
 use Carbon\Carbon;
 use App\PlacementSchedule;
+use Exception;
 
 class PlacementScheduleController extends Controller
 {
@@ -59,32 +60,37 @@ class PlacementScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        
         //validate the data
         $this->validate($request, array(
                 'term' => 'required|',
                 'L' => 'required|',
                 'date_of_plexam' => 'required|',
+                'format_id' => 'required|',
             ));
 
-        //loop for storing data to database
-        $ingredients = [];        
-        for ($i = 0; $i < count($request->date_of_plexam); $i++) {
-            $ingredients[] = new  PlacementSchedule([
-                'term' => $request->term,
-                'language_id' => $request->L,
-                'date_of_plexam' => $request->date_of_plexam[$i],
-                'date_of_plexam_end' => $request->date_of_plexam_end,
-                'is_online' => $request->format_id,
-                ]); 
-                    foreach ($ingredients as $data) {
-                        $data->save();
-                    }
-        }
-        
-        $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
+        try{
+            //loop for storing data to database
+            $ingredients = [];        
+            for ($i = 0; $i < count($request->date_of_plexam); $i++) {
+                $ingredients[] = new  PlacementSchedule([
+                    'term' => $request->term,
+                    'language_id' => $request->L,
+                    'date_of_plexam' => $request->date_of_plexam[$i],
+                    'date_of_plexam_end' => $request->date_of_plexam_end,
+                    'is_online' => $request->format_id,
+                    ]); 
+                        foreach ($ingredients as $data) {
+                            $data->save();
+                        }
+            }
+            
+            $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
-        return redirect()->route('placement-schedule.index');
+            return redirect()->route('placement-schedule.index');
+        } catch(Exception $e) {
+
+            return redirect()->back()->with('error','placement test schedule already exists');
+        }
     }
 
     /**

@@ -5,6 +5,12 @@
 
 @endif
 
+@if (Session::has('error')) 
+    <div class="alert alert-danger" role="alert">
+        <strong>Error: </strong> {{ Session::get('error') }}
+    </div>
+@endif
+
 @if (Session::has('warning')) 
 	<div class="alert alert-warning alert-block" role="alert">
 		<strong>Message: </strong> {{ Session::get('warning') }}
