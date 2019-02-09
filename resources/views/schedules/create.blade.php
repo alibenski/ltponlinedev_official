@@ -8,24 +8,33 @@
   <div class="col-md-12">
     <form class="well form-horizontal" method="POST" action="{{ route('schedules.store') }}">
               {{ csrf_field() }}
-              <div class="form-group">
+              {{-- <div class="form-group">
                 <label for="sched_name" class="control-label col-md-4">Schedule Instructions:</label>
-                <textarea type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" disabled="">Choose the appropriate day(s) with the corresponding begin and end times.</textarea>
+                <span type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" disabled="">Choose the appropriate day(s) with the corresponding begin and end times.</span>
+              </div> --}}
+              <div class="form-group">
+                <label for="sched_name" class="control-label col-md-4">Non-standard Schedule:</label>
+                <input type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" disabled="" placeholder="not yet functional"></input>
+                <small class="col-md-8 col-md-offset-4 text-danger">Use only for non-standard schedule format. Leave blank if not needed.</small>
               </div>
-                <!-- array checkboxes -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Choose Days:</label>
-                    <div class="col-md-4">
-                        <div class="checkbox">
-                            <label>
-                              @foreach ($days as $id => $name)
-                                <input type="checkbox" name="begin_day[]" value="{{ $id }}" /> {{ $name }}
-                                <br>
-                              @endforeach
-                            </label>
-                        </div>
-                    </div>
-                </div>
+              <!-- array checkboxes -->
+              <div class="form-group">
+                <label for="sched_name" class="control-label col-md-4">Standard Schedule:</label>
+                <span type="text" class="col-md-6 form-control-static">Choose the appropriate day(s) with the corresponding begin and end times.</span>
+              </div>
+              <div class="form-group">
+                  <label class="col-md-4 control-label">Choose Days:</label>
+                  <div class="col-md-4">
+                      <div class="checkbox">
+                          <label>
+                            @foreach ($days as $id => $name)
+                              <input type="checkbox" name="begin_day[]" value="{{ $id }}" /> {{ $name }}
+                              <br>
+                            @endforeach
+                          </label>
+                      </div>
+                  </div>
+              </div>
 
               <div class="form-group">
                   <label name="begin_time" class="col-md-4 control-label">Begin Time: </label>

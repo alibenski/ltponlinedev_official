@@ -248,7 +248,12 @@ class CourseSchedController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
+        $classroom = Classroom::where('cs_unique', $request->cs_unique)->first();
+        
+        $course_schedule = CourseSchedule::find($id);
+
+        
+        dd($classroom, $course_schedule);
     }
 
     /**
