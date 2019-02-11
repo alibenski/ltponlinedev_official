@@ -147,6 +147,11 @@ class TeachersController extends Controller
         return view('teachers.teacher_view_classrooms', compact('assigned_classes'));
     }
 
+    /**
+     * Show the students for specific classrooms
+     * @param  Request $request get session parameters
+     * @return json           html view
+     */
     public function teacherShowStudents(Request $request)
     {
         $form_info = Repo::where('CodeClass', $request->Code)
@@ -158,6 +163,44 @@ class TeachersController extends Controller
             ->first();
         
         $data = view('teachers.teacher_show_students', compact('course', 'form_info'))->render();
+        return response()->json([$data]);
+    }
+
+    public function ajaxShowIfEnrolledNextTerm(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $indexid = $request->indexid;
+            $language = $request->L;
+            $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next;
+            
+            $enrolled_next_term_regular = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get();
+            
+            if (count($enrolled_next_term_regular) < 1) {
+                $data = 'not enrolled';
+                return response()->json($data); 
+            } 
+
+            $data = 'enrolled';
+            return response()->json($data);  
+            
+        }
+    }
+
+    public function teacherEnterResults(Request $request)
+    {
+        $form_info = Repo::where('CodeClass', $request->Code)
+            ->where('Term', Session::get('Term'))
+            ->get();
+
+        $course = Repo::where('CodeClass', $request->Code)
+            ->where('Term', Session::get('Term'))
+            ->first();
+        
+        $data = view('teachers.teacher_enter_results', compact('course', 'form_info'))->render();
         return response()->json([$data]);
     }
 
@@ -225,30 +268,6 @@ class TeachersController extends Controller
         return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'));
         // $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info'))->render();
         // return response()->json([$data]);
-    }
-
-    public function ajaxShowIfEnrolledNextTerm(Request $request)
-    {
-        if ($request->ajax()) {
-            
-            $indexid = $request->indexid;
-            $language = $request->L;
-            $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next;
-            
-            $enrolled_next_term_regular = Preenrolment::where('INDEXID', $indexid)
-                ->where('L', $language)
-                ->where('Term', $next_term)
-                ->get();
-            
-            if (count($enrolled_next_term_regular) < 1) {
-                $data = 'not enrolled';
-                return response()->json($data); 
-            } 
-
-            $data = 'enrolled';
-            return response()->json($data);  
-            
-        }
     }
 
     public function ajaxGetRemark(Request $request)

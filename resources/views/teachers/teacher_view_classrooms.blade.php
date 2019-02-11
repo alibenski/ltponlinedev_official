@@ -1,5 +1,7 @@
 @extends('teachers.teacher_template')
-
+@section('customcss')
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+@stop
 @section('content')
 
 <div class="row">
@@ -57,9 +59,10 @@
 				</div>
 				<div class="box-footer">
 						
-						<button id="showStudentsBtn" value="{{ $classroom->Code}}" class="btn btn-default">Show Students</button>
+						<button id="showStudentsBtn" value="{{ $classroom->Code}}" class="btn btn-default btn-space">Show Students</button>
 						{{-- <button id="manageAttendanceBtn" value="{{ $classroom->Code}}" class="btn btn-default">Manage Attendance</button> --}}
-						<a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-default">Manage Attendance</a>
+						<a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-default btn-space">Manage Attendance</a>
+						<button id="enterResultsBtn" value="{{ $classroom->Code}}" class="btn btn-default btn-space">Enter Results</button>
 						{{-- <form action="{{ route('teacher-manage-attendance') }}" method="GET">
 							<button type="submit" class="btn btn-default btn-space">Manage Attendance</button>
 							<input type="hidden" value="{{ $classroom->Code}}" name="Code">
@@ -121,6 +124,28 @@ $("button[id='showStudentsBtn']").click(function(){
 
   $.ajax({
       url: "{{ route('teacher-show-students') }}", 
+      method: 'POST',
+      data: {Code:Code, _token:token},
+      success: function(data, status) {
+        // console.log(data)
+        $(".students-here").html(data);
+        $(".students-here").html(data.options);
+      }
+  });
+}); 
+
+$("button[id='enterResultsBtn']").click(function(){
+  var Code = $(this).val();
+  var token = $("input[name='_token']").val();
+
+  $("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-success');
+  $("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-default');
+  $("button").not("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-default');
+  $("button").not("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-success');
+
+
+  $.ajax({
+      url: "{{ route('teacher-enter-results') }}", 
       method: 'POST',
       data: {Code:Code, _token:token},
       success: function(data, status) {

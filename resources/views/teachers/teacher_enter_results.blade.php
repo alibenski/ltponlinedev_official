@@ -1,13 +1,13 @@
 <div class="table-responsive filtered-table">
-  <h4><strong>Students of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
+  <h4><strong>Enter Restuls for Students of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
   <table class="table table-bordered table-striped">
       <thead>
           <tr>
               <th>#</th>
               <th>Name</th>
-              <th>Email</th>
-              <th>Contact No.</th>
-              <th>Enrolled Next Term?</th>
+              <th>Written</th>
+              <th>Oral</th>
+              <th>Overall Result</th>
               <th>Action</th>
           </tr>
       </thead>
@@ -23,16 +23,24 @@
             <input type="hidden" name="indexid" value="{{$form->INDEXID}}">
             <input type="hidden" name="L" value="{{$form->L}}">
           </td>
-          <td>
-            @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
-          <td>
-            @if(empty($form->users->sddextr->PHONE)) None @else {{ $form->users->sddextr->PHONE }} @endif 
+          <td class="input-Written">
+            @if(empty($form->Written)) None @else {{ $form->Written }} @endif 
+            <input type="number">
           </td>
-          <td id="{{$form->INDEXID}}" class="enrolled-next-term">
-            
+          <td class="input-Oral">
+            @if(empty($form->Oral)) None @else {{ $form->Oral }} @endif 
+            <input type="number">
+          </td>
+          <td class="input-Result">
+            @if(empty($form->Result)) None @else {{ $form->Result }} @endif 
+            <select name="" id="">
+              <option value="P">Pass</option>
+              <option value="F">Fail</option>
+              <option value="I">Incomplete</option>
+            </select>
           </td>
           <td>
-            <button class="btn btn-default"> Result</button>
+            <button class="btn btn-default"> Assign</button>
           </td>
         </tr>
         @endforeach
