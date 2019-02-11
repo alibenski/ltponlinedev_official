@@ -283,6 +283,7 @@ class PreenrolmentController extends Controller
                 $queries['sort'] = \Request::input('sort');
             }
 
+        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'attachment_id', 'attachment_pay', 'created_at')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'attachment_id', 'attachment_pay', 'created_at');
         // $allQueries = array_merge($queries, $currentQueries);
         $enrolment_forms = $enrolment_forms->withTrashed()->paginate(10)->appends($queries);
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);

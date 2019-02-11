@@ -60,7 +60,7 @@
 		            <th>Course</th>
 		            <th>Schedule</th>
 		            <th>Student Cancelled?</th>
-		            <th>Manager Approval</th>
+		            {{-- <th>Manager Approval</th> --}}
 		            <th>HR Approval</th>
 		            <th>ID Proof</th>
 		            <th>Payment Proof</th>
@@ -76,13 +76,14 @@
 					<td>{{ $form->Term }}</td>
 					<td>{{ $form->DEPT }}</td>
 					<td>{{ $form->courses->Description }}</td>
-					<td>{{ $form->schedule->name }}</td>
+					{{-- <td>{{ $form->schedule->name }}</td> --}}
+					<td><button>View</button></td>
 					<td>
 						@if( is_null($form->cancelled_by_student))
 						@else <span id="status" class="label label-danger margin-label">YES</span>
 						@endif
 					</td>
-					<td>
+					{{-- <td>
 						@if($form->is_self_pay_form == 1)
 						<span id="status" class="label label-info margin-label">
 						N/A - Self-Payment</span>
@@ -96,7 +97,7 @@
 						<span id="status" class="label label-danger margin-label">
 						Disapproved</span>
 						@endif 
-					</td>
+					</td> --}}
 					<td>
 						@if(is_null($form->is_self_pay_form))
 							@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
