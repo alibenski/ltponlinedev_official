@@ -90,6 +90,15 @@
                                 <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->PHONE }} @endif</p>
                             </div>
                         </div>
+                        
+
+                        <div class="form-group">
+                            <label for="contactNo" class="col-md-4 control-label">Date of Birth:</label>
+
+                            <div class="col-md-8 form-control-static">
+                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->BIRTH }} @endif</p>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label for="jobAppointment" class="col-md-4 control-label">Type of Appointment:</label>

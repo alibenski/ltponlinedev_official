@@ -3,6 +3,7 @@
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 @stop
 @section('content')
     {{-- Modal Dialog Box --}}
@@ -136,6 +137,25 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="form-group{{ $errors->has('dob') ? ' has-error' : '' }}">
+                            <label for="dob" class="col-md-2 control-label">Date of birth </label>
+
+                            <div class="col-md-6">
+                                <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="dob">
+                                <input class="form-control" size="16" type="text" value="" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->BIRTH }} @endif" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                </div>
+                                <input type="hidden" name="dob" id="dob" value=""/>
+
+                                @if ($errors->has('dob'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('dob') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label for="jobAppointment" class="col-md-2 control-label">Type of Appointment:</label>
@@ -181,7 +201,23 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-
+<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+<script>
+  $(document).ready(function() {
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 4,
+        forceParse: 0,
+        showMeridian: 1,
+        minView: 2
+    });
+  });
+</script>
 <script>
     $(document).ready(function() {
         $('.select2-basic-single').select2({
