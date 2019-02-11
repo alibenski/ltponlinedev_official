@@ -67,6 +67,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('ajax-get-remark', ['as'=>'ajax-get-remark','uses'=>'TeachersController@ajaxGetRemark']);
 
+    Route::get('ajax-show-if-enrolled-next-term', ['as'=>'ajax-show-if-enrolled-next-term','uses'=>'TeachersController@ajaxShowIfEnrolledNextTerm']);
+
     /*
      * Preview Routes
      */
