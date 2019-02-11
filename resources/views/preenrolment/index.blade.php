@@ -77,7 +77,9 @@
 					<td>{{ $form->DEPT }}</td>
 					<td>{{ $form->courses->Description }}</td>
 					{{-- <td>{{ $form->schedule->name }}</td> --}}
-					<td><button>View</button></td>
+					<td>
+						<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a>
+					</td>
 					<td>
 						@if( is_null($form->cancelled_by_student))
 						@else <span id="status" class="label label-danger margin-label">YES</span>
@@ -140,6 +142,23 @@
 	</div>
 	@endif
 
+{{-- modal for enrolments form chosen schedule --}}
+<div id="modalshow" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body-schedule">
+            </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endif
 
 @stop
@@ -151,6 +170,27 @@ $(document).ready(function() {
     $('.select2-basic-single').select2({
     placeholder: "Select Filter",
     });
+
+    $('#modalshow').on('show.bs.modal', function (event) {
+      var link = $(event.relatedTarget); // Link that triggered the modal
+      var dtitle = link.data('mtitle');
+      var dindexno = link.data('indexno');
+      var dtecode = link.data('tecode');
+      var dterm = link.data('term');
+      var dapproval = link.data('approval');
+      var dFormCounter = link.data('formx');
+      var token = $("input[name='_token']").val();
+      var modal = $(this);
+      modal.find('.modal-title').text(dtitle);
+
+      var token = $("input[name='_token']").val();      
+
+      $.post('{{ route('ajax-show-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
+          console.log(data);
+          $('.modal-body-schedule').html(data)
+      });
+    });
+
 });
 </script>
 <script type="text/javascript">
