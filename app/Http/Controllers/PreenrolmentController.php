@@ -285,7 +285,7 @@ class PreenrolmentController extends Controller
                 $enrolment_forms = $enrolment_forms->orderBy('created_at', 'asc');
             }
 
-        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'attachment_id', 'attachment_pay', 'created_at')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'attachment_id', 'attachment_pay', 'created_at');
+        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments');
         // $allQueries = array_merge($queries, $currentQueries);
         $enrolment_forms = $enrolment_forms->withTrashed()->paginate(10)->appends($queries);
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);

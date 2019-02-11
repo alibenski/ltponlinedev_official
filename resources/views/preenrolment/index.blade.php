@@ -64,6 +64,7 @@
 		            <th>HR Approval</th>
 		            <th>ID Proof</th>
 		            <th>Payment Proof</th>
+		            <th>Comment</th>
 		            <th>Time Stamp</th>
 		        </tr>
 		    </thead>
@@ -133,6 +134,14 @@
 					<td>
 					@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 					</td>
+					<td>
+						<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
+						<input type="hidden" name="eform_submit_count" value="{{$form->eform_submit_count}}">
+						<input type="hidden" name="term" value="{{$form->Term}}">
+						<input type="hidden" name="indexno" value="{{$form->INDEXID}}">
+						<input type="hidden" name="tecode" value="{{$form->Te_Code}}">
+						<input type="hidden" name="_token" value="{{ Session::token() }}">
+					</td>
 					<td>{{ $form->created_at}}</td>
 				</tr>
 				@endforeach
@@ -159,6 +168,34 @@
     </div>
 </div>
 
+<!-- Modal form to show student comments on regular forms -->
+<div id="showStdComments" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title-std-comments"><i class="fa fa-comment fa-2x text-primary"></i> Student Comment</h4>
+            </div>
+            <div class="modal-body">
+				@if(empty($enrolment_forms))
+
+				@else
+					@if(count($enrolment_forms) == 0)
+					
+					@else
+	                <div class="panel-body modal-body-std-comments"></div>
+                	@endif
+                @endif	  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                    <span class='glyphicon glyphicon-remove'></span> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endif
 
 @stop
@@ -166,6 +203,19 @@
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script type="text/javascript">
+$(document).on('click', '.show-std-comments', function() {
+	var indexno = $(this).closest("tr").find("input[name='indexno']").val();
+	var tecode = $(this).closest("tr").find("input[name='tecode']").val();
+	var eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
+	var term = $(this).closest("tr").find("input[name='term']").val();
+	var token = $("input[name='_token']").val();
+    $('#showStdComments').modal('show'); 
+
+    $.post('{{ route('ajax-std-comments') }}', {'indexno':indexno, 'tecode':tecode, 'term':term,  'eform_submit_count':eform_submit_count, '_token':token}, function(data) {
+          $('.modal-body-std-comments').html(data);
+      });
+});
+
 $(document).ready(function() {
     $('.select2-basic-single').select2({
     placeholder: "Select Filter",
