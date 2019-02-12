@@ -162,6 +162,14 @@ class TeachersController extends Controller
         $course = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
             ->first();
+
+        if (is_null($course)) {
+            return view('errors.404_custom');
+        }
+
+        if (is_null($form_info)) {
+            return view('errors.404_custom');
+        }
         
         $data = view('teachers.teacher_show_students', compact('course', 'form_info'))->render();
         return response()->json([$data]);
@@ -207,6 +215,11 @@ class TeachersController extends Controller
         }
     }
 
+    /**
+     * View to enter end of term results per student
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function teacherEnterResults(Request $request)
     {
         $form_info = Repo::where('CodeClass', $request->Code)
@@ -217,8 +230,31 @@ class TeachersController extends Controller
             ->where('Term', Session::get('Term'))
             ->first();
         
+        if (is_null($course)) {
+            return view('errors.404_custom');
+        }
+
+        if (is_null($form_info)) {
+            return view('errors.404_custom');
+        }
+
         $data = view('teachers.teacher_enter_results', compact('course', 'form_info'))->render();
         return response()->json([$data]);
+    }
+
+    public function ajaxSaveResults(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $filtered = (array_filter($request->all()));
+            $record = Repo::find($request->id);
+
+            $record->update($filtered);
+
+            $data = $record;
+
+            return response()->json($data); 
+        }
     }
 
     public function teacherSelectWeek($code)

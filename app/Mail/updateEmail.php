@@ -32,7 +32,7 @@ class updateEmail extends Mailable
     {
         return $this->view('emails.notifyProfileUpdate')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@un.org')
+                    // ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Confirmation Needed: CLM Online Profile Update for '.$this->student['name']);
     }

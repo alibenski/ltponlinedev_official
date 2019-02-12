@@ -136,6 +136,8 @@
           })
           .fail(function() {
             console.log("error");
+            alert("An error occured. Click OK to reload.");
+            window.location.reload();
           })
           .always(function() {
             // console.log("complete");

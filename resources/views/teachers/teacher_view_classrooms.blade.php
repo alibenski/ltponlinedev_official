@@ -11,6 +11,7 @@
 			<div class="box box-success">
 				<div class="box-header with-border">
 					<h3>{{ $classroom->course->Description }}</h3>
+					<small>{{ $classroom->terms->Comments }} {{ date('Y', strtotime($classroom->terms->Term_Begin)) }}</small>
 				</div>
 				<div class="box-body no-padding">
 					<div class="col-md-12">

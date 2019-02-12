@@ -1,5 +1,5 @@
 <div class="table-responsive filtered-table">
-  <div class="preloader2"></div>
+  <div class="preloader2"><p>Please wait... Fetching data from the database...</p></div>
   <h4><strong>Students of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
   <table class="table table-bordered table-striped">
       <thead>
@@ -9,7 +9,7 @@
               <th>Email</th>
               <th>Contact No.</th>
               <th>Enrolled Next Term?</th>
-              <th>Action</th>
+              {{-- <th>Action</th> --}}
           </tr>
       </thead>
       <tbody>
@@ -32,9 +32,9 @@
           <td id="{{$form->INDEXID}}" class="enrolled-next-term">
             
           </td>
-          <td>
+          {{-- <td>
             <button class="btn btn-default"> Result</button>
-          </td>
+          </td> --}}
         </tr>
         @endforeach
       {{-- @endforeach --}}
@@ -111,6 +111,8 @@ $(document).ready(function() {
           })
           .fail(function() {
             console.log("error");
+            alert("An error occured. Click OK to reload.");
+            window.location.reload();
           })
           .always(function() {
             // console.log("complete");

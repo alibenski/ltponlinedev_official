@@ -281,7 +281,17 @@ desired effect
               @include ('partials._messages') {{-- Include session error messages --}}
           </div>
       </div>
-
+      @if(!Session::has('Term'))
+        <a href="{{ route('teacher-dashboard') }}">
+        <div class="callout callout-danger col-sm-12">
+            <h4>Warning!</h4>
+            <p>
+                <b>Term</b> is not set. Click here to set the Term field for this session.
+            </p>
+        </div>
+        </a>
+      @endif
+      
       @yield('content')
 
     </section>

@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::post('teacher-enter-results', ['as'=>'teacher-enter-results','uses'=>'TeachersController@teacherEnterResults']);
 
+    Route::put('ajax-save-results', ['as'=>'ajax-save-results','uses'=>'TeachersController@ajaxSaveResults']);
+
     Route::get('teacher-select-week/{code}', ['as'=>'teacher-select-week','uses'=>'TeachersController@teacherSelectWeek']);
 
     Route::get('teacher-week-table', ['as'=>'teacher-week-table','uses'=>'TeachersController@teacherWeekTable']);
