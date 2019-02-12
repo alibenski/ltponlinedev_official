@@ -1,4 +1,5 @@
 <div class="table-responsive filtered-table">
+  <div class="preloader2"></div>
   <h4><strong>Students of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
   <table class="table table-bordered table-striped">
       <thead>
@@ -51,7 +52,7 @@
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body-schedule">
-            </div>
+            </div> 
             <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
             </div>
@@ -74,30 +75,51 @@ $(document).ready(function () {
 </script>
 <script> 
 $(document).ready(function() {
+    var promises = [];
     $('tr.table-row').each(function(){
       var indexid = $(this).closest("tr").find("input[name='indexid']").val();
       var L = $(this).closest("tr").find("input[name='L']").val();
       var token = $("input[name='_token']").val();
 
-      $.ajax({
+          promises.push($.ajax({
             url: '{{ route('ajax-show-if-enrolled-next-term') }}',
             type: 'GET',
             data: {indexid:indexid, L:L, _token:token},
           })
           .then(function(data) {
             // console.log("success");
-            console.log(data);
-            if (data == 'enrolled') {
-              $("td#"+indexid+".enrolled-next-term").append('<i class="fa fa-thumbs-up fa-2x text-success"></i>');
+            if (data != 'not enrolled') {
+
+              if (data[0].length > 0) {
+                console.log(data[0]);
+                $.each(data[0], function(index, val) {
+                  $("td#"+indexid+".enrolled-next-term").append("<p>"+val+"</p>");
+                });
+                
+              }
+
+              if (data[1].length > 0) {
+                console.log(data[1]);
+                $.each(data[1], function(i, v) {
+                  $("td#"+indexid+".enrolled-next-term").append("<p>Placement: "+v+"</p>");
+                });
+                
+              }
+
             }
+
           })
           .fail(function() {
             console.log("error");
           })
           .always(function() {
             // console.log("complete");
-          }); 
+          })); 
     }); //end of $.each
+
+    $.when.apply($('tr.table-row'), promises).then(function() {
+        $(".preloader2").fadeOut(600);
+    }); 
 });
 
 </script>

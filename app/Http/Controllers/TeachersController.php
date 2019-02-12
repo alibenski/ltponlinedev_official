@@ -6,6 +6,7 @@ use App\Attendance;
 use App\AttendanceRemarks;
 use App\Classroom;
 use App\NewUser;
+use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
 use App\Teachers;
@@ -178,13 +179,29 @@ class TeachersController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->get();
-            
-            if (count($enrolled_next_term_regular) < 1) {
+
+            $arr1 = [];
+            foreach ($enrolled_next_term_regular as $value1) {
+                $arr1[] = $value1->courses->Description;
+            }
+
+            $enrolled_next_term_placement = PlacementForm::where('INDEXID', $indexid)
+                // ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get();
+
+            $arr2 = [];
+            foreach ($enrolled_next_term_placement as $value2) {
+                $arr2[] = $value2->languages->name;
+            }
+
+            if (count($enrolled_next_term_regular) < 1 && count($enrolled_next_term_placement) < 1) {
                 $data = 'not enrolled';
                 return response()->json($data); 
             } 
 
-            $data = 'enrolled';
+            $data = [$arr1, $arr2];
+            // $data = [$enrolled_next_term_regular, $enrolled_next_term_placement];
             return response()->json($data);  
             
         }
