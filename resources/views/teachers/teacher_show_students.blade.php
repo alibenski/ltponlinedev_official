@@ -9,7 +9,7 @@
               <th>Email</th>
               <th>Contact No.</th>
               <th>Enrolled Next Term?</th>
-              {{-- <th>Action</th> --}}
+              {{-- <th>Total Attendance</th> --}}
           </tr>
       </thead>
       <tbody>
@@ -33,7 +33,7 @@
             
           </td>
           {{-- <td>
-            <button class="btn btn-default"> Result</button>
+            <p>20</p>
           </td> --}}
         </tr>
         @endforeach
