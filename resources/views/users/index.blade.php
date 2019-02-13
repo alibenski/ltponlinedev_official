@@ -7,11 +7,11 @@
     @hasrole('Admin')
     <a href="{{ route('roles.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Roles</a>
     <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right" style="margin: 1px;">Permissions</a>
-    <a href="user/switch/start/1" class="btn btn-default pull-right" style="margin: 1px;">Login as 1</a>
+    {{-- <a href="user/switch/start/271" class="btn btn-default pull-right" style="margin: 1px;">Login as 1</a>
 
         @if( Session::has('orig_user') )
         <a href="user/switch/stop" class="btn btn-default pull-right" style="margin: 1px;">Switch back to orig</a>
-        @endif
+        @endif --}}
     @endhasrole
     </h1>
     <hr>

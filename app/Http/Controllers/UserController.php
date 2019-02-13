@@ -32,12 +32,13 @@ class UserController extends Controller
         $this->middleware(['auth', 'isAdmin']); //isAdmin middleware lets only users with a specific permission to access these resources
     }
 
-    public function user_switch_start( $new_user )
+    public function user_switch_start(Request $request, $new_user )
     {
         $new_user = User::find( $new_user );
         Session::put( 'orig_user', Auth::id() );
         Auth::login( $new_user );
-        return Redirect::back();
+
+        return redirect()->back();
     }
 
     public function user_switch_stop()
@@ -45,7 +46,8 @@ class UserController extends Controller
         $id = Session::pull( 'orig_user' );
         $orig_user = User::find( $id );
         Auth::login( $orig_user );
-        return Redirect::back();
+        
+        return redirect()->back();
     }
     
     /**
