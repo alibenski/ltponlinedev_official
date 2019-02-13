@@ -112,6 +112,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm' ]);
     Route::post('user/enrol-student-to-placement-insert', ['as' => 'enrol-student-to-placement-insert', 'uses' => 'UserController@enrolStudentToPlacementInsert' ]);
 
+    Route::get( 'user/switch/start/{id}', 'UserController@user_switch_start' );
+    Route::get( 'user/switch/stop', 'UserController@user_switch_stop' );
+
     // page for tagging students as pass or fail
     Route::get('pashqtcur', ['as' => 'pashqtcur', 'uses' => 'ResultsController@pashqtcur' ]);
 
