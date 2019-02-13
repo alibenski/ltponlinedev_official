@@ -54,7 +54,7 @@
                                 </div>
                             @endif
                             <div class="col-md-12">
-                                <img src="/img/Logo2016_transparent.png" alt="CLM_logo">
+                                <img src="{{ asset('img/Logo2016_transparent.png') }}" alt="CLM_logo">
                             <h1 class="cover-heading tlt" style="margin-bottom: 50px;"> UNOG-CLM  Language Training Programme (LTP) Online Enrolment Platform</h1>
                             </div>
                             <div class="col-md-12">
