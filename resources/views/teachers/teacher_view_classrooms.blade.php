@@ -15,6 +15,12 @@
 				</div>
 				<div class="box-body no-padding">
 					<div class="col-md-12">
+						<p>Teacher: @if(empty($classroom->teachers)) 
+							@else <span><strong>{{ $classroom->teachers->Tch_Firstname }} {{ $classroom->teachers->Tch_Lastname }}
+							</strong></span>
+							@endif
+						</p>
+						
 
 						@if(!empty($classroom->Te_Mon_Room))
 

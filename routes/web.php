@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     
     Route::get('teacher-view-classrooms', ['as'=>'teacher-view-classrooms','uses'=>'TeachersController@teacherViewClassrooms']);
 
+    Route::get('teacher-view-all-classrooms', ['as'=>'teacher-view-all-classrooms','uses'=>'TeachersController@teacherViewAllClassrooms']);
+
     Route::post('teacher-show-students', ['as'=>'teacher-show-students','uses'=>'TeachersController@teacherShowStudents']);
 
     Route::post('teacher-enter-results', ['as'=>'teacher-enter-results','uses'=>'TeachersController@teacherEnterResults']);

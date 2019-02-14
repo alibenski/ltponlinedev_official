@@ -42,7 +42,7 @@ class LoginController extends Controller
         }
 
         if($user->hasRole('Teacher')) {
-            return redirect()->intended('teacher-dashboard');
+            return redirect()->intended('/admin/teacher-dashboard');
         }
         
         return redirect()->intended('/home');

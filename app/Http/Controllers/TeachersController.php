@@ -25,8 +25,12 @@ class TeachersController extends Controller
         $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
             ->where('Te_Term', Session::get('Term'))
             ->get();
+        $all_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
+            ->where('Tch_ID', '!=', 'TBD')
+            ->where('Te_Term', Session::get('Term'))
+            ->get();
         
-        return view('teachers.teacher_dashboard',compact('terms', 'assigned_classes'));
+        return view('teachers.teacher_dashboard',compact('terms', 'assigned_classes', 'all_classes'));
     }
 
     /**
@@ -142,6 +146,16 @@ class TeachersController extends Controller
     public function teacherViewClassrooms()
     {
         $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
+            ->where('Te_Term', Session::get('Term'))
+            ->get();
+
+        return view('teachers.teacher_view_classrooms', compact('assigned_classes'));
+    }
+
+    public function teacherViewAllClassrooms()
+    {
+        $assigned_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
+            ->where('Tch_ID', '!=', 'TBD')
             ->where('Te_Term', Session::get('Term'))
             ->get();
 

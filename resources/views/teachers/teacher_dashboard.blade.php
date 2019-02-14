@@ -95,7 +95,38 @@
 </div>
 @endif
 
+@hasrole('Teacher FP')
+  @if(count($all_classes) > 0)
+  <a href="{{ route('teacher-view-all-classrooms') }}"> 
+    <div class="col-sm-4 col-xs-12">
+        <div class="info-box">
+          <!-- Apply any bg-* class to to the icon to color it -->
+          <span class="info-box-icon bg-aqua"><i class="fa fa-columns"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">View All {{Auth::user()->teachers->languages->name}} Classes </span>
+            <span class="info-box-number"> {{ count($all_classes) }} </span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+  </a>
 
+  @else
+  <div class="col-sm-4 col-xs-12">
+      <div class="info-box">
+        <!-- Apply any bg-* class to to the icon to color it -->
+        <span class="info-box-icon bg-aqua"><i class="fa fa-columns"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">View All {{Auth::user()->teachers->languages->name}} Classes </span>
+          <span class="info-box-number">Set Term</span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+  </div>
+  @endif
+@endhasrole
 
 @endsection
 

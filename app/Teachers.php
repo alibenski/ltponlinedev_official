@@ -28,4 +28,8 @@ class Teachers extends Model
     public function classrooms() {
         return $this->hasMany('App\Classroom', 'Tch_ID', 'Tch_ID'); 
     }
+
+    public function languages() {
+        return $this->belongsTo('App\Language', 'Tch_L', 'code'); 
+    }
 }
