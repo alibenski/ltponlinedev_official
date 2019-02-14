@@ -159,7 +159,7 @@ class TeachersController extends Controller
             ->where('Te_Term', Session::get('Term'))
             ->get();
 
-        return view('teachers.teacher_view_classrooms', compact('assigned_classes'));
+        return view('teachers.teacher_view_all_classrooms', compact('assigned_classes'));
     }
 
     /**
