@@ -55,13 +55,14 @@
 		    <thead>
 		        <tr>
 		            <th>Name</th>
-		            <th>Term</th>
-		            <th>Organization</th>
+		            {{-- <th>Term</th> --}}
 		            <th>Course</th>
 		            <th>Schedule</th>
+		            <th>Organization</th>
 		            <th>Student Cancelled?</th>
 		            {{-- <th>Manager Approval</th> --}}
 		            <th>HR Approval</th>
+		            <th>Payment Status</th>
 		            <th>ID Proof</th>
 		            <th>Payment Proof</th>
 		            <th>Comment</th>
@@ -74,13 +75,13 @@
 					<td>
 					@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 					</td>
-					<td>{{ $form->Term }}</td>
-					<td>{{ $form->DEPT }}</td>
+					{{-- <td>{{ $form->Term }}</td> --}}
 					<td>{{ $form->courses->Description }}</td>
 					{{-- <td>{{ $form->schedule->name }}</td> --}}
 					<td>
 						<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a>
 					</td>
+					<td>{{ $form->DEPT }}</td>
 					<td>
 						@if( is_null($form->cancelled_by_student))
 						@else <span id="status" class="label label-danger margin-label">YES</span>
@@ -129,6 +130,23 @@
 						N/A - Self-Payment</span>
 						@endif
 					</td>
+
+					<td>
+						@if(is_null($form->is_self_pay_form))
+	                    <span id="status" class="label label-info margin-label">N/A</span>
+	                    @else
+	                      @if($form->selfpay_approval === 1)
+	                      <span id="status" class="label label-success margin-label">Approved</span>
+	                      @elseif($form->selfpay_approval === 2)
+	                      <span id="status" class="label label-warning margin-label">Pending Valid Document</span>
+	                      @elseif($form->selfpay_approval === 0)
+	                      <span id="status" class="label label-danger margin-label">Disapproved</span>
+	                      @else 
+	                      <span id="status" class="label label-info margin-label">Waiting for Admin</span>
+	                      @endif
+	                    @endif
+					</td>
+
 					<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 					</td>
 					<td>

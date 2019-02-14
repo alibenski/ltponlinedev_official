@@ -54,12 +54,13 @@
 	            <th>Name</th>
 	            <th>Convoked?</th>
 	            {{-- <th>Assigned Course?</th> --}}
-	            <th>Organization</th>
 	            <th>Language</th>
+	            <th>HR Approval</th>
+	            <th>Payment Status</th>
+	            <th>Organization</th>
 	            {{-- <th>Student Cancelled?</th> --}}
 	            <th>Exam Date</th>
-	            <th>Manager Approval</th>
-	            <th>HR Approval</th>
+	            {{-- <th>Manager Approval</th> --}}
 	            {{-- <th>ID Proof</th>
 	            <th>Payment Proof</th> --}}
 	            <th>Time Stamp</th>
@@ -83,38 +84,7 @@
 					@endif
 				@endif
 				</td>
-				{{-- <td>
-				@if(empty($form->assigned_to_course)) - @else 
-					@if($form->assigned_to_course == 1) Yes 
-					@else No 
-					@endif
-				@endif
-				</td> --}}
-				<td>
-				@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
-				</td>
 				<td>{{ $form->L }}</td>
-				{{-- <td>
-					@if( is_null($form->cancelled_by_student))
-					@else <span id="status" class="label label-danger margin-label">YES</span>
-					@endif
-				</td> --}}
-				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
-				<td>
-					@if($form->is_self_pay_form == 1)
-					<span id="status" class="label label-info margin-label">
-					N/A - Self-Payment</span>
-					@elseif(is_null($form->approval))
-					<span id="status" class="label label-warning margin-label">
-					Pending Approval</span>
-					@elseif($form->approval == 1)
-					<span id="status" class="label label-success margin-label">
-					Approved</span>
-					@elseif($form->approval == 0)
-					<span id="status" class="label label-danger margin-label">
-					Disapproved</span>
-					@endif
-				</td>
 				<td>
 					@if(is_null($form->is_self_pay_form))
 						@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
@@ -143,6 +113,52 @@
 					N/A - Self-Payment</span>
 					@endif
 				</td>
+				<td>
+					@if(is_null($form->is_self_pay_form))
+                    <span id="status" class="label label-info margin-label">N/A</span>
+                    @else
+                      @if($form->selfpay_approval === 1)
+                      <span id="status" class="label label-success margin-label">Approved</span>
+                      @elseif($form->selfpay_approval === 2)
+                      <span id="status" class="label label-warning margin-label">Pending Valid Document</span>
+                      @elseif($form->selfpay_approval === 0)
+                      <span id="status" class="label label-danger margin-label">Disapproved</span>
+                      @else 
+                      <span id="status" class="label label-info margin-label">Waiting for Admin</span>
+                      @endif
+                    @endif
+				</td>
+				{{-- <td>
+				@if(empty($form->assigned_to_course)) - @else 
+					@if($form->assigned_to_course == 1) Yes 
+					@else No 
+					@endif
+				@endif
+				</td> --}}
+				<td>
+				@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
+				</td>
+				{{-- <td>
+					@if( is_null($form->cancelled_by_student))
+					@else <span id="status" class="label label-danger margin-label">YES</span>
+					@endif
+				</td> --}}
+				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
+				{{-- <td>
+					@if($form->is_self_pay_form == 1)
+					<span id="status" class="label label-info margin-label">
+					N/A - Self-Payment</span>
+					@elseif(is_null($form->approval))
+					<span id="status" class="label label-warning margin-label">
+					Pending Approval</span>
+					@elseif($form->approval == 1)
+					<span id="status" class="label label-success margin-label">
+					Approved</span>
+					@elseif($form->approval == 0)
+					<span id="status" class="label label-danger margin-label">
+					Disapproved</span>
+					@endif
+				</td> --}}
 				{{-- <td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
 				<td>

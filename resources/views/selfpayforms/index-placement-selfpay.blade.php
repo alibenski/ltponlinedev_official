@@ -57,7 +57,7 @@
 	    <thead>
 	        <tr>
 	            <th>Operation</th>
-	            <th>Status</th>
+	            <th>Payment Status</th>
 	            <th>Name</th>
 	            <th>Organization</th>
                 <th>Term</th>
