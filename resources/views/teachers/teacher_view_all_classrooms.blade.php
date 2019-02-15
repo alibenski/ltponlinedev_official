@@ -21,7 +21,7 @@
 		  </thead>
 		  <tbody>
 		    @foreach($assigned_classes as $classroom)
-		    <tr class="table-row">
+		    <tr class="table-row-all-class">
 		      <td>
 		        <div><h4><strong>{{ $classroom->course->Description }}</strong></h4></div>
 		        <small>

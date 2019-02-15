@@ -9,7 +9,9 @@
               <th>Email</th>
               <th>Contact No.</th>
               <th>Enrolled Next Term?</th>
-              {{-- <th>Total Attendance</th> --}}
+              <th>Days Present</th>
+              <th>Days Excused</th>
+              <th>Days Absent</th>
           </tr>
       </thead>
       <tbody>
@@ -23,6 +25,7 @@
             @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif 
             <input type="hidden" name="indexid" value="{{$form->INDEXID}}">
             <input type="hidden" name="L" value="{{$form->L}}">
+            <input type="hidden" name="id" value="{{$form->id}}">
           </td>
           <td>
             @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
@@ -32,9 +35,15 @@
           <td id="{{$form->INDEXID}}" class="enrolled-next-term">
             
           </td>
-          {{-- <td>
-            <p>20</p>
-          </td> --}}
+          <td id="{{$form->INDEXID}}" class="days-present">
+            
+          </td>
+          <td id="{{$form->INDEXID}}" class="days-excused">
+            
+          </td>
+          <td id="{{$form->INDEXID}}" class="days-absent">
+            
+          </td>
         </tr>
         @endforeach
       {{-- @endforeach --}}
@@ -77,9 +86,31 @@ $(document).ready(function () {
 $(document).ready(function() {
     var promises = [];
     $('tr.table-row').each(function(){
-      var indexid = $(this).closest("tr").find("input[name='indexid']").val();
-      var L = $(this).closest("tr").find("input[name='L']").val();
+      var indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
+      var L = $(this).closest("tr.table-row").find("input[name='L']").val();
       var token = $("input[name='_token']").val();
+      var id = $(this).closest("tr.table-row").find("input[name='id']").val();
+
+          $.ajax({
+            url: '{{ route('ajax-show-overall-attendance') }}',
+            type: 'GET',
+            data: {indexid:indexid, L:L,id:id, _token:token},
+          })
+          .done(function(data) {
+            console.log(data);
+            $("td#"+indexid+".days-present").append("<p>"+data[0]+"</p>");
+            $("td#"+indexid+".days-excused").append("<p>"+data[1]+"</p>");
+            $("td#"+indexid+".days-absent").append("<p>"+data[2]+"</p>");
+          })
+          .fail(function() {
+            console.log("error");
+            alert("An error occured. Click OK to reload.");
+            window.location.reload();
+          })
+          .always(function() {
+            console.log("complete");
+          });
+          
 
           promises.push($.ajax({
             url: '{{ route('ajax-show-if-enrolled-next-term') }}',
@@ -91,7 +122,7 @@ $(document).ready(function() {
             if (data != 'not enrolled') {
 
               if (data[0].length > 0) {
-                console.log(data[0]);
+                // console.log(data[0]);
                 $.each(data[0], function(index, val) {
                   $("td#"+indexid+".enrolled-next-term").append("<p>"+val+"</p>");
                 });
@@ -99,7 +130,7 @@ $(document).ready(function() {
               }
 
               if (data[1].length > 0) {
-                console.log(data[1]);
+                // console.log(data[1]);
                 $.each(data[1], function(i, v) {
                   $("td#"+indexid+".enrolled-next-term").append("<p>Placement: "+v+"</p>");
                 });

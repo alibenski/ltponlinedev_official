@@ -9,7 +9,7 @@
 
 <div class="row">
   <div class="col-md-1">
-    <a href="{{ route('teacher-view-classrooms') }}" class="btn btn-danger btn-space"><i class="fa fa-arrow-circle-left"></i> View Classes</a>
+    <a href="{{ route('teacher-view-classrooms') }}" class="btn btn-danger btn-space"><i class="fa fa-arrow-circle-left"></i> View Your Classes</a>
     @hasrole('Teacher FP')
     <a href="{{ route('teacher-view-all-classrooms') }}" class="btn btn-info btn-space"><i class="fa fa-arrow-circle-left"></i> View All Classes</a>
     @endhasrole

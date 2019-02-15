@@ -114,7 +114,7 @@
 
 									<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
 			                            <input type="submit" @if (is_null($form->deleted_at))
-				                          value="Cancel Enrolment"
+				                          value="Reject/Cancel Enrolment"
 				                        @else
 				                          value="Cancelled"
 				                        @endif  class="btn btn-danger btn-space" 
@@ -207,7 +207,7 @@
 
 									<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
 				                        <input type="submit" @if (is_null($form->deleted_at))
-				                          value="Cancel Placement Test"
+				                          value="Reject/Cancel Placement Test"
 				                        @else
 				                          value="Cancelled"
 				                        @endif  class="btn btn-danger btn-space" @if (is_null($form->deleted_at))

@@ -10,6 +10,7 @@
               <th>Enrolment Next Term</th>
               <th>Written</th>
               <th>Oral</th>
+              <th>Overall Grade</th>
               <th>Overall Result</th>
               <th>Action</th>
           </tr>
@@ -40,6 +41,12 @@
             @if(empty($form->Oral)) 
               <input type="number" name="Oral" class="input-oral" value="" placeholder="no grade"> 
             @else <span class="oral">{{ $form->Oral }}</span> @endif 
+
+          </td>
+          <td class="input-Overall-Grade">
+            @if(empty($form->Overall_Grade)) 
+              <input type="number" name="Overall_Grade" class="input-overall-grade" value="" placeholder="no grade"> 
+            @else <span class="overall-grade">{{ $form->Overall_Grade }}</span> @endif 
 
           </td>
           <td class="input-Result">
@@ -168,11 +175,14 @@ $(document).ready(function() {
     $(this).attr('disabled', 'true');
     var Written = $(this).closest("tr").find("span.written").text();
     var Oral = $(this).closest("tr").find("span.oral").text();
+    var Overall_Grade = $(this).closest("tr").find("span.overall-grade").text();
     var Result = $(this).closest("tr").find("span.result").text();
     var trimmedResult = $.trim(Result); // trim away whitespaces
 
     $(this).closest("tr").find("span.written").html('<input type="number" name="Written" value="" placeholder="'+Written+'">');
     $(this).closest("tr").find("span.oral").html('<input type="number" name="Oral" value="" placeholder="'+Oral+'">');
+    $(this).closest("tr").find("span.overall-grade").html('<input type="number" name="Overall_Grade" value="" placeholder="'+Overall_Grade+'">');
+
     if (trimmedResult == "Pass") {
       $(this).closest("tr").find("span.result").html('<select name="Result" class="input-result" id="Result"><option value="" disabled>Select Here</option><option value="P" selected>Pass</option><option value="F">Fail</option><option value="I">Incomplete</option></select>');
     }
@@ -189,6 +199,7 @@ $(document).ready(function() {
     var id = $(this).closest("tr").find("input[name='id']").val();
     var Written = $(this).closest("tr").find("input[name='Written']").val();
     var Oral = $(this).closest("tr").find("input[name='Oral']").val();
+    var Overall_Grade = $(this).closest("tr").find("input[name='Overall_Grade']").val();
     var Result = $(this).closest("tr").find("select[name='Result']").val();
     var token = $("input[name='_token']").val();
     console.log(id)
@@ -196,7 +207,7 @@ $(document).ready(function() {
     $.ajax({
       url: '{{ route('ajax-save-results') }}',
       type: 'PUT',
-      data: {id:id, Written:Written, Oral:Oral, Result:Result, _token:token},
+      data: {id:id, Written:Written, Oral:Oral, Overall_Grade:Overall_Grade, Result:Result, _token:token},
     })
     .done(function(data) {
       var Code = data.CodeClass;

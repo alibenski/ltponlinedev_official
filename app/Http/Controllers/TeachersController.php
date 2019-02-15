@@ -189,7 +189,40 @@ class TeachersController extends Controller
         return response()->json([$data]);
     }
 
-    
+    public function ajaxShowOverallAttendance(Request $request)
+    {
+        $qry = Attendance::where('pash_id', $request->id)->get();
+        $arr = [];
+
+        foreach ($qry as $key => $value) {
+            $arr = $value;
+        }
+        
+
+        $arr2 = $arr->getAttributes();
+        
+        $sumP = [];
+        $sumE = [];
+        $sumA = [];
+        foreach ($arr2 as $k => $v) {
+            if($v == 'P'){
+                $sumP[] = 'P';  
+            }
+            if($v == 'E'){
+                $sumE[] = 'E';  
+            }
+            if($v == 'A'){
+                $sumA[] = 'A';  
+            }
+        }
+        
+        $sumP_count = count($sumP);
+        $sumE_count = count($sumE);
+        $sumA_count = count($sumA);
+
+        $data = [$sumP_count,$sumE_count,$sumA_count];
+        return response()->json($data);  
+    }
 
     public function ajaxShowIfEnrolledNextTerm(Request $request)
     {
