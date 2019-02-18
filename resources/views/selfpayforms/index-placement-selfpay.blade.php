@@ -4,13 +4,13 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
-<div class="nav-tabs-custom">
+{{-- <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li role="presentation" class="{{ Request::is('admin/selfpayform/approved-placement-selfpay') ? "active" : ""}}"><a href="{{ route('approved-placement-selfpay') }}" target="_blank">Validated</a></li>
         <li role="presentation" class="{{ Request::is('admin/selfpayform/cancelled-placement-selfpay') ? "active" : ""}}"><a href="{{ route('cancelled-placement-selfpay') }}" target="_blank">Disapproved</a></li>
         <li role="presentation" class="{{ Request::is('admin/selfpayform/pending-placement-selfpay') ? "active" : ""}}"><a href="{{ route('pending-placement-selfpay') }}" target="_blank">Pending</a></li>
     </ul>
-</div>
+</div> --}}
 <div class="alert alert-selfpay col-sm-12">
     <h4 class="text-center"><strong><i class="fa fa-file"></i> <span> Payment-based <u>Placement Forms</u>:</strong> Confirm if ID and payment proof attachments are valid or not.</span></h4>
 </div>
