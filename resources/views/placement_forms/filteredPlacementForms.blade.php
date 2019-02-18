@@ -5,9 +5,13 @@
 @stop
 
 @section('content')
+
 <div class="alert alert-warning col-sm-12">
-	<h4 class="text-center"><strong>Filtered Placement Test Forms</strong></h4>
+	<h4 class="text-center"><strong>Placement Test Forms Not Assigned to Language Course</strong></h4>
 </div>
+
+@include('admin.partials._termSessionMsg')
+
 <div class="form-group col-sm-12">
     <form method="GET" action="{{ route('placement-form-filtered') }}">
     	<input name="Term" type="hidden" value="{{  Session::get('Term') }}">
@@ -64,6 +68,7 @@
 	            {{-- <th>ID Proof</th>
 	            <th>Payment Proof</th> --}}
 	            <th>Time Stamp</th>
+	            <th>Cancel Date/Time</th>
 	        </tr>
 	    </thead>
 	    <tbody>
@@ -165,6 +170,7 @@
 				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 				</td> --}}
 				<td>{{ $form->created_at}}</td>
+				<td>{{ $form->deleted_at}}</td>
 			</tr>
 			@endforeach
 	    </tbody>

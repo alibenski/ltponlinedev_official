@@ -356,12 +356,16 @@ class UserController extends Controller
             ->where('INDEXID', $student->indexno)
             ->where('Term', $request->Term)->get();
 
+        $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $student->indexno)->where('Term', $request->Term)->get(); 
+
         $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();
-     
+        
+        $term_info = Term::where('Term_Code', $request->Term)->first(); 
+
         if ($student_last_term == null) {
             $repos_lang = null;
-            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data);
+            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withStudent_convoked($student_convoked)->withTerm_info($term_info);
         }    
 
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
@@ -371,12 +375,9 @@ class UserController extends Controller
             $student_enrolments = null;
             $student_placements = null;
             
-            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data);
+            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withStudent_convoked($student_convoked)->withTerm_info($term_info);
         }      
 
-        $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $student->indexno)->where('Term', $request->Term)->get(); 
-
-        $term_info = Term::where('Term_Code', $request->Term)->first(); 
         
         return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withStudent_convoked($student_convoked)->withTerm_info($term_info);
     }
