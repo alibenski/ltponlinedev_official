@@ -9,7 +9,7 @@
 @section('content')
 @include('admin.partials._userAdminNav')
 <div class="row col-sm-12">
-	<a href="{{ route('users.index') }}" class="btn btn-danger btn-space"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
+	<a href="{{ URL::previous() }}" class="btn btn-danger btn-space"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
 	<button type="button" class="show-modal btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
 	<button type="button" class="show-modal-history btn btn-primary btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
 	<a href="{{ route('enrol-student-to-course-form', $id) }}" class="btn btn-success btn-space"><span class="glyphicon glyphicon-pencil"></span>  Create Enrolment Form </a>

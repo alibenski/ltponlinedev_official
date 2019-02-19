@@ -466,7 +466,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 'Te_Code'
+                'L', 'DEPT', 
             ];
 
             foreach ($columns as $column) {
@@ -505,11 +505,14 @@ class PlacementFormController extends Controller
 
     public function getFilteredPlacementForms(Request $request)
     {      
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+
             $placement_forms = new PlacementForm;
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 
+                'L', 'DEPT', 'is_self_pay_form',
             ];
 
             foreach ($columns as $column) {
@@ -536,7 +539,7 @@ class PlacementFormController extends Controller
             $count = $placement_forms->whereNull('assigned_to_course')->get()->count();
             
             $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
-            return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms)->withCount($count);            
+            return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms)->withCount($count)->withLanguages($languages)->withOrg($org);            
     }
 
     public function edit($id)

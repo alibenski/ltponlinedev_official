@@ -13,11 +13,21 @@
 @include('admin.partials._termSessionMsg')
 
 <div class="form-group col-sm-12">
-    <form method="GET" action="{{ route('placement-form-filtered') }}">
+	<form method="GET" action="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'is_self_pay_form' => Request::input('is_self_pay_form'), 'Term' => Session::get('Term')]) }}">
+		
+		@include('admin.partials._filterIndexNoTeCode')
+
+        <!-- submit button included admin.partials._filterIndex view -->
+        	<a href="{{ route('placement-form-filtered',[ 'Term' => Session::get('Term')]) }}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
+        </div>
+
+    </form>
+
+    {{-- <form method="GET" action="{{ route('placement-form-filtered') }}">
     	<input name="Term" type="hidden" value="{{  Session::get('Term') }}">
     	<input name="L" type="hidden" value="{{ Request::input('L') }}">
     	<input name="DEPT" type="hidden" value="{{ Request::input('DEPT') }}">
-        {{-- search by name or email--}}
+        
             <label for="search" class="control-label">Search by name/email:</label>         
         <div class="input-group">  
             <input type="text" name="search" class="form-control" placeholder="Enter name here">
@@ -26,7 +36,7 @@
                 <button type="submit" class="btn btn-danger button-prevent-multi-submit"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
             </div>
         </div>
-    </form>    
+    </form>  --}}   
 </div>
 <div class="col-sm-4 col-xs-12 pull-right">
 	@if(Session::has('Term'))
@@ -34,8 +44,19 @@
 		<span class="info-box-icon bg-orange"><i class="fa fa-list"></i></span>
 		<div class="info-box-content">
 			<p>Currently Viewing:</p> 
-				@if(Session::has('Term')){{ Session::get('Term') }}@else @endif 	
-				@if(Request::has('L')) / {{ Request::input('L') }} 	@else @endif 
+				@if(Session::has('Term'))Term Code: {{ Session::get('Term') }}@else @endif 	
+				@if(Request::has('L')) / 
+					<strong> 	
+					@if(Request::input('L') == 'A') Arabic
+					@elseif(Request::input('L') == 'C') Chinese
+					@elseif(Request::input('L') == 'E') English
+					@elseif(Request::input('L') == 'F') French
+					@elseif(Request::input('L') == 'R') Russian
+					@elseif(Request::input('L') == 'S') Spanish
+					@endif
+					</strong>
+				@else / Viewing All Languages
+				@endif 
 				@if(Request::has('DEPT')) / {{ Request::input('DEPT') }} @else @endif 
 			<p>
 				Total count: {{ $count }} not assigned to a course
@@ -56,7 +77,7 @@
 	        <tr>
 	        	<th>Operation</th>
 	            <th>Name</th>
-	            <th>Convoked?</th>
+	            {{-- <th>Convoked?</th> --}}
 	            {{-- <th>Assigned Course?</th> --}}
 	            <th>Language</th>
 	            <th>HR Approval</th>
@@ -68,7 +89,6 @@
 	            {{-- <th>ID Proof</th>
 	            <th>Payment Proof</th> --}}
 	            <th>Time Stamp</th>
-	            <th>Cancel Date/Time</th>
 	        </tr>
 	    </thead>
 	    <tbody>
@@ -76,19 +96,19 @@
 			<tr>
 				<td>
 					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
-                    <a href="{{ route('placement-form.edit', [$form->id]) }}" target="_blank" class="btn btn-warning" style="margin: 1px;"><span class="glyphicon glyphicon-envelope"></span> Convoke</a> 
+                    {{-- <a href="{{ route('placement-form.edit', [$form->id]) }}" target="_blank" class="btn btn-warning" style="margin: 1px;"><span class="glyphicon glyphicon-envelope"></span> Convoke</a>  --}}
                     <a href="{{ route('placement-form-assign', [$form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><span class="glyphicon glyphicon-edit"></span> Assign Course</a> 
                 </td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
-				<td>
+				{{-- <td>
 				@if(is_null($form->convoked)) - @else 
 					@if($form->convoked == 1) Yes
 					@elseif($form->convoked == 0) No 
 					@endif
 				@endif
-				</td>
+				</td> --}}
 				<td>{{ $form->L }}</td>
 				<td>
 					@if(is_null($form->is_self_pay_form))
@@ -148,7 +168,7 @@
 					@else <span id="status" class="label label-danger margin-label">YES</span>
 					@endif
 				</td> --}}
-				<td>@if ($form->L === "F") Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
+				<td>@if ($form->placementSchedule->is_online == 1) Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} @else {{ $form->placementSchedule->date_of_plexam }} @endif</td>
 				{{-- <td>
 					@if($form->is_self_pay_form == 1)
 					<span id="status" class="label label-info margin-label">
@@ -170,7 +190,6 @@
 				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 				</td> --}}
 				<td>{{ $form->created_at}}</td>
-				<td>{{ $form->deleted_at}}</td>
 			</tr>
 			@endforeach
 	    </tbody>
@@ -181,6 +200,14 @@
 @stop
 
 @section('java_script')
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select2-basic-single').select2({
+    placeholder: "Select Here",
+    });
+});
+</script>
 <script language="javascript">
 // setTimeout(function(){
 //    window.location.reload(1);
