@@ -1,3 +1,5 @@
+Approved: {{ count($placement_forms) }}
+<br>
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
@@ -7,6 +9,8 @@
 	            <th>Email</th>
 	            <th>Organization</th>
 	            <th>Language</th>
+	            <th>Overall Approval</th>
+	            <th>Time Stamp</th>
 	        </tr>
 	    </thead>
 	    <tbody>
@@ -25,6 +29,9 @@
 				@if(empty($form->DEPT)) None @else <strong> {{ $form->DEPT }} </strong> @endif
 				</td>
 				<td>{{ $form->L }}</td>
+				<td>{{ $form->overall_approval }}</td>
+				<td>{{ $form->created_at }}</td>
+
 			</tr>
 			@endforeach
 	    </tbody>

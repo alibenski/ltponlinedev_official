@@ -499,17 +499,17 @@ class PlacementFormController extends Controller
                 }  
 
                 if (\Request::has('sort')) {
-                    $placement_forms = $placement_forms->where('selfpay_approval', '1')->orWhere('selfpay_approval', null)->orderBy('created_at', \Request::input('sort') );
+                    $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
                     $queries['sort'] = \Request::input('sort');
                 }
 
             // $allQueries = array_merge($queries, $currentQueries);
-            $placement_forms = $placement_forms->paginate(10)->appends($queries);
+            $placement_forms = $placement_forms->withTrashed()->paginate(10)->appends($queries);
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
     public function getApprovedPlacementFormsView(Request $request)
-    {
+    {   
         if (!Session::has('Term') ) {
             $request->session()->flash('error', 'Term is not set.');
             return view('admin_dashboard');
@@ -520,7 +520,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 'is_self_pay_form', 'overall_approval',
+                'L', 'DEPT', 'is_self_pay_form',
             ];
 
             foreach ($columns as $column) {
@@ -553,8 +553,8 @@ class PlacementFormController extends Controller
                 }
 
             // $allQueries = array_merge($queries, $currentQueries);
-            $placement_forms = $placement_forms->appends($queries);
-            return view('placement_forms.getApprovedPlacementForms')->withPlacement_forms($placement_forms);
+            $placement_forms = $placement_forms->where('overall_approval', 1)->get();
+            return view('placement_forms.approvedPlacementForms')->withPlacement_forms($placement_forms);
     }
 
     /**

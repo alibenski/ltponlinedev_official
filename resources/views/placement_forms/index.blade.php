@@ -28,7 +28,7 @@
         <!-- submit button included admin.partials._filterIndex view -->
         	<a href="/admin/placement-form/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
         	<a href="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}" target="_blank" class="btn btn-warning"><i class="fa fa-gear"></i> Manage Non-assigned Placement Test Forms</a>
-        	{{-- <a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}" target="_blank" class="btn btn-info"><i class="fa fa-list"></i> Extract </a> --}}
+        	
         </div>
 
     </form>
@@ -36,8 +36,8 @@
 	<div class="box-footer">
         <div class="form-group">    
             <div class="input-group-btn">
-				<a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
-		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
+				<a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'),'is_self_pay_form' => \Request::input('is_self_pay_form'), 'overall_approval' => \Request::input('overall_approval'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
+		        <a href="{{ route('placement-form.index', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'),'Term' => Session::get('Term'), 'is_self_pay_form' => \Request::input('is_self_pay_form'), 'overall_approval' => \Request::input('overall_approval'), 'sort' => 'desc']) }}" class="btn btn-default">Newest First</a>
 		    </div>
         </div>
     </div>
@@ -50,6 +50,10 @@
 
 @else
 {{ $placement_forms->links() }}
+<div class="col-sm-12">
+	<a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'), 'is_self_pay_form' => \Request::input('is_self_pay_form') ]) }}" target="_blank" class="btn btn-info"><i class="fa fa-list"></i> Extract Approved Placement Forms Without Cancelled Students</a>
+</div>
+
 <div class="table-responsive col-sm-12 filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
