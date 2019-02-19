@@ -1,4 +1,4 @@
-Approved: {{ count($placement_forms) }}
+Total Count: {{ count($placement_forms) }}
 <br>
 <div class="filtered-table">
 	<table class="table table-bordered table-striped">

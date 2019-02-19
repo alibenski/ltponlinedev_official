@@ -49,11 +49,27 @@
 @if(count($placement_forms) < 1)
 
 @else
-{{ $placement_forms->links() }}
-<div class="col-sm-12">
-	<a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'), 'is_self_pay_form' => \Request::input('is_self_pay_form') ]) }}" target="_blank" class="btn btn-info"><i class="fa fa-list"></i> Extract Approved Placement Forms Without Cancelled Students</a>
-</div>
 
+<div class="row">
+	<div class="col-sm-12">
+		@if (Request::has('overall_approval'))
+		<a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'), 'is_self_pay_form' => \Request::input('is_self_pay_form') ]) }}" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Extract Approved Placement Forms Without Cancelled Students 
+			@if (Request::has('L'))
+				@if (Request::get('L') == 'A') (Arabic)
+				@elseif (Request::get('L') == 'C') (Chinese)
+				@elseif (Request::get('L') == 'E') (English)
+				@elseif (Request::get('L') == 'F') (French)
+				@elseif (Request::get('L') == 'R') (Russian)
+				@elseif (Request::get('L') == 'S') (Spanish)
+				@endif
+			@else
+			(All Languages)
+			@endif
+		</a>
+		@endif
+	</div>
+</div>
+{{ $placement_forms->links() }}
 <div class="table-responsive col-sm-12 filtered-table">
 	<table class="table table-bordered table-striped">
 	    <thead>
