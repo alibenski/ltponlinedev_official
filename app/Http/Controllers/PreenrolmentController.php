@@ -253,7 +253,7 @@ class PreenrolmentController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 'Te_Code'
+            'L', 'DEPT', 'Te_Code', 'is_self_pay_form', 'overall_approval',
         ];
 
         

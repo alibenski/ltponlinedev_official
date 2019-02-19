@@ -35,7 +35,7 @@
     </div>
     @else
     @endif
-
+    
     <div class="form-group">           
       <label for="organization" class="col-md-12 control-label"> Organization:</label>
       <div class="form-group col-sm-12">
@@ -51,6 +51,56 @@
         </div>
       </div>
     </div>
+
+    <div class="form-group col-sm-12">
+      <label for="" class="control-label">Additional Filters:</label>
+      <div class="col-sm-12">
+        
+        @if(!Request::is('admin/selfpayform*'))
+        <div class="col-sm-8">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="is_self_pay_form" value=1 >                 
+              </span>
+                <label type="text" class="form-control">View Payment-based Forms Only</label>
+            </div>
+        </div>
+        @endif
+      </div>
+    </div>
+
+    @if(Request::is('admin/selfpayform*'))
+    <div class="form-group col-sm-12">
+      <label for="" class="control-label"></label>
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="selfpay_approval" value=2 >                 
+              </span>
+                <label type="text" class="form-control">View PENDING Payment Status Only</label>
+            </div>
+        </div>
+      </div>
+    </div>
+    @endif
+
+    <div class="form-group col-sm-12">
+      <label for="overall_approval" class="control-label"></label>
+      <div class="col-sm-12">
+        
+        <div class="col-sm-8">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="overall_approval" value=1 >                 
+              </span>
+                <label type="text" class="form-control">View Approved Forms Only</label>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+
 </div> <!-- end filter div -->
 
 <div class="form-group">           

@@ -70,7 +70,7 @@ class SelfPayController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 'Te_Code'
+            'L', 'DEPT', 'Te_Code', 'overall_approval', 'selfpay_approval',
         ];
         
         foreach ($columns as $column) {
@@ -383,11 +383,11 @@ class SelfPayController extends Controller
         }
 
         $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
-        
+
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 
+            'L', 'DEPT', 'overall_approval', 'selfpay_approval',
         ];
 
         
@@ -417,6 +417,7 @@ class SelfPayController extends Controller
                 $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
                 $queries['sort'] = \Request::input('sort');
             }
+
 
         $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
         return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);

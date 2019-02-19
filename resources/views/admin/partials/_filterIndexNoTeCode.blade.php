@@ -21,23 +21,7 @@
         @endforeach 
       </div>
     </div>
-
-    <div class="form-group col-sm-12">
-      <label for="is_self_pay_form" class="control-label"> View Payment-based Forms Only:</label>
-      <div class="col-sm-12">
-        
-        <div class="col-sm-4">
-            <div class="input-group"> 
-              <span class="input-group-addon">       
-                <input type="checkbox" name="is_self_pay_form" value=1 >                 
-              </span>
-                <label type="text" class="form-control">Yes</label>
-            </div>
-        </div>
-        
-      </div>
-    </div>
-
+    
     <div class="form-group">           
       <label for="organization" class="col-md-12 control-label"> Organization:</label>
       <div class="form-group col-sm-12">
@@ -53,6 +37,25 @@
         </div>
       </div>
     </div>
+    
+    @if(!Request::is('admin/selfpayform*'))
+    <div class="form-group col-sm-12">
+      <label for="is_self_pay_form" class="control-label"> Additional Filters:</label>
+      <div class="col-sm-12">
+        
+        <div class="col-sm-4">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="is_self_pay_form" value=1 >                 
+              </span>
+                <label type="text" class="form-control">View Payment-based Forms Only</label>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+    @endif
+
 </div> <!-- end filter div -->
 
 <div class="form-group">           

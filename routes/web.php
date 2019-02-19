@@ -151,6 +151,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('placement-form', 'PlacementFormController');
     Route::get('send-reminder-emails-placement', 'PlacementFormController@sendReminderEmailsPlacement')->name('send-reminder-emails-placement');
     Route::get('/placement-form-filtered', ['as'=>'placement-form-filtered','uses'=>'PlacementFormController@getFilteredPlacementForms']);
+    Route::get('/placement-form-approved-view', ['as'=>'placement-form-approved-view','uses'=>'PlacementFormController@getApprovedPlacementFormsView']);
+
     // route of assign course form to placement view 
     Route::get('/placement-form-assign/{id}', ['as'=>'placement-form-assign','uses'=>'PlacementFormController@editAssignCourse']);
     

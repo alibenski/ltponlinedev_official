@@ -27,7 +27,8 @@
 
         <!-- submit button included admin.partials._filterIndex view -->
         	<a href="/admin/placement-form/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
-        	<a href="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}" target="_blank" class="btn btn-info"><i class="fa fa-gear"></i> Manage Non-assigned Placement Forms</a>
+        	<a href="{{ route('placement-form-filtered',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}" target="_blank" class="btn btn-warning"><i class="fa fa-gear"></i> Manage Non-assigned Placement Test Forms</a>
+        	{{-- <a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}" target="_blank" class="btn btn-info"><i class="fa fa-list"></i> Extract </a> --}}
         </div>
 
     </form>

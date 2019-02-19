@@ -7,7 +7,7 @@
 @section('content')
 
 <div class="alert alert-warning col-sm-12">
-	<h4 class="text-center"><strong>Placement Test Forms Not Assigned to Language Course</strong></h4>
+	<h4 class="text-center"><strong><i class="fa fa-gear"></i> Manage Non-Assigned Placement Test Forms</strong></h4>
 </div>
 
 @include('admin.partials._termSessionMsg')

@@ -273,7 +273,12 @@ class PlacementFormController extends Controller
         $placementForm->agreementBtn = $request->agreementBtn;
         // $placementForm->contractDate = $request->contractDate;
         $placementForm->save();
-        
+
+        if (in_array($placementForm->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO'])) {
+            $placementForm->update([
+                'overall_approval' => 1,
+            ]);
+        }  
         // execute mail class to send email to HR focal point if needed
         $staff = $index_id;
         $next_term_code = $term_id;
@@ -466,7 +471,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 
+                'L', 'DEPT', 'is_self_pay_form', 'overall_approval',
             ];
 
             foreach ($columns as $column) {
@@ -503,6 +508,60 @@ class PlacementFormController extends Controller
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
+    public function getApprovedPlacementFormsView(Request $request)
+    {
+        if (!Session::has('Term') ) {
+            $request->session()->flash('error', 'Term is not set.');
+            return view('admin_dashboard');
+        }
+
+            $placement_forms = new PlacementForm;
+            // $currentQueries = \Request::query();
+            $queries = [];
+
+            $columns = [
+                'L', 'DEPT', 'is_self_pay_form', 'overall_approval',
+            ];
+
+            foreach ($columns as $column) {
+                if (\Request::has($column)) {
+                    $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                    
+                    $queries[$column] = \Request::input($column);
+                }
+                
+            } 
+
+
+                if (Session::has('Term')) {
+                    $placement_forms = $placement_forms->where('Term', Session::get('Term') );
+                    $queries['Term'] = Session::get('Term');
+                }
+
+                if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $placement_forms = $placement_forms->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+                }  
+
+                if (\Request::has('sort')) {
+                    $placement_forms = $placement_forms->where('selfpay_approval', '1')->orWhere('selfpay_approval', null)->orderBy('created_at', \Request::input('sort') );
+                    $queries['sort'] = \Request::input('sort');
+                }
+
+            // $allQueries = array_merge($queries, $currentQueries);
+            $placement_forms = $placement_forms->appends($queries);
+            return view('placement_forms.getApprovedPlacementForms')->withPlacement_forms($placement_forms);
+    }
+
+    /**
+     * View for Placement Test forms which have not been assigned to a course
+     * @param  Request $request 
+     * @return html           View with filter
+     */
     public function getFilteredPlacementForms(Request $request)
     {      
         $languages = DB::table('languages')->pluck("name","code")->all();
@@ -512,7 +571,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 'is_self_pay_form',
+                'L', 'DEPT', 'is_self_pay_form', 'overall_approval',
             ];
 
             foreach ($columns as $column) {
