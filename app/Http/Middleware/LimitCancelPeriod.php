@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Term;
 use Carbon\Carbon;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class LimitCancelPeriod
 {
@@ -30,27 +31,34 @@ class LimitCancelPeriod
         $cancellationDateLimit = Term::where('Term_Code', $termCode)->value('Cancel_Date_Limit');
         $current_enrol_season = Term::where('Term_Code', $termCode)->value('Comments');
 
-        if (!is_null($cancellationDateLimit)) {
-            //logic to check if today is 4 WORKING days AFTER the start of the NEXT term 
-            //and if the NEXT term is NOT Summer
-            //if yes, redirect(), else, $next
-            if ($current_enrol_season !== 'SUMMER' && $now_date >= $cancellationDateLimit) {
+        // exempt administrators from this middleware
+        if (Auth::user()->hasRole('Admin')) {
+            return $next($request);
+
+        } else {
+
+            if (!is_null($cancellationDateLimit)) {
+                //logic to check if today is 4 WORKING days AFTER the start of the NEXT term 
+                //and if the NEXT term is NOT Summer
+                //if yes, redirect(), else, $next
+                if ($current_enrol_season !== 'SUMMER' && $now_date >= $cancellationDateLimit) {
+                    return redirect()->route('home')
+                    ->with('interdire-msg','Cancellation period expired.');
+                } 
+                //logic to check if today is 2 weeks AFTER the start of the NEXT term 
+                //and if the NEXT term is Summer
+                //if yes, redirect(), else, $next
+                elseif ($current_enrol_season == 'SUMMER' && $now_date >= $cancellationDateLimit) {
+                    return redirect()->route('home')
+                    ->with('interdire-msg','Summer term cancellation period expired.');        
+                } 
+            } elseif (is_null($cancellationDateLimit)) {
                 return redirect()->route('home')
-                ->with('interdire-msg','Cancellation period expired.');
+                    ->with('interdire-msg','Cancellation of enrolment forms has been disabled. Please contact the Language Secretariat.');
             } 
-            //logic to check if today is 2 weeks AFTER the start of the NEXT term 
-            //and if the NEXT term is Summer
-            //if yes, redirect(), else, $next
-            elseif ($current_enrol_season == 'SUMMER' && $now_date >= $cancellationDateLimit) {
-                return redirect()->route('home')
-                ->with('interdire-msg','Summer term cancellation period expired.');        
-            } 
-        } elseif (is_null($cancellationDateLimit)) {
-            return redirect()->route('home')
-                ->with('interdire-msg','Cancellation of enrolment forms has been disabled. Please contact the Language Secretariat.');
-        } 
-        
-        return $next($request);
+            
+            return $next($request);
+        }
                 
     }
 }
