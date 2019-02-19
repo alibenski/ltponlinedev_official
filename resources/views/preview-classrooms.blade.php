@@ -56,6 +56,7 @@
                         <th>Flexible?</th>
                         <th>Schedules</th>
                         <th>Submission Date</th>
+                        <th>Cancel Date/Time Stamp</th>
                         <th>Operation</th>
                     </tr>
                 </thead>
@@ -104,6 +105,9 @@
                       </td>
                       <td>
                         {{$form->created_at}}
+                      </td>
+                      <td>
+                        {{$form->deleted_at}}
                       </td>
                       <td>
                         @if(is_null($form->convocation_email_sent))

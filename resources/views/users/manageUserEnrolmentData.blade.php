@@ -64,7 +64,7 @@
 		              <div class="panel-body">
 		                <p>
 		                  @foreach ($student_convoked as $element)
-		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong></h3>
+		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong> <a href="{{ route('pdfview',['download'=>'pdf', 'code'=> $element->CodeClass]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h3>
 		                  
 		                  <p>Schedule: <strong>@if(!empty($element->schedules->name)){{$element->schedules->name}}@endif</strong></p>  
 
@@ -160,6 +160,7 @@
 							            <th>Payment Proof</th>
 							            <th>Comment</th>
 							            <th>Time Stamp</th>
+							            <th>Cancel Time Stamp</th>
 							        </tr>
 							    </thead>
 							    <tbody>
@@ -220,6 +221,7 @@
 											<input type="hidden" name="tecode" value="{{$form->Te_Code}}">
 										</td>
 										<td>{{ $form->created_at}}</td>
+										<td>{{ $form->deleted_at}}</td>
 									</tr>
 									@endforeach
 							    </tbody>
@@ -253,6 +255,7 @@
 							            <th>ID Proof</th>
 							            <th>Payment Proof</th>
 							            <th>Time Stamp</th>
+							            <th>Cancel Time Stamp</th>
 							        </tr>
 							    </thead>
 							    <tbody>
@@ -330,6 +333,7 @@
 										@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 										</td>
 										<td>{{ $form->created_at}}</td>
+										<td>{{ $form->deleted_at}}</td>
 									</tr>
 									@endforeach
 							    </tbody>

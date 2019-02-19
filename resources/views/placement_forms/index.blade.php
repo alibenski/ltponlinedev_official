@@ -90,7 +90,7 @@
 	    </thead>
 	    <tbody>
 			@foreach($placement_forms as $form)
-			<tr>
+			<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 				<td>
 					<button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}" disabled><span class="glyphicon glyphicon-eye-open" ></span> Show</button>
                     {{-- <a href="{{ route('placement-form.edit', [$form->id]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a>  --}}

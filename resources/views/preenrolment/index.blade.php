@@ -67,11 +67,12 @@
 		            <th>Payment Proof</th>
 		            <th>Comment</th>
 		            <th>Time Stamp</th>
+		            <th>Cancel Date/Time Stamp</th>
 		        </tr>
 		    </thead>
 		    <tbody>
 				@foreach($enrolment_forms as $form)
-				<tr>
+				<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 					<td>
 					@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 					</td>
@@ -161,6 +162,7 @@
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
 					</td>
 					<td>{{ $form->created_at}}</td>
+					<td>{{ $form->deleted_at}}</td>
 				</tr>
 				@endforeach
 		    </tbody>

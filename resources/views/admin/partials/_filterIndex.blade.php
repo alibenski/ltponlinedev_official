@@ -62,7 +62,7 @@
               <span class="input-group-addon">       
                 <input type="checkbox" name="is_self_pay_form" value=1 >                 
               </span>
-                <label type="text" class="form-control">View Payment-based Forms Only</label>
+                <label type="text" class="form-control bg-purple">View Payment-based Forms Only</label>
             </div>
         </div>
         @endif
@@ -78,7 +78,7 @@
               <span class="input-group-addon">       
                 <input type="checkbox" name="selfpay_approval" value=2 >                 
               </span>
-                <label type="text" class="form-control">View PENDING Payment Status Only</label>
+                <label type="text" class="form-control bg-yellow">View Pending Payment Status Only</label>
             </div>
         </div>
       </div>
@@ -94,7 +94,7 @@
               <span class="input-group-addon">       
                 <input type="checkbox" name="overall_approval" value=1 >                 
               </span>
-                <label type="text" class="form-control">View Approved Forms Only</label>
+                <label type="text" class="form-control bg-green">View Approved Forms Only</label>
             </div>
         </div>
         
