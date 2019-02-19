@@ -219,11 +219,16 @@ class PreviewController extends Controller
         $schedule = $record->schedules->name;
         $std_email = $record->users->email;
 
-        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
+        // do not send email notification if admin cancelled the convocation
+        if (Auth::id() == $record->users->id) {
+            Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
+        }
 
+        $record->cancelled_by = Auth::id();
+        $record->save();
         $record_delete = Repo::where('CodeIndexIDClass', $codeindexidclass)->delete();
         
-        session()->flash('cancel_success', 'Your enrolment has been successfully cancelled. ');
+        session()->flash('cancel_success', 'Enrolment has been successfully cancelled. ');
         return back();
     }
 
