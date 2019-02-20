@@ -11,6 +11,7 @@ use App\Preenrolment;
 use App\Repo;
 use App\Teachers;
 use App\Term;
+use App\Torgan;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -310,7 +311,25 @@ class TeachersController extends Controller
 
     public function teacherAssignCourseView()
     {
-        $data = view('teachers.teacher_assign_course')->render();
+        $indexno = '711971';
+        $term ='194'; 
+        $tecode = 'C3R1';
+        $form_counter = 1;
+        $enrolment_details = Preenrolment::where('INDEXID', $indexno)
+            ->where('Term', $term)->where('Te_Code', $tecode)->where('form_counter', $form_counter)
+            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ])
+            ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ]);
+        
+        $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('form_counter', $form_counter)
+            ->where('Term', $term)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code' ]);
+
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+
+        $data = view('teachers.teacher_assign_course', compact('enrolment_details', 'enrolment_schedules', 'languages', 'org'))->render();
         return response()->json([$data]); 
     }
 
