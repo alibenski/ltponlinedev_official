@@ -85,6 +85,22 @@
     </div>
     @endif
 
+    @if(Request::is('admin/selfpayform*'))
+    <div class="form-group col-sm-12">
+      <label for="" class="control-label"></label>
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="selfpay_approval" value=0 >                 
+              </span>
+                <label type="text" class="form-control bg-red">View Disapproved Payment Status Only</label>
+            </div>
+        </div>
+      </div>
+    </div>
+    @endif
+
     <div class="form-group col-sm-12">
       <label for="overall_approval" class="control-label"></label>
       <div class="col-sm-12">

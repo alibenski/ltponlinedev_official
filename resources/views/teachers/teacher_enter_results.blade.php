@@ -1,3 +1,18 @@
+<style>
+.modal-dialog {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.modal-content {
+  height: auto;
+  min-height: 100%;
+  border-radius: 0;
+}  
+</style>
+
 <div class="reload">
 <div class="table-responsive filtered-table">
   <div class="preloader2"><p>Please wait...</p></div>
@@ -73,8 +88,9 @@
             
           </td>
           <td>
-            <button type="button" class="btn btn-warning btn-sm quick-edit">Edit</button>
-            <button type="button" class="btn btn-success btn-sm quick-save" >Save</button>
+            <button type="button" class="btn btn-warning btn-sm btn-space quick-edit">Edit</button>
+            <button type="button" class="btn btn-success btn-sm btn-space quick-save" >Save</button>
+            <button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
             <input type="hidden" name="_token" value="{{ Session::token() }}">
           </td>
         </tr>
@@ -87,13 +103,13 @@
 
 </div>
 <div id="modalshow" class="modal fade">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"></h4>
+                <h4 class="modal-title">Assign Course</h4>
             </div>
-            <div class="modal-body-schedule">
+            <div class="modal-body-content">
             </div>
             <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
@@ -105,6 +121,7 @@
 
 
 <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+<script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
 <script>
 $(document).ready(function () {
@@ -114,6 +131,32 @@ $(document).ready(function () {
         $(this).attr('id', counter);
         $('#'+counter).html(counter);
         // console.log(counter)
+    });    
+});
+</script>
+<script>
+$(document).ready(function () {
+    $('.assign-course').on('click', function() {
+
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+        url: '{{ route('teacher-assign-course-view') }}',
+        type: 'GET',
+        data: {_token: token},
+      })
+      .done(function(data) {
+        console.log("success");
+        $('.modal-body-content').html(data)
+        $('#modalshow').modal('show');
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+
     });    
 });
 </script>

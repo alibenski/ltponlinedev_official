@@ -308,6 +308,12 @@ class TeachersController extends Controller
         }
     }
 
+    public function teacherAssignCourseView()
+    {
+        $data = view('teachers.teacher_assign_course')->render();
+        return response()->json([$data]); 
+    }
+
     public function teacherSelectWeek($code)
     {
         $term = Term::where('Term_Code', Session::get('Term'))->first();
