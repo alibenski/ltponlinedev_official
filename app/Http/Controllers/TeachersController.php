@@ -238,6 +238,8 @@ class TeachersController extends Controller
             $enrolled_next_term_regular = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
+                ->select('Te_Code')
+                ->groupBy('Te_Code')
                 ->get();
 
             $arr1 = [];
@@ -309,22 +311,24 @@ class TeachersController extends Controller
         }
     }
 
-    public function teacherAssignCourseView()
+    public function teacherAssignCourseView(Request $request)
     {
-        $indexno = '711971';
-        $term ='194'; 
-        $tecode = 'C3R1';
-        $form_counter = 1;
-        $enrolment_details = Preenrolment::where('INDEXID', $indexno)
-            ->where('Term', $term)->where('Te_Code', $tecode)->where('form_counter', $form_counter)
-            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ])
-            ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ]);
+        $indexid = $request->indexid;
+        $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
+        $language = $request->L;
+
+        $enrolment_details = Preenrolment::where('INDEXID', $indexid)
+            ->where('L', $language)
+            ->where('Term', $next_term)
+            ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count')
+            ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count')
+            ->get();
         
         $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
-            ->where('Te_Code', $tecode)
-            ->where('INDEXID', $indexno)
-            ->where('form_counter', $form_counter)
-            ->where('Term', $term)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code' ]);
+            ->where('INDEXID', $indexid)
+            ->where('L', $language)
+            ->where('Term', $next_term)
+            ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
 
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);

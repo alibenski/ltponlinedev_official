@@ -1,18 +1,3 @@
-<style>
-.modal-dialog {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.modal-content {
-  height: auto;
-  min-height: 100%;
-  border-radius: 0;
-}  
-</style>
-
 <div class="reload">
 <div class="table-responsive filtered-table">
   <div class="preloader2"><p>Please wait...</p></div>
@@ -105,15 +90,14 @@
 <div id="modalshow" class="modal fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Assign Course</h4>
+
+            <div class="modal-header bg-purple">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                <h4 class="modal-title">Assign Course to Student</h4>
             </div>
-            <div class="modal-body-content">
+            <div class="modal-body-content modal-background">
             </div>
-            <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
-            </div>
+
         </div>
     </div>
 </div>  
@@ -132,18 +116,20 @@ $(document).ready(function () {
         $('#'+counter).html(counter);
         // console.log(counter)
     });    
+    $('.dropdown-toggle').dropdown();
 });
 </script>
 <script>
 $(document).ready(function () {
-    $('.assign-course').on('click', function() {
-
+    $('.assign-course').click( function() {
+      var indexid = $(this).closest("tr").find("input[name='indexid']").val();
+      var L = $(this).closest("tr").find("input[name='L']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
         url: '{{ route('teacher-assign-course-view') }}',
         type: 'GET',
-        data: {_token: token},
+        data: {indexid:indexid, L:L,_token: token},
       })
       .done(function(data) {
         console.log("success");
