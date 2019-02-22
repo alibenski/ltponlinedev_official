@@ -78,6 +78,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('ajax-show-overall-attendance', ['as'=>'ajax-show-overall-attendance','uses'=>'TeachersController@ajaxShowOverallAttendance']);
 
     Route::get('teacher-assign-course-view', ['as'=>'teacher-assign-course-view','uses'=>'TeachersController@teacherAssignCourseView']);
+    Route::get('teacher-check-schedule-count', ['as'=>'teacher-check-schedule-count','uses'=>'TeachersController@teacherCheckScheduleCount']);
+    Route::put('teacher-save-assigned-course', ['as'=>'teacher-save-assigned-course','uses'=>'TeachersController@teacherSaveAssignedCourse']);
+
     /*
      * Preview Routes
      */

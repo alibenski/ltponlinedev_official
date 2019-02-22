@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Attendance;
 use App\AttendanceRemarks;
 use App\Classroom;
+use App\ModifiedForms;
 use App\NewUser;
 use App\PlacementForm;
 use App\Preenrolment;
@@ -12,6 +13,7 @@ use App\Repo;
 use App\Teachers;
 use App\Term;
 use App\Torgan;
+use App\User;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -320,10 +322,20 @@ class TeachersController extends Controller
         $enrolment_details = Preenrolment::where('INDEXID', $indexid)
             ->where('L', $language)
             ->where('Term', $next_term)
-            ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count')
-            ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count')
+            ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn')
+            ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn')
             ->get();
-        
+
+        $arr1 = []; 
+        foreach ($enrolment_details as $key => $value) {
+            $arr1[] = Preenrolment::where('INDEXID', $indexid)
+            ->where('L', $language)
+            ->where('Term', $next_term)
+            ->where('Te_Code', $value->Te_Code)
+            ->get()
+            ->count();
+        }
+
         $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
             ->where('INDEXID', $indexid)
             ->where('L', $language)
@@ -333,9 +345,96 @@ class TeachersController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
 
-        $data = view('teachers.teacher_assign_course', compact('enrolment_details', 'enrolment_schedules', 'languages', 'org'))->render();
+        $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org'))->render();
         return response()->json([$data]); 
     }
+
+    public function teacherCheckScheduleCount(Request $request)
+    {
+        $indexid = $request->INDEXID;
+        $term = $request->term_id; 
+        $language = $request->L;
+
+        $enrolment_details = Preenrolment::where('INDEXID', $indexid)
+            ->where('L', $language)
+            ->where('Term', $term)            
+            ->where('eform_submit_count', $request->eform_submit_count)            
+            ->get();
+
+        $data = count($enrolment_details);
+
+        return response()->json($data);
+    }
+
+    public function teacherSaveAssignedCourse(Request $request)
+    {
+        $indexno = $request->indexid; 
+        $term = $request->term;
+        $tecode = $request->tecode;
+        $eform_submit_count = $request->eform_submit_count;
+
+        if (is_null($request->tecode)) {
+            $request->session()->flash('warning', 'Nothing to change, Nothing to update...');
+            return back();
+        }
+        $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('Term', $term)
+            ->get();
+
+        $user_id = User::where('indexno', $indexno)->first(['id']);
+
+        foreach ($enrolment_to_be_copied as $data) {
+            $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+
+            $arr = $data->attributesToArray();
+            $clone_forms = ModifiedForms::create($arr);
+        }
+
+
+        $count_form = $enrolment_to_be_copied->count();
+        if ($count_form > 1) {
+            $delform = Preenrolment::orderBy('id', 'desc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('Term', $term)
+            ->first();
+            $delform->Code = null;
+            $delform->CodeIndexID = null;
+            $delform->Te_Code = null;
+            $delform->INDEXID = null;
+            $delform->Term = null;
+            $delform->schedule_id = null;             
+            $delform->save();
+            $delform->delete();
+        }
+
+        $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('Term', $term)
+            ->get();
+
+        $input = $request->all();
+        $input = array_filter($input, 'strlen');
+        
+        foreach ($enrolment_to_be_modified as $new_data) {
+            $new_data->fill($input)->save();    
+
+            $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
+            $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
+            $new_data->save();
+        }
+
+        $data = $request->all();
+
+        return response()->json($data);
+    }
+
 
     public function teacherSelectWeek($code)
     {

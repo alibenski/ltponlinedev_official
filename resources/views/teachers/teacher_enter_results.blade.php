@@ -132,7 +132,7 @@ $(document).ready(function () {
         data: {indexid:indexid, L:L,_token: token},
       })
       .done(function(data) {
-        console.log("success");
+        console.log("show assign view : success");
         $('.modal-body-content').html(data)
         $('#modalshow').modal('show');
       })

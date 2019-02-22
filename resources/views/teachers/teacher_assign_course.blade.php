@@ -7,83 +7,144 @@
             </div>
             <div class="box-body">
             	<div class="col-sm-6">
-	                <ul>
-						<li>Name: <strong>{{ $element->users->name }}</strong></li> 
-		                <li>Language: <strong>{{ $element->languages->name }}</strong></li> 
-		                <li>Course: <strong>{{ $element->courses->Description }}</strong></li>
-						<li>Schedule(s) Chosen:</li>
-			                <ol>
-							@foreach ($enrolment_schedules as $val)
-				                @if ($val->eform_submit_count == $element->eform_submit_count)
-					                	<li><strong>{{ $val->schedule->name }}</strong></li>
-				                @endif
-							@endforeach    
-			                </ol>
 
-	                </ul>
+					<p>Name: <strong>{{ $element->users->name }}</strong></p> 
+	                <p>Language: <strong>{{ $element->languages->name }}</strong></p> 
+	                <p>Course: <strong>{{ $element->courses->Description }}</strong></p>
+					<p>Schedule(s) Chosen:</p>
+		                <ol>
+						@foreach ($enrolment_schedules as $val)
+			                @if ($val->eform_submit_count == $element->eform_submit_count)
+				                <li><strong>{{ $val->schedule->name }}</strong></li>
+			                @endif
+						@endforeach    
+		                </ol>
+					<p>Flexible: 
+						@if ( $element->flexibleBtn == 1)
+						<strong>Yes</strong>
+						@else
+						<strong>No</strong>
+						@endif
+					</p>
+
+	                <div id="{{$element->eform_submit_count}}" class="form-group schedule-count btn-accept hidden">
+	                	{{-- <a href="{{ route('nothing-to-modify', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}" class="btn btn-success">Accept Enrolment</a> --}}
+	                	<a href="" class="btn btn-warning"><span><i class="fa fa-thumbs-up"></i></span> Accept </a>		                	 	
+	                </div>
 				</div>
 
 				<div class="col-sm-6">
-		        <form id="form-{{ $element->eform_submit_count }}" method="POST" action="" class="col-sm-12">
-	                	{{ csrf_field() }}
-	                <input name="L" type="hidden" value="{{ $element->L }}">
-	                <input name="eform_submit_count" type="hidden" value="{{ $element->eform_submit_count }}">
-	                <input name="Term" type="hidden" value="{{ $element->Term }}">
+			        <form id="form-{{ $element->eform_submit_count }}" method="POST" action="" class="col-sm-12">
+		                	{{ csrf_field() }}
+		                <input name="INDEXID" type="hidden" value="{{ $element->INDEXID }}">
+		                <input name="L" type="hidden" value="{{ $element->L }}">
+		                <input name="eform_submit_count" type="hidden" value="{{ $element->eform_submit_count }}">
+		                <input name="Term" type="hidden" value="{{ $element->Term }}">
 
-					<div class="form-group">
-	                	<label>Course</label>
-
-
-	                        <select id="{{$element->eform_submit_count}}" class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%; " name="Te_Code">
-	                            <option value="">--- Select Course ---</option>
-	                        </select>
+						<div class="form-group">
+		                	<label>Course</label>
 
 
-	                </div>
+		                        <select id="{{$element->eform_submit_count}}" class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%; " name="Te_Code">
+		                            <option value="">--- Select Course ---</option>
+		                        </select>
 
-	                <div class="form-group">
-	                	<label>Schedule</label>
 
-	                        <select id="schedule-{{$element->eform_submit_count}}" class="col-sm-12 form-control schedule_select_no select2-basic-single" style="width: 100%; " name="schedule_id">
-	                            <option value="">--- Select Here ---</option>
-	                        </select>
+		                </div>
 
-	                </div>
-					
-	                <div class="form-group">
-						<label class="control-label">Comments: </label>
+		                <div class="form-group">
+		                	<label>Schedule</label>
 
-						<textarea name="" class="form-control" maxlength="3500" placeholder="Important information that the Language Secretariat needs to know"></textarea>
+		                        <select id="schedule-{{$element->eform_submit_count}}" class="col-sm-12 form-control schedule_select_no select2-basic-single" style="width: 100%; " name="schedule_id">
+		                            <option value="">--- Select Here ---</option>
+		                        </select>
+
+		                </div>
 						
-					</div>
-	                
-	                <div class="form-group">
-	                	<button id="{{$element->eform_submit_count}}" type="button" class="modal-save-btn btn btn-success btn-space pull-right">Save</button>
+		                <div class="form-group">
+							<label class="control-label">Comments: </label>
+
+							<textarea id="textarea-{{$element->eform_submit_count}}" name="" class="form-control" maxlength="3500" placeholder="Important information that the Language Secretariat needs to know"></textarea>
+							
+						</div>
 		                
-		                <input type="hidden" name="_token" value="{{ Session::token() }}">
-		                {{ method_field('PUT') }}
-	                </div>
-		        </form>
+		                <div class="form-group">
+
+		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-success btn-space pull-right">Save</button>
+			                
+			                <input type="hidden" name="_token" value="{{ Session::token() }}">
+			                {{ method_field('PUT') }}
+		                </div>
+			        </form>
 		    	</div>
             </div>
         </div>
     </div>
 	@endforeach
 </div>
-<script>
-$('.modal-save-btn').on('click', function() {
-	$('#modalshow').modal('hide');
 
+<script>	
+$('.modal-save-btn').on('click', function() {
+	var eform_submit_count = $(this).attr('id');
+	var tecode = $(this).attr('data-tecode');
+	var indexid = $(this).attr('data-indexid');
+	var term = $(this).attr('data-term');
+	var token = $("input[name='_token']").val();
+
+	$.ajax({
+		url: '{{ route('teacher-save-assigned-course') }}',
+		type: 'PUT',
+		data: {eform_submit_count:eform_submit_count, tecode:tecode, indexid:indexid, term:term, _token:token},
+	})
+	.done(function(data) {
+		console.log(data);
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+	
+	// $('#modalshow').modal('hide');
+	
 });
 $('#modalshow').on('hidden.bs.modal', function () {
-  	alert('refresh');
+  	// console.log('refresh')
 })
 </script>
+
 <script type="text/javascript">
 $(document).ready(function() {
+	var INDEXID = $("input[name='INDEXID']").val();
 	var L = $("input[name='L']").val();
 	var term = $("input[name='Term']").val();
 	var token = $("input[name='_token']").val();
+
+	$('.schedule-count').each(function(index, val) {
+		var eform_submit_count = $(this).attr('id');
+
+		console.log('eform_submit_count '+eform_submit_count)
+		$.ajax({
+			url: '{{ route('teacher-check-schedule-count') }}',
+			type: 'GET',
+			data: {eform_submit_count:eform_submit_count, INDEXID:INDEXID, L:L, term_id:term, _token:token},
+		})
+		.done(function(data) {
+			console.log(data)
+			if (data == 1) {
+				$('div#'+eform_submit_count+'.btn-accept').removeClass('hidden');
+			}
+			
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+	});
+
 
 	$.ajax({
 	  url: "{{ route('select-ajax') }}", 
