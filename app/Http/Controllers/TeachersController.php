@@ -327,24 +327,24 @@ class TeachersController extends Controller
         $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
         $language = $request->L;
 
-        $qry_enrolment_info = Preenrolment::where('INDEXID', $indexid)
+        $qry_enrolment_details = Preenrolment::withTrashed()
+            ->where('INDEXID', $indexid)
             ->where('L', $language)
             ->where('Term', $next_term)
             ->get();
 
-        $arr2 = [];
-        foreach ($qry_enrolment_info as $key => $value) {
-            $qry_modified_forms = ModifiedForms::where('id', $value->id)->get();
-            $arr2[] = $qry_modified_forms;
-        }
-        dd($arr2);
+        $modified_forms = [];
 
+        foreach ($qry_enrolment_details as $k => $v) {
+            $qry_mod_forms = ModifiedForms::where('id', $v->id)->get();
+            $modified_forms[] = $qry_mod_forms;
+        }    
 
         $enrolment_details = Preenrolment::where('INDEXID', $indexid)
             ->where('L', $language)
             ->where('Term', $next_term)
-            ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn')
-            ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn')
+            ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
+            ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
             ->get();
 
         $arr1 = []; 
@@ -366,7 +366,7 @@ class TeachersController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
 
-        $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'qry_enrolment_info', 'arr2'))->render();
+        $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms'))->render();
         return response()->json([$data]); 
     }
 
@@ -385,6 +385,28 @@ class TeachersController extends Controller
         $data = count($enrolment_details);
 
         return response()->json($data);
+    }
+
+    public function teacherNothingToModify(Request $request)
+    {
+        $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('form_counter', $form_counter)
+            ->where('Term', $term)
+            ->get();
+
+        $user_id = User::where('indexno', $indexno)->first(['id']);
+        
+        foreach ($enrolment_to_be_copied as $data) {
+            $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+
+            // $arr = $data->attributesToArray();
+            // $clone_forms = ModifiedForms::create($arr);
+        }
+        $request->session()->flash('success', 'Admin confirmation successful!');
+        // return redirect()->route('manage-user-enrolment-data', $user_id);
+        return redirect()->route('users.index');
     }
 
     public function teacherSaveAssignedCourse(Request $request)

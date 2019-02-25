@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('teacher-assign-course-view', ['as'=>'teacher-assign-course-view','uses'=>'TeachersController@teacherAssignCourseView']);
     Route::get('teacher-check-schedule-count', ['as'=>'teacher-check-schedule-count','uses'=>'TeachersController@teacherCheckScheduleCount']);
     Route::put('teacher-save-assigned-course', ['as'=>'teacher-save-assigned-course','uses'=>'TeachersController@teacherSaveAssignedCourse']);
+    Route::put('teacher-nothing-to-modify', ['as'=>'teacher-nothing-to-modify','uses'=>'TeachersController@teacherNothingToModify']);
 
     /*
      * Preview Routes

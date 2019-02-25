@@ -46,14 +46,6 @@
             </div>
             <div class="box-body">
             	<div class="col-sm-6">
-            		
-            		@if (count($arr2) > 0) 
-		            <div id="ribbon">
-					  Enrolment form modified by : @if ($element->modifyUser)
-					  	{{ $element->modifyUser->name }} on {{ $element->updated_at }}
-					  @endif
-					</div>
-            		@endif
 
 					<p>Name: <strong>{{ $element->users->name }}</strong></p> 
 	                <p>Language: <strong>{{ $element->languages->name }}</strong></p> 
@@ -78,6 +70,25 @@
 	                	{{-- <a href="{{ route('nothing-to-modify', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}" class="btn btn-success">Accept Enrolment</a> --}}
 	                	<a href="" class="btn btn-warning"><span><i class="fa fa-thumbs-up"></i></span> Accept </a>		                	 	
 	                </div>
+	
+					@if ($element->modifyUser)
+		            <div id="ribbon">
+					  Modified by :  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
+					</div>
+
+					<div class="well">
+						<p>Change Logs:</p>
+
+						@foreach ($modified_forms as $e)
+							@foreach ($e as $v)
+								{{ $v->id }} 
+								{{ $v->schedule->name }} <br>
+							@endforeach
+						@endforeach
+						
+					</div>
+
+					@endif
 				</div>
 
 				<div class="col-sm-6">
