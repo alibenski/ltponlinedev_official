@@ -196,13 +196,21 @@ class TeachersController extends Controller
     {
         if ($request->ajax()) {
             $qry = Attendance::where('pash_id', $request->id)->get();
-            $arr = [];
 
+            if ($qry->isEmpty()) {
+                $sumP_count = 0;
+                $sumE_count = 0;
+                $sumA_count = 0;
+
+                $data = [$sumP_count,$sumE_count,$sumA_count];
+                return response()->json($data); 
+            }
+
+            $arr = [];
             foreach ($qry as $key => $value) {
                 $arr = $value;
             }
             
-
             $arr2 = $arr->getAttributes();
             
             $sumP = [];
@@ -319,6 +327,19 @@ class TeachersController extends Controller
         $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
         $language = $request->L;
 
+        $qry_enrolment_info = Preenrolment::where('INDEXID', $indexid)
+            ->where('L', $language)
+            ->where('Term', $next_term)
+            ->get();
+
+        $arr2 = [];
+        foreach ($qry_enrolment_info as $key => $value) {
+            $qry_modified_forms = ModifiedForms::where('id', $value->id)->get();
+            $arr2[] = $qry_modified_forms;
+        }
+        dd($arr2);
+
+
         $enrolment_details = Preenrolment::where('INDEXID', $indexid)
             ->where('L', $language)
             ->where('Term', $next_term)
@@ -345,7 +366,7 @@ class TeachersController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
 
-        $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org'))->render();
+        $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'qry_enrolment_info', 'arr2'))->render();
         return response()->json([$data]); 
     }
 
@@ -368,15 +389,16 @@ class TeachersController extends Controller
 
     public function teacherSaveAssignedCourse(Request $request)
     {
-        $indexno = $request->indexid; 
-        $term = $request->term;
-        $tecode = $request->tecode;
+        $indexno = $request->qry_indexid; 
+        $term = $request->qry_term;
+        $tecode = $request->qry_tecode;
         $eform_submit_count = $request->eform_submit_count;
 
-        if (is_null($request->tecode)) {
-            $request->session()->flash('warning', 'Nothing to change, Nothing to update...');
-            return back();
+        if (is_null($request->Te_Code)) {
+            $data = 0;
+            return response()->json($data);
         }
+
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)

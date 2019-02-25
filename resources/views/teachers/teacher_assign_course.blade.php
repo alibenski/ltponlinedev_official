@@ -1,3 +1,42 @@
+<style>
+#ribbon{
+  background:#fa6f57;
+  height: 30px;
+  width:auto;
+  display: inline-block;
+  margin:15px auto;
+  position: relative;
+  color:#FFF;
+  line-height: 30px;
+  padding:0px 20px;
+}
+
+#ribbon:after{
+  content:"";
+  height:0;
+  width: 0;
+  top:0px;
+  right:-30px;
+  position: absolute;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 30px solid #fa6f57;
+}
+
+#ribbon:before{
+  content:"";
+  height:0;
+  width: 0;
+  top:0px;
+  right:-30px;
+  position: absolute;
+  border-style: solid;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-top: 30px solid #fa6f57;
+}
+</style>
+
 <div class="row">
 	@foreach ($enrolment_details as $element)
     <div class="col-sm-12">
@@ -7,6 +46,14 @@
             </div>
             <div class="box-body">
             	<div class="col-sm-6">
+            		
+            		@if (count($arr2) > 0) 
+		            <div id="ribbon">
+					  Enrolment form modified by : @if ($element->modifyUser)
+					  	{{ $element->modifyUser->name }} on {{ $element->updated_at }}
+					  @endif
+					</div>
+            		@endif
 
 					<p>Name: <strong>{{ $element->users->name }}</strong></p> 
 	                <p>Language: <strong>{{ $element->languages->name }}</strong></p> 
@@ -86,18 +133,23 @@
 <script>	
 $('.modal-save-btn').on('click', function() {
 	var eform_submit_count = $(this).attr('id');
-	var tecode = $(this).attr('data-tecode');
-	var indexid = $(this).attr('data-indexid');
-	var term = $(this).attr('data-term');
+	var qry_tecode = $(this).attr('data-tecode');
+	var qry_indexid = $(this).attr('data-indexid');
+	var qry_term = $(this).attr('data-term');
 	var token = $("input[name='_token']").val();
+	var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
+	var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
 
 	$.ajax({
 		url: '{{ route('teacher-save-assigned-course') }}',
 		type: 'PUT',
-		data: {eform_submit_count:eform_submit_count, tecode:tecode, indexid:indexid, term:term, _token:token},
+		data: {Te_Code:Te_Code, schedule_id:schedule_id, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
 	})
 	.done(function(data) {
 		console.log(data);
+		if (data == 0) {
+			alert('Hmm... Nothing to change, nothing to update...');
+		}
 	})
 	.fail(function() {
 		console.log("error");
