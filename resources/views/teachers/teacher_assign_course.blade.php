@@ -1,42 +1,3 @@
-<style>
-#ribbon{
-  background:#fa6f57;
-  height: 30px;
-  width:auto;
-  display: inline-block;
-  margin:15px auto;
-  position: relative;
-  color:#FFF;
-  line-height: 30px;
-  padding:0px 20px;
-}
-
-#ribbon:after{
-  content:"";
-  height:0;
-  width: 0;
-  top:0px;
-  right:-30px;
-  position: absolute;
-  border-left: 30px solid transparent;
-  border-right: 30px solid transparent;
-  border-bottom: 30px solid #fa6f57;
-}
-
-#ribbon:before{
-  content:"";
-  height:0;
-  width: 0;
-  top:0px;
-  right:-30px;
-  position: absolute;
-  border-style: solid;
-  border-left: 30px solid transparent;
-  border-right: 30px solid transparent;
-  border-top: 30px solid #fa6f57;
-}
-</style>
-
 <div class="row">
 	@foreach ($enrolment_details as $element)
     <div class="col-sm-12">
@@ -65,27 +26,24 @@
 						<strong>No</strong>
 						@endif
 					</p>
-
-	                <div id="{{$element->eform_submit_count}}" class="form-group schedule-count btn-accept hidden">
-	                	{{-- <a href="{{ route('nothing-to-modify', [$button->INDEXID, $button->Term, $button->Te_Code, $button->form_counter]) }}" class="btn btn-success">Accept Enrolment</a> --}}
-	                	<a href="" class="btn btn-warning"><span><i class="fa fa-thumbs-up"></i></span> Accept </a>		                	 	
-	                </div>
 	
 					@if ($element->modifyUser)
-		            <div id="ribbon">
-					  Modified by :  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
+		            <div class="callout callout-warning">
+						Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
 					</div>
-
+					
 					<div class="well">
-						<p>Change Logs:</p>
-
+						<p><strong>Change Logs (Student Originally Chose):</strong></p>
 						@foreach ($modified_forms as $e)
 							@foreach ($e as $v)
-								{{ $v->id }} 
-								{{ $v->schedule->name }} <br>
+								@if ($v->eform_submit_count == $element->eform_submit_count)
+									Form # {{ $v->eform_submit_count }}: 
+									{{ $v->courses->Description }} 
+									{{ $v->schedule->name }} <br>
+								@endif
+								
 							@endforeach
-						@endforeach
-						
+						@endforeach	
 					</div>
 
 					@endif
@@ -100,7 +58,8 @@
 		                <input name="Term" type="hidden" value="{{ $element->Term }}">
 
 						<div class="form-group">
-		                	<label>Course</label>
+		                	<label>Course:</label>
+		                	<small class="text-danger">Leave blank if no change is needed</small>
 
 
 		                        <select id="{{$element->eform_submit_count}}" class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%; " name="Te_Code">
@@ -111,7 +70,7 @@
 		                </div>
 
 		                <div class="form-group">
-		                	<label>Schedule</label>
+		                	<label>Schedule:</label>
 
 		                        <select id="schedule-{{$element->eform_submit_count}}" class="col-sm-12 form-control schedule_select_no select2-basic-single" style="width: 100%; " name="schedule_id">
 		                            <option value="">--- Select Here ---</option>
@@ -122,13 +81,17 @@
 		                <div class="form-group">
 							<label class="control-label">Comments: </label>
 
-							<textarea id="textarea-{{$element->eform_submit_count}}" name="" class="form-control" maxlength="3500" placeholder="Important information that the Language Secretariat needs to know"></textarea>
+							<textarea id="textarea-{{$element->eform_submit_count}}" name="" class="form-control" maxlength="3500" placeholder="Important information that the Language Secretariat needs to know e.g. 2nd prefered course to take, etc."></textarea>
 							
 						</div>
-		                
-		                <div class="form-group">
 
-		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-success btn-space pull-right">Save</button>
+		                <div class="form-group">
+							<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
+			                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-primary btn-space"><span><i class="fa fa-thumbs-up"></i></span> Accept </button>		                	 	
+			                </span>
+		                
+
+		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-success btn-space pull-right"><span><i class="fa fa-exchange"></i></span> Assign Course</button>
 			                
 			                <input type="hidden" name="_token" value="{{ Session::token() }}">
 			                {{ method_field('PUT') }}
@@ -136,12 +99,43 @@
 			        </form>
 		    	</div>
             </div>
+        	<div class="overlay">
+        		<i class="fa fa-refresh fa-spin"></i>
+        	</div>
         </div>
     </div>
 	@endforeach
 </div>
 
 <script>	
+$('.modal-accept-btn').on('click', function() {
+	var eform_submit_count = $(this).attr('id');
+	var qry_tecode = $(this).attr('data-tecode');
+	var qry_indexid = $(this).attr('data-indexid');
+	var qry_term = $(this).attr('data-term');
+	var token = $("input[name='_token']").val();
+
+
+	$.ajax({
+		url: '{{ route('teacher-nothing-to-modify') }}',
+		type: 'PUT',
+		data: {eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+	})
+	.done(function(data) {
+		console.log(data);
+		if (data == 0) {
+			alert('Hmm... Nothing to change, nothing to update...');
+		}
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+		
+});
+
 $('.modal-save-btn').on('click', function() {
 	var eform_submit_count = $(this).attr('id');
 	var qry_tecode = $(this).attr('data-tecode');
@@ -150,6 +144,8 @@ $('.modal-save-btn').on('click', function() {
 	var token = $("input[name='_token']").val();
 	var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
 	var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
+
+	$(".overlay").fadeIn('fast'); 
 
 	$.ajax({
 		url: '{{ route('teacher-save-assigned-course') }}',
@@ -167,14 +163,21 @@ $('.modal-save-btn').on('click', function() {
 	})
 	.always(function() {
 		console.log("complete");
+		var L = $("input[name='L']").val();
+
+			$.ajax({
+	        url: '{{ route('teacher-assign-course-view') }}',
+	        type: 'GET',
+	        data: {indexid:qry_indexid, L:L,_token: token},
+	      })
+	      .done(function(data) {
+	        console.log("show assign view : success");
+	        $('.modal-body-content').html(data)
+	        $('#modalshow').modal('show');
+	      })
 	});
-	
-	// $('#modalshow').modal('hide');
-	
+		
 });
-$('#modalshow').on('hidden.bs.modal', function () {
-  	// console.log('refresh')
-})
 </script>
 
 <script type="text/javascript">
@@ -184,11 +187,12 @@ $(document).ready(function() {
 	var term = $("input[name='Term']").val();
 	var token = $("input[name='_token']").val();
 
+	var promises = [];
 	$('.schedule-count').each(function(index, val) {
 		var eform_submit_count = $(this).attr('id');
 
 		console.log('eform_submit_count '+eform_submit_count)
-		$.ajax({
+		promises.push($.ajax({
 			url: '{{ route('teacher-check-schedule-count') }}',
 			type: 'GET',
 			data: {eform_submit_count:eform_submit_count, INDEXID:INDEXID, L:L, term_id:term, _token:token},
@@ -196,17 +200,23 @@ $(document).ready(function() {
 		.done(function(data) {
 			console.log(data)
 			if (data == 1) {
-				$('div#'+eform_submit_count+'.btn-accept').removeClass('hidden');
+				$('span#'+eform_submit_count+'.btn-accept').removeClass('hidden');
 			}
 			
 		})
 		.fail(function() {
 			console.log("error");
+			alert("Ooops! An error occured. Click OK to reload.");
+            window.location.reload();
 		})
 		.always(function() {
 			console.log("complete");
-		});
+		}));
 	});
+
+	$.when.apply($('.schedule-count'), promises).then(function() {
+        $(".overlay").fadeOut(600);
+    }); 
 
 
 	$.ajax({
@@ -233,5 +243,28 @@ $(document).ready(function() {
 		  }
 		});
 	});
+
+	$('#modalshow').on('hidden.bs.modal', function () {
+		$(".preloader2").fadeIn('fast');
+		var Code = $("button[id='enterResultsBtn'].btn-success").val();
+		var token = $("input[name='_token']").val();
+
+		$("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-success');
+		$("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-default');
+		$("button").not("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-default');
+		$("button").not("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-success');
+
+
+		$.ajax({
+		  url: "{{ route('teacher-enter-results') }}", 
+		  method: 'POST',
+		  data: {Code:Code, _token:token},
+		  success: function(data, status) {
+		    // console.log(data)
+		    $(".students-here").html(data);
+		    $(".students-here").html(data.options);
+		  }
+		});
+	})
 });
 </script>

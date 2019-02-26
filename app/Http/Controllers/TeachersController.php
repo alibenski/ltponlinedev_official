@@ -323,160 +323,174 @@ class TeachersController extends Controller
 
     public function teacherAssignCourseView(Request $request)
     {
-        $indexid = $request->indexid;
-        $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
-        $language = $request->L;
+        if ($request->ajax()) {
+            $indexid = $request->indexid;
+            $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
+            $language = $request->L;
 
-        $qry_enrolment_details = Preenrolment::withTrashed()
-            ->where('INDEXID', $indexid)
-            ->where('L', $language)
-            ->where('Term', $next_term)
-            ->get();
+            $qry_enrolment_details = Preenrolment::withTrashed()
+                ->where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get();
 
-        $modified_forms = [];
+            $modified_forms = [];
 
-        foreach ($qry_enrolment_details as $k => $v) {
-            $qry_mod_forms = ModifiedForms::where('id', $v->id)->get();
-            $modified_forms[] = $qry_mod_forms;
-        }    
+            foreach ($qry_enrolment_details as $k => $v) {
+                $qry_mod_forms = ModifiedForms::where('INDEXID', $v->INDEXID)
+                    ->where('Term', $v->Term)
+                    ->where('L', $v->L)
+                    ->where('eform_submit_count', $v->eform_submit_count)
+                    ->get();
 
-        $enrolment_details = Preenrolment::where('INDEXID', $indexid)
-            ->where('L', $language)
-            ->where('Term', $next_term)
-            ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
-            ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
-            ->get();
+                $modified_forms[] = $qry_mod_forms;
+            }    
 
-        $arr1 = []; 
-        foreach ($enrolment_details as $key => $value) {
-            $arr1[] = Preenrolment::where('INDEXID', $indexid)
-            ->where('L', $language)
-            ->where('Term', $next_term)
-            ->where('Te_Code', $value->Te_Code)
-            ->get()
-            ->count();
+            $enrolment_details = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
+                ->get();
+
+            $arr1 = []; 
+            foreach ($enrolment_details as $key => $value) {
+                $arr1[] = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->where('Te_Code', $value->Te_Code)
+                ->get()
+                ->count();
+            }
+
+            $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
+                ->where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
+
+            $languages = DB::table('languages')->pluck("name","code")->all();
+            $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+
+            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms'))->render();
+            return response()->json([$data]);             
         }
-
-        $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
-            ->where('INDEXID', $indexid)
-            ->where('L', $language)
-            ->where('Term', $next_term)
-            ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
-
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
-
-        $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms'))->render();
-        return response()->json([$data]); 
     }
 
     public function teacherCheckScheduleCount(Request $request)
     {
-        $indexid = $request->INDEXID;
-        $term = $request->term_id; 
-        $language = $request->L;
+        if ($request->ajax()) {
+            $indexid = $request->INDEXID;
+            $term = $request->term_id; 
+            $language = $request->L;
 
-        $enrolment_details = Preenrolment::where('INDEXID', $indexid)
-            ->where('L', $language)
-            ->where('Term', $term)            
-            ->where('eform_submit_count', $request->eform_submit_count)            
-            ->get();
+            $enrolment_details = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $term)            
+                ->where('eform_submit_count', $request->eform_submit_count)            
+                ->get();
 
-        $data = count($enrolment_details);
+            $data = count($enrolment_details);
 
-        return response()->json($data);
+            return response()->json($data);
+        }
     }
 
     public function teacherNothingToModify(Request $request)
     {
-        $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
-            ->where('Te_Code', $tecode)
-            ->where('INDEXID', $indexno)
-            ->where('form_counter', $form_counter)
-            ->where('Term', $term)
-            ->get();
+        if ($request->ajax()) {
+            $indexno = $request->qry_indexid; 
+            $term = $request->qry_term;
+            $tecode = $request->qry_tecode;
+            $eform_submit_count = $request->eform_submit_count;
 
-        $user_id = User::where('indexno', $indexno)->first(['id']);
-        
-        foreach ($enrolment_to_be_copied as $data) {
-            $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+            $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+            
+            foreach ($enrolment_to_be_copied as $data) {
+                $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+            }
 
-            // $arr = $data->attributesToArray();
-            // $clone_forms = ModifiedForms::create($arr);
+            $data = $request->all();
+
+            return response()->json($data);
         }
-        $request->session()->flash('success', 'Admin confirmation successful!');
-        // return redirect()->route('manage-user-enrolment-data', $user_id);
-        return redirect()->route('users.index');
     }
 
     public function teacherSaveAssignedCourse(Request $request)
     {
-        $indexno = $request->qry_indexid; 
-        $term = $request->qry_term;
-        $tecode = $request->qry_tecode;
-        $eform_submit_count = $request->eform_submit_count;
+        if ($request->ajax()) {
+            $indexno = $request->qry_indexid; 
+            $term = $request->qry_term;
+            $tecode = $request->qry_tecode;
+            $eform_submit_count = $request->eform_submit_count;
 
-        if (is_null($request->Te_Code)) {
-            $data = 0;
+            if (is_null($request->Te_Code)) {
+                $data = 0;
+                return response()->json($data);
+            }
+
+            $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+
+            $user_id = User::where('indexno', $indexno)->first(['id']);
+
+            foreach ($enrolment_to_be_copied as $data) {
+                $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+
+                $arr = $data->attributesToArray();
+                $clone_forms = ModifiedForms::create($arr);
+            }
+
+
+            $count_form = $enrolment_to_be_copied->count();
+            if ($count_form > 1) {
+                $delform = Preenrolment::orderBy('id', 'desc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->first();
+                $delform->Code = null;
+                $delform->CodeIndexID = null;
+                $delform->Te_Code = null;
+                $delform->INDEXID = null;
+                $delform->Term = null;
+                $delform->schedule_id = null;             
+                $delform->save();
+                $delform->delete();
+            }
+
+            $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+
+            $input = $request->all();
+            $input = array_filter($input, 'strlen');
+            
+            foreach ($enrolment_to_be_modified as $new_data) {
+                $new_data->fill($input)->save();    
+
+                $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
+                $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
+                $new_data->save();
+            }
+
+            $data = $request->all();
+
             return response()->json($data);
         }
-
-        $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
-            ->where('Te_Code', $tecode)
-            ->where('INDEXID', $indexno)
-            ->where('eform_submit_count', $eform_submit_count)
-            ->where('Term', $term)
-            ->get();
-
-        $user_id = User::where('indexno', $indexno)->first(['id']);
-
-        foreach ($enrolment_to_be_copied as $data) {
-            $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
-
-            $arr = $data->attributesToArray();
-            $clone_forms = ModifiedForms::create($arr);
-        }
-
-
-        $count_form = $enrolment_to_be_copied->count();
-        if ($count_form > 1) {
-            $delform = Preenrolment::orderBy('id', 'desc')
-            ->where('Te_Code', $tecode)
-            ->where('INDEXID', $indexno)
-            ->where('eform_submit_count', $eform_submit_count)
-            ->where('Term', $term)
-            ->first();
-            $delform->Code = null;
-            $delform->CodeIndexID = null;
-            $delform->Te_Code = null;
-            $delform->INDEXID = null;
-            $delform->Term = null;
-            $delform->schedule_id = null;             
-            $delform->save();
-            $delform->delete();
-        }
-
-        $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
-            ->where('Te_Code', $tecode)
-            ->where('INDEXID', $indexno)
-            ->where('eform_submit_count', $eform_submit_count)
-            ->where('Term', $term)
-            ->get();
-
-        $input = $request->all();
-        $input = array_filter($input, 'strlen');
-        
-        foreach ($enrolment_to_be_modified as $new_data) {
-            $new_data->fill($input)->save();    
-
-            $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
-            $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
-            $new_data->save();
-        }
-
-        $data = $request->all();
-
-        return response()->json($data);
     }
 
 
