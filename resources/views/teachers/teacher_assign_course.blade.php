@@ -87,7 +87,7 @@
 
 		                <div class="form-group">
 							<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
-			                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-primary btn-space"><span><i class="fa fa-thumbs-up"></i></span> Accept </button>		                	 	
+			                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-primary btn-space"><span><i class="fa fa-thumbs-up"></i></span> No Change </button>		                	 	
 			                </span>
 		                
 
@@ -132,6 +132,18 @@ $('.modal-accept-btn').on('click', function() {
 	})
 	.always(function() {
 		console.log("complete");
+		var L = $("input[name='L']").val();
+
+			$.ajax({
+	        url: '{{ route('teacher-assign-course-view') }}',
+	        type: 'GET',
+	        data: {indexid:qry_indexid, L:L,_token: token},
+	      })
+	      .done(function(data) {
+	        console.log("show assign view : success");
+	        $('.modal-body-content').html(data)
+	        $('#modalshow').modal('show');
+	      })
 	});
 		
 });
@@ -254,17 +266,24 @@ $(document).ready(function() {
 		$("button").not("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-default');
 		$("button").not("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-success');
 
-
 		$.ajax({
 		  url: "{{ route('teacher-enter-results') }}", 
 		  method: 'POST',
 		  data: {Code:Code, _token:token},
-		  success: function(data, status) {
-		    // console.log(data)
-		    $(".students-here").html(data);
-		    $(".students-here").html(data.options);
-		  }
+		})
+		.done(function(data) {
+			// console.log(data)
+			$(".students-here").html(data);
+			$(".students-here").html(data.options);
+		})
+		.fail(function(data) {
+			console.log("error");
+			alert("An error occured. Click OK to reload.");
+			window.location.reload();
+		})
+		.always(function(data) {
+			console.log("complete");
 		});
-	})
+	});
 });
 </script>

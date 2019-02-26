@@ -1,6 +1,6 @@
 <div class="reload">
 <div class="table-responsive filtered-table">
-  <div class="preloader2"><p>Please wait...</p></div>
+  <div class="preloader2"><p>Please wait... Loading results interface...</p></div>
   <h4><strong>Enter Results for Students of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
   <table class="table table-bordered table-striped">
       <thead>
@@ -153,7 +153,7 @@ $(document).ready(function() {
       var indexid = $(this).closest("tr").find("input[name='indexid']").val();
       var L = $(this).closest("tr").find("input[name='L']").val();
       var token = $("input[name='_token']").val();
-
+      console.log('1')
       promises.push($.ajax({
             url: '{{ route('ajax-show-if-enrolled-next-term') }}',
             type: 'GET',
@@ -166,7 +166,7 @@ $(document).ready(function() {
               if (data[0].length > 0) {
                 console.log(data[0]);
                 $.each(data[0], function(index, val) {
-                  $("td#"+indexid+".enrolled-next-term").append("<p>"+val+"</p>");
+                  $("td#"+indexid+".enrolled-next-term").append("<p class='appended-value-1'>"+val+"</p>");
                 });
                 
               }
@@ -174,7 +174,7 @@ $(document).ready(function() {
               if (data[1].length > 0) {
                 console.log(data[1]);
                 $.each(data[1], function(i, v) {
-                  $("td#"+indexid+".enrolled-next-term").append("<p>Placement: "+v+"</p>");
+                  $("td#"+indexid+".enrolled-next-term").append("<p class='appended-value-2'>Placement: "+v+"</p>");
                 });
                 
               }
@@ -242,15 +242,23 @@ $(document).ready(function() {
       var Code = data.CodeClass;
       console.log(Code);
       $.ajax({
-      url: "{{ route('teacher-enter-results') }}", 
-      method: 'POST',
-      data: {Code:Code, _token:token},
-      success: function(data, status) {
-        // console.log(data)
-        $(".students-here").html(data);
-        $(".students-here").html(data.options);
-      }
-  });
+          url: "{{ route('teacher-enter-results') }}", 
+          method: 'POST',
+          data: {Code:Code, _token:token},
+      })
+      .done(function(data) {
+          // console.log(data)
+            $(".students-here").html(data);
+            $(".students-here").html(data.options);
+      })
+      .fail(function(data) {
+          console.log("error");
+          alert("An error occured. Click OK to reload.");
+          window.location.reload();
+      })
+      .always(function(data) {
+          console.log("complete");
+      });
     })
     .fail(function(data) {
       console.log("error");

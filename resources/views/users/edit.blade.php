@@ -36,7 +36,7 @@
             <a href="{{ route('users.passwordreset', $user->id) }}" class="btn btn-danger"><i class='fa fa-undo'></i> Password Reset Here</a>
         </div>
         
-        <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
+        <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit" disabled="">Save</button>
         <input type="hidden" name="_token" value="{{ Session::token() }}">
         {{ method_field('PUT') }}
     </form>

@@ -133,11 +133,19 @@ $("button[id='showStudentsBtn']").click(function(){
       url: "{{ route('teacher-show-students') }}", 
       method: 'POST',
       data: {Code:Code, _token:token},
-      success: function(data, status) {
-        // console.log(data)
+  })
+  .done(function(data) {
+  		// console.log(data)
         $(".students-here").html(data);
         $(".students-here").html(data.options);
-      }
+  })
+  .fail(function(data) {
+      console.log("error");
+      alert("An error occured. Click OK to reload.");
+      window.location.reload();
+  })
+  .always(function(data) {
+      console.log("complete");
   });
 }); 
 
@@ -155,11 +163,19 @@ $("button[id='enterResultsBtn']").click(function(){
       url: "{{ route('teacher-enter-results') }}", 
       method: 'POST',
       data: {Code:Code, _token:token},
-      success: function(data, status) {
-        // console.log(data)
+  })
+  .done(function(data) {
+  		// console.log(data)
         $(".students-here").html(data);
         $(".students-here").html(data.options);
-      }
+  })
+  .fail(function(data) {
+      console.log("error");
+      alert("An error occured. Click OK to reload.");
+      window.location.reload();
+  })
+  .always(function(data) {
+      console.log("complete");
   });
 }); 
 </script>
