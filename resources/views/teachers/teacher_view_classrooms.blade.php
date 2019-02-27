@@ -165,9 +165,9 @@ $("button[id='enterResultsBtn']").click(function(){
       data: {Code:Code, _token:token},
   })
   .done(function(data) {
-  		// console.log(data)
         $(".students-here").html(data);
         $(".students-here").html(data.options);
+  		console.log("loading students after click Enter Results button")
   })
   .fail(function(data) {
       console.log("error");
@@ -175,7 +175,7 @@ $("button[id='enterResultsBtn']").click(function(){
       window.location.reload();
   })
   .always(function(data) {
-      console.log("complete");
+      console.log("complete load enter results view");
   });
 }); 
 </script>

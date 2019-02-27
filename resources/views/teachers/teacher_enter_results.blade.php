@@ -140,7 +140,7 @@ $(document).ready(function () {
         console.log("error");
       })
       .always(function() {
-        console.log("complete");
+        console.log("complete show assign view");
       });
 
     });    
@@ -153,7 +153,7 @@ $(document).ready(function() {
       var indexid = $(this).closest("tr").find("input[name='indexid']").val();
       var L = $(this).closest("tr").find("input[name='L']").val();
       var token = $("input[name='_token']").val();
-      console.log('1')
+
       promises.push($.ajax({
             url: '{{ route('ajax-show-if-enrolled-next-term') }}',
             type: 'GET',
@@ -164,6 +164,7 @@ $(document).ready(function() {
             if (data != 'not enrolled') {
 
               if (data[0].length > 0) {
+
                 console.log(data[0]);
                 $.each(data[0], function(index, val) {
                   $("td#"+indexid+".enrolled-next-term").append("<p class='appended-value-1'>"+val+"</p>");
@@ -188,7 +189,7 @@ $(document).ready(function() {
             window.location.reload();
           })
           .always(function() {
-            // console.log("complete");
+            console.log("complete append next term courses");
           })); 
     }); //end of $.each
 
@@ -266,7 +267,7 @@ $(document).ready(function() {
       window.location.reload();
     })
     .always(function(data) {
-      console.log("complete");
+      console.log("complete quick save");
     });
     
   });
