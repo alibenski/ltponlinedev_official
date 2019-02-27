@@ -168,29 +168,27 @@ $('.modal-save-btn').on('click', function() {
 		if (data == 0) {
 			alert('Hmm... Nothing to change, nothing to update...');
 		}
+		var L = $("input[name='L']").val();
+
+		$.ajax({
+			url: '{{ route('teacher-assign-course-view') }}',
+			type: 'GET',
+			data: {indexid:qry_indexid, L:L,_token: token},
+		})
+		.done(function(data) {
+			console.log("show assign view : success");     
+			// $('.modal-body-content').html(data);        
+		})
+
 	})
 	.fail(function() {
 		console.log("error");
 	})
 	.always(function() {
 		console.log("complete");
-		var L = $("input[name='L']").val();
-
-			$.ajax({
-	        url: '{{ route('teacher-assign-course-view') }}',
-	        type: 'GET',
-	        data: {indexid:qry_indexid, L:L,_token: token},
-	      })
-	      .done(function(data) {
-	        console.log("show assign view : success");
-	        // $('.modal-body-content').html(data)
-	        $('#modalshow').modal('hide', function () {
-
-				console.log('modal hide')
-			});
-	      })
 	});
 		
+
 });
 </script>
 
@@ -261,37 +259,39 @@ $(document).ready(function() {
 </script>
 
 <script>
-$('#modalshow').on('hide.bs.modal', function () {
-	alert();
-	console.log(1)
+$('#modalshow').on('hidden.bs.modal', function (event) {
 
-	// $(".preloader2").fadeIn('fast');
-	// var Code = $("button[id='enterResultsBtn'].btn-success").val();
-	// var token = $("input[name='_token']").val();
+	console.log(event.target)
+	// alert( "This will be displayed only once." );
+ //  	$( this ).off( event );
+	
+	$(".preloader2").fadeIn('fast');
+	var Code = $("button[id='enterResultsBtn'].btn-success").val();
+	var token = $("input[name='_token']").val();
 
-	// $("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-success');
-	// $("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-default');
-	// $("button").not("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-default');
-	// $("button").not("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-success');
+	$("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-success');
+	$("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-default');
+	$("button").not("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-default');
+	$("button").not("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-success');
 
-	// $.ajax({
-	//   url: "{{ route('teacher-enter-results') }}", 
-	//   method: 'POST',
-	//   data: {Code:Code, _token:token},
-	// })
-	// .done(function(data) {
+	$.ajax({
+	  url: "{{ route('teacher-enter-results') }}", 
+	  method: 'POST',
+	  data: {Code:Code, _token:token},
+	})
+	.done(function(data) {
 
-	// 	$(".students-here").html(data);
-	// 	$(".students-here").html(data.options);
-	// 	console.log("inserted student table");
-	// })
-	// .fail(function(data) {
-	// 	console.log("error");
-	// 	alert("An error occured. Click OK to reload.");
-	// 	window.location.reload();
-	// })
-	// .always(function(data) {
-	// 	console.log("complete close modal");
-	// });
+		$(".students-here").html(data);
+		$(".students-here").html(data.options);
+		console.log("inserted student table");
+	})
+	.fail(function(data) {
+		console.log("error");
+		alert("An error occured. Click OK to reload.");
+		window.location.reload();
+	})
+	.always(function(data) {
+		console.log("complete close modal");
+	});
 });
 </script>
