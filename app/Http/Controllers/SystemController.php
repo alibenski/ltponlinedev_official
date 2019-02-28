@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\sendBroadcastEnrolmentIsOpen;
+use App\Mail\sendReminderToCurrentStudents;
 use App\Preenrolment;
 use App\Repo;
 use App\User;
@@ -82,13 +83,13 @@ class SystemController extends Controller
 
             $query_email_addresses = User::where('indexno', $value3)->get(['email']);
             foreach ($query_email_addresses as $key4 => $value4) {
-               Mail::to($value4->email)
-                    ->subject("Reminder - Language Training Programme: Enrolment Period Open / Rappel - Programme de formation linguistique : Période d'inscription Ouverte")
-                    ->send(new sendBroadcastEnrolmentIsOpen($value4->email);
+                $sddextr_email_address = $value4->email;
+                $arr2[] = $sddextr_email_address;
+                Mail::to($sddextr_email_address)->send(new sendReminderToCurrentStudents($sddextr_email_address));    
             }
         }
-        dd($arr2, $diff, $arr0, $arr1);
 
-
+        $request->session()->flash('success', 'Reminder email sent to '.count($arr2).' students!');
+        return redirect()->back();
     }
 }
