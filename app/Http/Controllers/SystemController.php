@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\sendBroadcastEnrolmentIsOpen;
+use App\Preenrolment;
 use App\Repo;
 use App\User;
 use Illuminate\Http\Request;
@@ -50,5 +51,44 @@ class SystemController extends Controller
 
         $request->session()->flash('success', 'Broadcast email sent!');
     	return redirect()->back();
+    }
+
+    public function sendReminderToCurrentStudents(Request $request)
+    {
+        $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        // query all students enrolled to current term
+        $query_students_current_term = Repo::where('Term', $term->Term_Code)->get();
+        
+        $arr1 = [];
+        $arr0 = [];
+        foreach ($query_students_current_term as $key => $value) {
+            $arr0[] = $value->INDEXID;
+
+            $query_not_enrolled_stds = Preenrolment::where('INDEXID', $value->INDEXID)->where('Term', $term->Term_Next)->get();
+            foreach ($query_not_enrolled_stds as $key2 => $value2) {
+                $arr1[] = $value2->INDEXID;
+                
+            }
+        }
+
+        $arr0 = array_unique($arr0); // remove dupes
+        $arr1 = array_unique($arr1); // remove dupes
+        
+        $diff = array_diff($arr0, $arr1); // get difference
+        $diff = array_unique($diff); // remove dupes
+
+        $arr2 = [];
+        foreach ($diff as $key3 => $value3) {
+
+            $query_email_addresses = User::where('indexno', $value3)->get(['email']);
+            foreach ($query_email_addresses as $key4 => $value4) {
+               Mail::to($value4->email)
+                    ->subject("Reminder - Language Training Programme: Enrolment Period Open / Rappel - Programme de formation linguistique : Période d'inscription Ouverte")
+                    ->send(new sendBroadcastEnrolmentIsOpen($value4->email);
+            }
+        }
+        dd($arr2, $diff, $arr0, $arr1);
+
+
     }
 }
