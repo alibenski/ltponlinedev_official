@@ -77,12 +77,12 @@
             
               <div class="form-group col-md-12">
                 <label for="identityfile">Upload Proof of Identity: </label>
-                <input name="identityfile" type="file">
+                <input name="identityfile" type="file" required="">
               </div>
 
               <div class="form-group col-md-12">
                 <label for="payfile">Upload Proof of Payment: </label>
-                <input name="payfile" type="file">
+                <input name="payfile" type="file" required="">
               </div>  
 
               <div class="col-md-4 col-md-offset-4">
