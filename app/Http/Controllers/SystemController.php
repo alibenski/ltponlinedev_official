@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\sendBroadcastEnrolmentIsOpen;
 use App\Mail\sendReminderToCurrentStudents;
+use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
 use App\User;
@@ -72,11 +73,26 @@ class SystemController extends Controller
             }
         }
 
+        $arr3 = [];
+        foreach ($query_students_current_term as $key5 => $value5) {
+            $query_not_enrolled_stds_pl = PlacementForm::where('INDEXID', $value5->INDEXID)->where('Term', $term->Term_Next)->get();
+            foreach ($query_not_enrolled_stds_pl as $key6 => $value6) {
+                $arr3[] = $value6->INDEXID;
+            }
+        }
+
         $arr0 = array_unique($arr0); // remove dupes
         $arr1 = array_unique($arr1); // remove dupes
+        $arr3 = array_unique($arr3); // remove dupes
         
-        $diff = array_diff($arr0, $arr1); // get difference
-        $diff = array_unique($diff); // remove dupes
+        $difference = array_diff($arr0, $arr1); // get difference
+        $difference = array_unique($difference); // remove dupes
+
+        $diff = array_diff($difference, $arr3);
+        $diff = array_unique($diff); 
+
+        $difftest = array_diff($arr1, $arr3);
+        $difftest = array_unique($difftest);
 
         $arr2 = [];
         foreach ($diff as $key3 => $value3) {
