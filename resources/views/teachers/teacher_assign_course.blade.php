@@ -176,19 +176,24 @@ $('.modal-save-btn').on('click', function() {
 			data: {indexid:qry_indexid, L:L,_token: token},
 		})
 		.done(function(data) {
-			console.log("show assign view : success");     
-			// $('.modal-body-content').html(data);        
+			console.log("refreshing the assign view : success"); 
+			$('.modal-body-content').text(data);    
+			
+			// $('.modal-body-content').html(data);    
+			// $('#modalshow').modal('hide');  
 		})
+		.always(function() {
+			console.log("complete refresh modal view");
+		});
 
 	})
 	.fail(function() {
 		console.log("error");
 	})
 	.always(function() {
-		console.log("complete");
+		console.log("complete save assigned course");
 	});
-		
-
+	
 });
 </script>
 
@@ -263,7 +268,7 @@ $('#modalshow').on('hidden.bs.modal', function (event) {
 
 	console.log(event.target)
 	// alert( "This will be displayed only once." );
- //  	$( this ).off( event );
+ 	//  	$( this ).off( event );
 	
 	$(".preloader2").fadeIn('fast');
 	var Code = $("button[id='enterResultsBtn'].btn-success").val();

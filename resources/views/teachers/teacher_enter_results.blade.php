@@ -164,8 +164,7 @@ $(document).ready(function() {
             if (data != 'not enrolled') {
 
               if (data[0].length > 0) {
-
-                console.log(data[0]);
+                // console.log(data[0]);
                 $.each(data[0], function(index, val) {
                   $("td#"+indexid+".enrolled-next-term").append("<p class='appended-value-1'>"+val+"</p>");
                 });
@@ -173,7 +172,7 @@ $(document).ready(function() {
               }
 
               if (data[1].length > 0) {
-                console.log(data[1]);
+                // console.log(data[1]);
                 $.each(data[1], function(i, v) {
                   $("td#"+indexid+".enrolled-next-term").append("<p class='appended-value-2'>Placement: "+v+"</p>");
                 });
