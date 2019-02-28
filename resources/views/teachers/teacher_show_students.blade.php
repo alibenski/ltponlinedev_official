@@ -80,11 +80,7 @@ $(document).ready(function () {
         $('#'+counter).html(counter);
         // console.log(counter)
     });    
-});
-</script>
-<script> 
-$(document).ready(function() {
-    var promises = [];
+
     $('tr.table-row').each(function(){
       var indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
       var L = $(this).closest("tr.table-row").find("input[name='L']").val();
@@ -94,27 +90,45 @@ $(document).ready(function() {
           $.ajax({
             url: '{{ route('ajax-show-overall-attendance') }}',
             type: 'GET',
+            dateType:"json",
             data: {indexid:indexid, L:L,id:id, _token:token},
           })
           .done(function(data) {
             console.log(data);
+            // debugger;
             $("td#"+indexid+".days-present").append("<p>"+data[0]+"</p>");
             $("td#"+indexid+".days-excused").append("<p>"+data[1]+"</p>");
             $("td#"+indexid+".days-absent").append("<p>"+data[2]+"</p>");
           })
-          .fail(function() {
-            console.log("error");
+          .fail(function(data) {
+            console.log("error on loading attendance summary: " + data);
             alert("An error occured. Click OK to reload.");
             window.location.reload();
           })
           .always(function() {
-            console.log("complete");
+            console.log("load complete attendance summary");
           });
-          
+    });
+});
+</script>
+<script> 
+$(document).ajaxError(function(e, xhr, opt, exc){
+    console.log("Error requesting " + opt.url + ": " + xhr.status + " " + xhr.statusText + " " + exc);
+});
 
-          promises.push($.ajax({
+$(document).ready(function() {
+    var promises = [];
+    $('tr.table-row').each(function(){
+      var indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
+      var L = $(this).closest("tr.table-row").find("input[name='L']").val();
+      var token = $("input[name='_token']").val();
+      var id = $(this).closest("tr.table-row").find("input[name='id']").val();         
+
+          promises.push(
+          $.ajax({
             url: '{{ route('ajax-show-if-enrolled-next-term') }}',
             type: 'GET',
+            dateType:"json",
             data: {indexid:indexid, L:L, _token:token},
           })
           .then(function(data) {
@@ -125,6 +139,7 @@ $(document).ready(function() {
                 // console.log(data[0]);
                 $.each(data[0], function(index, val) {
                   $("td#"+indexid+".enrolled-next-term").append("<p>"+val+"</p>");
+                  console.log('append enrolled course')
                 });
                 
               }
@@ -133,15 +148,14 @@ $(document).ready(function() {
                 // console.log(data[1]);
                 $.each(data[1], function(i, v) {
                   $("td#"+indexid+".enrolled-next-term").append("<p>Placement: "+v+"</p>");
+                  console.log('append enrolled pl course')
                 });
-                
               }
-
             }
 
           })
-          .fail(function() {
-            console.log("error");
+          .fail(function(data) {
+            console.log("error on showing enrol next term: " + data);
             alert("An error occured. Click OK to reload.");
             window.location.reload();
           })

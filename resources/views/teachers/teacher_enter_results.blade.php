@@ -157,6 +157,7 @@ $(document).ready(function() {
       promises.push($.ajax({
             url: '{{ route('ajax-show-if-enrolled-next-term') }}',
             type: 'GET',
+            dateType:"json",
             data: {indexid:indexid, L:L, _token:token},
           })
           .then(function(data) {
@@ -269,6 +270,130 @@ $(document).ready(function() {
       console.log("complete quick save");
     });
     
+  });
+});
+</script>
+
+<script>  
+$('#modalshow').on('click', '.modal-accept-btn',function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+
+
+  $.ajax({
+    url: '{{ route('teacher-nothing-to-modify') }}',
+    type: 'PUT',
+    data: {eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+  })
+  .done(function(data) {
+    console.log(data);
+    if (data == 0) {
+      alert('Hmm... Nothing to change, nothing to update...');
+    }
+
+    var L = $("input[name='L']").val();
+
+      $.ajax({
+          url: '{{ route('teacher-assign-course-view') }}',
+          type: 'GET',
+          data: {indexid:qry_indexid, L:L,_token: token},
+        })
+        .done(function(data) {
+          console.log("no change assign view : success");
+          $('.modal-body-content').html(data);
+        })
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+    
+  });
+    
+});
+
+$('#modalshow').on('click', '.modal-save-btn',function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
+  var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
+
+  $(".overlay").fadeIn('fast'); 
+
+  $.ajax({
+    url: '{{ route('teacher-save-assigned-course') }}',
+    type: 'PUT',
+    data: {Te_Code:Te_Code, schedule_id:schedule_id, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+  })
+  .done(function(data) {
+    console.log(data);
+    if (data == 0) {
+      alert('Hmm... Nothing to change, nothing to update...');
+    }
+    var L = $("input[name='L']").val();
+
+    $.ajax({
+      url: '{{ route('teacher-assign-course-view') }}',
+      type: 'GET',
+      data: {indexid:qry_indexid, L:L,_token: token},
+    })
+    .done(function(data) {
+      console.log("refreshing the assign view : success"); 
+      $('.modal-body-content').html(data);    
+    })
+    .always(function() {
+      console.log("complete refresh modal view");
+    });
+
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete save assigned course");
+  });
+  
+});
+</script>
+
+
+
+<script>
+$('#modalshow').on('hidden.bs.modal', function (event) {
+
+  console.log(event.target)
+  // alert( "This will be displayed only once." );
+  //    $( this ).off( event );
+  
+  $(".preloader2").fadeIn('fast');
+  var Code = $("button[id='enterResultsBtn'].btn-success").val();
+  var token = $("input[name='_token']").val();
+
+  $.ajax({
+    url: "{{ route('teacher-enter-results') }}", 
+    method: 'POST',
+    data: {Code:Code, _token:token},
+  })
+  .done(function(data) {
+
+    $(".students-here").html(data);
+    $(".students-here").html(data.options);
+    console.log("inserted student table");
+  })
+  .fail(function(data) {
+    console.log("error");
+    alert("An error occured. Click OK to reload.");
+    window.location.reload();
+  })
+  .always(function(data) {
+    console.log("complete close modal");
   });
 });
 </script>

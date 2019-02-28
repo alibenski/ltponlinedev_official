@@ -197,10 +197,14 @@ class TeachersController extends Controller
         if ($request->ajax()) {
             $qry = Attendance::where('pash_id', $request->id)->get();
 
+            $sumP = [];
+            $sumE = [];
+            $sumA = [];
+            
             if ($qry->isEmpty()) {
-                $sumP_count = 0;
-                $sumE_count = 0;
-                $sumA_count = 0;
+                $sumP_count = count($sumP);
+                $sumE_count = count($sumP);
+                $sumA_count = count($sumP);
 
                 $data = [$sumP_count,$sumE_count,$sumA_count];
                 return response()->json($data); 
@@ -213,9 +217,6 @@ class TeachersController extends Controller
             
             $arr2 = $arr->getAttributes();
             
-            $sumP = [];
-            $sumE = [];
-            $sumA = [];
             foreach ($arr2 as $k => $v) {
                 if($v == 'P'){
                     $sumP[] = 'P';  
