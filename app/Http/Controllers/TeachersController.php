@@ -200,7 +200,7 @@ class TeachersController extends Controller
             $sumP = [];
             $sumE = [];
             $sumA = [];
-            
+
             if ($qry->isEmpty()) {
                 $sumP_count = count($sumP);
                 $sumE_count = count($sumP);
@@ -210,11 +210,10 @@ class TeachersController extends Controller
                 return response()->json($data); 
             }
 
-            $arr = [];
             foreach ($qry as $key => $value) {
                 $arr = $value;
             }
-            
+
             $arr2 = $arr->getAttributes();
             
             foreach ($arr2 as $k => $v) {
@@ -404,6 +403,7 @@ class TeachersController extends Controller
             $term = $request->qry_term;
             $tecode = $request->qry_tecode;
             $eform_submit_count = $request->eform_submit_count;
+            $teacher_comments = $request->teacher_comments;
 
             $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
                 ->where('Te_Code', $tecode)
@@ -413,7 +413,7 @@ class TeachersController extends Controller
                 ->get();
             
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+                $data->fill(['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
             }
 
             $data = $request->all();
@@ -429,6 +429,7 @@ class TeachersController extends Controller
             $term = $request->qry_term;
             $tecode = $request->qry_tecode;
             $eform_submit_count = $request->eform_submit_count;
+            $teacher_comments = $request->teacher_comments;
 
             if (is_null($request->Te_Code)) {
                 $data = 0;
@@ -445,7 +446,7 @@ class TeachersController extends Controller
             $user_id = User::where('indexno', $indexno)->first(['id']);
 
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+                $data->fill(['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
 
                 $arr = $data->attributesToArray();
                 $clone_forms = ModifiedForms::create($arr);

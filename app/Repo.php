@@ -11,7 +11,7 @@ class Repo extends Model
 
     protected $table = 'LTP_PASHQTcur';
     protected $fillable = [
-        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'flexibleBtn', 'form_counter', 'convocation_email_sent', 'Written', 'Oral', 'Result', 'Overall_Grade', 'cancelled_by'
+        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'flexibleBtn', 'form_counter', 'convocation_email_sent', 'Written', 'Oral', 'Result', 'Overall_Grade', 'cancelled_by', 'teacher_comments',
     ];
     
     /**

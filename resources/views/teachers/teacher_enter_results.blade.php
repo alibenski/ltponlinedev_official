@@ -281,12 +281,13 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
   var qry_indexid = $(this).attr('data-indexid');
   var qry_term = $(this).attr('data-term');
   var token = $("input[name='_token']").val();
+  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments']").val();
 
 
   $.ajax({
     url: '{{ route('teacher-nothing-to-modify') }}',
     type: 'PUT',
-    data: {eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+    data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
   })
   .done(function(data) {
     console.log(data);
@@ -324,13 +325,14 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
   var token = $("input[name='_token']").val();
   var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
   var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
+  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments']").val();
 
   $(".overlay").fadeIn('fast'); 
 
   $.ajax({
     url: '{{ route('teacher-save-assigned-course') }}',
     type: 'PUT',
-    data: {Te_Code:Te_Code, schedule_id:schedule_id, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+    data: {Te_Code:Te_Code, schedule_id:schedule_id, teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
   })
   .done(function(data) {
     console.log(data);

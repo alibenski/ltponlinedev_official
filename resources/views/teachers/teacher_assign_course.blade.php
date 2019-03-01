@@ -81,7 +81,7 @@
 		                <div class="form-group">
 							<label class="control-label">Comments: </label>
 
-							<textarea id="textarea-{{$element->eform_submit_count}}" name="" class="form-control" maxlength="3500" placeholder="Important information that the Language Secretariat needs to know e.g. 2nd prefered course to take, etc."></textarea>
+							<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control" maxlength="3500" placeholder="Important information that the Language Secretariat needs to know e.g. 2nd prefered course to take, etc."></textarea>
 							
 						</div>
 
