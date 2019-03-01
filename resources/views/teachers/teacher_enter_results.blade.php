@@ -29,7 +29,7 @@
             <input type="hidden" name="L" value="{{$form->L}}">
           </td>
           <td id="{{$form->INDEXID}}" class="enrolled-next-term">
-            
+            <ol></ol>
           </td>
           <td class="input-Written">
             @if(empty($form->Written)) 
@@ -167,18 +167,37 @@ $(document).ready(function() {
               if (data[0].length > 0) {
                 // console.log(data[0]);
                 $.each(data[0], function(index, val) {
-                  $("td#"+indexid+".enrolled-next-term").append("<p class='appended-value-1'>"+val+"</p>");
-                });
+                  $("td#"+indexid+".enrolled-next-term").find('ol').append("<li class='appended-value-1' data-name='"+val+"'>"+val+"</li>");
+
+                }); // end of foreach data[0]
+              }
+              
+              if (data[2].length > 0) {
+                $.each(data[2], function(x1, y1) {
+                  $.each(data[3], function(x, y) {
+
+                      if(y1 != null){
+                        if (x == x1) {
+                          $("td#"+indexid+".enrolled-next-term").find("li.appended-value-1[data-name='"+y+"']").append("<span><i class='fa fa-star fa-spin text-success' data-toggle='tooltip' title='This form has been assigned to a course''></i> </span>");
+                          
+                        }
+                          
+                      }
+                  }); // end of foreach data[3]                    
+                    
+                }); // end of foreach data[2]
                 
               }
 
               if (data[1].length > 0) {
                 // console.log(data[1]);
                 $.each(data[1], function(i, v) {
-                  $("td#"+indexid+".enrolled-next-term").append("<p class='appended-value-2'>Placement: "+v+"</p>");
+                  $("td#"+indexid+".enrolled-next-term").find('ol').append("<li class='appended-value-2'>Placement: "+v+"</li>");
                 });
                 
               }
+
+              
 
             }
 
@@ -194,6 +213,7 @@ $(document).ready(function() {
     }); //end of $.each
 
     $.when.apply($('tr.table-row'), promises).then(function() {
+        $('[data-toggle="tooltip"]').tooltip(); 
         $(".preloader2").fadeOut(600);
     }); 
 });
