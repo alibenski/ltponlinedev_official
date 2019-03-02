@@ -104,7 +104,7 @@
 </div>
 
 
-<script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+{{-- <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script> --}}
 <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
 <script>
@@ -117,6 +117,7 @@ $(document).ready(function () {
         // console.log(counter)
     });    
     $('.dropdown-toggle').dropdown();
+    
 });
 </script>
 <script>

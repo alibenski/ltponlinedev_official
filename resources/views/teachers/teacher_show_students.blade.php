@@ -69,7 +69,7 @@
     </div>
 </div>
 
-<script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+{{-- <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script> --}}
 
 <script>
 $(document).ready(function () {
@@ -80,7 +80,7 @@ $(document).ready(function () {
         $('#'+counter).html(counter);
         // console.log(counter)
     });    
-
+    
     $('tr.table-row').each(function(){
       var indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
       var L = $(this).closest("tr.table-row").find("input[name='L']").val();

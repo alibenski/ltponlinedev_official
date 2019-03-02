@@ -94,7 +94,7 @@
 @stop
 
 @section('java_script')
-<script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+{{-- <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script> --}}
 
 <script type="text/javascript">
 $("button[id='manageAttendanceBtn']").click(function(){
