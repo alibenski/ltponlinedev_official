@@ -2,6 +2,7 @@
 
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
 
 @section('content')

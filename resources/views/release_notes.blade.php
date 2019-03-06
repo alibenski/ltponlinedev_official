@@ -15,41 +15,42 @@ section { font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-s
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Debug Attendance summary queries letters &lt;, s, c results to<span style="font-weight: bold;"> Uncaught TypeError Cannot use 'in' operator to search for '0' </span></p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Check batch run if query does not consider selfpay_approval == 0 and 2</p>
 <p style="margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
+
 <p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;"><span style="text-decoration: underline;">Release Notes: 15 March 2019</span></p>
-<p lang="en-US" style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
-<p lang="en-US" style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Teachers' view</p>
-<p lang="en-US" style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Results view but with grades selection: Pass, Failed, No show, Incomplete.</p>
-<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span lang="en-US">3 additional boxes for oral, written and overall results </span><span lang="fr-CH">- Virginie</span></p>
+<p style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Teachers' view</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Results view but with grades selection: Pass, Failed, No show, Incomplete.</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">3 additional boxes for oral, written and overall results - Virginie</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Overall Grade field to be added in Results table</p>
-<p lang="en-US" style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Assigning to next term course</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Assigning to next term course</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Add teacher comments in EOT results - separate field, separate table from Admin comments</p>
 <p style="color: #000000; margin: 0in; margin-left: .75in; font-family: Calibri; font-size: 11.0pt;">Add field to 5 models: Preenrolment, PlacementForm, Preview, Repo, ModifiedForms</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Indicate if student has been assigned a course in table view</p>
-<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span lang="en-US">Attendance view: have an overall summary of the attendance of the student (</span><span lang="fr-CH">show number of presence, excuse, absence in show student view)</span></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Attendance view: have an overall summary of the attendance of the student (show number of presence, excuse, absence in show student view)</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">See who has enrolled in attendance view - Fabienne</p>
-<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix</span>: dropdown-toggle not initialized after click event of enter results</p>
-<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix</span>: Teacher clicks show student but has not logged attendance</p>
-<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix</span>: duplicate Enrolment Next Term in Enter Results</p>
-<p style="color: #000000; margin: 0in; margin-left: .375in;"><span style="font-weight: bold; font-family: Calibri; font-size: 11.0pt;">Hotfix</span><span style="font-family: Calibri; font-size: 11.0pt;">: </span><span style="font-family: Helvetica; font-size: 10.5pt; color: #222222;">Call to a member function getAttributes() on array in TeachersController.php line 218 - remove array declaration of $arr</span></p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Lang Admin logs in as Teacher to see assigned classrooms and attendance</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: dropdown-toggle not initialized after click event of enter results</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: Teacher clicks show student but has not logged attendance</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: duplicate Enrolment Next Term in Enter Results</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in;"><strong><span style="font-family: Calibri; font-size: 11.0pt;">Hotfix</span></strong><span style="font-family: Calibri; font-size: 11.0pt;">: </span><span style="font-family: Helvetica; font-size: 10.5pt; color: #222222;">Call to a member function getAttributes() on array in TeachersController.php line 218 - remove array declaration of $arr</span></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Lang Admin logs in as Teacher to see assigned classrooms and attendance</span></p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Teacher focal points can see assigned classrooms and attendance</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Complete self-payment filter to show approved, pending, waiting for admin payment status</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span lang="en-US">Create separate view for </span><span lang="fr-CH">cancelled payment-based regular and placement forms</span></p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span lang="en-US">Create separate view for </span><span lang="fr-CH">cancelled regular enrolment and placement forms</span></p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix</span>: Student can update DOB field</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix</span>: enrolment for index view changed to show per form submission without schedule</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span lang="fr-CH" style="font-weight: bold;">Hotfix</span><span lang="fr-CH">: </span><span lang="en-US">Show student comment in Enrolment index view</span></p>
-<p lang="en-US" style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Admin adds comment to enrolment and placement forms - Fabienne</p>
-<p lang="en-US" style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Field copied up to PASH table</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Create separate view for </span><span style="background: #D99694;">cancelled payment-based regular and placement forms</span></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Create separate view for </span><span style="background: #D99694;">cancelled regular enrolment and placement forms</span></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: Student can update DOB field</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: enrolment for index view changed to show per form submission without schedule</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: Show student comment in Enrolment index view</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Admin adds comment to enrolment and placement forms - Fabienne</span></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Field copied up to PASH table</span></p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Include Payment status in regular enrolment form, placement form view</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix</span>: Bug on teacher login url missing admin string</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: Bug on teacher login url missing admin string</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Cancel -&gt; "Delete" text instead : admin interface</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">!!! Connection of Enrolment/ Placement model to PASH model</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Copy submitted view in ManageUser view</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Create link to admin classroom management (Temporary pdf print out view)</p>
 <p style="color: #1f497d; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="text-decoration: line-through;">Hotfix: Students wants to take placement test but assigned to a class with no teacher - Daniel </span></p>
-<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span lang="fr-CH">Hotfix: </span><span lang="en-US">exempt admin from limit-cancel middleware </span></p>
-<p style="color: #1f497d; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Admins can leave a comment on enrolment, placement, pash tables and should be dynamic - Include in <span style="font-weight: bold; text-decoration: underline;">cancel method</span> and button for pash preview class - Daniel</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Hotfix: exempt admin from limit-cancel middleware</p>
+<p style="color: #1f497d; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Admins can leave a comment on enrolment, placement, pash tables and should be dynamic - Include in </span><strong><span style="text-decoration: underline; background: #D99694;">cancel method</span></strong><span style="background: #D99694;"> and button for pash preview class - Daniel</span></p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Cancel button for admins in ManageUser view - no email to be sent</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Show "deleted_at" field in all tables (enrolment, placement, pash, manageUser views) for billing</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Improve placement forms table view and filtering</p>
@@ -57,14 +58,20 @@ section { font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-s
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Extract email of students who will take placement exam</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Filter pending payment placement forms</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Filter disapproved payment placement forms (field == 0)</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Improve Assign Course table view</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Improve Assign Course table view for Admin</span></p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Assign course table shows payment status</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Assign course table can filter payment-based forms only</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Delete "Convoke" button</p>
-<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Assign Course function includes convoked question and admin comment when assigning a course</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix</span>: Placement forms overall_approval field not updated automatically when DEPT == UNOG, etc.</p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Assign Course function includes convoked question and admin comment when assigning a course</span></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><span style="background: #D99694;">Query automatically Level 1 and not-in-class students who submitted regular forms</span></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix</strong>: Placement forms overall_approval field not updated automatically when DEPT == UNOG, etc.</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Send reminder email to students in class that have not enrolled next term - F</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><span style="font-weight: bold;">Hotfix:</span> required attribute in file attachment - D</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Hotfix:</strong> required attribute in file attachment - D</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Add Pending filter in Placement forms - one for pending HR approval another for pending Language Admin approval</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Add all <strong>Comments,&nbsp; Placement test date (and online for English), </strong><strong>Preferred days and schedules </strong>to simple table list page of approved placement forms</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Only show view button in regular enrolment view if std_comments exists</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Update User Management View to be the same as placement and regular form tables</p>
+
 <p style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
 <p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;"><span style="text-decoration: underline;">Freeze: 11 Feb - 6 Mar 2019</span></p>
 <p style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>

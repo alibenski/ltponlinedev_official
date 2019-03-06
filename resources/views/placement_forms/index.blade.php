@@ -2,6 +2,7 @@
 
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
 
 @section('content')
@@ -92,8 +93,22 @@
 			@foreach($placement_forms as $form)
 			<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 				<td>
-					<button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}" disabled><span class="glyphicon glyphicon-eye-open" ></span> Show</button>
-                    {{-- <a href="{{ route('placement-form.edit', [$form->id]) }}" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a>  --}}
+					<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
+
+					<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
+                        <input type="submit" @if (is_null($form->deleted_at))
+                          value="Reject/Cancel Placement Test"
+                        @else
+                          value="Cancelled"
+                        @endif  class="btn btn-danger btn-space" @if (is_null($form->deleted_at))
+                          
+                        @else
+                          disabled="" 
+                        @endif>
+                        <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+                        <input type="hidden" name="_token" value="{{ Session::token() }}">
+                       {{ method_field('DELETE') }}
+                    </form>
                 </td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
@@ -170,6 +185,23 @@
 	{{ $placement_forms->links() }}
 </div>
 @endif
+{{-- modal for placement forms --}}
+<div id="modalshowplacementinfo" class="modal fade">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body-schedule">
+            </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @stop
 
 @section('java_script')
@@ -179,8 +211,27 @@ $(document).ready(function() {
     $('.select2-basic-single').select2({
     placeholder: "Select Filter",
     });
+
+
+	$('#modalshowplacementinfo').on('show.bs.modal', function (event) {
+	  var link = $(event.relatedTarget); // Link that triggered the modal
+	  console.log(link)
+	  var did = link.data('mid');
+	  var dtitle = link.data('mtitle');
+	  var modal = $(this);
+	  modal.find('.modal-title').text(dtitle);
+
+	  var token = $("input[name='_token']").val();      
+
+	  $.post('{{ route('ajax-show-modal-placement') }}', {'id':did, '_token':token}, function(data) {
+	      console.log(data);
+	      $('.modal-body-schedule').html(data)
+	  });
+	});
+
 });
 </script>
+
 <script type="text/javascript">
   $("input[name='L']").click(function(){
       var L = $(this).val();

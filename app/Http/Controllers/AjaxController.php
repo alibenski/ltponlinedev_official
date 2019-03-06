@@ -55,7 +55,9 @@ class AjaxController extends Controller
         $placement_form = PlacementForm::withTrashed()
             ->where('id', $request->id)
             ->first();
+
         $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
+        // $waitlists = Repo::where('INDEXID',$placement_form->INDEXID)->get();
 
         // render and return data values via AJAX
         $data = view('ajax-show-modal-placement', compact('placement_form','waitlists'))->render();

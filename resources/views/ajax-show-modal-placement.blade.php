@@ -74,39 +74,38 @@
 					<label class="control-label" for="show_sched">Exam Date:</label>
 				    <div class="col-sm-12">
 						<ul>
-				    		<li>@if($placement_form->L == 'F') <strong>ONLINE</strong> from {{ $placement_form->placementSchedule->date_of_plexam }} to {{ $placement_form->placementSchedule->date_of_plexam_end }} @else {{ $placement_form->placementSchedule->date_of_plexam }} @endif</li>
+				    		<p><strong><em>
+				    			@if ($placement_form->placementSchedule->is_online == 1) Online from {{ $placement_form->placementSchedule->date_of_plexam }} to {{ $placement_form->placementSchedule->date_of_plexam_end }} 
+								@else {{ $placement_form->placementSchedule->date_of_plexam }} 
+								@endif
+				    		</em></strong></p>
 						</ul>
 					</div>
+				</div>
 
-				</div>
-				<div class="form-group">
+				{{-- <div class="form-group">
 				    <label class="control-label" for="flexible_show">Placement Test/ Waitlist Information: </label>
-						<div class="panel panel-body">
-					    	@if ($waitlists)
-					    		@foreach($waitlists as $waitlisted)
-					    			@foreach($waitlisted->waitlist as $info_details)
-					    			<ul>
-					    				<li>Term Code: {{ $info_details->Term }}</li>
-					    				<li>Term: {{ $info_details->terms->Comments }}</li>
-					    				<li>Remark: {{ $info_details->Comments }}</li>
-					    			</ul>
-					    			<hr>
-					    			@endforeach 
-					    		@endforeach 
-					    	@else -- 
-					    	@endif
-						</div>
-				</div>
+					<div class="panel panel-body">
+				    	@if ($waitlists)
+				    		@foreach($waitlists as $waitlisted)
+				    			@foreach($waitlisted->waitlist as $info_details)
+				    			<ul>
+				    				<li>Term Code: {{ $info_details->Term }}</li>
+				    				<li>Term: {{ $info_details->terms->Comments }}</li>
+				    				<li>Remark: {{ $info_details->Comments }}</li>
+				    			</ul>
+				    			<hr>
+				    			@endforeach 
+				    		@endforeach 
+				    	@else -- 
+				    	@endif
+					</div>
+				</div> --}}
+
 				<div class="form-group">
 				    <label class="control-label" for="flexible_show">Is Flexible: @if($placement_form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 				</div>
 
-				<div class="form-group">
-				    <label class="control-label" for="">Supervisor's Email:</label>
-				    <div class="">
-				        <input type="text" class="form-control" name="" value="{{ $placement_form->mgr_email }}" readonly>
-				    </div>
-				</div>
 			</div> 
 			{{-- EOF 1st column --}}
 
