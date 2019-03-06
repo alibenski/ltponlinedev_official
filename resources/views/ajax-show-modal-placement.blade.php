@@ -83,24 +83,23 @@
 					</div>
 				</div>
 
-				{{-- <div class="form-group">
+				<div class="form-group">
 				    <label class="control-label" for="flexible_show">Placement Test/ Waitlist Information: </label>
 					<div class="panel panel-body">
-				    	@if ($waitlists)
+				    	@if (count($waitlists) > 0)
 				    		@foreach($waitlists as $waitlisted)
-				    			@foreach($waitlisted->waitlist as $info_details)
-				    			<ul>
-				    				<li>Term Code: {{ $info_details->Term }}</li>
-				    				<li>Term: {{ $info_details->terms->Comments }}</li>
-				    				<li>Remark: {{ $info_details->Comments }}</li>
-				    			</ul>
-				    			<hr>
-				    			@endforeach 
+				    			{{ $waitlisted->Term }}
+				    			{{ $waitlisted->languages->name }}
+				    			{{ $waitlisted->courses->Description }}
+				    			@if (is_null($waitlisted->classrooms->Tch_ID))
+									NULL
+								@else {{ $waitlisted->classrooms->Tch_ID }}
+				    			@endif
 				    		@endforeach 
 				    	@else -- 
 				    	@endif
 					</div>
-				</div> --}}
+				</div>
 
 				<div class="form-group">
 				    <label class="control-label" for="flexible_show">Is Flexible: @if($placement_form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>

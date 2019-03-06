@@ -56,8 +56,19 @@ class AjaxController extends Controller
             ->where('id', $request->id)
             ->first();
 
-        $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
-        // $waitlists = Repo::where('INDEXID',$placement_form->INDEXID)->get();
+        $prev_termCode = Term::where('Term_Code', $placement_form->Term)->first()->Term_Prev;
+
+        // query if student is in waitlist table 
+        // $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
+        
+        $waitlists = Repo::where('INDEXID',$placement_form->INDEXID)
+            ->where('Term',$prev_termCode)
+            ->whereHas('classrooms', function ($query) {
+                    $query->whereNull('Tch_ID')
+                            ->orWhere('Tch_ID', '=', 'TBD')
+                            ;
+                    })
+            ->get();
 
         // render and return data values via AJAX
         $data = view('ajax-show-modal-placement', compact('placement_form','waitlists'))->render();
