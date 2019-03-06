@@ -461,7 +461,7 @@ class PlacementFormController extends Controller
         $languages = DB::table('languages')->pluck("name","code")->all();
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        
+
         if (!Session::has('Term') ) {
             $placement_forms = null;
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
@@ -471,7 +471,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 'is_self_pay_form', 'overall_approval',
+                'L', 'DEPT', 'is_self_pay_form', 'overall_approval', 
             ];
 
             foreach ($columns as $column) {
@@ -489,6 +489,7 @@ class PlacementFormController extends Controller
                     $queries['Term'] = Session::get('Term');
                 }
 
+
                 if (\Request::has('search')) {
                     $name = \Request::input('search');
                     $placement_forms = $placement_forms->with('users')
@@ -501,6 +502,13 @@ class PlacementFormController extends Controller
                 if (\Request::has('sort')) {
                     $placement_forms = $placement_forms->orderBy('created_at', \Request::input('sort') );
                     $queries['sort'] = \Request::input('sort');
+                }
+
+                if (\Request::exists('approval_hr')) {
+                    if (is_null(\Request::input('approval_hr'))) {
+                        $placement_forms = $placement_forms->whereNull('approval_hr')->whereNull('is_self_pay_form')->whereNotIn('DEPT', ['UNOG', 'JIU','DDA','OIOS','DPKO']);
+                        $queries['approval_hr'] = \Request::input('approval_hr');
+                    }
                 }
 
             // $allQueries = array_merge($queries, $currentQueries);

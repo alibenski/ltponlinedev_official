@@ -69,6 +69,22 @@
       </div>
     </div>
 
+    @if(!Request::is('admin/selfpayform*'))
+    <div class="form-group col-sm-12">
+      <label for="" class="control-label"></label>
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="approval_hr" value="" >                 
+              </span>
+                <label type="text" class="form-control bg-yellow">View All Pending Forms Only</label>
+            </div>
+        </div>
+      </div>
+    </div>
+    @endif
+
     @if(Request::is('admin/selfpayform*'))
     <div class="form-group col-sm-12">
       <label for="" class="control-label"></label>

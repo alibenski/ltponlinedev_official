@@ -9,6 +9,8 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Email</th>
 	            <th>Organization</th>
 	            <th>Language</th>
+	            <th>Comments Placement Exam</th>	            
+	            <th>Comments Course Preference</th>	            
 	            <th>Overall Approval</th>
 	            <th>Time Stamp</th>
 	        </tr>
@@ -29,6 +31,8 @@ Total Count: {{ count($placement_forms) }}
 				@if(empty($form->DEPT)) None @else <strong> {{ $form->DEPT }} </strong> @endif
 				</td>
 				<td>{{ $form->L }}</td>
+				<td>{{ $form->std_comments }}</td>
+				<td>{{ $form->course_preference_comment }}</td>
 				<td>{{ $form->overall_approval }}</td>
 				<td>{{ $form->created_at }}</td>
 

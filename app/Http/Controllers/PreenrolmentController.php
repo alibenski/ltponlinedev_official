@@ -26,7 +26,7 @@ class PreenrolmentController extends Controller
 {
     public function queryRegularFormsToAssign()
     {
-        $forms_not_in_pash = Preenrolment::where('Term', '194')
+        // $forms_not_in_pash = Preenrolment::where('Term', '194')
     }
 
     public function ajaxStdComments(Request $request)
