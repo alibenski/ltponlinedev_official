@@ -290,7 +290,14 @@ class PreenrolmentController extends Controller
                 $enrolment_forms = $enrolment_forms->orderBy('created_at', 'asc');
             }
 
-        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval');
+            if (\Request::exists('approval_hr')) {
+                if (is_null(\Request::input('approval_hr'))) {
+                    $enrolment_forms = $enrolment_forms->whereNotIn('DEPT', ['UNOG', 'JIU','DDA','OIOS','DPKO'])->whereNull('is_self_pay_form')->whereNull('approval_hr');
+                    $queries['approval_hr'] = '';
+                }
+            }
+
+        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at');
         // $allQueries = array_merge($queries, $currentQueries);
         $enrolment_forms = $enrolment_forms->withTrashed()->paginate(10)->appends($queries);
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);

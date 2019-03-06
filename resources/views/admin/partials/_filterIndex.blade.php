@@ -69,7 +69,23 @@
       </div>
     </div>
 
-{{--     @if(!Request::is('admin/selfpayform*'))
+    @if(!Request::is('admin/selfpayform*'))
+    <div class="form-group col-sm-12">
+      <label for="" class="control-label"></label>
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="overall_approval" value="2" >                 
+              </span>
+                <label type="text" class="form-control">View Payment-based Forms with Pending Status</label>
+            </div>
+        </div>
+      </div>
+    </div>
+    @endif
+
+    @if(!Request::is('admin/selfpayform*'))
     <div class="form-group col-sm-12">
       <label for="" class="control-label"></label>
       <div class="col-sm-12">
@@ -78,12 +94,12 @@
               <span class="input-group-addon">       
                 <input type="checkbox" name="approval_hr" value="" >                 
               </span>
-                <label type="text" class="form-control bg-yellow">View All Pending Forms Only</label>
+                <label type="text" class="form-control bg-yellow">View Forms with Pending HR Approval</label>
             </div>
         </div>
       </div>
     </div>
-    @endif --}}
+    @endif
 
     @if(Request::is('admin/selfpayform*'))
     <div class="form-group col-sm-12">

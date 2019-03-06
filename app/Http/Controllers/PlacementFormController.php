@@ -483,7 +483,6 @@ class PlacementFormController extends Controller
                 
             } 
 
-
                 if (Session::has('Term')) {
                     $placement_forms = $placement_forms->where('Term', Session::get('Term') );
                     $queries['Term'] = Session::get('Term');
@@ -506,8 +505,8 @@ class PlacementFormController extends Controller
 
                 if (\Request::exists('approval_hr')) {
                     if (is_null(\Request::input('approval_hr'))) {
-                        $placement_forms = $placement_forms->whereNull('approval_hr')->whereNotIn('DEPT', ['UNOG', 'JIU','DDA','OIOS','DPKO']);
-                        $queries['approval_hr'] = \Request::input('approval_hr');
+                        $placement_forms = $placement_forms->whereNotIn('DEPT', ['UNOG', 'JIU','DDA','OIOS','DPKO'])->whereNull('is_self_pay_form')->whereNull('approval_hr');
+                        $queries['approval_hr'] = '';
                     }
                 }
 

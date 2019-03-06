@@ -154,7 +154,9 @@
 					@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 					</td>
 					<td>
-						<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
+						@if ($form->std_comments)
+							<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
+						@endif
 						<input type="hidden" name="eform_submit_count" value="{{$form->eform_submit_count}}">
 						<input type="hidden" name="term" value="{{$form->Term}}">
 						<input type="hidden" name="indexno" value="{{$form->INDEXID}}">

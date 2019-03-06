@@ -9,6 +9,9 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Email</th>
 	            <th>Organization</th>
 	            <th>Language</th>
+	            <th>Exam Date</th>
+	            <th>Preferred Day(s)</th>
+	            <th>Preferred Time(s)</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>	            
 	            <th>Overall Approval</th>
@@ -31,11 +34,17 @@ Total Count: {{ count($placement_forms) }}
 				@if(empty($form->DEPT)) None @else <strong> {{ $form->DEPT }} </strong> @endif
 				</td>
 				<td>{{ $form->L }}</td>
+				<td>
+				@if ($form->placementSchedule->is_online == 1) Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} 
+				@else {{ $form->placementSchedule->date_of_plexam }} 
+				@endif
+				</td>
+				<td>{{ $form->dayInput }}</td>
+				<td>{{ $form->timeInput }}</td>
 				<td>{{ $form->std_comments }}</td>
 				<td>{{ $form->course_preference_comment }}</td>
 				<td>{{ $form->overall_approval }}</td>
 				<td>{{ $form->created_at }}</td>
-
 			</tr>
 			@endforeach
 	    </tbody>
