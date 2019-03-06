@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    @if(!Request::is('admin/selfpayform*'))
+{{--     @if(!Request::is('admin/selfpayform*'))
     <div class="form-group col-sm-12">
       <label for="" class="control-label"></label>
       <div class="col-sm-12">
@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    @endif
+    @endif --}}
 
     @if(Request::is('admin/selfpayform*'))
     <div class="form-group col-sm-12">
