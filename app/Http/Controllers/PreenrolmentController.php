@@ -24,9 +24,53 @@ use Session;
 
 class PreenrolmentController extends Controller
 {
-    public function queryRegularFormsToAssign()
+    public function queryRegularFormsToAssign(Request $request)
     {
-        // $forms_not_in_pash = Preenrolment::where('Term', '194')
+        $prev_term = '191';
+        $students_in_class = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                    ->orWhere('Tch_ID', '!=', 'TBD')
+                    ;
+            })
+            ->get();
+
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+        $term = '194';
+        $enrolment_forms = Preenrolment::where('Term', $term)->get();
+
+        $arr2 = [];
+        foreach ($enrolment_forms as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        $students_not_in_class = array_diff($arr2, $arr1);
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+        $arr3 = [];
+        foreach ($unique_students_not_in_class as $key3 => $value3) {
+            $forms = Preenrolment::where('Term', $term)->where('INDEXID', $value3)->select('INDEXID', 'Te_Code', 'Term')->groupBy('INDEXID', 'Te_Code', 'Term')->get();
+            $arr3[] = $forms;
+        }
+
+        foreach ($arr3 as $key4 => $value4) {
+            foreach ($value4 as $key5 => $value5) {
+                echo $value5->INDEXID;
+                echo " - ";
+                echo $value5->Te_Code;
+                echo " - ";
+                echo $value5->Term;
+                echo "<br>";
+            }
+        }
+        dd();
+        // dd($arr3, $arr1, $arr2, $students_not_in_class, $unique_students_not_in_class);
+
     }
 
     public function ajaxStdComments(Request $request)

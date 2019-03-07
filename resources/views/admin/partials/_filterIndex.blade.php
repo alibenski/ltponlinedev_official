@@ -60,7 +60,7 @@
         <div class="col-sm-8">
             <div class="input-group"> 
               <span class="input-group-addon">       
-                <input type="checkbox" name="is_self_pay_form" value=1 >                 
+                <input type="checkbox" name="is_self_pay_form" class="add-filter" value=1 >                 
               </span>
                 <label type="text" class="form-control bg-purple">View Payment-based Forms Only</label>
             </div>
@@ -76,7 +76,7 @@
         <div class="col-sm-8">
             <div class="input-group"> 
               <span class="input-group-addon">       
-                <input type="checkbox" name="overall_approval" value="2" >                 
+                <input type="checkbox" name="overall_approval" class="add-filter" value="2" >                 
               </span>
                 <label type="text" class="form-control">View Payment-based Forms with Pending Status</label>
             </div>
@@ -92,7 +92,7 @@
         <div class="col-sm-8">
             <div class="input-group"> 
               <span class="input-group-addon">       
-                <input type="checkbox" name="approval_hr" value="" >                 
+                <input type="checkbox" name="approval_hr" class="add-filter" value="" >                 
               </span>
                 <label type="text" class="form-control bg-yellow">View Forms with Pending HR Approval</label>
             </div>
@@ -108,7 +108,7 @@
         <div class="col-sm-8">
             <div class="input-group"> 
               <span class="input-group-addon">       
-                <input type="checkbox" name="selfpay_approval" value=2 >                 
+                <input type="checkbox" name="selfpay_approval" class="add-filter" value=2 >                 
               </span>
                 <label type="text" class="form-control bg-yellow">View Pending Payment Status Only</label>
             </div>
@@ -124,7 +124,7 @@
         <div class="col-sm-8">
             <div class="input-group"> 
               <span class="input-group-addon">       
-                <input type="checkbox" name="selfpay_approval" value=0 >                 
+                <input type="checkbox" name="selfpay_approval" class="add-filter" value=0 >                 
               </span>
                 <label type="text" class="form-control bg-red">View Disapproved Payment Status Only</label>
             </div>
@@ -140,7 +140,7 @@
         <div class="col-sm-8">
             <div class="input-group"> 
               <span class="input-group-addon">       
-                <input type="checkbox" name="overall_approval" value=1 >                 
+                <input type="checkbox" name="overall_approval" class="add-filter" value=1 >                 
               </span>
                 <label type="text" class="form-control bg-green">View Approved Forms Only</label>
             </div>
@@ -155,3 +155,9 @@
                 <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
 @else
 @endif
+
+<script type="text/javascript">
+    $('.add-filter').on('change', function() {
+        $('.add-filter').not(this).prop('checked', false);  
+    });
+</script>

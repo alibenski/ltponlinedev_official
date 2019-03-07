@@ -152,6 +152,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['as' => 'enrolment.destroy', 'uses' => 'PreenrolmentController@destroy'])->where('tecode', '(.*)');
     // Route to AJAX get student comments
     Route::post('ajax-std-comments', ['as'=>'ajax-std-comments','uses'=>'PreenrolmentController@ajaxStdComments']);
+    
+    Route::get('query-regular-forms-to-assign', ['as'=>'query-regular-forms-to-assign','uses'=>'PreenrolmentController@queryRegularFormsToAssign']);
     /**
      * Placement forms controller
      */
