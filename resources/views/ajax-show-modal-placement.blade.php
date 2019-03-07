@@ -98,9 +98,9 @@
 									@else {{ $waitlisted->classrooms->Tch_ID }}
 					    			@endif
 					    		@endforeach 
-					    	@else Not Waitlisted
-					    	@endif
 				    	</div>
+				    	@else Not Waitlisted
+				    	@endif
 					</div>
 				</div>
 

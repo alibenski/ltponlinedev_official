@@ -9,7 +9,7 @@
 <div class='col-md-12'>
 
     <form>
-        <textarea name="editor1" id="editor1" rows="10" cols="80">
+        <textarea name="editor1" id="editor1" rows="10" cols="80" spellcheck="true">
             This is my textarea to be replaced with CKEditor.
         </textarea>
         <script>
