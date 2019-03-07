@@ -84,20 +84,23 @@
 				</div>
 
 				<div class="form-group">
-				    <label class="control-label" for="flexible_show">Placement Test/ Waitlist Information: </label>
+				    <label class="control-label" for="flexible_show"> Waitlist Information: </label>
 					<div class="panel panel-body">
 				    	@if (count($waitlists) > 0)
-				    		@foreach($waitlists as $waitlisted)
-				    			{{ $waitlisted->Term }}
-				    			{{ $waitlisted->languages->name }}
-				    			{{ $waitlisted->courses->Description }}
-				    			@if (is_null($waitlisted->classrooms->Tch_ID))
-									NULL
-								@else {{ $waitlisted->classrooms->Tch_ID }}
-				    			@endif
-				    		@endforeach 
-				    	@else -- 
-				    	@endif
+				    	<div class="alert alert-info">
+					    	<label for="">Waitlisted in </label>
+					    		@foreach($waitlists as $waitlisted)
+					    			{{ $waitlisted->Term }} : {{ $waitlisted->terms->Comments }} {{ date('Y', strtotime($waitlisted->terms->Term_Begin)) }} for 
+					    			{{ $waitlisted->languages->name }}
+					    			{{ $waitlisted->courses->Description }}
+					    			@if (is_null($waitlisted->classrooms->Tch_ID))
+										NULL
+									@else {{ $waitlisted->classrooms->Tch_ID }}
+					    			@endif
+					    		@endforeach 
+					    	@else Not Waitlisted
+					    	@endif
+				    	</div>
 					</div>
 				</div>
 

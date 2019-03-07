@@ -68,9 +68,9 @@ class PreenrolmentController extends Controller
                 echo "<br>";
             }
         }
-        dd();
+        
         // dd($arr3, $arr1, $arr2, $students_not_in_class, $unique_students_not_in_class);
-
+        return view('preenrolment.query-regular-forms-to-assign');
     }
 
     public function ajaxStdComments(Request $request)
