@@ -126,6 +126,35 @@
 		<!-- /.info-box -->
 	</a>
 </div>
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+	@if(Session::has('Term')) 
+	<a href="{{ route('query-regular-forms-to-assign') }}">
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-navy"><i class="fa  fa-files-o"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Manage Enrolment Forms </span>
+		    <span class="info-box-number"><small>(students not in a class)</small></span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+	@else 
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-navy"><i class="fa  fa-exclamation-circle"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Manage Enrolment Forms </span>
+		    <span class="info-box-number">Set the Term</span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	@endif
+</div>
+
 <div class="col-md-3 col-sm-6 col-xs-12">
 	@if ($new_user_count < 5)
 	<a href="{{ route('newuser.index') }}">

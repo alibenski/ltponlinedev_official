@@ -26,22 +26,33 @@ class PreenrolmentController extends Controller
 {
     public function queryRegularFormsToAssign(Request $request)
     {
-        $prev_term = '191';
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $term = Session::get('Term');
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
         $students_in_class = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
             $query->whereNotNull('Tch_ID')
                     ->orWhere('Tch_ID', '!=', 'TBD')
                     ;
             })
             ->get();
-
         $arr1 = [];
         foreach ($students_in_class as $key1 => $value1) {
             $arr1[] = $value1->INDEXID;
         }
         $arr1 = array_unique($arr1);
 
-        $term = '194';
-        $enrolment_forms = Preenrolment::where('Term', $term)->get();
+        // echo "Total Number of Students in Class for ".$prev_term.": ".count($arr1);
+        // echo "<br>";
+
+        $enrolment_forms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('Term', Session::get('Term'))
+            ->whereNull('updated_by_admin')
+            ->get();
+
+        // echo "Total Number of Enrolment Forms in ".$term.": ".count($enrolment_forms);
+        // echo "<br>";
 
         $arr2 = [];
         foreach ($enrolment_forms as $key2 => $value2) {
@@ -49,28 +60,52 @@ class PreenrolmentController extends Controller
         }
         $arr2 = array_unique($arr2);
 
-        $students_not_in_class = array_diff($arr2, $arr1);
+        // echo "Total Number of People who submitted Re-Enrolment/Enrolment Forms for term ".$term.": ".count($arr2);
+        // echo "<br>";
+
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
         $unique_students_not_in_class = array_unique($students_not_in_class);
+
+        // echo "Total Number of People NOT in Class for ".$term.": ".count($unique_students_not_in_class);
+        // echo "<br>";
 
         $arr3 = [];
         foreach ($unique_students_not_in_class as $key3 => $value3) {
-            $forms = Preenrolment::where('Term', $term)->where('INDEXID', $value3)->select('INDEXID', 'Te_Code', 'Term')->groupBy('INDEXID', 'Te_Code', 'Term')->get();
-            $arr3[] = $forms;
-        }
-
-        foreach ($arr3 as $key4 => $value4) {
-            foreach ($value4 as $key5 => $value5) {
-                echo $value5->INDEXID;
-                echo " - ";
-                echo $value5->Te_Code;
-                echo " - ";
-                echo $value5->Term;
-                echo "<br>";
+            $forms = Preenrolment::where('Term', $term)->where('INDEXID', $value3)
+                ->select('INDEXID', 'L', 'Te_Code', 'Term')
+                ->groupBy('INDEXID', 'L', 'Te_Code', 'Term')
+                ->get();
+            foreach ($forms as $key4 => $value4) {
+                $arr3[] = $value4;
             }
         }
         
-        // dd($arr3, $arr1, $arr2, $students_not_in_class, $unique_students_not_in_class);
-        return view('preenrolment.query-regular-forms-to-assign');
+        if (\Request::has('L')) {
+            $arr3 = collect($arr3);
+            
+            $queries = [];
+
+            $columns = [
+                'L', 
+            ];
+
+            
+            foreach ($columns as $column) {
+                if (\Request::has($column)) {
+                    $arr3 = $arr3->where($column, \Request::input($column) );
+                    $queries[$column] = \Request::input($column);
+                }
+
+            } 
+                if (Session::has('Term')) {
+                        $arr3 = $arr3->where('Term', Session::get('Term') );
+                        $queries['Term'] = Session::get('Term');
+                }
+
+            return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3')); 
+        }
+        
+        return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3'));
     }
 
     public function ajaxStdComments(Request $request)
