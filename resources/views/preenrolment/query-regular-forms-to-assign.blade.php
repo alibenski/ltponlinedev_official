@@ -106,9 +106,9 @@
 @else
 @endif
 
-<div id="modalshow" class="modal fade">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+<div id="modalshow" class="modal fade" role="dialog">
+    <div class="modal-dialog-full">
+        <div class="modal-content-full">
 
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
@@ -116,7 +116,10 @@
             </div>
             <div class="modal-body-content modal-background">
             </div>
-
+            <div class="modal-footer modal-background">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        
         </div>
     </div>
 </div>  

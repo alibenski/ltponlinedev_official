@@ -11,7 +11,7 @@
 					<p>Name: <strong>{{ $element->users->name }}</strong></p> 
 	                <p>Language: <strong>{{ $element->languages->name }}</strong></p> 
 	                <p>Course: <strong>{{ $element->courses->Description }}</strong></p>
-					<p>Schedule(s) Chosen:</p>
+					<p>Schedule(s):</p>
 		                <ol>
 						@foreach ($enrolment_schedules as $val)
 			                @if ($val->eform_submit_count == $element->eform_submit_count)
@@ -26,7 +26,17 @@
 						<strong>No</strong>
 						@endif
 					</p>
-	
+					<div class="form-group">
+						<label class="control-label">Comments: </label>
+
+						<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control" maxlength="3500" @if(is_null($element->teacher_comments)) placeholder="2nd prefered course to take and any important information that the Language Secretariat needs to know..." @else placeholder="{{$element->teacher_comments}}" @endif></textarea>
+						
+					</div>
+						
+					<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
+	                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-success btn-space"><span><i class="fa fa-thumbs-up"></i></span> Accept  </button>		                	 	
+	                </span>
+
 					@if ($element->modifyUser)
 		            <div class="callout callout-warning">
 						Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
@@ -58,8 +68,10 @@
 		                <input name="Term" type="hidden" value="{{ $element->Term }}">
 
 						<div class="form-group">
+		                	<p class="alert alert-warning">					
+		                	To change course and/or schedule, fill in the fields below and click Modify
+							</p>
 		                	<label>Course:</label>
-		                	<small class="text-danger">Leave blank if no change is needed</small>
 
 
 		                        <select id="{{$element->eform_submit_count}}" class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%; " name="Te_Code">
@@ -81,17 +93,13 @@
 		                <div class="form-group">
 							<label class="control-label">Comments: </label>
 
-							<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control" maxlength="3500" placeholder="Important information that the Language Secretariat needs to know e.g. 2nd prefered course to take, etc."></textarea>
+							<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control" maxlength="3500" @if(is_null($element->teacher_comments)) placeholder="2nd prefered course to take and any important information that the Language Secretariat needs to know..." @else placeholder="{{$element->teacher_comments}}" @endif></textarea>
 							
 						</div>
 
 		                <div class="form-group">
-							<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
-			                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-primary btn-space"><span><i class="fa fa-thumbs-up"></i></span> No Change </button>		                	 	
-			                </span>
-		                
 
-		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-success btn-space pull-right"><span><i class="fa fa-exchange"></i></span> Assign Course</button>
+		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-warning btn-space pull-right"><span><i class="fa fa-exchange"></i></span> Modify </button>
 			                
 			                <input type="hidden" name="_token" value="{{ Session::token() }}">
 			                {{ method_field('PUT') }}

@@ -117,8 +117,64 @@ class AdminController extends Controller
             ->where('selfpay_approval', null)
             ->get()->count();
 
+        if (Session::has('Term')) {
+            $term = Session::get('Term');
+            $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
 
-        return view('admin.index',compact('terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
+            $students_in_class = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+                $query->whereNotNull('Tch_ID')
+                        ->orWhere('Tch_ID', '!=', 'TBD')
+                        ;
+                })
+                ->get();
+            $arr1 = [];
+            foreach ($students_in_class as $key1 => $value1) {
+                $arr1[] = $value1->INDEXID;
+            }
+            $arr1 = array_unique($arr1);
+
+            // echo "Total Number of Students in Class for ".$prev_term.": ".count($arr1);
+            // echo "<br>";
+
+            $enrolment_forms_2 = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                ->where('Term', Session::get('Term'))
+                ->where('overall_approval', 1)
+                ->whereNull('updated_by_admin')
+                ->get();
+
+            // echo "Total Number of Enrolment Forms in ".$term.": ".count($enrolment_forms_2);
+            // echo "<br>";
+
+            $arr2 = [];
+            foreach ($enrolment_forms_2 as $key2 => $value2) {
+                $arr2[] = $value2->INDEXID;
+            }
+            $arr2 = array_unique($arr2);
+
+            // echo "Total Number of People who submitted Re-Enrolment/Enrolment Forms for term ".$term.": ".count($arr2);
+            // echo "<br>";
+
+            $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+            $unique_students_not_in_class = array_unique($students_not_in_class);
+
+            // echo "Total Number of People NOT in Class for ".$term.": ".count($unique_students_not_in_class);
+            // echo "<br>";
+
+            $arr3 = [];
+            foreach ($unique_students_not_in_class as $key3 => $value3) {
+                $forms = Preenrolment::where('Term', $term)->where('INDEXID', $value3)
+                    ->select('INDEXID', 'L', 'Te_Code', 'Term')
+                    ->groupBy('INDEXID', 'L', 'Te_Code', 'Term')
+                    ->get();
+                foreach ($forms as $key4 => $value4) {
+                    $arr3[] = $value4;
+                }
+            }
+            $arr3_count = count($arr3);
+        }
+
+        return view('admin.index',compact('arr3_count','terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
     }
 
 

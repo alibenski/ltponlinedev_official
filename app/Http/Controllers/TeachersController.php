@@ -364,8 +364,8 @@ class TeachersController extends Controller
             $enrolment_details = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn', 'teacher_comments')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn', 'teacher_comments')
                 ->get();
 
             $arr1 = []; 

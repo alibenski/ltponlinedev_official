@@ -10,7 +10,7 @@
 					<p>Name: <strong>{{ $element->users->name }}</strong></p> 
 	                <p>Language: <strong>{{ $element->languages->name }}</strong></p> 
 	                <p>Course: <strong>{{ $element->courses->Description }}</strong></p>
-					<p>Schedule(s) Chosen:</p>
+					<p>Schedule(s):</p>
 		                <ol>
 						@foreach ($enrolment_schedules as $val)
 			                @if ($val->eform_submit_count == $element->eform_submit_count)
@@ -18,6 +18,12 @@
 			                @endif
 						@endforeach    
 		                </ol>
+					<div class="form-group">
+					    <label class="control-label" for="std_comments">Student Comments:</label>
+					    <div class="">
+					        <textarea class="form-control" name="std_comments" cols="40" rows="3" readonly  placeholder="no comment">{{ $element->std_comments }}</textarea>
+					    </div>
+					</div>
 					<p>Flexible: 
 						@if ( $element->flexibleBtn == 1)
 						<strong>Yes</strong>
@@ -52,6 +58,17 @@
                             @endif 
                             </strong>
 					</p>
+
+	                <div class="form-group">
+						<label class="control-label">Admin Comments: </label>
+
+						<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control" maxlength="3500" @if(is_null($element->admin_eform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
+						
+					</div>
+
+					<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
+	                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-success btn-space"><span><i class="fa fa-thumbs-up"></i></span> Accept  </button>		                	 	
+	                </span>
 	
 					@if ($element->modifyUser)
 		            <div class="callout callout-warning">
@@ -84,7 +101,9 @@
 		                <input name="Term" type="hidden" class="modal-input" value="{{ $element->Term }}">
 
 						<div class="form-group">
-		                	<small class="text-danger">Leave blank if no change is needed and click the No Change button</small>
+							<p class="alert alert-warning">					
+		                	To change course and/or schedule, fill in the fields below and click Modify
+							</p>
 		                	<label>Course:</label>
 
 
@@ -111,13 +130,9 @@
 							
 						</div>
 
-		                <div class="form-group">
-							<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
-			                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-primary btn-space"><span><i class="fa fa-thumbs-up"></i></span> No Change </button>		                	 	
-			                </span>
-		                
+		                <div class="form-group">		                
 
-		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-success btn-space pull-right"><span><i class="fa fa-exchange"></i></span> Assign Course</button>
+		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-warning btn-space pull-right"><span><i class="fa fa-exchange"></i></span> Modify </button>
 			                
 			                <input type="hidden" name="_token" value="{{ Session::token() }}">
 			                {{ method_field('PUT') }}

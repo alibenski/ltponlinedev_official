@@ -141,8 +141,8 @@ class PreenrolmentController extends Controller
             $enrolment_details = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
                 ->get();
 
             $arr1 = []; 
