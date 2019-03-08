@@ -68,28 +68,38 @@
 			    <thead>
 			        <tr>
 			        	<th>#</th>
-			        	<th>Action</th>
-			            <th>Name</th>
-			            <th>Course</th>
-			            <th>Language</th>
-			            <th>Email</th>
-			            <th>Contact #</th>
+                <th>Action</th>
+			        	<th>Assigned Course?</th>
+		            <th>Name</th>
+		            <th>Course</th>
+		            <th>Language</th>
+		            <th>Email</th>
+		            <th>Contact #</th>
 			        </tr>
 			    </thead>
 			    <tbody>
 					@foreach($arr3 as $element)
 						<tr id="tr_{{$element->INDEXID}}">
 							<td>
-	                        	<div class="counter"></div>
-	                      	</td>
-	                      	<td>
-	                      		<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
-	                      		<input type="hidden" name="_token" value="{{ Session::token() }}">
-	                      	</td>
+              	<div class="counter"></div>
+            	</td>
+            	<td>
+            		<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
+            		<input type="hidden" name="_token" value="{{ Session::token() }}">
+            	</td>
+              <td>
+                @if(empty($element->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+                @else
+                  @if ($element->modified_by)
+                    <span class="label label-success margin-label">Yes by {{$element->modifyUser->name }} </span>
+                  @endif
+                @endif
+              </td>
 							<td>
-							@if(empty($element->users->name)) None @else {{$element->users->name }} </a> @endif
+							@if(empty($element->users->name)) None @else {{$element->users->name }} @endif
 							<input type="hidden" name="indexid" value="{{$element->INDEXID}}">	
-							<input type="hidden" name="L" value="{{$element->L}}">
+              <input type="hidden" name="L" value="{{$element->L}}">
+							<input type="hidden" name="Te_Code_Input" value="{{$element->Te_Code}}">
 
 							</td>
 							<td>{{$element->courses->Description }}</td>
@@ -152,12 +162,13 @@ $(document).ready(function () {
     $('.assign-course').click( function() {
       var indexid = $(this).closest("tr").find("input[name='indexid']").val();
       var L = $(this).closest("tr").find("input[name='L']").val();
+      var Te_Code_Input = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
         url: '{{ route('admin-assign-course-view') }}',
         type: 'GET',
-        data: {indexid:indexid, L:L,_token: token},
+        data: {indexid:indexid, L:L,Te_Code:Te_Code_Input,_token: token},
       })
       .done(function(data) {
         console.log("show assign view : success");
@@ -201,7 +212,7 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
       $.ajax({
           url: '{{ route('admin-assign-course-view') }}',
           type: 'GET',
-          data: {indexid:qry_indexid, L:L,_token: token},
+          data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
         })
         .done(function(data) {
           console.log("no change assign view : success");
@@ -245,7 +256,7 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
 	    $.ajax({
 	      url: '{{ route('admin-assign-course-view') }}',
 	      type: 'GET',
-	      data: {indexid:qry_indexid, L:L,_token: token},
+	      data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
 	    })
 	    .done(function(data) {
 	      console.log("refreshing the assign view : success"); 

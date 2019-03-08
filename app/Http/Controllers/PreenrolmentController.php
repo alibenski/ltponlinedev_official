@@ -50,7 +50,7 @@ class PreenrolmentController extends Controller
                 ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
                 ->where('Term', Session::get('Term'))
                 ->where('overall_approval', 1)
-                ->whereNull('updated_by_admin')
+                // ->whereNull('updated_by_admin')
                 ->get();
 
             // echo "Total Number of Enrolment Forms in ".$term.": ".count($enrolment_forms);
@@ -73,9 +73,11 @@ class PreenrolmentController extends Controller
 
             $arr3 = [];
             foreach ($unique_students_not_in_class as $key3 => $value3) {
-                $forms = Preenrolment::where('Term', $term)->where('INDEXID', $value3)
-                    ->select('INDEXID', 'L', 'Te_Code', 'Term')
-                    ->groupBy('INDEXID', 'L', 'Te_Code', 'Term')
+                $forms = Preenrolment::where('Term', $term)
+                    ->where('INDEXID', $value3)
+                    // ->whereNull('updated_by_admin')
+                    ->select('INDEXID', 'L', 'Te_Code', 'Term', 'updated_by_admin', 'modified_by')
+                    ->groupBy('INDEXID', 'L', 'Te_Code', 'Term', 'updated_by_admin', 'modified_by')
                     ->get();
                 foreach ($forms as $key4 => $value4) {
                     $arr3[] = $value4;
@@ -141,6 +143,7 @@ class PreenrolmentController extends Controller
             $enrolment_details = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
+                ->where('Te_Code', $request->Te_Code)
                 ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
                 ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
                 ->get();
