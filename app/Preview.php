@@ -11,7 +11,7 @@ class Preview extends Model
 
     protected $table = 'tblLTP_preview';
     protected $fillable = [
-        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'flexibleBtn', 'form_counter', 'convocation_email_sent', 'teacher_comments',
+        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'flexibleBtn', 'form_counter', 'convocation_email_sent', 'teacher_comments', 'admin_eform_comment', 'admin_plform_comment',
     ];
     
     /**

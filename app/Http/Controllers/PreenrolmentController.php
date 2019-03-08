@@ -27,85 +27,265 @@ class PreenrolmentController extends Controller
     public function queryRegularFormsToAssign(Request $request)
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $term = Session::get('Term');
-        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+        if (Session::has('Term')) {
+            $term = Session::get('Term');
+            $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
 
-        $students_in_class = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
-            $query->whereNotNull('Tch_ID')
-                    ->orWhere('Tch_ID', '!=', 'TBD')
-                    ;
-            })
-            ->get();
-        $arr1 = [];
-        foreach ($students_in_class as $key1 => $value1) {
-            $arr1[] = $value1->INDEXID;
-        }
-        $arr1 = array_unique($arr1);
-
-        // echo "Total Number of Students in Class for ".$prev_term.": ".count($arr1);
-        // echo "<br>";
-
-        $enrolment_forms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
-            ->where('Term', Session::get('Term'))
-            ->whereNull('updated_by_admin')
-            ->get();
-
-        // echo "Total Number of Enrolment Forms in ".$term.": ".count($enrolment_forms);
-        // echo "<br>";
-
-        $arr2 = [];
-        foreach ($enrolment_forms as $key2 => $value2) {
-            $arr2[] = $value2->INDEXID;
-        }
-        $arr2 = array_unique($arr2);
-
-        // echo "Total Number of People who submitted Re-Enrolment/Enrolment Forms for term ".$term.": ".count($arr2);
-        // echo "<br>";
-
-        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
-        $unique_students_not_in_class = array_unique($students_not_in_class);
-
-        // echo "Total Number of People NOT in Class for ".$term.": ".count($unique_students_not_in_class);
-        // echo "<br>";
-
-        $arr3 = [];
-        foreach ($unique_students_not_in_class as $key3 => $value3) {
-            $forms = Preenrolment::where('Term', $term)->where('INDEXID', $value3)
-                ->select('INDEXID', 'L', 'Te_Code', 'Term')
-                ->groupBy('INDEXID', 'L', 'Te_Code', 'Term')
+            $students_in_class = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+                $query->whereNotNull('Tch_ID')
+                        ->orWhere('Tch_ID', '!=', 'TBD')
+                        ;
+                })
                 ->get();
-            foreach ($forms as $key4 => $value4) {
-                $arr3[] = $value4;
+            $arr1 = [];
+            foreach ($students_in_class as $key1 => $value1) {
+                $arr1[] = $value1->INDEXID;
             }
-        }
-        
-        if (\Request::has('L')) {
-            $arr3 = collect($arr3);
-            
-            $queries = [];
+            $arr1 = array_unique($arr1);
 
-            $columns = [
-                'L', 
-            ];
+            // echo "Total Number of Students in Class for ".$prev_term.": ".count($arr1);
+            // echo "<br>";
 
-            
-            foreach ($columns as $column) {
-                if (\Request::has($column)) {
-                    $arr3 = $arr3->where($column, \Request::input($column) );
-                    $queries[$column] = \Request::input($column);
+            $enrolment_forms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                ->where('Term', Session::get('Term'))
+                ->where('overall_approval', 1)
+                ->whereNull('updated_by_admin')
+                ->get();
+
+            // echo "Total Number of Enrolment Forms in ".$term.": ".count($enrolment_forms);
+            // echo "<br>";
+
+            $arr2 = [];
+            foreach ($enrolment_forms as $key2 => $value2) {
+                $arr2[] = $value2->INDEXID;
+            }
+            $arr2 = array_unique($arr2);
+
+            // echo "Total Number of People who submitted Re-Enrolment/Enrolment Forms for term ".$term.": ".count($arr2);
+            // echo "<br>";
+
+            $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+            $unique_students_not_in_class = array_unique($students_not_in_class);
+
+            // echo "Total Number of People NOT in Class for ".$term.": ".count($unique_students_not_in_class);
+            // echo "<br>";
+
+            $arr3 = [];
+            foreach ($unique_students_not_in_class as $key3 => $value3) {
+                $forms = Preenrolment::where('Term', $term)->where('INDEXID', $value3)
+                    ->select('INDEXID', 'L', 'Te_Code', 'Term')
+                    ->groupBy('INDEXID', 'L', 'Te_Code', 'Term')
+                    ->get();
+                foreach ($forms as $key4 => $value4) {
+                    $arr3[] = $value4;
                 }
+            }
+            
+            if (\Request::has('L')) {
+                $arr3 = collect($arr3);
+                
+                $queries = [];
 
-            } 
-                if (Session::has('Term')) {
-                        $arr3 = $arr3->where('Term', Session::get('Term') );
-                        $queries['Term'] = Session::get('Term');
-                }
+                $columns = [
+                    'L', 
+                ];
 
-            return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3')); 
+                
+                foreach ($columns as $column) {
+                    if (\Request::has($column)) {
+                        $arr3 = $arr3->where($column, \Request::input($column) );
+                        $queries[$column] = \Request::input($column);
+                    }
+
+                } 
+                    if (Session::has('Term')) {
+                            $arr3 = $arr3->where('Term', Session::get('Term') );
+                            $queries['Term'] = Session::get('Term');
+                    }
+
+                return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3')); 
+            }
+            
+            return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3'));
         }
-        
         return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3'));
+    }
+
+
+    public function adminAssignCourseView(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexid = $request->indexid;
+            $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Code; 
+            $language = $request->L;
+
+            $qry_enrolment_details = Preenrolment::withTrashed()
+                ->where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get();
+
+            $modified_forms = [];
+
+            foreach ($qry_enrolment_details as $k => $v) {
+                $qry_mod_forms = ModifiedForms::where('INDEXID', $v->INDEXID)
+                    ->where('Term', $v->Term)
+                    ->where('L', $v->L)
+                    ->where('eform_submit_count', $v->eform_submit_count)
+                    ->get();
+
+                $modified_forms[] = $qry_mod_forms;
+            }    
+
+            $enrolment_details = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment', 'updatedOn')
+                ->get();
+
+            $arr1 = []; 
+            foreach ($enrolment_details as $key => $value) {
+                $arr1[] = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->where('Te_Code', $value->Te_Code)
+                ->get()
+                ->count();
+            }
+
+            $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
+                ->where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
+
+            $languages = DB::table('languages')->pluck("name","code")->all();
+            $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+
+            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data'))->render();
+            return response()->json([$data]);             
+        }
+    }
+
+    public function adminCheckScheduleCount(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexid = $request->INDEXID;
+            $term = $request->term_id; 
+            $language = $request->L;
+
+            $enrolment_details = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $term)            
+                ->where('eform_submit_count', $request->eform_submit_count)            
+                ->get();
+
+            $data = count($enrolment_details);
+
+            return response()->json($data);
+        }
+    }
+
+    public function adminNothingToModify(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexno = $request->qry_indexid; 
+            $term = $request->qry_term;
+            $tecode = $request->qry_tecode;
+            $eform_submit_count = $request->eform_submit_count;
+            $admin_eform_comment = $request->admin_eform_comment;
+
+            $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+            
+            foreach ($enrolment_to_be_copied as $data) {
+                $data->fill(['admin_eform_comment' => $admin_eform_comment,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+            }
+
+            $data = $request->all();
+
+            return response()->json($data);
+        }
+    }
+
+    public function adminSaveAssignedCourse(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexno = $request->qry_indexid; 
+            $term = $request->qry_term;
+            $tecode = $request->qry_tecode;
+            $eform_submit_count = $request->eform_submit_count;
+            $admin_eform_comment = $request->admin_eform_comment;
+
+            if (is_null($request->Te_Code)) {
+                $data = 0;
+                return response()->json($data);
+            }
+
+            $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+
+            $user_id = User::where('indexno', $indexno)->first(['id']);
+
+            foreach ($enrolment_to_be_copied as $data) {
+                $data->fill(['admin_eform_comment' => $admin_eform_comment,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+
+                $arr = $data->attributesToArray();
+                $clone_forms = ModifiedForms::create($arr);
+            }
+
+
+            $count_form = $enrolment_to_be_copied->count();
+            if ($count_form > 1) {
+                $delform = Preenrolment::orderBy('id', 'desc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->first();
+                $delform->Code = null;
+                $delform->CodeIndexID = null;
+                $delform->Te_Code = null;
+                $delform->INDEXID = null;
+                $delform->Term = null;
+                $delform->schedule_id = null;             
+                $delform->save();
+                $delform->delete();
+            }
+
+            $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+
+            $input = $request->all();
+            $input = array_filter($input, 'strlen');
+            
+            foreach ($enrolment_to_be_modified as $new_data) {
+                $new_data->fill($input)->save();    
+
+                $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
+                $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
+                $new_data->save();
+            }
+
+            $data = $request->all();
+
+            return response()->json($data);
+        }
     }
 
     public function ajaxStdComments(Request $request)

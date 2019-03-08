@@ -11,7 +11,7 @@ class PlacementForm extends Model
 
     protected $table = 'tblLTP_Placement_Forms';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'mgr_fname', 'mgr_lname', 'L', 'profile', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form', 'form_counter', 'eform_submit_count', 'cancelled_by_student', 'agreementBtn', 'consentBtn', 'placement_schedule_id', 'palcement_time', 'flexibleBtn', 'contractDate', 'dayInput', 'timeInput', 'selfpay_approval', 'Comments', 'modified_by','updated_by_admin', 'overall_approval', 'teacher_comments',
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'mgr_fname', 'mgr_lname', 'L', 'profile', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form', 'form_counter', 'eform_submit_count', 'cancelled_by_student', 'agreementBtn', 'consentBtn', 'placement_schedule_id', 'palcement_time', 'flexibleBtn', 'contractDate', 'dayInput', 'timeInput', 'selfpay_approval', 'Comments', 'modified_by','updated_by_admin', 'overall_approval', 'teacher_comments', 'admin_eform_comment', 'admin_plform_comment',
     ];
 
      /**

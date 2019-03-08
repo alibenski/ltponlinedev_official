@@ -534,7 +534,22 @@
 	                            @else
 	                                @if(empty($hist_datum->Te_Code)) {{ $hist_datum->coursesOld->Description }} 
 	                                @else {{ $hist_datum->courses->Description }} 
-	                                @endif</strong> : {{ $hist_datum->terms->Term_Name }} (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else -- @endif)</li>
+	                                @endif</strong> : {{ $hist_datum->terms->Term_Name }} 
+
+	                                <em>
+                                	@if (empty($hist_datum->classrooms))
+                                	@else
+	                                	@if (is_null($hist_datum->classrooms->Tch_ID))
+	                                		Waitlisted
+	                                	@elseif($hist_datum->classrooms->Tch_ID == 'TBD')
+	                                		Waitlisted
+	                                	@else
+	                                		* {{ $hist_datum->classrooms->Tch_ID }} *
+	                                	@endif
+                                	@endif
+                                	</em>
+
+	                                (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else -- @endif)</li>
 	                            @endif
 	                        @endforeach
 	                    </ul>
