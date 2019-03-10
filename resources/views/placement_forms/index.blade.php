@@ -76,6 +76,7 @@
 	    <thead>
 	        <tr>
 	        	<th>Operation</th>
+	        	<th>Validated/Assigned Course?</th>
 	            <th>Name</th>
 	            <th>Language</th>
 	            <th>HR Approval</th>
@@ -110,6 +111,14 @@
                        {{ method_field('DELETE') }}
                     </form>
                 </td>
+                <td>
+					@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+					@else
+					  @if ($form->modified_by)
+					    <span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span>
+					  @endif
+					@endif
+				</td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>

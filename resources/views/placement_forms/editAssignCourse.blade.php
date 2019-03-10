@@ -13,13 +13,13 @@
 @if($placement_form->assigned_to_course == 1)
 <div class="row">
 	<div class="callout callout-info col-sm-12">
-		<h4>Course Currently Assigned to {{ $placement_form->courses->Description }} - {{ $placement_form->schedule->name }}</h4>
+		<h4>Current Course Assigned:  {{ $placement_form->courses->Description }} - {{ $placement_form->schedule->name }}</h4>
 	</div>
 </div>
 @else
 <div class="row">
 	<div class="callout callout-warning col-sm-12">
-		<h4>No language course assigned yet</h4>
+		<h4>No language course assigned </h4>
 	</div>
 </div>
 @endif
@@ -41,13 +41,42 @@
 		  <div class="panel-body">
 
 		    <div class="form-group">
+				<label for="">Was the student convoked to take a placement exam?</label>
 				<div class="col-sm-12">
-				        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-				        <label for="decision2" class="form-control-static">Assign course</label>
+			        <div class="col-md-4">
+                      <input id="decisionCovoked1" name="convoked" class="with-font" type="radio" value="1">
+                      <label for="decisionCovoked1" class="form-control-static">YES</label>
+                    </div>
+
+                    <div class="col-md-4">
+                      <input id="decisionConvoked0" name="convoked" class="with-font" type="radio" value="0">
+                      <label for="decisionConvoked0" class="form-control-static">NO</label>
+                    </div>
 				</div>
+
+				{{-- <div class="col-sm-12 radio-click-assign" style="display: none;">
+				        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
+				        <label for="decision2" class="form-control-static">Click to assign course</label>
+				</div> --}}
 		    </div>
 
 			<div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
+
+				<div class="form-group">
+			      <label for="L" class="control-label"> Language:</label>
+			      <div class="col-sm-12">
+			        @foreach ($languages as $id => $name)
+			        <div class="col-sm-4">
+			            <div class="input-group"> 
+			              <span class="input-group-addon">       
+			                <input type="radio" name="L" value="{{ $id }}" >                 
+			              </span>
+			                <label type="text" class="form-control">{{ $name }}</label>
+			            </div>
+			        </div>
+			        @endforeach 
+			      </div>
+			    </div>
 
 				<div class="form-group">
 				    <label for="course_id" class="control-label">Assign Course: </label>
@@ -71,12 +100,19 @@
 				    
 				</div>
 
+				<div class="form-group">
+					<label class="control-label">Admin Comments: </label>
+
+					<textarea id="textarea-{{$placement_form->eform_submit_count}}" name="admin_plform_comment" class="form-control" maxlength="3500" @if(is_null($placement_form->admin_plform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$placement_form->admin_plform_comment}}" @endif></textarea>
+					
+				</div>
+
 			</div> {{-- end of hidden fields --}}
 
 			<div class="form-group col-sm-12">
 				{{-- <a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a> --}}
 				{{-- <button type="submit" class="btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button> --}}
-				<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1"><span class="glyphicon glyphicon-ok"></span>  Submit </button>	
+				<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1" disabled=""> Submit </button>	
 				{{-- <button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button> --}}
 			</div>
 			<input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -138,9 +174,9 @@
 			<label class="control-label" for="show_sched">Exam Date:</label>
 			{{-- @foreach($placement_form as $show_sched) --}}
 		    <div class="col-sm-12">
-				<ul>
-		    		<li>@if($placement_form->L == 'F') <strong>ONLINE</strong> from {{ $placement_form->placementSchedule->date_of_plexam }} to {{ $placement_form->placementSchedule->date_of_plexam_end }} @else {{ $placement_form->placementSchedule->date_of_plexam }} @endif</li>
-				</ul>
+				@if ($placement_form->placementSchedule->is_online == 1) Online from {{ $placement_form->placementSchedule->date_of_plexam }} to {{ $placement_form->placementSchedule->date_of_plexam_end }} 
+				@else {{ $placement_form->placementSchedule->date_of_plexam }} 
+				@endif
 			</div>
 			{{-- @endforeach --}}
 		</div>
@@ -148,20 +184,22 @@
 	
 	<div class="col-sm-6"> <!-- 2nd SECTION -->
 		<div class="form-group">
-		    <label class="control-label" for="flexible_show">Placement Test/ Waitlist Information: </label>
+		    <label class="control-label" for="flexible_show">Waitlist Information: </label>
 				<div class="panel panel-body">
-			    	@if ($waitlists)
-			    		@foreach($waitlists as $waitlisted)
-			    			@foreach($waitlisted->waitlist as $info_details)
-			    			<ul>
-			    				<li>Term Code: {{ $info_details->Term }}</li>
-			    				<li>Term: {{ $info_details->terms->Comments }}</li>
-			    				<li>Remark: {{ $info_details->Comments }}</li>
-			    			</ul>
-			    			<hr>
-			    			@endforeach 
-			    		@endforeach 
-			    	@else -- 
+			    	@if (count($waitlists) > 0)
+				    	<div class="alert alert-info">
+					    	<label for="">Waitlisted in </label>
+					    		@foreach($waitlists as $waitlisted)
+					    			{{ $waitlisted->Term }} : {{ $waitlisted->terms->Comments }} {{ date('Y', strtotime($waitlisted->terms->Term_Begin)) }} for 
+					    			{{ $waitlisted->languages->name }}
+					    			{{ $waitlisted->courses->Description }}
+					    			@if (is_null($waitlisted->classrooms->Tch_ID))
+										NULL
+									@else {{ $waitlisted->classrooms->Tch_ID }}
+					    			@endif
+					    		@endforeach 
+			    		</div>
+			    	@else Not Waitlisted
 			    	@endif
 				</div>
 		</div>
@@ -225,9 +263,14 @@
 	    $('.wx').val([]).trigger('change');
 	});
 
-	$(document).on('click', '#decision2', function() {
-	    $(".regular-enrol").removeAttr('style');
-	    var L = $("input[name='L']").val();
+	$("input[name='convoked']").on('click', function() {
+			// $(".radio-click-assign").removeAttr('style');
+			$(".regular-enrol").removeAttr('style');
+	});
+
+	$(document).on('click', "input[name='L']", function() {
+	    // $(".regular-enrol").removeAttr('style');
+	    var L = $(this).val();
 		var term = $("input[name='Term']").val();
 		var token = $("input[name='_token']").val();
 	    console.log(L);
@@ -240,8 +283,7 @@
 		    $("select[name='course_id']").html('');
 		    $("select[name='course_id']").html(data.options);
 		  }
-		});
-	    
+		}); 
 	});
 </script>
 <script>
@@ -258,6 +300,7 @@
 		  	console.log("success on schedule");
 		    $("select[name='schedule_id']").html('');
 		    $("select[name='schedule_id']").html(data.options);
+		    $("button[name='submit-approval']").removeAttr('disabled');
 		  }
 		});
   	}); 
@@ -266,7 +309,9 @@
 	localStorage.setItem("update", "0");
 	$("button[name='submit-approval']").click(function(){//target element and request click event
 		localStorage.setItem("update", "1");//set localStorage of parent page
-		setTimeout(function(){window.close();},500);//timeout code to close window
+		setTimeout(function(){
+			window.close();},
+			800);//timeout code to close window
 		});
 </script>
 @stop

@@ -55,7 +55,7 @@
 	</form>
 </div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 	<a href="{{ route('preenrolment.index') }}">
 		<div class="info-box bg-aqua">
 		  <!-- Apply any bg-* class to to the icon to color it -->
@@ -72,7 +72,7 @@
 		<!-- /.info-box -->
 	</a>
 </div>
-<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 	<a href="{{ route('placement-form.index') }}">
 		<div class="info-box bg-yellow">
 		  <!-- Apply any bg-* class to to the icon to color it -->
@@ -90,7 +90,7 @@
 	</a>
 </div>
 {{-- <div class="col-md-3 col-sm-6 col-xs-12"> --}}
-<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 	<a href="{{ route('selfpayform.index') }}">
 		<div class="info-box bg-purple">
 		  <!-- Apply any bg-* class to to the icon to color it -->
@@ -108,7 +108,7 @@
 		<!-- /.info-box -->
 	</a>
 </div>
-<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 	<a href="{{ route('index-placement-selfpay') }}">
 		<div class="info-box alert-selfpay">
 		  <!-- Apply any bg-* class to to the icon to color it -->
@@ -127,14 +127,14 @@
 	</a>
 </div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
+<div class="col-md-6 col-sm-6 col-xs-12">
 	@if(Session::has('Term')) 
 	<a href="{{ route('query-regular-forms-to-assign') }}">
-		<div class="info-box">
+		<div class="info-box bg-teal">
 		  <!-- Apply any bg-* class to to the icon to color it -->
-		  <span class="info-box-icon bg-navy"><i class="fa  fa-files-o"></i></span>
+		  <span class="info-box-icon bg-teal"><i class="fa  fa-files-o"></i></span>
 		  <div class="info-box-content">
-		    <span class="info-box-text">Manage Enrolment Forms </span>
+		    <span class="info-box-text">Manage Unassigned Enrolment Forms </span>
 		    <span class="info-box-number">{{$arr3_count}}</span>
 		    <span class="info-box-number"><small>(students not in a class)</small></span>
 		  </div>
@@ -143,11 +143,39 @@
 		<!-- /.info-box -->
 	</a>
 	@else 
-		<div class="info-box">
+		<div class="info-box bg-teal">
 		  <!-- Apply any bg-* class to to the icon to color it -->
-		  <span class="info-box-icon bg-navy"><i class="fa  fa-exclamation-circle"></i></span>
+		  <span class="info-box-icon bg-teal"><i class="fa  fa-exclamation-circle"></i></span>
 		  <div class="info-box-content">
-		    <span class="info-box-text">Manage Enrolment Forms </span>
+		    <span class="info-box-text">Manage Unassigned Enrolment Forms </span>
+		    <span class="info-box-number">Set the Term</span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	@endif
+</div>
+
+<div class="col-md-6 col-sm-6 col-xs-12">
+	@if(Session::has('Term')) 
+	<a href="{{ route('placement-form-filtered') }}">
+		<div class="info-box bg-orange">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-orange"><i class="fa  fa-files-o"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Manage Non-assigned Placement Forms </span>
+		    <span class="info-box-number">#</span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+	@else 
+		<div class="info-box bg-orange">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-orange"><i class="fa  fa-exclamation-circle"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Manage Non-assigned Placement Forms </span>
 		    <span class="info-box-number">Set the Term</span>
 		  </div>
 		  <!-- /.info-box-content -->

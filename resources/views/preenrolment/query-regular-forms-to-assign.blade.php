@@ -69,7 +69,7 @@
 			        <tr>
 			        	<th>#</th>
                 <th>Action</th>
-			        	<th>Assigned Course?</th>
+			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
 		            <th>Course</th>
 		            <th>Language</th>

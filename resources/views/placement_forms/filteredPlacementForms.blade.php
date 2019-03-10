@@ -76,9 +76,9 @@
 	    <thead>
 	        <tr>
 	        	<th>Operation</th>
+	            <th>Validated/Assigned Course?</th>
 	            <th>Name</th>
 	            {{-- <th>Convoked?</th> --}}
-	            {{-- <th>Assigned Course?</th> --}}
 	            <th>Language</th>
 	            <th>HR Approval</th>
 	            <th>Payment Status</th>
@@ -98,6 +98,14 @@
 					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
                     {{-- <a href="{{ route('placement-form.edit', [$form->id]) }}" target="_blank" class="btn btn-warning" style="margin: 1px;"><span class="glyphicon glyphicon-envelope"></span> Convoke</a>  --}}
                     <a href="{{ route('placement-form-assign', [$form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><span class="glyphicon glyphicon-edit"></span> Assign Course</a> 
+                </td>
+                <td>
+                	@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+					@else
+					  @if ($form->modified_by)
+					    <span class="label label-success margin-label">Yes by @if($form->modifyUser->name) {{$form->modifyUser->name }}  @else   User ID {{ $form->modified_by }} @endif</span>
+					  @endif
+					@endif
                 </td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif

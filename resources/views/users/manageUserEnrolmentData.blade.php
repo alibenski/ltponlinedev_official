@@ -149,7 +149,7 @@
 							    <thead>
 							        <tr>
 							            <th>Operation</th>
-							            <th>Treated by Admin?</th>
+							            <th>Validated/Assigned Course?</th>
 							            <th>Name</th>
 							            <th>Course</th>
 							            <th>Schedule</th>

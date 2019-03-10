@@ -43,6 +43,10 @@ class PlacementForm extends Model
 
     public function users() {
     return $this->belongsTo('App\User', 'INDEXID', 'indexno'); }
+    
+    public function modifyUser() {
+    return $this->belongsTo('App\User', 'modified_by', 'id'); 
+    }
 
     public function terms() {
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 

@@ -515,6 +515,9 @@ class PlacementFormController extends Controller
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 
+    /**
+     * View of simple list table of placement forms with overall_approval = 1 
+     */
     public function getApprovedPlacementFormsView(Request $request)
     {   
         if (!Session::has('Term') ) {
@@ -602,12 +605,35 @@ class PlacementFormController extends Controller
                         $queries['search'] = \Request::input('search');
                 }
 
-            $count = $placement_forms->whereNull('assigned_to_course')->get()->count();
-            
-            $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
+            $count = new PlacementForm;
+            $columns2 = [
+                'L', 'DEPT', 'is_self_pay_form', 'overall_approval',
+            ];
+            foreach ($columns2 as $column2) {
+                if (\Request::has($column2)) {
+                    $count = $count->where($column2, \Request::input($column2) );
+                }  
+            } 
+                if (Session::has('Term')) {
+                        $count = $count->where('Term', Session::get('Term') );
+                }
+                if (\Request::has('search')) {
+                        $name2 = \Request::input('search');
+                        $count = $count->with('users')
+                            ->whereHas('users', function($q2) use ( $name2) {
+                                return $q2->where('name', 'LIKE', '%' . $name2 . '%')->orWhere('email', 'LIKE', '%' . $name2 . '%');
+                            });
+                }
+            $count = $count->where('overall_approval', 1)->whereNull('assigned_to_course')->get()->count();
+
+            // $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
+            $placement_forms = $placement_forms->where('overall_approval', 1)->paginate(20)->appends($queries);
             return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms)->withCount($count)->withLanguages($languages)->withOrg($org);            
     }
 
+    /**
+     * Page/View to convoke students to take a placement examination
+     */
     public function edit($id)
     {
         $placement_form = PlacementForm::find($id);
@@ -616,14 +642,30 @@ class PlacementFormController extends Controller
         return view('placement_forms.edit',compact('placement_form','waitlists', 'times'));
     }
 
+    /**
+     * Page/View to assign course to a placement examination
+     */
     public function editAssignCourse($id)
     {
+        $languages = DB::table('languages')->pluck("name","code")->all();
         $placement_form = PlacementForm::find($id);
-        $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
+        
+        $prev_termCode = Term::where('Term_Code', $placement_form->Term)->first()->Term_Prev;
+        $waitlists = Repo::where('INDEXID',$placement_form->INDEXID)
+            ->where('Term',$prev_termCode)
+            ->whereHas('classrooms', function ($query) {
+                    $query->whereNull('Tch_ID')
+                            ->orWhere('Tch_ID', '=', 'TBD')
+                            ;
+                    })
+            ->get();
         // dd($placement_form, $placement_student_index);
-        return view('placement_forms.editAssignCourse',compact('placement_form','waitlists'));
+        return view('placement_forms.editAssignCourse',compact('languages','placement_form','waitlists'));
     }
 
+    /**
+     * Update resource with convoked field = '1'. This method is currently not used
+     */
     public function update(Request $request, $id)
     {
         $this->validate($request,[
@@ -692,45 +734,37 @@ class PlacementFormController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Update resource with assigned course with convoked input field 
+     */
     public function assignCourseToPlacement(Request $request, $id)
     {
         $code_index_id = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
         $request->request->add(['CodeIndexID' => $code_index_id]);
 
         $this->validate($request, array(
-                            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
-                            'Term' => 'required|',
-                            'INDEXID' => 'required|',
-                            'L' => 'required|',
-                            'decision' => 'required|',
-                            'submit-approval' => 'required|',
-                            'course_id' => 'required|',
-                            'schedule_id' => 'required|',
-                        )); 
-        if (isset($placement_form->convoked)) {
-                // $this->assignCourseToPlacement($request, $id);
-                $this->validate($request, array(
-                                'course_id' => 'required|',
-                                'schedule_id' => 'required|',
-                            ));
-                $placement_form->assigned_to_course = 1;
-                $placement_form->schedule_id = $request->schedule_id;
-                $placement_form->Te_Code = $request->course_id;
-                $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
-                $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
-                $placement_form->save();
-        } else {
-                $placement_form = PlacementForm::find($id);
-                $placement_form->convoked = 0;
-                $placement_form->assigned_to_course = 1;
-                $placement_form->schedule_id = $request->schedule_id;
-                $placement_form->Te_Code = $request->course_id;
-                $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
-                $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
-                $placement_form->save();
-        }
+            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+            'Term' => 'required|',
+            'INDEXID' => 'required|',
+            'L' => 'required|',
+            'convoked' => 'required|',
+            'submit-approval' => 'required|',
+            'course_id' => 'required|',
+            'schedule_id' => 'required|',
+        )); 
 
-
+        $placement_form = PlacementForm::find($id);
+        $placement_form->convoked = $request->convoked;
+        $placement_form->assigned_to_course = 1;
+        $placement_form->admin_plform_comment = $request->admin_plform_comment;
+        $placement_form->updated_by_admin = 1;
+        $placement_form->modified_by = Auth::user()->id;
+        $placement_form->schedule_id = $request->schedule_id;
+        $placement_form->Te_Code = $request->course_id;
+        $placement_form->Code = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term;
+        $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
+        $placement_form->save();
+    
         // $request->session()->flash('success', 'Placement form record has been updated.'); 
         return redirect()->back();
     }
