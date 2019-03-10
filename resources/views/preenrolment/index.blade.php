@@ -55,6 +55,7 @@
 		<table class="table table-bordered table-striped">
 		    <thead>
 		        <tr>
+		        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
 		            {{-- <th>Term</th> --}}
 		            <th>Course</th>
@@ -74,6 +75,14 @@
 		    <tbody>
 				@foreach($enrolment_forms as $form)
 				<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
+					<td>
+						@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+		                @else
+		                  @if ($form->modified_by)
+		                    <span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span>
+		                  @endif
+		                @endif
+					</td>
 					<td>
 					@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 					</td>
