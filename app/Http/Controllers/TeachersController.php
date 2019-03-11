@@ -427,8 +427,11 @@ class TeachersController extends Controller
                 ->where('Term', $term)
                 ->get();
             
+            $input_1 = ['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ];
+            $input_1 = array_filter($input_1, 'strlen');
+
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill(['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+                $data->fill($input_1)->save();
             }
 
             $data = $request->all();
@@ -460,8 +463,11 @@ class TeachersController extends Controller
 
             $user_id = User::where('indexno', $indexno)->first(['id']);
 
+            $input_1 = ['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ];
+            $input_1 = array_filter($input_1, 'strlen');
+
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill(['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+                $data->fill($input_1)->save();
 
                 $arr = $data->attributesToArray();
                 $clone_forms = ModifiedForms::create($arr);

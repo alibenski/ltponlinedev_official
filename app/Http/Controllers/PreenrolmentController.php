@@ -208,8 +208,11 @@ class PreenrolmentController extends Controller
                 ->where('Term', $term)
                 ->get();
             
+            $input_1 = ['admin_eform_comment' => $admin_eform_comment,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ];
+            $input_1 = array_filter($input_1, 'strlen');
+
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill(['admin_eform_comment' => $admin_eform_comment,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+                $data->fill($input_1)->save();
             }
 
             $data = $request->all();
@@ -241,8 +244,11 @@ class PreenrolmentController extends Controller
 
             $user_id = User::where('indexno', $indexno)->first(['id']);
 
+            $input_1 = ['admin_eform_comment' => $admin_eform_comment,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ];
+            $input_1 = array_filter($input_1, 'strlen');
+
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill(['admin_eform_comment' => $admin_eform_comment,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+                $data->fill($input_1)->save();
 
                 $arr = $data->attributesToArray();
                 $clone_forms = ModifiedForms::create($arr);
@@ -285,7 +291,7 @@ class PreenrolmentController extends Controller
                 $new_data->save();
             }
 
-            $data = $request->all();
+            $data = $input;
 
             return response()->json($data);
         }

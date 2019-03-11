@@ -457,6 +457,7 @@ class UserController extends Controller
                 'form_counter' => $form_counter,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
+                'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
             ]); 
@@ -560,6 +561,7 @@ class UserController extends Controller
                 'form_counter' => $form_counter,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
+                'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
             ]);
@@ -642,6 +644,7 @@ class UserController extends Controller
                 'form_counter' => 0,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
+                'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
             ]); 
@@ -685,6 +688,7 @@ class UserController extends Controller
                 'form_counter' => 0,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
+                'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
             ]);

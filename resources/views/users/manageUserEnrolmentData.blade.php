@@ -168,6 +168,8 @@
 									@foreach($student_enrolments as $form)
 									<tr>
 										<td>
+											<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
+
 											<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
 					                            <input type="submit" @if (is_null($form->deleted_at))
 						                          value="Reject/Cancel Enrolment"
@@ -187,11 +189,15 @@
 											@if($form->updated_by_admin == 1)
 			                                	<span class="label label-success margin-label">Yes by {{ $form->modifyUser->name}}</span>
 			                                @else
-												-
+												<span class="label label-danger margin-label">Not Assigned </span>
 			                                @endif
 										</td>
 										<td>
-										@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
+											@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif 
+											<input type="hidden" name="indexid" value="{{$form->INDEXID}}">	
+								            <input type="hidden" name="L" value="{{$form->L}}">
+											<input type="hidden" name="Te_Code_Input" value="{{$form->Te_Code}}">
+										</td>
 										<td>{{ $form->courses->Description }}</td>
 										<td>
 											<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class=""></i></span> View </a>
@@ -625,12 +631,165 @@
         </div>
     </div>
 </div>
+
+<div id="modalAssignCourse" class="modal fade" role="dialog">
+    <div class="modal-dialog-full">
+        <div class="modal-content-full">
+
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                <h4 class="modal-title">Admin Assign Course to Student</h4>
+            </div>
+            <div class="modal-body-content modal-background">
+            </div>
+            <div class="modal-footer modal-background">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        
+        </div>
+    </div>
+</div> 
+
 @stop
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script>
+$(document).ready(function () {
+    $('.assign-course').click( function() {
+      var indexid = $(this).closest("tr").find("input[name='indexid']").val();
+      var L = $(this).closest("tr").find("input[name='L']").val();
+      var Te_Code_Input = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+        url: '{{ route('admin-assign-course-view') }}',
+        type: 'GET',
+        data: {indexid:indexid, L:L,Te_Code:Te_Code_Input,_token: token},
+      })
+      .done(function(data) {
+        console.log("show assign view : success");
+        $('.modal-body-content').html(data)
+        $('#modalAssignCourse').modal('show');
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete show assign view");
+      });
+    });
+});
+</script>
+
+<script>  
+$('#modalAssignCourse').on('click', '.modal-accept-btn',function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-no-change").val();
+
+
+  $.ajax({
+    url: '{{ route('admin-nothing-to-modify') }}',
+    type: 'PUT',
+    data: {admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+  })
+  .done(function(data) {
+    console.log(data);
+    if (data == 0) {
+      alert('Hmm... Nothing to change, nothing to update...');
+    }
+
+    var L = $("input[name='L'].modal-input").val();
+
+      $.ajax({
+          url: '{{ route('admin-assign-course-view') }}',
+          type: 'GET',
+          data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
+        })
+        .done(function(data) {
+          console.log("no change assign view : success");
+          $('.modal-body-content').html(data);
+        })
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+    
+  });
+    
+});
+
+$('#modalAssignCourse').on('click', '.modal-save-btn',function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
+  var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
+  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-changed").val();
+
+  $(".overlay").fadeIn('fast'); 
+
+  $.ajax({
+    url: '{{ route('admin-save-assigned-course') }}',
+    type: 'PUT',
+    data: {Te_Code:Te_Code, schedule_id:schedule_id, admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+  })
+  .done(function(data) {
+	    console.log(data);
+	    if (data == 0) {
+	      alert('Hmm... Nothing to change, nothing to update...');
+	      location.reload();
+	    }
+	    var L = $("input[name='L'].modal-input").val();
+		console.log(Te_Code)
+	    $.ajax({
+	      url: '{{ route('admin-assign-course-view') }}',
+	      type: 'GET',
+	      data: {indexid:qry_indexid, L:L, Te_Code:Te_Code, _token: token},
+	    })
+	    .done(function(data) {
+	      console.log("refreshing the assign view : success"); 
+	      $('.modal-body-content').html(data);    
+	    })
+	    .always(function() {
+	      console.log("complete refresh modal view");
+	    });
+  })
+  .fail(function() {
+    	console.log("error");
+  })
+  .always(function() {
+    	console.log("complete save assigned course");
+  });
+  
+});
+</script>
+
+<script>
+$('#modalAssignCourse').on('hidden.bs.modal', function (event) {
+
+  console.log(event.target)
+  // alert( "This will be displayed only once." );
+  //    $( this ).off( event );
+  
+  $(".preloader").fadeIn('fast');
+  location.reload();
+
+});
+</script>
+
+
 <script type="text/javascript">
 $(document).ready(function() {
+    $('.dropdown-toggle').dropdown(); 
     $('.select2-basic-single').select2({
     placeholder: "--- Select Here ---",
     });

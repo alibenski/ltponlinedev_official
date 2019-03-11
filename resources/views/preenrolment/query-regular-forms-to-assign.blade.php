@@ -193,7 +193,7 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
   var qry_indexid = $(this).attr('data-indexid');
   var qry_term = $(this).attr('data-term');
   var token = $("input[name='_token']").val();
-  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment']").val();
+  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-no-change").val();
 
 
   $.ajax({
@@ -237,7 +237,7 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
   var token = $("input[name='_token']").val();
   var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
   var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
-  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment']").val();
+  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-changed").val();
 
   $(".overlay").fadeIn('fast'); 
 
@@ -250,13 +250,14 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
 	    console.log(data);
 	    if (data == 0) {
 	      alert('Hmm... Nothing to change, nothing to update...');
+        location.reload();
 	    }
 	    var L = $("input[name='L'].modal-input").val();
-
+      console.log(Te_Code)
 	    $.ajax({
 	      url: '{{ route('admin-assign-course-view') }}',
 	      type: 'GET',
-	      data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
+	      data: {indexid:qry_indexid, L:L, Te_Code:Te_Code, _token: token},
 	    })
 	    .done(function(data) {
 	      console.log("refreshing the assign view : success"); 

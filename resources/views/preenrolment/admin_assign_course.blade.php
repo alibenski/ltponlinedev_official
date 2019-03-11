@@ -62,7 +62,7 @@
 	                <div class="form-group">
 						<label class="control-label">Admin Comments: </label>
 
-						<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control" maxlength="3500" @if(is_null($element->admin_eform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
+						<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control course-no-change" maxlength="3500" @if(is_null($element->admin_eform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
 						
 					</div>
 
@@ -126,7 +126,7 @@
 		                <div class="form-group">
 							<label class="control-label">Admin Comments: </label>
 
-							<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control" maxlength="3500" @if(is_null($element->admin_eform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
+							<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control course-changed" maxlength="3500" @if(is_null($element->admin_eform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
 							
 						</div>
 

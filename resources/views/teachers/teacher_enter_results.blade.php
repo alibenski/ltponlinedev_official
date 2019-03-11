@@ -302,7 +302,7 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
   var qry_indexid = $(this).attr('data-indexid');
   var qry_term = $(this).attr('data-term');
   var token = $("input[name='_token']").val();
-  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments']").val();
+  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-no-change").val();
 
 
   $.ajax({
@@ -346,7 +346,7 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
   var token = $("input[name='_token']").val();
   var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
   var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
-  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments']").val();
+  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-changed").val();
 
   $(".overlay").fadeIn('fast'); 
 

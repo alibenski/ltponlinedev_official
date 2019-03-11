@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<label class="control-label">Comments: </label>
 
-						<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control" maxlength="3500" @if(is_null($element->teacher_comments)) placeholder="2nd prefered course to take and any important information that the Language Secretariat needs to know..." @else placeholder="{{$element->teacher_comments}}" @endif></textarea>
+						<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control course-no-change" maxlength="3500" @if(is_null($element->teacher_comments)) placeholder="2nd prefered course to take and any important information that the Language Secretariat needs to know..." @else placeholder="{{$element->teacher_comments}}" @endif></textarea>
 						
 					</div>
 						
@@ -93,7 +93,7 @@
 		                <div class="form-group">
 							<label class="control-label">Comments: </label>
 
-							<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control" maxlength="3500" @if(is_null($element->teacher_comments)) placeholder="2nd prefered course to take and any important information that the Language Secretariat needs to know..." @else placeholder="{{$element->teacher_comments}}" @endif></textarea>
+							<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control course-changed" maxlength="3500" @if(is_null($element->teacher_comments)) placeholder="2nd prefered course to take and any important information that the Language Secretariat needs to know..." @else placeholder="{{$element->teacher_comments}}" @endif></textarea>
 							
 						</div>
 

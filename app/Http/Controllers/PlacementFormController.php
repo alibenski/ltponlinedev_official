@@ -756,7 +756,11 @@ class PlacementFormController extends Controller
         $placement_form = PlacementForm::find($id);
         $placement_form->convoked = $request->convoked;
         $placement_form->assigned_to_course = 1;
-        $placement_form->admin_plform_comment = $request->admin_plform_comment;
+
+        if (!is_null($request->admin_plform_comment)) {
+            $placement_form->admin_plform_comment = $request->admin_plform_comment;
+        }
+            
         $placement_form->updated_by_admin = 1;
         $placement_form->modified_by = Auth::user()->id;
         $placement_form->schedule_id = $request->schedule_id;
