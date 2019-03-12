@@ -291,6 +291,7 @@
 							    <thead>
 							        <tr>
 							            <th>Operation</th>
+							            <th>Validated/Assigned Course?</th>
 							            <th>Name</th>
 							            <th>Language</th>
 							            <th>HR Approval</th>
@@ -324,6 +325,13 @@
 						                        <input type="hidden" name="_token" value="{{ Session::token() }}">
 						                       {{ method_field('DELETE') }}
 						                    </form>
+										</td>
+										<td>
+											@if($form->updated_by_admin == 1)
+			                                	<span class="label label-success margin-label">Yes by {{ $form->modifyUser->name}}</span>
+			                                @else
+												<span class="label label-danger margin-label">Not Assigned </span>
+			                                @endif
 										</td>
 										<td>
 										@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>

@@ -272,7 +272,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id); //Get role specified by id
 
-    //Validate name, email and password fields  
+        //Validate name, email and password fields  
         $this->validate($request, [
             'password'=>'required|min:6|confirmed'
         ]);
@@ -437,7 +437,7 @@ class UserController extends Controller
                 $form_counter = $lastValueCollection->form_counter + 1;    
             }
 
-            $new_enrolment = Preenrolment::create([ 
+            $input = [ 
                 'CodeIndexID' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID,
                 'Code' => $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term,
                 'schedule_id' => $request->schedule_id,
@@ -449,7 +449,7 @@ class UserController extends Controller
                 'is_self_pay_form' => null,
                 'approval' => 1,
                 'approval_hr' => 1,
-                "created_at" =>  \Carbon\Carbon::now(),
+                "created_at" =>  $request->created_at,
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
@@ -460,7 +460,11 @@ class UserController extends Controller
                 'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
-            ]); 
+            ];
+            array_filter($input);
+
+            $new_enrolment = Preenrolment::create($input); 
+            
         } else {
             $this->storeAttachedFiles($request);            
         }
@@ -553,7 +557,7 @@ class UserController extends Controller
                 'attachment_id' => $attachment_identity_file->id,
                 'attachment_pay' => $attachment_pay_file->id,
                 'selfpay_approval' => 1,
-                "created_at" =>  \Carbon\Carbon::now(),
+                "created_at" =>  $request->created_at,
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
@@ -636,7 +640,7 @@ class UserController extends Controller
                 'is_self_pay_form' => null,
                 'approval' => 1,
                 'approval_hr' => 1,
-                "created_at" =>  \Carbon\Carbon::now(),
+                "created_at" =>  $request->created_at,
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
@@ -680,7 +684,7 @@ class UserController extends Controller
                 'attachment_id' => $attachment_identity_file->id,
                 'attachment_pay' => $attachment_pay_file->id,
                 'selfpay_approval' => 1,
-                "created_at" =>  \Carbon\Carbon::now(),
+                "created_at" =>  $request->created_at,
                 "updated_at" =>  \Carbon\Carbon::now(),
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 

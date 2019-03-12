@@ -173,3 +173,11 @@
 		</form>			
 	</div>
 </div>
+<script language="javascript">
+	window.setInterval(function(){
+    if(localStorage["update"] == "1"){
+        localStorage["update"] = "0";
+        window.location.reload();
+    }
+}, 500);
+</script>

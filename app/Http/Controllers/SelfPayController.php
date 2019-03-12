@@ -334,7 +334,7 @@ class SelfPayController extends Controller
                                 
         foreach ($forms as $form) {
             $enrolment_record = Preenrolment::where('id', $form->id)->first();
-            $enrolment_record->Comments = $request->admin_comment_show;
+            // $enrolment_record->Comments = $request->admin_comment_show;
             $enrolment_record->selfpay_approval = $request['submit-approval'];
             $enrolment_record->overall_approval = $request['submit-approval'];
             $enrolment_record->save();
@@ -498,7 +498,7 @@ class SelfPayController extends Controller
 
         foreach ($forms as $form) {
             $enrolment_record = PlacementForm::where('id', $form->id)->first();
-            $enrolment_record->Comments = $request->admin_comment_show;
+            // $enrolment_record->Comments = $request->admin_comment_show;
             $enrolment_record->selfpay_approval = $request['submit-approval'];
             $enrolment_record->overall_approval = $request['submit-approval'];
             $enrolment_record->save();

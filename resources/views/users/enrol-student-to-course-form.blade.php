@@ -3,6 +3,7 @@
 @section('customcss')
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 @stop
 
 @section('content')
@@ -134,6 +135,17 @@
             </div>
 			
 			<div class="form-group col-sm-12">
+			    <label class="control-label" for="created_at">Manually Set Time Stamp: </label>
+
+			        <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - hh:ii:ss" data-link-field="created_at">
+                        <input class="form-control" size="16" type="text" value="{{\Carbon\Carbon::now()}}" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+					</div>
+                        <input type="hidden" name="created_at" id="created_at" value="{{\Carbon\Carbon::now()}}" required=""/>
+			</div>
+
+			<div class="form-group col-sm-12">
 			    <label class="control-label" for="Comments">Admin Comment: </label>
 			    <div class="">
 			        <textarea class="form-control" name="Comments" cols="40" rows="3">Created and approved by CLM Language Administrator</textarea>
@@ -162,6 +174,23 @@
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+<script>
+  $(document).ready(function() {
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        // weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        // todayHighlight: 1,
+        // startView: 4,
+        // forceParse: 0,
+        // showMeridian: 1,
+        // minView: 2
+    });
+  });
+</script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('.select2').select2({
