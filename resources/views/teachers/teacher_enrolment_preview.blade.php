@@ -60,22 +60,6 @@
 		    @else
 		    @endif
 
-		    <div class="form-group col-sm-12">
-		      <label for="overall_approval" class="control-label"></label>
-		      <div class="col-sm-12">
-		        
-		        <div class="col-sm-8">
-		            <div class="input-group"> 
-		              <span class="input-group-addon">       
-		                <input type="checkbox" name="overall_approval" class="add-filter" value=1 >                 
-		              </span>
-		                <label type="text" class="form-control bg-green">View Approved Forms Only</label>
-		            </div>
-		        </div>
-		        
-		      </div>
-		    </div>
-
 		</div> <!-- end filter div -->
 
 		<div class="form-group">           
@@ -112,7 +96,7 @@
 			<div class="col-sm-4">
 				<h3>Total # <span class="label label-info">{{$count}}</span></h3>
 			</div>
-			@if (Request::has('Te_Code')||Request::has('overall_approval')||Request::has('L'))
+			@if (Request::has('Te_Code')||Request::has('L'))
 			<div class="pull-right col-sm-4">
 				<div class="box box-default">
 					<div class="box-header with-border">
@@ -125,13 +109,6 @@
 						
 						<p>Language: {{Request::get('L')}}</p>
 						<p>Course Code: {{Request::get('Te_Code')}}</p>
-						<p>
-							@if (Request::get('overall_approval') == 1)
-								Viewing only approved enrolment forms
-							@else
-								Viewing approved and non-approved enrolment forms
-							@endif
-						</p>
 					
 					</div>
 				</div>
