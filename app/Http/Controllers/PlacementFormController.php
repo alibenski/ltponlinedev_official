@@ -511,7 +511,7 @@ class PlacementFormController extends Controller
                 }
 
             // $allQueries = array_merge($queries, $currentQueries);
-            $placement_forms = $placement_forms->withTrashed()->paginate(10)->appends($queries);
+            $placement_forms = $placement_forms->withTrashed()->paginate(20)->appends($queries);
             return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 

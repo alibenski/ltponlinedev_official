@@ -99,7 +99,7 @@ class SelfPayController extends Controller
                 $queries['sort'] = \Request::input('sort');
             }
 
-        $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
+        $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
         return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
     }
 
@@ -419,7 +419,7 @@ class SelfPayController extends Controller
             }
 
 
-        $selfpayforms = $selfpayforms->paginate(10)->appends($queries);
+        $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
         return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
     }
 

@@ -36,6 +36,69 @@ class TeachersController extends Controller
         return view('teachers.teacher_dashboard',compact('terms', 'assigned_classes', 'all_classes'));
     }
 
+    public function teacherEnrolmentPreview(Request $request)
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+
+
+        if (!Session::has('Term')) {
+            $enrolment_forms = null;
+            return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        }
+
+        $enrolment_forms = new Preenrolment;
+        // $currentQueries = \Request::query();
+        $queries = [];
+
+        $columns = [
+            'L', 'DEPT', 'Te_Code', 'is_self_pay_form', 'overall_approval',
+        ];
+
+        
+        foreach ($columns as $column) {
+            if (\Request::has($column)) {
+                $enrolment_forms = $enrolment_forms->where($column, \Request::input($column) );
+                $queries[$column] = \Request::input($column);
+            }
+
+        } 
+            if (Session::has('Term')) {
+                    $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term') );
+                    $queries['Term'] = Session::get('Term');
+            }
+
+                if (\Request::has('search')) {
+                    $name = \Request::input('search');
+                    $enrolment_forms = $enrolment_forms->with('users')
+                        ->whereHas('users', function($q) use ( $name) {
+                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                        });
+                    $queries['search'] = \Request::input('search');
+            } 
+
+            if (\Request::has('sort')) {
+                $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort') );
+                $queries['sort'] = \Request::input('sort');
+            } else {
+                $enrolment_forms = $enrolment_forms->orderBy('created_at', 'asc');
+            }
+
+            if (\Request::exists('approval_hr')) {
+                if (is_null(\Request::input('approval_hr'))) {
+                    $enrolment_forms = $enrolment_forms->whereNotIn('DEPT', ['UNOG', 'JIU','DDA','OIOS','DPKO'])->whereNull('is_self_pay_form')->whereNull('approval_hr');
+                    $queries['approval_hr'] = '';
+                }
+            }
+
+        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by');
+        // $allQueries = array_merge($queries, $currentQueries);
+        $enrolment_forms = $enrolment_forms->withTrashed()->paginate(20)->appends($queries);
+        return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+    }
+
     /**
      * Display a listing of the resource.
      *
