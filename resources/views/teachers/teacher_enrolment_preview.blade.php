@@ -7,10 +7,8 @@
 
 @section('content')
 <div class="alert alert-info col-sm-12">
-	<h4 class="text-center"><strong>Regular Enrolment Forms</strong></h4>
+	<h4 class="text-center"><strong>Teacher's View of Regular Enrolment Forms</strong></h4>
 </div>
-
-@include('admin.partials._termSessionMsg')
 
 <div class="row">
     <div class="col-sm-12">
@@ -24,7 +22,66 @@
     <div class="box-body">
     <form method="GET" action="{{ route('teacher-enrolment-preview',['L' => \Request::input('L'), 'Te_Code' => \Request::input('Te_Code'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}">
 		
-		@include('admin.partials._filterIndex')
+		@if(Session::has('Term'))
+		<input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
+		<div class="form-group input-group col-sm-12">
+		    <div class="form-group col-sm-12">
+		      <label for="search" class="control-label">Search by Name:</label>
+		      <input type="text" name="search" class="form-control" placeholder="Enter name here">
+		    </div>
+
+		    <div class="form-group col-sm-12">
+		      <label for="L" class="control-label"> Language:</label>
+		      <div class="col-sm-12">
+		        @foreach ($languages as $id => $name)
+		        <div class="col-sm-4">
+		            <div class="input-group"> 
+		              <span class="input-group-addon">       
+		                <input type="radio" name="L" value="{{ $id }}" >                 
+		              </span>
+		                <label type="text" class="form-control">{{ $name }}</label>
+		            </div>
+		        </div>
+		        @endforeach 
+		      </div>
+		    </div>
+		    
+		    @if(!Request::is('admin/placement-form') && !Request::is('admin/selfpayform/index-placement-selfpay'))
+		    <div class="form-group">
+		        <label for="Te_Code" class="col-md-12 control-label"> Course: </label>
+		        <div class="form-group col-sm-12">
+		          <div class="dropdown">
+		            <select class="col-md-10 form-control select2-basic-single" style="width: 100%;" name="Te_Code" autocomplete="off">
+		                <option value="">--- Select ---</option>
+		            </select>
+		          </div>
+		        </div>
+		    </div>
+		    @else
+		    @endif
+
+		    <div class="form-group col-sm-12">
+		      <label for="overall_approval" class="control-label"></label>
+		      <div class="col-sm-12">
+		        
+		        <div class="col-sm-8">
+		            <div class="input-group"> 
+		              <span class="input-group-addon">       
+		                <input type="checkbox" name="overall_approval" class="add-filter" value=1 >                 
+		              </span>
+		                <label type="text" class="form-control bg-green">View Approved Forms Only</label>
+		            </div>
+		        </div>
+		        
+		      </div>
+		    </div>
+
+		</div> <!-- end filter div -->
+
+		<div class="form-group">           
+		                <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
+		@else
+		@endif
 
         <!-- submit button included admin.partials._filterIndex view -->
         	<a href="/admin/teacher-enrolment-preview" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
@@ -50,26 +107,56 @@
 	@if(is_null($enrolment_forms))
 
 	@else
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="col-sm-4">
+				<h3>Total # <span class="label label-info">{{$count}}</span></h3>
+			</div>
+			@if (Request::has('Te_Code')||Request::has('overall_approval')||Request::has('L'))
+			<div class="pull-right col-sm-4">
+				<div class="box box-default">
+					<div class="box-header with-border">
+			            <h3 class="box-title">Current Filters:</h3>
+			            <div class="box-tools pull-right">
+			                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+			            </div>
+			        </div>
+					<div class="box-body">
+						
+						<p>Language: {{Request::get('L')}}</p>
+						<p>Course Code: {{Request::get('Te_Code')}}</p>
+						<p>
+							@if (Request::get('overall_approval') == 1)
+								Viewing only approved enrolment forms
+							@else
+								Viewing approved and non-approved enrolment forms
+							@endif
+						</p>
+					
+					</div>
+				</div>
+			</div>
+			@endif
+		
+		</div>
+	</div>
 	{{ $enrolment_forms->links() }}
 	<div class="filtered-table table-responsive">
-		<div class="col-sm-12">
-			# {{count($enrolment_forms)}}
-		</div>
 		<table class="table table-bordered table-striped">
 		    <thead>
 		        <tr>
 		        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
-		            {{-- <th>Term</th> --}}
+		            <th>Email</th>
+		            <th>Contact No.</th>
 		            <th>Course</th>
 		            <th>Schedule</th>
 		            <th>Organization</th>
 		            <th>Student Cancelled?</th>
-		            {{-- <th>Manager Approval</th> --}}
 		            <th>HR Approval</th>
 		            <th>Payment Status</th>
-		            <th>ID Proof</th>
-		            <th>Payment Proof</th>
+		            {{-- <th>ID Proof</th>
+		            <th>Payment Proof</th> --}}
 		            <th>Comment</th>
 		            <th>Time Stamp</th>
 		            <th>Cancel Date/Time Stamp</th>
@@ -89,9 +176,13 @@
 					<td>
 					@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 					</td>
-					{{-- <td>{{ $form->Term }}</td> --}}
+					<td>
+					@if(empty($form->users->email)) None @else {{ $form->users->email }} @endif
+					</td>
+					<td>
+					@if(empty($form->users->sddextr->PHONE)) None @else {{ $form->users->sddextr->PHONE }} @endif
+					</td>
 					<td>{{ $form->courses->Description }}</td>
-					{{-- <td>{{ $form->schedule->name }}</td> --}}
 					<td>
 						<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a>
 					</td>
@@ -101,21 +192,6 @@
 						@else <span id="status" class="label label-danger margin-label">YES</span>
 						@endif
 					</td>
-					{{-- <td>
-						@if($form->is_self_pay_form == 1)
-						<span id="status" class="label label-info margin-label">
-						N/A - Self-Payment</span>
-						@elseif(is_null($form->approval))
-						<span id="status" class="label label-warning margin-label">
-						Pending Approval</span>
-						@elseif($form->approval == 1)
-						<span id="status" class="label label-success margin-label">
-						Approved</span>
-						@elseif($form->approval == 0)
-						<span id="status" class="label label-danger margin-label">
-						Disapproved</span>
-						@endif 
-					</td> --}}
 					<td>
 						@if(is_null($form->is_self_pay_form))
 							@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
@@ -161,11 +237,11 @@
 	                    @endif
 					</td>
 
-					<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
+					{{-- <td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif
 					</td>
 					<td>
 					@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
-					</td>
+					</td> --}}
 					<td>
 						@if ($form->std_comments)
 							<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
@@ -186,7 +262,7 @@
 	</div>
 	@endif
 
-{{-- modal for enrolments form chosen schedule --}}
+<!-- modal for enrolments form chosen schedule -->
 <div id="modalshow" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">

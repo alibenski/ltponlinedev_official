@@ -50,7 +50,7 @@ class TeachersController extends Controller
         }
 
         $enrolment_forms = new Preenrolment;
-        // $currentQueries = \Request::query();
+
         $queries = [];
 
         $columns = [
@@ -94,9 +94,10 @@ class TeachersController extends Controller
             }
 
         $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by');
-        // $allQueries = array_merge($queries, $currentQueries);
-        $enrolment_forms = $enrolment_forms->withTrashed()->paginate(20)->appends($queries);
-        return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        
+        $count = count($enrolment_forms->get());
+        $enrolment_forms = $enrolment_forms->paginate(20)->appends($queries);
+        return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms)->withCount($count);
     }
 
     /**
