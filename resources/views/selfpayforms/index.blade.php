@@ -65,8 +65,8 @@
 			@foreach($selfpayforms as $form)
 			<tr>
 				<td>
-					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
-                    <a href="{{ route('selfpayform.edit', [$form->INDEXID, $form->Te_Code, $form->Term]) }}" target="_blank" class="btn btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
+                    <a href="{{ route('selfpayform.edit', [$form->INDEXID, $form->Te_Code, $form->Term]) }}" target="_blank" class="btn btn-space btn-warning"><span class="glyphicon glyphicon-eye-open"></span> Show</a> 
+                    <a href="{{ route('admin-add-attachments', [$form->INDEXID, $form->L, $form->Te_Code, $form->Term, $form->eform_submit_count]) }}" class="btn btn-space btn-info"> Upload Documents</a>
                 </td>
 				<td>
                 @if(is_null($form->selfpay_approval)) <span class="label label-info">Waiting for Admin</span> @elseif( $form->selfpay_approval == 0 ) <span class="label label-danger">Disapproved</span> @elseif ($form->selfpay_approval == 1) <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif   

@@ -13,7 +13,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-responsive col-sm-12 filtered-table">
-		<form method="POST" action="{{ route('add-attachments-placement-store') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
+		<form method="POST" action="{{ route('admin-add-attachments-placement-store') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
 		{{ csrf_field() }}
 				<table class="table table-bordered table-striped">
 				    <thead>

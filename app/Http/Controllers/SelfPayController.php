@@ -63,7 +63,7 @@ class SelfPayController extends Controller
             return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
         }
 
-        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at','eform_submit_count');
         // ->orderBy('created_at', 'asc')->get();
         // $selfpayforms = new Preenrolment;
         // $currentQueries = \Request::query();
@@ -102,6 +102,175 @@ class SelfPayController extends Controller
         $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
         return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
     }
+
+
+    public function adminAddAttachmentsView($indexid, $lang, $tecode, $term, $eform)
+    {
+        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID',$indexid)
+            ->where('L', $lang)
+            ->where('Te_Code', $tecode)
+            ->where('Term', $term)
+            ->where('eform_submit_count', $eform)
+            ->where('is_self_pay_form', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->get();
+
+        if (count($selfpayforms) < 1) {
+            return redirect()->route('updateLinkExpired');
+        }
+
+        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+            ->where('is_self_pay_form', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->get();
+        
+        
+
+        return view('selfpayforms.admin-add-attachments', compact('selfpayforms'));
+    }
+
+    public function adminAddAttachmentsStore(Request $request)
+    {
+        $this->validate($request, [
+            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+        ]);
+
+        $index_id = $request->INDEXID;
+        $term_id = $request->Term;
+        $language_id = $request->L; 
+        $course_id = $request->Te_Code;
+        $eform_submit_count = $request->eform_submit_count;
+
+        $selfpayforms = Preenrolment::where('INDEXID',$index_id)
+            ->where('L', $language_id)
+            ->where('Te_Code', $course_id)
+            ->where('Term', $term_id)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('is_self_pay_form', '1')
+            ->get();
+
+        // save who modified the form
+        foreach ($selfpayforms as $value) {
+            $value->modified_by = Auth::user()->id;
+            $value->UpdatedOn = Carbon::now();
+            $value->save(['timestamps' => FALSE]);
+        }
+        
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+
+            $attachment_identity_file = File::find($request->identity_id);
+            $attachment_identity_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+
+        }
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+
+            $attachment_pay_file = File::find($request->payment_id);
+            $attachment_pay_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+        }
+
+        $request->session()->flash('success', 'Files have successfully been uploaded.');
+        return redirect(route('selfpayform.index'));
+
+    }
+
+    public function adminAddAttachmentsPlacementView($indexid, $lang, $term, $eform)
+    {
+        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID',$indexid)
+            ->where('L', $lang)
+            ->where('Term', $term)
+            ->where('eform_submit_count', $eform)
+            ->where('is_self_pay_form', '1')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->get();
+
+        if (count($selfpayforms_placement) < 1) {
+            return redirect()->route('updateLinkExpired');
+        }      
+        
+        return view('selfpayforms.admin-add-attachments-placement', compact('selfpayforms_placement'));
+    }
+
+    public function adminAddAttachmentsPlacementStore(Request $request)
+    {
+        $this->validate($request, [
+            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+        ]);
+
+        $index_id = $request->INDEXID;
+        $term_id = $request->Term;
+        $language_id = $request->L; 
+        $course_id = $request->Te_Code;
+        $eform_submit_count = $request->eform_submit_count;
+
+        $selfpayforms = PlacementForm::where('INDEXID',$index_id)
+            ->where('L', $language_id)
+            ->where('Term', $term_id)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('is_self_pay_form', '1')
+            ->get();
+
+        // save who modified the form
+        foreach ($selfpayforms as $value) {
+            $value->modified_by = Auth::user()->id;
+            $value->UpdatedOn = Carbon::now();
+            $value->save(['timestamps' => FALSE]);
+        }
+        
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+
+            $attachment_identity_file = File::find($request->identity_id);
+            $attachment_identity_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+
+        }
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+
+            $attachment_pay_file = File::find($request->payment_id);
+            $attachment_pay_file->update([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+            ]);
+        }
+
+        $request->session()->flash('success', 'Files have been successfully uploaded.');
+        return redirect(route('index-placement-selfpay'));
+
+    }
+
 
     public function addAttachmentsView($indexid, $lang, $tecode, $term, $date, $eform)
     {
@@ -382,7 +551,7 @@ class SelfPayController extends Controller
             return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
 
-        $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+        $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count');
 
         $queries = [];
 

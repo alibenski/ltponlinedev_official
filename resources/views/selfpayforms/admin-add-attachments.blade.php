@@ -13,7 +13,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-responsive col-sm-12 filtered-table">
-		<form method="POST" action="{{ route('add-attachments-placement-store') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
+		<form method="POST" action="{{ route('admin-add-attachments-store') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
 		{{ csrf_field() }}
 				<table class="table table-bordered table-striped">
 				    <thead>
@@ -22,13 +22,13 @@
 				            <th>Name</th>
 				            <th>Organization</th>
 			                <th>Term</th>
-			                <th>Language</th>
+			                <th>Course</th>
 				            <th>Current ID Proof</th>
 				            <th>Current Payment Proof</th>
 				        </tr>
 				    </thead>
 				    <tbody>
-						@foreach($selfpayforms_placement as $form)
+						@foreach($selfpayforms as $form)
 						<tr>
 							<td>
 			                	@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) <span class="alert alert-danger">Disapproved</span> @elseif ($form->selfpay_approval == 1) <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif   
@@ -45,7 +45,7 @@
 			                	<input type="hidden" name="Term" value="{{$form->Term}}">
 			                </td>
 			                <td>
-			                	{{ $form->languages->name }}
+			                	{{ $form->courses->Description }}
 								<input type="hidden" name="L" value="{{$form->L}}">
 								<input type="hidden" name="Te_Code" value="{{$form->Te_Code}}">
 								<input type="hidden" name="eform_submit_count" value="{{$form->eform_submit_count}}">
@@ -69,7 +69,7 @@
 		</div>
 
 		<div class="form-group col-md-12 file-section">
-            <h3>Attach your valid documents here</h3>
+            <h3>Attach valid documents here</h3>
 
               <div class="big text-danger">
                 <p><strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong><p>

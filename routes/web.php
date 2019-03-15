@@ -195,6 +195,12 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('selfpayform/show-schedule-selfpay', ['as'=>'show-schedule-selfpay','uses'=>'AjaxController@showScheduleSelfPay']);
     Route::post('selfpayform/post-decision-selfpay', ['as'=>'post-decision-selfpay','uses'=>'AjaxController@postDecisionSelfPay']);
 
+    // route to admin attach documents to SelfPayment forms
+    Route::get('admin-add-attachments/{indexid}/{lang}/{tecode}/{term}/{eform}', ['as'=>'admin-add-attachments','uses'=>'SelfPayController@adminAddAttachmentsView']);
+    Route::get('admin-add-attachments-placement/{indexid}/{lang}/{term}/{eform}', ['as'=>'admin-add-attachments-placement','uses'=>'SelfPayController@adminAddAttachmentsPlacementView']);
+    Route::put('admin-add-attachments-store', ['as'=>'admin-add-attachments-store','uses'=>'SelfPayController@adminAddAttachmentsStore']);
+    Route::put('admin-add-attachments-placement-store', ['as'=>'admin-add-attachments-placement-store','uses'=>'SelfPayController@adminAddAttachmentsPlacementStore']);
+
     Route::get('/placement-form-approved', ['as'=>'placement-form-approved','uses'=>'ValidateFormsController@getApprovedPlacementForms']);
 
     Route::get('vsa-page-1', ['as'=>'vsa-page-1','uses'=>'ValidateFormsController@vsaPage1']);

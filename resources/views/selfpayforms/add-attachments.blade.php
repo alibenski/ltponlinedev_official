@@ -73,6 +73,7 @@
 
               <div class="big text-danger">
                 <p><strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong><p>
+                <p><strong>Please upload both documents. Both are required.</strong><p>
               </div>
             
               <div class="form-group col-md-12">
