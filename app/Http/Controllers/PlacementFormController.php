@@ -800,12 +800,16 @@ class PlacementFormController extends Controller
         //get email address of the Manager
         $mgr_email = $forms->pluck('mgr_email')->first();
 
-        //if self-paying enrolment form
-        if (is_null($mgr_email)){
+        // get is_self_pay_form value
+        $is_self_pay_form = $forms->pluck('is_self_pay_form')->first();
+
+        //if self-paying placement form
+        if ($is_self_pay_form == 1){
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
                 $delform = PlacementForm::find($enrol_form);
+                $delform->admin_plform_cancel_comment = $request->admin_plform_cancel_comment;
                 $delform->cancelled_by_student = 1;
                 $delform->cancelled_by_admin = $admin_id;
                 $delform->save();
@@ -815,10 +819,21 @@ class PlacementFormController extends Controller
             return redirect()->back();
         }
 
-        //email notification to Manager    
         $staff_member_name = $forms->first()->users->name;
-            Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+        //email notification to Manager    
+            //     Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
         
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+        
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
         //email notification to CLM Partner
         $org = $display_language->DEPT;
 
@@ -841,7 +856,7 @@ class PlacementFormController extends Controller
             $org_email_arr = $org_email->toArray(); 
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+                    ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name, $term_season_en, $term_year));
 
         }
 
@@ -849,13 +864,14 @@ class PlacementFormController extends Controller
         for ($i = 0; $i < count($forms); $i++) {
             $enrol_form = $forms[$i]->id;
             $delform = PlacementForm::find($enrol_form);
+            $delform->admin_plform_cancel_comment = $request->admin_plform_cancel_comment;
             $delform->cancelled_by_student = 1;
             $delform->cancelled_by_admin = $admin_id;
             $delform->save();
             $delform->delete();
         }
 
-        session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled. An email has been sent to your supervisor and if necessary, to your HR/Staff Development Office.');
+        session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled. If necessary, an email has been sent to the HR/Staff Development Office of the student.');
         return redirect()->back();
     }
 }

@@ -168,22 +168,56 @@
 									@foreach($student_enrolments as $form)
 									<tr>
 										<td>
-											<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
+											<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
 
-											<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
-					                            <input type="submit" @if (is_null($form->deleted_at))
-						                          value="Reject/Cancel Enrolment"
-						                        @else
-						                          value="Cancelled"
-						                        @endif  class="btn btn-danger btn-space" 
-						                        @if (is_null($form->deleted_at))
-						                        @else
-						                          disabled="" 
-						                        @endif>
-					                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
-					                            <input type="hidden" name="_token" value="{{ Session::token() }}">
-					                            {{ method_field('DELETE') }}
-					                        </form>
+@if (is_null($form->deleted_at))
+<button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
+@else
+<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+@endif
+
+<div id="modalDeleteEnrolment" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                <h4 class="modal-title">Admin Course Cancellation</h4>
+            </div>
+            <div class="modal-body-course-delete">
+            	<div class="col-sm-12">	
+	            	<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
+
+	            		<div class="form-group">
+							<label class="control-label">Admin Comments: </label>
+
+							<textarea id="course-delete-textarea-{{$form->eform_submit_count}}" name="admin_eform_cancel_comment" class="form-control course-delete-by-admin" maxlength="3500" @if(is_null($form->admin_eform_cancel_comment)) placeholder="Place important information about the cancellation of this form..." @else placeholder="{{$form->admin_eform_cancel_comment}}" @endif></textarea>
+							
+						</div>
+
+	                    <input type="submit" @if (is_null($form->deleted_at))
+	                      value="Reject/Cancel Enrolment"
+	                    @else
+	                      value="Cancelled"
+	                    @endif  class="btn btn-danger btn-space" 
+	                    @if (is_null($form->deleted_at))
+	                    @else
+	                      disabled="" 
+	                    @endif>
+	                    <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+	                    <input type="hidden" name="_token" value="{{ Session::token() }}">
+	                    {{ method_field('DELETE') }}
+	                </form>
+            	</div>
+            </div>
+            <div class="modal-footer modal-background">
+              
+            </div>
+        
+        </div>
+    </div>
+</div>
+											
 										</td>
 										<td>
 											@if($form->updated_by_admin == 1)
@@ -310,21 +344,55 @@
 									<tr>
 										<td>
 											<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
+@if (is_null($form->deleted_at))
+<button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
+@else
+<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+@endif
 
-											<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
-						                        <input type="submit" @if (is_null($form->deleted_at))
-						                          value="Reject/Cancel Placement Test"
-						                        @else
-						                          value="Cancelled"
-						                        @endif  class="btn btn-danger btn-space" @if (is_null($form->deleted_at))
-						                          
-						                        @else
-						                          disabled="" 
-						                        @endif>
-						                        <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
-						                        <input type="hidden" name="_token" value="{{ Session::token() }}">
-						                       {{ method_field('DELETE') }}
-						                    </form>
+<div id="modalDeletePlacement" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                <h4 class="modal-title">Admin Placement Cancellation</h4>
+            </div>
+            <div class="modal-body-placement-delete">
+            	<div class="col-sm-12">	
+	            	<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
+
+	            		<div class="form-group">
+							<label class="control-label">Admin Comments: </label>
+
+							<textarea id="placement-delete-textarea-{{$form->eform_submit_count}}" name="admin_plform_cancel_comment" class="form-control placement-delete" maxlength="3500" @if(is_null($form->admin_plform_cancel_comment)) placeholder="Place important information about the cancellation of this form..." @else placeholder="{{$form->admin_plform_cancel_comment}}" @endif></textarea>
+							
+						</div>
+
+	                    <input type="submit" @if (is_null($form->deleted_at))
+	                      value="Reject/Cancel Placement Form"
+	                    @else
+	                      value="Cancelled"
+	                    @endif  class="btn btn-danger btn-space" 
+	                    @if (is_null($form->deleted_at))
+	                    @else
+	                      disabled="" 
+	                    @endif>
+	                    <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+	                    <input type="hidden" name="_token" value="{{ Session::token() }}">
+	                    {{ method_field('DELETE') }}
+	                </form>
+            	</div>
+            </div>
+            <div class="modal-footer modal-background">
+              
+            </div>
+        
+        </div>
+    </div>
+</div>
+
+
 										</td>
 										<td>
 											@if($form->updated_by_admin == 1)
@@ -661,6 +729,8 @@
 @stop
 
 @section('java_script')
+<script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script>
 $(document).ready(function () {
@@ -799,8 +869,11 @@ $('#modalAssignCourse').on('hidden.bs.modal', function (event) {
 $(document).ready(function() {
     $('.dropdown-toggle').dropdown(); 
     $('.select2-basic-single').select2({
-    placeholder: "--- Select Here ---",
-    });
+    	placeholder: "--- Select Here ---",
+    }); 
+
+    $('.course-delete-tooltip').tooltip();
+
 });
 </script>
 <script>
@@ -811,6 +884,12 @@ $(document).on('click', '.show-modal', function() {
 $(document).on('click', '.show-modal-history', function() {
 	$('.modal-title-history').text('Past Language Course Enrolment for {{ $student->name }}');
     $('#showModalHistory').modal('show'); 
+});
+$(document).on('click', '.course-delete', function() {
+    $('#modalDeleteEnrolment').modal('show'); 
+});
+$(document).on('click', '.placement-delete', function() {
+    $('#modalDeletePlacement').modal('show'); 
 });
 $(document).on('click', '.show-std-comments', function() {
 	var indexno = $(this).closest("tr").find("input[name='indexno']").val();
