@@ -96,20 +96,55 @@
 				<td>
 					<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
 
-					<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
-                        <input type="submit" @if (is_null($form->deleted_at))
-                          value="Reject/Cancel Placement Test"
-                        @else
-                          value="Cancelled"
-                        @endif  class="btn btn-danger btn-space" @if (is_null($form->deleted_at))
-                          
-                        @else
-                          disabled="" 
-                        @endif>
-                        <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
-                        <input type="hidden" name="_token" value="{{ Session::token() }}">
-                       {{ method_field('DELETE') }}
-                    </form>
+
+@if (is_null($form->deleted_at))
+<button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
+@else
+<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+@endif
+
+<div id="modalDeletePlacement" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                <h4 class="modal-title">Admin Placement Cancellation</h4>
+            </div>
+            <div class="modal-body-placement-delete">
+            	<div class="col-sm-12">	
+	            	<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
+
+	            		<div class="form-group">
+							<label class="control-label">Admin Comments: </label>
+
+							<textarea id="placement-delete-textarea-{{$form->eform_submit_count}}" name="admin_plform_cancel_comment" class="form-control placement-delete" maxlength="3500" @if(is_null($form->admin_plform_cancel_comment)) placeholder="Place important information about the cancellation of this form..." @else placeholder="{{$form->admin_plform_cancel_comment}}" @endif></textarea>
+							
+						</div>
+
+	                    <input type="submit" @if (is_null($form->deleted_at))
+	                      value="Reject/Cancel Placement Form"
+	                    @else
+	                      value="Cancelled"
+	                    @endif  class="btn btn-danger btn-space" 
+	                    @if (is_null($form->deleted_at))
+	                    @else
+	                      disabled="" 
+	                    @endif>
+	                    <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+	                    <input type="hidden" name="_token" value="{{ Session::token() }}">
+	                    {{ method_field('DELETE') }}
+	                </form>
+            	</div>
+            </div>
+            <div class="modal-footer modal-background">
+              
+            </div>
+        
+        </div>
+    </div>
+</div>
+
                 </td>
                 <td>
 					@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
@@ -214,6 +249,8 @@
 @stop
 
 @section('java_script')
+<script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -221,6 +258,7 @@ $(document).ready(function() {
     placeholder: "Select Filter",
     });
 
+    $('.course-delete-tooltip').tooltip();
 
 	$('#modalshowplacementinfo').on('show.bs.modal', function (event) {
 	  var link = $(event.relatedTarget); // Link that triggered the modal
@@ -236,6 +274,10 @@ $(document).ready(function() {
 	      console.log(data);
 	      $('.modal-body-schedule').html(data)
 	  });
+	});
+
+	$(document).on('click', '.placement-delete', function() {
+	    $('#modalDeletePlacement').modal('show'); 
 	});
 
 });
