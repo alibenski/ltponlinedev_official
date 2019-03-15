@@ -133,8 +133,8 @@ class SelfPayController extends Controller
     public function adminAddAttachmentsStore(Request $request)
     {
         $this->validate($request, [
-            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'mimes:pdf,doc,docx|max:8000',
         ]);
 
         $index_id = $request->INDEXID;
@@ -213,8 +213,8 @@ class SelfPayController extends Controller
     public function adminAddAttachmentsPlacementStore(Request $request)
     {
         $this->validate($request, [
-            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'mimes:pdf,doc,docx|max:8000',
         ]);
 
         $index_id = $request->INDEXID;
