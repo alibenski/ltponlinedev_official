@@ -71,6 +71,20 @@ class PreenrolmentController extends Controller
             // echo "Total Number of People NOT in Class for ".$term.": ".count($unique_students_not_in_class);
             // echo "<br>";
 
+            $arr4 = [];
+            foreach ($unique_students_not_in_class as $key4 => $value4) {
+                $forms = Preenrolment::where('Term', $term)
+                    ->where('INDEXID', $value4)
+                    ->whereNull('updated_by_admin')
+                    ->select('INDEXID', 'L', 'Te_Code', 'Term', 'updated_by_admin', 'modified_by')
+                    ->groupBy('INDEXID', 'L', 'Te_Code', 'Term', 'updated_by_admin', 'modified_by')
+                    ->get();
+                foreach ($forms as $key5 => $value5) {
+                    $arr4[] = $value5;
+                }
+            }
+            $count_not_assigned = count($arr4);
+
             $arr3 = [];
             foreach ($unique_students_not_in_class as $key3 => $value3) {
                 $forms = Preenrolment::where('Term', $term)
@@ -106,12 +120,13 @@ class PreenrolmentController extends Controller
                             $queries['Term'] = Session::get('Term');
                     }
 
-                return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3')); 
+                return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3', 'count_not_assigned')); 
             }
             
-            return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3'));
+            return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3', 'count_not_assigned'));
         }
-        return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3'));
+
+        return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3', 'count_not_assigned'));
     }
 
 

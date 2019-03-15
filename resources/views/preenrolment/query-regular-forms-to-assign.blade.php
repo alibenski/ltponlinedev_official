@@ -57,7 +57,7 @@
 @if(Session::has('Term'))
 <div class="row">
 	<div class="col-sm-12">
-		<h3>Total Number of Enrolment Forms <small>(students who are not in a class this term)</small> <span class="label label-primary">{{ count($arr3) }}</span></h3>
+		<h3>Total Number of Enrolment Forms <small>(students who are not in a class this term)</small> <span class="label label-primary">{{$count_not_assigned}} out of {{ count($arr3) }}</span></h3>
 	</div>
 </div>
 
