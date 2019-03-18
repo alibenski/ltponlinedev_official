@@ -12,7 +12,6 @@
 */
 // test routes for test queries
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
-Route::get('test-query-2', 'WaitlistController@testQuery2')->name('test-query-2');
 Route::get('send-auth-email', 'WaitlistController@sendAuthEmailIndividual')->name('send-auth-email');
 Route::get('query-term', 'WaitlistController@queryTerm')->name('query-term');
 Route::get('sddextr', 'WaitlistController@sddextr')->name('sddextr');
@@ -110,6 +109,10 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('preview-waitlisted', 'PreviewController@previewWaitlisted')->name('preview-waitlisted');
     Route::get('cancelled-convocation-view', 'PreviewController@cancelledConvocaitonView')->name('cancelled-convocation-view');
     
+    Route::get('preview-merged-forms', 'PreviewController@previewMergedForms')->name('preview-merged-forms');
+    Route::post('ajax-preview-course-boxes', ['as'=>'ajax-preview-course-boxes','uses'=>'PreviewController@ajaxPreviewCourseBoxes']);
+    Route::get('ajax-preview-get-student-count', ['as'=>'ajax-preview-get-student-count','uses'=>'PreviewController@ajaxPreviewGetStudentCount']);
+
     /**
      * User Routes
      */

@@ -124,6 +124,38 @@
 .fa-warning{
     color: #bf5329;
 }
+.bg-arab{
+    background-color: #ff7243;
+    color: #fff;
+
+}
+.bg-chi{
+    background-color: #B22222;
+    color: #fff;
+
+}
+.bg-eng{
+    background-color: #0079c1;
+    color: #fff;
+
+}
+.bg-fr{
+    background-color: #338d11;
+    color: #fff;
+
+}
+.bg-ru{
+    background-color: #6347b2;
+    color: #fff;
+
+}
+.bg-sp{
+    background-color: #bf8124;
+    color: #fff;
+
+}
+
+
 .arab-txt{
     background-color: #ff7243;
     color: #fff;

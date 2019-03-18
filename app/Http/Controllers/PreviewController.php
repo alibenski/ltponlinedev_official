@@ -41,6 +41,43 @@ use Session;
 
 class PreviewController extends Controller
 {
+    public function previewMergedForms(Request $request)
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $term = Session::get('Term');
+        return view('preview-merged-forms')->withLanguages($languages)->withTerm($term);
+    }
+
+    public function ajaxPreviewCourseBoxes(Request $request)
+    {
+        if($request->ajax()){            
+            $select_courses = CourseSchedule::where('L', $request->L)
+            ->where('Te_Term', $request->term_id)
+            ->whereNull('Code')
+            ->with('course')
+            ->select('Te_Code_New','L')
+            ->groupBy('Te_Code_New','L')
+            ->get();
+            
+
+            $data = view('preview-course-boxes',compact('select_courses'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
+
+    public function ajaxPreviewGetStudentCount(Request $request)
+    {
+        $term = Session::get('Term');
+        $q = Preenrolment::where('Term', $term)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
+        $q2 = PlacementForm::where('Term', $term)->whereNotNull('Te_Code')->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
+        $merge = collect($q)->merge($q2);
+
+        $count = $merge->whereIn('Te_Code', $request->arr)->pluck('Te_Code')->toArray();
+        
+
+        $data = array_count_values($count);
+        return response()->json($data);
+    }
     public function vsaPage1()
     {
         DB::table('tblLTP_preview_TempSort')->truncate();
