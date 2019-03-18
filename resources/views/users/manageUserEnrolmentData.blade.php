@@ -176,7 +176,7 @@
 <button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
 @endif
 
-<div id="modalDeleteEnrolment" class="modal fade" role="dialog">
+<div id="modalDeleteEnrolment-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -188,6 +188,9 @@
             	<div class="col-sm-12">	
 	            	<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
 
+						<p>Index # {{ $form->INDEXID }} : {{ $form->users->name }}</p>
+						<p>Language: {{ $form->languages->name }}</p>
+						<p>Course : {{ $form->courses->Description }}</p>
 	            		<div class="form-group">
 							<label class="control-label">Admin Comments: </label>
 
@@ -350,7 +353,7 @@
 <button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
 @endif
 
-<div id="modalDeletePlacement" class="modal fade" role="dialog">
+<div id="modalDeletePlacement-{{ $form->id }}" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -361,7 +364,9 @@
             <div class="modal-body-placement-delete">
             	<div class="col-sm-12">	
 	            	<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
-
+						
+						<p>Index # {{ $form->INDEXID }} : {{ $form->users->name }}</p>
+						<p>Placement Form : {{ $form->languages->name }}</p>
 	            		<div class="form-group">
 							<label class="control-label">Admin Comments: </label>
 
@@ -886,12 +891,20 @@ $(document).on('click', '.show-modal-history', function() {
 	$('.modal-title-history').text('Past Language Course Enrolment for {{ $student->name }}');
     $('#showModalHistory').modal('show'); 
 });
+
 $(document).on('click', '.course-delete', function() {
-    $('#modalDeleteEnrolment').modal('show'); 
+	var INDEXID = $(this).closest("tr").find("input[name='indexid']").val();
+	var Te_Code = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
+	var Term = $(this).closest("tr").find("input[name='term']").val();
+    $('#modalDeleteEnrolment-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
 });
+
 $(document).on('click', '.placement-delete', function() {
-    $('#modalDeletePlacement').modal('show'); 
+	var placement_id = $(this).closest("tr").find("a[data-mid]").attr('data-mid');
+	console.log(placement_id) 
+    $('#modalDeletePlacement-'+placement_id).modal('show'); 
 });
+
 $(document).on('click', '.show-std-comments', function() {
 	var indexno = $(this).closest("tr").find("input[name='indexno']").val();
 	var tecode = $(this).closest("tr").find("input[name='tecode']").val();
