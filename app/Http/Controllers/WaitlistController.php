@@ -46,6 +46,9 @@ class WaitlistController extends Controller
         $merge = collect($q)->merge($q2);
         return view('test-query-2', compact('merge'));
         dd($q, $q2, $merge);
+
+
+        
         // sort enrolment forms by date of submission
         $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $term)->where('approval','1')->orderBy('created_at', 'asc')->get();
 

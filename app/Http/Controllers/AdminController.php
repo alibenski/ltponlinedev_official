@@ -174,7 +174,9 @@ class AdminController extends Controller
             $arr3_count = count($arr3);
         }
 
-        return view('admin.index',compact('arr3_count','terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
+        $countNonAssignedPlacement = PlacementForm::where('overall_approval', 1)->whereNull('assigned_to_course')->get()->count();
+
+        return view('admin.index',compact('countNonAssignedPlacement','arr3_count','terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
     }
 
 

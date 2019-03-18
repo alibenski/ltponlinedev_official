@@ -7,7 +7,7 @@ return [
     'April'     => 'avril',
     'May'     => 'mai',
     'June'     => 'juin',
-    'July'     => 'julliet',
+    'July'     => 'juillet',
     'August'     => 'août',
     'September'     => 'septembre',
     'October'     => 'octobre',

@@ -135,7 +135,7 @@
 		  <span class="info-box-icon bg-teal"><i class="fa  fa-files-o"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Manage Unassigned Enrolment Forms </span>
-		    <span class="info-box-number">{{$arr3_count}}</span>
+		    <span class="info-box-number">{{$arr3_count}} forms</span>
 		    <span class="info-box-number"><small>(students not in a class)</small></span>
 		  </div>
 		  <!-- /.info-box-content -->
@@ -164,7 +164,7 @@
 		  <span class="info-box-icon bg-orange"><i class="fa  fa-files-o"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Manage Non-assigned Placement Forms </span>
-		    <span class="info-box-number">#</span>
+		    <span class="info-box-number">{{$countNonAssignedPlacement}} forms</span>
 		  </div>
 		  <!-- /.info-box-content -->
 		</div>
