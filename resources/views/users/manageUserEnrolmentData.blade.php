@@ -191,7 +191,7 @@
 	            		<div class="form-group">
 							<label class="control-label">Admin Comments: </label>
 
-							<textarea id="course-delete-textarea-{{$form->eform_submit_count}}" name="admin_eform_cancel_comment" class="form-control course-delete-by-admin" maxlength="3500" @if(is_null($form->admin_eform_cancel_comment)) placeholder="Place important information about the cancellation of this form..." @else placeholder="{{$form->admin_eform_cancel_comment}}" @endif></textarea>
+							<textarea id="course-delete-textarea-{{$form->eform_submit_count}}" name="admin_eform_cancel_comment" class="form-control course-delete-by-admin" maxlength="3500" placeholder="Place important information about the cancellation of this form..."></textarea>
 							
 						</div>
 
@@ -365,7 +365,7 @@
 	            		<div class="form-group">
 							<label class="control-label">Admin Comments: </label>
 
-							<textarea id="placement-delete-textarea-{{$form->eform_submit_count}}" name="admin_plform_cancel_comment" class="form-control placement-delete" maxlength="3500" @if(is_null($form->admin_plform_cancel_comment)) placeholder="Place important information about the cancellation of this form..." @else placeholder="{{$form->admin_plform_cancel_comment}}" @endif></textarea>
+							<textarea id="placement-delete-textarea-{{$form->eform_submit_count}}" name="admin_plform_cancel_comment" class="form-control placement-delete" maxlength="3500" placeholder="Place important information about the cancellation of this form..."></textarea>
 							
 						</div>
 
@@ -737,13 +737,14 @@ $(document).ready(function () {
     $('.assign-course').click( function() {
       var indexid = $(this).closest("tr").find("input[name='indexid']").val();
       var L = $(this).closest("tr").find("input[name='L']").val();
+      var Term = $(this).closest("tr").find("input[name='term']").val();
       var Te_Code_Input = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
-        url: '{{ route('admin-assign-course-view') }}',
+        url: '{{ route('admin-manage-user-assign-course-view') }}',
         type: 'GET',
-        data: {indexid:indexid, L:L,Te_Code:Te_Code_Input,_token: token},
+        data: {indexid:indexid, L:L,Te_Code:Te_Code_Input,Term:Term,_token: token},
       })
       .done(function(data) {
         console.log("show assign view : success");
@@ -784,9 +785,9 @@ $('#modalAssignCourse').on('click', '.modal-accept-btn',function() {
     var L = $("input[name='L'].modal-input").val();
 
       $.ajax({
-          url: '{{ route('admin-assign-course-view') }}',
+          url: '{{ route('admin-manage-user-assign-course-view') }}',
           type: 'GET',
-          data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
+          data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, Term:qry_term,_token: token},
         })
         .done(function(data) {
           console.log("no change assign view : success");
@@ -829,9 +830,9 @@ $('#modalAssignCourse').on('click', '.modal-save-btn',function() {
 	    var L = $("input[name='L'].modal-input").val();
 		console.log(Te_Code)
 	    $.ajax({
-	      url: '{{ route('admin-assign-course-view') }}',
+	      url: '{{ route('admin-manage-user-assign-course-view') }}',
 	      type: 'GET',
-	      data: {indexid:qry_indexid, L:L, Te_Code:Te_Code, _token: token},
+	      data: {indexid:qry_indexid, L:L, Te_Code:Te_Code,Term:qry_term, _token: token},
 	    })
 	    .done(function(data) {
 	      console.log("refreshing the assign view : success"); 

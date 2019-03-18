@@ -3,7 +3,7 @@
     <div class="col-sm-12">
         <div class="box box-default">
             <div class="box-header with-border">
-            	<h4>Enrolment Form # {{ $element->eform_submit_count}}</h4>
+            	<h4>Enrolment Form # {{ $element->eform_submit_count}} : {{ $element->terms->Comments }} {{ date('Y', strtotime($element->terms->Term_Begin)) }} [{{$element->Term}}]</h4>
             </div>
             <div class="box-body">
             	<div class="col-sm-6">

@@ -118,7 +118,7 @@
 	            		<div class="form-group">
 							<label class="control-label">Admin Comments: </label>
 
-							<textarea id="placement-delete-textarea-{{$form->eform_submit_count}}" name="admin_plform_cancel_comment" class="form-control placement-delete" maxlength="3500" @if(is_null($form->admin_plform_cancel_comment)) placeholder="Place important information about the cancellation of this form..." @else placeholder="{{$form->admin_plform_cancel_comment}}" @endif></textarea>
+							<textarea id="placement-delete-textarea-{{$form->eform_submit_count}}" name="admin_plform_cancel_comment" class="form-control placement-delete" maxlength="3500" placeholder="Place important information about the cancellation of this form..."></textarea>
 							
 						</div>
 

@@ -186,6 +186,67 @@ class PreenrolmentController extends Controller
             $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data'))->render();
             return response()->json([$data]);             
         }
+    }    
+
+    /**
+     * Admin assign course view in Admin ManageUser view
+     */
+    public function adminManageUserAssignCourseView(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexid = $request->indexid;
+            $next_term = Term::where('Term_Code', $request->Term )->first()->Term_Code; 
+            $language = $request->L;
+
+            $qry_enrolment_details = Preenrolment::withTrashed()
+                ->where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get();
+
+            $modified_forms = [];
+
+            foreach ($qry_enrolment_details as $k => $v) {
+                $qry_mod_forms = ModifiedForms::where('INDEXID', $v->INDEXID)
+                    ->where('Term', $v->Term)
+                    ->where('L', $v->L)
+                    ->where('eform_submit_count', $v->eform_submit_count)
+                    ->get();
+
+                $modified_forms[] = $qry_mod_forms;
+            }    
+
+            $enrolment_details = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->where('Te_Code', $request->Te_Code)
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
+                ->get();
+
+            $arr1 = []; 
+            foreach ($enrolment_details as $key => $value) {
+                $arr1[] = Preenrolment::where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->where('Te_Code', $value->Te_Code)
+                ->get()
+                ->count();
+            }
+
+            $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
+                ->where('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
+
+            $languages = DB::table('languages')->pluck("name","code")->all();
+            $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+
+            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data'))->render();
+            return response()->json([$data]);             
+        }
     }
 
     public function adminCheckScheduleCount(Request $request)
