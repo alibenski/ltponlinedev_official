@@ -23,7 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
-  <link rel="stylesheet" href="{{ asset('dist/css/skins/skin-purple.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('dist/css/skins/skin-black.min.css') }}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -74,7 +74,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-purple sidebar-collapse">
+<body class="hold-transition skin-black sidebar-collapse">
 <div class="wrapper">
 
   <!-- Main Header -->
@@ -258,9 +258,19 @@ desired effect
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        <a href="{{ route('teacher-dashboard') }}"><i class="fa fa-home"></i> CLM Student Management System (SMS)</a>
-      </h1>
+
+      @hasrole('Admin')
+        <h1>
+          <a href="{{ route('admin_dashboard') }}"><i class="fa fa-dashboard"></i> CLM Online Enrolment Administration</a>
+          <small>Language Training Programme</small>
+        </h1>
+      @else
+        <h1>
+          <a href="{{ route('teacher-dashboard') }}"><i class="fa fa-home"></i> CLM Student Management System (SMS)</a>
+        </h1>
+      @endhasrole
+
+      
       {{-- <ol class="breadcrumb">
         <li><a href="{{ route('teacher-dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
         <li class="active">Here</li>
@@ -282,7 +292,18 @@ desired effect
           </div>
       </div>
 
-      @hasanyrole('Teacher|Teacher FP')
+      @hasrole('Admin')
+        @if(!Session::has('Term'))
+          <a href="{{ route('admin_dashboard') }}">
+          <div class="callout callout-danger col-sm-12">
+              <h4>Warning!</h4>
+              <p>
+                  <b>Term</b> is not set. Click here to go to the Dashboard and set the Term field for this session.
+              </p>
+          </div>
+          </a>
+        @endif
+      @else
         @if(!Session::has('Term'))
           <a href="{{ route('teacher-dashboard') }}">
           <div class="callout callout-danger col-sm-12">
@@ -293,8 +314,11 @@ desired effect
           </div>
           </a>
         @endif
-      @endhasanyrole
+      @endhasrole
 
+      {{-- @hasrole('Admin')
+        @include('admin.partials._termSessionMsg')
+      @endhasrole --}}
 
       @yield('content')
 

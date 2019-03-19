@@ -193,6 +193,7 @@ $(document).ready(function () {
 
       $.post('{{ route('ajax-preview-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
           // console.log(data);
+          $('.modal-body-schedule').html('');
           $('.modal-body-schedule').html(data);
       });
     });

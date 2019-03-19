@@ -72,7 +72,11 @@ class PreviewController extends Controller
         $q2 = PlacementForm::where('Term', $term)->whereNotNull('Te_Code')->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
         $merge = collect($q)->merge($q2);
 
-        $count = $merge->whereIn('Te_Code', $request->arr)->pluck('Te_Code')->toArray();
+        $count = $merge->whereIn('Te_Code', $request->arr)->unique(function ($item) {
+                return $item['INDEXID'].$item['Te_Code'];
+            })
+            ->pluck('Te_Code')
+            ->toArray();
         
 
         $data = array_count_values($count);

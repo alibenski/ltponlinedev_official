@@ -130,7 +130,7 @@
 
 @hasrole('Teacher FP')
   @if(Session::has('Term'))
-  <a href="{{ route('teacher-enrolment-preview') }}"> 
+  <a href="{{ route('preview-merged-forms') }}"> 
     <div class="col-sm-4 col-xs-12">
         <div class="info-box">
           <!-- Apply any bg-* class to to the icon to color it -->

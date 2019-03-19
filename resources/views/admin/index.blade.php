@@ -214,12 +214,26 @@
 	@endif
 </div>
 <div class="col-md-3 col-sm-6 col-xs-12">
-	<a href="{{ route('preview-vsa-page-2') }}">
+	<a href="{{ route('preview-merged-forms') }}">
 		<div class="info-box">
 		  <!-- Apply any bg-* class to to the icon to color it -->
 		  <span class="info-box-icon bg-navy"><i class="fa fa-eye"></i></span>
 		  <div class="info-box-content">
-		    <span class="info-box-text">Preview Classes </span>
+		    <span class="info-box-text">Preview </span>
+		    <span class="info-box-number"></span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+</div>
+<div class="col-md-3 col-sm-6 col-xs-12">
+	<a href="{{ route('preview-vsa-page-2') }}">
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-navy"><i class="fa fa-gears"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Manage Classes </span>
 		    <span class="info-box-number"></span>
 		  </div>
 		  <!-- /.info-box-content -->

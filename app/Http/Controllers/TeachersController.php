@@ -42,14 +42,21 @@ class TeachersController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-
+        $term = Session::get('Term');
 
         if (!Session::has('Term')) {
             $enrolment_forms = null;
             return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
         }
 
-        $enrolment_forms = new Preenrolment;
+        $q = Preenrolment::where('Term', $term)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
+        $q2 = PlacementForm::where('Term', $term)->whereNotNull('Te_Code')->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
+        $merge = collect($q)->merge($q2);
+
+        $enrolment_forms = $merge->unique(function ($item) {
+                return $item['INDEXID'].$item['Te_Code'];
+            })
+            ->sortBy('created_at');
 
         $queries = [];
 
@@ -70,21 +77,21 @@ class TeachersController extends Controller
                     $queries['Term'] = Session::get('Term');
             }
 
-                if (\Request::has('search')) {
-                    $name = \Request::input('search');
-                    $enrolment_forms = $enrolment_forms->with('users')
-                        ->whereHas('users', function($q) use ( $name) {
-                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-                        });
-                    $queries['search'] = \Request::input('search');
-            } 
+            //     if (\Request::has('search')) {
+            //         $name = \Request::input('search');
+            //         $enrolment_forms = $enrolment_forms->with('users')
+            //             ->whereHas('users', function($q) use ( $name) {
+            //                 return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+            //             });
+            //         $queries['search'] = \Request::input('search');
+            // } 
 
-            if (\Request::has('sort')) {
-                $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort') );
-                $queries['sort'] = \Request::input('sort');
-            } else {
-                $enrolment_forms = $enrolment_forms->orderBy('created_at', 'asc');
-            }
+            // if (\Request::has('sort')) {
+            //     $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort') );
+            //     $queries['sort'] = \Request::input('sort');
+            // } else {
+            //     $enrolment_forms = $enrolment_forms->orderBy('created_at', 'asc');
+            // }
 
             if (\Request::exists('approval_hr')) {
                 if (is_null(\Request::input('approval_hr'))) {
@@ -93,10 +100,11 @@ class TeachersController extends Controller
                 }
             }
 
-        $enrolment_forms->where('overall_approval',1)->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by');
-        
-        $count = count($enrolment_forms->get());
-        $enrolment_forms = $enrolment_forms->paginate(20)->appends($queries);
+        // $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by');
+        // $count = count($enrolment_forms->get());
+        $count = count($enrolment_forms);
+        // $enrolment_forms = $enrolment_forms->paginate(20)->appends($queries);
+
         return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms)->withCount($count);
     }
 

@@ -1,5 +1,6 @@
+@foreach ($select_courses->chunk(4) as $element)
 <div class="row">
-  @foreach($select_courses as $data)
+  @foreach($element as $data)
     <div class="col-lg-3 col-xs-6">
       <!-- small box -->
       <div class="row">
@@ -20,7 +21,7 @@
           <i class="ion ion-person-add"></i>
         </div>
         
-        <a href="" target="_blank" class="small-box-footer">
+        <a href="{{ route('teacher-enrolment-preview',['Te_Code' => $data->Te_Code_New, 'Term' => Session::get('Term')]) }}" target="_blank" class="small-box-footer">
               More info on  <i class="fa fa-arrow-circle-right"></i>
             </a>
 
@@ -29,6 +30,7 @@
     </div> 
   @endforeach
 </div>
+@endforeach
 
 <script>
 	$(document).ready(function() {

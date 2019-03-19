@@ -1,4 +1,4 @@
-@extends('admin.no_sidebar_admin')
+@extends('shared_template')
 
 @section('customcss')
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -6,8 +6,6 @@
 @stop
 
 @section('content')
-
-@include('admin.partials._termSessionMsg')
 
 <div class="row">
     <div class="col-sm-12">
@@ -20,18 +18,21 @@
 			{{ csrf_field() }}
 
 			<input type="hidden" name="term_id" value=@if (is_null($term)) ""  @else "{{$term}}" @endif>
-			
-				
-			<div class="form-group">
-		        <label class="col-md-3 control-label">Choose language:</label>
-		          <div class="col-md-8">
-		              @foreach ($languages as $id => $name)
-		            <div class="input-group col-md-9">
-		                      <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}" required="">
-		                      <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
+
+			<div class="form-group col-sm-12">
+		      <label for="L" class="control-label"> Language:</label>
+		      <div class="col-sm-12">
+		        @foreach ($languages as $id => $name)
+		        <div class="col-sm-4">
+		            <div class="input-group"> 
+		              <span class="input-group-addon">       
+		                <input id="{{ $name }}" type="radio" name="L" value="{{ $id }}">                 
+		              </span>
+		                <label for="{{ $name }}" type="text" class="form-control">{{ $name }}</label>
 		            </div>
-		              @endforeach
-		          </div>
+		        </div>
+		        @endforeach 
+		      </div>
 		    </div>
 
 			<div class="form-group col-sm-12 add-margin">           

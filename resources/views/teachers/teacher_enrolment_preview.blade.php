@@ -1,4 +1,4 @@
-@extends('teachers.teacher_template')
+@extends('shared_template')
 
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
@@ -7,10 +7,10 @@
 
 @section('content')
 <div class="alert alert-info col-sm-12">
-	<h4 class="text-center"><strong>Teacher's View of Regular Enrolment Forms</strong></h4>
+	<h4 class="text-center"><strong>Live Preview of Enrolment and Placement Forms</strong></h4>
 </div>
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-sm-12">
     <div class="box box-default">
         <div class="box-header with-border">
@@ -83,7 +83,7 @@
     </div>
     </div>
     </div>
-</div>
+</div> --}}
 
 @if(empty(Request::all())) 
 @else
@@ -107,7 +107,7 @@
 			        </div>
 					<div class="box-body">
 						
-						<p>Language: {{Request::get('L')}}</p>
+						{{-- <p>Language: {{Request::get('L')}}</p> --}}
 						<p>Course Code: {{Request::get('Te_Code')}}</p>
 					
 					</div>
@@ -117,7 +117,7 @@
 		
 		</div>
 	</div>
-	{{ $enrolment_forms->links() }}
+	{{-- {{ $enrolment_forms->links() }} --}}
 	<div class="filtered-table table-responsive">
 		<table class="table table-bordered table-striped">
 		    <thead>
@@ -128,6 +128,7 @@
 		            <th>Contact No.</th>
 		            <th>Course</th>
 		            <th>Schedule</th>
+		            <th>Flexible?</th>
 		            <th>Organization</th>
 		            <th>Student Cancelled?</th>
 		            <th>HR Approval</th>
@@ -146,7 +147,9 @@
 						@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 		                @else
 		                  @if ($form->modified_by)
-		                    <span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span>
+		                    <p><span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span></p>
+		                    <p><span class="label label-success margin-label">{{ $form->courses->Description }}  </span></p>
+		                    <p><span class="label label-success margin-label">{{$form->schedule->name }} </span></p>
 		                  @endif
 		                @endif
 					</td>
@@ -161,7 +164,15 @@
 					</td>
 					<td>{{ $form->courses->Description }}</td>
 					<td>
-						<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a>
+						{{-- <a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a> --}}
+						<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
+					</td>
+					<td>
+						@if($form->flexibleBtn == 1)
+                                    <span class="label label-success margin-label">Yes</span>
+                                  @else
+                          -
+                                  @endif
 					</td>
 					<td>{{ $form->DEPT }}</td>
 					<td>
@@ -235,7 +246,7 @@
 				@endforeach
 		    </tbody>
 		</table>
-		{{ $enrolment_forms->links() }}
+		{{-- {{ $enrolment_forms->links() }} --}}
 	</div>
 	@endif
 
@@ -309,6 +320,26 @@ $(document).ready(function() {
     placeholder: "Select Filter",
     });
 
+    // $('#modalshow').on('show.bs.modal', function (event) {
+    //   var link = $(event.relatedTarget); // Link that triggered the modal
+    //   var dtitle = link.data('mtitle');
+    //   var dindexno = link.data('indexno');
+    //   var dtecode = link.data('tecode');
+    //   var dterm = link.data('term');
+    //   var dapproval = link.data('approval');
+    //   var dFormCounter = link.data('formx');
+    //   var token = $("input[name='_token']").val();
+    //   var modal = $(this);
+    //   modal.find('.modal-title').text(dtitle);
+
+    //   var token = $("input[name='_token']").val();      
+
+    //   $.post('{{ route('ajax-show-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
+    //       console.log(data);
+    //       $('.modal-body-schedule').html(data)
+    //   });
+    // });
+
     $('#modalshow').on('show.bs.modal', function (event) {
       var link = $(event.relatedTarget); // Link that triggered the modal
       var dtitle = link.data('mtitle');
@@ -323,9 +354,10 @@ $(document).ready(function() {
 
       var token = $("input[name='_token']").val();      
 
-      $.post('{{ route('ajax-show-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
-          console.log(data);
-          $('.modal-body-schedule').html(data)
+      $.post('{{ route('ajax-preview-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
+          // console.log(data);
+          $('.modal-body-schedule').html('');
+          $('.modal-body-schedule').html(data);
       });
     });
 

@@ -100,6 +100,7 @@ class PreenrolmentController extends Controller
             
             if (\Request::has('L')) {
                 $arr3 = collect($arr3);
+                $arr4 = collect($arr4);
                 
                 $queries = [];
 
@@ -120,6 +121,20 @@ class PreenrolmentController extends Controller
                             $queries['Term'] = Session::get('Term');
                     }
 
+                foreach ($columns as $column) {
+                    if (\Request::has($column)) {
+                        $arr4 = $arr4->where($column, \Request::input($column) );
+                        $queries[$column] = \Request::input($column);
+                    }
+
+                } 
+                    if (Session::has('Term')) {
+                            $arr4 = $arr4->where('Term', Session::get('Term') );
+                            $queries['Term'] = Session::get('Term');
+                    }
+
+                $count_not_assigned = count($arr4);
+                   
                 return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3', 'count_not_assigned')); 
             }
             
