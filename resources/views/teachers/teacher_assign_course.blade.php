@@ -3,7 +3,7 @@
     <div class="col-sm-12">
         <div class="box box-info">
             <div class="box-header with-border bg-aqua">
-            	<h4>Enrolment Form # {{ $element->eform_submit_count}}</h4>
+            	<h4>Enrolment Form # {{ $element->eform_submit_count}} <span><button type="button" class="btn btn-danger btn-space course-delete pull-right" data-toggle="modal"><i class="fa fa-remove"></i> Delete Form</button></span></h4>
             </div>
             <div class="box-body">
             	<div class="col-sm-6">
