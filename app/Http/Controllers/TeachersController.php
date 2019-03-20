@@ -748,8 +748,33 @@ class TeachersController extends Controller
      * @param  \App\Teachers  $teachers
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Teachers $teachers)
+    public function teacherDeleteForm(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $indexno = $request->qry_indexid; 
+            $term = $request->qry_term;
+            $tecode = $request->qry_tecode;
+            $eform_submit_count = $request->eform_submit_count;
+            $teacher_comments = $request->teacher_comments;
+
+            $enrolment_to_be_deleted = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+
+            $input_1 = ['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id, 'cancelled_by_admin' => Auth::user()->id ];
+            $input_1 = array_filter($input_1, 'strlen');
+
+            foreach ($enrolment_to_be_deleted as $data) {
+                $data->fill($input_1)->save();
+                $data->delete();
+            }
+            
+            $data = $request->all();
+
+            return response()->json($data);
+        }
     }
 }

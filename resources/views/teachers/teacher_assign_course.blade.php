@@ -1,9 +1,19 @@
+@if (count($enrolment_details) < 1)
+<div class="row">
+	<div class="col-sm-10 col-sm-offset-1">
+		<div class="alert alert-danger">
+			<h4><i class="icon fa fa-ban"></i> Sorry, no forms were found!</h4>
+		</div>
+	</div>
+</div>
+@endif
 <div class="row">
 	@foreach ($enrolment_details as $element)
     <div class="col-sm-12">
         <div class="box box-info">
             <div class="box-header with-border bg-aqua">
-            	<h4>Enrolment Form # {{ $element->eform_submit_count}} <span><button type="button" class="btn btn-danger btn-space course-delete pull-right" data-toggle="modal"><i class="fa fa-remove"></i> Delete Form</button></span></h4>
+            	<h4>Enrolment Form # {{ $element->eform_submit_count}} <span><button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="btn btn-danger btn-space course-delete pull-right" data-toggle="modal"><i class="fa fa-remove"></i> Delete Form</button></span></h4>
+            	{{ method_field('DELETE') }}
             </div>
             <div class="box-body">
             	<div class="col-sm-6">
