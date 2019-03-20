@@ -154,10 +154,10 @@
 		                @endif
 					</td>
 					<td>
-						@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
-						@if($form->placement_schedule_id)
-							<p><span class="label label-warning margin-label">Placement Form</span></p>
-						@endif
+						<h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} <small>[{{ $form->INDEXID }}]</small> @endif</h4>
+							@if($form->placement_schedule_id)
+								<p><span class="label label-warning margin-label">Placement Form</span></p>
+							@endif
 						
 						<div class="student-priority-status-here-{{ $form->INDEXID }}"></div>
 						<div class="student-classroom-here-{{ $form->INDEXID }}"></div>
@@ -174,6 +174,7 @@
 					<td>
 						{{-- <a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a> --}}
 						<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
+						<div class="student-count-schedule-{{ $form->INDEXID }}"></div>
 					</td>
 					<td>
 						@if($form->flexibleBtn == 1)
@@ -380,6 +381,22 @@ $(document).ready(function() {
 			$("input[name='indexno']").each(function() {
 				if ($(this).val() == y) {
 					$('div.student-within-two-terms-here-'+y).html('<p><span class="label label-default margin-label bg-maroon">Within 2 Terms</span></p>');
+				}
+			});
+		});
+		console.log(data[4]);
+		$.each(data[4], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == x) {
+					$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
+				}
+			});
+		});
+
+		$.each(data[5], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == x) {
+					$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
 				}
 			});
 		});

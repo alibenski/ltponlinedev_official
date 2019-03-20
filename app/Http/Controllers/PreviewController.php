@@ -145,10 +145,31 @@ class PreviewController extends Controller
         $within_two_terms = array_unique($within_two_terms);
        
 
-        $data = [$arr1, $unique_students_not_in_class, $waitlisted, $within_two_terms];
+            // count how many schedules were originally chosen
+            $check_modified_forms = ModifiedForms::whereIn('INDEXID', $request->arr)->where('Term', $request->term)->where('overall_approval','1')->get();
+
+            $count_schedule_in_modified_table = [];
+            foreach ($check_modified_forms as $key7 => $value7) {
+                $count_schedule_in_modified_table[] = $value7->INDEXID;
+            }
+
+            $count_schedule_in_modified_table = array_count_values($count_schedule_in_modified_table);
+
+
+            $count_schedule = [];
+            foreach ($q as $key6 => $value6) {
+                $count_schedule[] = $value6->INDEXID;
+            }
+
+            $count_schedule = array_count_values($count_schedule);
+
+        $data = [$arr1, $unique_students_not_in_class, $waitlisted, $within_two_terms, $count_schedule, $count_schedule_in_modified_table];
         return response()->json($data);
     }
 
+    /**
+     * Ajax call to GetStudentCurrentClass in current term and then pass in view
+     */
     public function ajaxPreviewGetStudentCurrentClass(Request $request)
     {
         $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
@@ -169,7 +190,7 @@ class PreviewController extends Controller
             $collect[] = $class_info;
 
         }
-        
+
         $data = $collect;
         return response()->json($data);
 
