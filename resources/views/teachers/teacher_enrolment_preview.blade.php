@@ -154,7 +154,15 @@
 		                @endif
 					</td>
 					<td>
-					@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
+						@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
+						@if($form->placement_schedule_id)
+							<p><span class="label label-warning margin-label">Placement Form</span></p>
+						@endif
+						
+						<div class="student-priority-status-here-{{ $form->INDEXID }}"></div>
+						<div class="student-classroom-here-{{ $form->INDEXID }}"></div>
+						<div class="student-waitlisted-here-{{ $form->INDEXID }}"></div>
+						<div class="student-within-two-terms-here-{{ $form->INDEXID }}"></div>
 					</td>
 					<td>
 					@if(empty($form->users->email)) None @else {{ $form->users->email }} @endif
@@ -301,6 +309,90 @@
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+	var arr = [];
+	var token = $("input[name='_token']").val();
+	var term = $("input[name='term']").val();
+
+	$("input[name='indexno']").each(function() {
+		var indexno = $(this).val();
+		arr.push(indexno); //insert values to array per iteration
+	});
+	// console.log(arr)
+
+	$.ajax({
+		url: '{{ route('ajax-preview-get-student-current-class') }}',
+		type: 'GET',
+		data: {arr:arr,term:term,_token:token},
+	})
+	.done(function(data) {
+		// console.log(data)
+		$.each(data, function(x, y) {
+			// console.log(y.INDEXID)
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y.INDEXID) {
+					$('div.student-classroom-here-'+y.INDEXID).html('<strong>Current Class:</strong> <p><span class="label label-info margin-label">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
+				}
+			});
+		});
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+
+
+	$.ajax({
+		url: '{{ route('ajax-preview-get-student-priority-status') }}',
+		type: 'GET',
+		data: {arr:arr,term:term,_token:token},
+	})
+	.done(function(data) {
+		// console.log(data[0]);
+		$.each(data[0], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-priority-status-here-'+y).html('<p><span class="label label-info margin-label">Re-enrolment</span></p>');
+				}
+			});
+		});
+		// console.log(data[1]);
+		$.each(data[1], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-priority-status-here-'+y).html('<p><span class="label label-default margin-label">Not in a class</span></p>');
+				}
+			});
+		});
+		// console.log(data[2]);
+		$.each(data[2], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-waitlisted-here-'+y).html('<p><span class="label label-default margin-label bg-purple">Waitlisted</span></p>');
+				}
+			});
+		});
+		// console.log(data[3]);
+		$.each(data[3], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-within-two-terms-here-'+y).html('<p><span class="label label-default margin-label bg-maroon">Within 2 Terms</span></p>');
+				}
+			});
+		});
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+});
+</script>
+
 <script type="text/javascript">
 $(document).on('click', '.show-std-comments', function() {
 	var indexno = $(this).closest("tr").find("input[name='indexno']").val();

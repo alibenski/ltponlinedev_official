@@ -65,6 +65,9 @@ class PreviewController extends Controller
         }
     }
 
+    /**
+     * Ajax call to GetStudentCount per course level
+     */
     public function ajaxPreviewGetStudentCount(Request $request)
     {
         $term = Session::get('Term');
@@ -82,6 +85,96 @@ class PreviewController extends Controller
         $data = array_count_values($count);
         return response()->json($data);
     }
+
+    /**
+     * Ajax call to GetStudentPriorityStatus
+     */
+    public function ajaxPreviewGetStudentPriorityStatus(Request $request)
+    {
+        $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
+
+        // query students in class
+        $students_in_class = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                    ->orWhere('Tch_ID', '!=', 'TBD')
+                    ;
+            })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+
+        $q = Preenrolment::whereIn('INDEXID', $request->arr)->where('Term', $request->term)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
+        $arr2 = [];
+        foreach ($q as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+        // query waitlisted students
+        $students_waitlisted = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD')
+                    ;
+            })
+            ->get();
+        // put inside array
+        $waitlisted = [];
+        foreach ($students_waitlisted as $key3 => $value3) {
+            $waitlisted[] = $value3->INDEXID;
+        }
+        $waitlisted = array_unique($waitlisted);
+
+
+        $prev_prev_term = Term::where('Term_Code', $prev_term)->first()->Term_Prev;
+
+        $students_within_two_terms = Repo::whereIn('INDEXID', $unique_students_not_in_class)->where('Term', $prev_prev_term)->get();
+        // put inside array
+        $within_two_terms = [];
+        foreach ($students_within_two_terms as $key4 => $value4) {
+            $within_two_terms[] = $value4->INDEXID;
+        }
+        $within_two_terms = array_unique($within_two_terms);
+       
+
+        $data = [$arr1, $unique_students_not_in_class, $waitlisted, $within_two_terms];
+        return response()->json($data);
+    }
+
+    public function ajaxPreviewGetStudentCurrentClass(Request $request)
+    {
+        $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
+
+        $get_class = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                    ->orWhere('Tch_ID', '!=', 'TBD')
+                    ;
+            })
+            ->get();
+
+        $class_info = [];
+        $collect = [];
+        foreach ($get_class as $key5 => $value5) {
+            $class_info['INDEXID'] = $value5->INDEXID;
+            $class_info['course_name'] = $value5->courses->Description;
+            $class_info['teacher'] = $value5->classrooms->teachers->Tch_Name;
+            $collect[] = $class_info;
+
+        }
+        
+        $data = $collect;
+        return response()->json($data);
+
+    }
+
     public function vsaPage1()
     {
         DB::table('tblLTP_preview_TempSort')->truncate();
