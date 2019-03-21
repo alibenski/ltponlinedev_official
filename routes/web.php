@@ -144,6 +144,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::resource('classrooms', 'ClassroomController');
     Route::resource('course-schedule', 'CourseSchedController');
     Route::resource('schedules', 'ScheduleController');
+
+    Route::post('store-non-standard-schedule', ['as' => 'store-non-standard-schedule', 'uses' => 'ScheduleController@storeNonStandardSchedule' ]);
     Route::resource('terms', 'TermController');
     Route::resource('courses', 'CourseController');
     Route::resource('organizations', 'OrgController');

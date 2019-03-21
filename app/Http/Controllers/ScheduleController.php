@@ -56,6 +56,7 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         $countDays = count($request->begin_day);
         $implodeName = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
         $request->merge( [ 'name' => $implodeName ] );
@@ -89,6 +90,11 @@ class ScheduleController extends Controller
         // Redirect to flash data to posts.show
         return redirect()->route('schedules.create'); 
 
+    }
+
+    public function storeNonStandardSchedule(Request $request)
+    {
+        dd($request);
     }
 
     /**

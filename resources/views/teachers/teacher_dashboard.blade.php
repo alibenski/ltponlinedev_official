@@ -136,7 +136,7 @@
           <!-- Apply any bg-* class to to the icon to color it -->
           <span class="info-box-icon bg-yellow"><i class="fa fa-list"></i></span>
           <div class="info-box-content">
-            <span class="info-box-text">Preview of Enrolment Forms for Term: <span class="lead"><strong>{{Session::get('Term')}}</strong></span></span>
+            <span class="info-box-text">Preview for Term: <span class="lead"><strong>{{Session::get('Term')}}</strong></span></span>
             <span class="info-box-number"></span>
           </div>
           <!-- /.info-box-content -->
@@ -151,7 +151,7 @@
         <!-- Apply any bg-* class to to the icon to color it -->
         <span class="info-box-icon bg-yellow"><i class="fa fa-list"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">Preview of Enrolment Forms</span>
+          <span class="info-box-text">Preview </span>
           <span class="info-box-number">Set Term</span>
         </div>
         <!-- /.info-box-content -->
