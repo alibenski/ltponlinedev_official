@@ -35,13 +35,13 @@
           <td id="{{$form->INDEXID}}" class="enrolled-next-term">
             
           </td>
-          <td id="{{$form->INDEXID}}" class="days-present">
+          <td id="{{$form->id}}" class="days-present">
             
           </td>
-          <td id="{{$form->INDEXID}}" class="days-excused">
+          <td id="{{$form->id}}" class="days-excused">
             
           </td>
-          <td id="{{$form->INDEXID}}" class="days-absent">
+          <td id="{{$form->id}}" class="days-absent">
             
           </td>
         </tr>
@@ -81,11 +81,18 @@ $(document).ready(function () {
         // console.log(counter)
     });    
     
+    var id = [];
+    var indexid = [];
+    var L = $(this).closest("tr.table-row").find("input[name='L']").val();
+    var token = $("input[name='_token']").val();
+
     $('tr.table-row').each(function(){
-      var indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
-      var L = $(this).closest("tr.table-row").find("input[name='L']").val();
-      var token = $("input[name='_token']").val();
-      var id = $(this).closest("tr.table-row").find("input[name='id']").val();
+      var each_id = $(this).closest("tr.table-row").find("input[name='id']").val();
+      var each_indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
+
+      id.push(each_id);
+      indexid.push(each_indexid);
+    });
 
           $.ajax({
             url: '{{ route('ajax-show-overall-attendance') }}',
@@ -94,21 +101,28 @@ $(document).ready(function () {
             data: {indexid:indexid, L:L,id:id, _token:token},
           })
           .done(function(data) {
-            console.log(data);
-            // debugger;
-            $("td#"+indexid+".days-present").append("<p>"+data[0]+"</p>");
-            $("td#"+indexid+".days-excused").append("<p>"+data[1]+"</p>");
-            $("td#"+indexid+".days-absent").append("<p>"+data[2]+"</p>");
+              console.log(data)
+
+              if (data == 0) {
+                  $("td.days-present").append("<p>0</p>");
+                  $("td.days-excused").append("<p>0</p>");
+                  $("td.days-absent").append("<p>0</p>");
+              } else {
+                $.each(data, function(index, val) {
+                   $("td#"+val.pash_id+".days-present").append("<p>"+val.P+"</p>");
+                   $("td#"+val.pash_id+".days-excused").append("<p>"+val.E+"</p>");
+                   $("td#"+val.pash_id+".days-absent").append("<p>"+val.A+"</p>");
+                });
+              }
           })
           .fail(function(data) {
-            console.log("error on loading attendance summary: " + data);
-            alert("An error occured. Click OK to reload.");
-            window.location.reload();
+              console.log("error on loading attendance summary: " + data);
+              alert("An error occured. Click OK to reload.");
+              window.location.reload();
           })
           .always(function() {
-            console.log("load complete attendance summary");
+              console.log("load complete attendance summary");
           });
-    });
 });
 </script>
 <script> 

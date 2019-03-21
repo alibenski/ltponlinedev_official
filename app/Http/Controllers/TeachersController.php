@@ -267,44 +267,55 @@ class TeachersController extends Controller
     public function ajaxShowOverallAttendance(Request $request)
     {
         if ($request->ajax()) {
-            $qry = Attendance::where('pash_id', $request->id)->get();
+            $qry = Attendance::whereIn('pash_id', $request->id)->get();
+                       
+            // if no attendance has been entered yet, then 0 value
+            if ($qry->isEmpty()) {
+
+                $data = 0;
+                return response()->json($data); 
+            }
+
+            $array_attributes = []; 
+            foreach ($qry as $key => $value) {
+                $arr = $value;
+                $array_attributes[] = $arr->getAttributes();
+            }
 
             $sumP = [];
             $sumE = [];
             $sumA = [];
+            $info = [];
+            $collector = [];
+            foreach ($array_attributes as $x => $y) {
+                $info['pash_id'] = $y['pash_id'];
 
-            if ($qry->isEmpty()) {
-                $sumP_count = count($sumP);
-                $sumE_count = count($sumP);
-                $sumA_count = count($sumP);
+                foreach ($y as $k => $v) {
+                        if($v == 'P'){
+                            $sumP[] = 'P';  
+                        }
 
-                $data = [$sumP_count,$sumE_count,$sumA_count];
-                return response()->json($data); 
+                        if($v == 'E'){
+                            $sumE[] = 'E';
+                        } 
+
+                        if($v == 'A'){
+                            $sumA[] = 'A';  
+                        }
+                }
+
+                $info['P'] = count($sumP);
+                $info['E'] = count($sumE);
+                $info['A'] = count($sumA);
+
+                $collector[] = $info;
+                // clear contents of array for the next loop
+                $sumP = [];
+                $sumE = [];
+                $sumA = [];
             }
 
-            foreach ($qry as $key => $value) {
-                $arr = $value;
-            }
-
-            $arr2 = $arr->getAttributes();
-            
-            foreach ($arr2 as $k => $v) {
-                if($v == 'P'){
-                    $sumP[] = 'P';  
-                }
-                if($v == 'E'){
-                    $sumE[] = 'E';  
-                }
-                if($v == 'A'){
-                    $sumA[] = 'A';  
-                }
-            }
-            
-            $sumP_count = count($sumP);
-            $sumE_count = count($sumE);
-            $sumA_count = count($sumA);
-
-            $data = [$sumP_count,$sumE_count,$sumA_count];
+            $data = $collector;
             return response()->json($data);  
         }
     }
