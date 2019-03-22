@@ -18,10 +18,36 @@
             </div>
               
             <div class="form-sched non-standard-schedule hidden">
+              {{-- <div class="form-group">
+                <label class="col-md-4 control-label">Is this Online?</label>
+                  <div class="col-md-4">
+                    <div class="input-group"> 
+                      <span class="input-group-addon">       
+                        <input type="checkbox" name="online" value="online" autocomplete="off">                 
+                      </span>
+                        <label type="text" class="form-control">Yes, it is online with no definite time and day</label>
+                    </div>
+                  </div>
+              </div> --}}
+
               <div class="form-group">
                 <label for="sched_name" class="control-label col-md-4">Non-standard Schedule:</label>
-                <input type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" placeholder="Enter the non-standard schedule format, e.g. Online, 1 & 15 Feb, 1, 15 & 29 March, etc."></input>
-                <strong><small class="col-md-8 col-md-offset-4 text-danger">Use only for non-standard schedule format, e.g. "Online", "1 & 15 Feb, 1, 15 & 29 March", etc.</small></strong>
+                <input type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" placeholder="Enter the non-standard schedule format, e.g. 1 & 15 Feb, 1, 15 & 29 March, etc."></input>
+                <strong><small class="col-md-6 col-md-offset-4 text-danger">Use only for non-standard schedule format, e.g. "1 & 15 Feb, 1, 15 & 29 March", "10 & 24 May, 7 & 21 June, 5 July",etc.</small></strong>
+              </div>
+              
+              <div class="form-group">
+                  <label class="col-md-4 control-label">Choose Days:</label>
+                  <div class="col-md-4">
+                    @foreach ($days as $id => $name)
+                    <div class="input-group"> 
+                      <span class="input-group-addon">       
+                        <input type="checkbox" name="begin_day[]" class="add-filter" value="{{ $id }}" autocomplete="off">                 
+                      </span>
+                        <label type="text" class="form-control">{{ $name }}</label>
+                    </div>
+                    @endforeach
+                  </div>
               </div>
 
               <div class="form-group">
@@ -43,7 +69,7 @@
                       @endforeach
                   </select>
               </div>
-              
+
               <div class="container create-btn-grp">
                 <div class="col-md-4 col-md-offset-4">
                   <div class="row">
@@ -66,9 +92,10 @@
             <div class="form-sched standard-schedule hidden">
               <!-- array checkboxes -->
               <div class="form-group">
-                <label for="sched_name" class="control-label col-md-4">Standard Schedule:</label>
+                <label for="" class="control-label col-md-4">Standard Schedule:</label>
                 <span type="text" class="col-md-6 form-control-static">Choose the appropriate day(s) with the corresponding begin and end times.</span>
               </div>
+
               <div class="form-group">
                   <label class="col-md-4 control-label">Choose Days:</label>
                   <div class="col-md-4">
@@ -142,6 +169,8 @@
       $( "div.form-sched.standard-schedule" ).addClass('hidden');
 
     });
+
+
 
   });
 </script>
