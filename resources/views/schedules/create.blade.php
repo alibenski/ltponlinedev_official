@@ -23,6 +23,26 @@
                 <input type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" placeholder="Enter the non-standard schedule format, e.g. Online, 1 & 15 Feb, 1, 15 & 29 March, etc."></input>
                 <strong><small class="col-md-8 col-md-offset-4 text-danger">Use only for non-standard schedule format, e.g. "Online", "1 & 15 Feb, 1, 15 & 29 March", etc.</small></strong>
               </div>
+
+              <div class="form-group">
+                  <label name="begin_time" class="col-md-4 control-label">Begin Time: </label>
+                  <select class="col-md-6 form-control-static" name="begin_time">
+                      <option value="">Select Begin Time</option>
+                      @foreach ($btimes as $id => $name)
+                          <option value="{{ $id }}"> {{ date('h:i:sa', strtotime($name)) }}</option>
+                      @endforeach
+                  </select>
+              </div>
+
+              <div class="form-group">
+                  <label name="end_time" class="col-md-4 control-label">End Time: </label>
+                  <select class="col-md-6 form-control-static" name="end_time">
+                      <option value="">Select End Time</option>
+                      @foreach ($etimes as $id => $name)
+                          <option value="{{ $id }}"> {{ date('h:i:sa', strtotime($name)) }}</option>
+                      @endforeach
+                  </select>
+              </div>
               
               <div class="container create-btn-grp">
                 <div class="col-md-4 col-md-offset-4">
