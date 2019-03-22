@@ -344,6 +344,7 @@ class TeachersController extends Controller
             $check_if_assigned_regular = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
+                ->where('updated_by_admin', 1)
                 ->select('Te_Code','modified_by')
                 ->groupBy('Te_Code','modified_by')
                 ->get();
@@ -447,8 +448,8 @@ class TeachersController extends Controller
             $enrolment_details = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn', 'teacher_comments')
-                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by', 'updatedOn', 'teacher_comments')
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin', 'updatedOn', 'teacher_comments')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin', 'updatedOn', 'teacher_comments')
                 ->get();
 
             $arr1 = []; 

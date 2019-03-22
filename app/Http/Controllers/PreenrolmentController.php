@@ -174,8 +174,8 @@ class PreenrolmentController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('Te_Code', $request->Te_Code)
-                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin','admin_eform_comment','std_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin','admin_eform_comment','std_comments', 'updatedOn')
                 ->get();
 
             $arr1 = []; 
@@ -235,8 +235,8 @@ class PreenrolmentController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('Te_Code', $request->Te_Code)
-                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','admin_eform_comment','std_comments', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin','admin_eform_comment','std_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin','admin_eform_comment','std_comments', 'updatedOn')
                 ->get();
 
             $arr1 = []; 
