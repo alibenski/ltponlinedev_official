@@ -185,7 +185,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     // Placement form cancellation route for administrators
     Route::delete('/delete/user/{staff}/lang/{lang}/term/{term}/{eform}', ['as' => 'placement.destroy', 'uses' => 'PlacementFormController@destroy'])->where('tecode', '(.*)');
-
+    // Route to AJAX get student comments
+    Route::post('ajax-placement-comments', ['as'=>'ajax-placement-comments','uses'=>'PlacementFormController@ajaxPlacementComments']);
 
     Route::resource('rooms', 'RoomsController');
     Route::resource('waitlist', 'WaitlistController');

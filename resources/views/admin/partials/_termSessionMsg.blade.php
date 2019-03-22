@@ -1,6 +1,6 @@
 @if(Session::has('Term'))
 <div class="callout callout-success col-sm-12">
-    <h4>Reminder!</h4>
+    <h4><i class="icon fa fa-bullhorn fa-2x"></i>Reminder!</h4>
     <p>
         All <b>Term</b> fields are currently set to: <strong>{{ Session::get('Term') }}</strong>
     </p>

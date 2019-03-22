@@ -6,6 +6,14 @@
 @stop
 
 @section('content')
+@if(Session::has('Term'))
+<div class="alert alert-success col-sm-12">
+    <h4><i class="icon fa fa-bullhorn fa-2x"></i>Reminder!</h4>
+    <p>
+        All <b>Term</b> fields are currently set to: <strong>{{ Session::get('Term') }}</strong>
+    </p>
+</div>
+@endif
 <div class="alert alert-info col-sm-12">
 	<h4 class="text-center"><strong>Live Preview of Enrolment and Placement Forms</strong></h4>
 </div>
@@ -94,6 +102,15 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="col-sm-4">
+
+				@foreach ($enrolment_forms as $item)
+					@if ($loop->first) {{-- only get the first item of the loop --}}
+					<div class="">
+						<h2>{{ $item->courses->Description }}</h2>
+					</div>
+					@endif
+				@endforeach
+
 				<h3>Total # <span class="label label-info">{{$count}}</span></h3>
 			</div>
 			@if (Request::has('Te_Code')||Request::has('L'))
@@ -240,13 +257,19 @@
 					@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 					</td> --}}
 					<td>
-						@if ($form->std_comments)
-							<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
+						@if($form->placement_schedule_id)
+								<button type="button" class="show-placement-comments btn btn-warning btn-space" data-toggle="modal"> View </button>
+						@else
+							@if ($form->std_comments)
+								<button type="button" class="show-std-comments btn btn-primary btn-space" data-toggle="modal"> View </button>
+							@endif
 						@endif
 						<input type="hidden" name="eform_submit_count" value="{{$form->eform_submit_count}}">
 						<input type="hidden" name="term" value="{{$form->Term}}">
 						<input type="hidden" name="indexno" value="{{$form->INDEXID}}">
 						<input type="hidden" name="tecode" value="{{$form->Te_Code}}">
+						<input type="hidden" name="L" value="{{$form->courses->language->code}}">
+						<input type="hidden" name="formL" value="{{$form->L}}">
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
 					</td>
 					<td>{{ $form->created_at}}</td>
@@ -296,7 +319,35 @@
                 @endif	  
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <span class='glyphicon glyphicon-remove'></span> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal form to show student comments on placement forms -->
+<div id="showPlacementComments" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title-placement-comments"><i class="fa fa-comment fa-2x text-warning"></i> Student Comment</h4>
+            </div>
+            <div class="modal-body">
+				@if(empty($enrolment_forms))
+
+				@else
+					@if(count($enrolment_forms) == 0)
+					
+					@else
+	                <div class="panel-body modal-body-placement-comments"></div>
+                	@endif
+                @endif	  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
                     <span class='glyphicon glyphicon-remove'></span> Close
                 </button>
             </div>
@@ -315,6 +366,7 @@ $(document).ready(function() {
 	var arr = [];
 	var token = $("input[name='_token']").val();
 	var term = $("input[name='term']").val();
+	var L = $("input[name='L']").val();
 
 	$("input[name='indexno']").each(function() {
 		var indexno = $(this).val();
@@ -349,7 +401,7 @@ $(document).ready(function() {
 	$.ajax({
 		url: '{{ route('ajax-preview-get-student-priority-status') }}',
 		type: 'GET',
-		data: {arr:arr,term:term,_token:token},
+		data: {arr:arr,L:L,term:term,_token:token},
 	})
 	.done(function(data) {
 		// console.log(data[0]);
@@ -421,6 +473,24 @@ $(document).on('click', '.show-std-comments', function() {
 
     $.post('{{ route('ajax-std-comments') }}', {'indexno':indexno, 'tecode':tecode, 'term':term,  'eform_submit_count':eform_submit_count, '_token':token}, function(data) {
           $('.modal-body-std-comments').html(data);
+      });
+});
+
+$(document).on('click', '.show-placement-comments', function() {
+	var indexno = $(this).closest("tr").find("input[name='indexno']").val();
+	var L = $(this).closest("tr").find("input[name='formL']").val();
+	var eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
+	var term = $(this).closest("tr").find("input[name='term']").val();
+	var token = $("input[name='_token']").val();
+    $('#showPlacementComments').modal('show'); 
+
+    $.post('{{ route('ajax-placement-comments') }}', {'indexno':indexno, 'L':L, 'term':term,  'eform_submit_count':eform_submit_count, '_token':token}, function(data) {
+          $('.modal-body-placement-comments').html(
+          	'<label for="">Comment: </label> '+ data[0]+
+          	'<br><label for="">Course Preference: </label> '+ data[1]+
+          	'<br><label for="">Time Preference: </label> '+ data[2]+
+          	'<br><label for="">Day Preference: </label> '+ data[3]
+          	);
       });
 });
 

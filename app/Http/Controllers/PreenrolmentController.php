@@ -33,7 +33,7 @@ class PreenrolmentController extends Controller
 
             $students_in_class = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
                 $query->whereNotNull('Tch_ID')
-                        ->orWhere('Tch_ID', '!=', 'TBD')
+                        ->where('Tch_ID', '!=', 'TBD')
                         ;
                 })
                 ->get();

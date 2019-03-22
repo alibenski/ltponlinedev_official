@@ -874,4 +874,24 @@ class PlacementFormController extends Controller
         session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled. If necessary, an email has been sent to the HR/Staff Development Office of the student.');
         return redirect()->back();
     }
+
+    public function ajaxPlacementComments(Request $request)
+    {
+        if($request->ajax()){
+            $student_enrolments = PlacementForm::withTrashed()
+            ->where('INDEXID', $request->indexno)
+            ->where('Term', $request->term)
+            ->where('L', $request->L)
+            ->where('eform_submit_count', $request->eform_submit_count)
+            ->get();
+
+            $std_comment = $student_enrolments->first()->std_comments;
+            $course_preference_comment = $student_enrolments->first()->course_preference_comment;
+            $timeInput = $student_enrolments->first()->timeInput;
+            $dayInput = $student_enrolments->first()->dayInput;
+
+            $data = [$std_comment, $course_preference_comment, $timeInput, $dayInput];
+            return response()->json($data);
+        }
+    }
 }

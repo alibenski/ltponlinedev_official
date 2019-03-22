@@ -96,7 +96,7 @@ class PreviewController extends Controller
         // query students in class
         $students_in_class = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
             $query->whereNotNull('Tch_ID')
-                    ->orWhere('Tch_ID', '!=', 'TBD')
+                    ->where('Tch_ID', '!=', 'TBD')
                     ;
             })
             ->get();
@@ -118,6 +118,7 @@ class PreviewController extends Controller
         // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
         $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
         $unique_students_not_in_class = array_unique($students_not_in_class);
+
 
         // query waitlisted students
         $students_waitlisted = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
@@ -146,7 +147,7 @@ class PreviewController extends Controller
        
 
             // count how many schedules were originally chosen
-            $check_modified_forms = ModifiedForms::whereIn('INDEXID', $request->arr)->where('Term', $request->term)->where('overall_approval','1')->get();
+            $check_modified_forms = ModifiedForms::whereIn('INDEXID', $request->arr)->where('Term', $request->term)->where('L', $request->L)->where('overall_approval','1')->get();
 
             $count_schedule_in_modified_table = [];
             foreach ($check_modified_forms as $key7 => $value7) {
@@ -155,9 +156,10 @@ class PreviewController extends Controller
 
             $count_schedule_in_modified_table = array_count_values($count_schedule_in_modified_table);
 
+            $qry = Preenrolment::whereIn('INDEXID', $request->arr)->where('Term', $request->term)->where('L', $request->L)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
 
             $count_schedule = [];
-            foreach ($q as $key6 => $value6) {
+            foreach ($qry as $key6 => $value6) {
                 $count_schedule[] = $value6->INDEXID;
             }
 
@@ -176,7 +178,7 @@ class PreviewController extends Controller
 
         $get_class = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
             $query->whereNotNull('Tch_ID')
-                    ->orWhere('Tch_ID', '!=', 'TBD')
+                    ->where('Tch_ID', '!=', 'TBD')
                     ;
             })
             ->get();
@@ -442,7 +444,7 @@ class PreviewController extends Controller
         // query students who will receive convocation
         $convocation = Repo::where('Term', Session::get('Term'))->whereHas('classrooms', function ($query) {
                     $query->whereNotNull('Tch_ID')
-                            ->orWhere('Tch_ID', '!=', 'TBD')
+                            ->where('Tch_ID', '!=', 'TBD')
                             ;
                     })
                     ->where('Te_Code','!=','F3R2')

@@ -123,7 +123,7 @@ class AdminController extends Controller
 
             $students_in_class = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
                 $query->whereNotNull('Tch_ID')
-                        ->orWhere('Tch_ID', '!=', 'TBD')
+                        ->where('Tch_ID', '!=', 'TBD')
                         ;
                 })
                 ->get();
@@ -132,7 +132,6 @@ class AdminController extends Controller
                 $arr1[] = $value1->INDEXID;
             }
             $arr1 = array_unique($arr1);
-
             // echo "Total Number of Students in Class for ".$prev_term.": ".count($arr1);
             // echo "<br>";
 
