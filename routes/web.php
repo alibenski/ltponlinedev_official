@@ -17,6 +17,7 @@ Route::get('query-term', 'WaitlistController@queryTerm')->name('query-term');
 Route::get('sddextr', 'WaitlistController@sddextr')->name('sddextr');
 Route::get('test-method', 'WaitlistController@testMethod')->name('test-method');
 Route::get('insert-record-to-preview', 'WaitlistController@insertRecordToPreview')->name('insert-record-to-preview');
+Route::get('copy-students-to-waitlist', 'WaitlistController@copyStudentsToWaitlist')->name('copy-students-to-waitlist');
 
 Route::get('pdfview', ['as'=>'pdfview','uses'=>'PreviewController@pdfView']);
 Route::get('release-notes', function () { return view('release_notes'); })->name('release-notes');

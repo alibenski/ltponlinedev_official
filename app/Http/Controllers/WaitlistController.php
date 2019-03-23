@@ -38,6 +38,23 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function copyStudentsToWaitlist()
+    {
+        $students_waitlisted = Repo::where('Term', '191')->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD')
+                    ;
+            })
+            ->get();
+
+        foreach ($students_waitlisted as $data) {
+                $arr = $data->attributesToArray();
+                $clone_forms = Waitlist::create($arr);
+            }
+        dd($arr);
+    }
+
+
     public function insertRecordToPreview()
     {   
         $request = (object) [

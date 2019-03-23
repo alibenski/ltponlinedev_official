@@ -144,7 +144,9 @@ class PreenrolmentController extends Controller
         return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3', 'count_not_assigned'));
     }
 
-
+    /**
+     * Admin assign course view in non-assigned enrolment table
+     */
     public function adminAssignCourseView(Request $request)
     {
         if ($request->ajax()) {
