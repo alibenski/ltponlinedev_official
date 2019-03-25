@@ -743,7 +743,7 @@ class PlacementFormController extends Controller
         $request->request->add(['CodeIndexID' => $code_index_id]);
 
         $this->validate($request, array(
-            'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+            'CodeIndexID' => 'unique:tblLTP_Placement_Forms,CodeIndexID|',
             'Term' => 'required|',
             'INDEXID' => 'required|',
             'L' => 'required|',
