@@ -47,6 +47,9 @@
                         <label type="text" class="form-control">{{ $name }}</label>
                     </div>
                     @endforeach
+                    <strong><p class="col-md-12 text-danger text-center">
+                      If none checked, the system by default will choose from Monday to Friday
+                    </p></strong>
                   </div>
               </div>
 

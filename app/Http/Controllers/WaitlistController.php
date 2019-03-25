@@ -38,6 +38,17 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function updateOverallApproval()
+    {
+        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->orderBy('created_at', 'asc')->update(['overall_approval'=> 1]);
+        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->update(['overall_approval'=> 1]);
+        $approved_0_3_collect = Preenrolment::where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->orderBy('created_at', 'asc')->update(['overall_approval'=> 1]);
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->orderBy('created_at', 'asc')->update(['overall_approval'=> 1]);
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->update(['overall_approval'=> 1]);
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', '191')->orderBy('created_at', 'asc')->update(['overall_approval'=> 1]);
+
+        dd(count($approved_0_1_collect), count($approved_0_2_collect), count($approved_0_3_collect));
+    }
     public function copyStudentsToWaitlist()
     {
         $students_waitlisted = Repo::where('Term', '191')->whereHas('classrooms', function ($query) {

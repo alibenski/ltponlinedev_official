@@ -18,7 +18,7 @@
           
         </div>
         <div class="icon">
-          <i class="ion ion-person-add"></i>
+          <i class="ion ion-person-stalker"></i>
         </div>
         
         <a href="{{ route('teacher-enrolment-preview',['Te_Code' => $data->Te_Code_New, 'Term' => Session::get('Term')]) }}" target="_blank" class="small-box-footer">

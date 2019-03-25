@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="alert bg-black col-sm-12">
-  <h4 class="text-center"><strong>Preview of {{$preview_course->courses->Description}}</strong></h4>
+  <h4 class="text-center"><strong>Viewing {{$preview_course->courses->Description}}</strong></h4>
 </div>
 {{-- @include('admin.partials._termSessionMsg') --}}
 

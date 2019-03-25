@@ -1449,7 +1449,7 @@ class PreviewController extends Controller
 
         // PreviewTempSort::truncate();
 
-        $request->session()->flash('success', 'Preview done!');
+        $request->session()->flash('success', 'System batch run done!');
         return redirect()->route('preview-vsa-page-2');
     }
 

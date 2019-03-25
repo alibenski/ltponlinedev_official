@@ -12,6 +12,7 @@
 */
 // test routes for test queries
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
+Route::get('update-overall-approval', 'WaitlistController@updateOverallApproval')->name('update-overall-approval');
 Route::get('send-auth-email', 'WaitlistController@sendAuthEmailIndividual')->name('send-auth-email');
 Route::get('query-term', 'WaitlistController@queryTerm')->name('query-term');
 Route::get('sddextr', 'WaitlistController@sddextr')->name('sddextr');
