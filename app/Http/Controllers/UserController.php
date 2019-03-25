@@ -589,15 +589,22 @@ class UserController extends Controller
                 'INDEXID' => 'required|',
                 'Term' => 'required|',
                 'L' => 'required|',
-                // validation rule function for composite fields Term, L, INDEXID
-                'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use($request) {
-                        $query->where('INDEXID', $request->INDEXID)
-                        ->where('L', $request->L)
-                        ->where('Term', $request->Term)
-                        ->whereNull('deleted_at');
+                
+                /**
+                 * validation rule function for composite fields was taken out due to the need of admin 
+                 * to create another placement form for students who want to attend more than 1 course 
+                 * of the same language
+                 */
 
-                        return $query->count() === 0; 
-                    }),
+                // validation rule function for composite fields Term, L, INDEXID
+                // 'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use($request) {
+                //         $query->where('INDEXID', $request->INDEXID)
+                //         ->where('L', $request->L)
+                //         ->where('Term', $request->Term)
+                //         ->whereNull('deleted_at');
+
+                //         return $query->count() === 0; 
+                //     }),
                 'profile' => 'required|',
                 'DEPT' => 'required|',
                 'placementLang' => 'required|integer',
@@ -630,6 +637,17 @@ class UserController extends Controller
                 $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
             }
 
+            $lastValueCollection = PlacementForm::withTrashed()
+                ->where('INDEXID', $request->INDEXID)
+                ->where('L', $request->L)
+                ->where('Term', $request->Term)
+                ->orderBy('form_counter', 'desc')->first();
+
+            $form_counter = 0;
+            if(isset($lastValueCollection->form_counter)){
+                $form_counter = $lastValueCollection->form_counter + 1;    
+            }
+
             $new_enrolment = PlacementForm::create([ 
                 'L' => $request->L,
                 'placement_schedule_id' => $request->placementLang,
@@ -645,7 +663,7 @@ class UserController extends Controller
                 'continue_bool' => 1,
                 'DEPT' => $request->DEPT, 
                 'eform_submit_count' => $eform_submit_count,              
-                'form_counter' => 0,  
+                'form_counter' => $form_counter,  
                 'agreementBtn' => 1,
                 'flexibleBtn' => 1,
                 'overall_approval' => 1,

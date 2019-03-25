@@ -113,15 +113,15 @@
 
 			<div class="col-sm-6">
 				<div class="form-group">
-				    <label class="control-label" for="student_comment_show">Preferred Days:</label>
+				    <label class="control-label" for="preferred_days_comment">Preferred Days:</label>
 				    <div class="">
-				        <textarea class="form-control" name="student_comment_show" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->dayInput }}</textarea>
+				        <textarea class="form-control" name="preferred_days_comment" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->dayInput }}</textarea>
 				    </div>
 				</div>
 				<div class="form-group">
-				    <label class="control-label" for="student_comment_show">Preferred Time:</label>
+				    <label class="control-label" for="preferred_time_comment">Preferred Time:</label>
 				    <div class="">
-				        <textarea class="form-control" name="student_comment_show" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->timeInput }}</textarea>
+				        <textarea class="form-control" name="preferred_time_comment" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->timeInput }}</textarea>
 				    </div>
 				</div>
 				<div class="form-group">
@@ -131,11 +131,20 @@
 				    </div>
 				</div>
 				<div class="form-group">
-				    <label class="control-label" for="admin_comment_show">Course Preference:</label>
+				    <label class="control-label" for="course_preference_comment">Course Preference:</label>
 				    <div class="">
-				        <textarea class="form-control" name="admin_comment_show" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->course_preference_comment }}</textarea>
+				        <textarea class="form-control" name="course_preference_comment" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->course_preference_comment }}</textarea>
 				    </div>
 				</div>
+
+				@if(!is_null($placement_form->Comments))
+				<div class="form-group">
+				    <label class="control-label" for="admin_comment_show">Admin Comment:</label>
+				    <div class="">
+				        <textarea style="border:1px solid red;" class="form-control" name="admin_comment_show" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->Comments }}</textarea>
+				    </div>
+				</div>
+				@endif
 				
 				<div class="form-group">
 				    <label class="control-label" for="">Convoked to placement test:</label>
