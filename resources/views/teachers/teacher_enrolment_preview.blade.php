@@ -364,15 +364,18 @@
 <script>
 $(document).ready(function() {
 	var arr = [];
+	var eform_submit_count = [];
 	var token = $("input[name='_token']").val();
 	var term = $("input[name='term']").val();
 	var L = $("input[name='L']").val();
 
 	$("input[name='indexno']").each(function() {
 		var indexno = $(this).val();
+		var each_eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
 		arr.push(indexno); //insert values to array per iteration
+		eform_submit_count.push(each_eform_submit_count); //insert values to array per iteration
 	});
-	// console.log(arr)
+	console.log(eform_submit_count)
 
 	$.ajax({
 		url: '{{ route('ajax-preview-get-student-current-class') }}',
@@ -401,7 +404,7 @@ $(document).ready(function() {
 	$.ajax({
 		url: '{{ route('ajax-preview-get-student-priority-status') }}',
 		type: 'GET',
-		data: {arr:arr,L:L,term:term,_token:token},
+		data: {arr:arr,eform_submit_count:eform_submit_count,L:L,term:term,_token:token},
 	})
 	.done(function(data) {
 		// console.log(data[0]);

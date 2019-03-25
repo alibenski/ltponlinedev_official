@@ -147,7 +147,7 @@ class PreviewController extends Controller
        
 
             // count how many schedules were originally chosen
-            $check_modified_forms = ModifiedForms::whereIn('INDEXID', $request->arr)->where('Term', $request->term)->where('L', $request->L)->where('overall_approval','1')->get();
+            $check_modified_forms = ModifiedForms::whereIn('INDEXID', $request->arr)->whereIn('eform_submit_count', $request->eform_submit_count)->where('Term', $request->term)->where('L', $request->L)->where('overall_approval','1')->get();
 
             $count_schedule_in_modified_table = [];
             foreach ($check_modified_forms as $key7 => $value7) {
@@ -156,7 +156,7 @@ class PreviewController extends Controller
 
             $count_schedule_in_modified_table = array_count_values($count_schedule_in_modified_table);
 
-            $qry = Preenrolment::whereIn('INDEXID', $request->arr)->where('Term', $request->term)->where('L', $request->L)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
+            $qry = Preenrolment::whereIn('INDEXID', $request->arr)->whereIn('eform_submit_count', $request->eform_submit_count)->where('Term', $request->term)->where('L', $request->L)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
 
             $count_schedule = [];
             foreach ($qry as $key6 => $value6) {
