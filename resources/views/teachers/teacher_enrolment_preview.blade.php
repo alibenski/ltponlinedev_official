@@ -377,91 +377,95 @@ $(document).ready(function() {
 	});
 	console.log(eform_submit_count)
 
-	$.ajax({
-		url: '{{ route('ajax-preview-get-student-current-class') }}',
-		type: 'GET',
-		data: {arr:arr,term:term,_token:token},
-	})
-	.done(function(data) {
-		// console.log(data)
-		$.each(data, function(x, y) {
-			// console.log(y.INDEXID)
-			$("input[name='indexno']").each(function() {
-				if ($(this).val() == y.INDEXID) {
-					$('div.student-classroom-here-'+y.INDEXID).html('<strong>Current Class:</strong> <p><span class="label label-info margin-label">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
-				}
+	if (term) {
+
+		$.ajax({
+			url: '{{ route('ajax-preview-get-student-current-class') }}',
+			type: 'GET',
+			data: {arr:arr,term:term,_token:token},
+		})
+		.done(function(data) {
+			// console.log(data)
+			$.each(data, function(x, y) {
+				// console.log(y.INDEXID)
+				$("input[name='indexno']").each(function() {
+					if ($(this).val() == y.INDEXID) {
+						$('div.student-classroom-here-'+y.INDEXID).html('<strong>Current Class:</strong> <p><span class="label label-info margin-label">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
+					}
+				});
 			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
 		});
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
-	});
 
 
-	$.ajax({
-		url: '{{ route('ajax-preview-get-student-priority-status') }}',
-		type: 'GET',
-		data: {arr:arr,eform_submit_count:eform_submit_count,L:L,term:term,_token:token},
-	})
-	.done(function(data) {
-		// console.log(data[0]);
-		$.each(data[0], function(x, y) {
-			$("input[name='indexno']").each(function() {
-				if ($(this).val() == y) {
-					$('div.student-priority-status-here-'+y).html('<p><span class="label label-info margin-label">Re-enrolment</span></p>');
-				}
+		$.ajax({
+			url: '{{ route('ajax-preview-get-student-priority-status') }}',
+			type: 'GET',
+			data: {arr:arr,eform_submit_count:eform_submit_count,L:L,term:term,_token:token},
+		})
+		.done(function(data) {
+			// console.log(data[0]);
+			$.each(data[0], function(x, y) {
+				$("input[name='indexno']").each(function() {
+					if ($(this).val() == y) {
+						$('div.student-priority-status-here-'+y).html('<p><span class="label label-info margin-label">Re-enrolment</span></p>');
+					}
+				});
 			});
-		});
-		// console.log(data[1]);
-		$.each(data[1], function(x, y) {
-			$("input[name='indexno']").each(function() {
-				if ($(this).val() == y) {
-					$('div.student-priority-status-here-'+y).html('<p><span class="label label-default margin-label">Not in a class</span></p>');
-				}
+			// console.log(data[1]);
+			$.each(data[1], function(x, y) {
+				$("input[name='indexno']").each(function() {
+					if ($(this).val() == y) {
+						$('div.student-priority-status-here-'+y).html('<p><span class="label label-default margin-label">Not in a class</span></p>');
+					}
+				});
 			});
-		});
-		// console.log(data[2]);
-		$.each(data[2], function(x, y) {
-			$("input[name='indexno']").each(function() {
-				if ($(this).val() == y) {
-					$('div.student-waitlisted-here-'+y).html('<p><span class="label label-default margin-label bg-purple">Waitlisted</span></p>');
-				}
+			// console.log(data[2]);
+			$.each(data[2], function(x, y) {
+				$("input[name='indexno']").each(function() {
+					if ($(this).val() == y) {
+						$('div.student-waitlisted-here-'+y).html('<p><span class="label label-default margin-label bg-purple">Waitlisted</span></p>');
+					}
+				});
 			});
-		});
-		// console.log(data[3]);
-		$.each(data[3], function(x, y) {
-			$("input[name='indexno']").each(function() {
-				if ($(this).val() == y) {
-					$('div.student-within-two-terms-here-'+y).html('<p><span class="label label-default margin-label bg-maroon">Within 2 Terms</span></p>');
-				}
+			// console.log(data[3]);
+			$.each(data[3], function(x, y) {
+				$("input[name='indexno']").each(function() {
+					if ($(this).val() == y) {
+						$('div.student-within-two-terms-here-'+y).html('<p><span class="label label-default margin-label bg-maroon">Within 2 Terms</span></p>');
+					}
+				});
 			});
-		});
-		console.log(data[4]);
-		$.each(data[4], function(x, y) {
-			$("input[name='indexno']").each(function() {
-				if ($(this).val() == x) {
-					$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
-				}
+			console.log(data[4]);
+			$.each(data[4], function(x, y) {
+				$("input[name='indexno']").each(function() {
+					if ($(this).val() == x) {
+						$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
+					}
+				});
 			});
-		});
 
-		$.each(data[5], function(x, y) {
-			$("input[name='indexno']").each(function() {
-				if ($(this).val() == x) {
-					$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
-				}
+			$.each(data[5], function(x, y) {
+				$("input[name='indexno']").each(function() {
+					if ($(this).val() == x) {
+						$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
+					}
+				});
 			});
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
 		});
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function() {
-		console.log("complete");
-	});
+		
+	}
 });
 </script>
 

@@ -8,7 +8,7 @@
 @section('content')
 
 <div class="alert bg-black col-sm-12">
-  <h4 class="text-center"><strong><i class="icon fa fa-gears"></i>Manage Classes (After Batch Run)</strong></h4>
+  <h4 class="text-center"><strong><i class="icon fa fa-gears"></i>Manage Classes [After Batch Run]</strong></h4>
 </div>
 
 @include('admin.partials._termSessionMsg')
@@ -34,7 +34,7 @@
     </div>
   </div>
         
-	<div class="form-group">
+{{-- 	<div class="form-group">
         <label for="course_id" class="col-md-3 control-label">Choose course: </label>
         <div class="col-md-8">
           <div class="dropdown">
@@ -47,7 +47,7 @@
 	<div class="form-group col-sm-12 add-margin">           
         <button type="submit" class="btn btn-success button-prevent-multi-submit" @if (is_null($term)) disabled="" @endif>Preview</button>
 		<input type="hidden" name="_token" value="{{ Session::token() }}">
-	</div>
+	</div> --}}
 </form>
 
 <div class="row">
@@ -65,29 +65,29 @@
     $("input[name='L']").prop('checked', false);
   });
 
+  // $("input[name='L']").click(function(){
+  //     var L = $(this).val();
+  //     var term = $("input[name='term_id']").val();
+  //     var token = $("input[name='_token']").val();
+
+  //     $.ajax({
+  //         url: "{{ route('select-ajax-admin') }}", 
+  //         method: 'POST',
+  //         data: {L:L, term_id:term, _token:token},
+  //         success: function(data, status) {
+  //           $("select[name='course_id']").html('');
+  //           $("select[name='course_id']").html(data.options);
+  //         }
+  //     });
+  // }); 
+
   $("input[name='L']").click(function(){
       var L = $(this).val();
       var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
 
       $.ajax({
-          url: "{{ route('select-ajax-admin') }}", 
-          method: 'POST',
-          data: {L:L, term_id:term, _token:token},
-          success: function(data, status) {
-            $("select[name='course_id']").html('');
-            $("select[name='course_id']").html(data.options);
-          }
-      });
-  }); 
-
-  $("input[name='L']").click(function(){
-      var L = $(this).val();
-      var term = $("input[name='term_id']").val();
-      var token = $("input[name='_token']").val();
-
-      $.ajax({
-          url: "{{ route('ajax-preview-course-boxes') }}", 
+          url: "{{ route('ajax-class-boxes') }}", 
           method: 'POST',
           data: {L:L, term_id:term, _token:token},
           success: function(data, status) {

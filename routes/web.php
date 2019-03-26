@@ -119,6 +119,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('ajax-preview-get-student-priority-status', ['as'=>'ajax-preview-get-student-priority-status','uses'=>'PreviewController@ajaxPreviewGetStudentPriorityStatus']);
     Route::get('ajax-preview-get-student-current-class', ['as'=>'ajax-preview-get-student-current-class','uses'=>'PreviewController@ajaxPreviewGetStudentCurrentClass']);
 
+    Route::post('ajax-class-boxes', ['as'=>'ajax-class-boxes','uses'=>'PreviewController@ajaxClassBoxes']);
+    Route::get('ajax-get-student-count-per-class', ['as'=>'ajax-get-student-count-per-class','uses'=>'PreviewController@ajaxGetStudentCountPerClass']);
+
     /**
      * User Routes
      */

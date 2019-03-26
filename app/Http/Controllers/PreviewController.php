@@ -212,6 +212,40 @@ class PreviewController extends Controller
         return view('preview-course-2')->withLanguages($languages)->withTerm($term);
     }
 
+    public function ajaxClassBoxes(Request $request)
+    {
+        if($request->ajax()){            
+            $classrooms = Classroom::where('L', $request->L)
+            ->where('Te_Term', $request->term_id)
+            ->get();
+            
+
+            $data = view('preview-class-boxes',compact('classrooms'))->render();
+            return response()->json(['options'=>$data]);
+        }        
+    }
+
+    /**
+     * Ajax call to GetStudentCount per class
+     */
+    public function ajaxGetStudentCountPerClass(Request $request)
+    {
+        
+        $count = Repo::whereIn('CodeClass', $request->arr)
+            // ->unique(function ($item) {
+            //     return $item['INDEXID'].$item['CodeClass'];
+            // })
+            // ->pluck('CodeClass')
+            // ->toArray();
+            ->pluck('CodeClass')
+            ->toArray();
+        
+
+        // $data = $count;
+        $data = array_count_values($count);
+        return response()->json($data);
+    }
+
     public function previewCourse3(Request $request)
     {       
         $preview_course = Repo::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->first();
