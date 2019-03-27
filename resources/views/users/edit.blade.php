@@ -11,12 +11,14 @@
         {{ csrf_field() }}
         <div class="form-group">
             <label class="control-label">Name: </label>
-            <input name="name" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $user->name) }}">
+            {{-- <input name="name" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $user->name) }}"> --}}
+            <input name="name" type="text" class="form-control" readonly value="{{ old('name', $user->name) }}">
         </div>
 
         <div class="form-group">
             <label class="control-label">Email: </label>
-            <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email', $user->email) }}"> 
+            {{-- <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email', $user->email) }}">  --}}
+            <input name="email" type="email" class="form-control" readonly value="{{ old('email', $user->email) }}"> 
         </div>
 
         <h5><b>Give Role</b></h5>
@@ -36,7 +38,7 @@
             <a href="{{ route('users.passwordreset', $user->id) }}" class="btn btn-danger"><i class='fa fa-undo'></i> Password Reset Here</a>
         </div>
         
-        <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit" disabled="">Save</button>
+        <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Save</button>
         <input type="hidden" name="_token" value="{{ Session::token() }}">
         {{ method_field('PUT') }}
     </form>
