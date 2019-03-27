@@ -169,6 +169,7 @@
 									<tr>
 										<td>
 											<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
+											<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
 
 @if (is_null($form->deleted_at))
 <button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
@@ -737,6 +738,34 @@
 <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
 <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script>
+$(document).ready(function () {
+    $('button.insert-to-class').click( function() {
+      var INDEXID = $(this).attr('data-indexno');
+      var L = $(this).attr('data-language');
+      var Term = $(this).attr('data-term');
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+        url: '{{ route('insert-record-to-preview') }}',
+        type: 'POST',
+        data: {INDEXID:INDEXID, L:L,Term:Term,_token: token},
+      })
+      .done(function(data) {
+        console.log("insert record complete");
+        console.log(data);
+        
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+    });
+});
+</script>
+
 <script>
 $(document).ready(function () {
     $('.assign-course').click( function() {

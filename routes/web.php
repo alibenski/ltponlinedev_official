@@ -17,7 +17,7 @@ Route::get('send-auth-email', 'WaitlistController@sendAuthEmailIndividual')->nam
 Route::get('query-term', 'WaitlistController@queryTerm')->name('query-term');
 Route::get('sddextr', 'WaitlistController@sddextr')->name('sddextr');
 Route::get('test-method', 'WaitlistController@testMethod')->name('test-method');
-Route::get('insert-record-to-preview', 'WaitlistController@insertRecordToPreview')->name('insert-record-to-preview');
+Route::get('insert-record-to-preview-test', 'WaitlistController@insertRecordToPreview')->name('insert-record-to-preview-test');
 Route::get('copy-students-to-waitlist', 'WaitlistController@copyStudentsToWaitlist')->name('copy-students-to-waitlist');
 
 Route::get('pdfview', ['as'=>'pdfview','uses'=>'PreviewController@pdfView']);
@@ -122,6 +122,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('ajax-class-boxes', ['as'=>'ajax-class-boxes','uses'=>'PreviewController@ajaxClassBoxes']);
     Route::get('ajax-get-student-count-per-class', ['as'=>'ajax-get-student-count-per-class','uses'=>'PreviewController@ajaxGetStudentCountPerClass']);
     Route::get('view-classrooms-per-section/{code}', ['as'=>'view-classrooms-per-section','uses'=>'PreviewController@viewClassroomsPerSection']);
+
+    Route::post('insert-record-to-preview', ['as' => 'insert-record-to-preview', 'uses' => 'PreviewController@insertRecordToPreview']);
 
     /**
      * User Routes

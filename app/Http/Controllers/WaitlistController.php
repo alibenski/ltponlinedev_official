@@ -70,8 +70,8 @@ class WaitlistController extends Controller
     {   
         $request = (object) [
             'Term' => '191',
-            'INDEXID' => 'L21199',
-            'L' => 'F',
+            'INDEXID' => 'EXT1027',
+            'L' => 'A',
             ];
 
         // sort enrolment forms by date of submission
@@ -474,10 +474,19 @@ class WaitlistController extends Controller
                             'CodeClass' => $valueClassRoomDetails->Code, 
                             'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID
                         ]);
+                        
                         $arrayCheck[] = $pashUpdate->get();
-                    }
+                        $insertStudentToPash = $pashUpdate->get();
+                        foreach ($insertStudentToPash as $datum) {
+                            $arroy = $datum->attributesToArray();
+                            $collection = collect($arroy);
+                            $filtered = $collection->except(['id'])->all();
 
-                    dd($arrayCheck);
+                            $move_to_pash = Repo::create($filtered);
+                        }
+                    }
+                    
+                    dd($arrayCheck,$filtered);
                 }
 
             }
