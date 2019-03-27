@@ -217,6 +217,7 @@ class PreviewController extends Controller
         if($request->ajax()){            
             $classrooms = Classroom::where('L', $request->L)
             ->where('Te_Term', $request->term_id)
+            ->orderBy('Code', 'asc')
             ->get();
             
 
@@ -246,6 +247,51 @@ class PreviewController extends Controller
         return response()->json($data);
     }
 
+    public function viewClassroomsPerSection($code)
+    {
+        $classrooms = Classroom::where('Code', $code)->get();
+
+        $arr = [];
+        $classrooms_2 = Classroom::where('Code', $code)->select('Code')->groupBy('Code')->get();
+
+            foreach ($classrooms_2 as $class) {
+                $students = Repo::where('Term', Session::get('Term'))->where('CodeClass', $class->Code)->orderBy('PS', 'asc')->get();
+                foreach ($students as $value) {
+                    $arr[] = $value;
+                }
+            }
+
+        $classroom_3 = Classroom::where('Code', $code)->first();
+
+        $form_info_arr = [];
+
+        $student = Repo::withTrashed()
+            ->where('Term', Session::get('Term'))
+            ->where('Te_Code', $classroom_3->Te_Code_New)
+            ->where('schedule_id', $classroom_3->schedule_id)
+            ->orderBy('PS', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        
+
+        foreach ($student as $value) {
+            $form = Repo::withTrashed()
+                ->where('Term', Session::get('Term'))
+                ->where('CodeIndexID', $value->CodeIndexID)
+                ->get();
+                foreach ($form as $value) {
+                    $form_info_arr[] = $value;
+                }
+        }
+        $form_info = collect($form_info_arr);
+        // ->sortBy('id');
+
+        return view('preview-classrooms', compact('arr','classrooms','form_info', 'classroom_3'));
+    }
+
+    /**
+     * Replaced by ajaxClassBoxes method
+     */
     public function previewCourse3(Request $request)
     {       
         $preview_course = Repo::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->first();

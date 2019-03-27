@@ -121,6 +121,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::post('ajax-class-boxes', ['as'=>'ajax-class-boxes','uses'=>'PreviewController@ajaxClassBoxes']);
     Route::get('ajax-get-student-count-per-class', ['as'=>'ajax-get-student-count-per-class','uses'=>'PreviewController@ajaxGetStudentCountPerClass']);
+    Route::get('view-classrooms-per-section/{code}', ['as'=>'view-classrooms-per-section','uses'=>'PreviewController@viewClassroomsPerSection']);
 
     /**
      * User Routes

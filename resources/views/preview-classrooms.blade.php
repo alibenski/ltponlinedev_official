@@ -1,5 +1,10 @@
 @extends('admin.no_sidebar_admin')
 
+@section('customcss')
+<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+@stop
+
 @section('content')
 
 <div class="row">
@@ -112,10 +117,18 @@
                       <td>
                         @if(is_null($form->convocation_email_sent))
                           @if(!is_null($form->classrooms->Tch_ID) && $form->classrooms->Tch_ID != 'TBD')
-                            <button type="button" value="{{ $form->CodeIndexIDClass }}" id="sendEmailConvocation" class="btn btn-success"><i class="fa fa-send"></i> Send Email Convocation</button>
+                            <button type="button" value="{{ $form->CodeIndexIDClass }}" id="sendEmailConvocation" class="btn btn-success btn-space"><i class="fa fa-send"></i> Send Email Convocation</button>
                           @endif
-                        @else --
+                        @else 
                         @endif
+
+                        <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
+                            <input type="submit" value="@if($form->deleted_at) Cancelled @else Delete @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($form->deleted_at) disabled="" @else @endif>
+                            {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
+                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+                            <input type="hidden" name="_token" value="{{ Session::token() }}">
+                           {{ method_field('DELETE') }}
+                        </form>
                       </td>
                     </tr>  
                     @endif

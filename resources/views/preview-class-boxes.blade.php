@@ -11,7 +11,7 @@
         <h4>{{$data->course->Description}}</h4>
         <p>{{ $data->Code }}</p>
         <p>{{ $data->scheduler->name }}</p>
-        <p>@if(empty($data->teachers)) NULL @else {{ $data->teachers->Tch_Name }} @endif</p>
+        <p>@if(empty($data->teachers)) <span class="text-danger">Waitlist/Class Cancelled</span> @elseif($data->Tch_ID == 'TBD') <span class="text-danger">Waitlist/Class Cancelled</span> @else {{ $data->teachers->Tch_Name }} @endif</p>
                 
 		<input type="hidden" name="Code" value="{{$data->Code}}">
 		<input type="hidden" name="Te_Code_New" value="{{$data->Te_Code_New}}">
@@ -23,8 +23,8 @@
           <i class="ion ion-university"></i>
         </div>
         
-        <a href="" target="_blank" class="small-box-footer">
-              More info on  <i class="fa fa-arrow-circle-right"></i>
+        <a href="{{ route('view-classrooms-per-section', ['Code' => $data->Code]) }}" target="_blank" class="small-box-footer">
+              More info  <i class="fa fa-arrow-circle-right"></i>
             </a>
 
       </div>
@@ -72,6 +72,8 @@
 		});
 		console.log(arr)
 
+		if (arr) {
+
 			$.ajax({
 				url: '{{ route('ajax-get-student-count-per-class') }}',
 				type: 'GET',
@@ -93,6 +95,7 @@
 			.always(function() {
 				console.log("complete");
 			});
+		}
 			
 	});
 </script>

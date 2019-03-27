@@ -86,15 +86,18 @@
       var term = $("input[name='term_id']").val();
       var token = $("input[name='_token']").val();
 
-      $.ajax({
-          url: "{{ route('ajax-class-boxes') }}", 
-          method: 'POST',
-          data: {L:L, term_id:term, _token:token},
-          success: function(data, status) {
-            $("div.preview-boxes-here").html('');
-            $("div.preview-boxes-here").html(data.options);
-          }
-      });
+      if (term) {
+        
+        $.ajax({
+            url: "{{ route('ajax-class-boxes') }}", 
+            method: 'POST',
+            data: {L:L, term_id:term, _token:token},
+            success: function(data, status) {
+              $("div.preview-boxes-here").html('');
+              $("div.preview-boxes-here").html(data.options);
+            }
+        });
+      }
   }); 
 </script>
 @stop
