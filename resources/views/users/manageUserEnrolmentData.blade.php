@@ -166,10 +166,13 @@
 							    </thead>
 							    <tbody>
 									@foreach($student_enrolments as $form)
-									<tr>
+									<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 										<td>
+											@if($form->deleted_at)
+											@else
 											<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
 											<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+											@endif
 
 @if (is_null($form->deleted_at))
 <button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
@@ -345,9 +348,12 @@
 							    </thead>
 							    <tbody>
 									@foreach($student_placements as $form)
-									<tr>
+									<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 										<td>
+											@if($form->deleted_at)
+											@else
 											<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
+											@endif
 @if (is_null($form->deleted_at))
 <button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
 @else
