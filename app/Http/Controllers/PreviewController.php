@@ -1734,6 +1734,13 @@ class PreviewController extends Controller
             //     'L' => 'F',
             //     ];
             
+            // validate if form is already in PASH
+            $checker = Repo::where('INDEXID', $request->INDEXID)->where('Term', $request->Term)->where('L',$request->L)->where('Te_Code', $request->Te_Code)->get();
+            if (count($checker) > 0) {
+                $data = 'already-inserted';
+                return response()->json($data);
+            }
+
             // sort enrolment forms by date of submission
             $approved_0_1_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('L',$request->L)->where('Te_Code', $request->Te_Code)->where('updated_by_admin', 1)->orderBy('created_at', 'asc')->get();
             
@@ -1746,10 +1753,6 @@ class PreviewController extends Controller
             $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections with sorting by submission date and time
             $approved_collections = $approved_collections->unique('INDEXID')->values()->all(); 
 
-            if (count($approved_collections) < 1) {
-                $data = 'un-assigned';
-                return response()->json($data);
-            }
 
             $selectedTerm = $request->Term; // No need of type casting
             // echo substr($selectedTerm, 0, 1); // get first value
@@ -2095,7 +2098,7 @@ class PreviewController extends Controller
 
 
 
-            $getCode = Preview::select('Code')->where('INDEXID', $request->INDEXID)->where('L', $request->L)->orderBy('id')->get();
+            $getCode = Preview::select('Code')->where('INDEXID', $request->INDEXID)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->orderBy('id')->get();
 
             $arrGetClassRoomDetails = [];
             $arrCountCodeClass = [];

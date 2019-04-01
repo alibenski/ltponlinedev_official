@@ -85,14 +85,18 @@
 		                    @endif
 
 		                  <p>
-		                    @if(!empty($element->classrooms->Tch_ID))
-		                    Teacher: <strong>{{ $element->classrooms->teachers->Tch_Name }} </strong>
-		                    @else 
+		                    @if($element->classrooms->Tch_ID == 'TBD')
 		                    <h4><span class="label label-danger"> Waitlisted</span></h4> 
+		                    @elseif(empty($element->classrooms->Tch_ID))
+		                    <h4><span class="label label-danger"> Waitlisted</span></h4> 
+		                    @else 
+		                    Teacher: <strong>{{ $element->classrooms->teachers->Tch_Name }} </strong>
 		                    @endif
 		                  </p>
 		                  <br> 
-		                    @if(!empty($element->classrooms->Tch_ID))
+		                  	@if($element->classrooms->Tch_ID == 'TBD')
+		                  	@elseif(empty($element->classrooms->Tch_ID))
+		                    @else
 		                    <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
 		                        <input type="submit" value="@if($element->deleted_at) Cancelled @else Cancel Enrolment @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($element->deleted_at) disabled="" @else @endif>
 		                        {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
@@ -100,7 +104,6 @@
 		                        <input type="hidden" name="_token" value="{{ Session::token() }}">
 		                       {{ method_field('DELETE') }}
 		                    </form>
-		                    @else
 		                    @endif
 		                  @endforeach
 		                </p>
@@ -167,43 +170,26 @@
 							        </tr>
 							    </thead>
 							    <tbody>
-									@foreach($student_enrolments as $form)
+									@foreach($student_enrolments as $key=>$form)
 									<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 										<td>
 												@if($form->deleted_at)
 												@else
-													<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
+													<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button> 
 
-													@if (count($student_convoked) > 0) 
-														@foreach ($student_convoked as $key => $element)
-															{{ $key }}
-															@if ($element->CodeIndexID == $form->CodeIndexID)
-																<p class="btn-space"><strong>Student has been inserted to a class. Changes here have no effect. Go to Manage Classes in Admin Dashboard.</strong></p>
-															@endif
-														@endforeach
-													@else
-														@if ($form->updated_by_admin == 1)
-															<button id="insert-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
-														@endif
+													@if ($form->updated_by_admin == 1)
+														<button id="insert-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
 													@endif
 
 												@endif
 
-												@if (count($student_convoked) > 0) 
+												
+												@if (is_null($form->deleted_at))
+												<button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
 												@else
-													{{-- @foreach ($student_convoked as $element)
-														@if ($element->CodeIndexID != $form->CodeIndexID) --}}
-
-															@if (is_null($form->deleted_at))
-															<button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
-															@else
-															<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
-															@endif
-														
-														{{-- @endif
-													@endforeach --}}
-													
+												<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
 												@endif
+												
 											<div id="modalDeleteEnrolment-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
 											    <div class="modal-dialog">
 											        <div class="modal-content">
@@ -378,34 +364,20 @@
 											@else
 												<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
 
-												@if (count($student_convoked) > 0)
-													@foreach ($student_convoked as $element)
-														@if ($element->CodeIndexID == $form->CodeIndexID)
-															<p class="btn-space"><strong>Student has been inserted to a class. Changes here have no effect. Go to Manage Classes in Admin Dashboard.</strong></p>
-														@endif
-													@endforeach
-												@else
-													@if ($form->updated_by_admin == 1)
-													<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
-													@endif
+												@if (!is_null($form->CodeIndexID) && $form->updated_by_admin == 1)
+												<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
 												@endif
+												
 											@endif
 											
-											@if (count($student_convoked) > 0) 
 
-												@foreach ($student_convoked as $element_pl)
-													@if ($element->CodeIndexID == $form->CodeIndexID)
-													@else
-														@if (is_null($form->deleted_at))
-														<button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
-														@else
-														<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
-														@endif
-													@endif
-												@endforeach
-
+											@if (is_null($form->deleted_at))
+											<button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
 											@else
+											<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
 											@endif
+
+											
 
 											<div id="modalDeletePlacement-{{ $form->id }}" class="modal fade" role="dialog">
 											    <div class="modal-dialog">
@@ -807,6 +779,9 @@ $(document).ready(function () {
         console.log(data);
         if (data == 'un-assigned') {
         	alert('The form is not assigned to a course or not validated/confirmed by a language admin.')
+        	location.reload(true);
+        } else if(data == 'already-inserted'){
+        	alert('The form has already been inserted to a class. Please check convocation details on this page.')
         	location.reload(true);
         } else {
         	location.reload(true);
