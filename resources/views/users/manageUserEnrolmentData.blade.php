@@ -64,7 +64,7 @@
 		              <div class="panel-body">
 		                <p>
 		                  @foreach ($student_convoked as $element)
-		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong> <a href="{{ route('pdfview',['download'=>'pdf', 'code'=> $element->CodeClass]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h3>
+		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong> <a href="{{ route('view-classrooms-per-section', ['Code' => $element->CodeClass]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h3>
 		                  
 		                  <p>Schedule: <strong>@if(!empty($element->schedules->name)){{$element->schedules->name}}@endif</strong></p>  
 
@@ -176,9 +176,10 @@
 												@if($form->deleted_at)
 												@else
 													<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button> 
-
-													@if ($form->updated_by_admin == 1)
-														<button id="insert-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+													@if ($batch_implemented > 0)
+														@if ($form->updated_by_admin == 1)
+															<button id="insert-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+														@endif
 													@endif
 
 												@endif
@@ -363,11 +364,11 @@
 											@if($form->deleted_at)
 											@else
 												<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
-
-												@if (!is_null($form->CodeIndexID) && $form->updated_by_admin == 1)
-												<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+												@if ($batch_implemented > 0)
+													@if (!is_null($form->CodeIndexID) && $form->updated_by_admin == 1)
+													<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+													@endif
 												@endif
-												
 											@endif
 											
 
