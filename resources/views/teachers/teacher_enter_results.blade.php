@@ -179,7 +179,7 @@ $(document).ready(function() {
 
                       if(y1 != null){
                         if (x == x1) {
-                          $("td#"+indexid+".enrolled-next-term").find("li.appended-value-1[data-name='"+y+"']").append("<span><i class='fa fa-star fa-spin text-success' data-toggle='tooltip' title='This form has been assigned to a course''></i> </span>");
+                          $("td#"+indexid+".enrolled-next-term").find("li.appended-value-1[data-name='"+y+"']").append("<span><i class='fa fa-star text-success' data-toggle='tooltip' title='This form has been assigned to a course''></i> </span>");
                           
                         }
                           
@@ -386,6 +386,7 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
 });
 
 $('#modalshow').on('click', 'button.course-delete',function() {
+
   var eform_submit_count = $(this).attr('id');
   var qry_tecode = $(this).attr('data-tecode');
   var qry_indexid = $(this).attr('data-indexid');
@@ -394,38 +395,42 @@ $('#modalshow').on('click', 'button.course-delete',function() {
   var method = $("input[name='_method']").val();
   var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-changed").val();
 
-  $(".overlay").fadeIn('fast'); 
+  var r = confirm("You are about to delete a form. Are you sure?");
+  if (r == true) {
 
-  $.ajax({
-    url: '{{ route('teacher-delete-form') }}',
-    type: 'POST',
-    data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
-  })
-  .done(function(data) {
-    console.log(data);
-    var L = $("input[name='L']").val();
+    $(".overlay").fadeIn('fast'); 
 
     $.ajax({
-      url: '{{ route('teacher-assign-course-view') }}',
-      type: 'GET',
-      data: {indexid:qry_indexid, L:L,_token: token},
+      url: '{{ route('teacher-delete-form') }}',
+      type: 'POST',
+      data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
     })
     .done(function(data) {
-      console.log("refreshing the assign view : success"); 
-      $('.modal-body-content').html(data);    
+      console.log(data);
+      var L = $("input[name='L']").val();
+
+      $.ajax({
+        url: '{{ route('teacher-assign-course-view') }}',
+        type: 'GET',
+        data: {indexid:qry_indexid, L:L,_token: token},
+      })
+      .done(function(data) {
+        console.log("refreshing the assign view : success"); 
+        $('.modal-body-content').html(data);    
+      })
+      .always(function() {
+        console.log("complete refresh modal view");
+      });
+
+    })
+    .fail(function() {
+      console.log("error");
     })
     .always(function() {
-      console.log("complete refresh modal view");
+      console.log("complete delete form");
     });
+  }
 
-  })
-  .fail(function() {
-    console.log("error");
-  })
-  .always(function() {
-    console.log("complete delete form");
-  });
-  
 });
 </script>
 

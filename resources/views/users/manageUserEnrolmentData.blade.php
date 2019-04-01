@@ -172,21 +172,37 @@
 										<td>
 												@if($form->deleted_at)
 												@else
-												<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
+													<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
+
 													@if (count($student_convoked) > 0) 
+														@foreach ($student_convoked as $key => $element)
+															{{ $key }}
+															@if ($element->CodeIndexID == $form->CodeIndexID)
+																<p class="btn-space"><strong>Student has been inserted to a class. Changes here have no effect. Go to Manage Classes in Admin Dashboard.</strong></p>
+															@endif
+														@endforeach
 													@else
-														<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+														@if ($form->updated_by_admin == 1)
+															<button id="insert-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}" data-tecode="{{ $form->Te_Code }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+														@endif
 													@endif
+
 												@endif
 
 												@if (count($student_convoked) > 0) 
-													<p class="btn-space"><strong>Student has been inserted to a class. Changes here have no effect. Go to Manage Classes in Admin Dashboard.</strong></p>
 												@else
-													@if (is_null($form->deleted_at))
-													<button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
-													@else
-													<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
-													@endif
+													{{-- @foreach ($student_convoked as $element)
+														@if ($element->CodeIndexID != $form->CodeIndexID) --}}
+
+															@if (is_null($form->deleted_at))
+															<button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
+															@else
+															<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+															@endif
+														
+														{{-- @endif
+													@endforeach --}}
+													
 												@endif
 											<div id="modalDeleteEnrolment-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
 											    <div class="modal-dialog">
@@ -363,19 +379,32 @@
 												<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>
 
 												@if (count($student_convoked) > 0)
+													@foreach ($student_convoked as $element)
+														@if ($element->CodeIndexID == $form->CodeIndexID)
+															<p class="btn-space"><strong>Student has been inserted to a class. Changes here have no effect. Go to Manage Classes in Admin Dashboard.</strong></p>
+														@endif
+													@endforeach
 												@else
-												<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+													@if ($form->updated_by_admin == 1)
+													<button type="button" class="btn btn-default btn-space insert-to-class" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-language="{{ $form->L }}"><i class="fa fa-plus-circle"></i> Insert to Class</button>
+													@endif
 												@endif
 											@endif
 											
 											@if (count($student_convoked) > 0) 
-												<p class="btn-space"><strong>Student has been inserted to a class. Changes here have no effect. Go to Manage Classes in Admin Dashboard.</strong></p>
+
+												@foreach ($student_convoked as $element_pl)
+													@if ($element->CodeIndexID == $form->CodeIndexID)
+													@else
+														@if (is_null($form->deleted_at))
+														<button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
+														@else
+														<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+														@endif
+													@endif
+												@endforeach
+
 											@else
-												@if (is_null($form->deleted_at))
-												<button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
-												@else
-												<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
-												@endif
 											@endif
 
 											<div id="modalDeletePlacement-{{ $form->id }}" class="modal fade" role="dialog">
@@ -764,17 +793,25 @@ $(document).ready(function () {
     $('button.insert-to-class').click( function() {
       var INDEXID = $(this).attr('data-indexno');
       var L = $(this).attr('data-language');
+      var Te_Code = $(this).attr('data-tecode');
       var Term = $(this).attr('data-term');
       var token = $("input[name='_token']").val();
 
       $.ajax({
         url: '{{ route('insert-record-to-preview') }}',
         type: 'POST',
-        data: {INDEXID:INDEXID, L:L,Term:Term,_token: token},
+        data: {INDEXID:INDEXID, L:L, Te_Code:Te_Code, Term:Term,_token: token},
       })
       .done(function(data) {
         console.log("insert record complete");
         console.log(data);
+        if (data == 'un-assigned') {
+        	alert('The form is not assigned to a course or not validated/confirmed by a language admin.')
+        	location.reload(true);
+        } else {
+        	location.reload(true);
+        }
+
         
       })
       .fail(function() {

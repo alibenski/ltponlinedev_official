@@ -399,7 +399,7 @@ class UserController extends Controller
         $request->request->add(['CodeIndexID' => $code_index_id]);
 
         $this->validate($request, [
-                'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+                'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID,NULL,id,deleted_at,NULL|',
                 'INDEXID' => 'required|',
                 'profile' => 'required|',
                 'DEPT' => 'required|',

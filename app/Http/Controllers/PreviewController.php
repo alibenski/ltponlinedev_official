@@ -1735,16 +1735,21 @@ class PreviewController extends Controller
             //     ];
             
             // sort enrolment forms by date of submission
-            $approved_0_1_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('L',$request->L)->orderBy('created_at', 'asc')->get();
+            $approved_0_1_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('L',$request->L)->where('Te_Code', $request->Te_Code)->where('updated_by_admin', 1)->orderBy('created_at', 'asc')->get();
             
-            $approved_0_2_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('L',$request->L)->orderBy('created_at', 'asc')->get();
+            $approved_0_2_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('L',$request->L)->where('Te_Code', $request->Te_Code)->where('updated_by_admin', 1)->orderBy('created_at', 'asc')->get();
             
 
-            $approved_0_3_collect = Preenrolment::where('INDEXID', $request->INDEXID)->where('L',$request->L)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+            $approved_0_3_collect = Preenrolment::where('INDEXID', $request->INDEXID)->where('L',$request->L)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->where('Te_Code', $request->Te_Code)->where('updated_by_admin', 1)->get();
             
 
             $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections with sorting by submission date and time
             $approved_collections = $approved_collections->unique('INDEXID')->values()->all(); 
+
+            if (count($approved_collections) < 1) {
+                $data = 'un-assigned';
+                return response()->json($data);
+            }
 
             $selectedTerm = $request->Term; // No need of type casting
             // echo substr($selectedTerm, 0, 1); // get first value
@@ -1809,7 +1814,7 @@ class PreviewController extends Controller
             if ($countArrValue > 0) {
                 for ($i=0; $i < $countArrValue; $i++) {
                     // collect priority 1 enrolment forms 
-                    $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
+                    $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('Te_Code', $request->Te_Code)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
                     // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
                     $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
@@ -1876,7 +1881,7 @@ class PreviewController extends Controller
             if ($countArrValue2 > 0) {
                 for ($z=0; $z < $countArrValue2; $z++) {
                     // collect priority 2 enrolment forms 
-                    $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])->orderBy('created_at', 'asc')->get();
+                    $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('Te_Code', $request->Te_Code)->where('INDEXID', $arrValue2[$z])->orderBy('created_at', 'asc')->get();
 
                     $arr_enrolment_forms_waitlisted[] = $enrolment_forms_waitlisted;
 
@@ -2012,7 +2017,7 @@ class PreviewController extends Controller
             if ($countPriority3 > 0) {
                 for ($i=0; $i < $countPriority3; $i++) {
                     // collect priority 3 enrolment forms 
-                    $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
+                    $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('Te_Code', $request->Te_Code)->where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
                     $arrPriority3[] = $enrolment_forms_priority3 ;
 
                     foreach ($enrolment_forms_priority3 as $value) {
@@ -2147,9 +2152,9 @@ class PreviewController extends Controller
                         }
 
                         // dd($arrayCheck,$filtered);
+                        $data = $filtered;
+                        return response()->json($data);
                     }
-                    $data = $filtered;
-                    return response()->json($data);
                 }
                 
                 // if all are full and no orphan section, then create one
@@ -2202,6 +2207,18 @@ class PreviewController extends Controller
                     'CodeIndexIDClass' => $ingredients->Code.'-'.$getIndividualStudent->INDEXID
                 ]);
 
+                $arrayCheck[] = $insertStudentRecord->get();
+                $insertStudentToPash = $insertStudentRecord->get();
+                foreach ($insertStudentToPash as $datum) {
+                    $arroy = $datum->attributesToArray();
+                    $collection = collect($arroy);
+                    $filtered = $collection->except(['id'])->all();
+
+                    $move_to_pash = Repo::create($filtered);
+                }
+
+                $data = $filtered;
+                return response()->json($data);
                 dd($ingredients, $insertStudentRecord->get());
             }
 
