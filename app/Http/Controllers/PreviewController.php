@@ -53,7 +53,7 @@ class PreviewController extends Controller
         if($request->ajax()){            
             $select_courses = CourseSchedule::where('L', $request->L)
             ->where('Te_Term', $request->term_id)
-            ->whereNull('Code')
+            // ->whereNull('Code')
             ->with('course')
             ->select('Te_Code_New','L')
             ->groupBy('Te_Code_New','L')
@@ -856,28 +856,43 @@ class PreviewController extends Controller
         }
     }
 
-	
-
+    /**
+     * "Batch Run" method to create and assign classrooms to students in order of priority
+     */	
 	public function getApprovedEnrolmentForms(Request $request)
-    {
-
-        // sort enrolment forms by date of submission
-        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+    {   
         
-        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        // copy waitlisted student from previous term to Waitlist table
+        $prev_term = Term::where('Term_Code', $request->Term)->first()->Term_Prev;
+        $students_waitlisted = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD')
+                    ;
+            })
+            ->get();
+
+        foreach ($students_waitlisted as $data) {
+            $arr = $data->attributesToArray();
+            $clone_forms = Waitlist::create($arr);
+        } 
+        // query enrolment forms where updated_by_admin = 1 and overall_approval = 1
+        // sort enrolment forms by date of submission
+        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+        
+        $approved_0_1 = Preenrolment::select('INDEXID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
         // apply unique() method to remove dupes 
         // apply values() method to reset key series of the array 
         $approved_1 = $approved_0_1->unique('INDEXID')->values()->all(); // becomes an array
 
-        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
         
-        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2 = Preenrolment::select('INDEXID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
         $approved_2 = $approved_0_2->unique('INDEXID')->values()->all();
 
         // !!!!!! add where selfpay_approval == 1 !!!!!!
-        $approved_0_3_collect = Preenrolment::where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_0_3_collect = Preenrolment::where('selfpay_approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         
-        $approved_0_3 = Preenrolment::select('INDEXID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_0_3 = Preenrolment::select('INDEXID')->where('selfpay_approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         $approved_3 = $approved_0_3->unique('INDEXID')->values()->all(); 
         
 
@@ -960,7 +975,7 @@ class PreviewController extends Controller
         $countArrValue = count($arrValue);
         for ($i=0; $i < $countArrValue; $i++) {
         	// collect priority 1 enrolment forms 
-            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
             // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
             $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
@@ -1025,7 +1040,7 @@ class PreviewController extends Controller
 
         for ($z=0; $z < $countArrValue2; $z++) {
             // collect priority 2 enrolment forms 
-            $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
             $arr_enrolment_forms_waitlisted[] = $enrolment_forms_waitlisted;
 
@@ -1064,22 +1079,22 @@ class PreviewController extends Controller
          * and compare to waitlist table to set priority 2
          */
         // sort enrolment forms by date of submission
-        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
-        $approved_0_1_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->orderBy('created_at', 'asc')->get();
+        $approved_0_1_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
         // apply unique() method to remove dupes 
         // apply values() method to reset key series of the array 
         $approved_1_placement = $approved_0_1_placement->unique('INDEXID')->values()->all(); // becomes an array
 
-        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
         
-        $approved_0_2_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->orderBy('created_at', 'asc')->get();
+        $approved_0_2_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', $request->Term)->where('approval','1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
         $approved_2_placement = $approved_0_2_placement->unique('INDEXID')->values()->all();
 
         // !!!!!! add where selfpay_approval == 1 !!!!!!
-        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         
-        $approved_0_3_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->where('selfpay_approval','1')->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
+        $approved_0_3_placement = PlacementForm::select('INDEXID')->whereNotNull('CodeIndexID')->where('selfpay_approval','1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)->orderBy('created_at', 'asc')->get();
         $approved_3_placement = $approved_0_3_placement->unique('INDEXID')->values()->all(); 
         
 
@@ -1118,7 +1133,7 @@ class PreviewController extends Controller
 
         for ($h=0; $h < $countArrValuePlacement; $h++) {
             // collect priority 2 placement forms 
-            $placement_forms_waitlisted = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $arrValuePlacement[$h])->orderBy('created_at', 'asc')->get();
+            $placement_forms_waitlisted = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $arrValuePlacement[$h])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
             $arr_placement_forms_waitlisted[] = $placement_forms_waitlisted;
 
@@ -1169,7 +1184,7 @@ class PreviewController extends Controller
 
         for ($i=0; $i < $countPriority3; $i++) {
             // collect priority 3 enrolment forms 
-            $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
             $arrPriority3[] = $enrolment_forms_priority3 ;
 
             foreach ($enrolment_forms_priority3 as $value) {
@@ -1211,7 +1226,7 @@ class PreviewController extends Controller
   
         for ($d=0; $d < $countPriority4; $d++) {
             // collect leftover priority 4 enrolment forms 
-            $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->orderBy('created_at', 'asc')->get();
+            $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
             foreach ($placement_forms_priority4 as $value4) {
                 $ingredients4[] = new  PreviewTempSort([
@@ -1246,7 +1261,7 @@ class PreviewController extends Controller
          * Order Codes by count per code
          */
         DB::table('tblLTP_preview_TempOrder')->truncate();
-        // DB::table('tblLTP_preview')->truncate();
+        DB::table('tblLTP_preview')->truncate();
 
         // collect the courses offered for the term entered
         $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');

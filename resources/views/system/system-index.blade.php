@@ -10,7 +10,7 @@
 	<div class="col-md-12">
 		<div class="box box-default">
 			<div class="box box-body">
-				<h4><a href="#"><i class="fa fa-play"></i> Run batch to assign students to classrooms with priority </a></h4>
+				<h4><a href="{{ route('preview-vsa-page-1') }}"><i class="fa fa-play"></i> Run batch to assign students to classrooms with priority </a></h4>
 				<h4>
 					@if (is_null($term))
 						<a href="#" class="text-danger"><i class="fa fa-ban"></i> Send Convocation Email to students (Term is not set)</a>

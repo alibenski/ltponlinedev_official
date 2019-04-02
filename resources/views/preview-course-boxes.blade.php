@@ -1,3 +1,4 @@
+<div class="total"></div>
 @foreach ($select_courses->chunk(4) as $element)
 <div class="row">
   @foreach($element as $data)
@@ -67,13 +68,17 @@
 			})
 			.done(function(data) {
 				console.log(data);
+				var sum = 0;
 				$.each(data, function(x, y) {
 					$("input[name='Te_Code_New']").each(function() {
 						if ($(this).val() == x) {
 							$('h3.count-students-'+x).html(y+' Students')
 						}
 					});
+
+					sum+=parseFloat(y) || 0;
 				});
+				$("div.total").html("<h3>Total Number of Students: <span class='label label-default'>"+sum+"</span></h3>");
 			})
 			.fail(function() {
 				console.log("error");

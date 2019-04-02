@@ -11,7 +11,7 @@
         <h4>{{$data->course->Description}}</h4>
         <p>{{ $data->Code }}</p>
         <p>{{ $data->scheduler->name }}</p>
-        <p>@if(empty($data->teachers)) <span class="text-danger">Waitlist/Class Cancelled</span> @elseif($data->Tch_ID == 'TBD') <span class="text-danger">Waitlist/Class Cancelled</span> @else {{ $data->teachers->Tch_Name }} @endif</p>
+        <p>@if(empty($data->teachers)) <span class="text-danger">No Teacher: Waitlist/Class Cancelled</span> @elseif($data->Tch_ID == 'TBD') <span class="text-danger">No Teacher: Waitlist/Class Cancelled</span> @else {{ $data->teachers->Tch_Name }} @endif</p>
                 
 		<input type="hidden" name="Code" value="{{$data->Code}}">
 		<input type="hidden" name="Te_Code_New" value="{{$data->Te_Code_New}}">
