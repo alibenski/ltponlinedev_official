@@ -358,7 +358,7 @@ class UserController extends Controller
 
         $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $student->indexno)->where('Term', $request->Term)->get(); 
 
-        $batch_implemented = Repo::where('Term', $request->Term)->count(); 
+        $batch_implemented = Repo::where('Term', $request->Term)->count(); // flag to indicate if batch has been ran or not
 
         $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();

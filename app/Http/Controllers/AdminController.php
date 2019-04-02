@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classroom;
 use App\NewUser;
 use App\PlacementForm;
 use App\Preenrolment;
@@ -39,6 +40,15 @@ class AdminController extends Controller
 
         // return view('admin.index',compact('terms'))->withNew_user_count($new_user_count);   
         return redirect()->back();   
+    }
+
+    public function adminViewClassrooms(Request $request)
+    {
+        $assigned_classes = Classroom::where('Code', $request->Code)
+            ->where('Te_Term', Session::get('Term'))
+            ->get();
+
+        return view('admin.admin-view-classrooms', compact('assigned_classes'));
     }
 
     public function adminIndex()

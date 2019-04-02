@@ -22,7 +22,7 @@
         </div>
         
         <a href="{{ route('teacher-enrolment-preview',['Te_Code' => $data->Te_Code_New, 'Term' => Session::get('Term')]) }}" target="_blank" class="small-box-footer">
-              More info on  <i class="fa fa-arrow-circle-right"></i>
+              Click here for more info <i class="fa fa-arrow-circle-right"></i>
             </a>
 
       </div>

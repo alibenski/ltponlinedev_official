@@ -7,13 +7,17 @@
 
 @section('content')
 
+@include('admin.partials._termSessionMsg')
+
 <div class="row">
   <div class="col-sm-12">
     <div id="accordion">
         @foreach($classrooms as $classroom)
         <h3><strong>{{ $classroom_3->course->Description}}</strong></h3>
-
-        <a class="btn btn-success" href="{{ route('pdfview',['download'=>'pdf', 'code'=> $classroom->Code]) }}" target="_blank"><i class="fa fa-print"></i> Print/Download</a>
+        <div class="btn-group">
+          <a class="btn btn-success btn-space" href="{{ route('pdfview',['download'=>'pdf', 'code'=> $classroom->Code]) }}" target="_blank"><i class="fa fa-print"></i> Print/Download</a>
+          <a class="btn btn-info btn-space view-attendance" href="{{ route('admin-view-classrooms', ['Code'=> $classroom->Code]) }}" target="_blank"><i class="fa fa-eye"></i> View Attendance/Grades</a>
+        </div>
         
         <div class="col-sm-12">
         <h3>Section # {{ $classroom->sectionNo }}</h3>

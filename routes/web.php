@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('edit-text', 'TextController@editText')->name('edit-text');
 
+    Route::get('admin-view-classrooms', ['as'=>'admin-view-classrooms','uses'=>'AdminController@adminViewClassrooms']);
+
     /**
      * Teachers Routes
      */
