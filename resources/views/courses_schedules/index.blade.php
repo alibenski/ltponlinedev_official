@@ -20,7 +20,7 @@
 			<div class="filtered-table table-responsive">
 				<table class="table table-bordered table-striped">
 					<thead>
-						<th>Operation</th>
+						{{-- <th>Operation</th> --}}
 						<th>Term</th>
 						<th>CS Code</th>
 						<th>Course Name</th>
@@ -31,7 +31,7 @@
 					<tbody>
 						@foreach($course_schedule as $class)
 							<tr>
-								<td><a href="{{ route('course-schedule.edit', $class->id)}}" class="btn btn-default btn-sm">Edit</a></td>
+								{{-- <td><a href="{{ route('course-schedule.edit', $class->id)}}" class="btn btn-default btn-sm">Edit</a></td> --}}
 								<th>{{ $class->Te_Term }}</th>
 								<th>{{ $class->cs_unique }}</th>
 								<td>{{ $class->Te_Code_New}} - {{ $class->course->Description }}</td>

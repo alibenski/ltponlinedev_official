@@ -280,7 +280,7 @@ class AjaxController extends Controller
         if($request->ajax()){            
             $select_courses = CourseSchedule::where('L', $request->L)
             ->where('Te_Term', $request->term_id)
-            ->whereNull('Code')
+            // ->whereNull('Code')
             ->orderBy('id', 'asc')
             ->with('course')
             ->get()
