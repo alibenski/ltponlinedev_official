@@ -21,7 +21,7 @@
             </div>
         </div>
 	    <div class="box-body">
-	    <form method="GET" action="{{ route('query-regular-forms-to-assign',['Orphans' => \Request::input('Orphans'), 'L' => \Request::input('L'), 'Term' => Session::get('Term')]) }}">
+	    <form method="GET" action="{{ route('query-orphan-forms-to-assign',['L' => \Request::input('L'), 'Term' => Session::get('Term')]) }}">
 			
 			<div class="form-group col-sm-12">
 		      <label for="L" class="control-label"> Language:</label>
@@ -41,7 +41,7 @@
 
         <div class="form-group">           
             <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
-        	<a href="{{route('query-regular-forms-to-assign')}}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
+        	<a href="{{route('query-orphan-forms-to-assign')}}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
         </div>
 
 	    </form>
