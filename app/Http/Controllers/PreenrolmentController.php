@@ -24,6 +24,56 @@ use Session;
 
 class PreenrolmentController extends Controller
 {
+    public function queryOrphanFormsToAssign(Request $request)
+    {
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        if (Session::has('Term')) {
+            $term = Session::get('Term');
+            $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+            // query regular enrolment forms which are unassigned to a course
+            $arr3 = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')
+                ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')
+                ->where('Term', Session::get('Term'))
+                ->where('overall_approval', 1)
+                ->whereNull('updated_by_admin')
+                ->get();
+            
+            $total_enrolment_forms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                ->where('Term', Session::get('Term'))
+                ->where('overall_approval', 1)
+                // ->whereNull('updated_by_admin')
+                ->get();    
+
+            if (\Request::has('L')) {
+                
+                $queries = [];
+
+                $columns = [
+                    'L', 
+                ];
+
+                
+                foreach ($columns as $column) {
+                    if (\Request::has($column)) {
+                        $arr3 = $arr3->where($column, \Request::input($column) );
+                        $queries[$column] = \Request::input($column);
+                    }
+
+                } 
+                    if (Session::has('Term')) {
+                            $arr3 = $arr3->where('Term', Session::get('Term') );
+                            $queries['Term'] = Session::get('Term');
+                    }
+                   
+                return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3', 'total_enrolment_forms')); 
+            }
+
+            return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3', 'total_enrolment_forms'));    
+        }
+    }
+
     public function queryRegularFormsToAssign(Request $request)
     {
         $languages = DB::table('languages')->pluck("name","code")->all();

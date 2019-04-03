@@ -175,6 +175,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('ajax-std-comments', ['as'=>'ajax-std-comments','uses'=>'PreenrolmentController@ajaxStdComments']);
     
     Route::get('query-regular-forms-to-assign', ['as'=>'query-regular-forms-to-assign','uses'=>'PreenrolmentController@queryRegularFormsToAssign']);
+    Route::get('query-orphan-forms-to-assign', ['as'=>'query-orphan-forms-to-assign','uses'=>'PreenrolmentController@queryOrphanFormsToAssign']);
     Route::get('admin-assign-course-view', ['as'=>'admin-assign-course-view','uses'=>'PreenrolmentController@adminAssignCourseView']);
     Route::get('admin-check-schedule-count', ['as'=>'admin-check-schedule-count','uses'=>'PreenrolmentController@adminCheckScheduleCount']);
     Route::put('admin-save-assigned-course', ['as'=>'admin-save-assigned-course','uses'=>'PreenrolmentController@adminSaveAssignedCourse']);

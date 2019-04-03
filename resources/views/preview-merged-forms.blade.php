@@ -11,7 +11,7 @@
     <div class="col-sm-12">
         <div class="box box-info">
             <div class="box-header with-border bg-aqua">
-            	<h4>Live Preview (Merged View)</h4>
+            	<h4><i class="fa fa-eye"></i> Live Preview </h4>
             </div>
     <div class="box-body">
 		<form method="GET" action="">

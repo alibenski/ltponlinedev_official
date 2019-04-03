@@ -185,7 +185,15 @@ class AdminController extends Controller
 
         $countNonAssignedPlacement = PlacementForm::where('overall_approval', 1)->whereNull('assigned_to_course')->get()->count();
 
-        return view('admin.index',compact('countNonAssignedPlacement','arr3_count','terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
+        // query regular enrolment forms which are unassigned to a course
+        $all_unassigned_enrolment_form = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')
+            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')
+            ->where('Term', Session::get('Term'))
+            ->where('overall_approval', 1)
+            ->whereNull('updated_by_admin')
+            ->get()->count();
+
+        return view('admin.index',compact('all_unassigned_enrolment_form','countNonAssignedPlacement','arr3_count','terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
     }
 
 

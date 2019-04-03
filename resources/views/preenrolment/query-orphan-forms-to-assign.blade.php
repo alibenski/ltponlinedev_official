@@ -56,9 +56,13 @@
 </div>
 @if(Session::has('Term'))
 <div class="row">
-	<div class="col-sm-12">
-		<h3>Total Number of Enrolment Forms <small>(students who are not in a class this term)</small> <span class="label label-primary">{{$count_not_assigned}} out of {{ count($arr3) }}</span></h3>
+	<div class="col-sm-8">
+		<h3>Viewing <span class="label label-default">{{count($arr3)}} out of {{ count($total_enrolment_forms) }}</span> Unassigned Enrolment Forms </h3>
 	</div>
+  <div class="alert alert-warning col-sm-4 pull-right">
+    <h4><i class="icon fa fa-info-circle "></i>Important Note</h4>
+    <p>You are viewing all <strong><u>unassigned</u></strong> regular enrolment forms which have been fully approved and validated by HR Focal Points and the Language Secretariat. This view includes students who are in a class and who are <strong><u>not</u></strong> in a class this term.</p>
+  </div>
 </div>
 
 <div class="row">
@@ -96,10 +100,14 @@
                 @endif
               </td>
 							<td>
-							@if(empty($element->users->name)) None @else {{$element->users->name }} @endif
-							<input type="hidden" name="indexid" value="{{$element->INDEXID}}">	
-              <input type="hidden" name="L" value="{{$element->L}}">
-							<input type="hidden" name="Te_Code_Input" value="{{$element->Te_Code}}">
+  							<h4>@if(empty($element->users->name)) None @else {{$element->users->name }} @endif @if($element->selfpay_approval)<span><i class="fa fa-usd" title="Self-paying Student"></i></span>@endif</h4>
+                <div class="student-classroom-here-{{ $element->INDEXID }}"></div>
+
+  							<input type="hidden" name="eform_submit_count" value="{{$element->eform_submit_count}}">
+                <input type="hidden" name="indexid" value="{{$element->INDEXID}}">	
+                <input type="hidden" name="L" value="{{$element->L}}">
+                <input type="hidden" name="term" value="{{$element->Term}}">
+  							<input type="hidden" name="Te_Code_Input" value="{{$element->Te_Code}}">
 
 							</td>
 							<td>{{$element->courses->Description }}</td>
@@ -140,6 +148,48 @@
 @section('java_script')
 <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script>
+$(document).ready(function() {
+  var arr = [];
+  var eform_submit_count = [];
+  var token = $("input[name='_token']").val();
+  var term = $("input[name='term']").val();
+  var L = $("input[name='L']").val();
+
+  $("input[name='indexid']").each(function() {
+    var indexno = $(this).val();
+    var each_eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
+    arr.push(indexno); //insert values to array per iteration
+    eform_submit_count.push(each_eform_submit_count); //insert values to array per iteration
+  });
+  
+  if (term) {
+
+    $.ajax({
+      url: '{{ route('ajax-preview-get-student-current-class') }}',
+      type: 'GET',
+      data: {arr:arr,term:term,_token:token},
+    })
+    .done(function(data) {
+      // console.log(data)
+      $.each(data, function(x, y) {
+        // console.log(y.INDEXID)
+        $("input[name='indexid']").each(function() {
+          if ($(this).val() == y.INDEXID) {
+            $('div.student-classroom-here-'+y.INDEXID).html('<strong>Current Class:</strong> <p><span class="label label-info margin-label">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
+          }
+        });
+      });
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+  }
+});
+</script>
+<script>
 $(document).ready(function () {
     var counter = 0;
     var promises = [];
@@ -156,7 +206,7 @@ $(document).ready(function () {
     $('.dropdown-toggle').dropdown();
     
     $('#myTable').DataTable({
-    	"paging":   false,
+    	"paging":   true,
     }); 
 
     $('.assign-course').click( function() {

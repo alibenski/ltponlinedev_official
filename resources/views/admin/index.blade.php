@@ -62,8 +62,8 @@
 		  <span class="info-box-icon bg-aqua"><i class="fa fa-file-o"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Regular Enrolment Forms</span>
-		    <span class="info-box-number">@if(Session::has('Term')) Total: {{$enrolment_forms}} @else Set the Term @endif</span>
-		    <span class="info-box-number">.</span>
+		    <span class="info-box-number">@if(Session::has('Term')) Submission Total: {{$enrolment_forms}} @else Set the Term @endif</span>
+		    <span class="info-box-text">Total number of submitted forms (approved + unapproved)</span>
 		    <span class="info-box-number">.</span>
 		    <span class="info-box-number">.</span>
 		  </div>
@@ -79,8 +79,8 @@
 		  <span class="info-box-icon bg-yellow"><i class="fa fa-file"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Placement Forms</span>
-		    <span class="info-box-number">@if(Session::has('Term')) Total: {{$placement_forms}} @else Set the Term @endif</span>
-		    <span class="info-box-number">.</span>
+		    <span class="info-box-number">@if(Session::has('Term')) Submission Total: {{$placement_forms}} @else Set the Term @endif</span>
+		    <span class="info-box-text">Total number of submitted forms (approved + unapproved)</span>
 		    <span class="info-box-number">.</span>
 		    <span class="info-box-number">.</span>
 		  </div>
@@ -129,25 +129,25 @@
 
 <div class="col-md-6 col-sm-6 col-xs-12">
 	@if(Session::has('Term')) 
-	<a href="{{ route('query-regular-forms-to-assign') }}">
-		<div class="info-box bg-teal">
+	<a href="{{ route('query-orphan-forms-to-assign') }}">
+		<div class="info-box bg-navy">
 		  <!-- Apply any bg-* class to to the icon to color it -->
-		  <span class="info-box-icon bg-teal"><i class="fa  fa-files-o"></i></span>
+		  <span class="info-box-icon bg-navy"><i class="fa  fa-tasks"></i></span>
 		  <div class="info-box-content">
-		    <span class="info-box-text">Manage Unassigned Enrolment Forms </span>
-		    <span class="info-box-number">{{$arr3_count}} forms</span>
-		    <span class="info-box-number"><small>(students not in a class)</small></span>
+		    <span class="info-box-text">Manage ALL Unassigned Enrolment Forms </span>
+		    <span class="info-box-number">{{$all_unassigned_enrolment_form}} Form(s)</span>
+		    <span class="info-box-text">Shows ALL regular enrolment forms</span>
 		  </div>
 		  <!-- /.info-box-content -->
 		</div>
 		<!-- /.info-box -->
 	</a>
 	@else 
-		<div class="info-box bg-teal">
+		<div class="info-box bg-navy">
 		  <!-- Apply any bg-* class to to the icon to color it -->
-		  <span class="info-box-icon bg-teal"><i class="fa  fa-exclamation-circle"></i></span>
+		  <span class="info-box-icon bg-navy"><i class="fa  fa-exclamation-circle"></i></span>
 		  <div class="info-box-content">
-		    <span class="info-box-text">Manage Unassigned Enrolment Forms </span>
+		    <span class="info-box-text">Manage ALL Unassigned Enrolment Forms </span>
 		    <span class="info-box-number">Set the Term</span>
 		  </div>
 		  <!-- /.info-box-content -->
@@ -164,7 +164,7 @@
 		  <span class="info-box-icon bg-orange"><i class="fa  fa-files-o"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Manage Non-assigned Placement Forms </span>
-		    <span class="info-box-number">{{$countNonAssignedPlacement}} forms</span>
+		    <span class="info-box-number">{{$countNonAssignedPlacement}} Form(s)</span>
 		  </div>
 		  <!-- /.info-box-content -->
 		</div>
@@ -176,6 +176,35 @@
 		  <span class="info-box-icon bg-orange"><i class="fa  fa-exclamation-circle"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Manage Non-assigned Placement Forms </span>
+		    <span class="info-box-number">Set the Term</span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	@endif
+</div>
+
+<div class="col-md-6 col-sm-6 col-xs-12">
+	@if(Session::has('Term')) 
+	<a href="{{ route('query-regular-forms-to-assign') }}">
+		<div class="info-box bg-teal">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-teal"><i class="fa  fa-files-o"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Manage Unassigned Enrolment Forms </span>
+		    <span class="info-box-number">{{$arr3_count}} forms</span>
+		    <span class="info-box-text"><small>Shows only students not in a class</small></span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+	@else 
+		<div class="info-box bg-teal">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-teal"><i class="fa  fa-exclamation-circle"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Manage Unassigned Enrolment Forms </span>
 		    <span class="info-box-number">Set the Term</span>
 		  </div>
 		  <!-- /.info-box-content -->
