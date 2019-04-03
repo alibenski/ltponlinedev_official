@@ -864,6 +864,11 @@ class PreviewController extends Controller
         
         // copy waitlisted student from previous term to Waitlist table
         $prev_term = Term::where('Term_Code', $request->Term)->first()->Term_Prev;
+        $reset_waitlist = Waitlist::where('Term', $prev_term);
+            if ($reset_waitlist) {
+                $reset_waitlist->forceDelete();
+            }
+
         $students_waitlisted = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
             $query->whereNull('Tch_ID')
                     ->orWhere('Tch_ID', '=', 'TBD')
@@ -1002,6 +1007,13 @@ class PreviewController extends Controller
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
                 'PS' => 1,
+                'std_comments' => $value->std_comments,
+                'hr_comments' => $value->hr_comments,
+                'teacher_comments' => $value->teacher_comments,
+                'Comments' => $value->Comments,
+                'admin_eform_comment' => $value->admin_eform_comment,
+                'admin_plform_comment' => $value->admin_plform_comment,
+                'course_preference_comment' => $value->course_preference_comment,
                 ]); 
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -1067,6 +1079,13 @@ class PreviewController extends Controller
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
                 'PS' => 2,
+                'std_comments' => $value->std_comments,
+                'hr_comments' => $value->hr_comments,
+                'teacher_comments' => $value->teacher_comments,
+                'Comments' => $value->Comments,
+                'admin_eform_comment' => $value->admin_eform_comment,
+                'admin_plform_comment' => $value->admin_plform_comment,
+                'course_preference_comment' => $value->course_preference_comment,
                 ]); 
                     foreach ($ingredients2 as $data2) {
                         $data2->save();
@@ -1160,6 +1179,13 @@ class PreviewController extends Controller
                 'agreementBtn' => $value_placement->agreementBtn,
                 'flexibleBtn' => $value_placement->flexibleBtn,
                 'PS' => 2,
+                'std_comments' => $value->std_comments,
+                'hr_comments' => $value->hr_comments,
+                'teacher_comments' => $value->teacher_comments,
+                'Comments' => $value->Comments,
+                'admin_eform_comment' => $value->admin_eform_comment,
+                'admin_plform_comment' => $value->admin_plform_comment,
+                'course_preference_comment' => $value->course_preference_comment,
                 ]); 
                     foreach ($placement_ingredients2 as $placement_data2) {
                         $placement_data2->save();
@@ -1209,6 +1235,13 @@ class PreviewController extends Controller
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
                 'PS' => 3,
+                'std_comments' => $value->std_comments,
+                'hr_comments' => $value->hr_comments,
+                'teacher_comments' => $value->teacher_comments,
+                'Comments' => $value->Comments,
+                'admin_eform_comment' => $value->admin_eform_comment,
+                'admin_plform_comment' => $value->admin_plform_comment,
+                'course_preference_comment' => $value->course_preference_comment,
                 ]); 
                     foreach ($ingredients3 as $data) {
                         $data->save();
@@ -1250,6 +1283,13 @@ class PreviewController extends Controller
                 'agreementBtn' => $value4->agreementBtn,
                 'flexibleBtn' => $value4->flexibleBtn,
                 'PS' => 4,
+                'std_comments' => $value->std_comments,
+                'hr_comments' => $value->hr_comments,
+                'teacher_comments' => $value->teacher_comments,
+                'Comments' => $value->Comments,
+                'admin_eform_comment' => $value->admin_eform_comment,
+                'admin_plform_comment' => $value->admin_plform_comment,
+                'course_preference_comment' => $value->course_preference_comment,
                 ]); 
                     foreach ($ingredients4 as $data4) {
                         $data4->save();
@@ -1353,6 +1393,13 @@ class PreviewController extends Controller
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
                             'PS' => $value->PS,
+                            'std_comments' => $value->std_comments,
+                            'hr_comments' => $value->hr_comments,
+                            'teacher_comments' => $value->teacher_comments,
+                            'Comments' => $value->Comments,
+                            'admin_eform_comment' => $value->admin_eform_comment,
+                            'admin_plform_comment' => $value->admin_plform_comment,
+                            'course_preference_comment' => $value->course_preference_comment,
                             ]); 
                             foreach ($arrSaveToPash as $data) {
                                 $data->save();
@@ -1414,6 +1461,13 @@ class PreviewController extends Controller
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
                     'PS' => $value->PS,
+                    'std_comments' => $value->std_comments,
+                    'hr_comments' => $value->hr_comments,
+                    'teacher_comments' => $value->teacher_comments,
+                    'Comments' => $value->Comments,
+                    'admin_eform_comment' => $value->admin_eform_comment,
+                    'admin_plform_comment' => $value->admin_plform_comment,
+                    'course_preference_comment' => $value->course_preference_comment,
                     ]); 
                     foreach ($arrStd as $data) {
                         $data->save();
@@ -1859,6 +1913,13 @@ class PreviewController extends Controller
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
                         'PS' => 1,
+                        'std_comments' => $value->std_comments,
+                        'hr_comments' => $value->hr_comments,
+                        'teacher_comments' => $value->teacher_comments,
+                        'Comments' => $value->Comments,
+                        'admin_eform_comment' => $value->admin_eform_comment,
+                        'admin_plform_comment' => $value->admin_plform_comment,
+                        'course_preference_comment' => $value->course_preference_comment
                         ]); 
                             foreach ($ingredients as $data) {
                                 $data->save();
@@ -1926,6 +1987,13 @@ class PreviewController extends Controller
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
                         'PS' => 2,
+                        'std_comments' => $value->std_comments,
+                        'hr_comments' => $value->hr_comments,
+                        'teacher_comments' => $value->teacher_comments,
+                        'Comments' => $value->Comments,
+                        'admin_eform_comment' => $value->admin_eform_comment,
+                        'admin_plform_comment' => $value->admin_plform_comment,
+                        'course_preference_comment' => $value->course_preference_comment
                         ]); 
                             foreach ($ingredients2 as $data2) {
                                 $data2->save();
@@ -2009,6 +2077,13 @@ class PreviewController extends Controller
                         'agreementBtn' => $value_placement->agreementBtn,
                         'flexibleBtn' => $value_placement->flexibleBtn,
                         'PS' => 2,
+                        'std_comments' => $value->std_comments,
+                        'hr_comments' => $value->hr_comments,
+                        'teacher_comments' => $value->teacher_comments,
+                        'Comments' => $value->Comments,
+                        'admin_eform_comment' => $value->admin_eform_comment,
+                        'admin_plform_comment' => $value->admin_plform_comment,
+                        'course_preference_comment' => $value->course_preference_comment
                         ]); 
                             foreach ($placement_ingredients2 as $placement_data2) {
                                 $placement_data2->save();
@@ -2060,6 +2135,13 @@ class PreviewController extends Controller
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
                         'PS' => 3,
+                        'std_comments' => $value->std_comments,
+                        'hr_comments' => $value->hr_comments,
+                        'teacher_comments' => $value->teacher_comments,
+                        'Comments' => $value->Comments,
+                        'admin_eform_comment' => $value->admin_eform_comment,
+                        'admin_plform_comment' => $value->admin_plform_comment,
+                        'course_preference_comment' => $value->course_preference_comment
                         ]); 
                             foreach ($ingredients3 as $data) {
                                 $data->save();
@@ -2103,6 +2185,13 @@ class PreviewController extends Controller
                         'agreementBtn' => $value4->agreementBtn,
                         'flexibleBtn' => $value4->flexibleBtn,
                         'PS' => 4,
+                        'std_comments' => $value->std_comments,
+                        'hr_comments' => $value->hr_comments,
+                        'teacher_comments' => $value->teacher_comments,
+                        'Comments' => $value->Comments,
+                        'admin_eform_comment' => $value->admin_eform_comment,
+                        'admin_plform_comment' => $value->admin_plform_comment,
+                        'course_preference_comment' => $value->course_preference_comment
                         ]); 
                             foreach ($ingredients4 as $data4) {
                                 $data4->save();

@@ -64,6 +64,8 @@
                         <th>Priority</th>
                         <th>Flexible?</th>
                         <th>Schedules</th>
+                        <th>Comments</th>
+                        <th>Remark</th>
                         <th>Submission Date</th>
                         <th>Cancel Date/Time Stamp</th>
                         <th>Operation</th>
@@ -85,7 +87,7 @@
                         @endif
                       </td>
                       <td>
-                        @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif 
+                        <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </h4> 
                         @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
                       </td>
                       <td>
@@ -97,6 +99,7 @@
                         <input name="Term" type="hidden" value="{{ $form->Term }}">
                         <input name="L" type="hidden" value="{{ $form->L }}">
                         <input name="CodeIndexID" type="hidden" value="{{ $form->CodeIndexID }}">
+                        <input name="Te_Code" type="hidden" value="{{ $form->Te_Code }}">
                         <strong>
                          <div><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></div>
                          <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
@@ -110,7 +113,48 @@
                                   @endif
                       </td>
                       <td>
-                        <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
+                        <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist </a>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-default btn-space view-all-comments" data-toggle="modal"><i class="fa fa-comment"></i> View </button>
+
+                        <div id="viewAllComments-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-header bg-default">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                                        <h4 class="modal-title"><i class="fa fa-comment"></i> View All Comments</h4>
+                                    </div>
+                                    <div class="modal-body-view-all-comments">
+                                      <div class="col-sm-12"> 
+                                        <p><strong>HR Comment:</strong> {{ $form->hr_comments }}</p>
+                                        <p><strong>Student Comment:</strong> {{ $form->std_comments }}</p>
+                                        <p><strong>Course Preference:</strong> {{ $form->course_preference_comment }}</p>
+                                        <p><strong>Teacher Comment:</strong> {{ $form->teacher_comments }}</p>
+                                        @if ($form->admin_eform_comment)
+                                          <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_eform_comment }}</p>
+                                        @endif
+                                        @if ($form->admin_plform_comment)
+                                          <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_plform_comment }}</p>
+                                        @endif
+                                        @if ($form->Comments)
+                                          <p><strong>Admin Comment on Manually Created Form:</strong> {{ $form->Comments }}</p>
+                                        @endif
+                                      </div> 
+                                    </div>
+                                    <div class="modal-footer modal-background">
+                                      
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+                      </td>
+                      <td>
+                        <textarea id="{{ $form->id }}" name="pash-remark" class="remark" cols="30" rows="1" value="">Not Yet Functional</textarea>
+
+                        <button class="btn btn-success btn-space save-remark" disabled=""><i class="fa fa-save"></i></button>
                       </td>
                       <td>
                         {{$form->created_at}}
@@ -193,6 +237,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-confirmation/1.0.5/bootstrap-confirmation.min.js"></script>
 
 <script>
+$(document).ready(function() {
+  var arr = [];
+  var eform_submit_count = [];
+  var token = $("input[name='_token']").val();
+  var term = $("input[name='term']").val();
+  var L = $("input[name='L']").val();
+
+  $("textarea.remark").each(function() {
+    var id = $(this).attr('id');
+    
+    arr.push(id); //insert values to array per iteration
+  });
+  console.log(arr)
+
+
+});
+</script>
+
+<script>
 $(document).ready(function () {
     $('#modalshow').on('show.bs.modal', function (event) {
       var link = $(event.relatedTarget); // Link that triggered the modal
@@ -214,6 +277,13 @@ $(document).ready(function () {
           $('.modal-body-schedule').html(data);
       });
     });
+});
+
+$(document).on('click', '.view-all-comments', function() {
+  var INDEXID = $(this).closest("tr").find("input[name='INDEXID']").val();
+  var Te_Code = $(this).closest("tr").find("input[name='Te_Code']").val();
+  var Term = $(this).closest("tr").find("input[name='Term']").val();
+    $('#viewAllComments-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
 });
 </script>
 
@@ -411,4 +481,5 @@ $(document).ready(function() {
       // });
   });
 </script>
+
 @stop

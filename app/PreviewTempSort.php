@@ -11,7 +11,7 @@ class PreviewTempSort extends Model
 
     protected $table = 'tblLTP_preview_TempSort';
     protected $fillable = [
-        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'mgr_fname', 'mgr_lname', 'L', 'profile', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form', 'selfpay_approval', 'form_counter', 'eform_submit_count', 'cancelled_by_student', 'agreementBtn', 'consentBtn', 'flexibleBtn', 'contractDate', 'created_at', 'UpdatedOn', 'PS',
+        'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'mgr_fname', 'mgr_lname', 'L', 'profile', 'continue_bool', 'approval','approval_hr','DEPT','attachment_id','attachment_pay', 'is_self_pay_form', 'selfpay_approval', 'form_counter', 'eform_submit_count', 'cancelled_by_student', 'agreementBtn', 'consentBtn', 'flexibleBtn', 'contractDate', 'created_at', 'UpdatedOn', 'PS', 'std_comments', 'hr_comments', 'teacher_comments', 'Comments', 'admin_eform_comment', 'admin_plform_comment', 'course_preference_comment',
     ];
     /**
      * The storage format of the model's date columns.

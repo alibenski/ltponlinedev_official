@@ -28,7 +28,7 @@ class AdminController extends Controller
      */
     public function moveToPash()
     {
-        $results = \DB::select( "INSERT into LTP_PASHQTcur (INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments) SELECT INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments FROM tblLTP_preview" );
+        $results = \DB::select( "INSERT into LTP_PASHQTcur (INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments,std_comments, hr_comments, teacher_comments,  admin_eform_comment, admin_plform_comment, course_preference_comment) SELECT INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,flexibleBtn,convocation_email_sent,form_counter,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments,std_comments, hr_comments, teacher_comments, admin_eform_comment, admin_plform_comment, course_preference_comment FROM tblLTP_preview" );
     }
 
     public function setSessionTerm(Request $request)
