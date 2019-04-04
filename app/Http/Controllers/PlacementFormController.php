@@ -738,7 +738,7 @@ class PlacementFormController extends Controller
      * Update resource with assigned course with convoked input field 
      */
     public function assignCourseToPlacement(Request $request, $id)
-    {dd($request->all());
+    {
         $code_index_id = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
         $request->request->add(['CodeIndexID' => $code_index_id]);
 
