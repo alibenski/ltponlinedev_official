@@ -1,5 +1,3 @@
-{{ dd($classrooms) }}
-
 @foreach ($classrooms->chunk(4) as $element)
 <div class="row">
   @foreach($element as $data)
