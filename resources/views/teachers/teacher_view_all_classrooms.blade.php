@@ -65,7 +65,8 @@
 		      	{{ $classroom->terms->Comments }} {{ date('Y', strtotime($classroom->terms->Term_Begin)) }}
 		      </td>
 		      <td>
-				@if(empty($classroom->teachers)) 
+				@if(empty($classroom->teachers)) No Teacher: Waitlist/Class Cancelled
+				@elseif($classroom->Tch_ID == 'TBD')  No Teacher: Waitlist/Class Cancelled
 				@else <span><strong>{{ $classroom->teachers->Tch_Firstname }} {{ $classroom->teachers->Tch_Lastname }}
 				</strong></span>
 				@endif

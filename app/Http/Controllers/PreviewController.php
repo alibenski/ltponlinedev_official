@@ -705,8 +705,8 @@ class PreviewController extends Controller
     {
         if ($request->ajax()) {
             
-            $pash_record = Repo::whereIn('id', $request->arr)->get()->pluck('pash_remark','id');
-            
+            $pash_record = Repo::withTrashed()->whereIn('id', $request->arr)->get()->pluck('pash_remark','id');
+
             $data = $pash_record;
             return response()->json($data);
         }
@@ -716,7 +716,7 @@ class PreviewController extends Controller
     {
         if ($request->ajax()) {
             
-            $pash_record = Repo::where('id', $request->id)->update(['pash_remark' => $request->remark, 'last_remark_by' => Auth::user()->id]);
+            $pash_record = Repo::withTrashed()->where('id', $request->id)->update(['pash_remark' => $request->remark, 'last_remark_by' => Auth::user()->id]);
             $data = 'success';
             return response()->json($data);
         }

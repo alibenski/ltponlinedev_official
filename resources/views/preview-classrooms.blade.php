@@ -172,8 +172,8 @@
                         @else 
                         @endif
 
-                        <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
-                            <input type="submit" value="@if($form->deleted_at) Cancelled @else Delete @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($form->deleted_at) disabled="" @else @endif>
+                        <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="delete-form form-prevent-multi-submit">
+                            <input type="submit" value="@if($form->deleted_at) Cancelled @else Delete @endif" class="delete-form btn btn-danger btn-space button-prevent-multi-submit" @if($form->deleted_at) disabled="" @else @endif>
                             {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
                             <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
                             <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -334,6 +334,11 @@ $(document).ready(function () {
           $('.modal-body-schedule').html(data);
       });
     });
+
+    $('form.delete-form').submit(function() {
+        var c = confirm("You are about to delete a form. Are you sure?");
+        return c; //you can just return c because it will be true or false
+    });
 });
 
 $(document).on('click', '.view-all-comments', function() {
@@ -342,6 +347,10 @@ $(document).on('click', '.view-all-comments', function() {
   var Term = $(this).closest("tr").find("input[name='Term']").val();
     $('#viewAllComments-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
 });
+
+
+
+
 </script>
 
 <script>

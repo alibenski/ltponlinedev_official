@@ -230,7 +230,7 @@ class TeachersController extends Controller
     public function teacherViewAllClassrooms()
     {
         $assigned_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
-            ->where('Tch_ID', '!=', 'TBD')
+            // ->where('Tch_ID', '!=', 'TBD')
             ->where('Te_Term', Session::get('Term'))
             ->get();
 
