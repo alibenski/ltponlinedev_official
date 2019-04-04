@@ -254,24 +254,26 @@ $(document).ready(function() {
   });
   console.log(arr)
 
-  $.ajax({
-    url: '{{ route('ajax-preview-get-remarks') }}',
-    type: 'GET',
-    data: {arr:arr, term:term, _token:token},
-  })
-  .done(function(data) {
-    console.log(data);
-    $.each(data, function(index, val) {
-      $('textarea#'+index).val(val);
+  if (arr.length > 0) {
+    $.ajax({
+      url: '{{ route('ajax-preview-get-remarks') }}',
+      type: 'GET',
+      data: {arr:arr, term:term, _token:token},
+    })
+    .done(function(data) {
+      // console.log(data);
+      $.each(data, function(index, val) {
+        $('textarea#'+index).val(val);
+      });
+    })
+    .fail(function() {
+      alert("An error occured. Click OK to reload.");
+      window.location.reload();
+    })
+    .always(function() {
+      console.log("complete");
     });
-  })
-  .fail(function() {
-    alert("An error occured. Click OK to reload.");
-    window.location.reload();
-  })
-  .always(function() {
-    console.log("complete");
-  });
+  }
   
 
   // enable save button only if textarea has characters
