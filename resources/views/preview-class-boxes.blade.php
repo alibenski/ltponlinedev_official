@@ -1,5 +1,8 @@
-@foreach ($classrooms->chunk(4) as $element)
+{{-- @foreach ($classrooms->chunk(4) as $element) --}}
+{{-- Group by Course Name per row --}}
+@foreach ($classrooms->groupBy('Te_Code_New') as $element)
 <div class="row">
+  <h3><strong>{{ $element->first()->course->Description }}</strong></h3>
   @foreach($element as $data)
     <div class="col-lg-3 col-xs-6">
       <!-- small box -->
