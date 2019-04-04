@@ -182,7 +182,7 @@ class SelfPayController extends Controller
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
                     'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
+                    'size' => $request->payfile->getClientSize(),
                     'path' => $filestore,
             ]);
         }
@@ -261,7 +261,7 @@ class SelfPayController extends Controller
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
                     'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
+                    'size' => $request->payfile->getClientSize(),
                     'path' => $filestore,
             ]);
         }
@@ -355,7 +355,7 @@ class SelfPayController extends Controller
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
                     'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
+                    'size' => $request->payfile->getClientSize(),
                     'path' => $filestore,
             ]);
         }
@@ -444,7 +444,7 @@ class SelfPayController extends Controller
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
                     'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
+                    'size' => $request->payfile->getClientSize(),
                     'path' => $filestore,
             ]);
         }
