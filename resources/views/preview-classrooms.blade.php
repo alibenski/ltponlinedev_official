@@ -87,7 +87,7 @@
                         @endif
                       </td>
                       <td>
-                        <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </h4> 
+                        <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}]</small></h4> 
                         @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
                       </td>
                       <td>
@@ -152,9 +152,11 @@
                         </div>
                       </td>
                       <td>
-                        <textarea id="{{ $form->id }}" name="pash-remark" class="remark" cols="30" rows="1" value="">Not Yet Functional</textarea>
-
-                        <button class="btn btn-success btn-space save-remark" disabled=""><i class="fa fa-save"></i></button>
+                        <textarea id="{{ $form->id }}" name="pash-remark" class="remark" cols="30" rows="1" value="" placeholder="Saving overwrites the existing comment."></textarea>
+                        <div class="row">
+                          <button id="{{ $form->id }}" class="btn btn-success btn-space save-remark" disabled=""><i class="fa fa-save"></i></button>
+                          <small>@if ($form->lastRemarkBy) Last remark by  {{ $form->lastRemarkBy->name }}  @endif</small>
+                        </div>
                       </td>
                       <td>
                         {{$form->created_at}}
@@ -244,6 +246,7 @@ $(document).ready(function() {
   var term = $("input[name='term']").val();
   var L = $("input[name='L']").val();
 
+  // retrieve each remark
   $("textarea.remark").each(function() {
     var id = $(this).attr('id');
     
@@ -251,7 +254,61 @@ $(document).ready(function() {
   });
   console.log(arr)
 
+  $.ajax({
+    url: '{{ route('ajax-preview-get-remarks') }}',
+    type: 'GET',
+    data: {arr:arr, term:term, _token:token},
+  })
+  .done(function(data) {
+    console.log(data);
+    $.each(data, function(index, val) {
+      $('textarea#'+index).val(val);
+    });
+  })
+  .fail(function() {
+    alert("An error occured. Click OK to reload.");
+    window.location.reload();
+  })
+  .always(function() {
+    console.log("complete");
+  });
+  
 
+  // enable save button only if textarea has characters
+  $('textarea.remark').on("keyup", function() {
+      var remark_id = $(this).attr('id');
+
+      if( $('textarea#'+remark_id).val().length > 0) {
+          $('button#'+remark_id+'.save-remark').prop("disabled", false);
+      } else {
+          $('button#'+remark_id+'.save-remark').prop("disabled", true);
+      }
+  });
+
+  $('button.save-remark').click(function() {
+    var id = $(this).attr('id');
+    var remark = $('textarea#'+id).val();
+    var token = $("input[name='_token']").val();
+
+    $.ajax({
+      url: '{{ route('ajax-preview-post-remarks') }}',
+      type: 'PUT',
+      data: {id:id, remark:remark, _token:token},
+    })
+    .done(function(data) {
+      if (data == 'success') {
+        window.location.reload();
+      }
+    })
+    .fail(function() {
+      alert("An error occured. Click OK to reload.");
+      window.location.reload();
+    })
+    .always(function() {
+      console.log("complete");
+    });
+    
+  });
 });
 </script>
 

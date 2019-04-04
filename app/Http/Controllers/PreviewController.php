@@ -701,6 +701,27 @@ class PreviewController extends Controller
         return view('preview-classrooms', compact('arr','classrooms','form_info', 'classroom_3'));
     }
 
+    public function ajaxPreviewGetRemarks(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $pash_record = Repo::whereIn('id', $request->arr)->get()->pluck('pash_remark','id');
+            
+            $data = $pash_record;
+            return response()->json($data);
+        }
+    }
+
+    public function ajaxPreviewPostRemarks(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $pash_record = Repo::where('id', $request->id)->update(['pash_remark' => $request->remark, 'last_remark_by' => Auth::user()->id]);
+            $data = 'success';
+            return response()->json($data);
+        }
+    }
+
     public function ajaxMoveStudentsForm(Request $request)
     {
         if ($request->ajax()) {
@@ -864,9 +885,17 @@ class PreviewController extends Controller
         
         // copy waitlisted student from previous term to Waitlist table
         $prev_term = Term::where('Term_Code', $request->Term)->first()->Term_Prev;
+        
+        // forceDelete waitlist records related to previous term of the selected term before running the batch
         $reset_waitlist = Waitlist::where('Term', $prev_term);
             if ($reset_waitlist) {
                 $reset_waitlist->forceDelete();
+            }
+
+        // forceDelete PASHQTcur records related to the selected term before running the batch
+        $reset_pash_records = Repo::where('Term',  $request->Term);
+            if ($reset_pash_records) {
+                $reset_pash_records->forceDelete();
             }
 
         $students_waitlisted = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
