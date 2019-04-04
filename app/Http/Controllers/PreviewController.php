@@ -527,7 +527,7 @@ class PreviewController extends Controller
                             ->where('Tch_ID', '!=', 'TBD')
                             ;
                     })
-                    ->where('Te_Code','!=','F3R2')
+                    // ->where('Te_Code','!=','F3R2')
                     ->get();
 
 
