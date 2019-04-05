@@ -23,6 +23,9 @@
 				
 				<h4><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled</a> (Email text needs to be updated programmatically)</h4>
 			</div>
+			<div class="overlay">
+        		<i class="fa fa-refresh fa-spin"></i>
+        	</div>
 		</div>
 		
 	</div>
@@ -34,8 +37,14 @@
 @section('java_script')
 
 <script>
+	$(document).ready(function() {
+		$(".overlay").fadeOut(600);
+	});
+
 	$('a.send-emails').on('click', function() {
         var c = confirm("This is a mass email function. Are you sure?");
+        $(".overlay").fadeIn(600);
+        window.location.reload();
         return c; //you can just return c because it will be true or false
     });	
 </script>
