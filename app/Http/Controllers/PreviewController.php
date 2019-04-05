@@ -571,17 +571,31 @@ class PreviewController extends Controller
             $term_year = new Carbon($term_date_time);
             $term_year = $term_year->year;
 
+            // get cancel date limit
+            $cancel_date_limit = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+            $termCancelMonth = date('F', strtotime($cancel_date_limit));
+            $termCancelDate = date('d', strtotime($cancel_date_limit));
+            $termCancelYear = date('Y', strtotime($cancel_date_limit));
+
+            // cancel limit date convert to string
+            $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+            // translate 
+            $termCancelMonthFr = __('months.'.$termCancelMonth, [], 'fr');
+            $cancel_date_limit_string_fr = $termCancelDate.' '.$termCancelMonthFr.' '.$termCancelYear;
+
             $staff_name = $value->users->name; 
             $staff_email = $value->users->email;
             
-            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
+            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year, $cancel_date_limit_string, $cancel_date_limit_string_fr));
 
             $convocation_email_sent = Repo::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
                         'convocation_email_sent' => 1,
                         ]);
         }
         
-        return count($convocation_diff3);
+        session()->flash('success', 'Convocation email sent to '.count($convocation_diff3).' students ');
+        return back();
     }
 
     public function sendIndividualConvocation(Request $request)
@@ -615,10 +629,23 @@ class PreviewController extends Controller
                 $term_year = new Carbon($term_date_time);
                 $term_year = $term_year->year;
 
+                // get cancel date limit
+                $cancel_date_limit = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+                $termCancelMonth = date('F', strtotime($cancel_date_limit));
+                $termCancelDate = date('d', strtotime($cancel_date_limit));
+                $termCancelYear = date('Y', strtotime($cancel_date_limit));
+
+                // cancel limit date convert to string
+                $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+                // translate 
+                $termCancelMonthFr = __('months.'.$termCancelMonth, [], 'fr');
+                $cancel_date_limit_string_fr = $termCancelDate.' '.$termCancelMonthFr.' '.$termCancelYear;
+
                 $staff_name = $select_student->users->name; 
                 $staff_email = $select_student->users->email;
                 
-            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year));
+            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year, $cancel_date_limit_string, $cancel_date_limit_string_fr));
 
             $convocation_email_sent = Repo::where('CodeIndexIDClass', $select_student->CodeIndexIDClass)->update([
                     'convocation_email_sent' => 1,

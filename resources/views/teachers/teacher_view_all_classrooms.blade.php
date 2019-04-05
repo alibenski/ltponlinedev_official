@@ -10,7 +10,7 @@
 </div>
 <div class="row">
 	<div class="col-md-12">
-		<table class="table table-bordered table-striped">
+		<table class="table table-bordered">
 		  <thead>
 		      <tr>
 		          <th>Class</th>
@@ -20,8 +20,10 @@
 		      </tr>
 		  </thead>
 		  <tbody>
-		    @foreach($assigned_classes as $classroom)
-		    <tr class="table-row-all-class">
+		    @foreach($assigned_classes->groupBy('Te_Code_New') as $element)
+		    @foreach ($element as $classroom)
+		    
+		    <tr class="table-row-all-class" @if(empty($classroom->teachers)) @elseif($classroom->Tch_ID == 'TBD') @else style="background-color: #9592d1;" @endif>
 		      <td>
 		        <div><h4><strong>{{ $classroom->course->Description }}</strong></h4></div>
 		        <small>
@@ -78,6 +80,7 @@
 					<button id="enterResultsBtn" value="{{ $classroom->Code}}" class="btn btn-default btn-space">Enter Results</button>
 		      </td>
 		    </tr>
+		    @endforeach
 		    @endforeach
 		  {{-- @endforeach --}}
 		  </tbody>

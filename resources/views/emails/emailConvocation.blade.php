@@ -236,7 +236,7 @@
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at clm_language@un.org 
                                     </p>
                                     <p style="color: red;">
-                                        Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before 30 December 2018. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/PaymentReimbursementEn.pdf">here</a>.
+                                        Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }}. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/PaymentReimbursementEn.pdf">here</a>.
                                     </p>
                                     <p> 
                                         To cancel, log into the platform <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, go to “Submitted Forms”, select the appropriate term and click ”View Forms” to display your applications. Click the red button “Cancel Enrolment” on the registration form you wish to cancel.
@@ -308,7 +308,7 @@
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse clm_language@un.org 
                                     </p>
                                     <p style="color: red;">
-                                        Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit·e à deux cours), vous devez le faire avant le 30 décembre 2018. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/sites/default/files/ContainerFr/LTP/Admin/PaymentReimbursementFr.pdf">ici</a>.
+                                        Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit·e à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }}. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/sites/default/files/ContainerFr/LTP/Admin/PaymentReimbursementFr.pdf">ici</a>.
                                     </p>
                                     <p> 
                                         Pour annuler, connectez-vous à la plate-forme <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, allez à «Submitted Forms», sélectionnez le trimestre approprié, puis cliquez sur «View Forms» pour afficher vos formulaires. Cliquez sur le bouton rouge «Cancel Enrolment» sur le formulaire d'inscription que vous souhaitez annuler.
