@@ -29,35 +29,35 @@
 		        <small>
 		        	@if(!empty($classroom->Te_Mon_Room))
 
-						{{-- <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p> --}}
+						<p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
 						<p>Monday: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_BTime)) }}</strong> - <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
 
 						@endif
 
 						@if(!empty($classroom->Te_Tue_Room))
 
-						{{-- <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p> --}}
+						<p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
 						<p>Tuesday: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_BTime)) }}</strong> - <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
 
 						@endif
 
 						@if(!empty($classroom->Te_Wed_Room))
 
-						{{-- <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p> --}}
+						<p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
 						<p>Wednesday: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_BTime ))}}</strong> - <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
 
 						@endif
 
 						@if(!empty($classroom->Te_Thu_Room))
 
-						{{-- <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p> --}}
+						<p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
 						<p>Thursday: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_BTime)) }}</strong> - <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
 
 						@endif
 
 						@if(!empty($classroom->Te_Fri_Room))
 
-						{{-- <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p> --}}
+						<p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
 						<p>Friday: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_BTime ))}}</strong> - <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
 
 						@endif
