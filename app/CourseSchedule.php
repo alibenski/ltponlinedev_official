@@ -8,7 +8,8 @@ class CourseSchedule extends Model
 {
     protected $table = 'tblLTP_CourseSchedule';
     protected $fillable = [
-        'Code', 'cs_unique','Te_Code_New', 'schedule_id', 'Te_Term', 'L', 'room_id', 'Tch_ID', 'Te_Hours', 'Te_Description',
+        'Code', 'cs_unique','Te_Code_New', 'schedule_id', 'Te_Term', 'L', 'room_id', 'Tch_ID', 'Te_Hours', 'Te_Description', 'Te_Price',
+
     ];
 
     /**

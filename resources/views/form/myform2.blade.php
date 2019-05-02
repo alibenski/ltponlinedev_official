@@ -134,6 +134,13 @@
                     </div>
 
                   <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
+                    <div class="form-group col-md-12">
+                      <div class="alert alert-danger col-md-8 col-md-offset-2">
+                        <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
+                        <p><strong>If you have already passed the LPE or the highest level of your chosen language but have not taken classes during the past two terms, you are still required to fill the form below. Please indicate in the comment box that you have passed the exam and the Language Secretariat will...</strong></p>
+                      </div>
+                    </div>
+
                     <div class="col-md-12">
                       <div class="panel panel-info">
                         <div class="panel-heading col-md-12"><strong>Placement test dates</strong></div>
@@ -219,8 +226,9 @@
                             </div>
 
                             <div class="col-md-12 form-group">
-                              <label class="col-md-3 control-label">Comments: <i>(required)</i></label>
+                              <label class="col-md-3 control-label text-danger">Comments: <i>(required)</i></label>
                               <div class="col-md-8 pink-border">
+                              <small class="text-danger"><i class="fa fa-warning"></i> <strong>You are required to fill this comment box. Failure to do so will nullify your submission.</strong></small>
                               <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, passed LPE, etc." required=""></textarea>
                               </div>
                             </div>

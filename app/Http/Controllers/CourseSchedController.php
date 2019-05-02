@@ -47,10 +47,11 @@ class CourseSchedController extends Controller
 
         $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en","id")->all();
         $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en","id")->all();
+        $price = DB::table('tblLTP_Course_Price')->pluck("price","id")->all();
         $teachers = Teachers::where('In_Out', '1')->get();
         $rooms = Room::all();
 
-        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withFormat($format)->withDuration($duration)->withTeachers($teachers)->withRooms($rooms);
+        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withFormat($format)->withDuration($duration)->withTeachers($teachers)->withRooms($rooms)->withPrice($price);
     }
 
     /**
@@ -107,6 +108,7 @@ class CourseSchedController extends Controller
                 'cs_unique' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
                 'Te_Hours' => $request->duration_id, 
                 'Te_Description' => $request->format_id,
+                'Te_Price' => $request->price_id,
                 'created_at' =>  \Carbon\Carbon::now(),
                 'updated_at' =>  \Carbon\Carbon::now(),
                 ]);

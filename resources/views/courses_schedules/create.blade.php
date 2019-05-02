@@ -90,7 +90,7 @@
 
       <div class="col-md-6"> 
       <div class="panel panel-info">
-        <div class="panel-heading">Format and Duration</div>
+        <div class="panel-heading">Format Duration Pricing</div>
         <div class="panel-body">
           <div class="row">
             <div class="col-md-12">
@@ -98,6 +98,7 @@
                 <thead>
                   <th>Format</th>
                   <th>Duration</th>
+                  <th>Pricing</th>
                 </thead>
                 <tbody>
                     <tr>
@@ -118,6 +119,17 @@
                                 <div class="radio">
                                     <label>
                                         <input type="radio" name="duration_id" value="{{ $id }}" required="" /> {{ $name }}
+                                    </label>
+                                </div>
+
+                            @endforeach
+                      </td>
+                      <td>
+                            @foreach ($price as $id => $name)
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="price_id" value="{{ $id }}" required="" /> {{ $name }} CHF
                                     </label>
                                 </div>
 
