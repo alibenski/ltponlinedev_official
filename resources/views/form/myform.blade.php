@@ -137,7 +137,7 @@
                     <div class="form-group col-md-12">
                       <div class="alert alert-danger col-md-8 col-md-offset-2">
                         <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
-                        <p><strong>If you have already passed the LPE or the highest level of your chosen language but have not taken classes during the past two terms, you are still required to fill the form below. Please indicate in the comment box that you have passed the exam and the Language Secretariat will...</strong></p>
+                        <p><strong>If you have already passed the LPE or the highest level of your chosen language but have not taken classes during two terms, you are still required to fill in the form below. However the placement test might not be necessary depending on the information you provide. The language training secretariat will examine your request and make a decision.</strong></p>
                       </div>
                     </div>
 
@@ -149,6 +149,7 @@
                             <div class="alert alert-info alert-dismissible alert-placement-instruction">
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                               <p>Please select a date (required) for your placement test from the options available. If you are unable to take the placement test on the given dates, then please write the reason in the comments box and indicate your availability.  Where possible, we will try to accommodate your wishes.  If it is not possible, you will need to apply again for the following term.</p> 
+                              <p> If you think that the placement test is not necessary for you, for whatever reason, please explain why in the box below.</p> 
                             </div>
                           </div>
                           

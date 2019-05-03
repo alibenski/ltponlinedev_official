@@ -32,7 +32,7 @@
 
                             <h4><strong>What should I do if I want to cancel my language course?</strong></h4>
                             <p>Go to the tab “current submitted forms”, select the cancellation form and click on the button: “Cancel Enrolment”  or “cancel placement test”.</p>
-                            <p>The deadline for cancelling your course is 14 April 2019 at 11:59 p.m.</p>
+                            <p>The deadline for cancelling your course is 4 August 2019 at 11:59 p.m.</p>
                             
                             <h4><strong>Contact:</strong></h4>
                             <p>If you have any questions, please contact the Language Secretariat by email: <strong>clm_language@un.org.</strong></p>
@@ -55,7 +55,7 @@
                             
                             <h4><strong>Que devrais-je faire si je veux annuler mon cours de langue ?</strong></h4>
                             <p>Allez à l’onglet " Register/Enrol Here ", choisissez le formulaire d'annulation et cliquez sur le bouton : "cancel enrolment " ou « cancel placement test »</p>
-                            <p>Le délai d’annulation pour votre cours de langues est le 14 avril 2019 à 23h59.</p>
+                            <p>Le délai d’annulation pour votre cours de langues est le 4 août 2019 à 23h59.</p>
                             
                             <h4><strong>Contact:</strong></h4>
                             <p>Si vous avez des questions, veuillez contacter, le secrétariat par courriel à : <strong>clm_language@un.org.</strong></p>

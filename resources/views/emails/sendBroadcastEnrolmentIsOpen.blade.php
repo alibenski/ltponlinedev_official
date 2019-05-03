@@ -192,7 +192,8 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
-                                    <p>Dear student, </p>
+                                    {!!$text->text!!}
+                                    {{-- <p>Dear student, </p>
                                     <p><strong>The enrolment period for the 2019 Spring term, from 23 April to 12 July 2019, is now open until 5 March 2019. </strong></p>
                                     <p>To enrol on the UNOG Language Training Programme: 
                                         <ol>
@@ -325,7 +326,7 @@
                                         <li>Cours de révision (A2)</li>
                                         </ul>
                                         <p>Pour plus d’informations, merci de visiter notre site web à l’adresse suivante <a href="http://learning.unog.ch/fr/language-index">http://learning.unog.ch/fr/language-index</a></p>
-                                        <hr>
+                                        <hr> --}}
                                 </td>
                             </tr>
                             <tr>
@@ -343,14 +344,14 @@
                                     <!-- Button : END -->
                                 </td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;"></h2>
                                     <p style="margin: 0;">If you have any question please contact us at: clm_language@un.org<hr>
                                     Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : clm_language@un.org
                                     </p>
                                 </td>
-                            </tr>
+                            </tr> --}}
                         </table>
                     </td>
                 </tr>

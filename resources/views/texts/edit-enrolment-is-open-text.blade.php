@@ -9,20 +9,19 @@
 <div class='col-md-12'>
 
     <form method="POST" action="{{ route('store-enrolment-is-open-text') }}">
-        <textarea name="text-value" id="editor1" rows="10" cols="80" spellcheck="true">
-            {{$text->text}}
-        </textarea>
-        <script>
-            // Replace the <textarea id="editor1"> with a CKEditor
-            // instance, using default configuration.
-            CKEDITOR.replace( 'editor1' );
-        </script>
+        <div class="form-group">
+            <textarea name="textValue" id="editor1" rows="10" cols="80" spellcheck="true">
+                {{$text->text}}
+            </textarea>
+        </div>
 
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
+                <div class="form-group">
                   <button type="submit" class="btn btn-success btn-block">Submit Changes</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
                   {{ method_field('PUT') }}
+                </div>
             </div>
         </div>
     </form> 
@@ -32,5 +31,9 @@
 @stop
 
 @section('java_script')
-
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor
+    // instance, using default configuration.
+    CKEDITOR.replace( 'editor1' );
+</script>
 @stop

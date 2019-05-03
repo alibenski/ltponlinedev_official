@@ -9,7 +9,8 @@ class TextController extends Controller
 {
 	public function viewEnrolmentIsOpenText()
 	{
-		return view('emails.sendBroadcastEnrolmentIsOpen');
+		$text = Text::find(1);
+		return view('texts.view-enrolment-is-open-text', compact('text'));
 	}
 
     public function editEnrolmentIsOpenText()
@@ -20,6 +21,10 @@ class TextController extends Controller
 
     public function storeEnrolmentIsOpenText(Request $request)
     {
-    	dd($request);
+    	$text = Text::find(1);
+    	$text->text = $request->textValue;
+    	$text->save();
+
+    	return redirect(route('view-enrolment-is-open-text'));
     }
 }

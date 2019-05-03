@@ -7,6 +7,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+use App\Text;
+
 class sendBroadcastEnrolmentIsOpen extends Mailable
 {
     use Queueable, SerializesModels;
@@ -29,7 +31,9 @@ class sendBroadcastEnrolmentIsOpen extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.sendBroadcastEnrolmentIsOpen')
+        $text = Text::find(1);
+        
+        return $this->view('emails.sendBroadcastEnrolmentIsOpen', compact('text'))
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->priority(1)
                     ->subject("Language Training Programme: Enrolment Period Open / Programme de formation linguistique : Période d'inscription Ouverte");
