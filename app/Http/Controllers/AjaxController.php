@@ -437,10 +437,11 @@ class AjaxController extends Controller
 
             if ($lastDigit == 9) {
                 $prev_term = $selectedTerm - 1;
+                $placementData = PlacementForm::where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->first();
+            } else {
+                $placementData = null; 
             }
-            $placementData = PlacementForm::where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->first();
             
-            // $placementData = null; 
 
             // if latest term for selected language is less than the 2 terms then true, take placement
             if (($repos_value < $prev_prev_TermCode ) && empty($placementData)) {
