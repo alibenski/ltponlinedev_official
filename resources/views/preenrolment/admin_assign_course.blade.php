@@ -7,6 +7,9 @@
             </div>
             <div class="box-body">
             	<div class="col-sm-6">
+            		@if($placement_flag) 
+            			<h4 class="text-danger"><i class="fa fa-flag"></i> Student placement exam for summer on-going </h4> 
+            		@endif
 					<p>Name: <strong>{{ $element->users->name }}</strong></p> 
 	                <p>Language: <strong>{{ $element->languages->name }}</strong></p> 
 	                <p>Course: <strong>{{ $element->courses->Description }}</strong></p>

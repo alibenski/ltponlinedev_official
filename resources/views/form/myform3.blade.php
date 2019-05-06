@@ -301,7 +301,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Comments: <i>(optional)</i></label>
                         <div class="col-md-8">
-                          <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder="Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints."></textarea>
+                          <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder=""></textarea>
                           <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small>
                         </div>
                     </div>

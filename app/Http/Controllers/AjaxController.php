@@ -431,11 +431,19 @@ class AjaxController extends Controller
             $prev_termCode = $current_enrol_term->Term_Prev;
             $prev_prev_TermCode = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $prev_termCode)->value('Term_Prev');
 
-            // query placement exam table if student placement enrolment data exists or not
-            $placementData = null; 
+            // query placement table if student placement enrolment data exists or not for the previous term
+            $selectedTerm = $current_enrol_term->Term_Code;
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                $prev_term = $selectedTerm - 1;
+            }
+            $placementData = PlacementForm::where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->first();
+            
+            // $placementData = null; 
 
             // if latest term for selected language is less than the 2 terms then true, take placement
-            if (($repos_value < $prev_prev_TermCode ) && $placementData == null) {
+            if (($repos_value < $prev_prev_TermCode ) && empty($placementData)) {
                 $data = true;
             } else {
                 $data = false;
