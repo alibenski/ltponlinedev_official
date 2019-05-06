@@ -581,7 +581,7 @@ class PlacementFormController extends Controller
             $queries = [];
 
             $columns = [
-                'L', 'DEPT', 'is_self_pay_form', 'overall_approval',
+                'L', 'DEPT', 'is_self_pay_form', 'overall_approval', 
             ];
 
             foreach ($columns as $column) {
@@ -594,6 +594,11 @@ class PlacementFormController extends Controller
                 if (Session::has('Term')) {
                         $placement_forms = $placement_forms->where('Term', Session::get('Term') );
                         $queries['Term'] = Session::get('Term');
+                }
+
+                if (\Request::has('not_assigned')) {
+                    $placement_forms = $placement_forms->whereNull('assigned_to_course');
+                    $queries['not_assigned'] = \Request::input('not_assigned');
                 }
 
                 if (\Request::has('search')) {

@@ -46,6 +46,15 @@
         <div class="col-sm-4">
             <div class="input-group"> 
               <span class="input-group-addon">       
+                <input type="checkbox" name="not_assigned" value=1 >                 
+              </span>
+                <label type="text" class="form-control bg-red">View Non-Assigned Placement Forms Only</label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
                 <input type="checkbox" name="is_self_pay_form" value=1 >                 
               </span>
                 <label type="text" class="form-control">View Payment-based Forms Only</label>

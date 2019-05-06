@@ -430,7 +430,8 @@ class AjaxController extends Controller
             $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
             $prev_termCode = $current_enrol_term->Term_Prev;
             $prev_prev_TermCode = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $prev_termCode)->value('Term_Prev');
-            // // query placement exam table if student placement enrolment data exists or not
+
+            // query placement exam table if student placement enrolment data exists or not
             $placementData = null; 
 
             // if latest term for selected language is less than the 2 terms then true, take placement

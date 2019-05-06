@@ -183,7 +183,7 @@ class AdminController extends Controller
             $arr3_count = count($arr3);
         }
 
-        $countNonAssignedPlacement = PlacementForm::where('overall_approval', 1)->whereNull('assigned_to_course')->get()->count();
+        $countNonAssignedPlacement = PlacementForm::where('overall_approval', 1)->where('Term', Session::get('Term'))->whereNull('assigned_to_course')->get()->count();
 
         // query regular enrolment forms which are unassigned to a course
         $all_unassigned_enrolment_form = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')
