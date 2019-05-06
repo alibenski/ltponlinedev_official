@@ -257,8 +257,10 @@ class PreenrolmentController extends Controller
 
             if ($lastDigit == 9) {
                 $prev_term = $selectedTerm - 1;
+                $placement_flag = PlacementForm::where('Term', $prev_term)->whereNull('assigned_to_course')->where('L', $language)->where('INDEXID',$indexid)->first();
+            } else {
+                $placement_flag = null;
             }
-            $placement_flag = PlacementForm::where('Term', $prev_term)->whereNull('assigned_to_course')->where('L', $language)->where('INDEXID',$indexid)->first();
 
             $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag'))->render();
             return response()->json([$data]);             
@@ -321,7 +323,18 @@ class PreenrolmentController extends Controller
             $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
             $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
 
-            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data'))->render();
+            // query placement table if student placement enrolment data exists or not for the previous term
+            $selectedTerm = $next_term;
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                $prev_term = $selectedTerm - 1;
+                $placement_flag = PlacementForm::where('Term', $prev_term)->whereNull('assigned_to_course')->where('L', $language)->where('INDEXID',$indexid)->first();
+            } else {
+                $placement_flag = null;
+            }
+
+            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag'))->render();
             return response()->json([$data]);             
         }
     }
