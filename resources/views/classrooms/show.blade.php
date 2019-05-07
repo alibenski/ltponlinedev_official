@@ -4,7 +4,7 @@
 			@foreach($show_classrooms as $classroom)
 			<h3>Section # {{ $classroom->sectionNo }}</h3>
 			<div>
-				<p>Number of Students:</p>
+				<p>Number of Students: {{count($classroom->pash)}}</p>
 				<p>Teacher: @if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned</span> @endif</p>
 				@if(!empty($classroom->Te_Mon_Room))
 				<p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>

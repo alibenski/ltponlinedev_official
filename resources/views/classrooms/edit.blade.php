@@ -1,21 +1,35 @@
-@extends('admin.admin')
+@extends('admin.no_sidebar_admin')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
+<div class="alert col-sm-12">
+    <h3 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Edit Classroom </strong></h3>
+</div>
+
 <form class="form-horizontal" role="form" method="POST" action="{{ route('classrooms.update', $classroom->id) }}">{{ csrf_field() }}
+	<div class="col-sm-12">
+		<div class="panel panel-primary">
+			<div class="panel-body">
+			    <div class="form-group">
+			        <div class="col-sm-12">
+			        <label class="control-label" for="id">Classroom ID:</label>
+			            <input type="text" class="form-control class-id" value="{{$classroom->id}}" disabled>
+			        </div>
+			    </div>
+			    <div class="form-group">
+			        <div class="col-sm-12">
+			        <label class="control-label" for="title">Title:</label>
+			            <input type="text" class="form-control" value="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" disabled>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</div>
+
     <div class="form-group">
-        <div class="col-sm-12">
-        <label class="control-label" for="id">ID:</label>
-            <input type="text" class="form-control class-id" value="{{$classroom->id}}" disabled>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-12">
-        <label class="control-label" for="title">Title:</label>
-            <input type="text" class="form-control" value="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" disabled>
-        </div>
-        <div class="col-sm-6 add-margin">
+        <div class="col-sm-4 add-margin">
 			<div class="panel panel-primary">
 				<div class="panel-heading"><strong>Existing Values</strong></div>
 		        <div class="panel-body existing-content">
@@ -48,342 +62,188 @@
 		        </div>
 		    </div>
         </div>
-    </div>
 
-    <div id="section-accordion">
-        <div id="sectionCount" class="content-clone">
-            <div class="col-sm-12"><hr></div>
-            <h4><strong>Section # <input type="text" class="btn" id="sectionValue" name="sectionNo" value="{{$classroom->sectionNo}}" required="" disabled=""  /></strong></h4>
-            <div class="form-group class-section">
-				<div class="form-group col-sm-12">
-                    <label class="control-label col-sm-2" for="Tch_ID">Teacher:</label>
-                    <div class="col-sm-10">
-                        <select class="form-control select2" name="Tch_ID" autocomplete="off" style="width: 100%;">
-                            <option value="">--- Select Teacher ---</option>
-                            @foreach ($teachers as $teacher)
-                            <option value="{{ $teacher->Tch_ID }}"> {{ $teacher->Tch_Name }}</option>
-                            @endforeach
-                        </select>
-                        <br>
-                        <p class="errorTeacher text-center alert alert-danger hidden"></p>
-                    </div>
-                </div>
-
-				<div class="days-rooms-section">
-					<label class="col-sm-12">Assign Room and Time:</label>
-
-					@if(!empty($classroom->Te_Mon_BTime))
-					<div class="form-group monday col-sm-12">
-	                    <div class="col-sm-12">
-	                        <div class="checkbox">
-	                            <label>
-	                                <input type="checkbox" name="Te_Mon" value="2" /> Monday
-	                                <br>
-	                            </label>
-			                    <div class="content-hide content-params">
-									<div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Mon_Room">Room:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Mon_Room" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($rooms as $room)
-			                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
-			                                    @endforeach
-			                                </select>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Mon_BTime">Begin Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Mon_BTime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($btimes as $id => $val)
-			                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-			                                    @endforeach
-			                                </select>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Mon_ETime">End Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Mon_ETime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($etimes as $id => $val)
-			                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-			                                    @endforeach
-			                                </select>
-			                            </div>
-									</div>
-									
-									<div class="form-group btn-space pull-right">
-										<button class="delete-day-param btn btn-danger" value="2">
-                                        <span class="glyphicon glyphicon-trash"></span> Delete</button>
-									</div>
-
-			                    </div>
-	                        </div>
-	                    </div>
-                    </div>
-					@endif
-
-					@if(!empty($classroom->Te_Tue_BTime))
-                    <div class="form-group tuesday col-sm-12">
-	                    <div class="col-sm-12">
-	                        <div class="checkbox">    
-	                            <label>
-	                                <input type="checkbox" name="Te_Tue" value="3" /> Tuesday
-	                                <br>
-	                            </label>
-								<div class="content-hide content-params">
-									<div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Tue_Room">Room:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Tue_Room" autocomplete="off" style="width: 100%;">
-                                                <option></option>
-			                                    @foreach ($rooms as $room)
-			                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
-			                                    @endforeach
-			                                </select>
-			                                <p class="errorRoom text-center alert alert-danger hidden"></p>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Tue_BTime">Begin Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Tue_BTime" autocomplete="off" style="width: 100%;">
-                                                <option></option>
-			                                    @foreach ($btimes as $id => $val)
-			                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-			                                    @endforeach
-			                                </select>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Tue_ETime">End Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Tue_ETime" autocomplete="off" style="width: 100%;">
-                                                <option></option>
-			                                    @foreach ($etimes as $id => $val)
-			                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-			                                    @endforeach
-			                                </select>
-			                            </div>
-									</div>
-									<div class="form-group btn-space pull-right">
-										<button class="delete-day-param btn btn-danger" value="3">
-                                        <span class="glyphicon glyphicon-trash"></span> Delete</button>
-									</div>
-								</div>
-                            </div>
-                        </div>
-                    </div>
-					@endif
-					
-					@if(!empty($classroom->Te_Wed_BTime))
-                    <div class="form-group wednesday col-sm-12">
-                    	<div class="col-sm-12">
-	                        <div class="checkbox">    
-	                            <label>
-	                                <input type="checkbox" name="Te_Wed" value="4" /> Wednesday
-	                                <br>
-	                            </label>
-								<div class="content-hide content-params">
-									<div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Wed_Room">Room:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Wed_Room" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($rooms as $room)
-			                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
-			                                    @endforeach
-			                                </select>
-			                                <p class="errorRoom text-center alert alert-danger hidden"></p>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Wed_BTime">Begin Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Wed_BTime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($btimes as $id => $val)
-                                                <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-                                                @endforeach
-			                                </select>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Wed_ETime">End Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Wed_ETime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($etimes as $id => $val)
-                                                <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-                                                @endforeach
-			                                </select>
-			                            </div>
-									</div>
-									<div class="form-group btn-space pull-right">
-										<button class="delete-day-param btn btn-danger" value="4">
-                                        <span class="glyphicon glyphicon-trash"></span> Delete</button>
-									</div>
-								</div>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                    @if(!empty($classroom->Te_Thu_BTime))
-                    <div class="form-group thursday col-sm-12">
-	                    <div class="col-sm-12">
-	                        <div class="checkbox"> 
-	                            <label>
-	                                <input type="checkbox" name="Te_Thu" value="5" /> Thursday
-	                                <br>
-	                            </label>
-								<div class="content-hide content-params">
-									<div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Thu_Room">Room:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Thu_Room" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($rooms as $room)
-			                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
-			                                    @endforeach
-			                                </select>
-			                                <p class="errorRoom text-center alert alert-danger hidden"></p>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Thu_BTime">Begin Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Thu_BTime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($btimes as $id => $val)
-                                                <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-                                                @endforeach
-			                                </select>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Thu_ETime">End Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Thu_ETime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($etimes as $id => $val)
-                                                <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-                                                @endforeach
-			                                </select>
-			                            </div>
-									</div>
-									<div class="form-group btn-space pull-right">
-										<button class="delete-day-param btn btn-danger" value="5">
-                                        <span class="glyphicon glyphicon-trash"></span> Delete</button>
-									</div>
-								</div>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-
-                    @if(!empty($classroom->Te_Fri_BTime))
-                    <div class="form-group friday col-sm-12">
-	                    <div class="col-sm-12">
-	                        <div class="checkbox"> 
-	                            <label>
-	                                <input type="checkbox" name="Te_Fri" value="6" /> Friday
-	                                <br>
-	                            </label>
-								<div class="content-hide content-params">
-									<div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Fri_Room">Room:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Fri_Room" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($rooms as $room)
-			                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
-			                                    @endforeach
-			                                </select>
-			                                <p class="errorRoom text-center alert alert-danger hidden"></p>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Fri_BTime">Begin Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Fri_BTime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($btimes as $id => $val)
-                                                <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-                                                @endforeach
-			                                </select>
-			                            </div>
-			                        </div>
-			                        <div class="btn-space col-sm-12">
-			                            <label class="control-label col-sm-2" for="Te_Fri_ETime">End Time:</label>
-			                            <div class="col-sm-10">
-			                                <select class="form-control " name="Te_Fri_ETime" autocomplete="off" style="width: 100%;">
-			                                    <option></option>
-                                                @foreach ($etimes as $id => $val)
-                                                <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
-                                                @endforeach
-			                                </select>
-			                            </div>
-									</div>
-									<div class="form-group btn-space pull-right">
-										<button class="delete-day-param btn btn-danger" value="6">
-                                        <span class="glyphicon glyphicon-trash"></span> Delete</button>
-									</div>
-								</div>
-                            </div>
-                        </div>
-                	</div>
-                	@endif
-
-                </div> 
-			</div> 
+        <div class="col-sm-5 add-margin">
+        	<div class="panel panel-info">
+				<div class="panel-heading"><strong>Students [Class Code: {{ $classroom->Code }}]</strong></div>
+		        <div class="panel-body">
+		            @foreach ($students->chunk(4) as $element)
+		            	<div class="col-sm-3">
+			            	@foreach ($element as $student)
+			            		<p>{{ $student->users->name }}</p>
+			            	@endforeach
+		            	</div>
+		            @endforeach
+		        </div>
+		    </div>
         </div>
     </div>
-	<div class="modal-footer">
-	    <button type="submit" class="btn btn-success"><span class='glyphicon glyphicon-check'></span> Save</button>
-	    <input type="hidden" name="_token" value="{{ Session::token() }}">
-	    {{ method_field('PUT') }}
-	    <a href="{{ route('classrooms.index') }}" class="btn btn-danger">
-            <span class='glyphicon glyphicon-remove'></span> Back
-        </a>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-12">  
+				<div class="panel panel-primary">
+				<div class="panel-heading"><strong>Choose Schedule</strong></div>
+					<div class="panel-body">
+					  <div class="row">
+					    <div class="col-md-2">
+					      <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block btn-space">
+					    </div>
+						<div class="col-md-2 pull-right">
+						    <button id="saveBtn" type="submit" class="btn btn-success btn-space" disabled=""><i class='fa fa-save'></i> Save</button>
+						    <input type="hidden" name="_token" value="{{ Session::token() }}">
+						    {{ method_field('PUT') }}
+						    <a href="{{ route('classrooms.index') }}" class="btn btn-danger btn-space">
+					            <i class='fa fa-rotate-left'></i> Back
+					        </a>
+						</div>
+
+					    <div class="col-md-12">
+					      <div class="col-md-12">
+					        @foreach ($schedules as $schedule)
+					        <div class="col-sm-2">
+						        @foreach ($schedule as $id => $name)
+						            <div class="checkbox">
+						                <label>
+						                    <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id" multiple="multiple" value="{{ $id }}" /> {{ $name }}
+						                </label>
+						            </div>
+
+						            <div class="form-group teacher_div_{{ $id }}" style="display: none;">
+						              <label name="Tch_ID" class="col-md-3 control-label" style="margin: 5px 5px;">Teachers: </label>
+						                <select id="Tch_ID_select_{{ $id }}" class="col-md-8 form-control select2-multi" name="Tch_ID" multiple="multiple" autocomplete="off" style="width: 100%">
+						                    <option value="">--- Select Teacher ---</option>
+						                    @foreach ($teachers as $valueTeacher)
+						                        <option value="{{$valueTeacher->Tch_ID}}">{{$valueTeacher->Tch_Name}} </option>
+						                    @endforeach
+						                </select>
+						            </div>
+									
+									<div class="sched-days schedule-days-{{$id}}"></div>
+						        @endforeach
+					        </div>
+					        @endforeach
+					      </div>                  
+					    </div>
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </form>
 @stop
 @section('java_script')
+<script src="{{ asset('js/select2.min.js') }}"></script>
 <script>
-	// Show parameters
-        $("input[type='checkbox']").on('click', function() {
-            $(this).parent().next(".content-params").toggle();
-        });
-    // Delete day parameters
-    	$('.delete-day-param').on('click', function(event) {
-    		event.preventDefault();
-    		var dayID = $(this).val();
+  $(document).ready(function(){
+    $('input[type=checkbox]').prop('checked',false);
+    $('input[type=radio]').prop('checked',false);
 
-    		$.ajax({
-    			url: '{{ route('delete-day-param-ajax') }}',
-    			type: 'POST',
-    			data: {
-    				'_token': $('input[name=_token]').val(),
-    				'dayID' : dayID,
-    				'id' : $('.class-id').val(),
-    			},
-    		})
-    		.done(function(data) {
-    			console.log("success");
-    			console.log(data);
-    			location.reload(true);
-    		})
-    		.fail(function() {
-    			console.log("error");
-    		})
-    		.always(function() {
-    			console.log("complete");
-    		});
-    		
-    	});
+    $('.select2-one').select2({
+      placeholder: "--- Select Here ---",
+    });
+    
+    $('.select2-multi').select2({
+      placeholder: "--- Select Here ---",
+      maximumSelectionLength: 1,
+    });
+  });
+</script>
+
+<script>
+$(document).ready(function(){
+  /* Get the checkboxes values based on the class attached to each check box */
+  $("#buttonClass").click(function() {
+      getScheduleDays();
+      getValueUsingClass();
+  });
+
+  function getScheduleDays() {
+	var scheduleID = $('input[name="schedule_id"]:checked').val();
+	var token = $("input[name='_token']").val();
+
+	$.ajax({
+		url: '{{ route('get-schedule-days') }}',
+		type: 'GET',
+		data: {id:scheduleID, _token:token},
+	})
+	.done(function(data) {
+		$('.schedule-days-'+scheduleID).html('');
+		$('.schedule-days-'+scheduleID).html(data);
+		$('.select2-one').select2({
+	      placeholder: "--- Select Here ---",
+	    });
+	    
+	    $('.select2-multi').select2({
+	      placeholder: "--- Select Here ---",
+	      maximumSelectionLength: 1,
+	    });
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+	
+  }
+
+  function getValueUsingClass(){
+    /* declare an checkbox array */
+    var chkArray = [];
+    
+    /* look for all checkboxes that have name of 'schedule_id' attached to it and check if it was checked */
+    $('input[name="schedule_id"]:checked').each(function() {
+      chkArray.push($(this).val());
+    });
+
+    $.each(chkArray, function(index, val) {
+      console.log(val)
+      $('#Tch_ID_select_'+val).prop('required', true);
+      $('#room_id_select_'+val).prop('required', true);
+      $('.teacher_div_'+val).removeAttr('style');
+      $('.room_div_'+val).removeAttr('style');
+    });
+
+    /* we join the array separated by the comma */
+    var selected;
+    selected = chkArray.join(',') ;
+    
+    /* check if there is selected checkboxes, by default the length is 1 as it contains one single comma */
+    if(selected.length > 0){
+      console.log("You have selected " + selected)
+      $('#saveBtn').removeAttr('disabled');
+    }else{
+      alert("Please at least check one of the checkbox");
+      $('#saveBtn').attr('disabled', 'disabled');
+    }
+  }
+});   
+</script>
+
+<script>
+$(document).ready(function(){
+  $('input[name="schedule_id"]').on('click', function() {
+    var valueID = $(this).val();
+      if (!$('#box_value_'+valueID).is(':checked')) {
+        // console.log($('#Tch_ID_select_'+valueID))
+        $('#Tch_ID_select_'+valueID).val([]).trigger('change'); // reset select2 value
+        $('#room_id_select_'+valueID).val([]).trigger('change'); // reset select2 value
+        $('#Tch_ID_select_'+valueID).prop('required', false);
+        $('#room_id_select_'+valueID).prop('required', false);
+        $('.teacher_div_'+valueID).attr('style', 'display: none;');
+        $('.room_div_'+valueID).attr('style', 'display: none;');
+        $('.schedule-days-'+valueID).html('');
+      }
+  });
+
+  $('input[name="schedule_id"]').on('change', function (e) {
+	    if ($('input[name="schedule_id"]:checked').length > 1) {
+	        $(this).prop('checked', false);
+	        alert("Only 1 schedule is allowed for this class.");
+	    }
+  });
+});   
 </script>
 @stop
