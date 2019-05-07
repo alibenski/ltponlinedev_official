@@ -38,6 +38,7 @@ class LoginController extends Controller
     
     protected function authenticated($request, $user)
     {
+    	$user->timestamps = false;
         $user->update([
             'last_login_at' => Carbon::now()->toDateTimeString(),
             'last_login_ip' => $request->getClientIp(),
