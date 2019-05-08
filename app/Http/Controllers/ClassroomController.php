@@ -259,6 +259,7 @@ class ClassroomController extends Controller
         $classroom->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
         $classroom->Code = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$classroom->sectionNo;
 
+        // set day, time, and room fields to null 
         $classroom->Te_Mon = null;
         $classroom->Te_Mon_BTime = null;
         $classroom->Te_Mon_ETime = null;
@@ -315,10 +316,7 @@ class ClassroomController extends Controller
                 $classroom->Te_Fri_ETime = $schedule_fields->end_time;
                 $classroom->Te_Fri_Room = $request->Te_Fri_Room;
             }
-
-
         $classroom->save();
-        // $classroom->update($fliteredInput);
         $request->session()->flash('success', 'Changes have been saved!');
         return redirect()->back();
     }
@@ -331,9 +329,6 @@ class ClassroomController extends Controller
      */
     public function destroy($id)
     {
-        $course = Course::find($id);
-        $course->delete();
-        session()->flash('success', 'Post deleted');
-        return redirect()->route('courses.index');
+        //
     }
 }
