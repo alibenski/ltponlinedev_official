@@ -193,11 +193,17 @@ class ClassroomController extends Controller
         $etimes = Time::pluck("End_Time","End_Time")->all(); 
 
         $students = Repo::where('CodeClass', $classroom->Code)->get();
-        $schedules = Schedule::pluck("name","id")->chunk(5)->all();
+        $schedules = Schedule::orderBy('name', 'asc')->pluck("name","id")->chunk(5)->all();
 
         return view('classrooms.edit')->withSchedules($schedules)->withStudents($students)->withClassroom($classroom)->withRooms($rooms)->withTeachers($teachers)->withTerms($terms)->withBtimes($btimes)->withEtimes($etimes);
     }
 
+    /**
+     * Get the days associated to schedule 
+     * 
+     * @param  Request $request 
+     * @return json           
+     */
     public function getScheduleDays(Request $request)
     {
         if ($request->ajax()) {
@@ -226,9 +232,18 @@ class ClassroomController extends Controller
             }
         $classroom = Classroom::findOrFail($id);
 
+        // update CourseSchedule records first to new schedule
+        $courseSchedRecord = CourseSchedule::where('cs_unique', $classroom->cs_unique)->get();
+        foreach ($courseSchedRecord as $record) {
+            $record->Tch_ID = $request->Tch_ID;
+            $record->schedule_id = $request->schedule_id;
+            $record->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
+            
+            $record->save();
+        }
+
         // update PASH records first to new schedule
         $pash_record = Repo::where('CodeClass', $classroom->Code)->get();
-
         foreach ($pash_record as $value) {
             $value->schedule_id = $request->schedule_id;
             $value->Code = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;

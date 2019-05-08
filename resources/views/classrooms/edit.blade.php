@@ -87,7 +87,7 @@
 					<div class="panel-body">
 					  <div class="row">
 					    <div class="col-md-2">
-					      <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block btn-space">
+					      <input type="button" value="Assign Teacher & Room" id="buttonClass" class="btn btn-info btn-block btn-space">
 					    </div>
 						<div class="col-md-2 pull-right">
 						    <button id="saveBtn" type="submit" class="btn btn-success btn-space" disabled=""><i class='fa fa-save'></i> Save</button>
