@@ -157,7 +157,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
-    
+
+    // Classroom routes
     Route::resource('classrooms', 'ClassroomController');
     Route::get('get-schedule-days', ['as' => 'get-schedule-days', 'uses' => 'ClassroomController@getScheduleDays' ]);
 
