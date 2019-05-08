@@ -362,12 +362,15 @@ class UserController extends Controller
 
         $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();
-        
+        $placement_records = PlacementForm::withTrashed()
+            ->where('INDEXID', $student->indexno)
+            ->get();
+
         $term_info = Term::where('Term_Code', $request->Term)->first(); 
 
         if ($student_last_term == null) {
             $repos_lang = null;
-            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
+            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withPlacement_records($placement_records)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
         }    
 
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
@@ -377,11 +380,11 @@ class UserController extends Controller
             $student_enrolments = null;
             $student_placements = null;
             
-            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
+            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withPlacement_records($placement_records)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
         }      
 
         
-        return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
+        return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withPlacement_records($placement_records)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
     }
 
     public function enrolStudentToCourseForm(Request $request, $id)

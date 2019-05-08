@@ -12,6 +12,7 @@
 	<a href="{{ route('users.index') }}" class="btn btn-danger btn-space"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
 	<button type="button" class="show-modal btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
 	<button type="button" class="show-modal-history btn btn-primary btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
+	<button type="button" class="show-modal-placement-history btn bg-orange btn-space" data-toggle="modal"><span class="glyphicon glyphicon-list-alt"></span> Placement Tests & Results</button>
 	<a href="{{ route('enrol-student-to-course-form', $id) }}" class="btn btn-success btn-space"><span class="glyphicon glyphicon-pencil"></span>  Create Enrolment Form </a>
 	<a href="{{ route('enrol-student-to-placement-form', $id) }}" class="btn btn-warning btn-space"><span class="glyphicon glyphicon-pencil"></span>  Create Placement Form</a>
 	
@@ -683,6 +684,49 @@
         </div>
     </div>
 </div>
+
+<!-- Modal form to show placement history -->
+<div id="showModalPlacementHistory" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title-placement-history"></h4>
+            </div>
+            <div class="modal-body-placement-history">
+	            <div class="panel-body panel-info">
+	                @if($placement_records->isEmpty())
+	                <div class="alert alert-danger">
+	                    <p>There were no placement test records found.</p>
+	                </div>
+	                @else
+	                <ul  class="list-group">
+	                    @foreach($placement_records as $placement_record)
+	                        <li class="list-group-item"><strong class="text-success">
+	                        @if(empty($placement_record))
+		                        <div class="alert alert-danger">
+		                            <p>There were no placement test records found.</p>
+		                        </div>
+	                        @else
+								{{ $placement_record->terms->Comments }} {{ $placement_record->terms->Term_Name }}</strong> : {{ $placement_record->languages->name }} Placement Test 
+								<br><strong>Assessment/Result :</strong> {{ $placement_record->Result }}
+								<br><strong>Assigned Course : </strong> @if ($placement_record->Te_Code) {{ $placement_record->courses->Description }} @endif
+	                        @endif
+	                        </li>
+	                    @endforeach
+	                </ul>
+	                @endif
+	            </div>                	  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                    <span class='glyphicon glyphicon-remove'></span> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- modal for enrolments forms --}}
 <div id="modalshow" class="modal fade">
     <div class="modal-dialog">
@@ -954,10 +998,16 @@ $(document).ready(function() {
 $(document).on('click', '.show-modal', function() {
     $('#showModal').modal('show'); 
 });
+
 $(document).on('click', '.show-modal-history', function() {
 	$('.modal-title-history').text('Past Language Course Enrolment for {{ $student->name }}');
     $('#showModalHistory').modal('show'); 
 });
+
+$(document).on('click', '.show-modal-placement-history', function() {
+	$('.modal-title-placement-history').text('Placement Tests and Results for {{ $student->name }}');
+    $('#showModalPlacementHistory').modal('show'); 
+})
 
 $(document).on('click', '.course-delete', function() {
 	var INDEXID = $(this).closest("tr").find("input[name='indexid']").val();
