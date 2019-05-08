@@ -134,7 +134,7 @@
     <div class="col-sm-4 col-xs-12">
         <div class="info-box">
           <!-- Apply any bg-* class to to the icon to color it -->
-          <span class="info-box-icon bg-yellow"><i class="fa fa-list"></i></span>
+          <span class="info-box-icon bg-navy"><i class="fa fa-list"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">Preview for Term: <span class="lead"><strong>{{Session::get('Term')}}</strong></span></span>
             <span class="info-box-number"></span>
@@ -149,9 +149,42 @@
   <div class="col-sm-4 col-xs-12">
       <div class="info-box">
         <!-- Apply any bg-* class to to the icon to color it -->
-        <span class="info-box-icon bg-yellow"><i class="fa fa-list"></i></span>
+        <span class="info-box-icon bg-navy"><i class="fa fa-list"></i></span>
         <div class="info-box-content">
           <span class="info-box-text">Preview </span>
+          <span class="info-box-number">Set Term</span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+  </div>
+  @endif
+@endhasrole
+
+@hasrole('Teacher FP')
+  @if(Session::has('Term'))
+  <a href="{{ route('placement-form-filtered') }}"> 
+    <div class="col-sm-4 col-xs-12">
+        <div class="info-box">
+          <!-- Apply any bg-* class to to the icon to color it -->
+          <span class="info-box-icon bg-yellow"><i class="fa fa-file"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">Placement Forms for Term: <span class="lead"><strong>{{Session::get('Term')}}</strong></span></span>
+            <span class="info-box-number"></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+  </a>
+
+  @else
+  <div class="col-sm-4 col-xs-12">
+      <div class="info-box">
+        <!-- Apply any bg-* class to to the icon to color it -->
+        <span class="info-box-icon bg-yellow"><i class="fa fa-file"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Placement Forms </span>
           <span class="info-box-number">Set Term</span>
         </div>
         <!-- /.info-box-content -->

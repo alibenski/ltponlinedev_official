@@ -104,6 +104,9 @@
 <button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
 @else
 <button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+	@if ($form->admin_plform_cancel_comment)
+		<p><small>Admin Comment: "{{$form->admin_plform_cancel_comment}}"</small></p>
+	@endif
 @endif
 
 <div id="modalDeletePlacement-{{ $form->id }}" class="modal fade" role="dialog">
@@ -254,8 +257,6 @@
 @stop
 
 @section('java_script')
-<script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {

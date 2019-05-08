@@ -1,4 +1,4 @@
-@extends('admin.no_sidebar_admin')
+@extends('shared_template')
 
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">

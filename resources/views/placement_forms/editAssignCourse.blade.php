@@ -1,19 +1,19 @@
-@extends('admin.no_sidebar_admin')
+@extends('shared_template')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
 <div class="row">
-	<div class="callout callout-success col-sm-12">
-		<h4>Assign Language Courses</h4>
+	<div class="alert bg-gray col-sm-12">
+		<h4 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Assign Language Course To Placement Form</strong></h4>
 	</div>
 </div>
 
 @if($placement_form->assigned_to_course == 1)
 <div class="row">
 	<div class="callout callout-info col-sm-12">
-		<h4>Current Course Assigned:  {{ $placement_form->courses->Description }} - {{ $placement_form->schedule->name }}</h4>
+		<h4><i class="fa fa-check-square-o"></i> Current Course Assigned:  {{ $placement_form->courses->Description }} - {{ $placement_form->schedule->name }}</h4>
 	</div>
 </div>
 @else
@@ -44,8 +44,8 @@
 				<label for="">Was the student convoked to take a placement exam?</label>
 				<div class="col-sm-12">
 			        <div class="col-md-4">
-                      <input id="decisionCovoked1" name="convoked" class="with-font" type="radio" value="1">
-                      <label for="decisionCovoked1" class="form-control-static">YES</label>
+                      <input id="decisionConvoked1" name="convoked" class="with-font" type="radio" value="1">
+                      <label for="decisionConvoked1" class="form-control-static">YES</label>
                     </div>
 
                     <div class="col-md-4">
@@ -60,7 +60,13 @@
 				</div> --}}
 		    </div>
 
+
 			<div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
+			
+				<div class="form-group placement-result">
+					<label for="inputResult">Placement Test Result: (optional)</label>
+					<textarea name="Result" id="inputResult" class="form-control" maxlength="3500" placeholder="Enter result of the placement test and other relevant information in this field, i.e. appropriate level, course, etc. or reason why student does not need to take a placement test"></textarea>
+				</div>
 
 				<div class="form-group">
 			      <label for="L" class="control-label"> Language:</label>
@@ -101,7 +107,7 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label">Admin Comments: </label>
+					<label class="control-label">Admin Comments: (optional) </label>
 
 					<textarea id="textarea-{{$placement_form->eform_submit_count}}" name="admin_plform_comment" class="form-control" maxlength="3500" @if(is_null($placement_form->admin_plform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$placement_form->admin_plform_comment}}" @endif></textarea>
 					
@@ -172,13 +178,14 @@
 		</div>
 		<div class="form-group">	
 			<label class="control-label" for="show_sched">Exam Date:</label>
-			{{-- @foreach($placement_form as $show_sched) --}}
-		    <div class="col-sm-12">
-				@if ($placement_form->placementSchedule->is_online == 1) Online from {{ $placement_form->placementSchedule->date_of_plexam }} to {{ $placement_form->placementSchedule->date_of_plexam_end }} 
-				@else {{ $placement_form->placementSchedule->date_of_plexam }} 
-				@endif
-			</div>
-			{{-- @endforeach --}}
+		    <input type="text" class="form-control" name="org_show" value="@if ($placement_form->placementSchedule->is_online == 1) Online from {{ $placement_form->placementSchedule->date_of_plexam }} to {{ $placement_form->placementSchedule->date_of_plexam_end }} @else {{ $placement_form->placementSchedule->date_of_plexam }} @endif" readonly>
+
+		</div>
+		<div class="form-group">
+		    <label class="control-label" for="result_comment">Placement Test Result:</label>
+		    <div class="">
+		        <textarea class="form-control" name="result_comment" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->Result }}</textarea>
+		    </div>
 		</div>
 	</div> <!-- EOF 1st SECTION -->
 	
@@ -309,9 +316,9 @@
 	localStorage.setItem("update", "0");
 	$("button[name='submit-approval']").click(function(){//target element and request click event
 		localStorage.setItem("update", "1");//set localStorage of parent page
-		setTimeout(function(){
-			window.close();},
-			800);//timeout code to close window
+		// setTimeout(function(){
+		// 	window.close();},
+		// 	800);//timeout code to close window
 		});
 </script>
 @stop
