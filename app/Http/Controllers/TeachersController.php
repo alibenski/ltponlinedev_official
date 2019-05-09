@@ -149,6 +149,17 @@ class TeachersController extends Controller
         return view('teachers.index')->withTeachers($teachers)->withLanguages($languages);
     }
 
+    public function teacherShowClassroomsPerTeacher(Request $request)
+    {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        if ($request->has('Term')) {
+            $pash_records = Repo::where('Term', $request->input('Term'))->get();
+
+            dd($request->input('Term'));
+        }
+        
+        return view('teachers.teacher_show_classrooms_per_teacher', compact('terms'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -471,7 +482,9 @@ class TeachersController extends Controller
             $languages = DB::table('languages')->pluck("name","code")->all();
             $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
 
-            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms'))->render();
+            $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+
+            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms','last_placement_test'))->render();
             return response()->json([$data]);             
         }
     }

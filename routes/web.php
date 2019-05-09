@@ -57,6 +57,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
      * Teachers Routes
      */
     Route::resource('teachers', 'TeachersController');
+    Route::get('teacher-show-classrooms-per-teacher', ['as'=>'teacher-show-classrooms-per-teacher','uses'=>'TeachersController@teacherShowClassroomsPerTeacher']);
+
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard')->middleware('first-time-login');
     
     Route::put('ajax-teacher-update', ['as'=>'ajax-teacher-update','uses'=>'TeachersController@ajaxTeacherUpdate']);

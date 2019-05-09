@@ -35,12 +35,31 @@
 						@endif
 					</p>
 					<p>
+						Last placement test taken: 
+						<br>
+						@if(empty($last_placement_test))
+							<p class="text-danger"><strong>
+							There were no placement test records found.
+							</strong></p>
+                        @else
+							<ul class="list-group">
+								<li class="list-group-item">
+									<strong>{{ $last_placement_test->terms->Comments }} {{ $last_placement_test->terms->Term_Name }}</strong> : {{ $last_placement_test->languages->name }} Placement Test 
+									<br><strong>Assessment/Result :</strong> {{ $last_placement_test->Result }}
+									<br><strong>Assigned Course : </strong> @if ($last_placement_test->Te_Code) {{ $last_placement_test->courses->Description }} @endif
+								</li>
+							</ul>
+                        @endif
+					</p>
+					<p>
 						Last language course taken: <strong>
-							@if(empty($historical_data))
-
-                                There were no historical records found.
-
-                            @else
+						@if(empty($historical_data))
+							<p class="text-danger"><strong>
+                            There were no historical records found.
+							</strong></p>
+                        @else
+                        	<ul class="list-group">
+								<li class="list-group-item">
                                 @if(empty($historical_data->Te_Code)) {{ $historical_data->coursesOld->Description }} 
                                 @else {{ $historical_data->courses->Description }} 
                                 @endif : {{ $historical_data->terms->Term_Name }} 
@@ -58,8 +77,10 @@
                                 	@endif
                                 	</em>
                                 	(@if($historical_data->Result == 'P') Passed @elseif($historical_data->Result == 'F') Failed @elseif($historical_data->Result == 'I') Incomplete @else -- @endif)
-                            @endif 
-                            </strong>
+                            	</li>
+                            </ul>	
+                        @endif 
+                        </strong>
 					</p>
 
 	                <div class="form-group">

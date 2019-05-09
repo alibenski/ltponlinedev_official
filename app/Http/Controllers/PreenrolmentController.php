@@ -262,7 +262,9 @@ class PreenrolmentController extends Controller
                 $placement_flag = null;
             }
 
-            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag'))->render();
+            $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+
+            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag','last_placement_test'))->render();
             return response()->json([$data]);             
         }
     }    
@@ -334,7 +336,9 @@ class PreenrolmentController extends Controller
                 $placement_flag = null;
             }
 
-            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag'))->render();
+            $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+
+            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag','last_placement_test'))->render();
             return response()->json([$data]);             
         }
     }
