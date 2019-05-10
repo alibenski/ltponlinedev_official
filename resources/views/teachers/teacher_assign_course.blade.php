@@ -36,6 +36,23 @@
 						<strong>No</strong>
 						@endif
 					</p>
+					<p>
+						Last placement test taken: 
+						<br>
+						@if(empty($last_placement_test))
+							<p class="text-danger"><strong>
+							There were no placement test records found.
+							</strong></p>
+                        @else
+							<ul class="list-group">
+								<li class="list-group-item">
+									<strong>{{ $last_placement_test->terms->Comments }} {{ $last_placement_test->terms->Term_Name }}</strong> : {{ $last_placement_test->languages->name }} Placement Test 
+									<br><strong>Assessment/Result :</strong> {{ $last_placement_test->Result }}
+									<br><strong>Assigned Course : </strong> @if ($last_placement_test->Te_Code) {{ $last_placement_test->courses->Description }} @endif
+								</li>
+							</ul>
+                        @endif
+					</p>
 					<div class="form-group">
 						<label class="control-label">Comments: </label>
 

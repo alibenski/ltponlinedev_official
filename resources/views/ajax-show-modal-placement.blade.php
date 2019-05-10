@@ -108,6 +108,13 @@
 				    <label class="control-label" for="flexible_show">Is Flexible: @if($placement_form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 				</div>
 
+				<div class="form-group">
+				    <label class="control-label" for="result_comment">Placement Test Result:</label>
+				    <div class="">
+				        <textarea class="form-control" name="result_comment" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->Result }}</textarea>
+				    </div>
+				</div>
+
 			</div> 
 			{{-- EOF 1st column --}}
 
@@ -177,7 +184,7 @@
 				    </div>
 				</div>
 				@endif
-				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><span class="glyphicon glyphicon-edit"></span> Modify Assigned Course</a> 
+				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><i class="fa fa-pencil"></i> Modify Assigned Course</a> 
 			</div> {{-- EOF 2nd column --}}
 		</form>			
 	</div>

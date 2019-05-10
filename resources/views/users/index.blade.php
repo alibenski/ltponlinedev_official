@@ -48,6 +48,7 @@
                     <th>Contact Number</th>
                     <th>Member Since</th>
                     <th>Has logged in?</th>
+                    <th>Last Login At</th>
                     <th>User Roles</th>
                 </tr>
             </thead>
@@ -75,6 +76,11 @@
                             <h4><span class="label label-success">Yes</span></h4>
                         @else
                             <h4><span class="label label-danger">Never</span></h4>
+                        @endif
+                    </td>
+                    <td>
+                        @if ($user->last_login_at)
+                            {{ $user->last_login_at}}
                         @endif
                     </td>                    
                     <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}

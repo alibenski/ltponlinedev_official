@@ -638,6 +638,7 @@ class PlacementFormController extends Controller
 
     /**
      * Page/View to convoke students to take a placement examination
+     * Not used at the moment
      */
     public function edit($id)
     {
@@ -760,6 +761,7 @@ class PlacementFormController extends Controller
 
         $placement_form = PlacementForm::find($id);
         $placement_form->convoked = $request->convoked;
+        $placement_form->Result = $request->Result;
         $placement_form->assigned_to_course = 1;
 
         if (!is_null($request->admin_plform_comment)) {
@@ -775,7 +777,7 @@ class PlacementFormController extends Controller
         $placement_form->CodeIndexID = $request->course_id.'-'.$request->schedule_id.'-'.$request->Term.'-'.$request->INDEXID;
         $placement_form->save();
     
-        // $request->session()->flash('success', 'Placement form record has been updated.'); 
+        // $request->session()->flash('success', 'Placement form record has been updated. You can now close this window/tab.'); 
         return redirect()->back();
     }
 
