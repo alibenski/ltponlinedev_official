@@ -152,6 +152,13 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get( 'user/switch/start/{id}', 'UserController@user_switch_start' );
     Route::get( 'user/switch/stop', 'UserController@user_switch_stop' );
 
+    /**
+     * Billing Routes
+     */
+    Route::get('billing-index', ['as' => 'billing-index', 'uses' => 'BillingController@billingIndex' ]);
+    Route::get('ajax-billing-table', ['as' => 'ajax-billing-table', 'uses' => 'BillingController@ajaxBillingTable' ]);
+    Route::get('billing-json', function () { return view('billing.billing_table'); })->name('billing-json');
+
     // page for tagging students as pass or fail
     Route::get('pashqtcur', ['as' => 'pashqtcur', 'uses' => 'ResultsController@pashqtcur' ]);
 
