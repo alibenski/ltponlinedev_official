@@ -40,7 +40,13 @@
 
 					<div class="form-group">
 						<div class="col-md-12">
-							<h4><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled</a> (Email text needs to be updated programmatically)</h4>
+							<h4><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails"><i class="fa fa-envelope"></i> Send Reminder Email to All Students Not Yet Enrolled</a> (Email text needs to be updated programmatically, contact the System Admin)</h4>
+						</div>						
+					</div>
+
+					<div class="form-group">
+						<div class="col-md-12">
+							<h4><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled</a> (Email text needs to be updated programmatically, contact the System Admin)</h4>
 						</div>						
 					</div>
 				</form>
