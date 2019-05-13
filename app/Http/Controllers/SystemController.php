@@ -139,6 +139,11 @@ class SystemController extends Controller
     	return redirect()->back();
     }
 
+    /**
+     * Send broadcast reminder email to all students EXCEPT students who have already submitted a form
+     * @param  Request $request 
+     * @return HTML Closure           
+     */
     public function sendBroadcastReminder(Request $request)
     {
         // query students who have logged in
