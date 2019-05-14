@@ -42,4 +42,8 @@ class CourseSchedule extends Model
     public function teachers() {
     return $this->belongsTo('App\Teachers', 'Tch_ID', 'Tch_ID'); 
     }
+
+    public function prices() {
+    return $this->belongsTo('App\Price', 'Te_Price', 'id'); 
+    }
 }

@@ -57,8 +57,11 @@
 		<thead>
 			<tr>
 				<th>Term</th>
-				<th>Name</th>
+				<th>Language</th>
+				<th>Description</th>
+				<th>Price USD</th>
 				<th>Organization</th>
+				<th>Name</th>
 				<th>RESULT</th>
 			</tr>
 		</thead>
@@ -100,17 +103,39 @@ $(document).ready(function() {
 	
 	function assignToEventsColumns(data) {
 	    var table = $('#sampol').dataTable({
+	    	// "deferRender": true,
 	    	"pagingType": "full_numbers",
 	        "bAutoWidth": false,
 	        "aaData": data.data,
 	        "columns": [
 	        		{ "data": "Term" }, 
-	        		{ "data": "users.name" }, 
+	        		{ "data": "languages.name" }, 
+	        		{ "data": "courses.Description" }, 
+	        		{ "data": "courseschedules.prices.price_usd" }, 
 	        		{ "data": "DEPT" },  
-	        		{ "data": "Result" }
-				        ]
+	        		{ "data": "users.name" }, 
+	        		{ "data": "Result", "className": "result" }
+				        ],
+			"createdRow": function( row, data, dataIndex ) {
+					    if ( data['Result'] == 'P') {
+					      $(row).addClass( 'pass' );
+					      $(row).find("td.result").text('PASS');
+					    }
+
+					    if ( data['Result'] == 'F') {
+					      $(row).addClass( 'label-danger' );
+					      $(row).find("td.result").text('Fail');
+					    }
+
+					    if ( data['Result'] == 'I') {
+					      $(row).addClass( 'label-warning' );
+					      $(row).find("td.result").text('Incomplete');
+					    }
+
+				    }
 	    })
 	}
+
 });
 </script>
 

@@ -49,13 +49,63 @@ class BillingController extends Controller
 
 
 	        // $records = $records->withTrashed()->paginate(20)->appends($queries);
-	        $records = $records->withTrashed()->with('users')->get();
-	        // $records = json_decode($records);
-	        // dd($records);
 
+	        $term = Session::get('Term');
+
+	        $records_1 = $records->with('users')
+	        	->where('DEPT','WIPO')
+	        	->with('courses')
+	        	->with('languages')
+	        	->with(['courseschedules' => function ($q2) {
+					    $q2->with('prices');
+					}])
+	        	->with('classrooms')
+	        	->whereHas('classrooms', function ($query2) {
+                    $query2->whereNotNull('Tch_ID')
+                            ->where('Tch_ID', '!=', 'TBD')
+                            ;
+                    })
+	        	->with('enrolments')
+	        	->whereHas('enrolments', function ($query3) use ($term) {
+                    $query3->where('Term', $term)->whereNull('is_self_pay_form')
+                            ;
+                    })
+	        	->get()
+	        		;
+
+	        $pashFromPlacement = new Repo;
+	        if (Session::has('Term')) {
+	                    $pashFromPlacement = $pashFromPlacement->where('Term', Session::get('Term') );
+	                    $queries['Term'] = Session::get('Term');
+	            }
+
+	        $records_0 = $pashFromPlacement->with('users')
+	        	->where('DEPT','WIPO')
+	        	->with('courses')
+	        	->with('languages')
+	        	->with(['courseschedules' => function ($q) {
+					    $q->with('prices');
+					}])
+	        	->with('classrooms')
+	        	->whereHas('classrooms', function ($query) {
+                    $query->whereNotNull('Tch_ID')
+                            ->where('Tch_ID', '!=', 'TBD')
+                            ;
+                    })
+	        	->with('placements')
+	        	->whereHas('placements', function ($query1) use ($term) {
+                    $query1->where('Term', $term)->whereNull('is_self_pay_form')
+                            ;
+                    })
+	        	->get()
+	        		;
+
+
+	        // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
 	        
-	        // $data = view('billing.billing_table', compact('records'))->render();
-	        $data = $records;
+	        $records_merged = $records_1->merge($records_0);
+
+	        $data = $records_merged;
 	        
         	return response()->json(['data' => $data]);
     	}

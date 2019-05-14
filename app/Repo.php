@@ -51,6 +51,10 @@ class Repo extends Model
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
     }
 
+    public function courseschedules() {
+    return $this->belongsTo('App\CourseSchedule', 'Code', 'cs_unique'); 
+    }
+
     public function schedules() {
     return $this->belongsTo('App\Schedule', 'schedule_id'); 
     }
@@ -73,5 +77,13 @@ class Repo extends Model
 
     public function lastRemarkBy() {
     return $this->belongsTo('App\User', 'last_remark_by', 'id'); 
+    }
+
+    public function enrolments() {
+    return $this->hasMany('App\Preenrolment', 'INDEXID', 'INDEXID'); 
+    }
+
+    public function placements() {
+    return $this->hasMany('App\PlacementForm', 'INDEXID', 'INDEXID'); 
     }
 }
