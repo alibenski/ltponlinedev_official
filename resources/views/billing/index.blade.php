@@ -12,7 +12,7 @@
 
 @include('admin.partials._termSessionMsg')
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-sm-12">
     <div class="box box-default">
         <div class="box-header with-border">
@@ -41,29 +41,27 @@
 	    </div>
 
 		<div class="form-group">           
-                {{-- <button type="submit" class="btn btn-success filter-submit-btn">Submit</button> --}}
+                <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
                 <button type="button" class="btn btn-success filter-submit-btn">Submit</button>
         <!-- submit button included admin.partials._filterIndex view -->
         	<a href="{{ route('billing-index') }}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Reset</a>
+        	<input type="hidden" name="_token" value="{{ Session::token() }}">
         </div>
 
     </form>
 	</div>
-</div>
+</div> --}}
 
 <div class="billing-section">
-	<table id="sampol" class="table table-hover">
+	<table id="sampol" class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<th>id</th>
-				<th>INEDXID</th>
+				<th>Term</th>
+				<th>Name</th>
+				<th>Organization</th>
+				<th>RESULT</th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr>
-				<td></td>
-			</tr>
-		</tbody>
 	</table>
 </div>
 
@@ -75,46 +73,44 @@
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+
 <script>
 $(document).ready(function() {
 	$('.select2-basic-single').select2({
     	placeholder: "Select Filter",
     });
 
-	$('.filter-submit-btn').on('click', function() {
-		var DEPT = $("select[name='DEPT']").val();
-		console.log(DEPT)
-		$.ajax({
-			url: "{{ route('ajax-billing-table') }}",
-			type: 'GET',
-			// dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
-			data: {DEPT:DEPT},
-		})
-		.done(function(data) {
-			console.log(data)
-			// $(".billing-section").html(data);
-   //          $(".billing-section").html(data.options);
-
-   			var dataReturned = data;
-				$("#sampol").dataTable({
-					data: dataReturned,
-				    columns: [  
-				    			{ data: "id" },        
-				    			{ data: "INDEXID" } 
-				    		]
-				});
-
-
-		})
-		.fail(function() {
-			console.log("error");
-		})
-		.always(function() {
-
-		});
-		
+	var token = $("input[name='_token']").val();
+	$.ajax({
+		url: '{{ route('ajax-billing-table') }}',
+		type: 'GET',
+		dataType: 'json',
+		data: {_token:token},
+	})
+	.done(function(data) {
+		console.log(data)
+		assignToEventsColumns(data);
+		// console.log(data.data)
+		// var data = jQuery.parseJSON(data.data);
+		// console.log(data)
+	})
+	.fail(function() {
+		console.log(data);
 	});
-
+	
+	function assignToEventsColumns(data) {
+	    var table = $('#sampol').dataTable({
+	    	"pagingType": "full_numbers",
+	        "bAutoWidth": false,
+	        "aaData": data.data,
+	        "columns": [
+	        		{ "data": "Term" }, 
+	        		{ "data": "users.name" }, 
+	        		{ "data": "DEPT" },  
+	        		{ "data": "Result" }
+				        ]
+	    })
+	}
 });
 </script>
 

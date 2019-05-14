@@ -22,12 +22,11 @@ class BillingController extends Controller
 
     		
     		if (!Session::has('Term')) {
-	            $records = null;
-	            return view('preenrolment.index', compact('org', 'records'));
+	            $data = null;
+	            return response()->json(['data' => $data]);
 	        }
 
 	        $records = new Repo;
-	        // $currentQueries = \Request::query();
 	        $queries = [];
 
 	        $columns = [
@@ -35,13 +34,14 @@ class BillingController extends Controller
 	        ];
 
 	        
-	        foreach ($columns as $column) {
-	            if (\Request::has($column)) {
-	                $records = $records->where($column, \Request::input($column) );
-	                $queries[$column] = \Request::input($column);
-	            }
+	        // foreach ($columns as $column) {
+	        //     if (\Request::has($column)) {
+	        //         $records = $records->where($column, \Request::input($column) );
+	        //         // $records = $records->where($column, \Request::input($column) );
+	        //         $queries[$column] = \Request::input($column);
+	        //     }
 
-	        } 
+	        // } 
 	            if (Session::has('Term')) {
 	                    $records = $records->where('Term', Session::get('Term') );
 	                    $queries['Term'] = Session::get('Term');
@@ -49,9 +49,7 @@ class BillingController extends Controller
 
 
 	        // $records = $records->withTrashed()->paginate(20)->appends($queries);
-	        // $records = $records->withTrashed()->get();
-	        $records = $records->withTrashed()->get()->toJson();
-
+	        $records = $records->withTrashed()->with('users')->get();
 	        // $records = json_decode($records);
 	        // dd($records);
 
@@ -59,7 +57,7 @@ class BillingController extends Controller
 	        // $data = view('billing.billing_table', compact('records'))->render();
 	        $data = $records;
 	        
-        	return response()->json($data);
+        	return response()->json(['data' => $data]);
     	}
     }
 }
