@@ -809,6 +809,34 @@
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
+
+<script>
+$(document).ready(function() {
+	var Term = "{{ Request::input('Term') }}";
+    var token = $("input[name='_token']").val();
+    console.log(Term)
+    $.ajax({
+    	url: '{{ route('ajax-check-batch-has-ran') }}',
+    	type: 'GET',
+    	data: {Term:Term,_token: token},
+    })
+    .done(function(data) {
+    	if (!jQuery.isEmptyObject( data )) {
+    		$(".course-delete").addClass('hidden');
+    		$(".placement-delete").addClass('hidden');
+    	}
+
+    })
+    .fail(function() {
+    	console.log("error");
+    })
+    .always(function() {
+    	console.log("complete check if batch has ran");
+    });
+
+});
+</script>
+
 <script>
 $(document).ready(function () {
     $('button.insert-to-class').click( function() {
@@ -844,7 +872,7 @@ $(document).ready(function () {
       .always(function() {
         console.log("complete");
       });
-    });
+    });    
 });
 </script>
 

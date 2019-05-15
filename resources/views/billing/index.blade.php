@@ -63,8 +63,21 @@
 				<th>Organization</th>
 				<th>Name</th>
 				<th>RESULT</th>
+				<th>Cancel Date</th>
 			</tr>
 		</thead>
+		<tfoot>
+			<tr>
+				<th>Term</th>
+				<th>Language</th>
+				<th>Description</th>
+				<th>Price USD</th>
+				<th>Organization</th>
+				<th>Name</th>
+				<th>RESULT</th>
+				<th>Cancel Date</th>
+			</tr>
+		</tfoot>
 	</table>
 </div>
 
@@ -102,8 +115,26 @@ $(document).ready(function() {
 	});
 	
 	function assignToEventsColumns(data) {
+		$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
+	    $('#sampol thead tr:eq(1) th').each( function (i) {
+	        var title = $(this).text();
+		        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+		 
+		        $( 'input', this ).on( 'keyup change', function () {
+		            if ( table.api().column(i).search() !== this.value ) {
+		                table
+		                	.api()
+		                    .column(i)
+		                    .search( this.value )
+		                    .draw();
+		            }
+		        } );
+		    } );
+
 	    var table = $('#sampol').dataTable({
 	    	// "deferRender": true,
+	    	"orderCellsTop": true,
+	    	"fixedHeader": true,
 	    	"pagingType": "full_numbers",
 	        "bAutoWidth": false,
 	        "aaData": data.data,
@@ -114,7 +145,8 @@ $(document).ready(function() {
 	        		{ "data": "courseschedules.prices.price_usd" }, 
 	        		{ "data": "DEPT" },  
 	        		{ "data": "users.name" }, 
-	        		{ "data": "Result", "className": "result" }
+	        		{ "data": "Result", "className": "result" },
+	        		{ "data": "deleted_at" }
 				        ],
 			"createdRow": function( row, data, dataIndex ) {
 					    if ( data['Result'] == 'P') {
@@ -130,6 +162,11 @@ $(document).ready(function() {
 					    if ( data['Result'] == 'I') {
 					      $(row).addClass( 'label-warning' );
 					      $(row).find("td.result").text('Incomplete');
+					    }
+
+					    if ( data['deleted_at'] !== null) {
+					      $(row).addClass( 'bg-navy' );
+					      $(row).find("td.result").text('Late Cancellation');
 					    }
 
 				    }

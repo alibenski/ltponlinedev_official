@@ -338,6 +338,7 @@ Route::resource('myform', 'RepoController');
 Route::post('check-placement-course-ajax', ['as'=>'check-placement-course-ajax','uses'=>'AjaxController@ajaxCheckPlacementCourse']);
 
 //main controller used for ajax jquery on all forms - myform, noform, selfpayform
+Route::get('ajax-check-batch-has-ran', ['as'=>'ajax-check-batch-has-ran','uses'=>'AjaxController@ajaxCheckBatchHasRan']);
 Route::post('select-ajax', ['as'=>'select-ajax','uses'=>'AjaxController@selectAjax']);
 Route::post('select-ajax2', ['as'=>'select-ajax2','uses'=>'AjaxController@selectAjax2']);
 Route::post('select-ajax-level-one', ['as'=>'select-ajax-level-one','uses'=>'AjaxController@selectAjaxLevelOne']);

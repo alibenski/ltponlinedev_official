@@ -24,6 +24,20 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxCheckBatchHasRan(Request $request)
+    {
+        if ($request->ajax()) {
+            if ($request->Term == null) {
+                $data = null;
+                return response()->json($data);
+            }
+            $checker = Repo::where('Term', $request->Term)->first();
+
+            $data = $checker;
+            return response()->json($data);
+        }
+    }
+
     public function ajaxShowModal(Request $request)
     {
         $current_user = $request->indexno;
