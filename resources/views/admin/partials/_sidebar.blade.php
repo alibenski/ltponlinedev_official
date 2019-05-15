@@ -39,6 +39,10 @@
         <li class="{{ Request::is(route('system-index')) ? "active" : ""}}"><a href="{{ route('system-index') }}"><i class="fa fa-cogs"></i> <span>System Operations</span></a></li>
         @endhasrole
 
+        @hasrole('Admin')
+        <li class="{{ Request::is(route('billing-index')) ? "active" : ""}}"><a href="{{ route('billing-index') }}"><i class="fa fa-money"></i> <span>Billing</span></a></li>
+        @endhasrole
+
         <li class="{{ Request::is('admin-stats/stats') ? "active" : ""}}"><a href="{{ route('stats') }}"><i class="fa fa-bar-chart"></i> <span>Admin Stats</span></a></li>
 
         <li class="treeview {{ Request::is('admin/preenrolment') ? "active" : ""}}">

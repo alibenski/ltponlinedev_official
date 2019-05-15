@@ -60,6 +60,7 @@
 				<th>Language</th>
 				<th>Description</th>
 				<th>Price USD</th>
+				<th>Duration</th>
 				<th>Organization</th>
 				<th>Name</th>
 				<th>RESULT</th>
@@ -72,6 +73,7 @@
 				<th>Language</th>
 				<th>Description</th>
 				<th>Price USD</th>
+				<th>Duration</th>
 				<th>Organization</th>
 				<th>Name</th>
 				<th>RESULT</th>
@@ -143,6 +145,7 @@ $(document).ready(function() {
 	        		{ "data": "languages.name" }, 
 	        		{ "data": "courses.Description" }, 
 	        		{ "data": "courseschedules.prices.price_usd" }, 
+	        		{ "data": "courseschedules.courseduration.duration_name_en" }, 
 	        		{ "data": "DEPT" },  
 	        		{ "data": "users.name" }, 
 	        		{ "data": "Result", "className": "result" },

@@ -60,7 +60,7 @@ class BillingController extends Controller
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q1) {
-					    $q1->with('prices');
+					    $q1->with('prices')->with('courseduration');
 					}])
 	        	->with('classrooms')
 	        	->whereHas('classrooms', function ($query1) {
@@ -87,7 +87,7 @@ class BillingController extends Controller
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q0) {
-					    $q0->with('prices');
+					    $q0->with('prices')->with('courseduration');
 					}])
 	        	->with('classrooms')
 	        	->whereHas('classrooms', function ($query0) {
@@ -116,7 +116,7 @@ class BillingController extends Controller
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q2) {
-					    $q2->with('prices');
+					    $q2->with('prices')->with('courseduration');
 					}])
 	        	->with('classrooms')
 	        	->whereHas('classrooms', function ($query2) {
@@ -143,7 +143,7 @@ class BillingController extends Controller
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q3) {
-					    $q3->with('prices');
+					    $q3->with('prices')->with('courseduration');
 					}])
 	        	->with('classrooms')
 	        	->whereHas('classrooms', function ($query3) {
