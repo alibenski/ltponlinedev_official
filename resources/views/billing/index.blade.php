@@ -2,8 +2,15 @@
 
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/> --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
+
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <style>
+    	table { table-layout:fixed; }
+		th, td { word-wrap:break-word; overflow:hidden; text-overflow: ellipsis; }
+    </style>
 @stop
 
 @section('content')
@@ -53,7 +60,7 @@
 </div> --}}
 
 <div class="billing-section">
-	<table id="sampol" class="table table-striped table-bordered">
+	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>
 				<th>Term</th>
@@ -81,7 +88,7 @@
 			</tr>
 		</tfoot>
 	</table>
-</div>
+</div>		
 
 
 
@@ -90,7 +97,10 @@
 @section('java_script')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-<script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+{{-- <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -123,9 +133,8 @@ $(document).ready(function() {
 		        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
 		 
 		        $( 'input', this ).on( 'keyup change', function () {
-		            if ( table.api().column(i).search() !== this.value ) {
+		            if ( table.column(i).search() !== this.value ) {
 		                table
-		                	.api()
 		                    .column(i)
 		                    .search( this.value )
 		                    .draw();
@@ -133,8 +142,14 @@ $(document).ready(function() {
 		        } );
 		    } );
 
-	    var table = $('#sampol').dataTable({
+	    var table = $('#sampol').DataTable({
 	    	// "deferRender": true,
+	    	"dom": 'B<"clear">lfrtip',
+	    	"buttons": [
+			        'copy', 'csv', 'excel', 'pdf'
+			    ],
+	    	"scrollX": true,
+	    	"responsive": false,
 	    	"orderCellsTop": true,
 	    	"fixedHeader": true,
 	    	"pagingType": "full_numbers",
