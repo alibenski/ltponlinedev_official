@@ -31,101 +31,6 @@
 	<input name="L" type="hidden" value="{{ $placement_form->L }}">
 	<input name="Term" type="hidden" value="{{ $placement_form->Term }}">
 
-	<div class="col-sm-12">
-		<!-- MAKE A DECISION SECTION -->
-
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">Operation:</h3>
-		  </div>
-		  <div class="panel-body">
-
-		    <div class="form-group">
-				<label for="">Was the student convoked to take a placement exam?</label>
-				<div class="col-sm-12">
-			        <div class="col-md-4">
-                      <input id="decisionConvoked1" name="convoked" class="with-font" type="radio" value="1">
-                      <label for="decisionConvoked1" class="form-control-static">YES</label>
-                    </div>
-
-                    <div class="col-md-4">
-                      <input id="decisionConvoked0" name="convoked" class="with-font" type="radio" value="0">
-                      <label for="decisionConvoked0" class="form-control-static">NO</label>
-                    </div>
-				</div>
-
-				{{-- <div class="col-sm-12 radio-click-assign" style="display: none;">
-				        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-				        <label for="decision2" class="form-control-static">Click to assign course</label>
-				</div> --}}
-		    </div>
-
-
-			<div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
-			
-				<div class="form-group placement-result">
-					<label for="inputResult">Placement Test Result: (optional)</label>
-					<textarea name="Result" id="inputResult" class="form-control" maxlength="3500" placeholder="Enter result of the placement test and other relevant information in this field, i.e. appropriate level, course, etc. or reason why student does not need to take a placement test"></textarea>
-				</div>
-
-				<div class="form-group">
-			      <label for="L" class="control-label"> Language:</label>
-			      <div class="col-sm-12">
-			        @foreach ($languages as $id => $name)
-			        <div class="col-sm-4">
-			            <div class="input-group"> 
-			              <span class="input-group-addon">       
-			                <input type="radio" name="L" value="{{ $id }}" >                 
-			              </span>
-			                <label type="text" class="form-control">{{ $name }}</label>
-			            </div>
-			        </div>
-			        @endforeach 
-			      </div>
-			    </div>
-
-				<div class="form-group">
-				    <label for="course_id" class="control-label">Assign Course: </label>
-				    
-				      <div class="dropdown">
-				        <select class="form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off" required="">
-				            <option value="">--- Select ---</option>
-				        </select>
-				      </div>
-				    
-				</div>
-
-				<div class="form-group">
-				    <label for="schedule_id" class="control-label">Assign Schedule: </label>
-				    
-				      <div class="dropdown">
-				        <select class="form-control schedule_select_no wx" style="width: 100%; " name="schedule_id" autocomplete="off" required="">
-				            <option value="">--- Select ---</option>
-				        </select>
-				      </div>
-				    
-				</div>
-
-				<div class="form-group">
-					<label class="control-label">Admin Comments: (optional) </label>
-
-					<textarea id="textarea-{{$placement_form->eform_submit_count}}" name="admin_plform_comment" class="form-control" maxlength="3500" @if(is_null($placement_form->admin_plform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$placement_form->admin_plform_comment}}" @endif></textarea>
-					
-				</div>
-
-			</div> {{-- end of hidden fields --}}
-
-			<div class="form-group col-sm-12">
-				{{-- <a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a> --}}
-				{{-- <button type="submit" class="btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button> --}}
-				<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1" disabled=""> Submit </button>	
-				{{-- <button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button> --}}
-			</div>
-			<input type="hidden" name="_token" value="{{ Session::token() }}">
-			        {{ method_field('PUT') }}
-		  </div>
-		</div>            
-    </div>
 	<div class="col-sm-6"> <!-- 1st SECTION -->
 		<div class="form-group">
 		    <label class="control-label" for="id_show">Name:</label>
@@ -239,6 +144,102 @@
 		    </div>
 		</div>
 	</div> <!-- EOF 2nd SECTION -->
+
+	<div class="col-sm-12">
+		<!-- MAKE A DECISION SECTION -->
+
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Operation:</h3>
+		  </div>
+		  <div class="panel-body">
+
+		    <div class="form-group">
+				<label for="">Did the student take a placement test? </label>
+				<div class="col-sm-12">
+			        <div class="col-md-4">
+                      <input id="decisionConvoked1" name="convoked" class="with-font" type="radio" value="1">
+                      <label for="decisionConvoked1" class="form-control-static">YES</label>
+                    </div>
+
+                    <div class="col-md-4">
+                      <input id="decisionConvoked0" name="convoked" class="with-font" type="radio" value="0">
+                      <label for="decisionConvoked0" class="form-control-static">NO</label>
+                    </div>
+				</div>
+
+				{{-- <div class="col-sm-12 radio-click-assign" style="display: none;">
+				        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
+				        <label for="decision2" class="form-control-static">Click to assign course</label>
+				</div> --}}
+		    </div>
+
+			{{-- start of hidden fields --}}
+			<div class="regular-enrol"> 
+			
+				<div class="form-group placement-result">
+					<label for="inputResult">Placement Test Result: (optional)</label>
+					<textarea name="Result" id="inputResult" class="form-control" maxlength="3500" placeholder="Enter result of the placement test and other relevant information in this field, i.e. appropriate level, course, etc. or reason why student does not need to take a placement test"></textarea>
+				</div>
+
+				<div class="form-group">
+			      <label for="L" class="control-label"> Language:</label>
+			      <div class="col-sm-12">
+			        @foreach ($languages as $id => $name)
+			        <div class="col-sm-4">
+			            <div class="input-group"> 
+			              <span class="input-group-addon">       
+			                <input type="radio" name="L" value="{{ $id }}" >                 
+			              </span>
+			                <label type="text" class="form-control">{{ $name }}</label>
+			            </div>
+			        </div>
+			        @endforeach 
+			      </div>
+			    </div>
+
+				<div class="form-group">
+				    <label for="course_id" class="control-label">Assign Course: </label>
+				    
+				      <div class="dropdown">
+				        <select class="form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off" required="">
+				            <option value="">--- Select ---</option>
+				        </select>
+				      </div>
+				    
+				</div>
+
+				<div class="form-group">
+				    <label for="schedule_id" class="control-label">Assign Schedule: </label>
+				    
+				      <div class="dropdown">
+				        <select class="form-control schedule_select_no wx" style="width: 100%; " name="schedule_id" autocomplete="off" required="">
+				            <option value="">--- Select ---</option>
+				        </select>
+				      </div>
+				    
+				</div>
+
+				<div class="form-group">
+					<label class="control-label">Admin Comments: (optional) </label>
+
+					<textarea id="textarea-{{$placement_form->eform_submit_count}}" name="admin_plform_comment" class="form-control" maxlength="3500" @if(is_null($placement_form->admin_plform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$placement_form->admin_plform_comment}}" @endif></textarea>
+					
+				</div>
+
+			</div> {{-- end of hidden fields --}}
+
+			<div class="form-group col-sm-12">
+				{{-- <a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a> --}}
+				{{-- <button type="submit" class="btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button> --}}
+				<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1" disabled=""> Submit </button>	
+				{{-- <button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button> --}}
+			</div>
+			<input type="hidden" name="_token" value="{{ Session::token() }}">
+			        {{ method_field('PUT') }}
+		  </div>
+		</div>            
+    </div>
 
 	</form>	
 </div>
