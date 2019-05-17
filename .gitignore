@@ -13,3 +13,6 @@ yarn-error.log
 .env
 sftp-config.json
 .vscode/sftp.json
+.settings
+.project
+.buildpath
