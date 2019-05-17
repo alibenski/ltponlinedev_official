@@ -96,6 +96,9 @@
 	
 	<div class="col-sm-6"> <!-- 2nd SECTION -->
 		<div class="form-group">
+			<button type="button" class="show-modal-history btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
+		</div>
+		<div class="form-group">
 		    <label class="control-label" for="flexible_show">Waitlist Information: </label>
 				<div class="panel panel-body">
 			    	@if (count($waitlists) > 0)
@@ -244,6 +247,68 @@
 	</form>	
 </div>
 
+<!-- Modal form to show history -->
+<div id="showModalHistory" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title-history"></h4>
+            </div>
+            <div class="modal-body">
+
+	            {{-- <div class="panel panel-info"> --}}
+	                {{-- <div class="panel-heading"><strong>Past Language Course Enrolment for {{ $student->name }}
+	                </div> --}}
+	                <div class="panel-body panel-info">
+	                    @if($historical_data->isEmpty())
+	                    <div class="alert alert-warning">
+	                        <p>There were no historical records found.</p>
+	                    </div>
+	                    @else
+	                    <ul  class="list-group">
+	                        @foreach($historical_data as $hist_datum)
+	                            <li class="list-group-item"><strong class="text-success">
+	                            @if(empty($hist_datum))
+	                            <div class="alert alert-warning">
+	                                <p>There were no historical records found.</p>
+	                            </div>
+	                            @else
+	                                @if(empty($hist_datum->Te_Code)) {{ $hist_datum->coursesOld->Description }} 
+	                                @else {{ $hist_datum->courses->Description }} 
+	                                @endif</strong> : {{ $hist_datum->terms->Term_Name }} 
+
+	                                <em>
+                                	@if (empty($hist_datum->classrooms))
+                                	@else
+	                                	@if (is_null($hist_datum->classrooms->Tch_ID))
+	                                		Waitlisted
+	                                	@elseif($hist_datum->classrooms->Tch_ID == 'TBD')
+	                                		Waitlisted
+	                                	@else
+	                                		* {{ $hist_datum->classrooms->Tch_ID }} *
+	                                	@endif
+                                	@endif
+                                	</em>
+
+	                                (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else -- @endif)</li>
+	                            @endif
+	                        @endforeach
+	                    </ul>
+	                    @endif
+	                </div>
+	            {{-- </div> --}}
+                	  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">
+                    <span class='glyphicon glyphicon-remove'></span> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @stop
 @section('java_script')
 <script src="{{ asset('js/submit.js') }}"></script>
@@ -264,6 +329,11 @@
 	    }
 	  });
 	}); 
+
+	$(document).on('click', '.show-modal-history', function() {
+		$('.modal-title-history').text('Past Language Course Enrolment for {{ $placement_form->users->name }}');
+	    $('#showModalHistory').modal('show'); 
+	});
 </script>
 <script>
 	$(document).on('click', '#decision1', function() {

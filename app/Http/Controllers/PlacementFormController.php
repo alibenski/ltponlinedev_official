@@ -665,8 +665,11 @@ class PlacementFormController extends Controller
                             ;
                     })
             ->get();
+
+        $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $placement_form->INDEXID)->get();
+        
         // dd($placement_form, $placement_student_index);
-        return view('placement_forms.editAssignCourse',compact('languages','placement_form','waitlists'));
+        return view('placement_forms.editAssignCourse',compact('languages','placement_form','waitlists','historical_data'));
     }
 
     /**
