@@ -87,6 +87,9 @@
         <li class="{{ Request::is('admin/classrooms*') ? "active" : ""}}"><a href="{{ route('classrooms.index') }}"><i class="fa fa-pencil-square-o"></i> <span>Classes</span></a></li>
         <li class="{{ Request::is('admin/rooms*') ? "active" : ""}}"><a href="{{ route('rooms.index') }}"><i class="fa fa-building-o"></i> <span>Rooms</span></a></li>
         <li class="{{ Request::is('admin/teachers*') ? "active" : ""}}"><a href="{{ route('teachers.index') }}"><i class="fa fa-pied-piper-alt"></i> <span>Teachers</span></a></li>
+        @hasrole('Teacher FP')
+        <li><a href="{{ route('teacher-dashboard') }}" target="_blank"><i class="fa fa-pied-piper"></i> <span>Teacher Dashboard</span></a></li>
+        @endhasrole
 
         <li class="treeview">
           <a href="#"><i class="fa fa-globe"></i> <span>Organizations</span>

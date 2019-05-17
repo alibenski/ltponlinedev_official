@@ -164,7 +164,7 @@
 @hasrole('Teacher FP')
   @if(Session::has('Term'))
   <a href="{{ route('placement-form-filtered') }}"> 
-    <div class="col-sm-4 col-xs-12 hidden">
+    <div class="col-sm-4 col-xs-12">
         <div class="info-box">
           <!-- Apply any bg-* class to to the icon to color it -->
           <span class="info-box-icon bg-yellow"><i class="fa fa-file"></i></span>
@@ -179,7 +179,7 @@
   </a>
 
   @else
-  <div class="col-sm-4 col-xs-12 hidden">
+  <div class="col-sm-4 col-xs-12">
       <div class="info-box">
         <!-- Apply any bg-* class to to the icon to color it -->
         <span class="info-box-icon bg-yellow"><i class="fa fa-file"></i></span>
