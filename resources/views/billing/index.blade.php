@@ -1,6 +1,7 @@
 @extends('admin.no_sidebar_admin')
 
 @section('customcss')
+	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> --}}
     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/> --}}
@@ -60,6 +61,7 @@
 </div> --}}
 
 <div class="billing-section">
+	<div class="preloader2"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
 	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>
@@ -108,14 +110,17 @@ $(document).ready(function() {
     	placeholder: "Select Filter",
     });
 
+	var promises = [];
 	var token = $("input[name='_token']").val();
+
+	promises.push(
 	$.ajax({
 		url: '{{ route('ajax-billing-table') }}',
 		type: 'GET',
 		dataType: 'json',
 		data: {_token:token},
 	})
-	.done(function(data) {
+	.then(function(data) {
 		console.log(data)
 		assignToEventsColumns(data);
 		// console.log(data.data)
@@ -124,7 +129,7 @@ $(document).ready(function() {
 	})
 	.fail(function() {
 		console.log(data);
-	});
+	}));
 	
 	function assignToEventsColumns(data) {
 		$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
@@ -191,6 +196,9 @@ $(document).ready(function() {
 	    })
 	}
 
+	$.when.apply($.ajax(), promises).then(function() {
+        $(".preloader2").fadeOut(600);
+    }); 
 });
 </script>
 
