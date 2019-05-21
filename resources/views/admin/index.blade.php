@@ -18,7 +18,7 @@
 @section('content')
 @include('admin.partials._termSessionMsg')
 <h1 class="text-success">Administrator Dashboard</h1>
-
+<div class="preloader hidden"></div>
 <div class="box box-success" data-widget="box-widget">
   <div class="box-header">
     <h3 class="box-title">Set the <b>Term</b> for your session:</h3>
@@ -334,6 +334,10 @@
 $(document).ready(function() {
     $('.select2-basic-single').select2({
     placeholder: "select here",
+    });
+
+    $("a").not('[target="_blank"]').click(function() {
+    	$(".preloader").removeClass('hidden');
     });
 });
 </script>

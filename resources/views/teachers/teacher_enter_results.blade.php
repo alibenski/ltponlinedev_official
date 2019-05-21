@@ -162,7 +162,7 @@ $(document).ready(function() {
             data: {indexid:indexid, L:L, _token:token},
           })
           .then(function(data) {
-            // console.log("success");
+
             if (data != 'not enrolled') {
 
               if (data[0].length > 0) {

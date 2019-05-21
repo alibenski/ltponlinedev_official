@@ -337,7 +337,29 @@ class TeachersController extends Controller
             
             $indexid = $request->indexid;
             $language = $request->L;
-            $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next;
+            // $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next;
+            
+            $selectedTerm = Session::get('Term'); // No need of type casting
+            // echo substr($selectedTerm, 0, 1); // get first value
+            // echo substr($selectedTerm, -1); // get last value
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                $next_term = $selectedTerm + 2;
+            }
+
+            if ($lastDigit == 1) {
+                $next_term = $selectedTerm + 3;
+            }
+
+            if ($lastDigit == 4) {
+                $next_term = $selectedTerm + 5;
+            }
+            if ($lastDigit == 8) {
+                $next_term = $selectedTerm + 1;
+            }
+
+            // $next_term_string = Term::where('Term_Code', $next_term )->first();
             
             $enrolled_next_term_regular = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
@@ -435,8 +457,30 @@ class TeachersController extends Controller
     {
         if ($request->ajax()) {
             $indexid = $request->indexid;
-            $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
             $language = $request->L;
+            // $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
+
+            $selectedTerm = Session::get('Term'); // No need of type casting
+            // echo substr($selectedTerm, 0, 1); // get first value
+            // echo substr($selectedTerm, -1); // get last value
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                $next_term = $selectedTerm + 2;
+            }
+
+            if ($lastDigit == 1) {
+                $next_term = $selectedTerm + 3;
+            }
+
+            if ($lastDigit == 4) {
+                $next_term = $selectedTerm + 5;
+            }
+            if ($lastDigit == 8) {
+                $next_term = $selectedTerm + 1;
+            }
+
+            $next_term_string = Term::where('Term_Code', $next_term )->first();
 
             $qry_enrolment_details = Preenrolment::withTrashed()
                 ->where('INDEXID', $indexid)
@@ -484,7 +528,7 @@ class TeachersController extends Controller
 
             $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
 
-            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms','last_placement_test'))->render();
+            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms','last_placement_test', 'next_term_string'))->render();
             return response()->json([$data]);             
         }
     }

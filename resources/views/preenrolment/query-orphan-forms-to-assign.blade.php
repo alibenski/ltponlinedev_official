@@ -1,7 +1,8 @@
-@extends('admin.no_sidebar_admin')
+@extends('shared_template')
 
 @section('customcss')
-	<link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+	{{-- <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> --}}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
 
@@ -10,7 +11,10 @@
 
 @include('admin.partials._termSessionMsg')
 
-<div class="preloader"></div>
+<div class="preloader">
+  <p class="text-center"><strong>Please wait... Fetching data from the database... </strong></p>
+  <p class="text-center"><strong>It may take some time to load... Patience is a virtue...</strong></p>
+</div>
 <div class="row">
     <div class="col-sm-12">
     <div class="box box-default">
@@ -146,7 +150,8 @@
 @stop
 
 @section('java_script')
-<script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+{{-- <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script>
 $(document).ready(function() {
   var arr = [];
@@ -154,6 +159,8 @@ $(document).ready(function() {
   var token = $("input[name='_token']").val();
   var term = $("input[name='term']").val();
   var L = $("input[name='L']").val();
+
+  var promises = [];
 
   $("input[name='indexid']").each(function() {
     var indexno = $(this).val();
@@ -164,12 +171,13 @@ $(document).ready(function() {
   
   if (term) {
 
+    promises.push(
     $.ajax({
       url: '{{ route('ajax-preview-get-student-current-class') }}',
       type: 'GET',
       data: {arr:arr,term:term,_token:token},
     })
-    .done(function(data) {
+    .then(function(data) {
       // console.log(data)
       $.each(data, function(x, y) {
         // console.log(y.INDEXID)
@@ -185,6 +193,10 @@ $(document).ready(function() {
     })
     .always(function() {
       console.log("complete");
+    }));
+
+    $.when.apply($.ajax(), promises).then(function() {
+        $(".preloader").fadeOut(600);
     });
   }
 });
@@ -200,13 +212,14 @@ $(document).ready(function () {
     });   
 
     $.when.apply($('.counter'), promises).then(function() {
-        $(".preloader").fadeOut(600);
+        // $(".preloader").fadeOut(600);
     });
 
     $('.dropdown-toggle').dropdown();
     
     $('#myTable').DataTable({
-    	"paging":   true,
+    	"deferRender": true,
+      "paging":   false,
     }); 
 
     $('.assign-course').click( function() {

@@ -12,7 +12,7 @@
     <div class="col-sm-12">
         <div class="box box-info">
             <div class="box-header with-border bg-aqua">
-            	<h4>Enrolment Form # {{ $element->eform_submit_count}} <span><button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="btn btn-danger btn-space course-delete pull-right" data-toggle="modal"><i class="fa fa-remove"></i> Delete Form</button></span></h4>
+            	<h4>Enrolment Form # {{ $element->eform_submit_count}} - {{$next_term_string->Comments}} Term<span><button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="btn btn-danger btn-space course-delete pull-right" data-toggle="modal"><i class="fa fa-remove"></i> Delete Form</button></span></h4>
             	{{ method_field('DELETE') }}
             </div>
             <div class="box-body">

@@ -27,7 +27,7 @@
 @endif
 
 <h1 class="text-success">Dashboard</h1>
-
+<div class="preloader hidden"></div>
 <div class="box box-success" data-widget="box-widget">
   <div class="box-header">
     <h3 class="box-title">Set the <b>Term</b> for your session:</h3>
@@ -162,6 +162,37 @@
 @endhasrole
 
 @hasrole('Teacher FP')
+<div class="col-sm-4 col-xs-12"><div class="preloader hidden"></div>
+  @if(Session::has('Term')) 
+  <a href="{{ route('query-orphan-forms-to-assign') }}">
+    <div class="info-box bg-navy">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-navy"><i class="fa  fa-tasks"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Manage ALL Unassigned Enrolment Forms </span>
+        <span class="info-box-number">Term: {{Session::get('Term')}}</span>
+        <span class="info-box-text">Shows ALL regular enrolment forms</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </a>
+  @else 
+    <div class="info-box bg-navy">
+      <!-- Apply any bg-* class to to the icon to color it -->
+      <span class="info-box-icon bg-navy"><i class="fa  fa-exclamation-circle"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Manage ALL Unassigned Enrolment Forms </span>
+        <span class="info-box-number">Set the Term</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  @endif
+</div>
+@endhasrole
+
+@hasrole('Teacher FP')
   @if(Session::has('Term'))
   <a href="{{ route('placement-form-filtered') }}"> 
     <div class="col-sm-4 col-xs-12">
@@ -203,6 +234,10 @@
 $(document).ready(function() {
     $('.select2-basic-single').select2({
     placeholder: "select here",
+    });
+
+    $("a").not('[target="_blank"]').click(function() {
+      $(".preloader").removeClass('hidden');
     });
 });
 </script>
