@@ -56,7 +56,7 @@ class BillingController extends Controller
 
 
 	        $records_1 = $records->with('users')
-	        	// ->where('DEPT','WIPO')
+	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q1) {
@@ -83,7 +83,7 @@ class BillingController extends Controller
 	            }
 
 	        $records_0 = $pashFromPlacement->with('users')
-	        	// ->where('DEPT','WIPO')
+	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q0) {
@@ -112,6 +112,7 @@ class BillingController extends Controller
 	            }
 
 	        $records_2 = $cancelledEnrolmentRecords->onlyTrashed()->with('users')
+	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->where('deleted_at','>', $termCancelDeadline)
 	        	->with('courses')
 	        	->with('languages')
@@ -139,6 +140,7 @@ class BillingController extends Controller
 	            }
 
 	        $records_3 = $cancelledPlacementRecords->onlyTrashed()->with('users')
+	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->where('deleted_at','>', $termCancelDeadline)
 	        	->with('courses')
 	        	->with('languages')
