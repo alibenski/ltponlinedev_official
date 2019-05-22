@@ -129,7 +129,7 @@
 
 <div class="col-md-6 col-sm-6 col-xs-12">
 	@if(Session::has('Term')) 
-	<a href="{{ route('query-orphan-forms-to-assign') }}">
+	<a class="link-to-orphans" href="{{ route('query-orphan-forms-to-assign') }}">
 		<div class="info-box bg-navy">
 		  <!-- Apply any bg-* class to to the icon to color it -->
 		  <span class="info-box-icon bg-navy"><i class="fa  fa-tasks"></i></span>
@@ -336,7 +336,7 @@ $(document).ready(function() {
     placeholder: "select here",
     });
 
-    $("a").not('[target="_blank"]').click(function() {
+    $("a.link-to-orphans").not('[target="_blank"]').click(function() {
     	$(".preloader").removeClass('hidden');
     });
 });
