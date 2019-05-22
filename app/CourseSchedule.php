@@ -50,4 +50,8 @@ class CourseSchedule extends Model
     public function courseduration() {
     return $this->belongsTo('App\CourseDuration', 'Te_Hours', 'id'); 
     }
+
+    public function courseformat() {
+    return $this->belongsTo('App\CourseFormat', 'Te_Description', 'id'); 
+    }
 }

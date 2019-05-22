@@ -162,7 +162,8 @@
 @endhasrole
 
 @hasrole('Teacher FP')
-<div class="col-sm-4 col-xs-12"><div class="preloader hidden"></div>
+<div class="col-sm-4 col-xs-12 hidden">
+  <div class="preloader hidden"></div>
   @if(Session::has('Term')) 
   <a class="link-to-orphans" href="{{ route('query-orphan-forms-to-assign') }}">
     <div class="info-box bg-navy">

@@ -26,7 +26,7 @@ class CourseSchedController extends Controller
     public function index()
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $course_schedule = CourseSchedule::orderBy('Te_Term', 'DESC')->paginate(10);
+        $course_schedule = CourseSchedule::orderBy('Te_Term', 'DESC')->paginate(15);
 
         
 
