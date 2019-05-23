@@ -75,9 +75,9 @@
 				<label>Select Course Type</label>
 				<select class="form-control select2-basic-single" style="width: 100%" name="CourseType" autocomplete="off" required="required">
 					@if(!empty($course_type))
-					@foreach($course_type as $key => $value)
+					@foreach($course_type as $value)
 	                <option></option>
-	                <option value="{{ $key }}">{{ $value }}</option>
+	                <option value="{{ $value->CourseType }}">{{ $value->CourseType }} - {{ $value->DescriptionEn }}</option>
 	                @endforeach
 	                @endif
                 </select>

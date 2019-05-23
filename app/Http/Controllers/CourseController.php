@@ -63,7 +63,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $course_type = DB::table('tblLTP_Course_Type_Param')->pluck("DescriptionEn","CourseType")->all();
+        // $course_type = DB::table('tblLTP_Course_Type_Param')->pluck("DescriptionEn","CourseType")->all();
+        $course_type = DB::table('tblLTP_Course_Type_Param')->get();
         $course_level_type = DB::table('tblLTP_Course_Level_Type_Param')->pluck("LevelEn","LevelType")->all();
         $course_order = DB::table('tblLTP_Course_Order_Param')->pluck("Order","Order")->all();
         //$courses = Course::all(['id', 'name']); // selected $key => $value
