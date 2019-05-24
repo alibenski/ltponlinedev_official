@@ -67,6 +67,7 @@
                         <th>Comments</th>
                         <th>Remark</th>
                         <th>Submission Date</th>
+                        <th>Cancelled & Billed?</th>
                         <th>Cancel Date/Time Stamp</th>
                         <th>Operation</th>
                     </tr>
@@ -89,6 +90,24 @@
                       <td>
                         <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}]</small></h4> 
                         @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
+                        
+                        
+                        @if ($form->enrolments)
+                          @foreach ($form->enrolments as $element)
+                            @if ($element->is_self_pay_form)
+                              <i class="fa fa-euro" title="self-paying student"></i>
+                            @endif
+                          @endforeach
+                        @endif
+                        
+                        @if ($form->placements)
+                          @foreach ($form->placements as $element)
+                            @if ($element->is_self_pay_form)
+                              <i class="fa fa-euro" title="self-paying student"></i>
+                            @endif
+                          @endforeach
+                        @endif
+                      
                       </td>
                       <td>
                         @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
@@ -162,6 +181,26 @@
                         {{$form->created_at}}
                       </td>
                       <td>
+                        @if ($form->deleted_at)
+                          @if ($form->deleted_at > $form->terms->Cancel_Date_Limit)
+                            
+                            @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+                              @else
+                              @if ($form->placements)
+                                @foreach ($form->placements as $element)
+                                  @if ($element->is_self_pay_form)
+                                    
+                                  @endif
+                                @endforeach
+                              @else
+                                <strong>YES</strong>
+                              @endif
+                            @endif
+
+                          @endif
+                        @endif
+                      </td>
+                      <td>
                         {{$form->deleted_at}}
                       </td>
                       <td>
@@ -172,13 +211,45 @@
                         @else 
                         @endif
 
-                        <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="delete-form form-prevent-multi-submit">
-                            <input type="submit" value="@if($form->deleted_at) Cancelled @else Delete @endif" class="delete-form btn btn-danger btn-space button-prevent-multi-submit" @if($form->deleted_at) disabled="" @else @endif>
-                            {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
-                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
-                            <input type="hidden" name="_token" value="{{ Session::token() }}">
-                           {{ method_field('DELETE') }}
-                        </form>
+                        <button type="button" class="btn btn-danger btn-space pash-delete" data-toggle="modal" @if($form->deleted_at) disabled="" @endif> @if($form->deleted_at)<i class="fa fa-remove"></i> Cancelled @else <i class="fa fa-trash"></i> Delete @endif</button>
+
+                        <div id="modalDeletePash-{{ $form->id }}" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-header bg-danger">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                                        <h3 class="modal-title">Class Cancellation</h3>
+                                    </div>
+                                    <div class="modal-body-pash-delete">
+                                      <div class="col-sm-12">
+
+                                        <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="delete-form form-prevent-multi-submit">
+
+                                            <h4>Index # {{ $form->INDEXID }} : <strong> {{ $form->users->name }}</strong></h4>
+                                            <h4>Cancelling participation from <strong> {{ $form->courses->Description }}</strong></h4>
+                                            
+                                            <div class="form-group">
+                                              <h4><input type="checkbox" name="cancelled_but_not_billed" value=1> Student will <strong class="text-danger"><u>NOT</u></strong> be billed</h4>
+                                            </div>
+
+                                            <input type="submit" value="@if($form->deleted_at) Cancelled @else Delete @endif" class="delete-form btn btn-danger btn-space button-prevent-multi-submit" @if($form->deleted_at) disabled="" @else @endif>
+
+                                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+                                            <input type="hidden" name="_token" value="{{ Session::token() }}">
+                                           {{ method_field('DELETE') }}
+                                        </form>
+
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer modal-background">
+                                      
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+
                       </td>
                     </tr>  
                     @endif
@@ -202,6 +273,7 @@
     </div>
   </div>
 </div>
+
 <div id="modalshow" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -233,6 +305,7 @@
         </div>
     </div>
 </div>
+
 @stop
 
 @section('java_script')
@@ -350,7 +423,11 @@ $(document).on('click', '.view-all-comments', function() {
     $('#viewAllComments-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
 });
 
-
+$(document).on('click', '.pash-delete', function() {
+  var pash_id = $(this).closest("tr").find("input[type='checkbox'].sub_chk").attr('data-id');
+  console.log(pash_id) 
+    $('#modalDeletePash-'+pash_id).modal('show'); 
+});
 
 
 </script>

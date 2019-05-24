@@ -447,7 +447,7 @@ class PreviewController extends Controller
         return view('admin.cancelled-convocation-view', compact('cancelled_convocations'));
     }
 
-    public function cancelConvocation($codeindexidclass)
+    public function cancelConvocation(Request $request, $codeindexidclass)
     {
         $record = Repo::where('CodeIndexIDClass', $codeindexidclass)->first();
         $staff_name = $record->users->name;
@@ -455,12 +455,14 @@ class PreviewController extends Controller
         $display_language_fr = $record->courses->FDescription;
         $schedule = $record->schedules->name;
         $std_email = $record->users->email;
-
         // do not send email notification if admin cancelled the convocation
         if (Auth::id() == $record->users->id) {
             Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
         }
 
+        if ($request->cancelled_but_not_billed) {
+            $record->cancelled_but_not_billed = $request->cancelled_but_not_billed;
+        }
         $record->cancelled_by = Auth::id();
         $record->save();
         $record_delete = Repo::where('CodeIndexIDClass', $codeindexidclass)->delete();

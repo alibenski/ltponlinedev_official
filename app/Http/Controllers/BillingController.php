@@ -114,6 +114,7 @@ class BillingController extends Controller
 	        $records_2 = $cancelledEnrolmentRecords->onlyTrashed()->with('users')
 	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->where('deleted_at','>', $termCancelDeadline)
+	        	->whereNull('cancelled_but_not_billed')
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q2) {
@@ -142,6 +143,7 @@ class BillingController extends Controller
 	        $records_3 = $cancelledPlacementRecords->onlyTrashed()->with('users')
 	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->where('deleted_at','>', $termCancelDeadline)
+	        	->whereNull('cancelled_but_not_billed')
 	        	->with('courses')
 	        	->with('languages')
 	        	->with(['courseschedules' => function ($q3) {
