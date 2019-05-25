@@ -278,6 +278,12 @@ class PreviewController extends Controller
             $form = Repo::withTrashed()
                 ->where('Term', Session::get('Term'))
                 ->where('CodeIndexID', $value->CodeIndexID)
+                ->with(['enrolments' => function ($q1) {
+                        $q1->where('Term', Session::get('Term'));
+                    }])
+                ->with(['placements' => function ($q2) {
+                        $q2->where('Term', Session::get('Term'));
+                    }])
                 ->get();
                 foreach ($form as $value) {
                     $form_info_arr[] = $value;

@@ -91,21 +91,24 @@
                         <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}]</small></h4> 
                         @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
                         
-                        
                         @if ($form->enrolments)
+                        <p>
                           @foreach ($form->enrolments as $element)
                             @if ($element->is_self_pay_form)
-                              <i class="fa fa-euro" title="self-paying student"></i>
+                              <i class="fa fa-euro" title="self-paying student"></i> self-paying
                             @endif
                           @endforeach
+                        </p>
                         @endif
                         
                         @if ($form->placements)
+                        <p>
                           @foreach ($form->placements as $element)
                             @if ($element->is_self_pay_form)
-                              <i class="fa fa-euro" title="self-paying student"></i>
+                              <i class="fa fa-euro" title="self-paying student"></i> self-paying
                             @endif
                           @endforeach
+                        </p>
                         @endif
                       
                       </td>
@@ -114,15 +117,30 @@
                       <td>
                         @if(empty($form->users->sddextr->PHONE)) None @else {{ $form->users->sddextr->PHONE }} @endif </td>
                       <td>
+                        <strong>
+                          @if ($form->PS == 1)
+                            Re-enrolment
+                          @endif
+                          @if ($form->PS == 2)
+                            In Waitlist
+                          @endif
+                          @if ($form->PS == 3)
+                            Within 2 Terms/Not Re-enrolment
+                          @endif
+                          @if ($form->PS == 4)
+                            Placement Forms/Others
+                          @endif
+                        </strong>
+                         [ {{$form->PS}} ] 
                         <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
                         <input name="Term" type="hidden" value="{{ $form->Term }}">
                         <input name="L" type="hidden" value="{{ $form->L }}">
                         <input name="CodeIndexID" type="hidden" value="{{ $form->CodeIndexID }}">
                         <input name="Te_Code" type="hidden" value="{{ $form->Te_Code }}">
-                        <strong>
+                        {{-- <strong>
                          <div><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></div>
                          <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
-                        </strong>
+                        </strong> --}}
                       </td>
                       <td>
                         @if($form->flexibleBtn == 1)
@@ -183,20 +201,33 @@
                       <td>
                         @if ($form->deleted_at)
                           @if ($form->deleted_at > $form->terms->Cancel_Date_Limit)
-                            
-                            @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-                              @else
-                              @if ($form->placements)
-                                @foreach ($form->placements as $element)
-                                  @if ($element->is_self_pay_form)
-                                    
+                            @if ($form->enrolments)
+                              @foreach ($form->enrolments as $element)
+                                @if ($element->is_self_pay_form)
+                                @else
+                                  @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+                                  @else
+                                    @if ($loop->first)
+                                    <strong>YES</strong>
+                                    @endif
                                   @endif
-                                @endforeach
-                              @else
-                                <strong>YES</strong>
-                              @endif
+                                @endif
+                              @endforeach
                             @endif
 
+                            @if ($form->placements)
+                              @foreach ($form->placements as $element)
+                                @if ($element->is_self_pay_form)
+                                @else
+                                  @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+                                  @else
+                                    @if ($loop->first)
+                                    <strong>YES</strong>
+                                    @endif
+                                  @endif
+                                @endif
+                              @endforeach
+                            @endif
                           @endif
                         @endif
                       </td>
@@ -450,11 +481,11 @@ $(document).ready(function () {
         var INDEXID = $("input[name='INDEXID']").val();
         var token = $("input[name='_token']").val();
         // console.log(CodeIndexID)
-        $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID, 'L':L, 'Term':Term, 'CodeIndexID':CodeIndexID, '_token':token }, function(data) {
-          // console.log(data)
-          $('.fa-spin').addClass('hidden');
-          $('#'+CodeIndexID).html(data);
-        });
+        // $.get('{{ route('ajax-get-priority') }}', {'INDEXID':INDEXID, 'L':L, 'Term':Term, 'CodeIndexID':CodeIndexID, '_token':token }, function(data) {
+        //   // console.log(data)
+        //   $('.fa-spin').addClass('hidden');
+        //   $('#'+CodeIndexID).html(data);
+        // });
         arr.push(CodeIndexID); //insert values to array per iteration
     });
     // console.log(arr)
