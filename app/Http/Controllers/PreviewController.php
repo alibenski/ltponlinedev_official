@@ -448,7 +448,7 @@ class PreviewController extends Controller
 
     public function cancelledConvocaitonView()
     {
-        $cancelled_convocations = Repo::onlyTrashed()->where('Term', Session::get('Term'))->orderBy('UpdatedOn', 'asc')->get();
+        $cancelled_convocations = Repo::onlyTrashed()->where('Term', Session::get('Term'))->orderBy('deleted_at', 'asc')->get();
 
         return view('admin.cancelled-convocation-view', compact('cancelled_convocations'));
     }
