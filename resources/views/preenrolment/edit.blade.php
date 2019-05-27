@@ -9,42 +9,39 @@
 @stop
 
 @section('content')
-<div class="row">
-	<div class="box box-primary col-sm-12">
-		<div class="box-header"></div>
-		<div class="col-sm-6">
-			<div class="form-group">
-				<label for="form-control">Index: </label>
-				<p class="form-control-static">{{ $enrolment_details->INDEXID }}</p>
-			</div>	
 
-			<div class="form-group">
-				<label for="form-control">Name: </label>
-				<p class="form-control-static">{{ $enrolment_details->users->name }}</p>
-			</div>	
-		</div>
-
-		<div class="col-sm-6">
-			<div class="form-group">
-				<label for="form-control">Time Stamp: </label>
-				<p class="form-control-static">{{ $enrolment_details->created_at }}</p>
-			</div>	
-		</div>
-	</div>
-</div>
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <div class="box box-info">
-            <div class="box-header">Current Fields</div>
+            <div class="box-header"><h3>Current Fields</h3></div>
             <div class="box-body">
-                <ul>
-                <li>Language: {{ $enrolment_details->L }}</li> 
-                <li>Course: {{ $enrolment_details->courses->Description }}</li>
+                
+                <div class="form-group">
+                    <label for="form-control">Index: </label>
+                    <h4 class="form-control-static">{{ $enrolment_details->INDEXID }}</h4>
+                </div>  
+
+                <div class="form-group">
+                    <label for="form-control">Name: </label>
+                    <h4 class="form-control-static">{{ $enrolment_details->users->name }}</h4>
+                </div>
+
+                <div class="form-group">
+                    <label for="form-control">Language: </label>
+                    <h4 class="form-control-static">{{ $enrolment_details->languages->name }}</h4>
+                </div> 
+
+                <div class="form-group">
+                    <label for="form-control">Course: </label>
+                    <h4 class="form-control-static">{{ $enrolment_details->courses->Description }}</h4>
+                </div> 
+
+
                 <div class="form-group">
                 	<label for="" class="">Schedule(s):</label> 
         					@foreach($enrolment_schedules as $schedule)
-        						<div class="form-control-static"><strong>{{ $schedule->schedule->name }}</strong></div>
-        						<p>Supervisor's Approval: 
+        						<div class="form-control-static"><strong><h4>{{ $schedule->schedule->name }}</h4></strong></div>
+        						{{-- <p>Supervisor's Approval: 
         							@if($schedule->is_self_pay_form == 1)
         							<span id="status" class="label label-info margin-label">
         							N/A - Self-Payment</span>
@@ -58,8 +55,10 @@
         							<span id="status" class="label label-danger margin-label">
         							Disapproved</span>
         							@endif
-        		                </p>
-        		                <p>HR Staff and Development Section Approval:
+        		                </p> --}}
+                                <div class="form-group">
+            		                <label>HR Staff and Development Section Approval:</label>
+                                    <h4 class="form-control-static">
         							@if(is_null($schedule->is_self_pay_form))
         								@if(in_array($schedule->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
         									<span id="status" class="label label-info margin-label">
@@ -86,10 +85,13 @@
         							<span id="status" class="label label-info margin-label">
         							N/A - Self-Payment</span>
         							@endif
-        		                </p>
-        		                <p>
-        		                	Language Secretariat Payment Validation: 
-        							@if(is_null($schedule->is_self_pay_form))
+            		                </h4>
+                                </div>
+
+                                <div class="form-group">
+            		                <label>Language Secretariat Payment Validation: </label>
+        							<h4 class="form-control-static">
+                                    @if(is_null($schedule->is_self_pay_form))
         							<span id="status" class="label label-info margin-label">N/A</span>
         							@else
         								@if($schedule->selfpay_approval === 1)
@@ -102,24 +104,31 @@
         								<span id="status" class="label label-info margin-label">Waiting</span>
         								@endif
         							@endif
-        		                </p>
+        		                    </h4>  
+                                </div>
         					@endforeach
                 </div>
-                <li>Organization: {{ $enrolment_details->DEPT }}</li>
-                <li>Supervisor's email: {{  $enrolment_details->mgr_email }}</li>
-                <li>Supervisor first name: {{ $enrolment_details->mgr_fname }}</li>
-                <li>Supervisor last name: {{ $enrolment_details->mgr_lname }}</li>
-                
-                </ul>
+                <div class="form-group">
+                    <label>Organization:</label>
+                    <h4 class="form-control-static">{{ $enrolment_details->DEPT }}</h4>
+                </div>
+                <div class="form-group">
+                    <label>Submission Date:</label>
+                    <h4 class="form-control-static">{{ $enrolment_details->created_at }}</h4>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-sm-6">
+    <div class="col-sm-8">
         <div class="box box-success">
-            <div class="box-header">Change to...</div>
+            <div class="box-header"><h3>Change to...</h3></div>
             <div class="box-body">
-                <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->form_counter]) }}" class="col-sm-12">{{ csrf_field() }}
+                <div class="alert alert-default">
+                    <h2><i class="fa fa-warning"></i> Warning</h2>
+                    <h4>Changing the following fields assumes that the changes have been approved by the LTP chief and HR focal point. Take note that no email correspondences will be sent after fields have been updated.</h4></div>
+                <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">{{ csrf_field() }}
+                    
                 <label>Language</label> 
                 @foreach ($languages as $id => $name)
 		            <div class="input-group col-sm-12">
@@ -144,6 +153,19 @@
                       <div class="dropdown">
                         <select class="col-sm-12 form-control schedule_select_no select2-basic-single" style="width: 100%; display: none;" name="schedule_id">
                             <option value="">Fill Out Language and Course Options</option>
+                        </select>
+                      </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>HR approval </label>
+                    <div class="col-sm-12">
+                      <div class="dropdown">
+                        <select class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%;" name="approval_hr">
+                            <option value="">--- No Change ---</option>
+                            <option value="1">Approve</option>
+                            <option value="0">Disapprove<option>
                         </select>
                       </div>
                     </div>
@@ -187,20 +209,10 @@
                       </div>
                     </div>
 				</div>
+                 --}}
+
                 <div class="form-group">
-                	<label>HR approval </label>
-                	<div class="col-sm-12">
-                      <div class="dropdown">
-                        <select class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%;" name="approval_hr">
-                            <option value="">--- No Change ---</option>
-                            <option value="1">Approve</option>
-                            <option value="0">Disapprove<option>
-                        </select>
-                      </div>
-                    </div>
-				</div> --}}
-                <div class="form-group">
-                	<button type="submit" class="btn btn-success btn-space pull-right">Save</button>
+                	<button type="submit" class="btn btn-success btn-space pull-right"><i class="fa fa-save"></i> Save</button>
 	                <input type="hidden" name="Term" value="{{ $enrolment_details->Term }}">
 	                <input type="hidden" name="form_counter" value="{{ $enrolment_details->form_counter }}">
 	                <input type="hidden" name="_token" value="{{ Session::token() }}">

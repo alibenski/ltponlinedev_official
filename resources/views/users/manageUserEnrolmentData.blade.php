@@ -176,6 +176,8 @@
 										<td>
 												@if($form->deleted_at)
 												@else
+													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" class="btn btn-info hidden">Edit</a>
+
 													<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button> 
 													@if ($batch_implemented > 0)
 														@if ($form->updated_by_admin == 1)

@@ -136,7 +136,7 @@
 		  <div class="info-box-content">
 		    <span class="info-box-text">Manage ALL Unassigned Enrolment Forms </span>
 		    <span class="info-box-number">{{$all_unassigned_enrolment_form}} Form(s)</span>
-		    <span class="info-box-text">Shows ALL regular enrolment forms</span>
+		    <span class="info-box-text">Shows ALL APPROVED regular enrolment forms</span>
 		  </div>
 		  <!-- /.info-box-content -->
 		</div>

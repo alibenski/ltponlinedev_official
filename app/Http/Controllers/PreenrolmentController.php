@@ -785,17 +785,17 @@ class PreenrolmentController extends Controller
 
     }
 
-    public function editEnrolmentFields($indexno, $term, $tecode, $form_counter)
+    public function editEnrolmentFields($indexno, $term, $tecode, $eform_submit_count)
     {
         $enrolment_details = Preenrolment::where('INDEXID', $indexno)
-            ->where('Term', $term)->where('Te_Code', $tecode)->where('form_counter', $form_counter)
-            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ])
-            ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ]);
+            ->where('Term', $term)->where('Te_Code', $tecode)->where('eform_submit_count', $eform_submit_count)
+            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ])
+            ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ]);
         
         $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
-            ->where('form_counter', $form_counter)
+            ->where('eform_submit_count', $eform_submit_count)
             ->where('Term', $term)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code' ]);
 
         $languages = DB::table('languages')->pluck("name","code")->all();
@@ -804,12 +804,12 @@ class PreenrolmentController extends Controller
         return view('preenrolment.edit', compact('enrolment_details', 'enrolment_schedules', 'languages', 'org'));
     }
 
-    public function nothingToModify(Request $request, $indexno, $term, $tecode, $form_counter)
+    public function nothingToModify(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
-            ->where('form_counter', $form_counter)
+            ->where('eform_submit_count', $eform_submit_count)
             ->where('Term', $term)
             ->get();
 
@@ -826,8 +826,10 @@ class PreenrolmentController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $form_counter)
+    public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {   
+        dd(array_filter($request->all()), $indexno, $term, $tecode, $eform_submit_count);
+        
         if (is_null($request->L)) {
             $request->session()->flash('warning', 'Nothing to change, Nothing to update...');
             return back();
@@ -835,7 +837,7 @@ class PreenrolmentController extends Controller
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
-            ->where('form_counter', $form_counter)
+            ->where('eform_submit_count', $eform_submit_count)
             ->where('Term', $term)
             ->get();
 
@@ -854,7 +856,7 @@ class PreenrolmentController extends Controller
             $delform = Preenrolment::orderBy('id', 'desc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
-            ->where('form_counter', $form_counter)
+            ->where('eform_submit_count', $eform_submit_count)
             ->where('Term', $term)
             ->first();
             $delform->Code = null;
@@ -870,7 +872,7 @@ class PreenrolmentController extends Controller
         $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
-            ->where('form_counter', $form_counter)
+            ->where('eform_submit_count', $eform_submit_count)
             ->where('Term', $term)
             ->get();
 
