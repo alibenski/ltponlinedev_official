@@ -63,4 +63,7 @@ class PlacementForm extends Model
     public function waitlist() {
         return $this->hasMany('App\Waitlist',  'INDEXID', 'INDEXID'); 
     }
+    public function cancelledBy() {
+    return $this->belongsTo('App\User', 'cancelled_by_admin', 'id'); 
+    }
 }

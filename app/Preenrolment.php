@@ -70,4 +70,7 @@ class Preenrolment extends Model
     public function adminComment() {
         return $this->hasMany('App\AdminComment', 'CodeIndexID', 'CodeIndexID'); 
     }
+    public function cancelledBy() {
+    return $this->belongsTo('App\User', 'cancelled_by_admin', 'id'); 
+    }
 }

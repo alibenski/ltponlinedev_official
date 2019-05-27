@@ -941,7 +941,7 @@ class PreenrolmentController extends Controller
                 $enrol_form = $forms[$i]->id;
                 $delform = Preenrolment::find($enrol_form);
                 $delform->admin_eform_cancel_comment = $request->admin_eform_cancel_comment;
-                $delform->cancelled_by_student = 1;
+                // $delform->cancelled_by_student = 1;
                 $delform->cancelled_by_admin = $admin_id;
                 $delform->save();
                 $delform->delete();
@@ -995,7 +995,7 @@ class PreenrolmentController extends Controller
             $enrol_form = $forms[$i]->id;
             $delform = Preenrolment::find($enrol_form);
             $delform->admin_eform_cancel_comment = $request->admin_eform_cancel_comment;
-            $delform->cancelled_by_student = 1;
+            // $delform->cancelled_by_student = 1;
             $delform->cancelled_by_admin = $admin_id;
             $delform->save();
             $delform->delete();

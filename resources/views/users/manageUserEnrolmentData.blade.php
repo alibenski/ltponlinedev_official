@@ -192,8 +192,8 @@
 												<button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
 												@else
 												<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
-													@if ($form->admin_plform_cancel_comment)
-														<p><small>Admin Comment: "{{$form->admin_plform_cancel_comment}}"</small></p>
+													@if ($form->admin_eform_cancel_comment)
+														<p><small><label>Cancellation Comment:</label> "{{$form->admin_eform_cancel_comment}}" - {{$form->cancelledBy->name}}</small></p>
 													@endif
 												@endif
 												
@@ -383,7 +383,7 @@
 											@else
 											<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
 												@if ($form->admin_plform_cancel_comment)
-													<p><small>Admin Comment: "{{$form->admin_plform_cancel_comment}}"</small></p>
+													<p><small><label>Cancellation Comment:</label> "{{$form->admin_plform_cancel_comment}}" - {{$form->cancelledBy->name}}</small></p>
 												@endif
 											@endif
 

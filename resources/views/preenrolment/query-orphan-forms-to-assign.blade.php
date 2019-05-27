@@ -139,7 +139,7 @@
             <div class="modal-body-content modal-background">
             </div>
             <div class="modal-footer modal-background">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close this window</button>
             </div>
         
         </div>
@@ -168,6 +168,10 @@ $(document).ready(function() {
     arr.push(indexno); //insert values to array per iteration
     eform_submit_count.push(each_eform_submit_count); //insert values to array per iteration
   });
+  
+  if (arr.length < 1) {
+    $(".preloader").fadeOut(600);
+  }
   
   if (term) {
 
@@ -337,6 +341,54 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
     	console.log("complete save assigned course");
   });
   
+});
+
+$('#modalshow').on('click', 'button.course-delete',function() {
+
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var method = $("input[name='_method']").val();
+  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-changed").val();
+
+  var r = confirm("You are about to delete a form. Are you sure?");
+  if (r == true) {
+
+    $(".overlay").fadeIn('fast'); 
+
+    $.ajax({
+      url: '{{ route('teacher-delete-form') }}',
+      type: 'POST',
+      data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
+    })
+    .done(function(data) {
+      console.log(data);
+      var L = $("input[name='L']").val();
+
+      $.ajax({
+        url: '{{ route('teacher-assign-course-view') }}',
+        type: 'GET',
+        data: {indexid:qry_indexid, L:L,_token: token},
+      })
+      .done(function(data) {
+        console.log("refreshing the assign view : success"); 
+        $('.modal-body-content').html(data);    
+      })
+      .always(function() {
+        console.log("complete refresh modal view");
+      });
+
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete delete form");
+    });
+  }
+
 });
 </script>
 

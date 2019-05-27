@@ -821,7 +821,7 @@ class PlacementFormController extends Controller
                 $enrol_form = $forms[$i]->id;
                 $delform = PlacementForm::find($enrol_form);
                 $delform->admin_plform_cancel_comment = $request->admin_plform_cancel_comment;
-                $delform->cancelled_by_student = 1;
+                // $delform->cancelled_by_student = 1;
                 $delform->cancelled_by_admin = $admin_id;
                 $delform->save();
                 $delform->delete();
@@ -876,7 +876,7 @@ class PlacementFormController extends Controller
             $enrol_form = $forms[$i]->id;
             $delform = PlacementForm::find($enrol_form);
             $delform->admin_plform_cancel_comment = $request->admin_plform_cancel_comment;
-            $delform->cancelled_by_student = 1;
+            // $delform->cancelled_by_student = 1;
             $delform->cancelled_by_admin = $admin_id;
             $delform->save();
             $delform->delete();
