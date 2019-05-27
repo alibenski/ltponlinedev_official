@@ -276,7 +276,7 @@ class AjaxController extends Controller
         if($request->ajax()){            
             $select_courses = CourseSchedule::where('L', $request->L)
             ->where('Te_Term', $request->term_id)
-            ->orderBy('id', 'asc')
+            ->orderBy('Te_Code_New', 'asc')
             ->with('course')
             ->get()
             ->pluck("course.Description","Te_Code_New");
@@ -295,7 +295,8 @@ class AjaxController extends Controller
             $select_courses = CourseSchedule::where('L', $request->L)
             ->where('Te_Term', $request->term_id)
             // ->whereNull('Code')
-            ->orderBy('id', 'asc')
+            // ->orderBy('id', 'asc')
+            ->orderBy('Te_Code_New', 'asc')
             ->with('course')
             ->get()
             ->pluck("course.Description","Te_Code_New");
