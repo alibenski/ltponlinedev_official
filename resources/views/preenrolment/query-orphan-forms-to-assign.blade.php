@@ -150,7 +150,7 @@
 @stop
 
 @section('java_script')
-{{-- <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
+<script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -351,7 +351,7 @@ $('#modalshow').on('click', 'button.course-delete',function() {
   var qry_term = $(this).attr('data-term');
   var token = $("input[name='_token']").val();
   var method = $("input[name='_method']").val();
-  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-changed").val();
+  // var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-changed").val();
 
   var r = confirm("You are about to delete a form. Are you sure?");
   if (r == true) {
@@ -359,27 +359,16 @@ $('#modalshow').on('click', 'button.course-delete',function() {
     $(".overlay").fadeIn('fast'); 
 
     $.ajax({
-      url: '{{ route('teacher-delete-form') }}',
+      url: '{{ route('delete-no-email') }}',
       type: 'POST',
-      data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
+      data: {
+        // teacher_comments:teacher_comments, 
+        eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
     })
     .done(function(data) {
       console.log(data);
-      var L = $("input[name='L']").val();
-
-      $.ajax({
-        url: '{{ route('teacher-assign-course-view') }}',
-        type: 'GET',
-        data: {indexid:qry_indexid, L:L,_token: token},
-      })
-      .done(function(data) {
-        console.log("refreshing the assign view : success"); 
-        $('.modal-body-content').html(data);    
-      })
-      .always(function() {
-        console.log("complete refresh modal view");
-      });
-
+      $(".preloader").fadeIn('fast');
+      location.reload();
     })
     .fail(function() {
       console.log("error");
