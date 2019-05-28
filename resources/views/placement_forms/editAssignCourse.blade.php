@@ -96,7 +96,7 @@
 	
 	<div class="col-sm-6"> <!-- 2nd SECTION -->
 		<div class="form-group">
-			<button type="button" class="show-modal-history btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
+			<button type="button" class="show-modal-history btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View Course History</button>
 		</div>
 		<div class="form-group">
 		    <label class="control-label" for="flexible_show">Waitlist Information: </label>

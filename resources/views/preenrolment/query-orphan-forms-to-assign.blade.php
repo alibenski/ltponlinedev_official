@@ -150,7 +150,7 @@
 @stop
 
 @section('java_script')
-<script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+{{-- <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -254,145 +254,159 @@ $(document).ready(function () {
 </script>
 
 <script>  
-$('#modalshow').on('click', '.modal-accept-btn',function() {
-  var eform_submit_count = $(this).attr('id');
-  var qry_tecode = $(this).attr('data-tecode');
-  var qry_indexid = $(this).attr('data-indexid');
-  var qry_term = $(this).attr('data-term');
-  var token = $("input[name='_token']").val();
-  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-no-change").val();
+  $('#modalshow').on('click', '.modal-accept-btn',function() {
+    var eform_submit_count = $(this).attr('id');
+    var qry_tecode = $(this).attr('data-tecode');
+    var qry_indexid = $(this).attr('data-indexid');
+    var qry_term = $(this).attr('data-term');
+    var token = $("input[name='_token']").val();
+    var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-no-change").val();
 
-
-  $.ajax({
-    url: '{{ route('admin-nothing-to-modify') }}',
-    type: 'PUT',
-    data: {admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
-  })
-  .done(function(data) {
-    console.log(data);
-    if (data == 0) {
-      alert('Hmm... Nothing to change, nothing to update...');
-    }
-
-    var L = $("input[name='L'].modal-input").val();
-
-      $.ajax({
-          url: '{{ route('admin-assign-course-view') }}',
-          type: 'GET',
-          data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
-        })
-        .done(function(data) {
-          console.log("no change assign view : success");
-          $('.modal-body-content').html(data);
-        })
-  })
-  .fail(function() {
-    console.log("error");
-  })
-  .always(function() {
-    console.log("complete");
-    
-  });
-    
-});
-
-$('#modalshow').on('click', '.modal-save-btn',function() {
-  var eform_submit_count = $(this).attr('id');
-  var qry_tecode = $(this).attr('data-tecode');
-  var qry_indexid = $(this).attr('data-indexid');
-  var qry_term = $(this).attr('data-term');
-  var token = $("input[name='_token']").val();
-  var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
-  var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
-  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-changed").val();
-
-  $(".overlay").fadeIn('fast'); 
-
-  $.ajax({
-    url: '{{ route('admin-save-assigned-course') }}',
-    type: 'PUT',
-    data: {Te_Code:Te_Code, schedule_id:schedule_id, admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
-  })
-  .done(function(data) {
-	    console.log(data);
-	    if (data == 0) {
-	      alert('Hmm... Nothing to change, nothing to update...');
-        location.reload();
-	    }
-	    var L = $("input[name='L'].modal-input").val();
-      console.log(Te_Code)
-	    $.ajax({
-	      url: '{{ route('admin-assign-course-view') }}',
-	      type: 'GET',
-	      data: {indexid:qry_indexid, L:L, Te_Code:Te_Code, _token: token},
-	    })
-	    .done(function(data) {
-	      console.log("refreshing the assign view : success"); 
-	      $('.modal-body-content').html(data);    
-	    })
-	    .always(function() {
-	      console.log("complete refresh modal view");
-	    });
-  })
-  .fail(function() {
-    	console.log("error");
-  })
-  .always(function() {
-    	console.log("complete save assigned course");
-  });
-  
-});
-
-$('#modalshow').on('click', 'button.course-delete',function() {
-
-  var eform_submit_count = $(this).attr('id');
-  var qry_tecode = $(this).attr('data-tecode');
-  var qry_indexid = $(this).attr('data-indexid');
-  var qry_term = $(this).attr('data-term');
-  var token = $("input[name='_token']").val();
-  var method = $("input[name='_method']").val();
-  // var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-changed").val();
-
-  var r = confirm("You are about to delete a form. Are you sure?");
-  if (r == true) {
-
-    $(".overlay").fadeIn('fast'); 
 
     $.ajax({
-      url: '{{ route('delete-no-email') }}',
-      type: 'POST',
-      data: {
-        // teacher_comments:teacher_comments, 
-        eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
+      url: '{{ route('admin-nothing-to-modify') }}',
+      type: 'PUT',
+      data: {admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
     })
     .done(function(data) {
       console.log(data);
-      $(".preloader").fadeIn('fast');
-      location.reload();
+      if (data == 0) {
+        alert('Hmm... Nothing to change, nothing to update...');
+      }
+
+      var L = $("input[name='L'].modal-input").val();
+
+        $.ajax({
+            url: '{{ route('admin-assign-course-view') }}',
+            type: 'GET',
+            data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
+          })
+          .done(function(data) {
+            console.log("no change assign view : success");
+            $('.modal-body-content').html(data);
+          })
     })
     .fail(function() {
       console.log("error");
     })
     .always(function() {
-      console.log("complete delete form");
+      console.log("complete");
+      
     });
-  }
+      
+  });
 
-});
+  $('#modalshow').on('click', '.modal-save-btn',function() {
+    var eform_submit_count = $(this).attr('id');
+    var qry_tecode = $(this).attr('data-tecode');
+    var qry_indexid = $(this).attr('data-indexid');
+    var qry_term = $(this).attr('data-term');
+    var token = $("input[name='_token']").val();
+    var Te_Code = $("select#"+eform_submit_count+"[name='Te_Code'].course_select_no").val();
+    var schedule_id = $("select#schedule-"+eform_submit_count+"[name='schedule_id']").val();
+    var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-changed").val();
+
+    $(".overlay").fadeIn('fast'); 
+
+    $.ajax({
+      url: '{{ route('admin-save-assigned-course') }}',
+      type: 'PUT',
+      data: {Te_Code:Te_Code, schedule_id:schedule_id, admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+    })
+    .done(function(data) {
+  	    console.log(data);
+  	    if (data == 0) {
+  	      alert('Hmm... Nothing to change, nothing to update...');
+          location.reload();
+  	    }
+  	    var L = $("input[name='L'].modal-input").val();
+        console.log(Te_Code)
+  	    $.ajax({
+  	      url: '{{ route('admin-assign-course-view') }}',
+  	      type: 'GET',
+  	      data: {indexid:qry_indexid, L:L, Te_Code:Te_Code, _token: token},
+  	    })
+  	    .done(function(data) {
+  	      console.log("refreshing the assign view : success"); 
+  	      $('.modal-body-content').html(data);    
+  	    })
+  	    .always(function() {
+  	      console.log("complete refresh modal view");
+  	    });
+    })
+    .fail(function() {
+      	console.log("error");
+    })
+    .always(function() {
+      	console.log("complete save assigned course");
+    });
+    
+  });
+
+  $('#modalshow').on('click', 'button.open-course-delete-modal', function() {
+
+    var eform_submit_count = $(this).attr('id');
+    var qry_tecode = $(this).attr('data-tecode');
+    var qry_indexid = $(this).attr('data-indexid');
+    var qry_term = $(this).attr('data-term');
+    var token = $("input[name='_token']").val();
+    var method = $("input[name='_method']").val();
+    
+    $('#modalDeleteEnrolment-'+qry_indexid+'-'+qry_tecode+'-'+qry_term).modal('show');
+  });
+
+  $('#modalshow').on('click', 'button.course-delete', function() {
+    var eform_submit_count = $(this).attr('id');
+    var qry_tecode = $(this).attr('data-tecode');
+    var qry_indexid = $(this).attr('data-indexid');
+    var qry_term = $(this).attr('data-term');
+    var token = $("input[name='_token']").val();
+    var method = $("input[name='_method']").val();
+    var admin_eform_cancel_comment = $("textarea#course-delete-textarea-"+eform_submit_count+"[name='admin_eform_cancel_comment'].course-delete-by-admin").val();
+    
+    var r = confirm("You are about to delete a form. Are you sure?");
+    if (r == true) {
+
+      $(".overlay").fadeIn('fast'); 
+
+      $.ajax({
+        url: '{{ route('delete-no-email') }}',
+        type: 'POST',
+        data: {
+          admin_eform_cancel_comment:admin_eform_cancel_comment, 
+          eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
+      })
+      .done(function(data) {
+        console.log(data);
+        $(".preloader").fadeIn('fast');
+        location.reload();
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete delete form");
+      });
+    }
+  });
+
+  $('#modalshow').on('click', 'button.show-modal-history', function() {
+    $('.modal-title-history').text('Past Language Course Enrolment');
+    $('#showModalHistory').modal('show');
+  });
 </script>
 
-
-
 <script>
-$('#modalshow').on('hidden.bs.modal', function (event) {
+  $('#modalshow').on('hidden.bs.modal', function (event) {
 
-  console.log(event.target)
-  // alert( "This will be displayed only once." );
-  //    $( this ).off( event );
-  
-  $(".preloader").fadeIn('fast');
-  location.reload();
+    console.log(event.target)
+    // alert( "This will be displayed only once." );
+    //    $( this ).off( event );
+    if (event.target.id == 'modalshow') {
+      $(".preloader").fadeIn('fast');
+      location.reload();
+    }
 
-});
+  });
 </script>
 @stop

@@ -3,9 +3,45 @@
     <div class="col-sm-12">
         <div class="box box-default">
             <div class="box-header with-border">
-            	<h4>Enrolment Form # {{ $element->eform_submit_count}} : {{ $element->terms->Comments }} {{ date('Y', strtotime($element->terms->Term_Begin)) }} [{{$element->Term}}]<span><button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="btn btn-danger btn-space course-delete pull-right" data-toggle="modal"><i class="fa fa-remove"></i> Delete Form</button></span></h4>
-            	{{ method_field('DELETE') }}
+            	<h4>Enrolment Form # {{ $element->eform_submit_count}} : {{ $element->terms->Comments }} {{ date('Y', strtotime($element->terms->Term_Begin)) }} [{{$element->Term}}]<span>
+
+            		<button id="{{$element->eform_submit_count}}" type="button" class="btn btn-danger btn-space open-course-delete-modal pull-right" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" data-toggle="modal"><i class="fa fa-trash-o"></i> Reject/Cancel</button>
+
+            		</span></h4>
             </div>
+
+            <div id="modalDeleteEnrolment-{{ $element->INDEXID }}-{{ $element->Te_Code }}-{{ $element->Term }}" class="modal fade delete-enrolment-form" role="dialog">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+
+			            <div class="modal-header bg-danger">
+			                <button type="button" class="close" data-button-id="modalDeleteEnrolment-{{ $element->INDEXID }}-{{ $element->Te_Code }}-{{ $element->Term }}" data-dismiss-cancel-modal="modal3" aria-hidden="true" style="text: white;">&times;</button>
+			                <h4 class="modal-title">Rejection / Cancellation</h4>
+			            </div>
+			            <div class="modal-body-course-delete">
+			            	<div class="col-sm-12">	
+
+								<p>Index # {{ $element->INDEXID }} : {{ $element->users->name }}</p>
+								<p>Language: {{ $element->languages->name }}</p>
+								<p>Course : {{ $element->courses->Description }}</p>
+			            		<div class="form-group">
+									<label class="control-label">Cancellation Comment: </label>
+
+									<textarea id="course-delete-textarea-{{$element->eform_submit_count}}" name="admin_eform_cancel_comment" class="form-control course-delete-by-admin" maxlength="3500" placeholder="Place important information about the cancellation of this form..."></textarea>
+									
+								</div>
+
+			            		<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="btn btn-danger btn-space course-delete pull-right"><i class="fa fa-trash"></i> Delete Form</button>
+								<input type="hidden" name="deleteTerm" value="{{ $element->Term }}">
+				                <input type="hidden" name="_token" value="{{ Session::token() }}">
+				                {{ method_field('DELETE') }}
+			            	</div>
+			            </div>
+			            <div class="modal-footer modal-background"></div>
+			        </div>
+			    </div>
+			</div>
+
             <div class="box-body">
             	<div class="col-sm-6">
             		@if($placement_flag) 
@@ -82,6 +118,63 @@
                             </ul>	
                         @endif 
                         </strong>
+                        <button type="button" class="show-modal-history btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View Course History</button>
+
+                        <!-- Modal form to show history -->
+						<div id="showModalHistory" class="modal" role="dialog">
+						    <div class="modal-dialog">
+						        <div class="modal-content">
+						            <div class="modal-header">
+						                <button type="button" class="close" data-dismiss-inner-modal="modal2">×</button>
+						                <h4 class="modal-title-history"></h4>
+						            </div>
+						            <div class="modal-body">
+						                <div class="panel-body panel-info">
+						                    @if($history->isEmpty())
+						                    <div class="alert alert-warning">
+						                        <p>There were no historical records found.</p>
+						                    </div>
+						                    @else
+						                    <ul  class="list-group">
+						                        @foreach($history as $hist_datum)
+						                            <li class="list-group-item"><strong class="text-success">
+						                            @if(empty($hist_datum))
+						                            <div class="alert alert-warning">
+						                                <p>There were no historical records found.</p>
+						                            </div>
+						                            @else
+						                                @if(empty($hist_datum->Te_Code)) {{ $hist_datum->coursesOld->Description }} 
+						                                @else {{ $hist_datum->courses->Description }} 
+						                                @endif</strong> : {{ $hist_datum->terms->Term_Name }} 
+
+						                                <em>
+					                                	@if (empty($hist_datum->classrooms))
+					                                	@else
+						                                	@if (is_null($hist_datum->classrooms->Tch_ID))
+						                                		Waitlisted
+						                                	@elseif($hist_datum->classrooms->Tch_ID == 'TBD')
+						                                		Waitlisted
+						                                	@else
+						                                		* {{ $hist_datum->classrooms->Tch_ID }} *
+						                                	@endif
+					                                	@endif
+					                                	</em>
+
+						                                (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else -- @endif)</li>
+						                            @endif
+						                        @endforeach
+						                    </ul>
+						                    @endif
+						                </div>						                	  
+						            </div>
+						            <div class="modal-footer">
+						                <button type="button" class="btn btn-warning" data-dismiss-inner-modal="modal2">
+						                    <span class='glyphicon glyphicon-remove'></span> Close
+						                </button>
+						            </div>
+						        </div>
+						    </div>
+						</div>
 					</p>
 
 	                <div class="form-group">
@@ -177,72 +270,76 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function() {
-  var INDEXID = $("input[name='INDEXID'].modal-input").val();
-  var L = $("input[name='L'].modal-input").val();
-  var term = $("input[name='Term'].modal-input").val();
-  var token = $("input[name='_token']").val();
+	$(document).ready(function() {
+	  var INDEXID = $("input[name='INDEXID'].modal-input").val();
+	  var L = $("input[name='L'].modal-input").val();
+	  var term = $("input[name='Term'].modal-input").val();
+	  var token = $("input[name='_token']").val();
 
-  var promises = [];
-  $('.schedule-count').each(function(index, val) {
-    var eform_submit_count = $(this).attr('id');
+	  var promises = [];
+	  $('.schedule-count').each(function(index, val) {
+	    var eform_submit_count = $(this).attr('id');
 
-    console.log('eform_submit_count '+eform_submit_count)
-    promises.push($.ajax({
-      url: '{{ route('admin-check-schedule-count') }}',
-      type: 'GET',
-      data: {eform_submit_count:eform_submit_count, INDEXID:INDEXID, L:L, term_id:term, _token:token},
-    })
-    .done(function(data) {
-      console.log(data)
-      if (data == 1) {
-        $('span#'+eform_submit_count+'.btn-accept').removeClass('hidden');
-      }
-      
-    })
-    .fail(function() {
-      console.log("error");
-      alert("Ooops! An error occured. Click OK to reload.");
-            window.location.reload();
-    })
-    .always(function() {
-      console.log("complete check schedule count for button");
-    }));
-  });
+	    console.log('eform_submit_count '+eform_submit_count)
+	    promises.push($.ajax({
+	      url: '{{ route('admin-check-schedule-count') }}',
+	      type: 'GET',
+	      data: {eform_submit_count:eform_submit_count, INDEXID:INDEXID, L:L, term_id:term, _token:token},
+	    })
+	    .done(function(data) {
+	      console.log(data)
+	      if (data == 1) {
+	        $('span#'+eform_submit_count+'.btn-accept').removeClass('hidden');
+	      }
+	      
+	    })
+	    .fail(function() {
+	      console.log("error");
+	      alert("Ooops! An error occured. Click OK to reload.");
+	            window.location.reload();
+	    })
+	    .always(function() {
+	      console.log("complete check schedule count for button");
+	    }));
+	  });
 
-  $.when.apply($('.schedule-count'), promises).then(function() {
-        $(".overlay").fadeOut(600);
-    }); 
+	  $.when.apply($('.schedule-count'), promises).then(function() {
+	        $(".overlay").fadeOut(600);
+	    }); 
 
 
-  $.ajax({
-    url: "{{ route('select-ajax') }}", 
-    method: 'POST',
-    data: {L:L, term_id:term, _token:token},
-    success: function(data, status) {
-      $("select[name='Te_Code']").html('');
-      $("select[name='Te_Code']").html(data.options);
-    }
-  }); 
+	  $.ajax({
+	    url: "{{ route('select-ajax') }}", 
+	    method: 'POST',
+	    data: {L:L, term_id:term, _token:token},
+	    success: function(data, status) {
+	      $("select[name='Te_Code']").html('');
+	      $("select[name='Te_Code']").html(data.options);
+	    }
+	  }); 
 
-  $("select[name='Te_Code']").on('change',function(){
-    var course_id = $(this).val();
-    var eform_submit_count = $(this).attr('id');
+	  $("select[name='Te_Code']").on('change',function(){
+	    var course_id = $(this).val();
+	    var eform_submit_count = $(this).attr('id');
 
-    $.ajax({
-      url: "{{ route('select-ajax2') }}", 
-      method: 'POST',
-      data: {course_id:course_id, term_id:term, _token:token},
-      success: function(data) {
-        $("select#schedule-"+eform_submit_count+"[name='schedule_id']").html('');
-        $("select#schedule-"+eform_submit_count+"[name='schedule_id']").html(data.options);
-      }
-    });
-  });
-});
+	    $.ajax({
+	      url: "{{ route('select-ajax2') }}", 
+	      method: 'POST',
+	      data: {course_id:course_id, term_id:term, _token:token},
+	      success: function(data) {
+	        $("select#schedule-"+eform_submit_count+"[name='schedule_id']").html('');
+	        $("select#schedule-"+eform_submit_count+"[name='schedule_id']").html(data.options);
+	      }
+	    });
+	  });
+	});
 
-$(document).on('click', '.show-modal-history', function() {
-	$('.modal-title-history').text('Past Language Courses');
-    $('#showModalHistory').modal('show'); 
-});
+	$('button[data-dismiss-inner-modal="modal2"]').click(function () {
+	    $('#showModalHistory').modal('hide');
+	  });
+
+	$('button[data-dismiss-cancel-modal="modal3"]').click(function () {
+		var closeButton = $(this).attr('data-button-id');
+	    $('#'+closeButton).modal('hide');
+	  });
 </script>

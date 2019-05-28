@@ -250,6 +250,7 @@ class PreenrolmentController extends Controller
             $languages = DB::table('languages')->pluck("name","code")->all();
             $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
             $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+            $history = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->get();
 
             // query placement table if student placement enrolment data exists or not for the previous term
             $selectedTerm = $next_term;
@@ -264,7 +265,7 @@ class PreenrolmentController extends Controller
 
             $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
 
-            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag','last_placement_test'))->render();
+            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'history', 'historical_data','placement_flag','last_placement_test'))->render();
             return response()->json([$data]);             
         }
     }    
@@ -1013,7 +1014,7 @@ class PreenrolmentController extends Controller
             $term = $request->qry_term;
             $tecode = $request->qry_tecode;
             $eform_submit_count = $request->eform_submit_count;
-            // $teacher_comments = $request->teacher_comments;
+            $admin_eform_cancel_comment = $request->admin_eform_cancel_comment;
 
             $enrolment_to_be_deleted = Preenrolment::orderBy('id', 'asc')
                 ->where('Te_Code', $tecode)
@@ -1023,7 +1024,7 @@ class PreenrolmentController extends Controller
                 ->get();
 
             $input_1 = [
-                // 'teacher_comments' => $teacher_comments,
+                'admin_eform_cancel_comment' => $admin_eform_cancel_comment,
                 'updated_by_admin' => 1,
                 'modified_by' => Auth::user()->id, 
                 'cancelled_by_admin' => Auth::user()->id 
