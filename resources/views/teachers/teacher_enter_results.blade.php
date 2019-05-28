@@ -87,7 +87,7 @@
   <input type="hidden" name="_token" value="{{ Session::token() }}">
 
 </div>
-<div id="modalshow" class="modal fade">
+<div id="modalshow" class="modal fade" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
@@ -432,6 +432,11 @@ $('#modalshow').on('click', 'button.course-delete',function() {
   }
 
 });
+
+$('#modalshow').on('click', 'button.show-modal-history', function() {
+    $('.modal-title-history').text('Past Language Course Enrolment');
+    $('#showModalHistory').modal('show');
+});    
 </script>
 
 
@@ -442,29 +447,30 @@ $('#modalshow').on('hidden.bs.modal', function (event) {
   console.log(event.target)
   // alert( "This will be displayed only once." );
   //    $( this ).off( event );
-  
-  $(".preloader2").fadeIn('fast');
-  var Code = $("button[id='enterResultsBtn'].btn-success").val();
-  var token = $("input[name='_token']").val();
+  if (event.target.id == 'modalshow') {
+    $(".preloader2").fadeIn('fast');
+    var Code = $("button[id='enterResultsBtn'].btn-success").val();
+    var token = $("input[name='_token']").val();
 
-  $.ajax({
-    url: "{{ route('teacher-enter-results') }}", 
-    method: 'POST',
-    data: {Code:Code, _token:token},
-  })
-  .done(function(data) {
+    $.ajax({
+      url: "{{ route('teacher-enter-results') }}", 
+      method: 'POST',
+      data: {Code:Code, _token:token},
+    })
+    .done(function(data) {
 
-    $(".students-here").html(data);
-    $(".students-here").html(data.options);
-    console.log("inserted student table");
-  })
-  .fail(function(data) {
-    console.log("error");
-    alert("An error occured. Click OK to reload.");
-    window.location.reload();
-  })
-  .always(function(data) {
-    console.log("complete close modal");
-  });
+      $(".students-here").html(data);
+      $(".students-here").html(data.options);
+      console.log("inserted student table");
+    })
+    .fail(function(data) {
+      console.log("error");
+      alert("An error occured. Click OK to reload.");
+      window.location.reload();
+    })
+    .always(function(data) {
+      console.log("complete close modal");
+    });
+  }
 });
 </script>

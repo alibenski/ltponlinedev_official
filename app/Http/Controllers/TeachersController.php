@@ -527,8 +527,9 @@ class TeachersController extends Controller
             $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
 
             $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+            $history = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->get();
 
-            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms','last_placement_test', 'next_term_string'))->render();
+            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms','last_placement_test', 'history', 'next_term_string'))->render();
             return response()->json([$data]);             
         }
     }

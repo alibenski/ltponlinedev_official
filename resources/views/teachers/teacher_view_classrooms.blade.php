@@ -1,6 +1,11 @@
 @extends('teachers.teacher_template')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <style>
+    body.modal-open {
+        overflow: hidden;
+    }
+    </style>
 @stop
 @section('content')
 
