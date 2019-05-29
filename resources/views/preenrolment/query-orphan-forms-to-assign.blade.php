@@ -59,6 +59,7 @@
 	</div>
 </div>
 @if(Session::has('Term'))
+@if (!empty($arr3)) 
 <div class="row">
 	<div class="col-sm-8">
 		<h3>Viewing <span class="label label-default">{{count($arr3)}} out of {{ count($total_enrolment_forms) }}</span> Unassigned Enrolment Forms </h3>
@@ -125,7 +126,7 @@
 		</div>	
 	</div>
 </div>
-@else
+@endif
 @endif
 
 <div id="modalshow" class="modal fade" role="dialog">
@@ -183,14 +184,21 @@ $(document).ready(function() {
     })
     .then(function(data) {
       // console.log(data)
+      // console.time('jquery');
       $.each(data, function(x, y) {
         // console.log(y.INDEXID)
+        // console.log(y.course_name)
         $("input[name='indexid']").each(function() {
           if ($(this).val() == y.INDEXID) {
-            $('div.student-classroom-here-'+y.INDEXID).html('<strong>Current Class:</strong> <p><span class="label label-info margin-label">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
+            var course = $(this).closest("tr").find('span#xcourse').attr('data-course');
+            console.log(course)
+            if (course != y.course_name) {
+              $('div.student-classroom-here-'+y.INDEXID).append('<strong>Current Class:</strong> <p><span id="xcourse" class="label label-info margin-label" data-course="'+y.course_name+'">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
+            }
           }
         });
       });
+      // console.timeEnd('jquery');
     })
     .fail(function() {
       console.log("error");
