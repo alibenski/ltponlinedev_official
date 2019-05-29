@@ -69,14 +69,14 @@
     <p>You are viewing all <strong><u>unassigned</u></strong> regular enrolment forms which have been fully approved and validated by HR Focal Points and the Language Secretariat. This view includes students who are in a class and who are <strong><u>not</u></strong> in a class this term.</p>
   </div>
 </div>
-
+{{$arr3->links()}}
 <div class="row">
 	<div class="col-sm-12">
 		<div class="filtered-table table-responsive">
 			<table id="myTable" class="table table-bordered table-striped">
 			    <thead>
 			        <tr>
-			        	<th>#</th>
+			        	{{-- <th>#</th> --}}
                 <th>Action</th>
 			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
@@ -89,9 +89,9 @@
 			    <tbody>
 					@foreach($arr3 as $element)
 						<tr id="tr_{{$element->INDEXID}}">
-							<td>
+							{{-- <td>
               	<div class="counter"></div>
-            	</td>
+            	</td> --}}
             	<td>
             		<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
             		<input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -215,23 +215,25 @@ $(document).ready(function() {
 </script>
 <script>
 $(document).ready(function () {
-    var counter = 0;
-    var promises = [];
-    $('.counter').each(function() {
-        counter++;
-        $(this).attr('id', counter);
-        promises.push($('#'+counter).html(counter));
-    });   
+    // var counter = 0;
+    // var promises = [];
+    // $('.counter').each(function() {
+    //     counter++;
+    //     $(this).attr('id', counter);
+    //     promises.push($('#'+counter).html(counter));
+    // });   
 
-    $.when.apply($('.counter'), promises).then(function() {
-        // $(".preloader").fadeOut(600);
-    });
+    // $.when.apply($('.counter'), promises).then(function() {
+    //     // $(".preloader").fadeOut(600);
+    // });
 
     $('.dropdown-toggle').dropdown();
     
     $('#myTable').DataTable({
     	"deferRender": true,
       "paging":   false,
+      "searching": false,
+      "order": [[ 2, "asc" ]]
     }); 
 
     $('.assign-course').click( function() {

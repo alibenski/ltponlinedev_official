@@ -40,14 +40,16 @@ class PreenrolmentController extends Controller
                     ->whereNull('updated_by_admin')
                     ->select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')
                     ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')
-                    ->get();
+                    // ->get()
+                    ;
                 
                 $total_enrolment_forms = Preenrolment::where('Term', Session::get('Term'))
                     ->where('overall_approval', 1)
                     // ->whereNull('updated_by_admin')
                     ->select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
                     ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
-                    ->get();    
+                    ->get()
+                    ;    
                 $queries = [];
 
                 $columns = [
@@ -66,7 +68,9 @@ class PreenrolmentController extends Controller
                             $arr3 = $arr3->where('Term', Session::get('Term') );
                             $queries['Term'] = Session::get('Term');
                     }
-                   
+                $arr3 = $arr3->paginate(20)->appends($queries);
+                // $arr3 = $arr3->get();
+                // dd($arr3);
                 return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3', 'total_enrolment_forms')); 
             }
 
