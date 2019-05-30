@@ -1,7 +1,8 @@
 @extends('admin.no_sidebar_admin')
 
 @section('customcss')
-	<link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+	{{-- <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> --}}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
 
@@ -138,7 +139,8 @@
 @stop
 
 @section('java_script')
-<script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+{{-- <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script>
 $(document).ready(function () {
     var counter = 0;
@@ -156,6 +158,7 @@ $(document).ready(function () {
     $('.dropdown-toggle').dropdown();
     
     $('#myTable').DataTable({
+      "deferRender": true,
     	"paging":   false,
     }); 
 
@@ -273,7 +276,59 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
   .always(function() {
     	console.log("complete save assigned course");
   });
+});
+
+$('#modalshow').on('click', 'button.open-course-delete-modal', function() {
+
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var method = $("input[name='_method']").val();
   
+  $('#modalDeleteEnrolment-'+qry_indexid+'-'+qry_tecode+'-'+qry_term).modal('show');
+});
+
+$('#modalshow').on('click', 'button.course-delete', function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var method = $("input[name='_method']").val();
+  var admin_eform_cancel_comment = $("textarea#course-delete-textarea-"+eform_submit_count+"[name='admin_eform_cancel_comment'].course-delete-by-admin").val();
+  
+  var r = confirm("You are about to delete a form. Are you sure?");
+  if (r == true) {
+
+    $("button.course-delete").attr('disabled', true);
+    $(".overlay").fadeIn('fast'); 
+
+    $.ajax({
+      url: '{{ route('delete-no-email') }}',
+      type: 'POST',
+      data: {
+        admin_eform_cancel_comment:admin_eform_cancel_comment, 
+        eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
+    })
+    .done(function(data) {
+      console.log(data);
+      $(".preloader").fadeIn('fast');
+      location.reload();
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete delete form");
+    });
+  }
+});
+
+$('#modalshow').on('click', 'button.show-modal-history', function() {
+  $('.modal-title-history').text('Past Language Course Enrolment');
+  $('#showModalHistory').modal('show');
 });
 </script>
 
@@ -285,9 +340,10 @@ $('#modalshow').on('hidden.bs.modal', function (event) {
   console.log(event.target)
   // alert( "This will be displayed only once." );
   //    $( this ).off( event );
-  
-  $(".preloader").fadeIn('fast');
-  location.reload();
+  if (event.target.id == 'modalshow') {
+    $(".preloader").fadeIn('fast');
+    location.reload();
+  }
 
 });
 </script>

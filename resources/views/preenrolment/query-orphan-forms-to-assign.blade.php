@@ -395,7 +395,8 @@ $(document).ready(function () {
     
     var r = confirm("You are about to delete a form. Are you sure?");
     if (r == true) {
-
+      
+      $("button.course-delete").attr('disabled', true);
       $(".overlay").fadeIn('fast'); 
 
       $.ajax({
