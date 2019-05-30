@@ -43,13 +43,14 @@ class PreenrolmentController extends Controller
                     // ->get()
                     ;
                 
-                $total_enrolment_forms = Preenrolment::where('Term', Session::get('Term'))
-                    ->where('overall_approval', 1)
-                    // ->whereNull('updated_by_admin')
-                    ->select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
-                    ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
-                    ->get()
-                    ;    
+                // $total_enrolment_forms = Preenrolment::where('Term', Session::get('Term'))
+                //     ->where('overall_approval', 1)
+                //     // ->whereNull('updated_by_admin')
+                //     ->select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                //     ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+                //     ->get()
+                //     ;    
+                    
                 $queries = [];
 
                 $columns = [
@@ -68,15 +69,17 @@ class PreenrolmentController extends Controller
                             $arr3 = $arr3->where('Term', Session::get('Term') );
                             $queries['Term'] = Session::get('Term');
                     }
-                $arr3 = $arr3->paginate(20)->appends($queries);
-                // $arr3 = $arr3->get();
-                // dd($arr3);
+                
+                // $arr3 = $arr3->paginate(20)->appends($queries);
+                $arr3 = $arr3->get();
+
                 return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3', 'total_enrolment_forms')); 
             }
 
             $arr3 = null;
-            $total_enrolment_forms = null;
-            return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3', 'total_enrolment_forms'));    
+            // $total_enrolment_forms = null;
+
+            return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3'));    
         }
     }
 

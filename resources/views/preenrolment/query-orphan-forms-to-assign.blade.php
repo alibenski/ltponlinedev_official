@@ -60,23 +60,36 @@
 </div>
 @if(Session::has('Term'))
 @if (!empty($arr3)) 
+
 <div class="row">
 	<div class="col-sm-8">
-		<h3>Viewing <span class="label label-default">{{count($arr3)}} out of {{ count($total_enrolment_forms) }}</span> Unassigned Enrolment Forms </h3>
+		<h3>Unassigned @if(Request::has('L'))
+          <strong>  
+          @if(Request::input('L') == 'A') <span>Arabic</span>
+          @elseif(Request::input('L') == 'C') <span>Chinese</span>
+          @elseif(Request::input('L') == 'E') <span>English</span>
+          @elseif(Request::input('L') == 'F') <span>French</span>
+          @elseif(Request::input('L') == 'R') <span>Russian</span>
+          @elseif(Request::input('L') == 'S') <span>Spanish</span>
+          @endif
+          </strong>
+        @endif Enrolment Forms Left: <span class="label label-default">{{count($arr3)}}</span> </h3>
 	</div>
   <div class="alert alert-warning col-sm-4 pull-right">
     <h4><i class="icon fa fa-info-circle "></i>Important Note</h4>
     <p>You are viewing all <strong><u>unassigned</u></strong> regular enrolment forms which have been fully approved and validated by HR Focal Points and the Language Secretariat. This view includes students who are in a class and who are <strong><u>not</u></strong> in a class this term.</p>
   </div>
 </div>
-{{$arr3->links()}}
+
+{{-- {{$arr3->links()}} --}}
+
 <div class="row">
 	<div class="col-sm-12">
 		<div class="filtered-table table-responsive">
 			<table id="myTable" class="table table-bordered table-striped">
 			    <thead>
 			        <tr>
-			        	{{-- <th>#</th> --}}
+			        	<th>#</th>
                 <th>Action</th>
 			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
@@ -89,9 +102,9 @@
 			    <tbody>
 					@foreach($arr3 as $element)
 						<tr id="tr_{{$element->INDEXID}}">
-							{{-- <td>
+							<td>
               	<div class="counter"></div>
-            	</td> --}}
+            	</td>
             	<td>
             		<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
             		<input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -126,6 +139,7 @@
 		</div>	
 	</div>
 </div>
+
 @endif
 @endif
 
@@ -191,7 +205,7 @@ $(document).ready(function() {
         $("input[name='indexid']").each(function() {
           if ($(this).val() == y.INDEXID) {
             var course = $(this).closest("tr").find('span#xcourse').attr('data-course');
-            console.log(course)
+            // console.log(course)
             if (course != y.course_name) {
               $('div.student-classroom-here-'+y.INDEXID).append('<strong>Current Class:</strong> <p><span id="xcourse" class="label label-info margin-label" data-course="'+y.course_name+'">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
             }
@@ -215,17 +229,22 @@ $(document).ready(function() {
 </script>
 <script>
 $(document).ready(function () {
-    // var counter = 0;
-    // var promises = [];
-    // $('.counter').each(function() {
-    //     counter++;
-    //     $(this).attr('id', counter);
-    //     promises.push($('#'+counter).html(counter));
-    // });   
+    var counter = 0;
+    var promises = [];
 
-    // $.when.apply($('.counter'), promises).then(function() {
-    //     // $(".preloader").fadeOut(600);
-    // });
+    $("button.filter-submit-btn").click(function() {
+      $(".preloader").fadeIn('fast');
+    });
+
+    $('.counter').each(function() {
+        counter++;
+        $(this).attr('id', counter);
+        promises.push($('#'+counter).html(counter));
+    });   
+
+    $.when.apply($('.counter'), promises).then(function() {
+        // $(".preloader").fadeOut(600);
+    });
 
     $('.dropdown-toggle').dropdown();
     
@@ -233,7 +252,7 @@ $(document).ready(function () {
     	"deferRender": true,
       "paging":   false,
       "searching": false,
-      "order": [[ 2, "asc" ]]
+      // "order": [[ 2, "asc" ]]
     }); 
 
     $('.assign-course').click( function() {
