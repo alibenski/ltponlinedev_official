@@ -1171,6 +1171,10 @@ $(document).on('click', '.show-std-comments', function() {
           $('.modal-body-schedule').html(data)
       });
     });
+
+    $('#modalshowplacementinfo').on('hidden.bs.modal', function (event) {
+	    $('.modal-body-schedule').html('<div class="preloader"></div>')
+	});
   });
 </script>
 @stop

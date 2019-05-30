@@ -314,6 +314,10 @@ $(document).ready(function() {
 	  });
 	});
 
+	$('#modalshowplacementinfo').on('hidden.bs.modal', function (event) {
+	    $('.modal-body-schedule').html('<div class="preloader"></div>')
+	});
+
 	$(document).on('click', '.placement-delete', function() {
 		var placement_id = $(this).closest("tr").find("a[data-mid]").attr('data-mid');
 		console.log(placement_id) 

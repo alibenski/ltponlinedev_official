@@ -151,11 +151,11 @@
 	<div class="col-sm-12">
 		<!-- MAKE A DECISION SECTION -->
 
-		<div class="panel panel-info">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">Operation:</h3>
+		<div class="box box-info operation-section">
+		  <div class="box-header with-border">
+		    <h3>Operation:</h3>
 		  </div>
-		  <div class="panel-body">
+		  <div class="box-body">
 
 		    <div class="form-group">
 				<label for="">Did the student take a placement test? </label>
@@ -333,6 +333,29 @@
 	$(document).on('click', '.show-modal-history', function() {
 		$('.modal-title-history').text('Past Language Course Enrolment for {{ $placement_form->users->name }}');
 	    $('#showModalHistory').modal('show'); 
+	});
+</script>
+<script>
+	$(document).ready(function() {
+		var term = $("input[name='Term']").val();
+		var token = $("input[name='_token']").val();
+		$.ajax({
+	    	url: '{{ route('ajax-check-batch-has-ran') }}',
+	    	type: 'GET',
+	    	data: {Term:term,_token: token},
+	    })
+	    .done(function(data) {
+	    	if (!jQuery.isEmptyObject( data )) {
+	    		$('.operation-section').append('<div class="overlay"><i class="fa fa-remove"></i><br><br><br><p class="text-center text-danger"><strong>Changes cannot be made. Please check with the system administrators.</strong></p></div>');
+
+	    	}
+	    })
+	    .fail(function() {
+	    	console.log("error");
+	    })
+	    .always(function() {
+	    	console.log("complete check if batch has ran");
+	    });
 	});
 </script>
 <script>

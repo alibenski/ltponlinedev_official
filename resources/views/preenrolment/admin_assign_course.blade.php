@@ -276,6 +276,25 @@
 	  var term = $("input[name='Term'].modal-input").val();
 	  var token = $("input[name='_token']").val();
 
+	$.ajax({
+    	url: '{{ route('ajax-check-batch-has-ran') }}',
+    	type: 'GET',
+    	data: {Term:term,_token: token},
+    })
+    .done(function(data) {
+    	if (!jQuery.isEmptyObject( data )) {
+    		$("button.modal-accept-btn").addClass('hidden');
+    		$("button.modal-save-btn").addClass('hidden');
+    		$("button.open-course-delete-modal").addClass('hidden');
+    	}
+    })
+    .fail(function() {
+    	console.log("error");
+    })
+    .always(function() {
+    	console.log("complete check if batch has ran");
+    });
+
 	  var promises = [];
 	  $('.schedule-count').each(function(index, val) {
 	    var eform_submit_count = $(this).attr('id');

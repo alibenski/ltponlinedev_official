@@ -184,11 +184,37 @@
 				    </div>
 				</div>
 				@endif
-				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><i class="fa fa-pencil"></i> Modify Assigned Course</a> 
+				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success assign-course-link hidden" style="margin: 1px;"><i class="fa fa-pencil"></i> Assign Course</a> 
 			</div> {{-- EOF 2nd column --}}
 		</form>			
 	</div>
 </div>
+<script>
+$(document).ready(function() {
+	var Term = $("input[name='Term']").val();
+    var token = $("input[name='_token']").val();
+    
+    $.ajax({
+    	url: '{{ route('ajax-check-batch-has-ran') }}',
+    	type: 'GET',
+    	data: {Term:Term,_token: token},
+    })
+    .done(function(data) {
+    	if (jQuery.isEmptyObject( data )) {
+    		$(".assign-course-link").removeClass('hidden');
+    	}
+
+    })
+    .fail(function() {
+    	console.log("error");
+    })
+    .always(function() {
+    	console.log("complete check if batch has ran");
+    });
+
+});
+</script>
+
 <script language="javascript">
 	window.setInterval(function(){
     if(localStorage["update"] == "1"){
