@@ -333,6 +333,7 @@ class PreenrolmentController extends Controller
             $languages = DB::table('languages')->pluck("name","code")->all();
             $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
             $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
+            $history = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->get();
 
             // query placement table if student placement enrolment data exists or not for the previous term
             $selectedTerm = $next_term;
@@ -347,7 +348,7 @@ class PreenrolmentController extends Controller
 
             $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
 
-            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'historical_data','placement_flag','last_placement_test'))->render();
+            $data = view('preenrolment.admin_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'history', 'historical_data','placement_flag','last_placement_test'))->render();
             return response()->json([$data]);             
         }
     }
@@ -744,7 +745,7 @@ class PreenrolmentController extends Controller
                 }
             }
 
-        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by');
+        $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by', 'cancelled_by_admin')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by', 'cancelled_by_admin');
         // $allQueries = array_merge($queries, $currentQueries);
         $enrolment_forms = $enrolment_forms->withTrashed()->paginate(20)->appends($queries);
         return view('preenrolment.index')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
@@ -1033,8 +1034,8 @@ class PreenrolmentController extends Controller
 
             $input_1 = [
                 'admin_eform_cancel_comment' => $admin_eform_cancel_comment,
-                'updated_by_admin' => 1,
-                'modified_by' => Auth::user()->id, 
+                // 'updated_by_admin' => 1,
+                // 'modified_by' => Auth::user()->id, 
                 'cancelled_by_admin' => Auth::user()->id 
                 ];
             $input_1 = array_filter($input_1, 'strlen');

@@ -834,7 +834,11 @@ class TeachersController extends Controller
                 ->where('Term', $term)
                 ->get();
 
-            $input_1 = ['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id, 'cancelled_by_admin' => Auth::user()->id ];
+            $input_1 = [
+                'teacher_comments' => $teacher_comments,
+                // 'updated_by_admin' => 1,
+                // 'modified_by' => Auth::user()->id, 
+                'cancelled_by_admin' => Auth::user()->id ];
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_deleted as $data) {

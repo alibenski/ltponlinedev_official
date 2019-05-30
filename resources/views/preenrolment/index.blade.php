@@ -69,6 +69,7 @@
 		            <th>Payment Proof</th>
 		            <th>Comment</th>
 		            <th>Time Stamp</th>
+		            <th>Cancelled/Deleted By</th>
 		            <th>Cancel Date/Time Stamp</th>
 		        </tr>
 		    </thead>
@@ -174,6 +175,11 @@
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
 					</td>
 					<td>{{ $form->created_at}}</td>
+					<td>
+						@if ($form->deleted_at && !is_null($form->cancelled_by_admin))
+		            		{{ $form->cancelledBy->name }}
+		            	@endif
+		            </td>
 					<td>{{ $form->deleted_at}}</td>
 				</tr>
 				@endforeach

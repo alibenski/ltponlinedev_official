@@ -11,7 +11,7 @@
 <div class="row col-sm-12">
 	<a href="{{ route('users.index') }}" class="btn btn-danger btn-space"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
 	<button type="button" class="show-modal btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
-	<button type="button" class="show-modal-history btn btn-primary btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
+	<button type="button" class="show-modal-history-main btn btn-primary btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History</button>
 	<button type="button" class="show-modal-placement-history btn bg-orange btn-space" data-toggle="modal"><span class="glyphicon glyphicon-list-alt"></span> Placement Tests & Results</button>
 	<a href="{{ route('enrol-student-to-course-form', $id) }}" class="btn btn-success btn-space"><span class="glyphicon glyphicon-pencil"></span>  Create Enrolment Form </a>
 	<a href="{{ route('enrol-student-to-placement-form', $id) }}" class="btn btn-warning btn-space"><span class="glyphicon glyphicon-pencil"></span>  Create Placement Form</a>
@@ -167,6 +167,7 @@
 							            <th>Payment Proof</th>
 							            <th>Comment</th>
 							            <th>Time Stamp</th>
+										<th>Cancelled/Deleted By</th>
 							            <th>Cancel Time Stamp</th>
 							        </tr>
 							    </thead>
@@ -189,15 +190,15 @@
 
 												
 												@if (is_null($form->deleted_at))
-												<button type="button" class="btn btn-danger btn-space course-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
+												<button type="button" class="btn btn-danger btn-space course-delete-main" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Enrolment</button>
 												@else
-												<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+												<button type="button" class="btn btn-danger btn-space course-delete-main-tooltip" title="{{$form->admin_eform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
 													@if ($form->admin_eform_cancel_comment)
 														<p><small><label>Cancellation Comment:</label> "{{$form->admin_eform_cancel_comment}}" - {{$form->cancelledBy->name}}</small></p>
 													@endif
 												@endif
 												
-											<div id="modalDeleteEnrolment-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
+											<div id="modalDeleteEnrolmentMain-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
 											    <div class="modal-dialog">
 											        <div class="modal-content">
 
@@ -205,7 +206,7 @@
 											                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
 											                <h4 class="modal-title">Admin Course Cancellation</h4>
 											            </div>
-											            <div class="modal-body-course-delete">
+											            <div class="modal-body-course-delete-main">
 											            	<div class="col-sm-12">	
 												            	<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
 
@@ -215,7 +216,7 @@
 												            		<div class="form-group">
 																		<label class="control-label">Admin Comments: </label>
 
-																		<textarea id="course-delete-textarea-{{$form->eform_submit_count}}" name="admin_eform_cancel_comment" class="form-control course-delete-by-admin" maxlength="3500" placeholder="Place important information about the cancellation of this form..."></textarea>
+																		<textarea id="course-delete-main-textarea-{{$form->eform_submit_count}}" name="admin_eform_cancel_comment" class="form-control course-delete-main-by-admin" maxlength="3500" placeholder="Place important information about the cancellation of this form..."></textarea>
 																		
 																	</div>
 
@@ -324,6 +325,11 @@
 											<input type="hidden" name="tecode" value="{{$form->Te_Code}}">
 										</td>
 										<td>{{ $form->created_at}}</td>
+										<td>
+											@if ($form->deleted_at && !is_null($form->cancelled_by_admin))
+							            		{{ $form->cancelledBy->name }}
+							            	@endif
+							            </td>
 										<td>{{ $form->deleted_at}}</td>
 									</tr>
 									@endforeach
@@ -360,6 +366,7 @@
 							            <th>ID Proof</th>
 							            <th>Payment Proof</th>
 							            <th>Time Stamp</th>
+							            <th>Cancelled/Deleted By</th>
 							            <th>Cancel Time Stamp</th>
 							        </tr>
 							    </thead>
@@ -381,7 +388,7 @@
 											@if (is_null($form->deleted_at))
 											<button type="button" class="btn btn-danger btn-space placement-delete" data-toggle="modal"><i class="fa fa-remove"></i> Reject/Cancel Placement Test</button>
 											@else
-											<button type="button" class="btn btn-danger btn-space course-delete-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
+											<button type="button" class="btn btn-danger btn-space course-delete-main-tooltip" title="{{$form->admin_plform_cancel_comment}}" disabled=""><i class="fa fa-info-circle"></i> Cancelled</button>
 												@if ($form->admin_plform_cancel_comment)
 													<p><small><label>Cancellation Comment:</label> "{{$form->admin_plform_cancel_comment}}" - {{$form->cancelledBy->name}}</small></p>
 												@endif
@@ -434,8 +441,10 @@
 											</div>
 										</td>
 										<td>
-											@if($form->updated_by_admin == 1)
-			                                	<span class="label label-success margin-label">Yes by {{ $form->modifyUser->name}}</span>
+											@if($form->assigned_to_course == 1)
+												@if($form->updated_by_admin == 1)
+				                                	<span class="label label-success margin-label">Yes by {{ $form->modifyUser->name}}</span>
+				                                @endif
 			                                @else
 												<span class="label label-danger margin-label">Not Assigned </span>
 			                                @endif
@@ -503,6 +512,11 @@
 										@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 										</td>
 										<td>{{ $form->created_at}}</td>
+										<td>
+											@if ($form->deleted_at && !is_null($form->cancelled_by_admin))
+							            		{{ $form->cancelledBy->name }}
+							            	@endif
+							            </td>
 										<td>{{ $form->deleted_at}}</td>
 									</tr>
 									@endforeach
@@ -626,7 +640,7 @@
     </div>
 </div>
 <!-- Modal form to show history -->
-<div id="showModalHistory" class="modal fade" role="dialog">
+<div id="showModalHistoryMain" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -824,7 +838,7 @@ $(document).ready(function() {
     })
     .done(function(data) {
     	if (!jQuery.isEmptyObject( data )) {
-    		$(".course-delete").addClass('hidden');
+    		$(".course-delete-main").addClass('hidden');
     		$(".placement-delete").addClass('hidden');
     	}
 
@@ -996,6 +1010,59 @@ $('#modalAssignCourse').on('click', '.modal-save-btn',function() {
   });
   
 });
+
+$('#modalAssignCourse').on('click', 'button.open-course-delete-modal', function() {
+
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var method = $("input[name='_method']").val();
+  
+  $('#modalDeleteEnrolment-'+qry_indexid+'-'+qry_tecode+'-'+qry_term).modal('show');
+});
+
+$('#modalAssignCourse').on('click', 'button.course-delete', function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var method = $("input[name='_method']").val();
+  var admin_eform_cancel_comment = $("textarea#course-delete-textarea-"+eform_submit_count+"[name='admin_eform_cancel_comment'].course-delete-by-admin").val();
+  
+  var r = confirm("You are about to delete a form. Are you sure?");
+  if (r == true) {
+
+    $("button.course-delete").attr('disabled', true);
+    $(".overlay").fadeIn('fast'); 
+
+    $.ajax({
+      url: '{{ route('delete-no-email') }}',
+      type: 'POST',
+      data: {
+        admin_eform_cancel_comment:admin_eform_cancel_comment, 
+        eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
+    })
+    .done(function(data) {
+      console.log(data);
+      $(".preloader").fadeIn('fast');
+      location.reload();
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete delete form");
+    });
+  }
+});
+
+$('#modalAssignCourse').on('click', 'button.show-modal-history', function() {
+  $('.modal-title-history').text('Past Language Course Enrolment');
+  $('#showModalHistory').modal('show');
+});
 </script>
 
 <script>
@@ -1004,10 +1071,10 @@ $('#modalAssignCourse').on('hidden.bs.modal', function (event) {
   console.log(event.target)
   // alert( "This will be displayed only once." );
   //    $( this ).off( event );
-  
-  $(".preloader").fadeIn('fast');
-  location.reload();
-
+  if (event.target.id == 'modalAssignCourse') {
+	  $(".preloader").fadeIn('fast');
+	  location.reload();
+	}
 });
 </script>
 
@@ -1019,7 +1086,7 @@ $(document).ready(function() {
     	placeholder: "--- Select Here ---",
     }); 
 
-    $('.course-delete-tooltip').tooltip();
+    $('.course-delete-main-tooltip').tooltip();
 
 });
 </script>
@@ -1029,9 +1096,9 @@ $(document).on('click', '.show-modal', function() {
     $('#showModal').modal('show'); 
 });
 
-$(document).on('click', '.show-modal-history', function() {
+$(document).on('click', '.show-modal-history-main', function() {
 	$('.modal-title-history').text('Past Language Course Enrolment for {{ $student->name }}');
-    $('#showModalHistory').modal('show'); 
+    $('#showModalHistoryMain').modal('show'); 
 });
 
 $(document).on('click', '.show-modal-placement-history', function() {
@@ -1039,11 +1106,11 @@ $(document).on('click', '.show-modal-placement-history', function() {
     $('#showModalPlacementHistory').modal('show'); 
 })
 
-$(document).on('click', '.course-delete', function() {
+$(document).on('click', '.course-delete-main', function() {
 	var INDEXID = $(this).closest("tr").find("input[name='indexid']").val();
 	var Te_Code = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
 	var Term = $(this).closest("tr").find("input[name='term']").val();
-    $('#modalDeleteEnrolment-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
+    $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
 });
 
 $(document).on('click', '.placement-delete', function() {

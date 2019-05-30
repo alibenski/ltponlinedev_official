@@ -87,6 +87,7 @@
 	            <th>ID Proof</th>
 	            <th>Payment Proof</th>
 	            <th>Time Stamp</th>
+	            <th>Cancelled/Deleted By</th>
 	            <th>Cancel Date/Time Stamp</th>
 	        </tr>
 	    </thead>
@@ -229,6 +230,11 @@
 				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
 				<td>{{ $form->created_at}}</td>
+				<td>
+					@if ($form->deleted_at && !is_null($form->cancelled_by_admin))
+	            		{{ $form->cancelledBy->name }}
+	            	@endif
+	            </td>
 				<td>{{ $form->deleted_at}}</td>
 			</tr>
 			@endforeach
