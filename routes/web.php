@@ -119,6 +119,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('send-convocation', 'PreviewController@sendConvocation')->name('send-convocation');
     Route::get('preview-waitlisted', 'PreviewController@previewWaitlisted')->name('preview-waitlisted');
     Route::get('cancelled-convocation-view', 'PreviewController@cancelledConvocaitonView')->name('cancelled-convocation-view');
+    Route::post('undelete-pash/{id}', ['as'=>'undelete-pash','uses'=>'PreviewController@unDeletePash']);
     
     Route::get('preview-merged-forms', 'PreviewController@previewMergedForms')->name('preview-merged-forms');
     Route::post('ajax-preview-course-boxes', ['as'=>'ajax-preview-course-boxes','uses'=>'PreviewController@ajaxPreviewCourseBoxes']);

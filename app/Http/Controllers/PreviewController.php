@@ -477,6 +477,13 @@ class PreviewController extends Controller
         return back();
     }
 
+    public function unDeletePash(Request $request, $id)
+    {
+        $pashRecord = Repo::onlyTrashed()->find($id);
+        $pashRecord->restore();
+        dd($pashRecord);
+    }
+
     public function previewWaitlisted()
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
