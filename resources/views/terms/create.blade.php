@@ -10,7 +10,7 @@
 <div class='col-lg-12'>
     <h1><i class='fa fa-snowflake-o'></i> Create Semester Term </h1>
     <hr>
-	    <form method="POST" action="{{ route('terms.store') }}">
+	    <form id="myForm" method="POST" action="{{ route('terms.store') }}">
         {{ csrf_field() }}
         <div class="col-md-4">
           <div class="form-group">
@@ -139,6 +139,35 @@
           </div>
       </form>
 </div>
+
+<!--Modal: modalConfirmDelete-->
+<div class="modal fade" id="modalConfirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-notify" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center bg-red">
+        <p class="heading"><i class="fa fa-times fa-2x animated rotateIn"></i> <br>Value Entered is invalid</p>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+        <p class="text-justify"><strong>Term Code values end with 1, 4, 8, or 9 depending on the trimestre. Please consult the system administrators for guidance on this matter.</strong></p>
+        
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center bg-red">
+        <a type="button" class="btn  btn-default waves-effect" data-dismiss="modal">Close</a>
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--Modal: modalConfirmDelete-->
+
 @stop
 
 @section('java_script')
@@ -152,6 +181,7 @@
     placeholder: "Select Season",
     minimumResultsForSearch: Infinity,
     });
+    
     $('.form_datetime').datetimepicker({
         //language:  'fr',
         weekStart: 1,
@@ -163,5 +193,21 @@
         showMeridian: 1
     });
   });
+
+  $('input[name="Term_Code"]').on('change', function(event) {
+    var term = $('input[name="Term_Code"]').val();
+    var lastDigit = term.toString().slice(-1);
+    var arr = ['1','4','8','9'];
+    //OR
+    //var lastDigit = (test + '').slice(-1);
+
+    if (jQuery.inArray( lastDigit, arr ) == -1) {
+      // alert('not valid');
+      $('#modalConfirmDelete').modal('show');
+      $(this).val('');
+    }
+    
+  });
+
 </script>
 @stop

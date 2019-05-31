@@ -8,6 +8,11 @@
 
 @section('content')
 
+<div class="row">
+  <div class="col-sm-12">
+    <h3 class="text-center"><strong>{{ strtoupper('Manage All Unassigned Enrolment Forms') }}</strong></h3>
+  </div>
+</div>
 
 @include('admin.partials._termSessionMsg')
 
