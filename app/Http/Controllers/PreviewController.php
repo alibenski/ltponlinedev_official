@@ -481,7 +481,8 @@ class PreviewController extends Controller
     {
         $pashRecord = Repo::onlyTrashed()->find($id);
         $pashRecord->restore();
-        dd($pashRecord);
+        
+        return back();
     }
 
     public function previewWaitlisted()

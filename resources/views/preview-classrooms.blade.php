@@ -244,6 +244,15 @@
 
                         <button type="button" class="btn btn-danger btn-space pash-delete" data-toggle="modal" @if($form->deleted_at) disabled="" @endif> @if($form->deleted_at)<i class="fa fa-remove"></i> Cancelled @else <i class="fa fa-trash"></i> Delete @endif</button>
 
+                        @if ($form->deleted_at)
+                          <form method="POST" action="{{ route('undelete-pash', [$form->id]) }}" class="undelete-form form-prevent-multi-submit">
+                              <input id="unDeleteInput" type="submit" value="Undo Delete" class="undelete-form btn btn-success btn-space button-prevent-multi-submit">
+
+                              <input type="hidden" name="_token" value="{{ Session::token() }}">
+                             {{ method_field('PUT') }}
+                          </form>
+                        @endif
+
                         <div id="modalDeletePash-{{ $form->id }}" class="modal fade" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">
