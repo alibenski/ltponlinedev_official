@@ -68,7 +68,7 @@
 
 <div class="row">
 	<div class="col-sm-8">
-		<h3>Unassigned @if(Request::has('L'))
+		<h3>Total @if(Request::has('L'))
           <strong>  
           @if(Request::input('L') == 'A') <span>Arabic</span>
           @elseif(Request::input('L') == 'C') <span>Chinese</span>
@@ -78,7 +78,7 @@
           @elseif(Request::input('L') == 'S') <span>Spanish</span>
           @endif
           </strong>
-        @endif Enrolment Forms Left: <span class="label label-default">{{count($arr3)}}</span> </h3>
+        @endif Enrolment Forms: <span class="label label-default">{{count($arr3)}}</span> </h3>
 	</div>
   <div class="alert alert-warning col-sm-4 pull-right">
     <h4><i class="icon fa fa-info-circle "></i>Important Note</h4>
