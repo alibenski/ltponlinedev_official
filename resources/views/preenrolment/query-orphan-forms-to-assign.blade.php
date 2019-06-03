@@ -78,7 +78,7 @@
           @elseif(Request::input('L') == 'S') <span>Spanish</span>
           @endif
           </strong>
-        @endif Enrolment Forms: <span class="label label-default">{{count($arr3)}}</span> </h3>
+        @endif Enrolment Forms: <span class="label label-default">{{ $assigned_forms_count }} / {{count($arr3)}}</span> </h3>
 	</div>
   <div class="alert alert-warning col-sm-4 pull-right">
     <h4><i class="icon fa fa-info-circle "></i>Important Note</h4>
