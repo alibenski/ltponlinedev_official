@@ -480,6 +480,8 @@ class PreviewController extends Controller
     public function unDeletePash(Request $request, $id)
     {
         $pashRecord = Repo::onlyTrashed()->find($id);
+        $pashRecord->cancelled_by = null;
+        $pashRecord->cancelled_but_not_billed = null;
         $pashRecord->restore();
         
         return back();
