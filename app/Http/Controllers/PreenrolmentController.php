@@ -27,8 +27,8 @@ class PreenrolmentController extends Controller
 {
     public function queryOrphanFormsToAssign(Request $request)
     {
-        $languages = DB::table('languages')->pluck("name","code")->all();
         if (Session::has('Term')) {
+            $languages = DB::table('languages')->pluck("name","code")->all();
             $term = Session::get('Term');
             $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
 
@@ -80,8 +80,9 @@ class PreenrolmentController extends Controller
             $arr3 = null;
             // $total_enrolment_forms = null;
 
-            return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3'));    
+            return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3')); 
         }
+            return redirect('/');   
     }
 
     public function queryRegularFormsToAssign(Request $request)
