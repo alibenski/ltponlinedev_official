@@ -720,30 +720,36 @@ class TeachersController extends Controller
         //     }
         // }
         // dd($arr);
-        return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'));
-        // $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info'))->render();
-        // return response()->json([$data]);
+        // return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'));
+        $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'))->render();
+        return response()->json([$data]);
     }
 
     public function ajaxGetRemark(Request $request)
     {
-        $attendance_id_check = Attendance::where('pash_id', $request->id)->get();
+        $attendance_id_check = Attendance::whereIn('pash_id', explode(",",$request->id))->get();
         $count_attendance_id = $attendance_id_check->count();
 
         if ($count_attendance_id > 0){
-            $attendance_id = Attendance::where('pash_id', $request->id)->first()->id;
+            // $attendance_id = Attendance::where('pash_id', $request->id)->first()->id;
+            // 
+            $attendance_id = Attendance::whereIn('pash_id', explode(",",$request->id))->with('attendanceRemarks')->get();
+            $data = $attendance_id;
             
-            $remark = AttendanceRemarks::where('attendance_id', $attendance_id)
-                ->where('wk_id', $request->wk)
-                ->orderBy('created_at', 'desc')
-                ->first();
+            // foreach ($attendance_id as $key => $value) {
+            //     $remark = AttendanceRemarks::where('attendance_id', $attendance_id)
+            //         ->where('wk_id', $request->wk)
+            //         ->orderBy('created_at', 'desc')
+            //         // ->first();
+            //         ->get();
+            // }
 
-            if (!empty($remark)) {
-                $data = $remark->remarks;
-                return response()->json($data);
-            }
+            // if (!empty($remark)) {
+            //     $data = $remark->remarks;
+            //     return response()->json($data);
+            // }
             
-            $data = '';
+            // $data = '';
             return response()->json($data);  
         }
 

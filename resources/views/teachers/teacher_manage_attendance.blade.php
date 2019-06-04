@@ -1,11 +1,15 @@
 
-@extends('teachers.teacher_template')
+{{-- @extends('teachers.teacher_template')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
-@section('content')
+@section('content') --}}
 {{-- <div id="loader2"></div> --}}
-<div class="preloader"></div>
+<div class="preloader2">
+  <p class="text-center">
+    <strong>Loading data from the database... Please wait...</strong>
+  </p>
+</div>
 <div class="row">
   <div class="col-md-12">
     <h3><strong>Log Student Attedance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $day }}: {{ $time }} ({{ $week }})</strong></h3>
@@ -37,11 +41,11 @@
 </div>
 <div class="row">
   <div class="col-md-6">
-    <a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-danger"><i class="fa fa-arrow-circle-left"></i> Back</a>
+    {{-- <a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-danger"><i class="fa fa-arrow-circle-left"></i> Back</a> --}}
 
     <button class="btn btn-success btn-save">Save Attendance</button>
     <input type="hidden" name="_token" value="{{ Session::token() }}">
-    <input type="hidden" name="wk" value="{{ $week }}">
+    <input type="hidden" name="wkManageAttendance" value="{{ $week }}">
   </div>
 </div>
 
@@ -77,7 +81,7 @@
           @foreach($form_info as $key => $form)
           <tr id="{{$form->id}}" class="table-row">
             <td>
-              <div class="counter"></div>
+              <div class="counter-std"></div>
             </td>
             <td>
               @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif </td>
@@ -103,49 +107,61 @@
 </div>
   
 
-@stop
+{{-- @stop --}}
 
-@section('java_script')
+{{-- @section('java_script') --}}
 <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
 
 <script>
   $(document).ready(function () {
-    var counter = 0;
-    $('.counter').each(function() {
-        counter++;
-        $(this).attr('id', counter);
-        $('#'+counter).html(counter);
-        // console.log(counter)
+    var counterStd = 0;
+    $('.counter-std').each(function() {
+        counterStd++;
+        $(this).attr('id', 'std-'+counterStd);
+        $('#std-'+counterStd).html(counterStd);
+        // console.log(counterStd)
     });
+
     var promises = [];
+    var allIDs = [];
+    var wk = $("input[name='wkManageAttendance']").val();
+    var token = $("input[name='_token']").val();
 
-    $('tr.table-row').each(function(){
-      var id = $(this).attr('id');
-      var wk = $("input[name='wk']").val();
-      var token = $("input[name='_token']").val();
+    console.log(wk)
 
-      promises.push($.ajax({
-            url: '{{ route('ajax-get-remark') }}',
-            type: 'GET',
-            data: {id:id, wk:wk, _token:token},
-          })
-          .then(function(data) {
-            console.log("success");
-            console.log(data);
-            $("tr#"+id).find("textarea.remarks").attr('placeholder', data);;
-          })
-          .fail(function() {
-            console.log("error");
-            alert("An error occured. Click OK to reload.");
-            window.location.reload();
-          })
-          .always(function() {
-            // console.log("complete");
-          })); 
+    $('tr.table-row').each(function(){      
+      allIDs.push($(this).attr('id'));
     }); //end of $.each
     
+    var id = allIDs.join(",");
+
+    promises.push($.ajax({
+          url: '{{ route('ajax-get-remark') }}',
+          type: 'GET',
+          data: {id:id, wk:wk, _token:token},
+        })
+        .then(function(data) {
+          // console.log("success");
+          console.log(data);
+          $.each(data, function(index, val) {
+            $.each(val.attendance_remarks, function(index1, val1) {
+              if (val1.wk_id == wk) {
+                $("tr#"+val.pash_id).find("textarea.remarks").attr('placeholder', val1.remarks);
+              }
+            });
+          });
+        })
+        .fail(function() {
+          console.log("error");
+          alert("An error occured. Click OK to reload.");
+          window.location.reload();
+        })
+        .always(function() {
+          // console.log("complete");
+        })); 
+    
     $.when.apply($('tr.table-row'), promises).then(function() {
-        $(".preloader").fadeOut(600);
+        $(".preloader2").fadeOut(600);
     });    
   });
 </script>
@@ -198,49 +214,8 @@
 
 <script>
   $(document).ready(function () {
-    $(".btn-save").click(function(){
-
-      var token = $("input[name='_token']").val();
-      var wk = $("input[name='wk']").val();
-      var allVals = [];  
-      var allStatus = [];
-      var allRemarks = [];
-          $(".sub_chk:checked").each(function() {  
-              allVals.push($(this).attr('data-id'));
-              allStatus.push($(this).val());
-              allRemarks.push($(this).closest("tr").find("textarea.remarks").val());
-          });
-      
-      var join_selected_values = allVals.join(",");
-      var join_status_values = allStatus.join(",");
-      var join_remarks_values = allRemarks.join(",");
-
-      if(allVals.length <=0)  
-          {  
-              alert("Please enter attendance for at least 1 student.");  
-
-          }  else {
-            $(this).attr('disabled', 'true');
-
-            $.ajax({
-                url: "{{ route('ajax-teacher-attendance-update') }}", 
-                method: 'PUT',
-                data: { ids:join_selected_values, attendanceStatus:join_status_values, remarks:join_remarks_values, _token:token, wk:wk },
-                success: function(data, status) {
-                  console.log(data)
-                  if (data == 'success') {
-                    window.location.reload();
-                  } else {
-                    alert('Something went wrong!');
-                    window.location.reload();
-                  }
-                  // $(".preview-here").html(data);
-                  // $(".preview-here").html(data.options);
-                }
-            });
-          }
-    }); 
+    
   });
 </script>
 
-@stop
+{{-- @stop --}}
