@@ -256,7 +256,7 @@ $(document).ready(function () {
     $('#myTable').DataTable({
     	"deferRender": true,
       "paging":   false,
-      "searching": false,
+      // "searching": false,
       // "order": [[ 2, "asc" ]]
     }); 
 

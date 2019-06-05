@@ -161,11 +161,10 @@ $(document).ready(function () {
     }
 
   // jQuery ajax to load manage attendance view
-    $("button.btn-log").click(teacherManageAttendances);
+  $("button.btn-log").click(teacherManageAttendances);
 
-  $( document ).ajaxComplete(function( event, request, settings ) {
-    $(".btn-save").click(function(){
-
+  // update resource(s) and ajax jQuery to reload manage attendance view 
+  $( document ).on('click', '.btn-save', function() {
       var token = $("input[name='_token']").val();
       var wk = $("input[name='wkManageAttendance']").val();
       var allVals = [];  
@@ -195,20 +194,19 @@ $(document).ready(function () {
                 success: function(data, status) {
                   console.log(data)
                   if (data == 'success') {
-                    // window.location.reload();
-                    $(".insert-students-here").html('Data saved.');
-                    teacherManageAttendances;
+                    $(".insert-students-here").append('<div class="saveloader"><p class="text-center"><strong>Saving...</strong></p></div>');
+                    setTimeout(function() {
+                      $("tr.bg-green").closest("tr").find("button.btn-log").each(teacherManageAttendances);
+                    }, 2000); 
 
                   } else {
                     alert('Something went wrong!');
                     window.location.reload();
                   }
-                  // $(".preview-here").html(data);
-                  // $(".preview-here").html(data.options);
                 }
             });
           }
-    });
-  }); 
+  });
+  
 });
 </script>
