@@ -1,5 +1,5 @@
 
-@extends('teachers.teacher_template')
+@extends('shared_template')
 
 @section('customcss')
 <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
