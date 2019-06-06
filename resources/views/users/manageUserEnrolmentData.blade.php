@@ -862,6 +862,8 @@ $(document).ready(function () {
       var Term = $(this).attr('data-term');
       var token = $("input[name='_token']").val();
 
+      $(this).attr('disabled', true);
+
       $.ajax({
         url: '{{ route('insert-record-to-preview') }}',
         type: 'POST',
