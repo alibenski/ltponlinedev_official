@@ -30,6 +30,8 @@ class LimitCancelPeriod
 
         $cancellationDateLimit = Term::where('Term_Code', $termCode)->value('Cancel_Date_Limit');
         $current_enrol_season = Term::where('Term_Code', $termCode)->value('Comments');
+        $term_year_qry = Term::where('Term_Code', $termCode)->first()->Term_Begin;
+        $term_year = date('Y', strtotime($term_year_qry));
 
         // exempt administrators from this middleware
         if (Auth::user()->hasRole('Admin')) {
@@ -50,7 +52,7 @@ class LimitCancelPeriod
                 //if yes, redirect(), else, $next
                 elseif ($current_enrol_season == 'SUMMER' && $now_date >= $cancellationDateLimit) {
                     return redirect()->route('home')
-                    ->with('interdire-msg','Summer term cancellation period expired.');        
+                    ->with('interdire-msg','Summer term ('.$term_year.') cancellation period expired.');        
                 } 
             } elseif (is_null($cancellationDateLimit)) {
                 return redirect()->route('home')

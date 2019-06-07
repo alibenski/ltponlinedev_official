@@ -103,11 +103,11 @@
   <div class="row">
         <div class="col-md-6">
             <div class="panel panel-info">
-                    <div class="panel-heading"><strong>Submitted Enrolment Forms for the 
+                    <div class="panel-heading text-center"><strong>Submitted Enrolment Forms for the 
                         @if(empty($next_term->Term_Name))
                         DB NO ENTRY
                         @else
-                        {{ $next_term->Term_Name }} 
+                        {{ $next_term->Term_Name }} {{ $next_term->Comments }}
                         @endif
                         Term
                       </strong>
@@ -185,7 +185,14 @@
         
         <div class="col-md-6">
           <div class="panel panel-warning">
-            <div class="panel-heading"><strong>Placement Test Request Forms</strong></div>
+            <div class="panel-heading text-center"><strong>Placement Test Request Forms for the 
+            @if(empty($next_term->Term_Name))
+                DB NO ENTRY
+              @else
+                {{ $next_term->Term_Name }} {{ $next_term->Comments }}
+            @endif
+                Term</strong>
+          </div>
             <div class="panel-body">
             @if(count($plforms_submitted) > 0)
               @foreach($plforms_submitted as $plform)
