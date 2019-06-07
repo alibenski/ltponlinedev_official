@@ -376,3 +376,7 @@ input[type=checkbox].with-font:focus ~ label
 {
   width: 50%
 }
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    color: black;
+}

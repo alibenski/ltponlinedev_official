@@ -104,8 +104,8 @@
 					        <div class="col-sm-2">
 						        @foreach ($schedule as $id => $name)
 						            <div class="checkbox">
-						                <label>
-						                    <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id" multiple="multiple" value="{{ $id }}" /> {{ $name }}
+						                <label class=@if ($id == $classroom->schedule_id) "mark" @endif>
+						                    <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id" multiple="multiple" value="{{ $id }}" /> {{ $name }} 
 						                </label>
 						            </div>
 
