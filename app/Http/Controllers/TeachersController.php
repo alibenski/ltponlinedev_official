@@ -10,6 +10,7 @@ use App\NewUser;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
+use App\SDDEXTR;
 use App\Teachers;
 use App\Term;
 use App\Torgan;
@@ -18,6 +19,9 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class TeachersController extends Controller
 {
@@ -167,7 +171,11 @@ class TeachersController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::where('id', '>', 2)->get();
+        $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
+        $org = Torgan::get(["Org Full Name","Org name"]);
+
+        return view('teachers.create', compact('roles', 'cat', 'org'));
     }
 
     /**
@@ -178,7 +186,246 @@ class TeachersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+$firstCharLastName = mb_substr($request->nameLast, 0, 1, "UTF-8");
+        $firstCharFirstName = mb_substr($request->nameFirst, 0, 1, "UTF-8");
+        $combineChar = $firstCharLastName.$firstCharFirstName;
+        
+        $checkTchID = Teachers::where('Tch_ID', $combineChar)->first();
+        
+        $b = 1;
+        if ($checkTchID) {
+            for ($i=0; $i < $b; $i++) { 
+                
+                $c = $combineChar.$i;
+                $checkTchID2 = Teachers::where('Tch_ID', $c)->first();
+                if (!$checkTchID2) {
+                    $newTeacher->Tch_ID = $c;
+                    $b = $i;
+                } else {
+                    $b++;
+                }
+
+
+            }
+
+        } else {
+            $newTeacher->Tch_ID = $combineChar;
+
+        }
+
+        dd();
+        if ($request->decision == 0) {
+            //validate the data
+            $this->validate($request, array(
+                    'gender' => 'required|string|',
+                    'title' => 'required|',
+                    'profile' => 'required|',
+                    'nameLast' => 'required|string|max:255',
+                    'nameFirst' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+                    'org' => 'required|string|max:255',
+                    'contact_num' => 'required|max:255',
+                    'dob' => 'required',
+            ));
+
+            //store in database
+            $newUser = new NewUser;
+            $newUser->gender = $request->gender;
+            $newUser->title = $request->title;
+            $newUser->profile = $request->profile;
+            $newUser->name = $request->nameFirst.' '.$request->nameLast;
+            $newUser->nameLast = $request->nameLast;
+            $newUser->nameFirst = $request->nameFirst;
+            $newUser->email = $request->email;
+            $newUser->org = $request->org;
+            $newUser->contact_num = $request->contact_num;
+            $newUser->dob = $request->dob;
+            $newUser->approved_account = 1;
+            $newUser->save();
+
+            $ext_index = 'EXT'.$newUser->id;
+            $request->merge(['indexno' => $ext_index]); 
+
+            $user = $this->teacherWithIndexID($request);
+            $user = $this->storeAccountInTeacherTable($request);
+
+            return redirect()->route('manage-user-enrolment-data', $user->id)
+            ->with('flash_message',
+             'User successfully added.');
+        } 
+
+        // else if decision == 1, then create with index no. 
+        $user = $this->teacherWithIndexID($request);
+        $user = $this->storeAccountInTeacherTable($request);
+
+        return redirect()->route('manage-user-enrolment-data', $user->id)
+            ->with('flash_message',
+             'User successfully added.');
+    }
+
+    public function teacherWithIndexID($request)
+    {
+        //Validate name, email and password fields
+        $rules_user = [
+            'indexno' => 'required|unique:users',
+            'nameFirst'=>'required|max:120',
+            'nameLast'=>'required|max:120',
+            'email'=>'required|email|unique:users',
+            // 'password'=>'required|min:6|confirmed'
+            ];            
+        $customMessagesUser = [
+                'unique' => 'The :attribute already exists in the Auth Table.'
+                ];
+
+        $this->validate($request, $rules_user, $customMessagesUser);
+
+        // if staff exists in sddextr table, copy data to auth table
+        $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
+        
+        // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
+        if ($query_sddextr_record) {
+            $query_sddextr_record_array = $query_sddextr_record->toArray();
+
+            $validator = Validator::make($query_sddextr_record_array, [
+                'INDEXNO' => 'required|unique:users,indexno',
+                'INDEXNO_old' => 'required|unique:users,indexno_old',
+                'EMAIL'=>'required|email|unique:users,email'
+            ]);
+
+            $user = User::create([ 
+                'indexno_old' => $query_sddextr_record->INDEXNO_old,
+                'indexno' => $query_sddextr_record->INDEXNO,
+                'profile' => $request->profile,
+                'email' => $query_sddextr_record->EMAIL, 
+                'nameFirst' => $query_sddextr_record->FIRSTNAME,
+                'nameLast' => $query_sddextr_record->LASTNAME,
+                'name' => $query_sddextr_record->FIRSTNAME.' '.$query_sddextr_record->LASTNAME,
+                'password' => Hash::make('Welcome2CLM'),
+                'must_change_password' => 1,
+                'approved_account' => 1,
+            ]);
+
+            return $user;
+        }
+
+
+        // if not in auth table and sddextr table, create
+        $user = User::create([ 
+            'indexno' => $request->indexno,
+            'indexno_old' => $request->indexno,
+            'profile' => $request->profile,
+            'email' => $request->email, 
+            'nameFirst' => $request->nameFirst,
+            'nameLast' => $request->nameLast,
+            'name' => $request->nameFirst.' '.$request->nameLast,
+            'password' => Hash::make('Welcome2CLM'),
+            'must_change_password' => 1,
+            'approved_account' => 1,
+        ]); 
+        
+        //Send Auth credentials to student via email
+        $sddextr_email_address = $request->email;
+        // send credential email to user using email from sddextr 
+        // Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
+        
+        $this->validate($request, [
+            'indexno' => 'required|unique:SDDEXTR,INDEXNO_old',
+            'indexno' => 'required|unique:SDDEXTR,INDEXNO',
+            'email' => 'required|unique:SDDEXTR,EMAIL',
+        ]);
+
+        $user->sddextr()->create([
+            'INDEXNO' => $request->indexno,
+            'INDEXNO_old' => $request->indexno,
+            'TITLE' => $request->title,
+            'FIRSTNAME' => $request->nameFirst,
+            'LASTNAME' => $request->nameLast,
+            'EMAIL' => $request->email,
+            'SEX' => $request->gender,
+            'DEPT' => $request->org,
+            'PHONE' => $request->contact_num,
+            // 'CAT' => $request->cat,
+        ]);
+
+        $roles = $request['roles']; //Retrieving the roles field
+        //Checking if a role was selected
+        if (isset($roles)) {
+
+            foreach ($roles as $role) {
+            $role_r = Role::where('id', '=', $role)->firstOrFail();            
+            $user->assignRole($role_r); //Assigning role to user
+            }
+        }
+
+        return $user;
+    }
+
+    public function storeAccountInTeacherTable($request)
+    {
+        //Validate name, email and password fields
+        $rules_user = [
+            'indexno' => 'required|unique:LTP_TEACHERS',
+            'nameFirst'=>'required|max:120',
+            'nameLast'=>'required|max:120',
+            'email'=>'required|email|unique:LTP_TEACHERS',
+            // 'password'=>'required|min:6|confirmed'
+            ];            
+        $customMessagesUser = [
+                'unique' => 'The :attribute already exists in the Teachers Table.'
+                ];
+
+        $this->validate($request, $rules_user, $customMessagesUser);
+
+
+        //store in Teachers table
+        $newTeacher = new Teachers;
+        $newTeacher->In_Out = 1;
+        $newTeacher->IndexNo = $request->indexno;
+        $newTeacher->Tch_Title = $request->title;
+        $newTeacher->Tch_Name = $request->nameFirst.' '.$request->nameLast;
+        $newTeacher->Tch_Lastname = $request->nameLast;
+        $newTeacher->Tch_Firstname = $request->nameFirst;
+        $newTeacher->User_Type = 'Teacher';
+
+        $newTeacher->Tch_L = $request->L; // missing request bag
+        
+        $newTeacher->email = $request->email;
+        $newTeacher->DoB = $request->dob;
+        $newTeacher->sex = $request->gender;
+        $newTeacher->Phone = $request->contact_num;
+        
+        $firstCharLastName = mb_substr($request->nameLast, 0, 1, "UTF-8");
+        $firstCharFirstName = mb_substr($request->nameFirst, 0, 1, "UTF-8");
+        $combineChar = $firstCharLastName.$firstCharFirstName;
+        
+        $checkTchID = Teachers::where('Tch_ID', $combineChar)->first();
+        
+        $b = 1;
+        if ($checkTchID) {
+            for ($i=0; $i < $b; $i++) { 
+                
+                $c = $combineChar.$i;
+                $checkTchID2 = Teachers::where('Tch_ID', $c)->first();
+                if (!$checkTchID2) {
+                    $newTeacher->Tch_ID = $c;
+                    $b = $i;
+                } else {
+                    $b++;
+                }
+
+
+            }
+
+        } else {
+            $newTeacher->Tch_ID = $combineChar;
+
+        }
+
+
+        $newTeacher->save();
+        $user = $newTeacher->users;
+
+        return $user;
     }
 
     /**

@@ -7,7 +7,7 @@
 			<h1><i class="fa fa-pied-piper-alt"></i> <span>Teachers</span></h1>
 		</div>
 		<div class="pull-right">
-			<a href="#" class="btn btn-primary btn-h1-spacing">Create Teacher</a>
+			<a href="{{ route('teachers.create') }}" class="btn btn-primary btn-h1-spacing">Create Teacher</a>
 			{{-- <a href="{{ route('teacher-show-classrooms-per-teacher') }}" class="btn btn-info btn-h1-spacing">Show Classrooms Per Teacher</a> --}}
 			<a href="#" class="btn btn-info btn-h1-spacing">Show Classrooms Per Teacher</a>
 		</div>
