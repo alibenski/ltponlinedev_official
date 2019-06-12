@@ -266,6 +266,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin-stats'],fun
 //middleware to prevent back button and access cache
 Route::group(['middleware' => 'prevent-back-history'],function(){
     Auth::routes();
+    Route::match(['get','post'], 'register', function(){
+    return redirect('/');
+});
     Route::get('/','WelcomeController@index');
 });
 
@@ -408,6 +411,9 @@ Route::post('post-new-outside-user-form', ['as' => 'post-new-outside-user-form',
 //Route::get('/', function () { return view('welcome'); });
 
 Auth::routes();
+Route::match(['get','post'], 'register', function(){
+    return redirect('/');
+});
 
     // Authentication Routes...
    // Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

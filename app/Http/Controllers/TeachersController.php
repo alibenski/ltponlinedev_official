@@ -186,34 +186,6 @@ class TeachersController extends Controller
      */
     public function store(Request $request)
     {
-$firstCharLastName = mb_substr($request->nameLast, 0, 1, "UTF-8");
-        $firstCharFirstName = mb_substr($request->nameFirst, 0, 1, "UTF-8");
-        $combineChar = $firstCharLastName.$firstCharFirstName;
-        
-        $checkTchID = Teachers::where('Tch_ID', $combineChar)->first();
-        
-        $b = 1;
-        if ($checkTchID) {
-            for ($i=0; $i < $b; $i++) { 
-                
-                $c = $combineChar.$i;
-                $checkTchID2 = Teachers::where('Tch_ID', $c)->first();
-                if (!$checkTchID2) {
-                    $newTeacher->Tch_ID = $c;
-                    $b = $i;
-                } else {
-                    $b++;
-                }
-
-
-            }
-
-        } else {
-            $newTeacher->Tch_ID = $combineChar;
-
-        }
-
-        dd();
         if ($request->decision == 0) {
             //validate the data
             $this->validate($request, array(
