@@ -8,7 +8,13 @@
 
 <div class='col-md-12'>
 
-    <form method="POST" action="{{ route('store-enrolment-is-open-text') }}">
+    <form method="POST" action="{{ route('store-enrolment-is-open-text', ['id' => $text->id]) }}">
+        <div class="form-group">
+            <label for="subject">Subject: </label>
+            <input type="text" name="subject" placeholder="@if (is_null($text->subject))
+                no subject @else {{$text->subject}} @endif" value="" style="width: 100%;">
+        </div>
+
         <div class="form-group">
             <textarea name="textValue" id="editor1" rows="10" cols="80" spellcheck="true">
                 {{$text->text}}

@@ -12,6 +12,7 @@ use App\Preenrolment;
 use App\Repo;
 use App\Teachers;
 use App\Term;
+use App\Text;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class SystemController extends Controller
 	public function systemIndex()
 	{
         $term = Term::where('Term_Code', Session::get('Term'))->first();
-		return view('system.system-index', compact('term'));
+        $texts = Text::get();
+		return view('system.system-index', compact('term', 'texts'));
 	}
 
     public function sendConvocation()
@@ -103,6 +105,12 @@ class SystemController extends Controller
         return count($convocation_diff3);
     }
 
+    /**
+     * Send broadcast reminder email to all students who have logged in
+     * Use during START of enrolment 
+     * @param  Request $request 
+     * @return HTML Closure           
+     */
     public function sendBroadcastEnrolmentIsOpen(Request $request)
     {
     	// query students who have logged in

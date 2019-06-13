@@ -120,6 +120,18 @@
 						  </div>
 			    </div>
 
+          <div class='form-group'>
+              <label class="control-label">Language: </label>
+              <div class="checkbox">
+                  <label>
+                    @foreach ($languages as $language)
+                      <input type="checkbox" name="L" value="{{ $language->code }}" /><strong>{{ ucfirst($language->name) }}</strong>
+                      <br>
+                    @endforeach
+                  </label>
+              </div>
+          </div>
+
           <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
               <label for="gender" class=" control-label">Gender</label>
               <div class="dropdown">

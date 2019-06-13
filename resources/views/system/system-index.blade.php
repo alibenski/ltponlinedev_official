@@ -29,13 +29,21 @@
 						</div>
 					</div>
 
+					@foreach ($texts as $text)
 					<div class="form-group">
 						<div class="col-md-12">
-							<h4><i class="fa fa-arrow-right"></i> Send Broadcast Email that Enrolment is Open</h4> 
-							<a href="{{route('send-broadcast-enrolment-is-open')}}" class="send-broadcast-enrolment-is-open send-emails btn btn-success"><i class="fa fa-envelope"></i> Send</a>
-							<a href="{{ route('view-enrolment-is-open-text') }}" class="btn btn-info"><i class="fa fa-eye"></i> View</a>
-							<a href="{{ route('edit-enrolment-is-open-text') }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
+							<h4><i class="fa fa-arrow-right"></i> {{ $text->name }} </h4> 
+							<a href="{{ route('view-enrolment-is-open-text', ['id' => $text->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i> View</a>
+							<a href="{{ route('edit-enrolment-is-open-text', ['id' => $text->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
 						</div>						
+					</div>
+					@endforeach
+
+					<div class="form-group">
+						<div class="col-md-12">
+							<h4><i class="fa fa-arrow-right"></i> Send Broadcast Email that Enrolment is Open </h4>
+							<a href="{{route('send-broadcast-enrolment-is-open')}}" class="send-broadcast-enrolment-is-open send-emails btn btn-success"><i class="fa fa-envelope"></i> Send</a>
+						</div>
 					</div>
 
 					<div class="form-group">

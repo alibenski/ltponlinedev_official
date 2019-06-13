@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Attendance;
 use App\AttendanceRemarks;
 use App\Classroom;
+use App\Language;
 use App\ModifiedForms;
 use App\NewUser;
 use App\PlacementForm;
@@ -18,9 +19,9 @@ use App\User;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class TeachersController extends Controller
@@ -174,8 +175,9 @@ class TeachersController extends Controller
         $roles = Role::where('id', '>', 2)->get();
         $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
         $org = Torgan::get(["Org Full Name","Org name"]);
+        $languages = Language::all();
 
-        return view('teachers.create', compact('roles', 'cat', 'org'));
+        return view('teachers.create', compact('roles', 'cat', 'org','languages'));
     }
 
     /**
@@ -359,7 +361,7 @@ class TeachersController extends Controller
         $newTeacher->Tch_Firstname = $request->nameFirst;
         $newTeacher->User_Type = 'Teacher';
 
-        $newTeacher->Tch_L = $request->L; // missing request bag
+        $newTeacher->Tch_L = $request->L;
         
         $newTeacher->email = $request->email;
         $newTeacher->DoB = $request->dob;

@@ -7,24 +7,25 @@ use Illuminate\Http\Request;
 
 class TextController extends Controller
 {
-	public function viewEnrolmentIsOpenText()
+	public function viewEnrolmentIsOpenText($id)
 	{
-		$text = Text::find(1);
+		$text = Text::find($id);
 		return view('texts.view-enrolment-is-open-text', compact('text'));
 	}
 
-    public function editEnrolmentIsOpenText()
+    public function editEnrolmentIsOpenText($id)
     {
-    	$text = Text::find(1);
+    	$text = Text::find($id);
     	return view('texts.edit-enrolment-is-open-text', compact('text'));
     }
 
-    public function storeEnrolmentIsOpenText(Request $request)
+    public function storeEnrolmentIsOpenText(Request $request, $id)
     {
-    	$text = Text::find(1);
-    	$text->text = $request->textValue;
+    	$text = Text::find($id);
+    	$text->subject = $request->subject;
+        $text->text = $request->textValue;
     	$text->save();
 
-    	return redirect(route('view-enrolment-is-open-text'));
+    	return redirect(route('view-enrolment-is-open-text', ['id' => $id]));
     }
 }
