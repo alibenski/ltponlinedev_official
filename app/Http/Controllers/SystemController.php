@@ -263,7 +263,8 @@ class SystemController extends Controller
             foreach ($query_email_addresses as $key4 => $value4) {
                 $sddextr_email_address = $value4->email;
                 $arr2[] = $sddextr_email_address;
-                Mail::to($sddextr_email_address)->send(new sendReminderToCurrentStudents($sddextr_email_address));    
+                // Mail::to($sddextr_email_address)->send(new sendReminderToCurrentStudents($sddextr_email_address));    
+                Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));    
             }
         }
 

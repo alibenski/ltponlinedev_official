@@ -29,33 +29,27 @@
 						</div>
 					</div>
 
-					@foreach ($texts as $text)
 					<div class="form-group">
 						<div class="col-md-12">
-							<h4><i class="fa fa-arrow-right"></i> {{ $text->name }} </h4> 
-							<a href="{{ route('view-enrolment-is-open-text', ['id' => $text->id]) }}" class="btn btn-info"><i class="fa fa-eye"></i> View</a>
-							<a href="{{ route('edit-enrolment-is-open-text', ['id' => $text->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
-						</div>						
-					</div>
-					@endforeach
+							<h4><i class="fa fa-arrow-right"></i> Send Broadcast Email </h4>
+							<h4>
+									<div class="dropdown">
+									  <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-success">
+									    <i class="fa fa-envelope"></i> Send to...
+									    <span class="caret"></span>
+									  </button>
+									  <ul class="dropdown-menu" aria-labelledby="dLabel">
+									    <li><a href="{{route('send-broadcast-enrolment-is-open')}}" class="send-broadcast-enrolment-is-open send-emails btn-space"><i class="fa fa-envelope"></i> Send Broadcast Email That Enrolment is Open</a></li>
+										<li><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to All Students Not Yet Enrolled</a></li>
+										<li><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled</a></li>
+									  </ul>
+									</div>
+							</h4>
+								<a href="{{ route('view-enrolment-is-open-text', ['id' => 1]) }}" class="btn btn-info"><i class="fa fa-eye"></i> View</a>
+								<a href="{{ route('edit-enrolment-is-open-text', ['id' => 1]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
+									
 
-					<div class="form-group">
-						<div class="col-md-12">
-							<h4><i class="fa fa-arrow-right"></i> Send Broadcast Email that Enrolment is Open </h4>
-							<a href="{{route('send-broadcast-enrolment-is-open')}}" class="send-broadcast-enrolment-is-open send-emails btn btn-success"><i class="fa fa-envelope"></i> Send</a>
 						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-md-12">
-							<h4><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails"><i class="fa fa-envelope"></i> Send Reminder Email to All Students Not Yet Enrolled</a> (Email text needs to be updated programmatically, contact the System Admin)</h4>
-						</div>						
-					</div>
-
-					<div class="form-group">
-						<div class="col-md-12">
-							<h4><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled</a> (Email text needs to be updated programmatically, contact the System Admin)</h4>
-						</div>						
 					</div>
 				</form>
 			</div>
