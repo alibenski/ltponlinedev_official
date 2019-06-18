@@ -20,299 +20,338 @@
         </div>
         
         <div class="col-sm-12">
-        <h3>Section # {{ $classroom->sectionNo }}</h3>
-          <p>Teacher: <h4>@if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned / waitlisted</span> @endif</h4></p>
-          @if(!empty($classroom->Te_Mon_Room))
-          <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
-          <p>Monday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_BTime)) }}</strong></p>
-          <p>Monday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Tue_Room))
-          <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
-          <p>Tuesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_BTime)) }}</strong></p>
-          <p>Tuesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Wed_Room))
-          <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
-          <p>Wednesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_BTime ))}}</strong></p>
-          <p>Wednesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Thu_Room))
-          <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
-          <p>Thursday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_BTime)) }}</strong></p>
-          <p>Thursday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
-          @endif
-          @if(!empty($classroom->Te_Fri_Room))
-          <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
-          <p>Friday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_BTime ))}}</strong></p>
-          <p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
-          @endif
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"><strong>Section # {{ $classroom->sectionNo }}</strong></h3>
+            </div>
+            <div class="panel-body">
+              <p>Teacher: 
+                <h4 class="teacher-name">@if($classroom->Tch_ID) <strong>{{ $classroom->teachers->Tch_Name }}</strong> @else <span class="label label-danger">none assigned / waitlisted</span> @endif</h4>
 
-          <div class="table-responsive filtered-table">
-            <h4><strong>{{ $classroom_3->course->Description}} Students</strong></h4>
-
-            <button style="margin-bottom: 10px" class="btn btn-primary delete_all">Move Selected</button>
+                <div class="col-sm-4 insert-select-teacher-here hidden">
+                  <select class="form-control"name="select-teacher" autocomplete="off">
+                    <option value=""></option>
+                  </select>
+                </div>
+              </p>
+            </div>
+            <div class="panel-footer">
+              <button id="changeTeacherBtn" class="btn btn-warning">Edit Teacher Only</button>
+              <button id="saveTeacherBtn" class="btn btn-success hidden" data-id="{{ $classroom->id }}">Save</button>
+            </div>
+          </div>
+          
+          <div class="panel panel-default">
+            <div class="panel-body">
+              @if(!empty($classroom->Te_Mon_Room))
+              <div class="col-sm-6">
+                <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+                <p>Monday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_BTime)) }}</strong></p>
+                <p>Monday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
+                <hr>
+              </div>
+              @endif
+              @if(!empty($classroom->Te_Tue_Room))
+              <div class="col-sm-6">
+                <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+                <p>Tuesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_BTime)) }}</strong></p>
+                <p>Tuesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
+                <hr>
+              </div>
+              @endif
+              @if(!empty($classroom->Te_Wed_Room))
+              <div class="col-sm-6">
+                <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+                <p>Wednesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_BTime ))}}</strong></p>
+                <p>Wednesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
+                <hr>
+              </div>
+              @endif
+              @if(!empty($classroom->Te_Thu_Room))
+              <div class="col-sm-6">
+                <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+                <p>Thursday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_BTime)) }}</strong></p>
+                <p>Thursday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
+                <hr>
+              </div>
+              @endif
+              @if(!empty($classroom->Te_Fri_Room))
+              <div class="col-sm-6">
+                <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+                <p>Friday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_BTime ))}}</strong></p>
+                <p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
+                <hr>
+              </div>
+              @endif
+            </div>
             
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th><input type="checkbox" id="master"></th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Contact No.</th>
-                        <th>Priority</th>
-                        <th>Flexible?</th>
-                        <th>Schedules</th>
-                        <th>Comments</th>
-                        <th>Remark</th>
-                        <th>Submission Date</th>
-                        <th>Cancelled & Billed?</th>
-                        <th>Cancel Date/Time Stamp</th>
-                        <th>Operation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {{-- @foreach($form_info as $form_in) --}}
-                  @foreach($form_info as $form)
-                    @if ($form->CodeClass === $classroom->Code)
-                    <tr id="tr_{{$form->id}}" @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
-                      <td>
-                        <div class="counter"></div>
-                      </td>
-                      <td>
-                        @if($form->deleted_at) 
-                        @else 
-                        <input type="checkbox" class="sub_chk" data-id="{{ $form->id }}">
-                        <input type="hidden" name="_token" value="{{ Session::token() }}">
-                        @endif
-                      </td>
-                      <td>
-                        <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}]</small></h4> 
-                        @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
-                        
-                        @if ($form->enrolments)
-                        <p>
-                          @foreach ($form->enrolments as $element)
-                            @if ($element->is_self_pay_form)
-                              <i class="fa fa-euro" title="self-paying student"></i> self-paying
-                            @endif
-                          @endforeach
-                        </p>
-                        @endif
-                        
-                        @if ($form->placements)
-                        <p>
-                          @foreach ($form->placements as $element)
-                            @if ($element->is_self_pay_form)
-                              <i class="fa fa-euro" title="self-paying student"></i> self-paying
-                            @endif
-                          @endforeach
-                        </p>
-                        @endif
-                      
-                      </td>
-                      <td>
-                        @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
-                      <td>
-                        @if(empty($form->users->sddextr->PHONE)) None @else {{ $form->users->sddextr->PHONE }} @endif </td>
-                      <td>
-                        <strong>
-                          @if ($form->PS == 1)
-                            Re-enrolment
-                          @endif
-                          @if ($form->PS == 2)
-                            In Waitlist
-                          @endif
-                          @if ($form->PS == 3)
-                            Within 2 Terms/Not Re-enrolment
-                          @endif
-                          @if ($form->PS == 4)
-                            Placement Forms/Others
-                          @endif
-                        </strong>
-                         [ {{$form->PS}} ] 
-                        <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
-                        <input name="Term" type="hidden" value="{{ $form->Term }}">
-                        <input name="L" type="hidden" value="{{ $form->L }}">
-                        <input name="CodeIndexID" type="hidden" value="{{ $form->CodeIndexID }}">
-                        <input name="Te_Code" type="hidden" value="{{ $form->Te_Code }}">
-                        {{-- <strong>
-                         <div><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></div>
-                         <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
-                        </strong> --}}
-                      </td>
-                      <td>
-                        @if($form->flexibleBtn == 1)
-                                    <span class="label label-success margin-label">Yes</span>
-                                  @else
-                          -
-                                  @endif
-                      </td>
-                      <td>
-                        <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist </a>
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-default btn-space view-all-comments" data-toggle="modal"><i class="fa fa-comment"></i> View </button>
-
-                        <div id="viewAllComments-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <div class="modal-header bg-default">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
-                                        <h4 class="modal-title"><i class="fa fa-comment"></i> View All Comments</h4>
-                                    </div>
-                                    <div class="modal-body-view-all-comments">
-                                      <div class="col-sm-12"> 
-                                        <p><strong>HR Comment:</strong> {{ $form->hr_comments }}</p>
-                                        <p><strong>Student Comment:</strong> {{ $form->std_comments }}</p>
-                                        <p><strong>Course Preference:</strong> {{ $form->course_preference_comment }}</p>
-                                        <p><strong>Teacher Comment:</strong> {{ $form->teacher_comments }}</p>
-                                        @if ($form->admin_eform_comment)
-                                          <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_eform_comment }}</p>
-                                        @endif
-                                        @if ($form->admin_plform_comment)
-                                          <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_plform_comment }}</p>
-                                        @endif
-                                        @if ($form->Comments)
-                                          <p><strong>Admin Comment on Manually Created Form:</strong> {{ $form->Comments }}</p>
-                                        @endif
-                                      </div> 
-                                    </div>
-                                    <div class="modal-footer modal-background">
-                                      
-                                    </div>
-                                
-                                </div>
-                            </div>
-                        </div>
-                      </td>
-                      <td>
-                        <textarea id="{{ $form->id }}" name="pash-remark" class="remark" cols="30" rows="1" value="" placeholder="Saving overwrites the existing comment."></textarea>
-                        <div class="row">
-                          <button id="{{ $form->id }}" class="btn btn-success btn-space save-remark" disabled=""><i class="fa fa-save"></i></button>
-                          <small>@if ($form->lastRemarkBy) Last remark by  {{ $form->lastRemarkBy->name }}  @endif</small>
-                        </div>
-                      </td>
-                      <td>
-                        {{$form->created_at}}
-                      </td>
-                      <td>
-                        @if ($form->deleted_at)
-                          @if ($form->deleted_at > $form->terms->Cancel_Date_Limit)
-                            @if ($form->enrolments)
-                              @foreach ($form->enrolments as $element)
-                                @if ($element->is_self_pay_form)
-                                @else
-                                  @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-                                  @else
-                                    @if ($loop->first)
-                                    <strong>YES</strong>
-                                    @endif
-                                  @endif
-                                @endif
-                              @endforeach
-                            @endif
-
-                            @if ($form->placements)
-                              @foreach ($form->placements as $element)
-                                @if ($element->is_self_pay_form)
-                                @else
-                                  @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-                                  @else
-                                    @if ($loop->first)
-                                    <strong>YES</strong>
-                                    @endif
-                                  @endif
-                                @endif
-                              @endforeach
-                            @endif
-                          @endif
-                        @endif
-                      </td>
-                      <td>
-                        {{$form->deleted_at}}
-                      </td>
-                      <td>
-                        @if(is_null($form->convocation_email_sent))
-                          @if(!is_null($form->classrooms->Tch_ID) && $form->classrooms->Tch_ID != 'TBD')
-                            <button type="button" value="{{ $form->CodeIndexIDClass }}" id="sendEmailConvocation" class="btn btn-success btn-space"><i class="fa fa-send"></i> Send Email Convocation</button>
-                          @endif
-                        @else 
-                        @endif
-
-                        <button type="button" class="btn btn-danger btn-space pash-delete" data-toggle="modal" @if($form->deleted_at) disabled="" @endif> @if($form->deleted_at)<i class="fa fa-remove"></i> Cancelled @else <i class="fa fa-trash"></i> Delete @endif</button>
-
-                        @if ($form->deleted_at)
-                          <form method="POST" action="{{ route('undelete-pash', [$form->id]) }}" class="undelete-form form-prevent-multi-submit">
-                              <input id="unDeleteInput" type="submit" value="Undo Delete" class="undelete-form btn btn-success btn-space button-prevent-multi-submit">
-
-                              <input type="hidden" name="_token" value="{{ Session::token() }}">
-                             {{ method_field('PUT') }}
-                          </form>
-                        @endif
-
-                        <div id="modalDeletePash-{{ $form->id }}" class="modal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <div class="modal-header bg-danger">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
-                                        <h3 class="modal-title">Class Cancellation</h3>
-                                    </div>
-                                    <div class="modal-body-pash-delete">
-                                      <div class="col-sm-12">
-
-                                        <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="delete-form form-prevent-multi-submit">
-
-                                            <h4>Index # {{ $form->INDEXID }} : <strong> {{ $form->users->name }}</strong></h4>
-                                            <h4>Cancelling participation from <strong> {{ $form->courses->Description }}</strong></h4>
-                                            
-                                            <div class="form-group">
-                                              <h4><input type="checkbox" name="cancelled_but_not_billed" value=1> Student will <strong class="text-danger"><u>NOT</u></strong> be billed</h4>
-                                            </div>
-
-                                            <input type="submit" value="@if($form->deleted_at) Cancelled @else Delete @endif" class="delete-form btn btn-danger btn-space button-prevent-multi-submit" @if($form->deleted_at) disabled="" @else @endif>
-
-                                            <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
-                                            <input type="hidden" name="_token" value="{{ Session::token() }}">
-                                           {{ method_field('DELETE') }}
-                                        </form>
-
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer modal-background">
-                                      
-                                    </div>
-                                
-                                </div>
-                            </div>
-                        </div>
-
-                      </td>
-                    </tr>  
-                    @endif
-                  @endforeach
-                {{-- @endforeach --}}
-                </tbody>
-            </table>
+            <div class="panel-footer">
+              <a href="{{ route('classrooms.edit', $classroom->id) }}" class="btn btn-warning" target="_blank">Edit Classroom Parameters</a>
+            </div>            
           </div>
 
-              {{-- <ol>
-              @foreach ($arr as $record)
-                @if ($record->CodeClass === $classroom->Code)
-                  <li>ID:{{$record->id}} - {{ucwords($record->users->name)}} - Priority:{{$record->PS}}
-                    <a id="modbtn" class="btn btn-sm btn-info btn-space" data-toggle="modal" href="#modalshowform" data-id="{{ $record->id }} data-mtitle="Moving : {{ucwords($record->users->name)}}"><span><i class="fa fa-arrow-right"></i></span> Move Student</a>
-                  </li>
-                @endif
-              @endforeach
-              </ol> --}}
         </div>
-        @endforeach
+    </div>    
+  </div>
+</div>  
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="table-responsive filtered-table">
+      <h4><strong>{{ $classroom_3->course->Description}} Students</strong></h4>
+
+      <button style="margin-bottom: 10px" class="btn btn-primary delete_all">Move Selected</button>
+      
+      <table class="table table-bordered table-striped">
+          <thead>
+              <tr>
+                  <th>#</th>
+                  <th><input type="checkbox" id="master"></th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Contact No.</th>
+                  <th>Priority</th>
+                  <th>Flexible?</th>
+                  <th>Schedules</th>
+                  <th>Comments</th>
+                  <th>Remark</th>
+                  <th>Submission Date</th>
+                  <th>Cancelled & Billed?</th>
+                  <th>Cancel Date/Time Stamp</th>
+                  <th>Operation</th>
+              </tr>
+          </thead>
+          <tbody>
+          {{-- @foreach($form_info as $form_in) --}}
+            @foreach($form_info as $form)
+              @if ($form->CodeClass === $classroom->Code)
+              <tr id="tr_{{$form->id}}" @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
+                <td>
+                  <div class="counter"></div>
+                </td>
+                <td>
+                  @if($form->deleted_at) 
+                  @else 
+                  <input type="checkbox" class="sub_chk" data-id="{{ $form->id }}">
+                  <input type="hidden" name="_token" value="{{ Session::token() }}">
+                  @endif
+                </td>
+                <td>
+                  <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}]</small></h4> 
+                  @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
+                  
+                  @if ($form->enrolments)
+                  <p>
+                    @foreach ($form->enrolments as $element)
+                      @if ($element->is_self_pay_form)
+                        <i class="fa fa-euro" title="self-paying student"></i> self-paying
+                      @endif
+                    @endforeach
+                  </p>
+                  @endif
+                  
+                  @if ($form->placements)
+                  <p>
+                    @foreach ($form->placements as $element)
+                      @if ($element->is_self_pay_form)
+                        <i class="fa fa-euro" title="self-paying student"></i> self-paying
+                      @endif
+                    @endforeach
+                  </p>
+                  @endif
+                
+                </td>
+                <td>
+                  @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
+                <td>
+                  @if(empty($form->users->sddextr->PHONE)) None @else {{ $form->users->sddextr->PHONE }} @endif </td>
+                <td>
+                  <strong>
+                    @if ($form->PS == 1)
+                      Re-enrolment
+                    @endif
+                    @if ($form->PS == 2)
+                      In Waitlist
+                    @endif
+                    @if ($form->PS == 3)
+                      Within 2 Terms/Not Re-enrolment
+                    @endif
+                    @if ($form->PS == 4)
+                      Placement Forms/Others
+                    @endif
+                  </strong>
+                   [ {{$form->PS}} ] 
+                  <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
+                  <input name="Term" type="hidden" value="{{ $form->Term }}">
+                  <input name="L" type="hidden" value="{{ $form->L }}">
+                  <input name="CodeIndexID" type="hidden" value="{{ $form->CodeIndexID }}">
+                  <input name="Te_Code" type="hidden" value="{{ $form->Te_Code }}">
+                  {{-- <strong>
+                   <div><i class="fa fa-spinner fa-spin fa-2x fa-fw"></i></div>
+                   <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
+                  </strong> --}}
+                </td>
+                <td>
+                  @if($form->flexibleBtn == 1)
+                              <span class="label label-success margin-label">Yes</span>
+                            @else
+                    -
+                            @endif
+                </td>
+                <td>
+                  <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist </a>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-default btn-space view-all-comments" data-toggle="modal"><i class="fa fa-comment"></i> View </button>
+
+                  <div id="viewAllComments-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+
+                              <div class="modal-header bg-default">
+                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                                  <h4 class="modal-title"><i class="fa fa-comment"></i> View All Comments</h4>
+                              </div>
+                              <div class="modal-body-view-all-comments">
+                                <div class="col-sm-12"> 
+                                  <p><strong>HR Comment:</strong> {{ $form->hr_comments }}</p>
+                                  <p><strong>Student Comment:</strong> {{ $form->std_comments }}</p>
+                                  <p><strong>Course Preference:</strong> {{ $form->course_preference_comment }}</p>
+                                  <p><strong>Teacher Comment:</strong> {{ $form->teacher_comments }}</p>
+                                  @if ($form->admin_eform_comment)
+                                    <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_eform_comment }}</p>
+                                  @endif
+                                  @if ($form->admin_plform_comment)
+                                    <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_plform_comment }}</p>
+                                  @endif
+                                  @if ($form->Comments)
+                                    <p><strong>Admin Comment on Manually Created Form:</strong> {{ $form->Comments }}</p>
+                                  @endif
+                                </div> 
+                              </div>
+                              <div class="modal-footer modal-background">
+                                
+                              </div>
+                          
+                          </div>
+                      </div>
+                  </div>
+                </td>
+                <td>
+                  <textarea id="{{ $form->id }}" name="pash-remark" class="remark" cols="30" rows="1" value="" placeholder="Saving overwrites the existing comment."></textarea>
+                  <div class="row">
+                    <button id="{{ $form->id }}" class="btn btn-success btn-space save-remark" disabled=""><i class="fa fa-save"></i></button>
+                    <small>@if ($form->lastRemarkBy) Last remark by  {{ $form->lastRemarkBy->name }}  @endif</small>
+                  </div>
+                </td>
+                <td>
+                  {{$form->created_at}}
+                </td>
+                <td>
+                  @if ($form->deleted_at)
+                    @if ($form->deleted_at > $form->terms->Cancel_Date_Limit)
+                      @if ($form->enrolments)
+                        @foreach ($form->enrolments as $element)
+                          @if ($element->is_self_pay_form)
+                          @else
+                            @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+                            @else
+                              @if ($loop->first)
+                              <strong>YES</strong>
+                              @endif
+                            @endif
+                          @endif
+                        @endforeach
+                      @endif
+
+                      @if ($form->placements)
+                        @foreach ($form->placements as $element)
+                          @if ($element->is_self_pay_form)
+                          @else
+                            @if ($form->cancelled_but_not_billed || in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
+                            @else
+                              @if ($loop->first)
+                              <strong>YES</strong>
+                              @endif
+                            @endif
+                          @endif
+                        @endforeach
+                      @endif
+                    @endif
+                  @endif
+                </td>
+                <td>
+                  {{$form->deleted_at}}
+                </td>
+                <td>
+                  @if(is_null($form->convocation_email_sent))
+                    @if(!is_null($form->classrooms->Tch_ID) && $form->classrooms->Tch_ID != 'TBD')
+                      <button type="button" value="{{ $form->CodeIndexIDClass }}" id="sendEmailConvocation" class="btn btn-success btn-space"><i class="fa fa-send"></i> Send Email Convocation</button>
+                    @endif
+                  @else 
+                  @endif
+
+                  <button type="button" class="btn btn-danger btn-space pash-delete" data-toggle="modal" @if($form->deleted_at) disabled="" @endif> @if($form->deleted_at)<i class="fa fa-remove"></i> Cancelled @else <i class="fa fa-trash"></i> Delete @endif</button>
+
+                  @if ($form->deleted_at)
+                    <form method="POST" action="{{ route('undelete-pash', [$form->id]) }}" class="undelete-form form-prevent-multi-submit">
+                        <input id="unDeleteInput" type="submit" value="Undo Delete" class="undelete-form btn btn-success btn-space button-prevent-multi-submit">
+
+                        <input type="hidden" name="_token" value="{{ Session::token() }}">
+                       {{ method_field('PUT') }}
+                    </form>
+                  @endif
+
+                  <div id="modalDeletePash-{{ $form->id }}" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+
+                              <div class="modal-header bg-danger">
+                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+                                  <h3 class="modal-title">Class Cancellation</h3>
+                              </div>
+                              <div class="modal-body-pash-delete">
+                                <div class="col-sm-12">
+
+                                  <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="delete-form form-prevent-multi-submit">
+
+                                      <h4>Index # {{ $form->INDEXID }} : <strong> {{ $form->users->name }}</strong></h4>
+                                      <h4>Cancelling participation from <strong> {{ $form->courses->Description }}</strong></h4>
+                                      
+                                      <div class="form-group">
+                                        <h4><input type="checkbox" name="cancelled_but_not_billed" value=1> Student will <strong class="text-danger"><u>NOT</u></strong> be billed</h4>
+                                      </div>
+
+                                      <input type="submit" value="@if($form->deleted_at) Cancelled @else Delete @endif" class="delete-form btn btn-danger btn-space button-prevent-multi-submit" @if($form->deleted_at) disabled="" @else @endif>
+
+                                      <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
+                                      <input type="hidden" name="_token" value="{{ Session::token() }}">
+                                     {{ method_field('DELETE') }}
+                                  </form>
+
+                                </div>
+                              </div>
+                              <div class="modal-footer modal-background">
+                                
+                              </div>
+                          
+                          </div>
+                      </div>
+                  </div>
+
+                </td>
+              </tr>  
+              @endif
+            @endforeach
+          {{-- @endforeach --}}
+          </tbody>
+      </table>
     </div>
   </div>
 </div>
+@endforeach
+
+
 
 <div id="modalshow" class="modal fade">
     <div class="modal-dialog">
@@ -667,4 +706,58 @@ $(document).ready(function() {
   });
 </script>
 
+<script>
+  $(document).ready(function() {
+    var token = $("input[name='_token']").val();
+
+    $("#changeTeacherBtn").on('click', function() {
+
+      $("h4.teacher-name").addClass('hidden');
+      $.ajax({
+        url: '{{ route('ajax-select-teacher') }}',
+        type: 'GET',
+        data: {_token: token},
+      })
+      .done(function(data) {
+        console.log("success");
+        $("select[name='select-teacher']").html(data.options);
+        $(".insert-select-teacher-here").removeClass('hidden');
+        $("#changeTeacherBtn").attr('disabled', 'disabled');
+        $("#saveTeacherBtn").removeClass('hidden');
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+    });
+
+    $(document).on('click', '#saveTeacherBtn', function() {
+
+      $(this).attr('disabled', 'disabled');
+      var id = $(this).attr('data-id');
+      var teacherID = $("select[name='select-teacher']").val();
+
+      $.ajax({
+        url: '{{ route('ajax-update-teacher') }}',
+        type: 'PUT',
+        data: {id: id, _token: token, Tch_ID: teacherID},
+      })
+      .done(function(data) {
+        console.log(data['Tch_ID'])
+        window.location.reload();
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+      
+
+    });
+
+  });
+</script>
 @stop

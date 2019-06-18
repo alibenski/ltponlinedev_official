@@ -130,6 +130,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('ajax-preview-get-remarks', ['as'=>'ajax-preview-get-remarks','uses'=>'PreviewController@ajaxPreviewGetRemarks']);
     Route::put('ajax-preview-post-remarks', ['as'=>'ajax-preview-post-remarks','uses'=>'PreviewController@ajaxPreviewPostRemarks']);
 
+    Route::get('ajax-select-teacher', ['as'=>'ajax-select-teacher','uses'=>'PreviewController@ajaxSelectTeacher']);
+    Route::put('ajax-update-teacher', ['as'=>'ajax-update-teacher','uses'=>'PreviewController@ajaxUpdateTeacher']);
+
     Route::post('ajax-class-boxes', ['as'=>'ajax-class-boxes','uses'=>'PreviewController@ajaxClassBoxes']);
     Route::get('ajax-get-student-count-per-class', ['as'=>'ajax-get-student-count-per-class','uses'=>'PreviewController@ajaxGetStudentCountPerClass']);
     Route::get('view-classrooms-per-section/{code}', ['as'=>'view-classrooms-per-section','uses'=>'PreviewController@viewClassroomsPerSection']);

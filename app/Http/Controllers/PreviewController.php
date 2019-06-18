@@ -295,6 +295,36 @@ class PreviewController extends Controller
         return view('preview-classrooms', compact('arr','classrooms','form_info', 'classroom_3'));
     }
 
+    public function ajaxSelectTeacher(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $teachers = Teachers::where('In_Out', '1')->orderBy('Tch_Lastname', 'asc')->get()->pluck('Tch_Name', 'Tch_ID');
+
+            $data = view('ajax-select-teacher',compact('teachers'))->render();
+            return response()->json(['options'=>$data]);
+        }
+    }
+
+    public function ajaxUpdateTeacher(Request $request)
+    {
+        if ($request->ajax()) {
+            $classroom = Classroom::findOrFail($request->id);
+
+            // update CourseSchedule records first to new schedule
+            $courseSchedRecord = CourseSchedule::where('cs_unique', $classroom->cs_unique)->get();
+            foreach ($courseSchedRecord as $record) {
+                $record->Tch_ID = $request->Tch_ID;                
+                $record->save();
+            }
+            $classroom->Tch_ID = $request->Tch_ID;
+            $classroom->save();
+
+            $data = $classroom;
+            return response()->json($data);
+        }
+    }
+
     /**
      * Replaced by ajaxClassBoxes method
      */
