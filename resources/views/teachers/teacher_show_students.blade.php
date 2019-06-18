@@ -17,12 +17,13 @@
       <tbody>
       {{-- @foreach($form_info as $form_in) --}}
         @foreach($form_info as $form)
-        <tr class="table-row">
+        <tr class="table-row" @if ($form->deleted_at) style="background-color: #eed5d2;" @endif>
           <td>
             <div class="counter"></div>
           </td>
           <td>
             @if(empty($form->users->name)) None @else {{ $form->users->name }} @endif 
+            @if ($form->deleted_at) <label for="cancelled" class="label label-danger">cancelled</label> @endif
             <input type="hidden" name="indexid" value="{{$form->INDEXID}}">
             <input type="hidden" name="L" value="{{$form->L}}">
             <input type="hidden" name="id" value="{{$form->id}}">

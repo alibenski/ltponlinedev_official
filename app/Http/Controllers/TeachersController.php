@@ -476,7 +476,8 @@ class TeachersController extends Controller
      */
     public function teacherShowStudents(Request $request)
     {
-        $form_info = Repo::where('CodeClass', $request->Code)
+        $form_info = Repo::withTrashed()
+            ->where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
             ->get();
 
