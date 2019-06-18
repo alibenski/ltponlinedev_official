@@ -22,8 +22,14 @@ class TextController extends Controller
     public function storeEnrolmentIsOpenText(Request $request, $id)
     {
     	$text = Text::find($id);
-    	$text->subject = $request->subject;
-        $text->text = $request->textValue;
+        
+        if (!is_null($request->subject)) {
+        	$text->subject = $request->subject;
+        }
+        if (!is_null($request->textValue)) {
+            $text->text = $request->textValue;
+        }
+        
     	$text->save();
 
     	return redirect(route('view-enrolment-is-open-text', ['id' => $id]));
