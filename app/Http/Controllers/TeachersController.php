@@ -356,7 +356,7 @@ class TeachersController extends Controller
         $newTeacher->In_Out = 1;
         $newTeacher->IndexNo = $request->indexno;
         $newTeacher->Tch_Title = $request->title;
-        $newTeacher->Tch_Name = $request->nameFirst.' '.$request->nameLast;
+        $newTeacher->Tch_Name = $request->nameLast.', '.$request->nameFirst;
         $newTeacher->Tch_Lastname = $request->nameLast;
         $newTeacher->Tch_Firstname = $request->nameFirst;
         $newTeacher->User_Type = 'Teacher';
