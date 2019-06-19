@@ -215,6 +215,12 @@ class StudentController extends Controller
         
         // query the user from the Users table
         $student = User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->first();
+        
+        // check if student is clicking on the latest link
+        if ($student == NULL) {
+            return view('confirmationLinkExpired');
+        }
+
 
         // check for token expiration after 24 hours
         $timeOfRequest = $student->updated_at;
