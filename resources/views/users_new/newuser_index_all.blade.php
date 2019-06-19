@@ -32,7 +32,7 @@
 	            <th>#</th>
 	            <th>Name</th>
 	            <th>Email</th>
-	            <th>Approved</th>
+	            <th>Status</th>
 	            <th>Date/Time Requested</th>
 	            <th>Operations</th>
 	        </tr>
@@ -43,7 +43,15 @@
 	            <td>{{ $user->id }}</td>
 	            <td>{{ $user->name }}</td>
 	            <td>{{ $user->email }}</td>
-	            <td>{{ $user->approved_account }}</td>
+	            <td>
+					@if ($user->approved_account == 1)
+						<span class="label label-success">Approved</span>
+					@elseif ($user->approved_account == 2)
+						<span class="label label-danger">Disapproved</span>
+					@else
+						<span class="label label-info">Waiting for Admin</span>
+					@endif
+	            </td>
 	            <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
 	            <td>
 	            <button class="show-modal btn btn-warning" data-id="{{$user->id}}"

@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::resource('newuser', 'NewUserController',['only' => ['index', 'show', 'update']]);
     Route::get('edit-new-user', ['as'=>'edit-new-user','uses'=>'NewUserController@editNewUser']);
+    Route::get('newuser-index-all', ['as'=>'newuser-index-all','uses'=>'NewUserController@newUserIndexAll']);
 
     Route::get('/', 'AdminController@adminIndex')->name('admin_dashboard');
     Route::get('user/import', 'AdminController@importUser')->name('import-user');

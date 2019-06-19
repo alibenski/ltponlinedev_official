@@ -39,6 +39,22 @@ class NewUserController extends Controller
         return view('users_new.index')->with('users', $users);
     }
 
+    public function newUserIndexAll()
+    {
+        //Get all users and pass it to the view
+        // $users = User::paginate(50); 
+        // Gets the query string from our form submission 
+        $query = \Request::input('search');
+        // Returns an array of users that have the query string located somewhere within 
+        // our users name or email fields. Paginates them so we can break up lots of search results.
+        $users = NewUser::orderBy('id', 'desc')
+            // ->where('approved_account', 0)
+            ->where('name', 'LIKE', '%' . $query . '%')
+            ->paginate(20);
+
+        return view('users_new.newuser_index_all')->with('users', $users);   
+    }
+
     /**
      * Show the form for creating a new resource.
      *
