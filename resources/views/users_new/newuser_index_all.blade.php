@@ -6,7 +6,7 @@
 @section('content')
 @include('users_new.new_user_nav')
 
-<h1><i class="fa fa-users"></i> New User Administration </h1>
+<h1><i class="fa fa-eye"></i> Viewing All New User Requests and Status </h1>
     <hr>
     <div class="row col-sm-12">
     	<div class="alert alert-info">

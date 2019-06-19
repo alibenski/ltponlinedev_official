@@ -564,7 +564,7 @@ class PlacementFormController extends Controller
 
             // $allQueries = array_merge($queries, $currentQueries);
             $placement_forms = $placement_forms->where('overall_approval', 1)->get();
-            return view('placement_forms.approvedPlacementForms')->withPlacement_forms($placement_forms);
+            return view('placement_forms.approvedPlacementForms', compact('placement_forms'));
     }
 
     /**
@@ -904,5 +904,60 @@ class PlacementFormController extends Controller
             $data = [$std_comment, $course_preference_comment, $timeInput, $dayInput];
             return response()->json($data);
         }
+    }
+
+    /**
+     * Main one-page view for managing placement exams
+     * @return \Illuminate\Http\Response 
+     */
+    public function manageExamView()
+    {
+        if (!Session::has('Term') ) {
+            $request->session()->flash('error', 'Term is not set.');
+            return view('admin_dashboard');
+        }
+
+            $languages = DB::table('languages')->pluck("name","code")->all();
+            return view('placement_forms.manage_exam_view', compact('languages'));
+    }
+
+    public function manageExamTable(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            if (!Session::has('Term') ) {
+                $request->session()->flash('error', 'Term is not set.');
+                return view('admin_dashboard');
+            }
+
+                $placement_forms = new PlacementForm;
+
+                $columns = [
+                    'L',
+                ];
+
+                foreach ($columns as $column) {
+                    if (\Request::has($column)) {
+                        $placement_forms = $placement_forms->where($column, \Request::input($column) );
+                        
+                        $queries[$column] = \Request::input($column);
+                    }
+                    
+                } 
+
+
+                    if (Session::has('Term')) {
+                        $placement_forms = $placement_forms->where('Term', Session::get('Term') );
+                        $queries['Term'] = Session::get('Term');
+                    }
+
+
+            $placement_forms = $placement_forms->where('overall_approval', 1)->get();
+            $term = Term::where('Term_Code', Session::get('Term'))->first();
+
+            $data = view('placement_forms.manage_exam_table', compact('placement_forms', 'term'))->render();
+            return response()->json(['options'=>$data]);
+        }
+
     }
 }

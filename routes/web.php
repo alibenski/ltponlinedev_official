@@ -226,6 +226,10 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // Route to AJAX get student comments
     Route::post('ajax-placement-comments', ['as'=>'ajax-placement-comments','uses'=>'PlacementFormController@ajaxPlacementComments']);
 
+    // Routes for managing placement exams
+    Route::get('manage-exam-view', ['as'=>'manage-exam-view','uses'=>'PlacementFormController@manageExamView']); 
+    Route::get('manage-exam-table', ['as'=>'manage-exam-table','uses'=>'PlacementFormController@manageExamtable']); 
+
     Route::resource('rooms', 'RoomsController');
     Route::resource('waitlist', 'WaitlistController');
     
