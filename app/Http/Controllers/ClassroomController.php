@@ -221,7 +221,6 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
     public function update(Request $request, $id)
     { 
         $noTokenMethod = $request->except(['_token', '_method']);
@@ -234,14 +233,38 @@ class ClassroomController extends Controller
 
         // update CourseSchedule records first to new schedule
         $courseSchedRecord = CourseSchedule::where('cs_unique', $classroom->cs_unique)->get();
-        foreach ($courseSchedRecord as $record) {
-            $record->Tch_ID = $request->Tch_ID;
-            $record->schedule_id = $request->schedule_id;
-            $record->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
-            
-            $record->save();
+
+        $requestedCSUnique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
+        // check if requested cs_unique already exists in CourseSchedule table
+        $checkCourseSchedDupe = CourseSchedule::where('cs_unique', $requestedCSUnique)->first();
+
+        // if cs_unique does not exist in CourseSchedule table, then do this
+        if (!$checkCourseSchedDupe) {
+            // Editing classroom schedule parameters cascades to PASH and Schedule and CourseSchedule Models (no duplicate or existing cs_unique and section field data) - Florence case
+            $this->changeCourseScheduleNotSection($request, $classroom, $courseSchedRecord);
+            $request->session()->flash('success', 'Changes have been saved!');
+            return redirect()->back();
+        } else {
+            // Editing classroom parameters cascades to PASH and Schedule and CourseSchedule Models with additional section because of duplicate cs_unique and section field data - Fabienne case
+            $this->changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord);
+            $request->session()->flash('warning', 'Sorry this cannot be done at the moment. Please manually create the class section. No changes made.');
+            return redirect()->back();
         }
 
+        $request->session()->flash('warning', 'No changes made!');
+        return redirect()->back();
+    }
+
+
+    public function changeCourseScheduleNotSection($request, $classroom, $courseSchedRecord)
+    {
+        foreach ($courseSchedRecord as $record) {
+                    $record->Tch_ID = $request->Tch_ID;
+                    $record->schedule_id = $request->schedule_id;
+                    $record->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
+                    
+                    $record->save();
+                }
         // update PASH records first to new schedule
         $pash_record = Repo::where('CodeClass', $classroom->Code)->get();
         foreach ($pash_record as $value) {
@@ -317,8 +340,14 @@ class ClassroomController extends Controller
                 $classroom->Te_Fri_Room = $request->Te_Fri_Room;
             }
         $classroom->save();
-        $request->session()->flash('success', 'Changes have been saved!');
-        return redirect()->back();
+
+        return $request;
+
+    }
+
+    public function changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord)
+    {
+        return $request;
     }
 
     /**

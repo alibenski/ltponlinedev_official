@@ -17,8 +17,10 @@ use App\PlacementForm;
 use App\PlacementSchedule;
 use App\Preenrolment;
 use App\Repo;
+use App\Room;
 use App\SDDEXTR;
 use App\Schedule;
+use App\Teachers;
 use App\Term;
 use App\Time;
 use App\Torgan;
@@ -910,11 +912,11 @@ class PlacementFormController extends Controller
      * Main one-page view for managing placement exams
      * @return \Illuminate\Http\Response 
      */
-    public function manageExamView()
+    public function manageExamView(Request $request)
     {
         if (!Session::has('Term') ) {
             $request->session()->flash('error', 'Term is not set.');
-            return view('admin_dashboard');
+            return view('home');
         }
 
             $languages = DB::table('languages')->pluck("name","code")->all();
@@ -927,7 +929,7 @@ class PlacementFormController extends Controller
             
             if (!Session::has('Term') ) {
                 $request->session()->flash('error', 'Term is not set.');
-                return view('admin_dashboard');
+                return view('home');
             }
 
                 $placement_forms = new PlacementForm;
@@ -954,10 +956,11 @@ class PlacementFormController extends Controller
 
             $placement_forms = $placement_forms->where('overall_approval', 1)->get();
             $term = Term::where('Term_Code', Session::get('Term'))->first();
+            $rooms = Room::pluck("Rl_Room","Rl_Room")->all();
+            $teachers = Teachers::where('In_Out', '1')->get();
 
-            $data = view('placement_forms.manage_exam_table', compact('placement_forms', 'term'))->render();
+            $data = view('placement_forms.manage_exam_table', compact('placement_forms', 'term', 'rooms', 'teachers'))->render();
             return response()->json(['options'=>$data]);
         }
-
     }
 }

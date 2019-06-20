@@ -1,4 +1,3 @@
-<link href="{{ asset('textillate/assets/animate.css') }}" rel="stylesheet">
 <div class="row">
 	<div class="col-sm-12"
 	@if ($placement_forms->first())	
@@ -16,8 +15,7 @@
 			style="background-color: #bf8124;color: #fff;"
 		@endif
 		>
-		
-		<h3 class="tlt"><strong>{{ date('Y', strtotime($term->Term_Begin)) }}  {{ $term->Comments }} TERM - {{ strtoupper(trans($placement_forms->first()->languages->name)) }} PLACEMENT TEST </strong></h3>
+		<h3 class="tlt text-center"><strong>{{ date('Y', strtotime($term->Term_Begin)) }}  {{ $term->Comments }} TERM - {{ strtoupper(trans($placement_forms->first()->languages->name)) }} PLACEMENT TEST </strong></h3>
 	@endif
 	</div>
 </div>
@@ -42,12 +40,13 @@
 	    </thead>
 	    <tbody>
 			@foreach($placement_forms as $form)
-			<tr>
+			<tr id="">
 				<td>
 					<p>@if(empty($form->users)) None @else <strong> {{ $form->users->name }} </strong>  @endif </p>
 					<p>Email: @if(empty($form->users)) None @else {{ $form->users->email }} @endif </p>
 					<p>Contact #: @if(empty($form->users)) None @else {{ $form->users->sddextr->PHONE }} @endif </p>
 					<p>Org: @if(empty($form->DEPT)) None @else {{ $form->DEPT }} @endif </p>
+					<p>{{$form->id}}</p>
 				</td>
 				<td>{{ $form->languages->name }}</td>
 				<td>{{ $form->std_comments }}</td>
@@ -55,29 +54,43 @@
 				<td>{{ $form->dayInput }}</td>
 				<td>{{ $form->timeInput }}</td>
 				<td>
-				@if ($form->placementSchedule->is_online == 1) Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} 
+				@if ($form->placementSchedule->is_online == 1) <span class="label label-success">Online</span> from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} 
 				@else {{ $form->placementSchedule->date_of_plexam }} 
 				@endif
 				</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td>
+				@if ($form->placementSchedule->is_online != 1)
+					<input class="timepicker" name="timeInput" placeholder="choose time here">
+				@endif
+				</td>
+				<td>
+				@if ($form->placementSchedule->is_online != 1)
+					<select class="select-room" name="room">
+                            <option value="">choose room here</option>
+                        @foreach ($rooms as $id => $name)
+                            <option value="{{ $id }}"> {{ $name }}</option>
+                        @endforeach
+                    </select>
+                @endif
+				</td>
+				<td>
+				@if ($form->placementSchedule->is_online != 1)
+					<select id="Tch_ID_select_{{ $form->id }}" class="select-teacher" name="Tch_ID">
+                        <option value="">--- Select Teacher ---</option>
+                        @foreach ($teachers as $valueTeacher)
+                            <option value="{{$valueTeacher->Tch_ID}}">{{$valueTeacher->Tch_Name}} </option>
+                        @endforeach
+                    </select>
+                @endif
+				</td>
+				<td>
+					<textarea name="restultInput" id="" cols="30" rows="5"></textarea>
+				</td>
+				<td>
+					<textarea name="teacherComment" id="" cols="30" rows="5"></textarea>
+				</td>
 			</tr>
 			@endforeach
 	    </tbody>
 	</table>
 </div>
-
-<script src="{{ asset('textillate/assets/jquery.fittext.js') }}"></script>
-<script src="{{ asset('textillate/assets/jquery.lettering.js') }}"></script>
-<script src="{{ asset('textillate/jquery.textillate.js') }}"></script>
-
-<script>
-	$(document).ready(function() {
-		$('.tlt').textillate({ in: { effect: 'fadeInDown', shuffle: false, delay: 20, } 
-
-		});
-	});
-</script>

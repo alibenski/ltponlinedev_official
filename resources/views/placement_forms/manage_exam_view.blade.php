@@ -4,6 +4,7 @@
   {{-- <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> --}}
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 @stop
 
 @section('content')
@@ -55,6 +56,7 @@
 
 @section('java_script')
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
 <script>
   $(document).ready(function() {
@@ -73,13 +75,36 @@
       })
       .done(function(data) {
         $(".insert-exam-table").html(data.options);
+        
 
-        $('table.manage-exam-table').DataTable({
-          "deferRender": true,
-          "paging":   false,
-          "fixedHeader": true
+        var examTable = $('table.manage-exam-table').DataTable({
+          // "deferRender": true,
+          // "paging":   false,
+          // "fixedHeader": true,
+          // "scrollX": true,
+          // "scrollY": 500,
+          // "fixedColumns": true,
+          // "scrollCollapse": true,
           // "searching": false,
           // "order": [[ 2, "asc" ]]
+          'dom': 'Rlfrtip',
+          // "columnDefs": [
+          //   { "width": "15%", "targets": 0 }
+          // ],
+        });
+
+
+        $('input.timepicker').timepicker({
+          timeFormat: 'HH:mm',
+          interval: 60,
+          minTime: '08',
+          maxTime: '6:00pm',
+          defaultTime: 'select time here',
+          startTime: '08:00',
+          interval: 15,
+          dynamic: false,
+          dropdown: true,
+          scrollbar: true
         });
 
       })
