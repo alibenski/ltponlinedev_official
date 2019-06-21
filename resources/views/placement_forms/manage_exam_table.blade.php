@@ -19,9 +19,9 @@
 	@endif
 	</div>
 </div>
-
 <div class="filtered-table">
-	<table class="table table-bordered table-striped manage-exam-table">
+	<div class="preloader2"></div>
+	<table class="table compact stripe  manage-exam-table">
 	    <thead>
 	        <tr>
 	            <th>Information</th>
@@ -34,8 +34,10 @@
 	            <th>Time</th>
 	            <th>Room</th>
 	            <th>Teacher</th>
+	            <th>Convoked</th>
 	            <th>Result</th>
 	            <th>Teacher Comments</th>
+	            <th>Operation</th>
 	        </tr>
 	    </thead>
 	    <tbody>
@@ -46,7 +48,7 @@
 					<p>Email: @if(empty($form->users)) None @else {{ $form->users->email }} @endif </p>
 					<p>Contact #: @if(empty($form->users)) None @else {{ $form->users->sddextr->PHONE }} @endif </p>
 					<p>Org: @if(empty($form->DEPT)) None @else {{ $form->DEPT }} @endif </p>
-					<p>{{$form->id}}</p>
+					<p>Placement Form # {{$form->id}}</p>
 				</td>
 				<td>{{ $form->languages->name }}</td>
 				<td>{{ $form->std_comments }}</td>
@@ -84,10 +86,16 @@
                 @endif
 				</td>
 				<td>
-					<textarea name="restultInput" id="" cols="30" rows="5"></textarea>
+					<input type="checkbox" name="convoked" value=1> YES
 				</td>
 				<td>
-					<textarea name="teacherComment" id="" cols="30" rows="5"></textarea>
+					<textarea name="restultInput" id="" cols="20" rows="3"></textarea>
+				</td>
+				<td>
+					<textarea name="teacherComment" id="" cols="20" rows="3"></textarea>
+				</td>
+				<td>
+					<button id="saveExam" class="btn btn-success" data-plid="{{$form->id}}">Save</button>
 				</td>
 			</tr>
 			@endforeach

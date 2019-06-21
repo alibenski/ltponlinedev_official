@@ -164,8 +164,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('ajax-billing-table', ['as' => 'ajax-billing-table', 'uses' => 'BillingController@ajaxBillingTable' ]);
     Route::get('billing-json', function () { return view('billing.billing_table'); })->name('billing-json');
 
-    // page for tagging students as pass or fail
-    Route::get('pashqtcur', ['as' => 'pashqtcur', 'uses' => 'ResultsController@pashqtcur' ]);
+    // Routes Placement EXam Results
+    Route::post('exam-result-save', ['as' => 'exam-result-save', 'uses' => 'ExamResultController@examResultSave' ]);
 
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');

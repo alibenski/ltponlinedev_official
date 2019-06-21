@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Session;
+use Spatie\Permission\Models\Role;
 
 class PlacementFormController extends Controller
 {
@@ -914,13 +915,22 @@ class PlacementFormController extends Controller
      */
     public function manageExamView(Request $request)
     {
+        $user = Auth::user();
         if (!Session::has('Term') ) {
-            $request->session()->flash('error', 'Term is not set.');
-            return view('home');
+            if ($user->hasAnyRole(['Teacher FP', 'Teacher'])) {
+                $request->session()->flash('error', 'Term is not set.');
+                return redirect(route('teacher-dashboard'));
+            } elseif ($user->hasRole('Admin')) {
+                $request->session()->flash('error', 'Term is not set.');
+                return redirect(route('admin_dashboard'));
+            } else {
+                $request->session()->flash('error', 'Unauthorized action.');
+                return view('home');
+            }
         }
 
-            $languages = DB::table('languages')->pluck("name","code")->all();
-            return view('placement_forms.manage_exam_view', compact('languages'));
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        return view('placement_forms.manage_exam_view', compact('languages'));
     }
 
     public function manageExamTable(Request $request)
