@@ -49,9 +49,13 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('move-to-pash', 'AdminController@moveToPash')->name('move-to-pash');
 
+    /**
+     * Text Roues
+     */
     Route::get('edit-enrolment-is-open-text/{id}',['as' => 'edit-enrolment-is-open-text', 'uses' => 'TextController@editEnrolmentIsOpenText'] );
     Route::get('view-enrolment-is-open-text/{id}',['as' => 'view-enrolment-is-open-text', 'uses' => 'TextController@viewEnrolmentIsOpenText'] );
     Route::put('store-enrolment-is-open-text/{id}',['as' => 'store-enrolment-is-open-text', 'uses' =>  'TextController@storeEnrolmentIsOpenText'] );
+    Route::resource('text', 'TextController');
 
     Route::get('admin-view-classrooms', ['as'=>'admin-view-classrooms','uses'=>'AdminController@adminViewClassrooms']);
 

@@ -34,4 +34,9 @@ class TextController extends Controller
 
     	return redirect(route('view-enrolment-is-open-text', ['id' => $id]));
     }
+
+    public function index()
+    {
+        # code...
+    }
 }
