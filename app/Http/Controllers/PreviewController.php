@@ -620,7 +620,10 @@ class PreviewController extends Controller
             $term_year = $term_year->year;
 
             // get cancel date limit
-            $cancel_date_limit = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+            $queryCancelDateLimit = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+            $cancel_date_limit = new Carbon($queryCancelDateLimit);
+            $cancel_date_limit->subDay();
+
             $termCancelMonth = date('F', strtotime($cancel_date_limit));
             $termCancelDate = date('d', strtotime($cancel_date_limit));
             $termCancelYear = date('Y', strtotime($cancel_date_limit));
