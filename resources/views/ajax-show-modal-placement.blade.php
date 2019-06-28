@@ -184,7 +184,7 @@
 				    </div>
 				</div>
 				@endif
-				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success assign-course-link hidden" style="margin: 1px;"><i class="fa fa-pencil"></i> Assign Course</a> 
+				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success assign-course-link" style="margin: 1px;"><i class="fa fa-pencil"></i> Assign Course</a> 
 			</div> {{-- EOF 2nd column --}}
 		</form>			
 	</div>
@@ -201,7 +201,7 @@ $(document).ready(function() {
     })
     .done(function(data) {
     	if (jQuery.isEmptyObject( data )) {
-    		$(".assign-course-link").removeClass('hidden');
+    		// $(".assign-course-link").removeClass('hidden');
     	}
 
     })

@@ -283,8 +283,8 @@
     })
     .done(function(data) {
     	if (!jQuery.isEmptyObject( data )) {
-    		$("button.modal-accept-btn").addClass('hidden');
-    		$("button.modal-save-btn").addClass('hidden');
+    		// $("button.modal-accept-btn").addClass('hidden');
+    		// $("button.modal-save-btn").addClass('hidden');
     		$("button.open-course-delete-modal").addClass('hidden');
     	}
     })

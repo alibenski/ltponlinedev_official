@@ -346,7 +346,7 @@
 	    })
 	    .done(function(data) {
 	    	if (!jQuery.isEmptyObject( data )) {
-	    		$('.operation-section').append('<div class="overlay"><i class="fa fa-remove"></i><br><br><br><p class="text-center text-danger"><strong>Changes cannot be made. Please check with the system administrators.</strong></p></div>');
+	    		// $('.operation-section').append('<div class="overlay"><i class="fa fa-remove"></i><br><br><br><p class="text-center text-danger"><strong>Changes cannot be made. Please check with the system administrators.</strong></p></div>');
 
 	    	}
 	    })
