@@ -24,7 +24,7 @@ class WritingTipController extends Controller
      */
     public function create()
     {
-        //
+        return view('writing_tips.create_writing_tip');
     }
 
     /**

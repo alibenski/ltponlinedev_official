@@ -99,6 +99,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('teacher-enrolment-preview', ['as'=>'teacher-enrolment-preview','uses'=>'TeachersController@teacherEnrolmentPreview']);
     Route::delete('teacher-delete-form', ['as'=>'teacher-delete-form','uses'=>'TeachersController@teacherDeleteForm']);
 
+    Route::resource('writing-tips', 'WritingTipController');
+
     /*
      * Preview Routes
      */
