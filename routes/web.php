@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('user/set-session-term', 'AdminController@setSessionTerm')->name('set-session-term');
 
     Route::get('move-to-pash', 'AdminController@moveToPash')->name('move-to-pash');
+    Route::get('admin-view-classrooms', ['as'=>'admin-view-classrooms','uses'=>'AdminController@adminViewClassrooms']);
 
     /**
      * Text Roues
@@ -55,8 +56,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('view-enrolment-is-open-text/{id}',['as' => 'view-enrolment-is-open-text', 'uses' => 'TextController@viewEnrolmentIsOpenText'] );
     Route::put('store-enrolment-is-open-text/{id}',['as' => 'store-enrolment-is-open-text', 'uses' =>  'TextController@storeEnrolmentIsOpenText'] );
     Route::resource('text', 'TextController');
-
-    Route::get('admin-view-classrooms', ['as'=>'admin-view-classrooms','uses'=>'AdminController@adminViewClassrooms']);
+    Route::get('view-convocation-email-text',['as' => 'view-convocation-email-text', 'uses' => 'TextController@viewConvocationEmailText']);
 
     /**
      * Teachers Routes

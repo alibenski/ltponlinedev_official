@@ -26,6 +26,9 @@
 									<a href="{{route('send-convocation')}}" class="send-convocation send-emails"><i class="fa fa-envelope-o"></i> Send Convocation Email to students of  {{ $term->Comments }} {{ date('Y', strtotime($term->Term_Begin)) }}  [ {{ $term->Term_Code }} ]</a>
 								@endif
 							</h4>
+								@if (!is_null($term))
+									<a href="{{ route('view-convocation-email-text') }}" class="btn btn-info"><i class="fa fa-eye"></i> View Convocation Email Text</a>
+								@endif
 						</div>
 					</div>
 

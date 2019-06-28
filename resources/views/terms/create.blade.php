@@ -97,6 +97,7 @@
 
           <div class="form-group">
                   <label for="Cancel_Date_Limit" class="control-label">Cancellation Date Limit: </label>
+                  <div class="text-danger"><small>If cancellation timestamp is 4 August 23h59, choose 5 August 00h00</small></div>
                   <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="Cancel_Date_Limit">
                     <input class="form-control" size="16" type="text" value="" readonly>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>

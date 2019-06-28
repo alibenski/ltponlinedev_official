@@ -592,7 +592,7 @@ class PreviewController extends Controller
 
         foreach ($convocation_diff3 as $value) {
             
-            $course_name = Course::where('Te_code_New', $value->Te_Code)->first(); 
+            $course_name = Course::where('Te_Code_New', $value->Te_Code)->first(); 
             $course_name_en = $course_name->EDescription; 
             $course_name_fr = $course_name->FDescription; 
 
