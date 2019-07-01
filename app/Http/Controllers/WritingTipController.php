@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\WritingTip;
+use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WritingTipController extends Controller
 {
@@ -14,7 +16,9 @@ class WritingTipController extends Controller
      */
     public function index()
     {
-        //
+        $records = WritingTip::all();
+
+        return view('writing_tips.index_writing_tip', compact('records') );
     }
 
     /**
@@ -24,7 +28,10 @@ class WritingTipController extends Controller
      */
     public function create()
     {
-        return view('writing_tips.create_writing_tip');
+        // $emails = DB::connection('drupal')->table('')->get()->pluck('val','key');
+        $languages = DB::table('languages')->pluck("name","code")->all();
+
+        return view('writing_tips.create_writing_tip', compact('languages'));
     }
 
     /**
@@ -35,7 +42,21 @@ class WritingTipController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'L' => 'required|',
+            'subject' => 'string|',
+            'text' => 'string|',
+        ]);
+
+        $record = new WritingTip;
+        $record->L = $request->L;
+        $record->subject = $request->subject;
+        $record->text = $request->text;
+        $record->created_by = Auth::id();
+        $record->save();
+
+        $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
+        return redirect()->route('writing-tips.index');
     }
 
     /**

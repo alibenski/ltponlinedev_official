@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('admin-view-classrooms', ['as'=>'admin-view-classrooms','uses'=>'AdminController@adminViewClassrooms']);
 
     /**
-     * Text Roues
+     * Text Routes
      */
     Route::get('edit-enrolment-is-open-text/{id}',['as' => 'edit-enrolment-is-open-text', 'uses' => 'TextController@editEnrolmentIsOpenText'] );
     Route::get('view-enrolment-is-open-text/{id}',['as' => 'view-enrolment-is-open-text', 'uses' => 'TextController@viewEnrolmentIsOpenText'] );
