@@ -141,6 +141,12 @@ class SystemController extends Controller
 
     }
 
+
+    /**
+     * Sends a reminder email ONLY to students who are in a class in the current term but have yet to enrol for the next term
+     * @param  Request $request 
+     * @return HTML Closure 
+     */
     public function sendReminderToCurrentStudents(Request $request)
     {
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();

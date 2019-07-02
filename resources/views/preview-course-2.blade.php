@@ -11,7 +11,13 @@
   <h4 class="text-center"><strong><i class="icon fa fa-gears"></i>Manage Classes [After Batch Run]</strong></h4>
 </div>
 
+<div class="preloader2 hidden"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
+
 @include('admin.partials._termSessionMsg')
+
+@if (Session::has('Term'))
+  <a href="{{ route('admin-student-email-view') }}" class="btn btn-primary admin-student-email-view"><i class="fa fa-at"></i> View All Current Students</a>
+@endif
 
 <form method="GET" action="{{ route('preview-course-3') }}">
 	{{ csrf_field() }}
@@ -99,5 +105,10 @@
         });
       }
   }); 
+
+  $('a.admin-student-email-view').click(function() {
+    $(".preloader2").removeClass('hidden');
+    $(".preloader2").fadeIn('fast');
+  });
 </script>
 @stop

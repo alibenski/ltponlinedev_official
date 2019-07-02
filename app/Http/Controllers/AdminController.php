@@ -12,6 +12,7 @@ use App\Services\User\ExistingUserImport;
 use App\Services\User\UserImport;
 use App\Term;
 use App\Torgan;
+use App\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -23,6 +24,15 @@ use Session;
 
 class AdminController extends Controller
 {
+    public function adminStudentEmailView()
+    {
+        $term = Term::where('Term_Code', Session::get('Term'))->first();
+        // query all students enrolled to current term
+        $query_students_current_term = Repo::where('Term', $term->Term_Code)->get();
+    
+        return view('admin.admin-student-email-view', compact('query_students_current_term'));
+    }
+
     /**
      * Copy Preview table to PASH table
      */
