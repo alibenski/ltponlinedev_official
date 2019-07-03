@@ -14,12 +14,12 @@
         <a href="{{ route('writing-tips.create') }}" class="btn btn-success"><i class="fa fa-pencil"></i> Create a new entry</a>
     </div>
 
-    <table class="table">
+    <table class="table table-bordered table-striped">
         <tr>
             <th>#</th>
             <th>Language</th>
             <th>Subject</th>
-            <th>Text</th>
+            <th>Operation</th>
         </tr>
         
         @foreach ($records as $record)
@@ -28,13 +28,13 @@
                 {{$record->id}}
             </td>
             <td>
-                {{$record->L}}
+                {{$record->languages->name}}
             </td>
             <td>
                 {{$record->subject}}
             </td>
             <td>
-                {!!$record->text!!}
+                <a href="{{ route('writing-tips.show', $record->id) }}" class="btn btn-link">View</a>
             </td>
         </tr>
         @endforeach

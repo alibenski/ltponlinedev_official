@@ -28,11 +28,11 @@
 
         <div class="form-group">
             <label for="subject">Subject: </label>
-            <input type="text" name="subject" placeholder="" value="" style="width: 100%;">
+            <input type="text" name="subject" placeholder="" value="" style="width: 100%;" required="required">
         </div>
 
         <div class="form-group">
-            <textarea id="editor" name="text"  rows="10" cols="80" spellcheck="true">
+            <textarea id="editor" name="text"  rows="10" cols="80" spellcheck="true" required="required">
                 
             </textarea>
         </div>

@@ -16,7 +16,13 @@
 @include('admin.partials._termSessionMsg')
 
 @if (Session::has('Term'))
-  <a href="{{ route('admin-student-email-view') }}" class="btn btn-primary admin-student-email-view"><i class="fa fa-at"></i> View All Current Students</a>
+<div class="col-sm-12">
+  <div class="box box-primary">
+    <div class="box-body">
+    <a href="{{ route('admin-student-email-view') }}" class="btn btn-primary admin-student-email-view"><i class="fa fa-at"></i> View All Current Students</a>
+    </div>
+  </div>
+</div>
 @endif
 
 <form method="GET" action="{{ route('preview-course-3') }}">

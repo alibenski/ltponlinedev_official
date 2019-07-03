@@ -44,8 +44,8 @@ class WritingTipController extends Controller
     {
         $this->validate($request, [
             'L' => 'required|',
-            'subject' => 'string|',
-            'text' => 'string|',
+            'subject' => 'string|required',
+            'text' => 'string|required',
         ]);
 
         $record = new WritingTip;
@@ -67,7 +67,7 @@ class WritingTipController extends Controller
      */
     public function show(WritingTip $writingTip)
     {
-        //
+        return view('writing_tips.show_writing_tip', compact('writingTip'));
     }
 
     /**
@@ -78,7 +78,7 @@ class WritingTipController extends Controller
      */
     public function edit(WritingTip $writingTip)
     {
-        //
+        dd($writingTip);
     }
 
     /**
