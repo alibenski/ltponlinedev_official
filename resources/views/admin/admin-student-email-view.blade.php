@@ -19,6 +19,7 @@
 				<th>Email</th>
 				<th>Language</th>
 				<th>Description</th>
+				<th>Teacher</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -29,6 +30,7 @@
 				<td>{{ $el->users->email }}</td>
 				<td>{{ $el->languages->name }}</td>
 				<td>{{ $el->courses->EDescription }}</td>
+				<td>{{ $el->classrooms->teachers->Tch_Name }}</td>
 			</tr>
 			@endforeach
 		</tbody>
@@ -39,6 +41,7 @@
 				<th>Email</th>
 				<th>Language</th>
 				<th>Description</th>
+				<th>Teacher</th>
 			</tr>
 		</tfoot>
 	</table>

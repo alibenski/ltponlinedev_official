@@ -28,7 +28,14 @@ class AdminController extends Controller
     {
         $term = Term::where('Term_Code', Session::get('Term'))->first();
         // query all students enrolled to current term
-        $query_students_current_term = Repo::where('Term', $term->Term_Code)->get();
+        $query_students_current_term = Repo::where('Term', $term->Term_Code)
+            ->whereHas('classrooms', function ($q)
+            {
+                $q->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                
+            })
+            ->get();
+        // dd($query_students_current_term);
     
         return view('admin.admin-student-email-view', compact('query_students_current_term'));
     }
