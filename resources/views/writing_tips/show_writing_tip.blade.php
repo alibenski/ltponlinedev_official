@@ -14,8 +14,8 @@
                 <div class="small-box bg-aqua">
                     <div class="inner">
                       <h3>
-                 ID # {{$writingTip->id}}
-            </h3>
+                         ID # {{$writingTip->id}}
+                      </h3>
 
                       <p>{{$writingTip->languages->name}} Writing Tip Entry</p>
                     </div>
@@ -28,16 +28,14 @@
             <div class="form-group">
                 <a href="{{ route('writing-tips.index') }}" class="btn btn-default btn-space"><i class="fa fa-arrow-left"></i> Back to Writing Tip Entries</a>
                 <a href="{{ route('writing-tips.edit', $writingTip->id) }}" class="btn btn-warning btn-space"><i class="fa fa-pencil"></i> Edit</a>
-                <a href="" class="btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to Mailing List</a>
+                <a href="{{ route('send-writing-tip-email', $writingTip->id) }}" class="btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to Mailing List</a>
             </div>
             
         </div>
     </div>
-
-
     
 
-    <h3 class="alert text-center">SUBJECT: {{ $writingTip->subject }}</h3>
+    <h3 class="alert text-center" style="font-weight: 800;">SUBJECT: Writing Tip - {{ $writingTip->subject }}</h3>
 
 
     <div class="row">

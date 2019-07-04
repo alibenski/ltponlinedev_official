@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::delete('teacher-delete-form', ['as'=>'teacher-delete-form','uses'=>'TeachersController@teacherDeleteForm']);
 
     Route::resource('writing-tips', 'WritingTipController');
+    Route::get('send-writing-tip-email/{writingTip}',  ['as'=>'send-writing-tip-email','uses'=>'WritingTipController@sendWritingTipEmail']);
 
     /*
      * Preview Routes

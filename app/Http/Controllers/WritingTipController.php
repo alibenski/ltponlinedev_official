@@ -2,13 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\sendWritingTip;
 use App\WritingTip;
+use Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class WritingTipController extends Controller
 {
+    public function sendWritingTipEmail(Request $request, WritingTip $writingTip)
+    {
+        $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])->take(3);
+        
+
+        foreach ($drupalEmailRecords as $key => $emailAddress) {
+            $when = Carbon\Carbon::now()->addSeconds(10);
+
+            Mail::to($emailAddress->data)->later($when, new sendWritingTip($writingTip));
+
+            sleep(5);
+        }
+
+        $request->session()->flash('success', 'Entry has been sent!');
+        return back();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -78,7 +98,7 @@ class WritingTipController extends Controller
      */
     public function edit(WritingTip $writingTip)
     {
-        dd($writingTip);
+        return view('writing_tips.edit_writing_tip', compact('writingTip'));
     }
 
     /**
@@ -90,7 +110,23 @@ class WritingTipController extends Controller
      */
     public function update(Request $request, WritingTip $writingTip)
     {
-        //
+        $this->validate($request, [
+            'subject' => 'nullable',
+            'text' => 'nullable',
+        ]);
+
+        $text = $writingTip;
+        
+        if (!is_null($request->subject)) {
+            $text->subject = $request->subject;
+        }
+        if (!is_null($request->text)) {
+            $text->text = $request->text;
+        }
+        
+        $text->save();
+
+        return view('writing_tips.show_writing_tip', compact('writingTip'));
     }
 
     /**
