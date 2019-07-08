@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Console;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,6 +25,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // $schedule->command('queue:restart');
+        // $schedule->command('queue:work --tries=3')
+        //         ->cron('* * * * * *')
+        //         ->withoutOverlapping();
+
+        // ->call(function () {
+        //     Mail::raw("Uwian na...", function($message) {
+        //         $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
+        //         $message->to('allyson.frias@un.org')->subject("Uwian na parekoy");
+        //     });
+        // })->dailyAt('16:53');
+
         // insert name and signature of you command and define the time of execution
         // run command to send reminder emails to managers in class \App\Console\Commands\ApprovalReminder
         $schedule->command('ApprovalReminder:approvalreminder')

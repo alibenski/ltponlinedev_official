@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\sendWritingTip;
+use App\Jobs\sendEmailJob;
 use App\WritingTip;
 use Carbon;
 use DB;
@@ -14,15 +15,21 @@ class WritingTipController extends Controller
 {
     public function sendWritingTipEmail(Request $request, WritingTip $writingTip)
     {
-        $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])->take(3);
+        $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])
+            ->take(3);
+            // ->first();
         
+        // $job = (new sendEmailJob($drupalEmailRecords))->delay(60);
+        // dispatch($job);
 
         foreach ($drupalEmailRecords as $key => $emailAddress) {
-            $when = Carbon\Carbon::now()->addSeconds(10);
+            $when = Carbon\Carbon::now()->addSeconds(3);
 
-            Mail::to($emailAddress->data)->later($when, new sendWritingTip($writingTip));
+            Mail::to($emailAddress->data)
+                // ->queue(new sendWritingTip($writingTip));
+                ->later($when, new sendWritingTip($writingTip));
 
-            sleep(5);
+        //     sleep(5);
         }
 
         $request->session()->flash('success', 'Entry has been sent!');
