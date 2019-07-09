@@ -16,18 +16,18 @@ class WritingTipController extends Controller
     public function sendWritingTipEmail(Request $request, WritingTip $writingTip)
     {
         $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])
-            ->take(3);
+            ->take(5);
             // ->first();
         
         // $job = (new sendEmailJob($drupalEmailRecords))->delay(60);
         // dispatch($job);
 
         foreach ($drupalEmailRecords as $key => $emailAddress) {
-            $when = Carbon\Carbon::now()->addSeconds(3);
+            // $when = Carbon\Carbon::now()->addSeconds(3);
 
             Mail::to($emailAddress->data)
-                // ->queue(new sendWritingTip($writingTip));
-                ->later($when, new sendWritingTip($writingTip));
+                ->queue(new sendWritingTip($writingTip));
+                // ->later($when, new sendWritingTip($writingTip));
 
         //     sleep(5);
         }
