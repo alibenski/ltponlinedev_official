@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
             // $event->connectionName
             // $event->job
             // $event->exception
-            Mail::raw("Mail Queue Failing", function($message) {
+            Mail::raw("Mail Queue Failing: ".$event->connectionName." ".$event->exception, function($message) {
             $message->from('clm_language@unog.ch', 'CLM Language');
             $message->to('allyson.frias@un.org')->subject('Alert: Mail Queue Failing');
             });

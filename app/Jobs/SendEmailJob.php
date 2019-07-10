@@ -2,27 +2,40 @@
 
 namespace App\Jobs;
 
+use App\Mail\sendWritingTip;
+use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SendMailable;
 
 class SendEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    private $drupalEmailRecords; 
+    private $writingTip;
+
+    /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 3;
+
+    public $timeout = 60;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($drupalEmailRecords, $writingTip)
     {
-        //
+        $this->drupalEmailRecords = $drupalEmailRecords; 
+        $this->writingTip = $writingTip;
     }
 
     /**
@@ -32,7 +45,11 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        // Mail::to('allyson.frias@un.org')->send(new SendMailable());
+        foreach ($this->drupalEmailRecords as $key => $emailAddress) {
+
+            Mail::to($emailAddress->data)
+                ->queue(new sendWritingTip($this->writingTip));
+        }
     }
 
     /**
@@ -41,12 +58,12 @@ class SendEmailJob implements ShouldQueue
      * @param  Exception  $exception
      * @return void
      */
-    public function failed(Exception $exception)
+    public function failed()
     {
-        Mail::raw("Mail Delivery Job Failure", function($message) {
+        Mail::raw("Mail Delivery Job Failure. Something is wrong with the code in App\Jobs\sendEmailJob. Stop cron/queue:work, fix the code, do queue:restart, then do queue:work", function($message) {
             $message->from('clm_language@unog.ch', 'CLM Language');
-            $message->to('allyson.frias@un.org')->subject('Alert: Mail Delivery Failure Reminder Email');
-            $message->text($exception);
+            $message->to('allyson.frias@un.org')->subject('Alert: Mail Delivery Failure Writing Tips');
+            // $message->text($exception);
         });
     }
 }
