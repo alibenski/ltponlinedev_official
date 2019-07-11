@@ -591,9 +591,11 @@ class TeachersController extends Controller
                 ->get();
 
             $arr1 = [];
+            $arr5 = [];
 
             foreach ($enrolled_next_term_regular as $value1) {
-                $arr1[] = $value1->courses->Description;
+                $arr1[] = $value1->Te_Code;
+                $arr5[] = $value1->courses->Description;
             }
 
             $check_if_assigned_regular = Preenrolment::where('INDEXID', $indexid)
@@ -608,7 +610,7 @@ class TeachersController extends Controller
             $arr4 = [];
             foreach ($check_if_assigned_regular as $value3) {
                 $arr3[] = $value3->modified_by;
-                $arr4[] = $value3->courses->Description;
+                $arr4[] = $value3->Te_Code;
             }
 
             $enrolled_next_term_placement = PlacementForm::where('INDEXID', $indexid)
@@ -626,7 +628,7 @@ class TeachersController extends Controller
                 return response()->json($data); 
             } 
 
-            $data = [$arr1, $arr2, $arr3, $arr4];
+            $data = [$arr1, $arr2, $arr3, $arr4, $arr5];
             // $data = [$enrolled_next_term_regular, $enrolled_next_term_placement];
             return response()->json($data);  
             

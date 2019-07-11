@@ -168,9 +168,14 @@ $(document).ready(function() {
               if (data[0].length > 0) {
                 // console.log(data[0]);
                 $.each(data[0], function(index, val) {
-                  $("td#"+indexid+".enrolled-next-term").find('ol').append("<li class='appended-value-1' data-name='"+val+"'>"+val+"</li>");
+                  $("td#"+indexid+".enrolled-next-term").find('ol').append("<li class='appended-value-1' data-name='"+val+"'></li>");
 
                 }); // end of foreach data[0]
+
+                $.each(data[4], function(i1, v1) {
+                  $("td#"+indexid+".enrolled-next-term").find('li.appended-value-1').append(v1);
+
+                }); // end of foreach data[4]
               }
               
               if (data[2].length > 0) {
