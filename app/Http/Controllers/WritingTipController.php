@@ -16,7 +16,8 @@ class WritingTipController extends Controller
     public function sendWritingTipEmail(Request $request, WritingTip $writingTip)
     {
         $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])
-            ->take(3);
+            ->unique();
+            // ->take(3);
             // ->first();
         
         $job = (new sendEmailJob($drupalEmailRecords, $writingTip))->delay(3);
@@ -93,8 +94,12 @@ class WritingTipController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(WritingTip $writingTip)
-    {
-        return view('writing_tips.show_writing_tip', compact('writingTip'));
+    {   
+        $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')
+        ->get(["data"])->unique();
+        // ->unique("data");
+        
+        return view('writing_tips.show_writing_tip', compact('writingTip', 'drupalEmailRecords'));
     }
 
     /**
