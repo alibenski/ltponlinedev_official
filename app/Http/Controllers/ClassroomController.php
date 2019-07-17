@@ -222,14 +222,17 @@ class ClassroomController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { 
+    {
         $noTokenMethod = $request->except(['_token', '_method']);
         $fliteredInput = (array_filter($noTokenMethod));
             if(!$fliteredInput) {
-                $request->session()->flash('warning', 'No changes made!');
+                $request->session()->flash('warning', 'No input. No changes made!');
             return redirect()->back();
             }
         $classroom = Classroom::findOrFail($id);
+
+        // check if there are PASH records for the term (if the batch has ran for the selected term)
+        $checkPashTerm = Repo::where('Term', '$classroom->Te_Term')->first();
 
         // update CourseSchedule records first to new schedule
         $courseSchedRecord = CourseSchedule::where('cs_unique', $classroom->cs_unique)->get();
@@ -238,26 +241,124 @@ class ClassroomController extends Controller
         // check if requested cs_unique already exists in CourseSchedule table
         $checkCourseSchedDupe = CourseSchedule::where('cs_unique', $requestedCSUnique)->first();
 
-        // if cs_unique does not exist in CourseSchedule table, then do this
-        if (!$checkCourseSchedDupe) {
-            // Editing classroom schedule parameters cascades to PASH and Schedule and CourseSchedule Models (no duplicate or existing cs_unique and section field data) - Florence case
-            $this->changeCourseScheduleNotSection($request, $classroom, $courseSchedRecord);
-            $request->session()->flash('success', 'Changes have been saved!');
-            return redirect()->back();
+        // if batch ran, then update PASH and Schedule and CourseSchedule Models...
+        if($checkPashTerm) {
+            // if cs_unique does not exist in CourseSchedule table, then do this
+            if (!$checkCourseSchedDupe) {
+                
+                $this->changeCourseScheduleNotSection($request, $classroom, $courseSchedRecord);
+                $request->session()->flash('success', 'Changes have been saved!');
+                return redirect()->back();
+
+            } else {
+                
+                $this->changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord);
+                $request->session()->flash('warning', 'Sorry this cannot be done at the moment. Please manually create the class section. No changes made.');
+                return redirect()->back();
+            }
+
         } else {
-            // Editing classroom parameters cascades to PASH and Schedule and CourseSchedule Models with additional section because of duplicate cs_unique and section field data - Fabienne case
-            $this->changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord);
-            $request->session()->flash('warning', 'Sorry this cannot be done at the moment. Please manually create the class section. No changes made.');
+
+            // if batch has not ran, then only update Classroom and CourseSchedule Models...                           
+            $this->updateWithoutPASH($request, $classroom, $courseSchedRecord);
+            $request->session()->flash('success', 'Changes have been saved to Classroom and CourseSchedule models!');
             return redirect()->back();
+            
         }
 
         $request->session()->flash('warning', 'No changes made!');
         return redirect()->back();
     }
 
+    /**
+     * Update Classroom and CourseSchedule Models because changes are done BEFORE the batch run
+     * @param  \Illuminate\Http\Request $request           
+     * @param  Object $classroom         
+     * @param  Object $courseSchedRecord 
+     * @return \Illuminate\Http\Response
+     */
+    public function updateWithoutPASH($request, $classroom, $courseSchedRecord)
+    {
+        foreach ($courseSchedRecord as $record) {
+                $record->Tch_ID = $request->Tch_ID;
+                $record->schedule_id = $request->schedule_id;
+                $record->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
+                
+                $record->save();
+            }
+
+            // update Classroom Model parameters
+            $classroom->schedule_id = $request->schedule_id;
+            $classroom->Tch_ID = $request->Tch_ID;
+            $classroom->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
+            $classroom->Code = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$classroom->sectionNo;
+
+            // set day, time, and room fields to null 
+            $classroom->Te_Mon = null;
+            $classroom->Te_Mon_BTime = null;
+            $classroom->Te_Mon_ETime = null;
+            $classroom->Te_Mon_Room = null;
+
+            $classroom->Te_Tue = null;
+            $classroom->Te_Tue_BTime = null;
+            $classroom->Te_Tue_ETime = null;
+            $classroom->Te_Tue_Room = null;
+
+            $classroom->Te_Wed = null;
+            $classroom->Te_Wed_BTime = null;
+            $classroom->Te_Wed_ETime = null;
+            $classroom->Te_Wed_Room = null;
+
+            $classroom->Te_Thu = null;
+            $classroom->Te_Thu_BTime = null;
+            $classroom->Te_Thu_ETime = null;
+            $classroom->Te_Thu_Room = null;
+
+            $classroom->Te_Fri = null;
+            $classroom->Te_Fri_BTime = null;
+            $classroom->Te_Fri_ETime = null;
+            $classroom->Te_Fri_Room = null;
+            
+            $schedule_fields = Schedule::find($request->schedule_id);
+                if (isset($schedule_fields->day_1)) {
+                    $classroom->Te_Mon = 2;
+                    $classroom->Te_Mon_BTime = $schedule_fields->begin_time;
+                    $classroom->Te_Mon_ETime = $schedule_fields->end_time;
+                    $classroom->Te_Mon_Room = $request->Te_Mon_Room;
+                }
+                if (isset($schedule_fields->day_2)) {
+                    $classroom->Te_Tue = 3;
+                    $classroom->Te_Tue_BTime = $schedule_fields->begin_time;
+                    $classroom->Te_Tue_ETime = $schedule_fields->end_time;
+                    $classroom->Te_Tue_Room = $request->Te_Tue_Room;
+                }
+                if (isset($schedule_fields->day_3)) {
+                    $classroom->Te_Wed = 4;
+                    $classroom->Te_Wed_BTime = $schedule_fields->begin_time;
+                    $classroom->Te_Wed_ETime = $schedule_fields->end_time;
+                    $classroom->Te_Wed_Room = $request->Te_Wed_Room;
+                }
+                if (isset($schedule_fields->day_4)) {
+                    $classroom->Te_Thu = 5;
+                    $classroom->Te_Thu_BTime = $schedule_fields->begin_time;
+                    $classroom->Te_Thu_ETime = $schedule_fields->end_time;
+                    $classroom->Te_Thu_Room = $request->Te_Thu_Room;
+                }
+                if (isset($schedule_fields->day_5)) {
+                    $classroom->Te_Fri = 6;
+                    $classroom->Te_Fri_BTime = $schedule_fields->begin_time;
+                    $classroom->Te_Fri_ETime = $schedule_fields->end_time;
+                    $classroom->Te_Fri_Room = $request->Te_Fri_Room;
+                }
+
+            $classroom->save();
+
+            return $request;
+    }
 
     public function changeCourseScheduleNotSection($request, $classroom, $courseSchedRecord)
     {
+        // Editing classroom schedule parameters cascades to PASH and Schedule and CourseSchedule Models (no duplicate or existing cs_unique and section field data) e.g. LPE Written and LPE Oral switched schedules - Florence case
         foreach ($courseSchedRecord as $record) {
                     $record->Tch_ID = $request->Tch_ID;
                     $record->schedule_id = $request->schedule_id;
@@ -276,7 +377,7 @@ class ClassroomController extends Controller
             $value->save();
         }
 
-        // udpate Classroom Model parameters
+        // update Classroom Model parameters
         $classroom->schedule_id = $request->schedule_id;
         $classroom->Tch_ID = $request->Tch_ID;
         $classroom->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
@@ -347,6 +448,9 @@ class ClassroomController extends Controller
 
     public function changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord)
     {
+        // Editing classroom parameters cascades to PASH and Schedule and CourseSchedule Models with additional section because of duplicate cs_unique and section field data - Fabienne case
+        
+
         return $request;
     }
 
