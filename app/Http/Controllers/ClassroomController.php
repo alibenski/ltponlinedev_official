@@ -232,7 +232,7 @@ class ClassroomController extends Controller
         $classroom = Classroom::findOrFail($id);
 
         // check if there are PASH records for the term (if the batch has ran for the selected term)
-        $checkPashTerm = Repo::where('Term', '$classroom->Te_Term')->first();
+        $checkPashTerm = Repo::where('Term', $classroom->Te_Term)->first();
 
         // update CourseSchedule records first to new schedule
         $courseSchedRecord = CourseSchedule::where('cs_unique', $classroom->cs_unique)->get();
@@ -271,7 +271,8 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Update Classroom and CourseSchedule Models because changes are done BEFORE the batch run
+     * Update Classroom and CourseSchedule Models when changes are done BEFORE the batch run
+     * 
      * @param  \Illuminate\Http\Request $request           
      * @param  Object $classroom         
      * @param  Object $courseSchedRecord 
@@ -356,9 +357,18 @@ class ClassroomController extends Controller
             return $request;
     }
 
+    /**
+     * Update of Classroom schedule parameters cascades to PASH and CourseSchedule Models 
+     * when changes are done AFTER the batch run
+     * 
+     * @param  \Illuminate\Http\Request $request           
+     * @param  Object $classroom         
+     * @param  Object $courseSchedRecord 
+     * @return \Illuminate\Http\Response
+     */
     public function changeCourseScheduleNotSection($request, $classroom, $courseSchedRecord)
     {
-        // Editing classroom schedule parameters cascades to PASH and Schedule and CourseSchedule Models (no duplicate or existing cs_unique and section field data) e.g. LPE Written and LPE Oral switched schedules - Florence case
+        // Editing Classroom schedule parameters cascades to PASH and CourseSchedule Models (no duplicate or existing cs_unique and section field data) e.g. LPE Written and LPE Oral switched schedules - Florence case
         foreach ($courseSchedRecord as $record) {
                     $record->Tch_ID = $request->Tch_ID;
                     $record->schedule_id = $request->schedule_id;
@@ -446,9 +456,18 @@ class ClassroomController extends Controller
 
     }
 
+    /**
+     * Update of Classroom schedule parameters cascades to PASH and CourseSchedule Models with additional section 
+     * when changes are done AFTER the batch run
+     * 
+     * @param  \Illuminate\Http\Request $request           
+     * @param  Object $classroom         
+     * @param  Object $courseSchedRecord 
+     * @return \Illuminate\Http\Response
+     */
     public function changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord)
     {
-        // Editing classroom parameters cascades to PASH and Schedule and CourseSchedule Models with additional section because of duplicate cs_unique and section field data - Fabienne case
+        // Editing Classroom schedule parameters cascades to PASH and CourseSchedule Models with additional section because of duplicate cs_unique and section field data - Fabienne case
         
 
         return $request;

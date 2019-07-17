@@ -94,7 +94,7 @@
 								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
                             </td>
 							<td>
-								<button class="edit-modal btn btn-info" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-edit"></span> Add Section</button>
+								<button class="add-section edit-modal btn btn-info hidden" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-edit"></span> Add Section</button>
 							</td>
 						</tr>
 					@endforeach
@@ -459,6 +459,33 @@
 <!-- icheck checkboxes -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
+
+<script>
+$(document).ready(function() {
+    var Term = "{{ Session::get('Term') }}";
+    var token = $("input[name='_token']").val();
+    console.log(Term)
+    $.ajax({
+        url: '{{ route('ajax-check-batch-has-ran') }}',
+        type: 'GET',
+        data: {Term:Term,_token: token},
+    })
+    .done(function(data) {
+        if (!jQuery.isEmptyObject( data )) {
+            $("button.add-section").removeClass('hidden');
+        }
+
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete check if batch has ran");
+    });
+
+});
+</script>
+
 <script type="text/javascript">
 $(document).ready(function() {
     $('.select2-basic-single').select2({
