@@ -36,7 +36,7 @@
               </p>
             </div>
             <div class="panel-footer">
-              <button id="changeTeacherBtn" class="btn btn-warning">Edit Teacher Only</button>
+              <button id="changeTeacherBtn" class="btn btn-warning">Change Teacher</button>
               <button id="saveTeacherBtn" class="btn btn-success hidden" data-id="{{ $classroom->id }}">Save</button>
             </div>
           </div>
