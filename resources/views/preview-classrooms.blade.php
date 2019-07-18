@@ -86,7 +86,7 @@
             </div>
             
             <div class="panel-footer">
-              <a href="{{ route('classrooms.edit', $classroom->id) }}" class="btn btn-warning" target="_blank">Edit Classroom Parameters</a>
+              <a href="{{ route('classrooms.edit', $classroom->id) }}" class="btn btn-warning">Edit Classroom Parameters</a>
             </div>            
           </div>
 

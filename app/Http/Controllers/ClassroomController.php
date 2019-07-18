@@ -366,7 +366,7 @@ class ClassroomController extends Controller
     public function updateWithoutPASH($request, $classroom, $courseSchedRecord)
     {
         foreach ($courseSchedRecord as $record) {
-                $record->Tch_ID = $request->Tch_ID;
+                // $record->Tch_ID = $request->Tch_ID;
                 $record->schedule_id = $request->schedule_id;
                 $record->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
                 
@@ -374,8 +374,8 @@ class ClassroomController extends Controller
             }
 
             // update Classroom Model parameters
+            // $classroom->Tch_ID = $request->Tch_ID;
             $classroom->schedule_id = $request->schedule_id;
-            $classroom->Tch_ID = $request->Tch_ID;
             $classroom->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
             $classroom->Code = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$classroom->sectionNo;
 
@@ -455,7 +455,7 @@ class ClassroomController extends Controller
     {
         // Editing Classroom schedule parameters cascades to PASH and CourseSchedule Models (no duplicate or existing cs_unique and section field data) e.g. LPE Written and LPE Oral switched schedules - Florence case
         foreach ($courseSchedRecord as $record) {
-                    $record->Tch_ID = $request->Tch_ID;
+                    // $record->Tch_ID = $request->Tch_ID;
                     $record->schedule_id = $request->schedule_id;
                     $record->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
                     
@@ -473,8 +473,8 @@ class ClassroomController extends Controller
         }
 
         // update Classroom Model parameters
+        // $classroom->Tch_ID = $request->Tch_ID;
         $classroom->schedule_id = $request->schedule_id;
-        $classroom->Tch_ID = $request->Tch_ID;
         $classroom->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
         $classroom->Code = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$classroom->sectionNo;
 
