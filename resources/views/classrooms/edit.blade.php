@@ -21,7 +21,7 @@
 			    <div class="form-group">
 			        <div class="col-sm-12">
 			        <label class="control-label" for="title">Title:</label>
-			            <input type="text" class="form-control" value="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" disabled>
+			            <input type="text" class="form-control" value="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}  Section # {{ $classroom->sectionNo }}" disabled>
 			        </div>
 			    </div>
 			</div>

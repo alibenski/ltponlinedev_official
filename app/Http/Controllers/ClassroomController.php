@@ -252,8 +252,10 @@ class ClassroomController extends Controller
 
             } else {
                 
-                $this->changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord);
-                $request->session()->flash('warning', 'Sorry this cannot be done at the moment. Please manually create the class section. No changes made.');
+                $result = $this->changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord, $checkCourseSchedDupe);
+                $classCode = $result[1];
+
+                $request->session()->flash('success', 'The classroom code has been changed to: '.$classCode->Code.' [ '.$classCode->course->Description.' '.$classCode->scheduler->name.' ] and the students have been successfully transferred.');
                 return redirect()->back();
             }
 
@@ -465,12 +467,94 @@ class ClassroomController extends Controller
      * @param  Object $courseSchedRecord 
      * @return \Illuminate\Http\Response
      */
-    public function changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord)
+    public function changeCourseScheduleAddSection($request, $classroom, $courseSchedRecord, $checkCourseSchedDupe)
     {
-        // Editing Classroom schedule parameters cascades to PASH and CourseSchedule Models with additional section because of duplicate cs_unique and section field data - Fabienne case
-        
+        // Editing Classroom schedule parameters cascades to PASH Models (Not CourseSchedule) with additional section because of duplicate cs_unique and section field data - Fabienne case
+        $csUniqueCode = $checkCourseSchedDupe->cs_unique;
 
-        return $request;
+        $latestClassWithCSUniqueCode = Classroom::where('cs_unique', $csUniqueCode)->orderBy('sectionNo', 'desc')->first();
+        $incrementSection = $latestClassWithCSUniqueCode->sectionNo;
+        $incrementSection++;
+
+        // update PASH records first to new schedule and section number
+        $pash_record = Repo::where('CodeClass', $classroom->Code)->get();
+        foreach ($pash_record as $value) {
+            $value->schedule_id = $request->schedule_id;
+            $value->Code = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
+            $value->CodeClass = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$incrementSection;
+            $value->CodeIndexID =  $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$value->INDEXID;
+            $value->CodeIndexIDClass =  $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$incrementSection.'-'.$value->INDEXID;
+            $value->save();
+        }
+
+        // update Classroom Model parameters
+        $classroom->schedule_id = $request->schedule_id;
+        $classroom->Tch_ID = $request->Tch_ID;
+        $classroom->sectionNo = $incrementSection;
+        $classroom->cs_unique = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term;
+        $classroom->Code = $classroom->Te_Code_New.'-'.$request->schedule_id.'-'.$classroom->Te_Term.'-'.$incrementSection;
+
+        // set day, time, and room fields to null 
+        $classroom->Te_Mon = null;
+        $classroom->Te_Mon_BTime = null;
+        $classroom->Te_Mon_ETime = null;
+        $classroom->Te_Mon_Room = null;
+
+        $classroom->Te_Tue = null;
+        $classroom->Te_Tue_BTime = null;
+        $classroom->Te_Tue_ETime = null;
+        $classroom->Te_Tue_Room = null;
+
+        $classroom->Te_Wed = null;
+        $classroom->Te_Wed_BTime = null;
+        $classroom->Te_Wed_ETime = null;
+        $classroom->Te_Wed_Room = null;
+
+        $classroom->Te_Thu = null;
+        $classroom->Te_Thu_BTime = null;
+        $classroom->Te_Thu_ETime = null;
+        $classroom->Te_Thu_Room = null;
+
+        $classroom->Te_Fri = null;
+        $classroom->Te_Fri_BTime = null;
+        $classroom->Te_Fri_ETime = null;
+        $classroom->Te_Fri_Room = null;
+        
+        $schedule_fields = Schedule::find($request->schedule_id);
+            if (isset($schedule_fields->day_1)) {
+                $classroom->Te_Mon = 2;
+                $classroom->Te_Mon_BTime = $schedule_fields->begin_time;
+                $classroom->Te_Mon_ETime = $schedule_fields->end_time;
+                $classroom->Te_Mon_Room = $request->Te_Mon_Room;
+            }
+            if (isset($schedule_fields->day_2)) {
+                $classroom->Te_Tue = 3;
+                $classroom->Te_Tue_BTime = $schedule_fields->begin_time;
+                $classroom->Te_Tue_ETime = $schedule_fields->end_time;
+                $classroom->Te_Tue_Room = $request->Te_Tue_Room;
+            }
+            if (isset($schedule_fields->day_3)) {
+                $classroom->Te_Wed = 4;
+                $classroom->Te_Wed_BTime = $schedule_fields->begin_time;
+                $classroom->Te_Wed_ETime = $schedule_fields->end_time;
+                $classroom->Te_Wed_Room = $request->Te_Wed_Room;
+            }
+            if (isset($schedule_fields->day_4)) {
+                $classroom->Te_Thu = 5;
+                $classroom->Te_Thu_BTime = $schedule_fields->begin_time;
+                $classroom->Te_Thu_ETime = $schedule_fields->end_time;
+                $classroom->Te_Thu_Room = $request->Te_Thu_Room;
+            }
+            if (isset($schedule_fields->day_5)) {
+                $classroom->Te_Fri = 6;
+                $classroom->Te_Fri_BTime = $schedule_fields->begin_time;
+                $classroom->Te_Fri_ETime = $schedule_fields->end_time;
+                $classroom->Te_Fri_Room = $request->Te_Fri_Room;
+            }
+        $classroom->save();
+        $result = [$request, $classroom];
+
+        return $result;
     }
 
     /**
