@@ -1636,6 +1636,9 @@ class PreviewController extends Controller
             // value of section is 1, if $existingSection is empty
             $counter = $num_classes[$i];
             $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
+            $existingSectionGet = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get();
+                echo $existingSectionGet;
+                echo '<br>';
             $arrExistingSection[] = $existingSection;
             $countExistingSection = count($existingSection);
             // if not, get existing value of sectionNo

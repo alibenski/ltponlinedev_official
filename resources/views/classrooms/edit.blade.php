@@ -117,8 +117,18 @@
 	<form class="form-horizontal" role="form" method="POST" action="{{ route('classrooms.update', $classroom->id) }}">{{ csrf_field() }}
 		<div class="col-md-12">
 			<div class="panel panel-warning">
-			<div class="panel-heading"><strong>Choose Schedule</strong></div>
+			<div class="panel-heading"><strong>Change Classroom Parameters</strong></div>
 				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="alert alert-default">
+								<h4 class="text-center" style="color: #a94442">
+									<p><i class="fa fa-info-circle"></i> You cannot change the schedule of this classroom at the moment. You can only assign the room(s) to the current schedule.</p>
+									<p>If changes were made to the schedule of this course, please create a new class in the "Course + Schedule" section.</p>
+								</h4> 
+							</div>
+						</div>
+					</div>
 				  <div class="row">
 				    <div class="col-md-2">
 				      <input type="button" value="Assign Room" id="buttonClass" class="btn btn-info btn-block btn-space">
@@ -139,7 +149,7 @@
 					        @foreach ($schedule as $id => $name)
 					            <div class="checkbox">
 					                <label class=@if ($id == $classroom->schedule_id) "mark" @endif>
-					                    <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id" multiple="multiple" value="{{ $id }}" /> {{ $name }} 
+					                    <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id" multiple="multiple" value="{{ $id }}" @if ($id == $classroom->schedule_id) @else disabled="true" @endif /> {{ $name }} 
 					                </label>
 					            </div>
 

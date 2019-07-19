@@ -241,6 +241,9 @@ class ClassroomController extends Controller
             return redirect()->back();
         }
 
+        $request->session()->flash('error', 'No changes made!');
+        return redirect()->back();
+
         // case 2: if existing schedule != requested schedule
          
         // check if there are PASH records for the term (if the batch has ran for the selected term)
