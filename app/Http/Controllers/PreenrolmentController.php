@@ -417,6 +417,14 @@ class PreenrolmentController extends Controller
                 return response()->json($data);
             }
 
+            // check if assigned course was already assigned
+            $assignedNewCourse = $request->Te_Code.'-'.$request->schedule_id.'-'.$term.'-'.$indexno;
+            $checkNewCourseExists = Preenrolment::where('CodeIndexID', $assignedNewCourse)->first();
+            if ($checkNewCourseExists) {
+                $data = 0;
+                return response()->json($data);
+            }
+
             $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
                 ->where('Te_Code', $tecode)
                 ->where('INDEXID', $indexno)

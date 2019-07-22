@@ -350,7 +350,7 @@ $(document).ready(function () {
     .done(function(data) {
   	    console.log(data);
   	    if (data == 0) {
-  	      alert('Hmm... Nothing to change, nothing to update...');
+  	      alert('Hmm... Nothing to change, nothing to update. Your selected course and schedule have already been assigned to this student.');
           location.reload();
   	    }
   	    var L = $("input[name='L'].modal-input").val();

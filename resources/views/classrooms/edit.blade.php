@@ -4,9 +4,18 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 @section('content')
-<div class="alert col-sm-12">
-    <h3 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Edit Classroom </strong></h3>
-</div>
+
+@include('admin.partials._termSessionMsg')
+
+@if (!Session::has('Term'))
+	<div class="alert col-sm-12">
+    	<h3 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Edit Classroom </strong></h3>
+	</div>
+@else
+
+	<div class="alert col-sm-12">
+	    <h3 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Edit Classroom </strong></h3>
+	</div>
 
 
 	<div class="col-sm-12">
@@ -124,7 +133,7 @@
 							<div class="alert alert-default">
 								<h4 class="text-center" style="color: #a94442">
 									<p><i class="fa fa-info-circle"></i> You cannot change the schedule of this classroom at the moment. You can only assign the room(s) to the current schedule.</p>
-									<p>If changes were made to the schedule of this course, please create a new class in the "Course + Schedule" section.</p>
+									<p>If it is imperative to create this course with a different schedule, please do so in the "Course + Schedule" section.</p>
 								</h4> 
 							</div>
 						</div>
@@ -174,6 +183,7 @@
 			</div>
 		</div>
 	</form>
+@endif
 @stop
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
