@@ -13,6 +13,24 @@ use Illuminate\Support\Facades\Mail;
 
 class WritingTipController extends Controller
 {
+    public function selectiveSendWritingTipEmail(Request $request, WritingTip $writingTip)
+    {
+        if ($request->ajax()) {
+            
+            $drupalEmailRecords = explode(',', $request->join_selected_values);
+
+            $arr = [];
+            foreach ($drupalEmailRecords as $emailAddress) {
+                Mail::to($emailAddress)
+                    ->send(new sendWritingTip($writingTip));
+                    $arr[] = $emailAddress;
+            }
+
+            $data = $drupalEmailRecords;
+            return response()->json($data);
+        }
+    }
+
     public function sendWritingTipEmail(Request $request, WritingTip $writingTip)
     {
         $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])

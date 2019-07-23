@@ -102,6 +102,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::resource('writing-tips', 'WritingTipController');
     Route::get('send-writing-tip-email/{writingTip}',  ['as'=>'send-writing-tip-email','uses'=>'WritingTipController@sendWritingTipEmail']);
+    Route::post('selective-send-writing-tip-email/{writingTip}',  ['as'=>'selective-send-writing-tip-email','uses'=>'WritingTipController@selectiveSendWritingTipEmail']);
 
     /*
      * Preview Routes
