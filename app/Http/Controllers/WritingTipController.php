@@ -156,7 +156,7 @@ class WritingTipController extends Controller
         
         $text->save();
 
-        return view('writing_tips.show_writing_tip', compact('writingTip'));
+        return redirect()->route('writing-tips.show', $writingTip->id);
     }
 
     /**
