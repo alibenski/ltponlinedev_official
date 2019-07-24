@@ -172,9 +172,6 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('ajax-billing-table', ['as' => 'ajax-billing-table', 'uses' => 'BillingController@ajaxBillingTable' ]);
     Route::get('billing-json', function () { return view('billing.billing_table'); })->name('billing-json');
 
-    // Routes Placement EXam Results
-    Route::post('exam-result-save', ['as' => 'exam-result-save', 'uses' => 'ExamResultController@examResultSave' ]);
-
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');
 
@@ -237,6 +234,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // Routes for managing placement exams
     Route::get('manage-exam-view', ['as'=>'manage-exam-view','uses'=>'PlacementFormController@manageExamView']); 
     Route::get('manage-exam-table', ['as'=>'manage-exam-table','uses'=>'PlacementFormController@manageExamtable']); 
+    
+    // Routes Placement Exam Results
+    Route::post('exam-result-save', ['as' => 'exam-result-save', 'uses' => 'ExamResultController@examResultSave' ]);
 
     Route::resource('rooms', 'RoomsController');
     Route::resource('waitlist', 'WaitlistController');

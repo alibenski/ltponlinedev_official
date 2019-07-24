@@ -51,7 +51,7 @@ class ClassroomController extends Controller
                     $classrooms = $classrooms->where('Te_Term', Session::get('Term') );
                     $queries['Term'] = Session::get('Term');
             }
-        $classrooms = $classrooms->orderBy('id','asc')->paginate(10)->appends($queries);
+        $classrooms = $classrooms->orderBy('id','asc')->paginate(20)->appends($queries);
 
         $rooms = Room::all();
         $teachers = Teachers::where('In_Out', '1')->get();

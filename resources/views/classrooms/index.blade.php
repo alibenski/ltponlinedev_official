@@ -82,7 +82,14 @@
 							<th>{{ $classroom->id }}</th>
 							<th>{{ $classroom->Te_Term }}</th>
 							{{-- <th>{{ $classroom->Code }}</th> --}}
-							<td>{{ $classroom->course->Description }}</td>
+							<td>
+                                @if($classroom->course->Description)
+                                <p>{{ $classroom->course->Description }}</p>
+                                @endif
+                                @if($classroom->course->FDescription)
+                                <p>{{ $classroom->course->FDescription }}</p>
+                                @endif
+                            </td>
 							<td>
 								@if(empty( $classroom->scheduler->name ))
 								null
