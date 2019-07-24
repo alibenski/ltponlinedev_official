@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\sendWritingTip;
-use App\Jobs\sendEmailJob;
+use App\Jobs\SendEmailJob;
 use App\WritingTip;
 use Carbon;
 use DB;
@@ -38,7 +38,7 @@ class WritingTipController extends Controller
             // ->take(3);
             // ->first();
         
-        $job = (new sendEmailJob($drupalEmailRecords, $writingTip))->delay(3);
+        $job = (new SendEmailJob($drupalEmailRecords, $writingTip))->delay(3);
         dispatch($job);
 
         // foreach ($drupalEmailRecords as $key => $emailAddress) {
