@@ -419,7 +419,9 @@ class PreenrolmentController extends Controller
 
             // check if assigned course was already assigned
             $assignedNewCourse = $request->Te_Code.'-'.$request->schedule_id.'-'.$term.'-'.$indexno;
-            $checkNewCourseExists = Preenrolment::where('CodeIndexID', $assignedNewCourse)->first();
+            $checkNewCourseExists = Preenrolment::where('CodeIndexID', $assignedNewCourse)
+                ->where('updated_by_admin', '1')
+                ->first();
             if ($checkNewCourseExists) {
                 $data = 0;
                 return response()->json($data);
