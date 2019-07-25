@@ -136,8 +136,9 @@
 
   $(document).on('click', '#saveExam', function() {
     var plid = $(this).attr('data-plid');
-    var convoked = $(this).closest('tr').find('input[name="convoked"]').val();
+    var convoked = $(this).closest('tr').find('input[name="convoked"]:checked').val();
     var token = $("input[name='_token']").val();
+    var Tch_ID = $(this).closest('tr').find("select[name='Tch_ID']").val();
     console.log(plid)
     
     $(".preloader2").fadeIn(500);
@@ -145,7 +146,7 @@
     $.ajax({
       url: '{{ route('exam-result-save') }}',
       type: 'POST',
-      data: { placement_id:plid, convoked:convoked, _token:token},
+      data: { placement_id:plid, convoked:convoked, Tch_ID:Tch_ID, _token:token},
     })
     .done(function(data) {
       console.log(data);

@@ -953,6 +953,7 @@ class PlacementFormController extends Controller
                         $placement_forms = $placement_forms->where($column, \Request::input($column) );
                         
                         $queries[$column] = \Request::input($column);
+                        $teachers = Teachers::where('In_Out', '1')->where('Tch_L',\Request::input($column))->get();
                     }
                     
                 } 
@@ -967,7 +968,6 @@ class PlacementFormController extends Controller
             $placement_forms = $placement_forms->where('overall_approval', 1)->get();
             $term = Term::where('Term_Code', Session::get('Term'))->first();
             $rooms = Room::pluck("Rl_Room","Rl_Room")->all();
-            $teachers = Teachers::where('In_Out', '1')->get();
 
             $data = view('placement_forms.manage_exam_table', compact('placement_forms', 'term', 'rooms', 'teachers'))->render();
             return response()->json(['options'=>$data]);
