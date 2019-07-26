@@ -177,8 +177,7 @@
 										<td>
 												@if($form->deleted_at)
 												@else
-													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" class="btn btn-info hidden">Edit</a>
-
+													
 													<button type="button" class="btn btn-primary btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button> 
 													@if ($batch_implemented > 0)
 														@if ($form->updated_by_admin == 1)
@@ -282,12 +281,15 @@
 													@elseif($form->approval == 1 && is_null($form->approval_hr))
 													<span id="status" class="label label-warning margin-label">
 													Pending Approval</span>
+													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank">_</a>
 													@elseif($form->approval == 1 && $form->approval_hr == 1)
 													<span id="status" class="label label-success margin-label">
 													Approved</span>
+													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" style="text-decoration: none" target="_blank">_</a>
 													@elseif($form->approval == 1 && $form->approval_hr == 0)
 													<span id="status" class="label label-danger margin-label">
 													Disapproved</span>
+													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank">_</a>
 													@endif
 												@endif
 											@else

@@ -65,7 +65,7 @@
 			</div>
 			<div class="form-group col-sm-12">
 				<label for="Term">Term</label>
-				<select name="Term" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true">
+				<select name="Term" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
 				@foreach($terms as $term)
 				  <option></option>
 		          <option value="{{ $term->Term_Code}}">{{ $term->Comments }} - {{ $term->Term_Name }}</option>
@@ -219,7 +219,7 @@ $(document).ready(function() {
         $(".time-section").addClass('hidden');
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
-        $(".time-section").removeClass('hidden');
+        // $(".time-section").removeClass('hidden');
       }
 
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');

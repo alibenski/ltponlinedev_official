@@ -626,7 +626,7 @@ class UserController extends Controller
         if($request->L != 'F'){
 
             $this->validate($request,[
-                                'placement_time' => 'required|integer',
+                                // 'placement_time' => 'required|integer',
                             ]);     
         }
 

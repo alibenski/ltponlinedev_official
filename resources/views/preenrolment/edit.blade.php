@@ -17,6 +17,11 @@
             <div class="box-body">
                 
                 <div class="form-group">
+                    <label for="form-control">Term: </label>
+                    <h4 class="form-control-static">{{ $enrolment_details->terms->Term_Name }} ({{ $enrolment_details->terms->Comments }})</h4>
+                </div>  
+
+                <div class="form-group">
                     <label for="form-control">Index: </label>
                     <h4 class="form-control-static">{{ $enrolment_details->INDEXID }}</h4>
                 </div>  
@@ -126,10 +131,22 @@
             <div class="box-body">
                 <div class="alert alert-default">
                     <h2><i class="fa fa-warning"></i> Warning</h2>
-                    <h4>Changing the following fields assumes that the changes have been approved by the LTP chief and HR focal point. Take note that no email correspondences will be sent after fields have been updated.</h4></div>
-                <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">{{ csrf_field() }}
+                </div>
+                <div class="alert alert-warning">
+                    <h4>
+                        <p>
+                            Changing the following fields assumes that the changes have been approved by the LTP chief and HR focal point. Take note that no email correspondences will be sent after fields have been updated.    
+                        </p>
+                        <p>
+                            This page is not complete and will only change the HR Approval field.
+                        </p>
+                    </h4>
+                </div>
+                
+                <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">
+                    {{ csrf_field() }}
                     
-                <label>Language</label> 
+                {{-- <label>Language</label> 
                 @foreach ($languages as $id => $name)
 		            <div class="input-group col-sm-12">
                       <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
@@ -156,7 +173,7 @@
                         </select>
                       </div>
                     </div>
-                </div>
+                </div> --}}
                 
                 <div class="form-group">
                     <label>HR approval </label>

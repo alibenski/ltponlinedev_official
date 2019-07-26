@@ -139,6 +139,10 @@
     var convoked = $(this).closest('tr').find('input[name="convoked"]:checked').val();
     var token = $("input[name='_token']").val();
     var Tch_ID = $(this).closest('tr').find("select[name='Tch_ID']").val();
+    var room_id = $(this).closest('tr').find(".select-room[name='room']").val();
+    var exam_time = $(this).closest('tr').find(".timepicker[name='timeInput']").val();
+    var result = $(this).closest('tr').find("textarea[name='restultInput']").val();
+    var teacher_comments = $(this).closest('tr').find("textarea[name='teacherComment']").val();
     console.log(plid)
     
     $(".preloader2").fadeIn(500);
@@ -146,7 +150,15 @@
     $.ajax({
       url: '{{ route('exam-result-save') }}',
       type: 'POST',
-      data: { placement_id:plid, convoked:convoked, Tch_ID:Tch_ID, _token:token},
+      data: { placement_id:plid, 
+              convoked:convoked, 
+              Tch_ID:Tch_ID, 
+              room_id:room_id, 
+              exam_time:exam_time,
+              result:result,
+              teacher_comments:teacher_comments,
+              _token:token
+            },
     })
     .done(function(data) {
       console.log(data);

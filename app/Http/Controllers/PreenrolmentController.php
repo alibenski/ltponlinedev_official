@@ -850,12 +850,13 @@ class PreenrolmentController extends Controller
 
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {   
-        dd(array_filter($request->all()), $indexno, $term, $tecode, $eform_submit_count);
+        // dd(array_filter($request->all()), $indexno, $term, $tecode, $eform_submit_count);
         
-        if (is_null($request->L)) {
+        if (is_null($request->approval_hr)) {
             $request->session()->flash('warning', 'Nothing to change, Nothing to update...');
             return back();
         }
+
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
@@ -863,54 +864,57 @@ class PreenrolmentController extends Controller
             ->where('Term', $term)
             ->get();
 
-        $user_id = User::where('indexno', $indexno)->first(['id']);
+        $enrolment_to_be_modified = $enrolment_to_be_copied;
+        // $user_id = User::where('indexno', $indexno)->first(['id']);
 
-        foreach ($enrolment_to_be_copied as $data) {
-            $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
+        // foreach ($enrolment_to_be_copied as $data) {
+        //     $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
 
-            $arr = $data->attributesToArray();
-            $clone_forms = ModifiedForms::create($arr);
-        }
+        //     $arr = $data->attributesToArray();
+        //     $clone_forms = ModifiedForms::create($arr);
+        // }
 
 
-        $count_form = $enrolment_to_be_copied->count();
-        if ($count_form > 1) {
-            $delform = Preenrolment::orderBy('id', 'desc')
-            ->where('Te_Code', $tecode)
-            ->where('INDEXID', $indexno)
-            ->where('eform_submit_count', $eform_submit_count)
-            ->where('Term', $term)
-            ->first();
-            $delform->Code = null;
-            $delform->CodeIndexID = null;
-            $delform->Te_Code = null;
-            $delform->INDEXID = null;
-            $delform->Term = null;
-            $delform->schedule_id = null;             
-            $delform->save();
-            $delform->delete();
-        }
+        // $count_form = $enrolment_to_be_copied->count();
+        // if ($count_form > 1) {
+        //     $delform = Preenrolment::orderBy('id', 'desc')
+        //     ->where('Te_Code', $tecode)
+        //     ->where('INDEXID', $indexno)
+        //     ->where('eform_submit_count', $eform_submit_count)
+        //     ->where('Term', $term)
+        //     ->first();
+        //     $delform->Code = null;
+        //     $delform->CodeIndexID = null;
+        //     $delform->Te_Code = null;
+        //     $delform->INDEXID = null;
+        //     $delform->Term = null;
+        //     $delform->schedule_id = null;             
+        //     $delform->save();
+        //     $delform->delete();
+        // }
 
-        $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
-            ->where('Te_Code', $tecode)
-            ->where('INDEXID', $indexno)
-            ->where('eform_submit_count', $eform_submit_count)
-            ->where('Term', $term)
-            ->get();
+        // $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
+        //     ->where('Te_Code', $tecode)
+        //     ->where('INDEXID', $indexno)
+        //     ->where('eform_submit_count', $eform_submit_count)
+        //     ->where('Term', $term)
+        //     ->get();
 
         $input = $request->all();
         $input = array_filter($input, 'strlen');
         
         foreach ($enrolment_to_be_modified as $new_data) {
-            $new_data->fill($input)->save();    
+            $new_data->fill($input)->save(); 
+            $new_data->overall_approval = $request->approval_hr;   
+            $new_data->save();   
 
-            $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
-            $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
-            $new_data->save();
+            // $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
+            // $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
+            // $new_data->save();
         }
         $request->session()->flash('success', 'Update successful!');
         // return redirect()->route('manage-user-enrolment-data', $user_id);
-        return redirect()->route('users.index');
+        return redirect()->back();
     }
 
     /**
