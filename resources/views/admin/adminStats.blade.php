@@ -1,68 +1,78 @@
 @extends('admin.admin')
 
 @section('customcss')
-<style>
-  #placeholder {
-    width: 500px;
-    height: 300px;
-  }
-  #placeholder2 {
-    width: 500px;
-    height: 300px;
-  }
-</style>
+
 @stop
 
 @section('content')
 
 <h1 class="text-danger">Admin Statistics - under construction</h1>
-<div id="placeholder"></div>
-<div id="placeholder2"></div>
+<div class="row">
+  <div class="col-md-6">
+    <canvas id="myAreaChart" width="400" height="400"></canvas>
+  </div>
+</div>
 
 @endsection
 
 @section('java_script')
-<script src="{{ asset('bower_components/Flot/jquery.flot.js') }}"></script>
-<script src="{{ asset('bower_components/Flot/jquery.flot.pie.js') }}"></script>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        // $.plot($("#placeholder"), data, options);
-        // $.plot($("#placeholder2"), data, options);
-    });
-</script>
-
-<script type="text/javascript">
-var data = [
-    { label: "IE",  data: 19.5, color: "#4572A7"},
-    { label: "Safari",  data: 4.5, color: "#80699B"},
-    { label: "Firefox",  data: 36.6, color: "#AA4643"},
-    { label: "Opera",  data: 2.3, color: "#3D96AE"},
-    { label: "Chrome",  data: 36.3, color: "#89A54E"},
-    { label: "Other",  data: 0.8, color: "#3D96AE"}
-];
-$(document).ready(function () {
-    $.plot($("#placeholder"), data, {
-         series: {
-            pie: {
-                show: true
-            }
-         },
-         legend: {
-            labelBoxBorderColor: "none"
-         }
-    });
-});
-</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 <script>
-  var d1 = [[0, 3], [1, 3], [2, 5], [3, 7], [4, 8], [5, 10], [6, 11], [7, 9], [8, 5], [9, 13]];
-  $.plot($("#placeholder2"), [
-      {
-          data: d1,
-          bars: {
-              show: true
-          }
-      }
-  ]);
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+
+// Area Chart Example
+var ctx = document.getElementById("myAreaChart");
+var myLineChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+    datasets: [{
+      label: "Sessions",
+      lineTension: 0.3,
+      backgroundColor: "rgba(2,117,216,0.2)",
+      borderColor: "rgba(2,117,216,1)",
+      pointRadius: 5,
+      pointBackgroundColor: "rgba(2,117,216,1)",
+      pointBorderColor: "rgba(255,255,255,0.8)",
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(2,117,216,1)",
+      pointHitRadius: 50,
+      pointBorderWidth: 2,
+      data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
+    }],
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'date'
+        },
+        gridLines: {
+          display: false
+        },
+        ticks: {
+          maxTicksLimit: 7
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          max: 40000,
+          maxTicksLimit: 5
+        },
+        gridLines: {
+          color: "rgba(0, 0, 0, .125)",
+        }
+      }],
+    },
+    legend: {
+      display: false
+    }
+  }
+});
+
 </script>
+
 @endsection
