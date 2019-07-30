@@ -158,9 +158,21 @@ class TeachersController extends Controller
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         if ($request->has('Term')) {
-            $pash_records = Repo::where('Term', $request->input('Term'))->get();
+            $pash_records = Repo::where('Term', $request->input('Term'))
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query) {
+                $query->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD')
+                        ;
+                })
+                ->with('courses')
 
-            dd($request->input('Term'));
+                ->get()
+
+                ;
+
+            // dd($pash_records);
+            return view('teachers.teacher_show_classrooms_per_teacher', compact('terms','pash_records'));
         }
         
         return view('teachers.teacher_show_classrooms_per_teacher', compact('terms'));
