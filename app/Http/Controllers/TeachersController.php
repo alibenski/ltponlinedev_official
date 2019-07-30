@@ -445,6 +445,26 @@ class TeachersController extends Controller
 
         $teacher->fill($input)->save(); 
 
+        // change data in the User table and SDDEXTR table
+        $user = User::where('indexno',$teacher->IndexNo)->first();
+        $sddextr = SDDEXTR::where('INDEXNO',$teacher->IndexNo)->first();
+
+        if ($request->email) {
+            $user->update(['email'=>$request->email]);   
+            $sddextr->update(['EMAIL'=>$request->email]);   
+        }
+        if ($request->Tch_Firstname) {
+            $user->update(['nameFirst'=>$request->Tch_Firstname]);   
+            $user->update(['name'=>$request->Tch_Firstname.' '.$user->nameLast]);   
+            $sddextr->update(['FIRSTNAME'=>$request->Tch_Firstname]);
+            $teacher->update(['Tch_Name'=>$teacher->Tch_Lastname.', '.$request->Tch_Firstname]);
+        }
+        if ($request->Tch_Lastname) {
+            $user->update(['nameLast'=>$request->Tch_Lastname]);
+            $user->update(['name'=>$user->nameFirst.' '.$request->Tch_Lastname]);  
+            $sddextr->update(['LASTNAME'=>$request->Tch_Lastname]);
+            $teacher->update(['Tch_Name'=>$request->Tch_Lastname.', '.$teacher->Tch_Firstname]);  
+        }
 
         $data = $input;
         return response()->json($data);

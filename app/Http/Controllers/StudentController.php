@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Crypt;
-use App\Torgan;
+use App\Course;
 use App\FocalPoints;
 use App\Language;
-use App\Course;
-use App\User;
-use App\SDDEXTR;
-use App\Repo;
+use App\Mail\updateEmail;
 use App\Preenrolment;
+use App\Repo;
+use App\SDDEXTR;
+use App\Teachers;
 use App\Term;
-use Session;
+use App\Torgan;
+use App\User;
 use Carbon\Carbon;
 use DB;
-use App\Mail\updateEmail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Session;
 
 class StudentController extends Controller
 {
@@ -232,6 +233,13 @@ class StudentController extends Controller
                 User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->update(['email'=>$temp_email, 'temp_email'=>NULL, 'approved_update'=>'1', 'update_token'=>NULL]);
                 // change e-mail address in the sddextr
                 SDDEXTR::where(['INDEXNO'=>$student->indexno])->update(['EMAIL'=>$temp_email]);
+
+                // change e-mail address in the teachers table if profile is a teacher
+                $teacher = Teachers::where('IndexNo', $student->indexno)->first();
+                if ($teacher) {
+                    $teacher->update(['email'=>$temp_email]);
+                }
+
                 // redirect to login page to use new email as username 
                 $request->session()->flash('success', 'E-mail address has been updated. Please log back in with your new e-mail address');
                 return redirect('login');

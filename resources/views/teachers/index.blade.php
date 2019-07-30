@@ -88,7 +88,7 @@ $(".quick-edit").click(function(){
 	var textTch_Firstname = $(this).closest("tr").find(".input-Tch_Firstname").text();
 	var textemail = $(this).closest("tr").find(".input-email").text();
 	console.log(textIndexNo)
-	$(this).closest("tr").find(".input-IndexNo").html('<input type="text" name="IndexNo" value="" placeholder="'+textIndexNo+'">');
+	$(this).closest("tr").find(".input-IndexNo").html('<input type="text" name="IndexNo" value="" placeholder="'+textIndexNo+'" disabled>');
 	$(this).closest("tr").find(".input-Tch_Lastname").html('<input type="text" name="Tch_Lastname" value="" placeholder="'+textTch_Lastname+'">');
 	$(this).closest("tr").find(".input-Tch_Firstname").html('<input type="text" name="Tch_Firstname" value="" placeholder="'+textTch_Firstname+'">');
 	$(this).closest("tr").find(".input-email").html('<input type="email" name="email" value="" placeholder="'+textemail+'">');

@@ -7,10 +7,70 @@ section { font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-s
 	
 <h3>CLM Language Online Registration Release Notes</h3>
 
+<p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;"><span style="text-decoration: underline;">Release Notes: 31 July 2019</span></p>
+<p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;">&nbsp;</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Create Placement test management view like excel sheet</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Create placement test table -&gt; tblltp_placement_exam_results</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Writing Tips - UI and CRUD</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Fetch email addresses from Drupal database</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Selective email sending from list of emails from Drupal database</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Hide Add Section button in Classroom index if Batch has not ran yet </strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>To prevent duplicate entries when running the batch - Put CodeIndexID validation check if selected course+schedule has already been assigned to the student in Teacher and Admin assign-course views</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong><span style="color: white; background: red;">NOT POSSIBLE BEFORE BATCH RUN :</span></strong><strong> Change classroom parameters as additional section because of duplicate cs_unique and section field data - Fabienne case</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Skip CourseSched validation </strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Update PASH records and increment sectionNo value</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Update Classroom parameters </strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Add instructions on Cancel Date Limit field when creating Term </strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Preview text of convocation email</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Extract Student Info (email address) in a specified term and extract to XLSX</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">For Survey - Extract all emails of students in a class, Extract students' emails for each language</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Debug Attendance summary queries letters &lt;, s, c results to<strong> Uncaught TypeError Cannot use 'in' operator to search for '0' </strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Refactor programming to fetch indices in an array to hit server in 1 ajax call - Attendance Summary/Show Students</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Refactor programming to fetch indices in an array to hit server in 1 ajax call - Manage Attendance</strong></p>
+<p style="margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
+<p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;">&nbsp;</p>
+<p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;"><span style="text-decoration: underline;">Release Notes: 24 June 2019</span></p>
+<p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;">&nbsp;</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Copy eform_submit_count field and </strong><strong>is_self_pay_form field </strong><strong>to Preview and Pash</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Add eform_submit_count field and </strong><strong>is_self_pay_form field</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Edit text when Enrolment is open uses only 1 record and 1 email template for different queries of email addresses</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Debug Subject field - when null, no change - array filter</strong></p>
+<p style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Student disappears from class list of teacher when Pash record is cancelled (?) - show as cancelled in Show Students view</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Include term year in cancellation flash message in submitted form view</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Une petite question&nbsp;: serait-il possible d&rsquo;afficher les deux jours de cours sur la m&ecirc;me page ( par exemple&nbsp;: onglet <strong><em>Mardi </em></strong><strong>et</strong> onglet <strong><em>Jeudi</em></strong>) pour ne pas avoir &agrave; retourner au menu <strong><em>Week 1 </em></strong>pour remplir le 2<span style="vertical-align: super;">&egrave;me</span> cours (celui du jeudi) - Sylviane</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Cancelled Pash Records are highlighted in table view</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Include TERM and ORG columns</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Compare deleted_at field with cancel deadline of the term </strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Create function to undo a deleted form </strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Set deleted_at = null - restore() function</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Set cancelled_by = null</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Set cancelled_but_not_billed = null</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Update assign course views to reflect that batch has run</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Hide assign buttons </strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Hide delete buttons</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Disable all functions on enrolment and placement forms</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Constrain creation of Term codes to 1,4,8,9</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Delete enrolment form button for teacher FPs</strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Disable delete button after click</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong><span style="text-decoration: line-through;">Delete placement form button for teacher FPs</span></strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong><span style="text-decoration: line-through;">Check impact on placement exam history</span></strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>View history on assign course view of admin, FP, teachers</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Fix delete and history buttons in unassigned forms for students not in class </strong></p>
+<p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Add jquery code to show the modals in view</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Fix assign and history buttons in manage user view</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Include cancelled_by_admin field in index table of Preenrolment, Placement, and ManageUser views</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Create new teacher and cascade to users and sddextr table</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Change teacher in classroom view</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Add Edit Classroom button in classroom view</strong></p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Prevent multiple clicks on insert-record-to-preview button</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Show all new user requests (approved, disapproved, waiting)</p>
+<p style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
+<p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;">&nbsp;</p>
 <p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;"><span style="text-decoration: underline;">Release Notes: 27 May 2019</span></p>
 <p style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Add last login date/time and ip address field in users table</p>
-<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Editing Class schedule parameters cascades to PASH and Schedule and CourseSchedule Models</p>
+<p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong><span style="color: white; background: red;">NOT POSSIBLE BEFORE BATCH RUN :</span></strong> Editing Class schedule parameters cascades to PASH and Schedule and CourseSchedule Models (no duplicate or existing cs_unique and section field data) - Florence case</p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;">Conflict between Summer and Autumn registration for Placement form</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Placement form results not yet available by 27 May and system will force students to the placement form</p>
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;">Check what table the function is validating, PASH or Placement table?? <strong>- PASH only</strong></p>
@@ -35,6 +95,7 @@ section { font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-s
 <p style="color: #000000; margin: 0in; margin-left: .375in; font-family: Calibri; font-size: 11.0pt;"><strong>Table should have a check box to bill or not</strong></p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Show Format, Duration, Price in CourseSchedule index view</strong></p>
 <p style="color: #000000; margin: 0in; font-family: Calibri; font-size: 11.0pt;"><strong>Add codes to courseType dropdown when creating new courses</strong></p>
+
 <p style="margin: 0in; font-family: Calibri; font-size: 11.0pt;">&nbsp;</p>
 <p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;">&nbsp;</p>
 <p style="margin: 0in; font-family: Calibri; font-size: 14.0pt;"><span style="text-decoration: underline;">Release Notes/Hot Fixes: 5 May 2019</span></p>
