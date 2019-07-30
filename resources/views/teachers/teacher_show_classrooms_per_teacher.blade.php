@@ -77,17 +77,17 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach ($pash_records->groupBy('ClassCode') as $array)
-				@foreach ($array as $element)
+			@foreach ($teachers as $teacher)
 			<tr>
 				<td>
-					{{$element->classrooms->teachers->Tch_Name}} <br>
-					{{-- {{$element->courses->Description}} --}}
-
+				{{$teacher->Tch_Name}} <br>
+				@foreach ($teacher->classrooms as $element)
+					{{$element->course->Description}} - {{$element->Te_Code_New}}<br>
+				@endforeach
 				</td>
 			</tr>
-				@endforeach
 			@endforeach
+				
 		</tbody>
 	</table>
 </div>
