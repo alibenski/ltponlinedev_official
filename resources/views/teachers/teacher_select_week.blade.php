@@ -16,7 +16,7 @@
   </div>
 
   <div class="col-md-11">
-    <h3 class="text-center" style="margin-top: 3px;"><strong>Manage Attedance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h3>
+    <h3 class="text-center" style="margin-top: 3px;"><strong>Manage Attendance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h3>
     <input type="hidden" name="CodeClass" value="{{ $course->CodeClass }}">
   </div>
 

@@ -14,82 +14,102 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<div class="box box-success" data-widget="box-widget">
-			  <div class="box-header">
-			    <h3 class="box-title">Set the <b>Term</b> for your session:</h3>
-			    <div class="box-tools">
-			      <!-- This will cause the box to be removed when clicked -->
-			      {{-- <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button> --}}
-			      <!-- This will cause the box to collapse when clicked -->
-			      <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-			    </div>
-			  </div>
-				<form id="set-term" method="GET" action="">
-				  	<div class="box-body">
-						<div class="form-group">
-						<label for="Term" class="col-md-12 control-label"></label>
-						<div class="form-group col-sm-12">
-						    <div class="dropdown">
-						      <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
-						        @foreach($terms as $value)
-						            <option></option>
-						            <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
-						        @endforeach
-						      </select>
-						    </div>
-						  </div>
-						</div>
-					</div>
-					  <!-- /.box-body -->
-					<div class="box-footer">
-						<div class="form-group">           
-						    <button type="submit" class="btn btn-success filter-submit-btn">Set Term</button>
-						    {{-- <a href="/admin" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a> --}}
-						</div>
-					</div>
-				</form>
-			</div>
+
+			@include('admin.partials._dropdownSetSessionTerm')
+
 		</div>
 	</div>
+
+	@if (Session::has('Term'))
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-info-circle"></i> Selected Term</h3>
+					</div>
+					<div class="panel-body">
+						<h4>You are currently viewing teachers and their respective classes for <strong> [{{ $selectedTerm->Term_Code }}] - {{ $selectedTerm->Comments }}: {{ $selectedTerm->Term_Name }} </strong> </h4>
+					</div>
+				</div>
+			</div>
+		</div>
+	@endif
+{{-- 
 	<div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header bg-yellow">
-              <div class="widget-user-image">
-                <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
-              </div>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username">Nadia Carmichael</h3>
-              <h5 class="widget-user-desc">Lead Developer</h5>
-            </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Projects <span class="pull-right badge bg-blue">31</span></a></li>
-                <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
-                <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
-                <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li>
-              </ul>
-            </div>
-          </div>
-	<table class="table table-condensed table-hover">
+	    <!-- Add the bg color to the header using any of the bg-* classes -->
+	    <div class="widget-user-header bg-yellow">
+	      <div class="widget-user-image">
+	        <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+	      </div>
+	      <!-- /.widget-user-image -->
+	      <h3 class="widget-user-username">Nadia Carmichael</h3>
+	      <h5 class="widget-user-desc">Lead Developer</h5>
+	    </div>
+	    <div class="box-footer no-padding">
+	      <ul class="nav nav-stacked">
+	        <li><a href="#">Projects <span class="pull-right badge bg-blue">31</span></a></li>
+	        <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
+	        <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
+	        <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li>
+	      </ul>
+	    </div>
+	</div>
+ --}}
+	@if (Session::has('Term'))
+	<table class="table table-condensed">
 		<thead>
 			<tr>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach ($teachers as $teacher)
-			<tr>
-				<td>
-				{{$teacher->Tch_Name}} <br>
-				@foreach ($teacher->classrooms as $element)
-					{{$element->course->Description}} - {{$element->Te_Code_New}}<br>
+			@foreach ($teachers as $value)
+				@foreach ($value as $teacher)
+				<tr>
+					<td>
+						<div class="box box-widget widget-user-2">
+						    <!-- Add the bg color to the header using any of the bg-* classes -->
+						    <div class="widget-user-header" 
+							@if ($teacher->Tch_L == 'A')
+								style="background-color: #ff7243;color: #fff;" 
+							@elseif($teacher->Tch_L == 'C')
+								style="background-color: #B22222;color: #fff;"
+							@elseif($teacher->Tch_L == 'E')
+								style="background-color: #0079c1;color: #fff;"
+							@elseif($teacher->Tch_L == 'F')
+								style="background-color: #338d11;color: #fff;"
+							@elseif($teacher->Tch_L == 'R')
+								style="background-color: #6347b2;color: #fff;"
+							@elseif($teacher->Tch_L == 'S')
+								style="background-color: #bf8124;color: #fff;"
+							@endif
+							>
+						      <div class="widget-user-image">
+						        <img class="img-circle" src="../img/generic-profile-icon-10.jpg" alt="User Avatar">
+						      </div>
+						      <!-- /.widget-user-image -->
+						      <h3 class="widget-user-username">{{$teacher->Tch_Name}}</h3>
+						      <h5 class="widget-user-desc">{{$teacher->languages->name}}</h5>
+						    </div>
+						    @foreach ($teacher->classrooms as $element)
+						    <div class="box-footer no-padding">
+						      <ul class="nav nav-stacked">
+						        <li><a href="{{ route('view-classrooms-per-section', ['Code' => $element->Code]) }}" target="_blank"> {{$element->course->Description}} - {{$element->Te_Code_New}}: {{$element->scheduler->name}} [{{ $element->Te_Term}}]</a></li>
+						        {{-- <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
+						        <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
+						        <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}
+						      </ul>
+						    </div>
+						    @endforeach
+						</div>
+					</td>
+				</tr>
 				@endforeach
-				</td>
-			</tr>
 			@endforeach
 				
 		</tbody>
 	</table>
+	@endif
 </div>
 @endsection
 

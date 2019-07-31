@@ -157,20 +157,31 @@ class TeachersController extends Controller
     public function teacherShowClassroomsPerTeacher(Request $request)
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        if ($request->has('Term')) {
-            $teachers = Teachers::where('In_Out', 1)
-                ->with(['classrooms' => function ($query) use ($request) {
-                    $query->where('Te_Term', $request->input('Term'))
-                            ->whereNotNull('Tch_ID')
-                            ->where('Tch_ID', '!=', 'TBD')
-                            ;
-                    }])
-                ->get()
-                // ->take(5)
-                ;
+
+        // get all teachers of the selected term
+        $queryTeachers = Classroom::where('Te_Term', $request->session()->get('Term'))->select('Tch_ID')->groupBy('Tch_ID')
+            ->whereNotNull('Tch_ID')
+            ->where('Tch_ID', '!=', 'TBD')                
+            ->get();
+        $teachers = [];
+        if ($request->session()->has('Term')) {
+            $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
+
+            foreach ($queryTeachers as $key => $value) {
+                $teachers[] = Teachers::where('Tch_ID', $value->Tch_ID)
+                    ->with(['classrooms' => function ($query) use ($request) {
+                        $query->where('Te_Term', $request->session()->get('Term'))
+                                ->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD')
+                                ;
+                        }])
+                    ->get()
+                    // ->take(5)
+                    ;
+            }
 
             // dd($teachers);
-            return view('teachers.teacher_show_classrooms_per_teacher', compact('terms','teachers'));
+            return view('teachers.teacher_show_classrooms_per_teacher', compact('terms', 'selectedTerm', 'teachers'));
         }
         
         return view('teachers.teacher_show_classrooms_per_teacher', compact('terms'));
