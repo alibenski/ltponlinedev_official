@@ -34,7 +34,7 @@
 	            <th>Time</th>
 	            <th>Room</th>
 	            <th>Teacher</th>
-	            <th>Convoked</th>
+	            <th>Need to take test?</th>
 	            <th>Result</th>
 	            <th>Teacher Comments</th>
 	            <th>Operation</th>
@@ -44,7 +44,7 @@
 			@foreach($placement_forms as $form)
 			<tr id="">
 				<td>
-					<p>@if(empty($form->users)) None @else <strong> {{ $form->users->name }} </strong>  @endif </p>
+					<p>@if(empty($form->users)) None @else <strong> {{ $form->users->nameLast }}, {{ $form->users->nameFirst }}</strong>  @endif </p>
 					<p>Email: @if(empty($form->users)) None @else {{ $form->users->email }} @endif </p>
 					<p>Contact #: @if(empty($form->users)) None @else {{ $form->users->sddextr->PHONE }} @endif </p>
 					<p>Org: @if(empty($form->DEPT)) None @else {{ $form->DEPT }} @endif </p>
@@ -89,13 +89,15 @@
 					<input type="checkbox" name="convoked" value=1> YES
 				</td>
 				<td>
-					<textarea name="restultInput" id="" cols="20" rows="3"></textarea>
+					<textarea name="restultInput" id="" cols="20" rows="2"></textarea>
+					<input type="checkbox" name="noShow" value=1> NO SHOW
 				</td>
 				<td>
 					<textarea name="teacherComment" id="" cols="20" rows="3"></textarea>
 				</td>
 				<td>
-					<button id="saveExam" class="btn btn-success" data-plid="{{$form->id}}">Save</button>
+					<button id="saveExam" class="btn btn-success btn-space" data-plid="{{$form->id}}">Save</button>
+					<a href="{{ route('placement-form-assign', [$form->id]) }}" id="assignCourse" class="btn btn-warning btn-space" target="_blank">Assign Course</a>
 				</td>
 			</tr>
 			@endforeach
