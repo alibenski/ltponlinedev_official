@@ -45,7 +45,7 @@ class PreviewController extends Controller
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
         $term = Session::get('Term');
-        return view('preview-merged-forms')->withLanguages($languages)->withTerm($term);
+        return view('preview-merged-forms', compact('languages', 'term'));
     }
 
     public function ajaxPreviewCourseBoxes(Request $request)
@@ -202,14 +202,14 @@ class PreviewController extends Controller
     {
         DB::table('tblLTP_preview_TempSort')->truncate();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        return view('preview-course')->withTerms($terms);
+        return view('preview-course', compact('terms'));
     }
 
     public function vsaPage2()
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
         $term = Session::get('Term');
-        return view('preview-course-2')->withLanguages($languages)->withTerm($term);
+        return view('preview-course-2', compact('languages', 'term'));
     }
 
     public function ajaxClassBoxes(Request $request)
@@ -352,9 +352,7 @@ class PreviewController extends Controller
         
         $preview = Repo::where('Te_Code', $request->course_id)->where('Term', Session::get('Term'))->select(['schedule_id', 'Code'])->groupBy(['schedule_id', 'Code'])->get(['schedule_id', 'Code']);
 
-        return view('preview-course-3')->withPreview($preview)
-            ->withPreview_course($preview_course)
-            ->withArr_count($arr_count);
+        return view('preview-course-3', compact('preview', 'preview_course', 'arr_count'));
     }
 
     public function previewClassStatus(Request $request)

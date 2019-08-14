@@ -60,7 +60,7 @@ class SelfPayController extends Controller
 
         if (!Session::has('Term')) {
             $selfpayforms = null;
-            return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
+            return view('selfpayforms.index', compact('selfpayforms', 'languages', 'org'));
         }
 
         $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at','eform_submit_count');
@@ -100,7 +100,7 @@ class SelfPayController extends Controller
             }
 
         $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
-        return view('selfpayforms.index')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org);
+        return view('selfpayforms.index', compact('selfpayforms', 'languages', 'org'));
     }
 
 
@@ -548,7 +548,7 @@ class SelfPayController extends Controller
 
         if (!Session::has('Term')) {
             $selfpayforms = null;
-            return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            return view('selfpayforms.index-placement-selfpay', compact('selfpayforms', 'languages', 'org', 'terms'));
         }
 
         $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count');
@@ -589,7 +589,7 @@ class SelfPayController extends Controller
 
 
         $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
-        return view('selfpayforms.index-placement-selfpay')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        return view('selfpayforms.index-placement-selfpay', compact('selfpayforms', 'languages', 'org', 'terms'));
     }
 
     public function approvedPlacementSelfPay(Request $request)
@@ -605,7 +605,7 @@ class SelfPayController extends Controller
             ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
 
             $selfpayforms = $selfpayforms->paginate(30);
-            return view('selfpayforms.approvedSelfpayPlacementForms')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            return view('selfpayforms.approvedSelfpayPlacementForms', compact('selfpayforms', 'languages', 'org', 'terms'));
         }
 
         $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
@@ -633,7 +633,7 @@ class SelfPayController extends Controller
             }
 
         $selfpayforms = $selfpayforms->paginate(30)->appends($queries);
-        return view('selfpayforms.approvedSelfpayPlacementForms')->withSelfpayforms($selfpayforms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+        return view('selfpayforms.approvedSelfpayPlacementForms', compact('selfpayforms', 'languages', 'org', 'terms'));
     }
 
     public function editPlacementSelfPay(Request $request, $indexid, $language, $term)
@@ -765,14 +765,14 @@ class SelfPayController extends Controller
         if ($student_last_term == null) {
                 $repos_lang = null;
                 $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
-                return view('form.myform3')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org)->withDays($days);
+                return view('form.myform3', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
             }         
 
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
             ->where('INDEXID', $current_user)->get();
         $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
 
-        return view('form.myform3')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org)->withDays($days);
+        return view('form.myform3', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {
         return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. Click on "Register/Enrol Here" < '. route('whatorg') .' > from the Menu below and answer the mandatory question.');
         }

@@ -44,7 +44,7 @@ class OrgController extends Controller
 
         $terms = Term::all(['Term_Code', 'Term_Name']);
 
-        return view('form.index')->withRepos($repos)->withTerms($terms);
+        return view('form.index', compact('repos', 'terms'));
     }
     
     /**

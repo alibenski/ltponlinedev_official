@@ -47,7 +47,7 @@ class StudentController extends Controller
         //query last UN Language Course enrolled in the past based on PASHQ table
         $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
                 
-        return view('students.index')->withRepos_lang($repos_lang);
+        return view('students.index', compact('repos_lang'));
     }
 
     /**
@@ -94,7 +94,7 @@ class StudentController extends Controller
         $gender = DB::table('SEX')->limit(4)->pluck('Title', 'Title');
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         
-        return view('students.edit')->withStudent($student)->withGender($gender)->withOrg($org);
+        return view('students.edit', compact('student', 'gender', 'org'));
     }
 
     /**

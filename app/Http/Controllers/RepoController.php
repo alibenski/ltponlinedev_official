@@ -52,7 +52,7 @@ class RepoController extends Controller
 
         $terms = Term::all(['Term_Code', 'Term_Name']);
 
-        return view('form.index')->withRepos($repos)->withTerms($terms);
+        return view('form.index', compact('repos', 'terms'));
     }
     
     /**
@@ -117,14 +117,14 @@ class RepoController extends Controller
             if ($student_last_term == null) {
                     $repos_lang = null;
                     $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
-                    return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org)->withDays($days);
+                    return view('form.myform', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
                 }    
 
             $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
                 ->where('INDEXID', $current_user)->get();
             $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
 
-            return view('form.myform')->withCourses($courses)->withLanguages($languages)->withTerms($terms)->withNext_term($next_term)->withPrev_term($prev_term)->withRepos($repos)->withRepos_lang($repos_lang)->withUser($user)->withOrg($org)->withDays($days);
+            return view('form.myform', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {
             return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. Click on "Register/Enrol Here" < '. route('whatorg') .' > from the Menu below and answer the mandatory question.');
         }

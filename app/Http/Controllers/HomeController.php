@@ -94,7 +94,7 @@ class HomeController extends Controller
         $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $current_user)->where('Term', $termValue)->get(); 
 
 
-        return view('form.submitted')->withForms_submitted($forms_submitted)->withPlforms_submitted($plforms_submitted)->withNext_term($next_term)->withTerm_select($term_select)->withStudent_convoked($student_convoked);
+        return view('form.submitted', compact('forms_submitted', 'plforms_submitted', 'next_term', 'term_select', 'student_convoked'));
     }
 
     public function showMod(Request $request)
@@ -122,10 +122,10 @@ class HomeController extends Controller
         
         if ($historical_data->isEmpty()) {
             $historical_data = null;
-            return view('form.history')->withHistorical_data($historical_data);
+            return view('form.history', compact('historical_data'));
         }
         // dd($historical_data);
-        return view('form.history')->withHistorical_data($historical_data);
+        return view('form.history', compact('historical_data'));
     }
 
     public function whatorg()
@@ -141,7 +141,7 @@ class HomeController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         // ->pluck('Org name','Org name', 'Org Full Name');
 
-        return view('form.whatorg')->withTerms($terms)->withNext_term($next_term)->withOrg($org);
+        return view('form.whatorg', compact('terms', 'next_term', 'org'));
     }
     
     public function whatform(Request $request)

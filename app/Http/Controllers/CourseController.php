@@ -53,7 +53,7 @@ class CourseController extends Controller
             }
         $courses = $courses->whereNotNull('Te_Code_New')->paginate(20)->appends($queries);
 
-        return view('courses.index')->withCourses($courses)->withLanguages($languages);
+        return view('courses.index', compact('courses', 'languages'));
     }
 
     /**
@@ -73,11 +73,7 @@ class CourseController extends Controller
         //get latest semester/term
         $terms = DB::table('LTP_Terms')->orderBy('Term_Code', 'DESC')->first();
 
-        return view('courses.create')->withCourse_type($course_type)
-                ->withCourse_level_type($course_level_type)
-                ->withCourse_order($course_order)
-                ->withLanguages($languages)
-                ->withTerms($terms);
+        return view('courses.create', compact('course_type', 'course_level_type', 'course_order', 'languages', 'terms'));
     }
 
     /**
@@ -144,7 +140,7 @@ class CourseController extends Controller
         $schedule_id = Schedule::first(); 
         // variable "exists" returns a boolean for the specific course
         $exists = $course->schedule->contains($schedule_id);
-        return view('courses.edit')->withCourse($course)->withExists($exists);
+        return view('courses.edit', compact('course', 'exists'));
     }
 
     /**

@@ -31,7 +31,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $schedules = Schedule::all();
-        return view('schedules.index')->withSchedules($schedules);
+        return view('schedules.index', compact('schedules'));
     }
 
     /**
@@ -45,7 +45,7 @@ class ScheduleController extends Controller
         $days = Day::pluck("Week_Day_Name","Week_Day_Name")->all(); 
         $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
         $etimes = Time::pluck("End_Time","End_Time")->all(); 
-        return view('schedules.create')->withSchedules($schedules)->withDays($days)->withBtimes($btimes)->withEtimes($etimes);
+        return view('schedules.create', compact('schedules', 'days', 'btimes', 'etimes'));
     }
 
     /**
@@ -160,7 +160,7 @@ class ScheduleController extends Controller
         $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
         $etimes = Time::pluck("End_Time","End_Time")->all(); 
         //$exists = $course->schedule->contains($schedule_id);
-        return view('schedules.edit')->withSchedule($schedule)->withDays($days)->withBtimes($btimes)->withEtimes($etimes);
+        return view('schedules.edit', compact('schedule', 'days', 'btimes', 'etimes'));
     }
 
     /**

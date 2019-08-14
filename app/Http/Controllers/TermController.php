@@ -17,7 +17,7 @@ class TermController extends Controller
     public function index()
     {
         $terms = Term::orderBy('Term_Code', 'desc')->paginate(10);
-        return view('terms.index')->withTerms($terms);
+        return view('terms.index', compact('terms'));
     }
 
     /**
@@ -32,7 +32,7 @@ class TermController extends Controller
 
         // automated prev and next term code 
 
-        return view('terms.create')->withTerms($terms)->withSeasons($seasons);
+        return view('terms.create', compact('terms', 'seasons'));
     }
 
     /**
@@ -156,7 +156,7 @@ class TermController extends Controller
     {
         $term = Term::find($id);
         $seasons = Season::pluck('ESEASON', 'ESEASON');
-        return view('terms.edit')->withTerm($term)->withSeasons($seasons);
+        return view('terms.edit', compact('term', 'seasons'));
     }
 
     /**

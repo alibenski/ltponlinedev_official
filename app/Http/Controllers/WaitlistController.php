@@ -1304,7 +1304,7 @@ dd();
     {
         
     	$students = Waitlist::all();
-        return view('waitlist.index')->withStudents($students);
+        return view('waitlist.index', compact('students'));
     }
 
     /**

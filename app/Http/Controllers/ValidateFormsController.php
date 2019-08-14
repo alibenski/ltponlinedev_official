@@ -38,7 +38,7 @@ class ValidateFormsController extends Controller
     public function vsaPage1()
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        return view('admin.operations.vsa-page-1')->withTerms($terms);
+        return view('admin.operations.vsa-page-1', compact('terms'));
     }
 
 	public function getApprovedEnrolmentForms(Request $request)

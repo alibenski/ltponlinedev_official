@@ -57,7 +57,7 @@ class ClassroomController extends Controller
         $teachers = Teachers::where('In_Out', '1')->get();
         $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
         $etimes = Time::pluck("End_Time","End_Time")->all(); 
-        return view('classrooms.index')->withClassrooms($classrooms)->withRooms($rooms)->withTeachers($teachers)->withBtimes($btimes)->withEtimes($etimes)->withLanguages($languages);
+        return view('classrooms.index', compact('classrooms', 'rooms', 'teachers', 'btimes', 'etimes', 'languages'));
     }
 
     /**
@@ -74,7 +74,7 @@ class ClassroomController extends Controller
         //get latest semester/term
         $terms = Term::orderBy('Term_Code', 'DESC')->first();
         $rooms = Room::pluck("Rl_Room","Rl_Room")->all();
-        return view('classrooms.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withRooms($rooms);
+        return view('classrooms.create', compact('courses', 'languages', 'schedules', 'terms', 'rooms'));
     }
     
     protected $rules =
@@ -195,7 +195,7 @@ class ClassroomController extends Controller
         $students = Repo::where('CodeClass', $classroom->Code)->get();
         $schedules = Schedule::orderBy('name', 'asc')->pluck("name","id")->chunk(5)->all();
 
-        return view('classrooms.edit')->withSchedules($schedules)->withStudents($students)->withClassroom($classroom)->withRooms($rooms)->withTeachers($teachers)->withTerms($terms)->withBtimes($btimes)->withEtimes($etimes);
+        return view('classrooms.edit'compact('schedules', 'students', 'classroom', 'rooms', 'teachers', 'terms', 'btimes', 'etimes'));
     }
 
     /**

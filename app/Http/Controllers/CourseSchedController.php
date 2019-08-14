@@ -30,7 +30,7 @@ class CourseSchedController extends Controller
 
         
 
-        return view('courses_schedules.index')->withCourse_schedule($course_schedule)->withTerms($terms);
+        return view('courses_schedules.index', compact('course_schedule', 'terms'));
     }
 
     /**
@@ -51,7 +51,7 @@ class CourseSchedController extends Controller
         $teachers = Teachers::where('In_Out', '1')->get();
         $rooms = Room::all();
 
-        return view('courses_schedules.create')->withCourses($courses)->withLanguages($languages)->withSchedules($schedules)->withTerms($terms)->withFormat($format)->withDuration($duration)->withTeachers($teachers)->withRooms($rooms)->withPrice($price);
+        return view('courses_schedules.create', compact('courses', 'languages', 'schedules', 'terms', 'format', 'duration', 'teachers', 'rooms', 'price'));
     }
 
     /**

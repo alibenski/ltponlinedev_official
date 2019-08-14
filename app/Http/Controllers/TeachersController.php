@@ -51,7 +51,7 @@ class TeachersController extends Controller
 
         if (!Session::has('Term')) {
             $enrolment_forms = null;
-            return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            return view('teachers.teacher_enrolment_preview', compact('enrolment_forms', 'languages', 'org', 'terms'));
         }
 
         $q = Preenrolment::where('Term', $term)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
@@ -110,7 +110,7 @@ class TeachersController extends Controller
         $count = count($enrolment_forms);
         // $enrolment_forms = $enrolment_forms->paginate(20)->appends($queries);
 
-        return view('teachers.teacher_enrolment_preview')->withEnrolment_forms($enrolment_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms)->withCount($count);
+        return view('teachers.teacher_enrolment_preview', compact('enrolment_forms', 'languages', 'org', 'terms', 'count'));
     }
 
     /**
@@ -151,7 +151,7 @@ class TeachersController extends Controller
         $teachers = $teachers->orderBy('In_Out', 'desc')->orderBy('Tch_Lastname', 'asc')->get();
 
 
-        return view('teachers.index')->withTeachers($teachers)->withLanguages($languages);
+        return view('teachers.index', compact('teachers', 'languages'));
     }
 
     public function teacherShowClassroomsPerTeacher(Request $request)

@@ -17,7 +17,7 @@ class TempSortController extends Controller
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
         $term = TempSort::orderBy('id', 'desc')->first();
-        return view('admin.operations.vsa-page-2')->withLanguages($languages)->withTerm($term);
+        return view('admin.operations.vsa-page-2', compact('languages', 'term'));
     }
 
 	public function orderCodes(Request $request)

@@ -362,7 +362,7 @@ class PlacementFormController extends Controller
         // $days = Day::pluck("Week_Day_Name","Week_Day_Name")->except('Sunday', 'Saturday')->all();
         // $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->first();
 
-        // return view('form.myformplacement')->withLanguages($languages)->withDays($days)->withLatest_placement_form($latest_placement_form);
+        // return view('form.myformplacement', compact('languages', 'days', 'latest_placement_form'));
     }
 
     public function postPlacementInfoAdditional($request, $placement_form_id)
@@ -467,7 +467,7 @@ class PlacementFormController extends Controller
 
         if (!Session::has('Term') ) {
             $placement_forms = null;
-            return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            return view('placement_forms.index', compact('placement_forms', 'languages', 'org', 'terms'));
         }
             $placement_forms = new PlacementForm;
             // $currentQueries = \Request::query();
@@ -515,7 +515,7 @@ class PlacementFormController extends Controller
 
             // $allQueries = array_merge($queries, $currentQueries);
             $placement_forms = $placement_forms->withTrashed()->paginate(20)->appends($queries);
-            return view('placement_forms.index')->withPlacement_forms($placement_forms)->withLanguages($languages)->withOrg($org)->withTerms($terms);
+            return view('placement_forms.index', compact('placement_forms', 'languages', 'org', 'terms'));
     }
 
     /**
@@ -636,7 +636,7 @@ class PlacementFormController extends Controller
 
             // $placement_forms = $placement_forms->whereNull('assigned_to_course')->paginate(20)->appends($queries);
             $placement_forms = $placement_forms->where('overall_approval', 1)->paginate(20)->appends($queries);
-            return view('placement_forms.filteredPlacementForms')->withPlacement_forms($placement_forms)->withCount($count)->withLanguages($languages)->withOrg($org);            
+            return view('placement_forms.filteredPlacementForms', compact('placement_forms', 'count', 'languages', 'org'));            
     }
 
     /**

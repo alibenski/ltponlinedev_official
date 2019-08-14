@@ -36,7 +36,7 @@ class NewUserController extends Controller
             ->where('name', 'LIKE', '%' . $query . '%')
             ->paginate(20);
 
-        return view('users_new.index')->with('users', $users);
+        return view('users_new.index', compact('users'));
     }
 
     public function newUserIndexAll()
@@ -52,7 +52,7 @@ class NewUserController extends Controller
             ->where('name', 'LIKE', '%' . $query . '%')
             ->paginate(20);
 
-        return view('users_new.newuser_index_all')->with('users', $users);   
+        return view('users_new.newuser_index_all', compact('users'));   
     }
 
     /**
@@ -139,7 +139,7 @@ class NewUserController extends Controller
         $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
         $student_status = DB::table('STU_STATUS')->pluck("StandFor","Abbreviation")->all();
         $org = TORGAN::get(["Org Full Name","Org name"]);
-        return view('users_new.new_new_user')->withCat($cat)->withStudent_status($student_status)->withOrg($org);
+        return view('users_new.new_new_user', compact('cat', 'student_status', 'org'));
     }
 
     public function postNewNewUser(Request $request)
@@ -267,7 +267,7 @@ class NewUserController extends Controller
         $enrol_object_end_date = $enrol_object->Enrol_Date_End;
         
         if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
-            return view('users_new.new_outside_user_form')->withOrg($org);
+            return view('users_new.new_outside_user_form', compact('org'));
         }
 
         return view('page_not_available');

@@ -82,7 +82,7 @@ class UserController extends Controller
         $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
         $org = TORGAN::get(["Org Full Name","Org name"]);
 
-        return view('users.create', ['roles'=>$roles])->withCat($cat)->withOrg($org);
+        return view('users.create', ['roles'=>$roles, 'org'=>$org, 'cat'=>$cat]);
     }
 
     /**
@@ -370,7 +370,7 @@ class UserController extends Controller
 
         if ($student_last_term == null) {
             $repos_lang = null;
-            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withPlacement_records($placement_records)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
+            return view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented'));
         }    
 
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
@@ -380,11 +380,11 @@ class UserController extends Controller
             $student_enrolments = null;
             $student_placements = null;
             
-            return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withPlacement_records($placement_records)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
+            return view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented'));
         }      
 
         
-        return view('users.manageUserEnrolmentData')->withTerms($terms)->withId($id)->withStudent($student)->withStudent_enrolments($student_enrolments)->withStudent_placements($student_placements)->withRepos_lang($repos_lang)->withHistorical_data($historical_data)->withPlacement_records($placement_records)->withStudent_convoked($student_convoked)->withTerm_info($term_info)->withBatch_implemented($batch_implemented);
+        return view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented'));
     }
 
     public function enrolStudentToCourseForm(Request $request, $id)

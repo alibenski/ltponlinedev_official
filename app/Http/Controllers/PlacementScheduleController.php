@@ -38,7 +38,7 @@ class PlacementScheduleController extends Controller
             ->orderBy('language_id', 'asc')
             ->paginate(20);
 
-        return view('placement_schedule.index')->withPlacement_schedule($placement_schedule)->withTerms($terms);
+        return view('placement_schedule.index', compact('placement_schedule', 'terms'));
     }
 
     /**
@@ -51,7 +51,7 @@ class PlacementScheduleController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $languages = DB::table('languages')->pluck("name","code")->all();
 
-        return view('placement_schedule.create')->withLanguages($languages)->withTerms($terms);
+        return view('placement_schedule.create', compact('languages', 'terms'));
     }
 
     /**
@@ -119,7 +119,7 @@ class PlacementScheduleController extends Controller
         $schedule_id = Schedule::first(); 
         // variable "exists" returns a boolean for the specific course
         $exists = $course->schedule->contains($schedule_id);
-        return view('courses.edit')->withCourse($course)->withExists($exists);
+        return view('courses.edit', compact('course', 'exists'));
     }
 
     /**

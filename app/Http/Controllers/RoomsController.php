@@ -16,7 +16,7 @@ class RoomsController extends Controller
     {
         $rooms = Room::all();
 
-        return view('rooms.index')->withRooms($rooms);
+        return view('rooms.index', compact('rooms'));
     }
 
     /**

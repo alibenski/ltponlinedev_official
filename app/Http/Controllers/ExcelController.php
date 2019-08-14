@@ -46,7 +46,7 @@ class ExcelController extends Controller
         \Excel::create('excelfiles', function($excel) use ($languages, $org, $placement_forms) {
             $excel->sheet('excelfiles', function($sheet) use ($languages, $org, $placement_forms) {
                 // $sheet->loadView('excelfiles.bladeExcel');
-                $sheet->loadView('placement_forms.index')->withLanguages($languages)->withOrg($org)->withPlacement_forms($placement_forms);
+                $sheet->loadView('placement_forms.index', compact('languages', 'org', 'placement_forms'));
             });
         })->download('xlsx');
 

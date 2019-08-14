@@ -66,7 +66,7 @@ class ApprovalController extends Controller
             return redirect()->route('eform');
         } 
         
-        return view('form.placementApprovalPage')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
+        return view('form.placementApprovalPage', compact('input_course', 'input_staff', 'next_term_code', 'next_term_name'));
     }
 
     public function updatePlacementFormData(Request $request, $staff, $lang, $formcount, $term)
@@ -202,7 +202,7 @@ class ApprovalController extends Controller
             return redirect()->route('eform2');
         } 
         
-        return view('form.placementApprovalHRPage')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
+        return view('form.placementApprovalHRPage', compact('input_course', 'input_staff', 'next_term_code', 'next_term_name'));
     }
 
     public function updatePlacementFormData2hr(Request $request, $staff, $lang, $formcount, $term)
@@ -337,7 +337,7 @@ class ApprovalController extends Controller
             return redirect()->route('eform');
         } 
         
-        return view('form.approval')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
+        return view('form.approval', compact('input_course', 'input_staff', 'next_term_code', 'next_term_name'));
     }
 
     /**
@@ -524,7 +524,7 @@ class ApprovalController extends Controller
             return redirect()->route('eform2');
         } 
         
-        return view('form.approvalhr')->withInput_course($input_course)->withInput_staff($input_staff)->withNext_term_code($next_term_code)->withNext_term_name($next_term_name);
+        return view('form.approvalhr', compact('input_course', 'input_staff', 'next_term_code', 'next_term_name'));
     }
 
     public function updateForm2hr(Request $request, $staff, $tecode, $formcount, $term)
