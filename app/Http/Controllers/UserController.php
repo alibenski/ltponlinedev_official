@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\File;
 use App\Language;
+use App\ModifiedForms;
 use App\NewUser;
 use App\PlacementForm;
 use App\Preenrolment;
@@ -27,6 +28,204 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function updateIndexView()
+    {
+
+        // $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->where('INDEXNO', '162089')->get();
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get();
+
+        $counter = [];
+        $counterUser = [];
+        $counterPASH = [];
+        $counterEnrol = [];
+        $counterPlacement = [];
+        $counterModified = [];
+
+        foreach ($getIndex as $key => $value) {
+            // update SDDEXTR table
+            $updateSDDEXTR = SDDEXTR::where('INDEXNO', $value->{'INDEXNO-August'});
+            $checkIfExist = $updateSDDEXTR->get();
+
+            if (!$checkIfExist->isEmpty()) {
+                $count = $updateSDDEXTR->update(['INDEXNO' => $value->INDEXNO]);
+                $counter[] = $count; 
+            }
+
+            // update User table
+            $updateUser = User::where('indexno', $value->{'INDEXNO-August'});
+            $checkIfUserExist = $updateUser->get();
+            
+            if (!$checkIfUserExist->isEmpty()) {
+                $countUser = $updateUser->update(['indexno' => $value->INDEXNO]);
+                $counterUser[] = $countUser; 
+            }
+
+        }
+
+        return view('users.update-index-view', compact('getIndex', 'counter', 'counterUser', 'counterPASH', 'counterEnrol', 'counterPlacement', 'counterModified'));
+    }
+
+    public function updatePASH()
+    {
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get();
+
+        $arrIndex = [];
+        
+            foreach ($getIndex as $key => $value) {
+
+                // update PASH table
+                $updatePASH = Repo::where('INDEXID', $value->{'INDEXNO-August'});
+                $checkIfPASHExist = $updatePASH->get();
+                
+                if (!$checkIfPASHExist->isEmpty()) {
+                    // $countPASH = $updatePASH->update(['INDEXID' => $value->INDEXNO]);
+                    foreach ($checkIfPASHExist as $keyID => $valueID) {
+                        $arrIndex[] = $valueID->id;
+                    }
+                }
+            }    
+        
+        dd(array_unique($arrIndex));
+        $arrIndexUnique =  array_unique($arrIndex);
+
+            foreach ($arrIndexUnique as $keyPASH => $valuePASH) {
+                        
+                $pashRecord = Repo::find($valuePASH->id);
+                
+                if (!is_null($pashRecord->CodeClass)) {
+                    $pashRecord->CodeIndexIDClass = $pashRecord->CodeClass.'-'.$value->INDEXNO;
+                }
+
+                if (is_null($pashRecord->Te_Code)) {
+                    $pashRecord->CodeIndexID = $pashRecord->Code.'/'.$value->INDEXNO;
+                } else {
+                    $pashRecord->CodeIndexID = $pashRecord->Code.'-'.$value->INDEXNO;
+                }
+                
+                $pashRecord->save();
+
+                $counterPASH[] = $countPASH; 
+            }
+
+        $stringPASH = count($counterPASH);
+
+        return $stringPASH.' PASH records done';
+    }
+
+    public function updatePASHTrashed()
+    {
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get();
+
+        $counter = [];
+        $counterUser = [];
+        $counterPASH = [];
+        $counterEnrol = [];
+        $counterPlacement = [];
+        $counterModified = [];
+
+        foreach ($getIndex as $key => $value) {        
+
+            // update PASH table
+            $updatePASH = Repo::onlyTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+            $checkIfPASHExist = $updatePASH->get();
+
+            if (!$checkIfPASHExist->isEmpty()) {
+                $countPASH = $updatePASH->update(['INDEXID' => $value->INDEXNO]);
+                
+                foreach ($checkIfPASHExist as $keyPASH => $valuePASH) {
+                    
+                    $pashRecord = Repo::onlyTrashed()->find($valuePASH->id);
+                    
+                    if (!is_null($pashRecord->CodeClass)) {
+                        $pashRecord->CodeIndexIDClass = $pashRecord->CodeClass.'-'.$value->INDEXNO;
+                    }
+
+                    if (is_null($pashRecord->Te_Code)) {
+                        $pashRecord->CodeIndexID = $pashRecord->Code.'/'.$value->INDEXNO;
+                    } else {
+                        $pashRecord->CodeIndexID = $pashRecord->Code.'-'.$value->INDEXNO;
+                    }
+                    
+                    $pashRecord->save();
+
+                    $counterPASH[] = $countPASH; 
+                }
+            }
+        }
+
+        $stringPASH = count($counterPASH);
+
+        return $stringPASH.' PASH records done';
+    }
+
+    public function updateEnrolment()
+    {
+                    
+
+                    // update Enrolment table
+            $updateEnrolment = Preenrolment::withTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+            $checkIfEnrolmentExist = $updateEnrolment->get();
+
+            if (!$checkIfEnrolmentExist->isEmpty()) {
+                $countEnrol = $updateEnrolment->update(['INDEXID' => $value->INDEXNO]);
+                
+                foreach ($checkIfEnrolmentExist as $keyEnrolment => $valueEnrolment) {
+                    
+                    $enrolmentRecord = Preenrolment::find($valueEnrolment->id);
+                    
+                    if (!is_null($enrolmentRecord->Code)) {
+                        $enrolmentRecord->CodeIndexID = $enrolmentRecord->Code.'-'.$value->INDEXNO;
+                    }
+                    
+                    $enrolmentRecord->save();
+
+                    $counterEnrol[] = $countEnrol; 
+                }
+            }
+
+            // update Placement table
+            $updatePlacement = PlacementForm::withTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+            $checkIfPlacementExist = $updatePlacement->get();
+
+            if (!$checkIfPlacementExist->isEmpty()) {
+                $countPlacement = $updatePlacement->update(['INDEXID' => $value->INDEXNO]);
+                
+                foreach ($checkIfPlacementExist as $keyPlacement => $valuePlacement) {
+                    
+                    $placementRecord = PlacementForm::find($valuePlacement->id);
+                    
+                    if (!is_null($placementRecord->Code)) {
+                        $placementRecord->CodeIndexID = $placementRecord->Code.'-'.$value->INDEXNO;
+                    }
+                    
+                    $placementRecord->save();
+
+                    $counterPlacement[] = $countPlacement; 
+                }
+            }
+
+            // update Modified Forms table
+            $updateModified = ModifiedForms::withTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+            $checkIfModifiedExist = $updateModified->get();
+
+            if (!$checkIfModifiedExist->isEmpty()) {
+                $countModified = $updateModified->update(['INDEXID' => $value->INDEXNO]);
+                
+                foreach ($checkIfModifiedExist as $keyModified => $valueModified) {
+                    
+                    $modifiedRecord = ModifiedForms::find($valueModified->id);
+                    
+                    if (!is_null($modifiedRecord->Code)) {
+                        $modifiedRecord->CodeIndexID = $modifiedRecord->Code.'-'.$value->INDEXNO;
+                    }
+                    
+                    $modifiedRecord->save();
+
+                    $counterModified[] = $countModified; 
+                }
+            }
+    }
+
     public function __construct() {
         
         $this->middleware(['auth', 'isAdmin']); //isAdmin middleware lets only users with a specific permission to access these resources

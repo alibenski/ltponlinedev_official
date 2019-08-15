@@ -69,6 +69,21 @@ return [
             // 'engine' => 'InnoDB ROW_FORMAT=DYNAMIC',
         ],
 
+        'dev_db_ltpdata' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_THIRD'),
+            'port' => env('DB_PORT_THIRD'),
+            'database' => env('DB_DATABASE_THIRD'),
+            'username' => env('DB_USERNAME_THIRD'),
+            'password' => env('DB_PASSWORD_THIRD'),
+            // 'unix_socket' => env('DB_SOCKET', ''),
+            // 'charset' => 'utf8mb4',
+            // 'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            // 'strict' => true,
+            // 'engine' => 'InnoDB ROW_FORMAT=DYNAMIC',
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

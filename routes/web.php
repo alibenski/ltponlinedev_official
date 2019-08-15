@@ -165,6 +165,11 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get( 'user/switch/start/{id}', 'UserController@user_switch_start' );
     Route::get( 'user/switch/stop', 'UserController@user_switch_stop' );
 
+    // update index numbers
+    Route::get('update-index-view', ['as' => 'update-index-view', 'uses' => 'UserController@updateIndexView' ]);
+    Route::get('update-PASH', ['as' => 'update-PASH', 'uses' => 'UserController@updatePASH' ]);
+    Route::get('update-PASH-trashed', ['as' => 'update-PASH-trashed', 'uses' => 'UserController@updatePASHTrashed' ]);
+
     /**
      * Billing Routes
      */
