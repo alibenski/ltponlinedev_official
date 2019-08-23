@@ -104,23 +104,6 @@ class UserController extends Controller
         $cases = implode(' ', $cases);
         $params[] = implode(',', $params);
 
-        // $arr = [];
-        // $arrChunk = [];
-        // $chunks = collect($i)->chunk(500);
-
-        //     foreach ($chunks as $param) {
-        //             $arrChunk[] = $param;
-        //         foreach ($param as $key => $value) {
-        //             $arr[] = $value;
-        //         }
-        //             return count($arrChunk);
-
-        //     }
-
-
-        // dd(collect($i)->chunk(500) ,$ids,$params);
-
-        // return [count($arr), count($arrChunk)];
         $runUpdate = \DB::update("UPDATE `{$pashTable}` SET `INDEXID` = CASE `INDEXID` {$cases} END WHERE `INDEXID` IN ({$ids})", $params);
 
 
@@ -134,16 +117,15 @@ class UserController extends Controller
                 $pashRecord->save();
         }
 
-        $this->updateCodeIndexID($i);
-
-        $countI = $this->updateCodeIndexID($i);
-
-        return $countI;
+        return $runUpdate;
     }
 
-    public function updateCodeIndexID($i)
+    public function updatePashCodeIndexID()
     {
+
         \Debugbar::startMeasure('render','Time for rendering');
+        
+        
         foreach ($i as $valuePASH) {
             $pashRecord = Repo::select('id', 'INDEXID', 'Code')->find($valuePASH);
 

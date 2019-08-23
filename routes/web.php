@@ -168,6 +168,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // update index numbers
     Route::get('update-index-view', ['as' => 'update-index-view', 'uses' => 'UserController@updateIndexView' ]);
     Route::get('update-PASH', ['as' => 'update-PASH', 'uses' => 'UserController@updatePASH' ]);
+    Route::get('update-PASH-CodeIndexID', ['as' => 'update-PASH-CodeIndexID', 'uses' => 'UserController@updatePashCodeIndexID' ]);
     Route::get('update-PASH-trashed', ['as' => 'update-PASH-trashed', 'uses' => 'UserController@updatePASHTrashed' ]);
 
     /**
