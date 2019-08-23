@@ -67,49 +67,98 @@ class UserController extends Controller
 
     public function updatePASH()
     {
-        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get();
 
-        $arrIndex = [];
+        $pashTable = Repo::getModel()->getTable();
+
+        // $runUpdate = \DB::update("UPDATE `{$pashTable}` SET `INDEXID` = CASE `INDEXID` WHEN 'EXT1036' THEN ? WHEN 'L21545' THEN ? END WHERE `INDEXID` IN ('EXT1036','L21545')", ['EXT123','EXT12345']);
+        // return $runUpdate;
         
-            foreach ($getIndex as $key => $value) {
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->select('INDEXNO', 'INDEXNO-August')->whereNotNull('INDEXNO')->get();
 
-                // update PASH table
-                $updatePASH = Repo::where('INDEXID', $value->{'INDEXNO-August'});
-                $checkIfPASHExist = $updatePASH->get();
-                
-                if (!$checkIfPASHExist->isEmpty()) {
-                    // $countPASH = $updatePASH->update(['INDEXID' => $value->INDEXNO]);
-                    foreach ($checkIfPASHExist as $keyID => $valueID) {
-                        $arrIndex[] = $valueID->id;
-                    }
+        $i = [];
+        $ids = [];
+        $cases = [];
+        $params = [];
+
+        foreach ($getIndex as $key => $value) {
+            $updatePASH = Repo::select('id')->where('INDEXID', $value->{'INDEXNO-August'});
+            $checkIfPASHExist = $updatePASH->get();   
+            if (!$checkIfPASHExist->isEmpty()) {
+                $id = $value->{'INDEXNO-August'};
+                $cases[] = "WHEN '{$id}' THEN ?";
+                $params[] = $value->INDEXNO;
+                $ids[] = "'{$id}'";
+
+                foreach ($checkIfPASHExist as $kk => $vv) {
+                    $i[] = $vv->id; 
                 }
-            }    
-        
-        dd(array_unique($arrIndex));
-        $arrIndexUnique =  array_unique($arrIndex);
+            }
+        }
 
-            foreach ($arrIndexUnique as $keyPASH => $valuePASH) {
-                        
-                $pashRecord = Repo::find($valuePASH->id);
-                
+
+        if (empty($ids)) {
+            return 'no changes needed';
+        }
+
+        $ids = implode(',', $ids);
+        $cases = implode(' ', $cases);
+        $params[] = implode(',', $params);
+
+        // $arr = [];
+        // $arrChunk = [];
+        // $chunks = collect($i)->chunk(500);
+
+        //     foreach ($chunks as $param) {
+        //             $arrChunk[] = $param;
+        //         foreach ($param as $key => $value) {
+        //             $arr[] = $value;
+        //         }
+        //             return count($arrChunk);
+
+        //     }
+
+
+        // dd(collect($i)->chunk(500) ,$ids,$params);
+
+        // return [count($arr), count($arrChunk)];
+        $runUpdate = \DB::update("UPDATE `{$pashTable}` SET `INDEXID` = CASE `INDEXID` {$cases} END WHERE `INDEXID` IN ({$ids})", $params);
+
+
+        foreach ($i as $valuePASH) {
+            $pashRecord = Repo::select('id', 'INDEXID', 'CodeIndexIDClass', 'CodeClass', 'CodeIndexID', 'Code')->find($valuePASH);
+
                 if (!is_null($pashRecord->CodeClass)) {
-                    $pashRecord->CodeIndexIDClass = $pashRecord->CodeClass.'-'.$value->INDEXNO;
-                }
-
-                if (is_null($pashRecord->Te_Code)) {
-                    $pashRecord->CodeIndexID = $pashRecord->Code.'/'.$value->INDEXNO;
-                } else {
-                    $pashRecord->CodeIndexID = $pashRecord->Code.'-'.$value->INDEXNO;
+                    $pashRecord->CodeIndexIDClass = $pashRecord->CodeClass.'-'.$pashRecord->INDEXID;
                 }
                 
                 $pashRecord->save();
+        }
 
-                $counterPASH[] = $countPASH; 
-            }
+        $this->updateCodeIndexID($i);
 
-        $stringPASH = count($counterPASH);
+        $countI = $this->updateCodeIndexID($i);
 
-        return $stringPASH.' PASH records done';
+        return $countI;
+    }
+
+    public function updateCodeIndexID($i)
+    {
+        \Debugbar::startMeasure('render','Time for rendering');
+        foreach ($i as $valuePASH) {
+            $pashRecord = Repo::select('id', 'INDEXID', 'Code')->find($valuePASH);
+
+                if (is_null($pashRecord->Te_Code)) {
+                    $pashRecord->CodeIndexID = $pashRecord->Code.'/'.$pashRecord->INDEXID;
+                } else {
+                    $pashRecord->CodeIndexID = $pashRecord->Code.'-'.$pashRecord->INDEXID;
+                }
+                
+                $pashRecord->save();
+        }
+
+        \Debugbar::stopMeasure('render');
+
+        return count($i);
     }
 
     public function updatePASHTrashed()

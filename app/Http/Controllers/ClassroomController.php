@@ -195,7 +195,7 @@ class ClassroomController extends Controller
         $students = Repo::where('CodeClass', $classroom->Code)->get();
         $schedules = Schedule::orderBy('name', 'asc')->pluck("name","id")->chunk(5)->all();
 
-        return view('classrooms.edit'compact('schedules', 'students', 'classroom', 'rooms', 'teachers', 'terms', 'btimes', 'etimes'));
+        return view('classrooms.edit', compact('schedules', 'students', 'classroom', 'rooms', 'teachers', 'terms', 'btimes', 'etimes'));
     }
 
     /**
