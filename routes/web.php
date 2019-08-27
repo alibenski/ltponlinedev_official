@@ -168,8 +168,11 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // update index numbers
     Route::get('update-index-view', ['as' => 'update-index-view', 'uses' => 'UserController@updateIndexView' ]);
     Route::get('update-PASH', ['as' => 'update-PASH', 'uses' => 'UserController@updatePASH' ]);
-    Route::get('update-PASH-CodeIndexID', ['as' => 'update-PASH-CodeIndexID', 'uses' => 'UserController@updatePashCodeIndexID' ]);
-    Route::get('update-PASH-trashed', ['as' => 'update-PASH-trashed', 'uses' => 'UserController@updatePASHTrashed' ]);
+    Route::post('update-PASH-IndexID', ['as' => 'update-PASH-IndexID', 'uses' => 'UserController@updatePASHIndexID' ]);
+    Route::post('update-PASH-trashed', ['as' => 'update-PASH-trashed', 'uses' => 'UserController@updatePASHTrashed' ]);
+    Route::post('update-enrolment-index', ['as' => 'update-enrolment-index', 'uses' => 'UserController@updateEnrolmentIndex' ]);
+    Route::post('update-placement-index', ['as' => 'update-placement-index', 'uses' => 'UserController@updatePlacementIndex' ]);
+    Route::post('update-modifiedforms-index', ['as' => 'update-modifiedforms-index', 'uses' => 'UserController@updateModifiedFormsIndex' ]);
 
     /**
      * Billing Routes

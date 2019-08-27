@@ -65,6 +65,7 @@ class UserController extends Controller
         return view('users.update-index-view', compact('getIndex', 'counter', 'counterUser', 'counterPASH', 'counterEnrol', 'counterPlacement', 'counterModified'));
     }
 
+    
     public function updatePASH()
     {
 
@@ -73,16 +74,33 @@ class UserController extends Controller
         // $runUpdate = \DB::update("UPDATE `{$pashTable}` SET `INDEXID` = CASE `INDEXID` WHEN 'EXT1036' THEN ? WHEN 'L21545' THEN ? END WHERE `INDEXID` IN ('EXT1036','L21545')", ['EXT123','EXT12345']);
         // return $runUpdate;
         
+        $getLastKey = [];
         $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->select('INDEXNO', 'INDEXNO-August')->whereNotNull('INDEXNO')->get();
+        $getIndexChunk = $getIndex->chunk(100);
+        
+        foreach ($getIndexChunk as $key => $value) {
+            $getLastKey[] = $key;
+        }
+
+        return view('users.update-pash-view', compact('getIndex', 'getLastKey'));
+    }
+
+    
+    public function updatePASHIndexID(Request $request)
+    {
+        $pashTable = Repo::getModel()->getTable();
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->select('INDEXNO', 'INDEXNO-August')->whereNotNull('INDEXNO')->get();
+        $getIndexChunk = $getIndex->chunk(100);
 
         $i = [];
         $ids = [];
         $cases = [];
         $params = [];
 
-        foreach ($getIndex as $key => $value) {
+        foreach ($getIndexChunk[$request->batchNo] as $key => $value) {
             $updatePASH = Repo::select('id')->where('INDEXID', $value->{'INDEXNO-August'});
-            $checkIfPASHExist = $updatePASH->get();   
+            $checkIfPASHExist = $updatePASH->get(); 
+
             if (!$checkIfPASHExist->isEmpty()) {
                 $id = $value->{'INDEXNO-August'};
                 $cases[] = "WHEN '{$id}' THEN ?";
@@ -97,7 +115,8 @@ class UserController extends Controller
 
 
         if (empty($ids)) {
-            return 'no changes needed';
+            $data = 'batch has been processed. no further changes needed.';
+            return response()->json($data);
         }
 
         $ids = implode(',', $ids);
@@ -114,50 +133,30 @@ class UserController extends Controller
                     $pashRecord->CodeIndexIDClass = $pashRecord->CodeClass.'-'.$pashRecord->INDEXID;
                 }
                 
-                $pashRecord->save();
-        }
-
-        return $runUpdate;
-    }
-
-    public function updatePashCodeIndexID()
-    {
-
-        \Debugbar::startMeasure('render','Time for rendering');
-        
-        
-        foreach ($i as $valuePASH) {
-            $pashRecord = Repo::select('id', 'INDEXID', 'Code')->find($valuePASH);
-
                 if (is_null($pashRecord->Te_Code)) {
                     $pashRecord->CodeIndexID = $pashRecord->Code.'/'.$pashRecord->INDEXID;
                 } else {
                     $pashRecord->CodeIndexID = $pashRecord->Code.'-'.$pashRecord->INDEXID;
                 }
-                
+
                 $pashRecord->save();
         }
 
-        \Debugbar::stopMeasure('render');
-
-        return count($i);
+        $data = $i;
+        return response()->json($data);
+        
     }
 
     public function updatePASHTrashed()
     {
         $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get();
 
-        $counter = [];
-        $counterUser = [];
         $counterPASH = [];
-        $counterEnrol = [];
-        $counterPlacement = [];
-        $counterModified = [];
 
         foreach ($getIndex as $key => $value) {        
 
-            // update PASH table
-            $updatePASH = Repo::onlyTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+            // update soft deleted PASH records
+            $updatePASH = Repo::onlyTrashed()->where('INDEXID', $value->{'INDEXNO'});
             $checkIfPASHExist = $updatePASH->get();
 
             if (!$checkIfPASHExist->isEmpty()) {
@@ -185,16 +184,21 @@ class UserController extends Controller
         }
 
         $stringPASH = count($counterPASH);
-
-        return $stringPASH.' PASH records done';
+        $data = $stringPASH.' PASH soft-deleted records updated';
+        return response()->json($data);
+        
     }
 
-    public function updateEnrolment()
+    public function updateEnrolmentIndex()
     {
-                    
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get(); 
 
-                    // update Enrolment table
-            $updateEnrolment = Preenrolment::withTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+        $counterEnrol = [];
+
+        foreach ($getIndex as $key => $value) {
+            
+            // update Enrolment table
+            $updateEnrolment = Preenrolment::withTrashed()->select('id', 'INDEXID', 'Code', 'CodeIndexID')->where('INDEXID', $value->{'INDEXNO-August'});
             $checkIfEnrolmentExist = $updateEnrolment->get();
 
             if (!$checkIfEnrolmentExist->isEmpty()) {
@@ -202,7 +206,7 @@ class UserController extends Controller
                 
                 foreach ($checkIfEnrolmentExist as $keyEnrolment => $valueEnrolment) {
                     
-                    $enrolmentRecord = Preenrolment::find($valueEnrolment->id);
+                    $enrolmentRecord = Preenrolment::withTrashed()->select('id', 'INDEXID', 'Code', 'CodeIndexID')->find($valueEnrolment->id);
                     
                     if (!is_null($enrolmentRecord->Code)) {
                         $enrolmentRecord->CodeIndexID = $enrolmentRecord->Code.'-'.$value->INDEXNO;
@@ -212,10 +216,29 @@ class UserController extends Controller
 
                     $counterEnrol[] = $countEnrol; 
                 }
-            }
+            }            
+        }
+
+        if (empty($counterEnrol)) {
+            $data = 0;
+            return response()->json($data);
+        }
+
+        $data = count($counterEnrol);
+        return response()->json($data);
+
+    }
+
+    public function updatePlacementIndex()
+    {
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get();            
+
+        $counterPlacement = [];
+
+        foreach ($getIndex as $key => $value) {
 
             // update Placement table
-            $updatePlacement = PlacementForm::withTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+            $updatePlacement = PlacementForm::withTrashed()->select('id', 'INDEXID', 'Code', 'CodeIndexID')->where('INDEXID', $value->{'INDEXNO-August'});
             $checkIfPlacementExist = $updatePlacement->get();
 
             if (!$checkIfPlacementExist->isEmpty()) {
@@ -223,7 +246,7 @@ class UserController extends Controller
                 
                 foreach ($checkIfPlacementExist as $keyPlacement => $valuePlacement) {
                     
-                    $placementRecord = PlacementForm::find($valuePlacement->id);
+                    $placementRecord = PlacementForm::withTrashed()->select('id', 'INDEXID', 'Code', 'CodeIndexID')->find($valuePlacement->id);
                     
                     if (!is_null($placementRecord->Code)) {
                         $placementRecord->CodeIndexID = $placementRecord->Code.'-'.$value->INDEXNO;
@@ -234,9 +257,27 @@ class UserController extends Controller
                     $counterPlacement[] = $countPlacement; 
                 }
             }
+        }
 
+        if (empty($counterPlacement)) {
+            $data = 0;
+            return response()->json($data);
+        }
+
+        $data = count($counterPlacement);
+        return response()->json($data);
+
+    }
+
+    public function updateModifiedFormsIndex()
+    {
+        $getIndex = DB::connection('dev_db_ltpdata')->table('Local-SDDEXTR')->whereNotNull('INDEXNO')->get();
+
+        $counterModified = [];
+        
+        foreach ($getIndex as $key => $value) {
             // update Modified Forms table
-            $updateModified = ModifiedForms::withTrashed()->where('INDEXID', $value->{'INDEXNO-August'});
+            $updateModified = ModifiedForms::withTrashed()->select('id', 'INDEXID', 'Code', 'CodeIndexID')->where('INDEXID', $value->{'INDEXNO-August'});
             $checkIfModifiedExist = $updateModified->get();
 
             if (!$checkIfModifiedExist->isEmpty()) {
@@ -244,7 +285,7 @@ class UserController extends Controller
                 
                 foreach ($checkIfModifiedExist as $keyModified => $valueModified) {
                     
-                    $modifiedRecord = ModifiedForms::find($valueModified->id);
+                    $modifiedRecord = ModifiedForms::withTrashed()->select('id', 'INDEXID', 'Code', 'CodeIndexID')->find($valueModified->id);
                     
                     if (!is_null($modifiedRecord->Code)) {
                         $modifiedRecord->CodeIndexID = $modifiedRecord->Code.'-'.$value->INDEXNO;
@@ -255,6 +296,15 @@ class UserController extends Controller
                     $counterModified[] = $countModified; 
                 }
             }
+        }
+
+        if (empty($counterModified)) {
+            $data = 0;
+            return response()->json($data);
+        }
+
+        $data = count($counterModified);
+        return response()->json($data);
     }
 
     public function __construct() {
