@@ -112,7 +112,7 @@
                         <div class="modal-body">
                             <form class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-5 question" for="id">Are you a UN staff member with an Umoja profile?</label>
+                                    <label class="control-label col-sm-5 question" for="id">Are you a UN staff member with Umoja profile?</label>
                                     <a href="{{ url('/newuser/create') }}" class="btn btn-default">Yes</a>
                                     <a href="{{ route('get-new-outside-user') }}" class="btn btn-default">No </a>
                                 </div>                                

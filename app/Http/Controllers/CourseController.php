@@ -76,6 +76,16 @@ class CourseController extends Controller
         return view('courses.create', compact('course_type', 'course_level_type', 'course_order', 'languages', 'terms'));
     }
 
+    public function checkExistingTeCode(Request $request)
+    {
+        if ($request->ajax()) {
+            $checkExistingTeCode = Course::select('Te_Code_New')->whereNotNUll('Te_Code_New')->where('L', $request->L)->get();
+            
+            $data = $checkExistingTeCode;
+            return response()->json($data);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *

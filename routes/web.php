@@ -197,6 +197,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::post('store-non-standard-schedule', ['as' => 'store-non-standard-schedule', 'uses' => 'ScheduleController@storeNonStandardSchedule' ]);
     Route::resource('terms', 'TermController');
     Route::resource('courses', 'CourseController');
+    Route::get('check-existing-tecode', ['as' => 'check-existing-tecode', 'uses' => 'CourseController@checkExistingTeCode' ]);
+
     Route::resource('organizations', 'OrgController');
     Route::resource('placement-schedule', 'PlacementScheduleController');
 

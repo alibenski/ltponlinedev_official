@@ -33,6 +33,10 @@
 					<span class="text"><strong>Numerical Category</strong> defines the specificity of a course which is already catergorized under an existing Course Type, e.g. an english writing course for a specific agency, a new french course for level 3 similar to "Cours 3", etc. </span>
 		        </li>
 
+				<li class="li-existing-tecode hidden">
+					<span><strong>Existing Codes:</strong></span>
+					<p class="text place-existing-here"></p>
+		        </li>
 
 		      </ul>
 		    </div>
@@ -131,6 +135,37 @@
 	    $('.select2-basic-single').select2({
 	    placeholder: "Select Here",
 	    });
+  	});
+
+	function removeP() {
+		$('span.inserted').remove();
+	}
+
+  	$("input[type='radio'][name='L']").click(function() {
+  		var L = $(this).val(); 
+  		console.log(L)
+  		$("li.li-existing-tecode").removeClass('hidden');
+  		removeP();
+  		$.ajax({
+  			url: '{{ route('check-existing-tecode') }}',
+  			type: 'GET',
+  			data: {L:L},
+  		})
+  		.done(function(data) {
+  			console.log(data);
+  			$.each(data, function(index, val) {
+  				$.each(val, function(index1, val1) {
+  				 $('p.place-existing-here').append("<span class='inserted'>"+val1+"  </span>");
+  				});
+  			});
+  		})
+  		.fail(function() {
+  			console.log("error");
+  		})
+  		.always(function() {
+  			console.log("complete");
+  		});
+  		
   	});
 </script>
 @stop
