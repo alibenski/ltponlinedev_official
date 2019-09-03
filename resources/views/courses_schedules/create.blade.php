@@ -10,7 +10,7 @@
 <div class="row">
   <div class="col-md-10 ">
     <h2><i class="fa fa-calendar-o"></i> Create Course + Schedule</h2>
-    <h5 class="alert alert-warning alert-block">Message: Language Secretariat creates the class schedules (Course-Schedule combinations) BEFORE the Enrolment period</h5>
+    <h5 class="alert alert-warning alert-block"><i class="fa fa-info-circle"></i> Use this function to create the class schedules (Course-Schedule combinations) which students see in the dropdown list on the enrolment form.</h5>
     <hr>
 
     <form method="POST" action="{{ route('course-schedule.store') }}">

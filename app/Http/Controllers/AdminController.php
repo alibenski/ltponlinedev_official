@@ -64,6 +64,17 @@ class AdminController extends Controller
         return redirect()->back();   
     }
 
+    public function adminFullyApprovedFormsNotInClass(Request $request)
+    {
+        if ($request->session()->has('Term')) {
+            $approvedEnrolmentForms = Preenrolment::select('id')
+                ->where('Term', $request->session()->get('Term'))
+                ->where('overall_approval', 1)
+                ->get();
+
+        }
+    }
+
     public function adminViewClassrooms(Request $request)
     {
         $assigned_classes = Classroom::where('Code', $request->Code)

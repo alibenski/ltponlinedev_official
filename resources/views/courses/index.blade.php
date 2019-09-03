@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
+		@include('admin.partials._termSessionMsg')
 		<div class="col-md-12">
 			<h1><i class="fa fa-book"></i> <span>Course Catalogue</span></h1>
 		</div>
@@ -15,6 +16,18 @@
 			<hr>
 		</div>
 	</div>
+
+	<div class="form-group">
+		<input type="hidden" name="term_id" value="{{Session::get('Term')}}">
+
+        <div class="col-md-8">
+          <div class="dropdown">
+            <select class="col-md-8 form-control course_select_no wx" style="width: 100%;" name="course_id" autocomplete="off">
+                <option value="">--- Select Course ---</option>
+            </select>
+          </div>
+        </div>
+    </div>
 
 	<form method="GET" action="{{ route('courses.index',['L' => \Request::input('L')]) }}">
 		<div class="form-group input-group col-sm-12">
@@ -73,3 +86,23 @@
 	</div>
 </div>
 @endsection
+
+@section('java_script')
+<script type="text/javascript">
+  $("input[name='L']").click(function(){
+      var L = $(this).val();
+      var term = $("input[name='term_id']").val();
+      var token = $("input[name='_token']").val();
+      console.log(term)
+      $.ajax({
+          url: "{{ route('select-ajax') }}", 
+          method: 'POST',
+          data: {L:L, term_id:term, _token:token},
+          success: function(data, status) {
+            $("select[name='course_id']").html('');
+            $("select[name='course_id']").html(data.options);
+          }
+      });
+  }); 
+</script>
+@stop

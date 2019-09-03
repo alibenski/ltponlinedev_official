@@ -978,8 +978,29 @@ dd();
         dd($sddextr_email_address);
     }
 
-    public function testQuery()
+    public function testQuery(Request $request)
     {
+        if ($request->session()->has('Term')) {
+            $qryPASH = Repo::select('INDEXID')
+                ->where('Term', $request->session()->get('Term'))
+                ->groupBy('INDEXID')
+                ->get()->all('INDEXID');
+
+            $approvedEnrolmentForms = Preenrolment::select('INDEXID')
+                ->where('Term', $request->session()->get('Term'))
+                ->where('overall_approval', 1)
+                ->groupBy('INDEXID')
+                ->get('INDEXID');
+
+            $counterEnrol = [];
+            
+        }
+
+        
+
+        dd( $qryPASH, $approvedEnrolmentForms);
+        return $counterEnrol;
+
         $now_date = Carbon::now();
         $now_year = Carbon::now()->year; 
         $enrolment_term = Term::whereYear('Enrol_Date_Begin', $now_year)

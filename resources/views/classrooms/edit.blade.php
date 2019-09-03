@@ -132,8 +132,8 @@
 						<div class="col-md-12">
 							<div class="alert alert-default">
 								<h4 class="text-center" style="color: #a94442">
-									<p><i class="fa fa-info-circle"></i> You cannot change the schedule of this classroom at the moment. You can only assign the room(s) to the current schedule.</p>
-									<p>If it is imperative to create this course with a different schedule, please do so in the "Course + Schedule" section.</p>
+									<p><i class="fa fa-info-circle"></i> You cannot change the schedule of this classroom at the moment. You can only assign <em>new room(s)</em> to the current schedule.</p>
+									<p>If it is imperative to create that course with a different schedule, please do so in the "Course + Schedule" section.</p>
 								</h4> 
 							</div>
 						</div>

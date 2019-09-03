@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Staff Member, {{ $staff_name }} , would like to enrol to a CLM language course and needs your approval.
+            Staff Member, {{ $staff_name }} , would like to enrol in a CLM language course and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
