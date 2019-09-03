@@ -662,22 +662,22 @@ class WaitlistController extends Controller
         }
 
         // calculate sum per code and divide by 14 or 15 for number of classes
-    $num_classes =[];
+        $num_classes =[];
 
-        for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
-            $num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
-        }
-    dd($num_classes);
-        // divide total number of students by $num_class of the Code
-    $num_students_per_class = [];
-        for ($q=0; $q < count($arrCountStdPerCode); $q++) { 
-            $num_students_per_class[] = intval(ceil($arrCountStdPerCode[$q]/$num_classes[$q]));
-        }
-   
-    $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
-        $arrGetCode = [];
-        $arrGetDetails = [];
-        
+            for ($i=0; $i < count($arrCountStdPerCode); $i++) { 
+                $num_classes[] = intval(ceil($arrCountStdPerCode[$i]/15));
+            }
+        dd($num_classes);
+            // divide total number of students by $num_class of the Code
+        $num_students_per_class = [];
+            for ($q=0; $q < count($arrCountStdPerCode); $q++) { 
+                $num_students_per_class[] = intval(ceil($arrCountStdPerCode[$q]/$num_classes[$q]));
+            }
+       
+        $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+            $arrGetCode = [];
+            $arrGetDetails = [];
+            
         foreach ($getCode as $valueCode) {
             $arrGetCode[] = $valueCode->Code;
             
@@ -810,7 +810,7 @@ class WaitlistController extends Controller
                 // var_dump('section value starts at: '.$sectionNo);
         }
 
-dd($num_classes);
+        dd($num_classes);
         // query PASHQTcur and take 15 students to assign classroom created in TEVENTcur
         $arrGetClassRoomDetails = [];
         $arrCountCodeClass = [];
@@ -898,7 +898,7 @@ dd($num_classes);
                 }
             }
         }
-dd();        
+        dd();        
 
 
         // $codeSortByCountIndexID = Preenrolment::select('Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', 'F1R1')->where('INDEXID', 'L21264')->groupBy('Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
@@ -925,7 +925,7 @@ dd();
     {
         $sddextr = SDDEXTR::where('INDEXNO', '17942')->first();
         return $sddextr->users->name;
-/*
+        /*
         // method to re-send emails to manager for un-approved forms
         $arrRecipient = [];
         $enrolments_no_mgr_approval = Preenrolment::where('Term', '191')->whereNull('is_self_pay_form')->whereNull('approval')->select('INDEXID', 'Te_Code', 'form_counter', 'mgr_email','created_at')->groupBy('INDEXID', 'Te_Code', 'form_counter', 'mgr_email', 'created_at')->get();
@@ -956,7 +956,7 @@ dd();
             echo '<br>';
         } // end of foreach loop
         dd($enrolments_no_mgr_approval);
-*/
+        */
     }
     public function queryTerm()
     {
