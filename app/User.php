@@ -33,7 +33,11 @@ class User extends Authenticatable
 
     public function preenrolment()
     {
-    return $this->hasMany('App\Preenrolment', 'indexno' ,'INDEXID');
+    return $this->hasMany('App\Preenrolment', 'INDEXID', 'indexno');
+    }
+    public function placement()
+    {
+    return $this->hasMany('App\PlacementForm', 'INDEXID', 'indexno');
     }
     public function adminCommentPlacement()
     {

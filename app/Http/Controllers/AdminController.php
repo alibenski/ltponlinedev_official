@@ -66,13 +66,67 @@ class AdminController extends Controller
 
     public function adminFullyApprovedFormsNotInClass(Request $request)
     {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
         if ($request->session()->has('Term')) {
-            $approvedEnrolmentForms = Preenrolment::select('id')
+            $arrIndexEnrolment = []; 
+            $approvedEnrolmentForms = Preenrolment::select('INDEXID')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
+                ->groupBy('INDEXID')
                 ->get();
 
+            foreach ($approvedEnrolmentForms as $key => $value) {
+                $arrIndexEnrolment[] = $value->INDEXID;
+            }
+
+            $arrIndexPlacement = []; 
+            $approvedPlacementForms = PlacementForm::select('INDEXID')
+                ->where('Term', $request->session()->get('Term'))
+                ->where('overall_approval', 1)
+                ->groupBy('INDEXID')
+                ->get();
+
+            foreach ($approvedPlacementForms as $keyP => $valueP) {
+                $arrIndexPlacement[] = $valueP->INDEXID;
+            }
+
+            $arrIndexPASH = [];
+            $qryPASH = Repo::withTrashed()->select('INDEXID')
+                ->where('Term', $request->session()->get('Term'))
+                ->groupBy('INDEXID')
+                ->get();
+
+            foreach ($qryPASH as $key1 => $value1) {
+                $arrIndexPASH[] = $value1->INDEXID;
+            }
+
+            $diffEnrolPASH = array_diff($arrIndexEnrolment, $arrIndexPASH);
+            $diffPlacementPASH = array_diff($arrIndexPlacement, $arrIndexPASH);
+
+            $merge = array_merge($diffPlacementPASH, $diffEnrolPASH);
+        
+            $studentIndexEnrol = User::whereIn('indexno', $merge)
+                ->with(['preenrolment' => function ($qry) use($request){
+                    $qry->where('Term', $request->session()->get('Term'));
+                    }])
+                ->whereHas('preenrolment', function($q1) use($request){
+                    $q1->where('Term', $request->session()->get('Term'));
+                    })
+                ->get();     
+            $studentIndexPlacement = User::whereIn('indexno', $merge)
+                ->with(['placement' => function ($qry) use($request){
+                    $qry->where('Term', $request->session()->get('Term'));
+                    }])
+                ->whereHas('placement', function($q2) use($request){
+                    $q2->where('Term', $request->session()->get('Term'));
+                    })
+                ->get();
+                // dd($studentIndexEnrol,$studentIndexPlacement);
+            return view('admin.fully-approved-forms-not-in-class', compact('terms', 'merge', 'studentIndexEnrol', 'studentIndexPlacement'));
         }
+
+        return view('admin.fully-approved-forms-not-in-class');
     }
 
     public function adminViewClassrooms(Request $request)
