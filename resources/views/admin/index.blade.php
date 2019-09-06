@@ -294,6 +294,24 @@
 		<!-- /.info-box -->
 	</a>
 </div>
+
+<div class="col-md-6 col-sm-6 col-xs-12 students-not-in-class hidden">
+	<a href="{{ route('fully-approved-forms-not-in-class') }}">
+		<div class="info-box">
+		  <!-- Apply any bg-* class to to the icon to color it -->
+		  <span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle fa-spin"></i></span>
+		  <div class="info-box-content">
+		    <span class="info-box-text">Students not in a class after batch run</span>
+		    <span class="info-box-number">@if(Session::has('Term')) {{count($merge)}} @else Set the Term @endif</span>
+		    <span class="info-box-text"><small>Shows fully approved and assigned forms</small></span>
+		  </div>
+		  <!-- /.info-box-content -->
+		</div>
+		<!-- /.info-box -->
+	</a>
+</div>
+
+<input type="hidden" name="_token" value="{{ Session::token() }}">
 @endsection
 
 @section('java_script')
@@ -308,6 +326,29 @@ $(document).ready(function() {
     $("a.link-to-orphans").not('[target="_blank"]').click(function() {
     	$(".preloader").removeClass('hidden');
     });
+
+    var Term = "{{ Session::get('Term') }}";
+    var token = $("input[name='_token']").val();
+    console.log(Term)
+
+    $.ajax({
+    	url: '{{ route('ajax-check-batch-has-ran') }}',
+    	type: 'GET',
+    	data: {Term:Term,_token: token},
+    })
+    .done(function(data) {
+    	if (!jQuery.isEmptyObject( data )) {
+    		$(".students-not-in-class").removeClass('hidden');
+    	}
+
+    })
+    .fail(function() {
+    	console.log("error");
+    })
+    .always(function() {
+    	console.log("complete check if batch has ran");
+    });
 });
 </script>
+
 @stop

@@ -69,10 +69,13 @@ class AdminController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if ($request->session()->has('Term')) {
+            $termSet = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
+
             $arrIndexEnrolment = []; 
             $approvedEnrolmentForms = Preenrolment::select('INDEXID')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
+                ->whereNotNull('modified_by')
                 ->groupBy('INDEXID')
                 ->get();
 
@@ -84,6 +87,7 @@ class AdminController extends Controller
             $approvedPlacementForms = PlacementForm::select('INDEXID')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
+                ->whereNotNull('modified_by')
                 ->groupBy('INDEXID')
                 ->get();
 
@@ -111,19 +115,22 @@ class AdminController extends Controller
                     $qry->where('Term', $request->session()->get('Term'));
                     }])
                 ->whereHas('preenrolment', function($q1) use($request){
-                    $q1->where('Term', $request->session()->get('Term'));
+                    $q1->where('Term', $request->session()->get('Term'))
+                        ->whereNotNull('modified_by');
                     })
                 ->get();     
+
             $studentIndexPlacement = User::whereIn('indexno', $merge)
                 ->with(['placement' => function ($qry) use($request){
                     $qry->where('Term', $request->session()->get('Term'));
                     }])
                 ->whereHas('placement', function($q2) use($request){
-                    $q2->where('Term', $request->session()->get('Term'));
+                    $q2->where('Term', $request->session()->get('Term'))
+                        ->whereNotNull('modified_by');
                     })
                 ->get();
                 // dd($studentIndexEnrol,$studentIndexPlacement);
-            return view('admin.fully-approved-forms-not-in-class', compact('terms', 'merge', 'studentIndexEnrol', 'studentIndexPlacement'));
+            return view('admin.fully-approved-forms-not-in-class', compact('terms','termSet', 'merge', 'studentIndexEnrol', 'studentIndexPlacement'));
         }
 
         return view('admin.fully-approved-forms-not-in-class');
@@ -138,7 +145,7 @@ class AdminController extends Controller
         return view('admin.admin-view-classrooms', compact('assigned_classes'));
     }
 
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
@@ -280,7 +287,50 @@ class AdminController extends Controller
             ->whereNull('updated_by_admin')
             ->get()->count();
 
-        return view('admin.index',compact('all_unassigned_enrolment_form','countNonAssignedPlacement','arr3_count','terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting'));   
+        if ($request->session()->has('Term')) {
+            $termSet = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
+
+            $arrIndexEnrolment = []; 
+            $approvedEnrolmentForms = Preenrolment::select('INDEXID')
+                ->where('Term', $request->session()->get('Term'))
+                ->where('overall_approval', 1)
+                ->whereNotNull('modified_by')
+                ->groupBy('INDEXID')
+                ->get();
+
+            foreach ($approvedEnrolmentForms as $key => $value) {
+                $arrIndexEnrolment[] = $value->INDEXID;
+            }
+
+            $arrIndexPlacement = []; 
+            $approvedPlacementForms = PlacementForm::select('INDEXID')
+                ->where('Term', $request->session()->get('Term'))
+                ->where('overall_approval', 1)
+                ->whereNotNull('modified_by')
+                ->groupBy('INDEXID')
+                ->get();
+
+            foreach ($approvedPlacementForms as $keyP => $valueP) {
+                $arrIndexPlacement[] = $valueP->INDEXID;
+            }
+
+            $arrIndexPASH = [];
+            $qryPASH = Repo::withTrashed()->select('INDEXID')
+                ->where('Term', $request->session()->get('Term'))
+                ->groupBy('INDEXID')
+                ->get();
+
+            foreach ($qryPASH as $key1 => $value1) {
+                $arrIndexPASH[] = $value1->INDEXID;
+            }
+
+            $diffEnrolPASH = array_diff($arrIndexEnrolment, $arrIndexPASH);
+            $diffPlacementPASH = array_diff($arrIndexPlacement, $arrIndexPASH);
+
+            $merge = array_merge($diffPlacementPASH, $diffEnrolPASH);
+        }
+
+        return view('admin.index',compact('all_unassigned_enrolment_form','countNonAssignedPlacement','arr3_count','terms','cancelled_convocations','new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting', 'merge'));   
     }
 
 

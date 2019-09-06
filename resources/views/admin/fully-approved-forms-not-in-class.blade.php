@@ -6,7 +6,7 @@
 @section('content')
 
 @if (Session::has('Term'))
-	This page should only be accessbile after batch run...
+	{{-- This view should only be accessbile after batch run... --}}
 	<div class="row">
 		<div class="col-md-12">
 			
@@ -14,7 +14,10 @@
 
 			<div class="box box-info">
 		        <div class="box-header with-border">
-		          <h3 class="box-title"><strong>Term: {{ Session::get('Term') }}:</strong> {{count($merge)}} students with fully approved forms but not in a class</h3>
+		          <h3 class="box-title"><strong>Term: [{{ Session::get('Term') }}] {{$termSet->Comments}} {{ date('Y', strtotime($termSet->Term_Begin)) }} - </strong> {{count($merge)}} Student(s) with fully approved forms and assigned by teacher/admin but not inserted/placed in a class
+		          </h3>
+		          	<small class="text-danger"><p>Note: This view is only avaiable after the batch has run. The purpose of this view is to show the number of students who are not in a class or not in the waitlist after batch run due to various reasons such as late registration, late payment, etc.</p>
+		          		<p>Please click on the Index No. or Name to open the User Administration view of the student.</p></small>
 
 		          <div class="box-tools pull-right">
 		            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -32,6 +35,8 @@
 		                <th>Name</th>
 		                <th>Form</th>
 		                <th>Language</th>
+		                <th>Assigned by</th>
+		                <th>Assigned to</th>
 		              </tr>
 		              </thead>
 		              <tbody>
@@ -44,6 +49,20 @@
 				                <td>
 				                	<p>{{ $element->preenrolment->first()->L}}</p>
 				                </td>
+				                	@if (!is_null($element->preenrolment->first()->modified_by))
+						                <td>
+						                	<p>
+						                		{{ $element->preenrolment->first()->modifyUser['name']}}
+						                	</p>
+						                </td>
+						                <td>
+						                	@if (!is_null($element->preenrolment->first()->Te_Code))
+						                	<p>
+						                		{{ $element->preenrolment->first()->courses['Description']}}
+						                	</p>
+						                	@endif
+						                </td>
+				                	@endif
 				              </tr>
 			              	@endforeach
 		              	@endif
@@ -57,6 +76,20 @@
 				                <td>
 				                 	<p>{{ $element->placement->first()->L}}</p>
 				                </td>
+				                	@if (!is_null($element->placement->first()->modified_by))
+						                <td>
+						                	<p>
+						                		{{ $element->placement->first()->modifyUser['name']}}
+						                	</p>
+						                </td>
+						                <td>
+						                	@if (!is_null($element->placement->first()->Te_Code))
+						                	<p>
+						                		{{ $element->placement->first()->courses['Description']}}
+						                	</p>
+						                	@endif
+						                </td>
+				                	@endif
 				              </tr>
 			              	@endforeach
 						@endif

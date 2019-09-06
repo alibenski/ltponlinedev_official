@@ -124,7 +124,7 @@ desired effect
               <li class="footer"><a href="#">View all</a></li>
             </ul>
           </li> --}}
-          <!-- Tasks Menu -->
+          {{-- <!-- Tasks Menu -->
           <li class="dropdown tasks-menu">
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -160,7 +160,7 @@ desired effect
                 <a href="#">View all tasks</a>
               </li>
             </ul>
-          </li>
+          </li> --}}
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
