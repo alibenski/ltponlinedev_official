@@ -2,6 +2,16 @@
 @section('tabtitle', '| Home')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+    .active-home>a {
+        color: #fff;
+        background-color: #636b6f;
+        }
+    .nav-pills>li.active-home>a:hover {
+        color: #fff;
+        background-color: #636b6f;
+        }
+    </style>
 @stop
 @section('content')
     <div class="row">
@@ -16,6 +26,9 @@
                         </div>
                     @endif
                     <div class="col-sm-12">
+                        
+                        @include('home_dashboard_nav')
+
                         <div class="col-sm-12 text-justify">
                         <h2 class="text-center">Enrolment Instructions and Language Training Programme Announcements</h2> 
                             <br>
@@ -60,6 +73,7 @@
                             <h4><strong>Contact:</strong></h4>
                             <p>Si vous avez des questions, veuillez contacter, le secrétariat par courriel à : <strong>clm_language@un.org.</strong></p>
                         </div>   
+
                     </div>
                 </div>
             </div>

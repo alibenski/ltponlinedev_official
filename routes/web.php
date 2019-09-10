@@ -305,6 +305,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['first-time-login'])->group(function () { //middleware to force user to change password 
         //home page routes
         Route::get('/home', 'HomeController@index')->name('home');
+        Route::get('/home-how-to-check-status', 'HomeController@homeHowToCheckStatus')->name('home-how-to-check-status');
         Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg']);
         // Route::get('/whatorg', ['as'=>'whatorg','uses'=>'HomeController@whatorg'])->middleware('opencloseenrolment');
         Route::post('/whatform', ['as'=>'whatform','uses'=>'HomeController@whatform'])->middleware('check-prev-url');

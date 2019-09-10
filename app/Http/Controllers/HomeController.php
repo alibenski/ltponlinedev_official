@@ -47,6 +47,11 @@ class HomeController extends Controller
         return view('home');
     }
        
+    public function homeHowToCheckStatus()
+    {
+        return view('home_how_to_check_status');
+    }
+
     /*
     *    Shows submitted forms @ route{{"/submitted"}} 
     *    and route{{"/previous-submitted"}} 
