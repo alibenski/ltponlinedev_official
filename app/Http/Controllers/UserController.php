@@ -501,6 +501,7 @@ class UserController extends Controller
             'SEX' => $request->gender,
             'DEPT' => $request->org,
             'PHONE' => $request->contact_num,
+            'BIRTH' => $request->dob,
             // 'CAT' => $request->cat,
         ]);
 

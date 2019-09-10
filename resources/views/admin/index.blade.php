@@ -299,7 +299,7 @@
 	<a href="{{ route('fully-approved-forms-not-in-class') }}">
 		<div class="info-box">
 		  <!-- Apply any bg-* class to to the icon to color it -->
-		  <span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle fa-spin"></i></span>
+		  <span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle"></i></span>
 		  <div class="info-box-content">
 		    <span class="info-box-text">Students not in a class after batch run</span>
 		    <span class="info-box-number">@if(Session::has('Term')) {{count($merge)}} @else Set the Term @endif</span>
