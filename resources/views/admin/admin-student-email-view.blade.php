@@ -11,6 +11,7 @@
 
 <div class="table-section">
 	<div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
+	<h3>Viewing All Current Students</h3>
 	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>

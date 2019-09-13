@@ -27,7 +27,7 @@
                     @endif
                     <div class="col-sm-12">
                         
-                        @include('home_dashboard_nav')
+                        {{-- @include('home_dashboard_nav') --}}
 
                         <div class="col-sm-12 text-justify">
                         <h2 class="text-center">Enrolment Instructions and Language Training Programme Announcements</h2> 

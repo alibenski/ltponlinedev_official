@@ -52,6 +52,9 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('admin-view-classrooms', ['as'=>'admin-view-classrooms','uses'=>'AdminController@adminViewClassrooms']);
 
     Route::get('admin-student-email-view', 'AdminController@adminStudentEmailView')->name('admin-student-email-view');
+    Route::get('admin-selfpaying-student-view', 'AdminController@adminSelfpayingStudentView')->name('admin-selfpaying-student-view');
+    Route::get('ajax-selfpaying-student-table', ['as' => 'ajax-selfpaying-student-table', 'uses' => 'AdminController@ajaxSelfpayingStudentTable' ]);
+
     /**
      * Text Routes
      */
