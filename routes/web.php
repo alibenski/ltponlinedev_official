@@ -52,8 +52,6 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('admin-view-classrooms', ['as'=>'admin-view-classrooms','uses'=>'AdminController@adminViewClassrooms']);
 
     Route::get('admin-student-email-view', 'AdminController@adminStudentEmailView')->name('admin-student-email-view');
-    Route::get('admin-selfpaying-student-view', 'AdminController@adminSelfpayingStudentView')->name('admin-selfpaying-student-view');
-    Route::get('ajax-selfpaying-student-table', ['as' => 'ajax-selfpaying-student-table', 'uses' => 'AdminController@ajaxSelfpayingStudentTable' ]);
 
     /**
      * Text Routes
@@ -185,6 +183,10 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('billing-index', ['as' => 'billing-index', 'uses' => 'BillingController@billingIndex' ]);
     Route::get('ajax-billing-table', ['as' => 'ajax-billing-table', 'uses' => 'BillingController@ajaxBillingTable' ]);
     Route::get('billing-json', function () { return view('billing.billing_table'); })->name('billing-json');
+
+    Route::get('billing-admin-selfpaying-student-view', 'BillingController@billingAdminSelfpayingStudentView')->name('billing-admin-selfpaying-student-view');
+    Route::get('ajax-selfpaying-student-table', ['as' => 'ajax-selfpaying-student-table', 'uses' => 'BillingController@ajaxSelfpayingStudentTable' ]);
+
 
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');

@@ -16,12 +16,19 @@
 
 @section('content')
 
-<h2 class="text-center"><i class="fa fa-usd"></i> Selfpaying Students In Class <i class="fa fa-usd"></i></h2>
+<h2 class="text-center"><i class="fa fa-usd"></i> Self-Paying Students <i class="fa fa-usd"></i></h2>
 
 @include('admin.partials._termSessionMsg')
 
 <div class="billing-section">
 	<div class="preloader2"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
+	
+	<div class="row">
+		<div class="col-sm-12 alert enter-sum">
+			
+		</div>
+	</div>
+
 	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>
@@ -61,6 +68,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/sum().js"></script>
 
 <script>
 $(document).ready(function() {
@@ -80,6 +88,7 @@ $(document).ready(function() {
 	})
 	.then(function(data) {
 		console.log(data)
+		getSumOfPrices(data);
 		assignToEventsColumns(data);
 		// console.log(data.data)
 		// var data = jQuery.parseJSON(data.data);
@@ -88,7 +97,37 @@ $(document).ready(function() {
 	.fail(function() {
 		console.log(data);
 	}));
-	
+
+	function getSumOfPrices(data) {
+		// console.log(data.data); //array
+		var prices = [];
+
+		$.each(data.data, function(index, val) {
+			prices.push(val.courseschedules.prices.price_usd);
+		});
+		var basketItems = prices.sort(),
+		    counts = {};
+
+		// get number of duplicate values in array
+		$.each(basketItems, function(key,value) {
+		  if (!counts.hasOwnProperty(value)) {
+		    counts[value] = 1;
+		  } else {
+		    counts[value]++;
+		  }
+		});
+
+		console.log(counts)
+		var output = [];
+		$.each(counts, function(i, v) {
+			output.push(i * v);
+			var product = i * v;
+			$('div.enter-sum').append('<p">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
+		});
+
+		console.log(output)
+	}
+
 	function assignToEventsColumns(data) {
 		$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
 	    $('#sampol thead tr:eq(1) th').each( function (i) {
