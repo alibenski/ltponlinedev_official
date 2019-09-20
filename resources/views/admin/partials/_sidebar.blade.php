@@ -40,7 +40,7 @@
         @endhasrole
         
         @hasrole('Admin')
-        <li class="treeview {{ Request::is('admin/billing-') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/billing-*') ? "active" : ""}}">
           <a href="#"><i class="fa fa-money"></i> <span>Billing</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
