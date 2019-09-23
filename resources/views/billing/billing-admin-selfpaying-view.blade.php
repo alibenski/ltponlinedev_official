@@ -104,7 +104,7 @@ $('select#Term').change(function() {
 		data: {_token:token, year:year},
 	})
 	.done(function(data) {
-		console.log(data.data);
+		// console.log(data.data);
 		createChart(data);
 	})
 	.fail(function() {
@@ -123,16 +123,19 @@ function createChart(data) {
 
 	var seasons = [];
 	var prices = [];
-	var arr = [];
+	var pricesPerTerm = [];
+	var arrPrices = [];
 	
 	$.each(data.data, function(index, val) {
-		console.log(index, val)
-
-
+		// console.log(index, val)
 		$.each(val, function(k, v) {
 			seasons.push(v.terms.Comments);		
 			prices.push(v.courseschedules.prices.price_usd);	
+			pricesPerTerm.push(v.courseschedules.prices.price_usd);	
 		});
+
+		arrPrices.push(pricesPerTerm);
+		pricesPerTerm = [];
 
 	});
 
@@ -140,8 +143,8 @@ function createChart(data) {
         return $.inArray(name, seasons) === index;
     }); // Returns Unique seasons
 
-	var basketItems = prices.sort(),
-	    countsYearTotal = {};
+	var basketItems = prices.sort();
+	var countsYearTotal = {};
 
 	// get number of duplicate values in array
 	$.each(basketItems, function(key,value) {
@@ -154,6 +157,55 @@ function createChart(data) {
 
 	console.log(countsYearTotal)
 
+	var items = arrPrices;
+	var	counts = {};
+	var arrCountsPerTerm = [];
+
+	$.each(items, function(key,value) {
+		// console.log(value.sort())
+		$.each(value, function(k, v) {
+			  if (!counts.hasOwnProperty(v)) {
+			    counts[v] = 1;
+			  } else {
+			    counts[v]++;
+			  }
+		});
+
+		arrCountsPerTerm.push(counts);
+		counts = {};
+	});
+
+	// console.log(arrCountsPerTerm)
+
+	var output = [];
+	var product = [];
+	var arrProduct = [];
+	$.each(arrCountsPerTerm, function(x, y) {
+		// console.log(y)
+		$.each(y, function(a, b) {
+			product.push(a * b);
+		});
+		arrProduct.push(product);
+		// console.log(arrProduct)
+		product =[];
+		// $('div.enter-sum').append('<p">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
+	});
+
+
+	var arrSum = [];
+	// get the sum of each array value
+	$.each(arrProduct, function(index, val) {
+		var r = 0;
+		$.each(val, function(i, v) {
+	        r += +v;
+	    });
+		console.log(r)
+	    // return r;
+		arrSum.push(r);
+
+	});
+
+	console.log(arrSum)
 
 	// Area Chart 
 	var ctx = document.getElementById("myAreaChart");
@@ -173,7 +225,7 @@ function createChart(data) {
 	      pointHoverBackgroundColor: "rgba(2,117,216,1)",
 	      pointHitRadius: 50,
 	      pointBorderWidth: 2,
-	      data: [data.data[0],data.data[1],data.data[2],data.data[3]],
+	      data: arrSum,
 	    }],
 	  },
 	  options: {
@@ -192,7 +244,7 @@ function createChart(data) {
 	      yAxes: [{
 	        ticks: {
 	          min: 0,
-	          max: 80000,
+	          max: 200000,
 	          maxTicksLimit: 5
 	        },
 	        gridLines: {
