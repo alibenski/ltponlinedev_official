@@ -19,7 +19,6 @@
 <h2 class="text-center"><i class="fa fa-usd"></i> Self-Paying Stats View <i class="fa fa-usd"></i></h2>
 
 <div class="row">
-
 	<div class="form-group">
       <label for="Term" class="col-md-12 control-label">Year Select:</label>
       <div class="form-group col-sm-12">
@@ -27,13 +26,12 @@
           <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
             @foreach($years as $value)
                 <option></option>
-                <option value="{{$value}}">{{$value}}</option>
+                <option value="{{$value}}" @if ($value < 2019) disabled @endif>{{$value}}</option>
             @endforeach
           </select>
         </div>
       </div>
     </div>
-
 </div> {{-- end filter div --}}
 
 <div class="row">
@@ -41,46 +39,17 @@
     <canvas id="myAreaChart" width="1200" height="400"></canvas>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-12 year-total">
+    
+  </div>
+</div>
 
-<div class="billing-section">
-	<div class="preloader2-"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
-	
-	<div class="row">
-		<div class="col-sm-12 alert enter-sum">
-			
-		</div>
-	</div>
-
-	<table id="sampol" class="table table-striped no-wrap" width="100%">
-		<thead>
-			<tr>
-				<th>Term</th>
-				<th>Language</th>
-				<th>Description</th>
-				<th>Price USD</th>
-				<th>Duration</th>
-				<th>Organization</th>
-				<th>Name</th>
-				<th>RESULT</th>
-				<th>Cancel Date</th>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<th>Term</th>
-				<th>Language</th>
-				<th>Description</th>
-				<th>Price USD</th>
-				<th>Duration</th>
-				<th>Organization</th>
-				<th>Name</th>
-				<th>RESULT</th>
-				<th>Cancel Date</th>
-			</tr>
-		</tfoot>
-	</table>
-</div>	
-
+<div class="row">
+  <div class="col-md-12 sum-total-year">
+    
+  </div>
+</div>
 @stop
 
 @section('java_script')
@@ -94,6 +63,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 
 <script>
+$(document).ready(function() {
+	$('.select2-basic-single').select2({
+		placeholder: "Select Filter",
+    });
+});
+
 $('select#Term').change(function() {
 	var year = $(this).val();
 	var token = $("input[name='_token']").val();
@@ -117,6 +92,10 @@ $('select#Term').change(function() {
 });
 
 function createChart(data) {
+
+	$('p.total-year-product').remove();
+	$('p.total-year-sum').remove();
+
 	// Set new default font family and font color to mimic Bootstrap's default styling
 	Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#292b2c';
@@ -155,8 +134,23 @@ function createChart(data) {
 	  }
 	});
 
-	console.log(countsYearTotal)
+	// console.log(countsYearTotal)
 
+	var arrYearProduct = [];
+	$.each(countsYearTotal, function(x, v) {
+		var yearProduct = x * v;
+		$('div.year-total').append('<p class="total-year-product"><strong>'+x+' USD x '+v+ ' = ' +yearProduct+ ' USD</strong></p>');
+		arrYearProduct.push(yearProduct);
+	});
+
+	// console.log(arrYearProduct)
+
+	// get the sum of 600 and 356 for the whole year
+	var sumTotalYear = 0;
+	$.each(arrYearProduct,function(){sumTotalYear+=parseFloat(this) || 0;});
+	$('div.sum-total-year').append('<p class="total-year-sum"><strong>Total Income: ' +sumTotalYear+ ' USD</strong></p>');
+
+	// break down 600 and 356 per term
 	var items = arrPrices;
 	var	counts = {};
 	var arrCountsPerTerm = [];
@@ -175,7 +169,7 @@ function createChart(data) {
 		counts = {};
 	});
 
-	// console.log(arrCountsPerTerm)
+	console.log(arrCountsPerTerm)
 
 	var output = [];
 	var product = [];
@@ -191,29 +185,49 @@ function createChart(data) {
 		// $('div.enter-sum').append('<p">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
 	});
 
+	console.log(arrProduct)
+	
+	arrCollate = {};
+	$.each(arrProduct, function(c, d) {
+		$.each(d, function(index, val) {
+			$.each(arrCountsPerTerm, function(e, f) {
+				$.each(f, function(g, h) {
+					console.log(g)
+					arrCollate = {
+						g: val
+					}
+				});
+			});
+			console.log(val)
+		});
 
-	var arrSum = [];
+	});
+	console.log(arrCollate)
+	
 	// get the sum of each array value
+	var arrSum = [];
 	$.each(arrProduct, function(index, val) {
 		var r = 0;
 		$.each(val, function(i, v) {
 	        r += +v;
 	    });
-		console.log(r)
+		// console.log(r)
 	    // return r;
 		arrSum.push(r);
 
 	});
 
-	console.log(arrSum)
+	// console.log(arrSum)
 
 	// Area Chart 
 	var ctx = document.getElementById("myAreaChart");
 	var myLineChart = new Chart(ctx, {
-	  type: 'line',
+	  type: 'bar',
 	  data: {
 	    labels: uniqueSeasons,
 	    datasets: [{
+	      type: 'line',
+	      fill: "false",
 	      label: "USD Income",
 	      lineTension: 0.3,
 	      backgroundColor: "rgba(2,117,216,0.2)",
@@ -226,7 +240,23 @@ function createChart(data) {
 	      pointHitRadius: 50,
 	      pointBorderWidth: 2,
 	      data: arrSum,
-	    }],
+	    },
+	    {
+          // Changes this dataset to become a line
+          
+          label: "USD 600 Dataset",
+	      data: [50000, 60000, 45000, 70000],
+	      borderColor: "#8e5ea2",
+	      fill: "false",
+	    },
+	    {
+	      
+          label: "USD 365 Dataset",
+	      data: [25000, 30000, 18000, 35000],
+	      borderColor: "rgba(193,46,12)",
+	      fill: "false",
+	    }
+	    ],
 	  },
 	  options: {
 	    scales: {
@@ -243,9 +273,9 @@ function createChart(data) {
 	      }],
 	      yAxes: [{
 	        ticks: {
-	          min: 0,
-	          max: 200000,
-	          maxTicksLimit: 5
+	          // min: 0,
+	          // max: 200000,
+	          // maxTicksLimit: 5
 	        },
 	        gridLines: {
 	          color: "rgba(0, 0, 0, .125)",
@@ -259,135 +289,6 @@ function createChart(data) {
 	});
 }
 
-</script>
-
-<script>
-$(document).ready(function() {
-	$('.select2-basic-single').select2({
-    	placeholder: "Select Filter",
-    });
-
-	var promises = [];
-	var token = $("input[name='_token']").val();
-
-	promises.push(
-	$.ajax({
-		url: '',
-		type: 'GET',
-		dataType: 'json',
-		data: {_token:token},
-	})
-	.then(function(data) {
-		// console.log(data)
-		// getSumOfPrices(data);
-		// assignToEventsColumns(data);
-		// console.log(data.data)
-		// var data = jQuery.parseJSON(data.data);
-		// console.log(data)
-	})
-	.fail(function() {
-		console.log(data);
-	}));
-
-	function getSumOfPrices(data) {
-		// console.log(data.data); //array
-		var prices = [];
-
-		$.each(data.data, function(index, val) {
-			prices.push(val.courseschedules.prices.price_usd);
-		});
-		var basketItems = prices.sort(),
-		    counts = {};
-
-		// get number of duplicate values in array
-		$.each(basketItems, function(key,value) {
-		  if (!counts.hasOwnProperty(value)) {
-		    counts[value] = 1;
-		  } else {
-		    counts[value]++;
-		  }
-		});
-
-		// console.log(counts)
-		var output = [];
-		$.each(counts, function(i, v) {
-			output.push(i * v);
-			var product = i * v;
-			$('div.enter-sum').append('<p">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
-		});
-
-		// console.log(output)
-	}
-
-	function assignToEventsColumns(data) {
-		$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
-	    $('#sampol thead tr:eq(1) th').each( function (i) {
-	        var title = $(this).text();
-		        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-		 
-		        $( 'input', this ).on( 'keyup change', function () {
-		            if ( table.column(i).search() !== this.value ) {
-		                table
-		                    .column(i)
-		                    .search( this.value )
-		                    .draw();
-		            }
-		        } );
-		    } );
-
-	    var table = $('#sampol').DataTable({
-	    	// "deferRender": true,
-	    	"dom": 'B<"clear">lfrtip',
-	    	"buttons": [
-			        'copy', 'csv', 'excel', 'pdf'
-			    ],
-	    	"scrollX": true,
-	    	"responsive": false,
-	    	"orderCellsTop": true,
-	    	"fixedHeader": true,
-	    	"pagingType": "full_numbers",
-	        "bAutoWidth": false,
-	        "aaData": data.data,
-	        "columns": [
-	        		{ "data": "Term" }, 
-	        		{ "data": "languages.name" }, 
-	        		{ "data": "courses.Description" }, 
-	        		{ "data": "courseschedules.prices.price_usd" }, 
-	        		{ "data": "courseschedules.courseduration.duration_name_en" }, 
-	        		{ "data": "DEPT" },  
-	        		{ "data": "users.name" }, 
-	        		{ "data": "Result", "className": "result" },
-	        		{ "data": "deleted_at" }
-				        ],
-			"createdRow": function( row, data, dataIndex ) {
-					    if ( data['Result'] == 'P') {
-					      $(row).addClass( 'pass' );
-					      $(row).find("td.result").text('PASS');
-					    }
-
-					    if ( data['Result'] == 'F') {
-					      $(row).addClass( 'label-danger' );
-					      $(row).find("td.result").text('Fail');
-					    }
-
-					    if ( data['Result'] == 'I') {
-					      $(row).addClass( 'label-warning' );
-					      $(row).find("td.result").text('Incomplete');
-					    }
-
-					    if ( data['deleted_at'] !== null) {
-					      $(row).addClass( 'bg-navy' );
-					      $(row).find("td.result").text('Late Cancellation');
-					    }
-
-				    }
-	    })
-	}
-
-	$.when.apply($.ajax(), promises).then(function() {
-        $(".preloader2").fadeOut(600);
-    }); 
-});
 </script>
 
 @stop

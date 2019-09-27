@@ -17,11 +17,24 @@
 @section('content')
 
 <h2 class="text-center"><i class="fa fa-usd"></i> Self-Paying Students <i class="fa fa-usd"></i></h2>
+<div class="row">
+	<div class="form-group">
+	<label for="Term" class="col-md-12 control-label">Select Term:</label>
+	<div class="form-group col-sm-12">
+	    <div class="dropdown">
+	      <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+	        @foreach($terms as $value)
+	            <option></option>
+	            <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
+	        @endforeach
+	      </select>
+	    </div>
+	  </div>
+	</div>
+</div>
 
-@include('admin.partials._termSessionMsg')
-
-<div class="billing-section">
-	<div class="preloader2"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
+<div class="billing-section hidden">
+	<div class="preloader2 hidden"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
 	
 	<div class="row">
 		<div class="col-sm-12 alert enter-sum">
@@ -76,126 +89,138 @@ $(document).ready(function() {
     	placeholder: "Select Filter",
     });
 
-	var promises = [];
-	var token = $("input[name='_token']").val();
+	$('select#Term').change(function() {
+		$(".preloader2").fadeIn(400);
+		$('div.preloader2').removeClass('hidden');
+		$('div.billing-section').removeClass('hidden');
+		
+		var promises = [];
+		var token = $("input[name='_token']").val();
+		var term = $(this).val();		
 
-	promises.push(
-	$.ajax({
-		url: '{{ route('ajax-selfpaying-student-table') }}',
-		type: 'GET',
-		dataType: 'json',
-		data: {_token:token},
-	})
-	.then(function(data) {
-		console.log(data)
-		getSumOfPrices(data);
-		assignToEventsColumns(data);
-		// console.log(data.data)
-		// var data = jQuery.parseJSON(data.data);
-		// console.log(data)
-	})
-	.fail(function() {
-		console.log(data);
-	}));
+		promises.push(
+			$.ajax({
+				url: '{{ route('ajax-selfpaying-student-table') }}',
+				type: 'GET',
+				dataType: 'json',
+				data: {term:term, _token:token},
+			})
+			.then(function(data) {
+				console.log(data)
+				getSumOfPrices(data);
+				assignToEventsColumns(data);
+				// console.log(data.data)
+				// var data = jQuery.parseJSON(data.data);
+				// console.log(data)
+			})
+			.fail(function() {
+				console.log(data);
+			})
 
-	function getSumOfPrices(data) {
-		// console.log(data.data); //array
-		var prices = [];
+		);
 
-		$.each(data.data, function(index, val) {
-			prices.push(val.courseschedules.prices.price_usd);
-		});
-		var basketItems = prices.sort(),
-		    counts = {};
+		function getSumOfPrices(data) {
+			// console.log(data.data); //array
+			$('p.show-sum').remove();
+			var prices = [];
 
-		// get number of duplicate values in array
-		$.each(basketItems, function(key,value) {
-		  if (!counts.hasOwnProperty(value)) {
-		    counts[value] = 1;
-		  } else {
-		    counts[value]++;
-		  }
-		});
+			$.each(data.data, function(index, val) {
+				prices.push(val.courseschedules.prices.price_usd);
+			});
+			var basketItems = prices.sort(),
+			    counts = {};
 
-		console.log(counts)
-		var output = [];
-		$.each(counts, function(i, v) {
-			output.push(i * v);
-			var product = i * v;
-			$('div.enter-sum').append('<p">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
-		});
+			// get number of duplicate values in array
+			$.each(basketItems, function(key,value) {
+			  if (!counts.hasOwnProperty(value)) {
+			    counts[value] = 1;
+			  } else {
+			    counts[value]++;
+			  }
+			});
 
-		console.log(output)
-	}
+			console.log(counts)
+			var output = [];
+			$.each(counts, function(i, v) {
+				output.push(i * v);
+				var product = i * v;
+				$('div.enter-sum').append('<p class="show-sum">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
+			});
 
-	function assignToEventsColumns(data) {
-		$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
-	    $('#sampol thead tr:eq(1) th').each( function (i) {
-	        var title = $(this).text();
-		        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-		 
-		        $( 'input', this ).on( 'keyup change', function () {
-		            if ( table.column(i).search() !== this.value ) {
-		                table
-		                    .column(i)
-		                    .search( this.value )
-		                    .draw();
-		            }
-		        } );
-		    } );
+			console.log(output)
+		}
 
-	    var table = $('#sampol').DataTable({
-	    	// "deferRender": true,
-	    	"dom": 'B<"clear">lfrtip',
-	    	"buttons": [
-			        'copy', 'csv', 'excel', 'pdf'
-			    ],
-	    	"scrollX": true,
-	    	"responsive": false,
-	    	"orderCellsTop": true,
-	    	"fixedHeader": true,
-	    	"pagingType": "full_numbers",
-	        "bAutoWidth": false,
-	        "aaData": data.data,
-	        "columns": [
-	        		{ "data": "Term" }, 
-	        		{ "data": "languages.name" }, 
-	        		{ "data": "courses.Description" }, 
-	        		{ "data": "courseschedules.prices.price_usd" }, 
-	        		{ "data": "courseschedules.courseduration.duration_name_en" }, 
-	        		{ "data": "DEPT" },  
-	        		{ "data": "users.name" }, 
-	        		{ "data": "Result", "className": "result" },
-	        		{ "data": "deleted_at" }
-				        ],
-			"createdRow": function( row, data, dataIndex ) {
-					    if ( data['Result'] == 'P') {
-					      $(row).addClass( 'pass' );
-					      $(row).find("td.result").text('PASS');
+		function assignToEventsColumns(data) {
+			$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
+		    $('#sampol thead tr:eq(1) th').each( function (i) {
+		        var title = $(this).text();
+			        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+			 
+			        $( 'input', this ).on( 'keyup change', function () {
+			            if ( table.column(i).search() !== this.value ) {
+			                table
+			                    .column(i)
+			                    .search( this.value )
+			                    .draw();
+			            }
+			        } );
+			    } );
+
+		    var table = $('#sampol').DataTable({
+		    	"destroy": true,
+		    	// "deferRender": true,
+		    	"dom": 'B<"clear">lfrtip',
+		    	"buttons": [
+				        'copy', 'csv', 'excel', 'pdf'
+				    ],
+		    	"scrollX": true,
+		    	"responsive": false,
+		    	"orderCellsTop": true,
+		    	"fixedHeader": true,
+		    	"pagingType": "full_numbers",
+		        "bAutoWidth": false,
+		        "aaData": data.data,
+		        "columns": [
+		        		{ "data": "Term" }, 
+		        		{ "data": "languages.name" }, 
+		        		{ "data": "courses.Description" }, 
+		        		{ "data": "courseschedules.prices.price_usd" }, 
+		        		{ "data": "courseschedules.courseduration.duration_name_en" }, 
+		        		{ "data": "DEPT" },  
+		        		{ "data": "users.name" }, 
+		        		{ "data": "Result", "className": "result" },
+		        		{ "data": "deleted_at" }
+					        ],
+				"createdRow": function( row, data, dataIndex ) {
+						    if ( data['Result'] == 'P') {
+						      $(row).addClass( 'pass' );
+						      $(row).find("td.result").text('PASS');
+						    }
+
+						    if ( data['Result'] == 'F') {
+						      $(row).addClass( 'label-danger' );
+						      $(row).find("td.result").text('Fail');
+						    }
+
+						    if ( data['Result'] == 'I') {
+						      $(row).addClass( 'label-warning' );
+						      $(row).find("td.result").text('Incomplete');
+						    }
+
+						    if ( data['deleted_at'] !== null) {
+						      $(row).addClass( 'bg-navy' );
+						      $(row).find("td.result").text('Late Cancellation');
+						    }
+
 					    }
+		    })
+		}
 
-					    if ( data['Result'] == 'F') {
-					      $(row).addClass( 'label-danger' );
-					      $(row).find("td.result").text('Fail');
-					    }
+		$.when.apply($.ajax(), promises).then(function() {
+	        $(".preloader2").fadeOut(800);
+	    }); 
+	});
 
-					    if ( data['Result'] == 'I') {
-					      $(row).addClass( 'label-warning' );
-					      $(row).find("td.result").text('Incomplete');
-					    }
-
-					    if ( data['deleted_at'] !== null) {
-					      $(row).addClass( 'bg-navy' );
-					      $(row).find("td.result").text('Late Cancellation');
-					    }
-
-				    }
-	    })
-	}
-
-	$.when.apply($.ajax(), promises).then(function() {
-        $(".preloader2").fadeOut(600);
-    }); 
 });
 </script>
 

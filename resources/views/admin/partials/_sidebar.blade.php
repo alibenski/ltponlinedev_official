@@ -49,6 +49,7 @@
           <ul class="treeview-menu">
             <li><a href="{{ route('billing-index') }}">Billing Section</a></li>
             <li><a href="{{ route('billing-admin-selfpaying-student-view') }}">Self-Paying Students</a></li>
+            <li><a href="{{ route('billing-admin-selfpaying-view') }}">Self-Paying Stats</a></li>
           </ul>
         </li> 
         @endhasrole

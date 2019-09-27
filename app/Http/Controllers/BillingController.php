@@ -174,7 +174,9 @@ class BillingController extends Controller
 
     public function billingAdminSelfpayingStudentView()
     {
-        return view('billing.billing-admin-selfpaying-student-view');
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        return view('billing.billing-admin-selfpaying-student-view', compact('terms'));
     }
 
     public function ajaxSelfpayingStudentTable(Request $request)
@@ -182,7 +184,7 @@ class BillingController extends Controller
         if ($request->ajax()) {
 
             
-            if (!Session::has('Term')) {
+            if (!$request->term) {
                 $data = null;
                 return response()->json(['data' => $data]);
             }
@@ -195,13 +197,13 @@ class BillingController extends Controller
             ];
 
              
-            if (Session::has('Term')) {
-                    $records = $records->where('Term', Session::get('Term') );
-                    $queries['Term'] = Session::get('Term');
+            if ($request->term) {
+                    $records = $records->where('Term', $request->term );
+                    $queries['Term'] = $request->term;
             }
 
 
-            $term = Session::get('Term');
+            $term = $request->term;
             $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
 
 
@@ -227,9 +229,9 @@ class BillingController extends Controller
                     ;
 
             $pashFromPlacement = new Repo;
-            if (Session::has('Term')) {
-                        $pashFromPlacement = $pashFromPlacement->where('Term', Session::get('Term') );
-                        $queries['Term'] = Session::get('Term');
+            if ($request->term) {
+                        $pashFromPlacement = $pashFromPlacement->where('Term', $request->term );
+                        $queries['Term'] = $request->term;
                 }
 
             $records_0 = $pashFromPlacement->with('users')
@@ -256,9 +258,9 @@ class BillingController extends Controller
 
             // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
             $cancelledEnrolmentRecords = new Repo;
-            if (Session::has('Term')) {
-                        $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', Session::get('Term') );
-                        $queries['Term'] = Session::get('Term');
+            if ($request->term) {
+                        $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', $request->term );
+                        $queries['Term'] = $request->term;
                 }
 
             $records_2 = $cancelledEnrolmentRecords->onlyTrashed()->with('users')
@@ -285,9 +287,9 @@ class BillingController extends Controller
                     ;
             
             $cancelledPlacementRecords = new Repo;
-            if (Session::has('Term')) {
-                        $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', Session::get('Term') );
-                        $queries['Term'] = Session::get('Term');
+            if ($request->term) {
+                        $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', $request->term );
+                        $queries['Term'] = $request->term;
                 }
 
             $records_3 = $cancelledPlacementRecords->onlyTrashed()->with('users')
