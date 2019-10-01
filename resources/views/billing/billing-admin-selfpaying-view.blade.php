@@ -23,7 +23,7 @@
       <label for="Term" class="col-md-12 control-label">Year Select:</label>
       <div class="form-group col-sm-12">
         <div class="dropdown">
-          <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+          <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
             @foreach($years as $value)
                 <option></option>
                 <option value="{{$value}}" @if ($value < 2019) disabled @endif>{{$value}}</option>
@@ -102,6 +102,7 @@ function createChart(data) {
 
 	var seasons = [];
 	var prices = [];
+	var countPrices = 0;
 	var pricesPerTerm = [];
 	var arrPrices = [];
 	
@@ -169,7 +170,7 @@ function createChart(data) {
 		counts = {};
 	});
 
-	console.log(arrCountsPerTerm)
+	// console.log(arrCountsPerTerm)
 
 	var output = [];
 	var product = [];
@@ -186,24 +187,47 @@ function createChart(data) {
 	});
 
 	console.log(arrProduct)
-	
-	arrCollate = {};
-	$.each(arrProduct, function(c, d) {
-		$.each(d, function(index, val) {
-			$.each(arrCountsPerTerm, function(e, f) {
-				$.each(f, function(g, h) {
-					console.log(g)
-					arrCollate = {
-						g: val
-					}
-				});
-			});
-			console.log(val)
-		});
 
-	});
-	console.log(arrCollate)
+	var uniquePrices = $.grep(prices, function (name, index) {
+        return $.inArray(name, prices) === index;
+    }); // Returns Unique prices
 	
+	var baseVariable = {};
+
+	for (var i = 0; i < uniquePrices.length; ++i) {
+	    baseVariable[i] = [];
+	}
+
+	$.each(baseVariable, function(e, f) { 
+		console.log(f)
+	});
+
+
+	var arr1 = [];
+	var arr2 = [];
+
+	$.each(arrProduct, function(i, v) {
+		
+		if (v.length < uniquePrices.length) {
+			$.each(v, function(index, val) {
+				if (index == 0) {
+					arr1.push(val);
+				} 					
+				var valNone = 0;
+				arr2.push(valNone);
+			});
+		} else {
+			$.each(v, function(index, val) {
+				if (index == 0) {
+					arr1.push(val);
+				}
+				if (index == 1) {
+					arr2.push(val);
+				}				
+			});
+		}
+	});
+
 	// get the sum of each array value
 	var arrSum = [];
 	$.each(arrProduct, function(index, val) {
@@ -244,15 +268,18 @@ function createChart(data) {
 	    {
           // Changes this dataset to become a line
           
-          label: "USD 600 Dataset",
-	      data: [50000, 60000, 45000, 70000],
-	      borderColor: "#8e5ea2",
+          label: "USD 600 Income",
+	      data: arr2,
+	      backgroundColor: "rgba(142,94,162,0.2)",
+	      borderColor: "rgba(142,94,162)",
+	      borderWidth: "2",
 	      fill: "false",
 	    },
 	    {
 	      
-          label: "USD 365 Dataset",
-	      data: [25000, 30000, 18000, 35000],
+          label: "USD 365 Income",
+	      data: arr1,
+	      backgroundColor: "rgba(193,46,12)", 
 	      borderColor: "rgba(193,46,12)",
 	      fill: "false",
 	    }
