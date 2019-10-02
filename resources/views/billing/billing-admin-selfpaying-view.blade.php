@@ -40,16 +40,19 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-12 year-total">
+  <div class="col-md-4 each-income-per-season">
+	    
+  </div>
+
+  <div class="col-md-4 year-total">
+    
+  </div>
+  
+  <div class="col-md-4 sum-total-year">
     
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12 sum-total-year">
-    
-  </div>
-</div>
 @stop
 
 @section('java_script')
@@ -149,7 +152,7 @@ function createChart(data) {
 	// get the sum of 600 and 356 for the whole year
 	var sumTotalYear = 0;
 	$.each(arrYearProduct,function(){sumTotalYear+=parseFloat(this) || 0;});
-	$('div.sum-total-year').append('<p class="total-year-sum"><strong>Total Income: ' +sumTotalYear+ ' USD</strong></p>');
+	$('div.sum-total-year').append('<h4 class="total-year-sum"><strong>Total Income: ' +sumTotalYear+ ' USD</strong></h4>');
 
 	// break down 600 and 356 per term
 	var items = arrPrices;
@@ -170,7 +173,7 @@ function createChart(data) {
 		counts = {};
 	});
 
-	// console.log(arrCountsPerTerm)
+	console.log(arrCountsPerTerm)
 
 	var output = [];
 	var product = [];
@@ -183,24 +186,53 @@ function createChart(data) {
 		arrProduct.push(product);
 		// console.log(arrProduct)
 		product =[];
-		// $('div.enter-sum').append('<p">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
+		// $('div.enter-sum').append('<p>'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
 	});
 
 	console.log(arrProduct)
+
+	var assocArray = {};
+	var assocProduct = {};
+
+	$.each(arrCountsPerTerm, function(index, val) {
+		$.each(val, function(a, b) {
+			assocProduct[a] = a * b;
+		});
+
+		assocArray[index] = assocProduct;
+		assocProduct = {};
+		
+	});
+	console.log(assocArray)
+
+	var eachIncomePerSeason = {};
+	$.each(uniqueSeasons, function(index, val) {
+		eachIncomePerSeason[val] = assocArray[index];
+	});
+
+	console.log(eachIncomePerSeason)
+
+	$.each(eachIncomePerSeason, function(index, val) {
+		$('div.each-income-per-season').append('<p class="show-cash-'+index+'"><strong>'+index+': </strong></p>');
+		$.each(val, function(i, v) {
+			$('p.show-cash-'+index).append('<p class="show-cash-'+i+'">'+i+' USD: '+v+' </p>');
+		});
+	});
 
 	var uniquePrices = $.grep(prices, function (name, index) {
         return $.inArray(name, prices) === index;
     }); // Returns Unique prices
 	
-	var baseVariable = {};
+	// create dynamic variables
+	// var baseVariable = {};
 
-	for (var i = 0; i < uniquePrices.length; ++i) {
-	    baseVariable[i] = [];
-	}
+	// for (var i = 0; i < uniquePrices.length; ++i) {
+	//     baseVariable[i] = [];
+	// }
 
-	$.each(baseVariable, function(e, f) { 
-		console.log(f)
-	});
+	// $.each(baseVariable, function(e, f) { 
+	// 	console.log(f)
+	// });
 
 
 	var arr1 = [];
@@ -268,8 +300,8 @@ function createChart(data) {
 	    {
           // Changes this dataset to become a line
           
-          label: "USD 600 Income",
-	      data: arr2,
+          label: "USD 365 Income",
+	      data: arr1,
 	      backgroundColor: "rgba(142,94,162,0.2)",
 	      borderColor: "rgba(142,94,162)",
 	      borderWidth: "2",
@@ -277,10 +309,11 @@ function createChart(data) {
 	    },
 	    {
 	      
-          label: "USD 365 Income",
-	      data: arr1,
-	      backgroundColor: "rgba(193,46,12)", 
-	      borderColor: "rgba(193,46,12)",
+          label: "USD 600 Income",
+	      data: arr2,
+	      backgroundColor: "rgba(68,186,81,0.2)", 
+	      borderColor: "rgba(68,186,81)",
+	      borderWidth: "2",
 	      fill: "false",
 	    }
 	    ],
