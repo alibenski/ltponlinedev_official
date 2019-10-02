@@ -1,3 +1,6 @@
 $(".single-item").slick({
-	dots: true
+	dots: true,
+	speed: 500,
+	fade: true,
+	cssEase: 'linear'
 });

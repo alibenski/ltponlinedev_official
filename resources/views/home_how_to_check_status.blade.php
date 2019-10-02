@@ -5,6 +5,7 @@
     <style>
     .active-home>a {
         color: #fff;
+        font-weight: bold;
         background-color: #636b6f;
         }
     .nav-pills>li.active-home>a:hover {
@@ -22,18 +23,31 @@
             padding: 40px;
             width: 80%;
             color: #333;
-            background: #419be0;
+            /*background: #419be0;*/
+            background: #fff;
         }
 
         .slick-slide {
             text-align: center;
             color: #419be0;
             background: white;
+            margin:10px;
         }
 
         img {
             min-width: 80%;
             height: auto;
+        }
+
+        .slick-slide img{
+          width:100%;
+          /*border: 2px solid #fff;*/
+        }
+        .slick-prev.slick-arrow::before {
+            color: #419be0;
+        }
+        .slick-next.slick-arrow::before {
+            color: #419be0;
         }
 
         .bounding-box {
@@ -62,21 +76,34 @@
                         
                         @include('home_dashboard_nav')
                             
-                        
                         <div class="form-group">
 
                             <div class='container-slick'>
                               <div class='single-item'>
                                 <div>
                                     <div class='bounding-box'>
-                                        <img src="{{ asset('img/CLM-TextRight_En.jpg') }}" alt="logo">
+                                        <img src="{{ asset('img/slide_1.png') }}" alt="slide_1">
+                                        <h2>Click "Submitted Forms"</h2>
                                     </div>
                                 </div>
-                                    <div><h3>2</h3></div>
-                                    <div><h3>3</h3></div>
-                                    <div><h3>4</h3></div>
-                                    <div><h3>5</h3></div>
-                                    <div><h3>6</h3></div>
+                                <div>
+                                    <div class='bounding-box'>
+                                        <img src="{{ asset('img/slide_2.png') }}" alt="slide_2">
+                                        <h2>Select the current Term and click "Submit"</h2>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class='bounding-box'>
+                                        <img src="{{ asset('img/slide_3.png') }}" alt="slide_3">
+                                        <h2>Click on "View Info" to see enrolment status</h2>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class='bounding-box'>
+                                        <img src="{{ asset('img/slide_4.png') }}" alt="slide_4">
+                                        <h2>A pop-up box will show the enrolment status</h2>
+                                    </div>
+                                </div>
                               </div>
                             </div>
                         
@@ -111,5 +138,4 @@
 {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="{{ asset('js/slick.js') }}"></script>
-
 @stop
