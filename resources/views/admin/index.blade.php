@@ -17,6 +17,9 @@
 
 @section('content')
 
+<!-- Display the countdown timer in an element -->
+<p id="demo"></p>
+
 @include('admin.partials._termSessionMsg')
 
 <h1 class="text-success">Administrator Dashboard</h1>
@@ -317,6 +320,7 @@
 @section('java_script')
 <script src="{{ asset('js/submit.js') }}"></script>
 <script src="{{ asset('js/select2.full.js') }}"></script>
+<script src="{{ asset('js/countDownTimer.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('.select2-basic-single').select2({
