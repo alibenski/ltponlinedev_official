@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CourseSchedule extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'tblLTP_CourseSchedule';
     protected $fillable = [
         'Code', 'cs_unique','Te_Code_New', 'schedule_id', 'Te_Term', 'L', 'room_id', 'Tch_ID', 'Te_Hours', 'Te_Description', 'Te_Price',

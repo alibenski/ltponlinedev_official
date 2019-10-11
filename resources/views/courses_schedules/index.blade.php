@@ -22,6 +22,7 @@
 				<table class="table table-bordered table-striped">
 					<thead>
 						{{-- <th>Operation</th> --}}
+						<th>id</th>
 						<th>Term</th>
 						{{-- <th>CS Code</th> --}}
 						<th>Code - Course Name</th>
@@ -36,6 +37,7 @@
 						@foreach($course_schedule as $class)
 							<tr>
 								{{-- <td><a href="{{ route('course-schedule.edit', $class->id)}}" class="btn btn-default btn-sm">Edit</a></td> --}}
+								<th>{{ $class->id }}</th>
 								<th>{{ $class->Te_Term }}</th>
 								{{-- <th>{{ $class->cs_unique }}</th> --}}
 								<td>{{ $class->Te_Code_New}} - {{ $class->course->Description }}</td>
