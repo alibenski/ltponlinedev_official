@@ -112,7 +112,7 @@ class StudentController extends Controller
                 // 'lastName' => 'required|string',
                 // 'firstName' => 'required|string',
                 // validate if email is unique 
-                'email' => 'required_without_all:TITLE,lastName,firstName,org,contactNo,dob,jobAppointment,gradeLevel,organization|unique:users,email',
+                'email' => 'email|required_without_all:TITLE,lastName,firstName,org,contactNo,dob,jobAppointment,gradeLevel,organization|unique:users,email',
                 // 'org' => 'required|',
                 'contactNo' => 'regex:/^[0-9\-+]+$/|nullable',
                 // 'jobAppointment' => 'required|string',
