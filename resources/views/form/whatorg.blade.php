@@ -161,7 +161,7 @@
           placeholder: "Select Profile",
           });
       } else if ($('#decision2').is(':checked')) {
-        $('#profile option:gt(1)').attr('disabled', 'disabled'); 
+        $('#profile option:gt(2)').attr('disabled', 'disabled'); 
         $('.select-profile-single').select2({
           placeholder: "Select Profile",
           });
