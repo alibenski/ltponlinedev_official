@@ -158,6 +158,7 @@ class HomeController extends Controller
         $student->profile = $request->profile;
         $student->save();
         // save organization to sddextr table
+        $student->sddextr->CAT = $request->profile;
         $student->sddextr->DEPT = $request->input('organization');
         $student->sddextr->save();
 
