@@ -231,7 +231,7 @@
     $(function(){
         $("#updateProfileForm").submit(function(){
             var valid=0;
-            $(this).find('input[type=text], #selectInput').each(function(){
+            $(this).find('input[type=text], #selectInput, select#profile').each(function(){
                 if($(this).val() != "") valid+=1;
             });
                         
