@@ -547,6 +547,28 @@
 				        <div class="panel-body">
 							<form class="form-horizontal">
 						        <div class="form-group">
+						            <label for="title" class="col-md-4 control-label">Profile:</label>
+
+						            <div class="col-md-8 form-control-static">
+						                <p>
+						                	@if(empty( $student->profile )) Update Needed 
+		                                    @else
+		                                        @if( $student->profile == "STF") Staff Member @endif
+		                                        @if( $student->profile == "INT") Intern @endif
+		                                        @if( $student->profile == "CON") Consultant @endif
+		                                        @if( $student->profile == "JPO") JPO @endif
+		                                        @if( $student->profile == "MSU") Staff of Permanent Mission @endif
+		                                        @if( $student->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif
+		                                        @if( $student->profile == "RET") Retired UN Staff Member @endif
+		                                        @if( $student->profile == "SERV") Staff of Service Organizations in the Palais @endif
+		                                        @if( $student->profile == "NGO") Staff of UN-accredited NGO's @endif
+		                                        @if( $student->profile == "PRESS") Staff of UN Press Corps @endif 
+		                                    @endif
+						                </p>
+						            </div>
+						        </div>
+
+						        <div class="form-group">
 						            <label for="title" class="col-md-4 control-label">Title:</label>
 
 						            <div class="col-md-8 form-control-static">
