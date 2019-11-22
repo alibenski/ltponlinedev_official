@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\sendWritingTip;
 use App\Jobs\SendEmailJob;
+use App\Mail\sendWritingTip;
 use App\WritingTip;
-use Carbon;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 class WritingTipController extends Controller
@@ -33,13 +34,36 @@ class WritingTipController extends Controller
 
     public function sendWritingTipEmail(Request $request, WritingTip $writingTip)
     {
-        $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])
+        $drupalEmailRecordsArray = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])
             ->unique();
             // ->take(3);
             // ->first();
         
-        $job = (new SendEmailJob($drupalEmailRecords, $writingTip))->delay(3);
-        dispatch($job);
+        // test sample dataset
+        // $drupalEmailRecordsArray =collect(    [
+        //         0 => ["data" => "allyson.frias@un.org"],
+        //         1 => ["data" => "jeanpierre.gaviano@un.org"],
+        //         2 => ["data" => "fabienne.pairon@un.org"]
+        //     ]);
+
+        foreach ($drupalEmailRecordsArray as $key => $drupalEmailRecords) {
+            $baseDelay = Carbon::now();
+
+            $getDelay = cache('jobs.' . SendEmailJob::class, $baseDelay);
+
+            $setDelay = Carbon::parse(
+                $getDelay
+            )->addSeconds(60);
+
+            // insert data to cache table
+            cache([
+                'jobs.' . SendEmailJob::class => $setDelay
+            ], 5);
+
+            $job = (new SendEmailJob($drupalEmailRecords, $writingTip))->delay($setDelay);
+            dispatch($job);
+        }
+
 
         // foreach ($drupalEmailRecords as $key => $emailAddress) {
         //     // $when = Carbon\Carbon::now()->addSeconds(3);

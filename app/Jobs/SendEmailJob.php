@@ -47,8 +47,10 @@ class SendEmailJob implements ShouldQueue
     {
         foreach ($this->drupalEmailRecords as $key => $emailAddress) {
 
-            Mail::to($emailAddress->data)
-                ->queue(new sendWritingTip($this->writingTip));
+            // Mail::to($emailAddress->data)
+                // ->queue(new sendWritingTip($this->writingTip));
+            Mail::to($emailAddress)
+                ->send(new sendWritingTip($this->writingTip));
         }
     }
 
