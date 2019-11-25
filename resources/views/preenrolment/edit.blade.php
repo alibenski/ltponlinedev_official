@@ -146,7 +146,7 @@
                 <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">
                     {{ csrf_field() }}
                 
-                <input name="radioFullSelectDropdown" class="radio-full-select-dropdown" type="radio" value="1">
+                <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font radio-full-select-dropdown" type="radio" value="1">
                 <label for="radioFullSelectDropdown" class="label-full-select-dropdown">Change selected course</label>
 
                 <div class="insert-full-select-dropdown"></div>
@@ -240,14 +240,16 @@
         var token = $("input[name='_token']").val();
 
        $.ajax({
-            url: 'ajax-show-full-select-dropdown',
+            url: "{{ route('ajax-show-full-select-dropdown') }}",
             type: 'GET',
             data: {radioFullSelect:radioFullSelect, _token:token},
         })
-        .done(function(data, status) {
-            // $('div.insert-full-select-dropdown').html('');
-            // $('div.insert-full-select-dropdown').html(data.options);
-            console.log(data);
+        .done(function(data) {
+            $('div.insert-full-select-dropdown').html('');
+            $('div.insert-full-select-dropdown').html(data.options);
+            $('.select2-basic-single').select2({
+            placeholder: "--- No Change ---",
+            });
         })
         .fail(function() {
             console.log("error");
@@ -261,7 +263,7 @@
 </script>
 
 <script type="text/javascript">
-  $("input[name='L']").on('click', function(){
+  $(".insert-full-select-dropdown").on("click", "input[name='L'].lang_select_no", function(){
       var L = $(this).val();
       var term = $("input[name='Term']").val();
       var token = $("input[name='_token']").val();
@@ -279,7 +281,7 @@
 </script>
 
 <script type="text/javascript">
-  $("select[name='Te_Code']").on('change',function(){
+  $(".insert-full-select-dropdown").on("change", "select[name='Te_Code'].course_select_no", function(){
       var course_id = $(this).val();
       var term = $("input[name='Term']").val();
       var token = $("input[name='_token']").val();

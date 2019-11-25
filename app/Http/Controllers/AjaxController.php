@@ -26,12 +26,10 @@ class AjaxController extends Controller
 {
     public function ajaxShowFullSelectDropdown(Request $request)
     {
-        // $languages = DB::table('languages')->pluck("name","code")->all();
+        $languages = DB::table('languages')->pluck("name","code")->all();
 
-        // $data = view('ajax-full-select-dropdown', compact('languages'))->render();
-        $data = 'hello';
-        // return response()->json(['options'=>$data]);
-        return response()->json($data);   
+        $data = view('ajax-full-select-dropdown', compact('languages'))->render();
+        return response()->json(['options'=>$data]);  
     }
 
     public function ajaxCheckBatchHasRan(Request $request)
