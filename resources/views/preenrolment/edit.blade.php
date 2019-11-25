@@ -138,42 +138,18 @@
                             Changing the following fields assumes that the changes have been approved by the LTP chief and HR focal point. Take note that no email correspondences will be sent after fields have been updated.    
                         </p>
                         <p>
-                            This page is not complete and will only change the HR Approval field.
+                            This page is not yet complete.
                         </p>
                     </h4>
                 </div>
                 
                 <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">
                     {{ csrf_field() }}
-                    
-                {{-- <label>Language</label> 
-                @foreach ($languages as $id => $name)
-		            <div class="input-group col-sm-12">
-                      <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
-                      <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
-		            </div>
-	            @endforeach
-				<div class="form-group">
-                	<label>Course</label>
-                    <div class="col-sm-12">
-                      <div class="dropdown">
-                        <select class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%; display: none;" name="Te_Code">
-                            <option value="">--- Select Course ---</option>
-                        </select>
-                      </div>
-                    </div>
-                </div>
+                
+                <input name="radioFullSelectDropdown" class="radio-full-select-dropdown" type="radio" value="1">
+                <label for="radioFullSelectDropdown" class="label-full-select-dropdown">Change selected course</label>
 
-                <div class="form-group">
-                	<label>Schedule</label>
-                    <div class="col-sm-12">
-                      <div class="dropdown">
-                        <select class="col-sm-12 form-control schedule_select_no select2-basic-single" style="width: 100%; display: none;" name="schedule_id">
-                            <option value="">Fill Out Language and Course Options</option>
-                        </select>
-                      </div>
-                    </div>
-                </div> --}}
+                <div class="insert-full-select-dropdown"></div>
                 
                 <div class="form-group">
                     <label>HR approval </label>
@@ -259,11 +235,33 @@
     placeholder: "--- No Change ---",
     });
 
+    $('input.radio-full-select-dropdown').click( function(){
+        var radioFullSelect = $(this).val();
+        var token = $("input[name='_token']").val();
+
+       $.ajax({
+            url: 'ajax-show-full-select-dropdown',
+            type: 'GET',
+            data: {radioFullSelect:radioFullSelect, _token:token},
+        })
+        .done(function(data, status) {
+            // $('div.insert-full-select-dropdown').html('');
+            // $('div.insert-full-select-dropdown').html(data.options);
+            console.log(data);
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+         
+    });
   });
 </script>
 
 <script type="text/javascript">
-  $("input[name='L']").click(function(){
+  $("input[name='L']").on('click', function(){
       var L = $(this).val();
       var term = $("input[name='Term']").val();
       var token = $("input[name='_token']").val();
