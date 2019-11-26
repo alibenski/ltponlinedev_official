@@ -856,7 +856,7 @@ class PreenrolmentController extends Controller
             $request->session()->flash('warning', 'Nothing to change, Nothing to update...');
             return back();
         }
-
+        dd('pass');
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)

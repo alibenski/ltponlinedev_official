@@ -391,6 +391,11 @@ Route::get('check-enrolment-entries-ajax', ['as'=>'check-enrolment-entries-ajax'
 Route::get('check-selfpay-entries-ajax', ['as'=>'check-selfpay-entries-ajax','uses'=>'AjaxController@ajaxCheckSelfpayEntries']);
 Route::get('check-selfpay-placement-entries-ajax', ['as'=>'check-selfpay-placement-entries-ajax','uses'=>'AjaxController@ajaxCheckSelfpayPlacementEntries']);
 Route::get('ajax-show-full-select-dropdown', ['as'=>'ajax-show-full-select-dropdown','uses'=>'AjaxController@ajaxShowFullSelectDropdown']);
+Route::get('ajax-change-hr-approval', ['as'=>'ajax-change-hr-approval','uses'=>'AjaxController@ajaxChangeHRApproval']);
+Route::get('ajax-change-org-in-form', ['as'=>'ajax-change-org-in-form','uses'=>'AjaxController@ajaxChangeOrgInForm']);
+Route::get('ajax-convert-to-selfpay', ['as'=>'ajax-convert-to-selfpay','uses'=>'AjaxController@ajaxConvertToSelfpay']);
+Route::get('ajax-convert-to-regular', ['as'=>'ajax-convert-to-regular','uses'=>'AjaxController@ajaxConvertToRegular']);
+
 
 // ajax use to get section number of cs_unique
 Route::get('get-section-no-ajax', ['as'=>'get-section-no-ajax','uses'=>'AjaxController@ajaxGetSectionNo']);

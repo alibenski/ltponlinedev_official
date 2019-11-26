@@ -27,9 +27,33 @@ class AjaxController extends Controller
     public function ajaxShowFullSelectDropdown(Request $request)
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
-
         $data = view('ajax-full-select-dropdown', compact('languages'))->render();
         return response()->json(['options'=>$data]);  
+    }
+
+    public function ajaxChangeHRApproval(Request $request)
+    {
+        $data = view('ajax-change-hr-approval')->render();
+        return response()->json(['options'=>$data]);
+    }
+
+    public function ajaxChangeOrgInForm(Request $request)
+    {
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $data = view('ajax-change-org-in-form', compact('org'))->render();
+        return response()->json(['options'=>$data]);
+    }
+
+    public function ajaxConvertToSelfpay(Request $request)
+    {
+        $data = view('ajax-convert-to-selfpay')->render();
+        return response()->json(['options'=>$data]);
+    }
+
+    public function ajaxConvertToRegular(Request $request)
+    {
+        $data = view('ajax-convert-to-regular')->render();
+        return response()->json(['options'=>$data]);
     }
 
     public function ajaxCheckBatchHasRan(Request $request)

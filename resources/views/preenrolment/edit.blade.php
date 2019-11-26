@@ -127,82 +127,58 @@
 
     <div class="col-sm-8">
         <div class="box box-success">
-            <div class="box-header"><h3>Change to...</h3></div>
+            <div class="box-header"><h3>Modifications</h3></div>
             <div class="box-body">
-                <div class="alert alert-default">
-                    <h2><i class="fa fa-warning"></i> Warning</h2>
-                </div>
                 <div class="alert alert-warning">
                     <h4>
+                        <p><i class="fa fa-warning"></i> Warning</p>
                         <p>
                             Changing the following fields assumes that the changes have been approved by the LTP chief and HR focal point. Take note that no email correspondences will be sent after fields have been updated.    
-                        </p>
-                        <p>
-                            This page is not yet complete.
                         </p>
                     </h4>
                 </div>
                 
                 <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">
                     {{ csrf_field() }}
-                
-                <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font radio-full-select-dropdown" type="radio" value="1">
-                <label for="radioFullSelectDropdown" class="label-full-select-dropdown">Change selected course</label>
+                <div class="input-group col-md-12">
+                    <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font radio-full-select-dropdown" type="checkbox" value="1">
+                    <label for="radioFullSelectDropdown" class="label-full-select-dropdown">Change selected course</label>
 
-                <div class="insert-full-select-dropdown"></div>
-                
-                <div class="form-group">
-                    <label>HR approval </label>
-                    <div class="col-sm-12">
-                      <div class="dropdown">
-                        <select class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%;" name="approval_hr">
-                            <option value="">--- No Change ---</option>
-                            <option value="1">Approve</option>
-                            <option value="0">Disapprove<option>
-                        </select>
-                      </div>
-                    </div>
+                    <div class="insert-full-select-dropdown"></div>
                 </div>
 
-                {{-- <label>Organization</label>
-            	<div class="col-sm-12">
-                  <div class="dropdown">
-					<select id="input" name="DEPT" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
-					@if(!empty($org))
-						<option value="">Select</option>
-						@foreach($org as $value)
-						<option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
-						@endforeach
-					@endif
-					</select>
-                  </div>
+                <div class="input-group col-md-12">
+                    <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font radio-change-hr-approval" type="checkbox" value="1">
+                    <label for="radioChangeHRApproval" class="label-change-hr-approval">Change HR approval status</label>
+
+                    <div class="insert-change-hr-approval"></div>
                 </div>
 
-                <div class="form-group">
-                	<label>Supervisor's email</label>
-                	<input type="text" name="mgr_email" class="col-sm-12 form-control" placeholder="Leave blank if no change">
-				</div>
-                <div class="form-group">
-                	<label>Supervisor first name</label>
-                	<input type="text" name="mgr_fname" class="col-sm-12 form-control" placeholder="Leave blank if no change">
-				</div>
-                <div class="form-group">
-                	<label>Supervisor last name</label>
-                	<input type="text" name="mgr_lname" class="col-sm-12 form-control" placeholder="Leave blank if no change">
-				</div>
-                <div class="form-group">
-                	<label>Supervisor approval</label>
-                	<div class="col-sm-12">
-                      <div class="dropdown">
-                        <select class="col-sm-12 form-control course_select_no select2-basic-single" style="width: 100%;" name="approval">
-                            <option value="">--- No Change ---</option>
-                            <option value="1">Approve</option>
-                            <option value="0">Disapprove<option>
-                        </select>
-                      </div>
-                    </div>
-				</div>
-                 --}}
+                <div class="input-group col-md-12">
+                    <input id="radioChangeOrgInForm" name="radioChangeOrgInForm" class="with-font radio-change-org-in-form" type="checkbox" value="1">
+                    <label for="radioChangeOrgInForm" class="label-change-org-in-form">Change Organization (Only applies to this form)</label>
+
+                    <div class="insert-change-org-in-form"></div>
+                </div>                
+                
+                <div class="input-group col-md-12">
+                    <input id="radioSelfPayOptions" name="radioSelfPayOptions" class="with-font radio-selfpay-options" type="checkbox" value="1">
+                    <label for="radioSelfPayOptions" class="label-selfpay-options">Self-payment form options</label>
+                        
+                        <div class="decision-section hidden">
+                            <div class="col-sm-12">
+                                <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font decision-convert-to-selfpay" type="radio">
+                                <label for="decisionConvertToSelfpay">Convert to a self-payment form</label>
+                            </div>
+                            <div class="insert-convert-to-selfpay"></div>
+
+                            <div class="col-sm-12">
+                                <input id="decisionConvertToRegular" name="decisionConvert" class="with-font decision-convert-to-regular" type="radio">
+                                <label for="decisionConvertToRegular">Convert to a non-self-payment form</label>
+                            </div>
+                            <div class="insert-convert-to-regular"></div>
+                        </div>
+                </div>
 
                 <div class="form-group">
                 	<button type="submit" class="btn btn-success btn-space pull-right"><i class="fa fa-save"></i> Save</button>
@@ -230,6 +206,7 @@
 <script>
   $(document).ready(function(){
     $('input[type=radio]').prop('checked',false);
+    $('input[type=checkbox]').prop('checked',false);
     
     $('.select2-basic-single').select2({
     placeholder: "--- No Change ---",
@@ -238,26 +215,145 @@
     $('input.radio-full-select-dropdown').click( function(){
         var radioFullSelect = $(this).val();
         var token = $("input[name='_token']").val();
+            if (($('input.radio-full-select-dropdown').prop('checked')) == true) {
+               $.ajax({
+                    url: "{{ route('ajax-show-full-select-dropdown') }}",
+                    type: 'GET',
+                    data: {radioFullSelect:radioFullSelect, _token:token},
+                })
+                .done(function(data) {
+                    $('div.insert-full-select-dropdown').html('');
+                    $('div.insert-full-select-dropdown').html(data.options);
+                    $('.select2-basic-single').select2({
+                    placeholder: "--- No Change ---",
+                    });
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    // console.log("complete");
+                });
+            } else {
+                $('div.insert-full-select-dropdown').empty();   
+            }
+    });
 
-       $.ajax({
-            url: "{{ route('ajax-show-full-select-dropdown') }}",
-            type: 'GET',
-            data: {radioFullSelect:radioFullSelect, _token:token},
-        })
-        .done(function(data) {
-            $('div.insert-full-select-dropdown').html('');
-            $('div.insert-full-select-dropdown').html(data.options);
-            $('.select2-basic-single').select2({
-            placeholder: "--- No Change ---",
+    $('input.radio-change-hr-approval').click( function(){
+        var token = $("input[name='_token']").val();
+            if (($('input.radio-change-hr-approval').prop('checked')) == true) {
+               $.ajax({
+                    url: "{{ route('ajax-change-hr-approval') }}",
+                    type: 'GET',
+                    data: {_token:token},
+                })
+                .done(function(data) {
+                    $('div.insert-change-hr-approval').html('');
+                    $('div.insert-change-hr-approval').html(data.options);
+                    $('.select2-basic-single').select2({
+                    placeholder: "--- No Change ---",
+                    });
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    // console.log("complete");
+                });
+            } else {
+                $('div.insert-change-hr-approval').empty();   
+            }
+    });
+
+    $('input.radio-change-org-in-form').click( function(){
+        var token = $("input[name='_token']").val();
+            if (($('input.radio-change-org-in-form').prop('checked')) == true) {
+               $.ajax({
+                    url: "{{ route('ajax-change-org-in-form') }}",
+                    type: 'GET',
+                    data: {_token:token},
+                })
+                .done(function(data) {
+                    $('div.insert-change-org-in-form').html('');
+                    $('div.insert-change-org-in-form').html(data.options);
+                    $('.select2-basic-single').select2({
+                    placeholder: "--- No Change ---",
+                    });
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    // console.log("complete");
+                });
+            } else {
+                $('div.insert-change-org-in-form').empty();   
+            }
+    });
+
+    $('input.radio-selfpay-options').click( function(){
+        var token = $("input[name='_token']").val();
+
+        if ($(this).prop('checked') == true) {
+            $('div.decision-section').removeClass('hidden');
+            $('input.decision-convert-to-selfpay').prop('checked',false);
+            $('input.decision-convert-to-regular').prop('checked',false);
+
+            $('input.decision-convert-to-selfpay').on('click', function() {
+                if (($(this).prop('checked')) == true) {
+                    $('div.insert-convert-to-regular').empty();  
+
+                   $.ajax({
+                        url: "{{ route('ajax-convert-to-selfpay') }}",
+                        type: 'GET',
+                        data: {_token:token},
+                    })
+                    .done(function(data) {
+                        $('div.insert-convert-to-selfpay').html('');
+                        $('div.insert-convert-to-selfpay').html(data.options);
+                        $('.select2-basic-single').select2({
+                        placeholder: "--- No Change ---",
+                        });
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        // console.log("complete");
+                    });
+                } 
             });
-        })
-        .fail(function() {
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        });
-         
+
+            $('input.decision-convert-to-regular').on('click', function() {
+                if (($(this).prop('checked')) == true) {
+                    $('div.insert-convert-to-selfpay').empty();  
+
+                   $.ajax({
+                        url: "{{ route('ajax-convert-to-regular') }}",
+                        type: 'GET',
+                        data: {_token:token},
+                    })
+                    .done(function(data) {
+                        $('div.insert-convert-to-regular').html('');
+                        $('div.insert-convert-to-regular').html(data.options);
+                        $('.select2-basic-single').select2({
+                        placeholder: "--- No Change ---",
+                        });
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        // console.log("complete");
+                    });
+                } 
+            });
+
+        } else {
+            $('div.decision-section').addClass('hidden');
+            $('div.insert-convert-to-selfpay').empty(); 
+            $('div.insert-convert-to-regular').empty();  
+        }
     });
   });
 </script>
