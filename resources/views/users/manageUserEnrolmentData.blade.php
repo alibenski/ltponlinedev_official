@@ -295,6 +295,7 @@
 											@else
 											<span id="status" class="label label-info margin-label">
 											N/A - Self-Payment</span>
+											<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank">_</a>
 											@endif											
 										</td>
 										<td>

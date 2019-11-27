@@ -848,21 +848,37 @@ class PreenrolmentController extends Controller
         return redirect()->route('users.index');
     }
 
+    public function checkIfSameCourse($request, $indexno, $term, $tecode, $eform_submit_count)
+    {
+        // check if assigned course was already assigned
+        $assignedNewCourse = $tecode.'-'.$request->schedule_id.'-'.$term.'-'.$indexno;
+        $checkNewCourseExists = Preenrolment::where('CodeIndexID', $assignedNewCourse)
+            // ->where('updated_by_admin', '1')
+            ->first();
+        if ($checkNewCourseExists) {
+            $data = 0;
+            return $data;
+        }
+
+        $data = 1; 
+        return $data;
+    }
+
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {   
         // dd(array_filter($request->all()), $indexno, $term, $tecode, $eform_submit_count);
         
-        if (is_null($request->approval_hr)) {
-            $request->session()->flash('warning', 'Nothing to change, Nothing to update...');
-            return back();
-        }
-        dd('pass');
+        // check if assigned course was already assigned
+        $data = $this->checkIfSameCourse($request, $indexno, $term, $tecode, $eform_submit_count);
+
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
             ->where('eform_submit_count', $eform_submit_count)
             ->where('Term', $term)
             ->get();
+
+        dd($enrolment_to_be_copied, $data);
 
         $enrolment_to_be_modified = $enrolment_to_be_copied;
         // $user_id = User::where('indexno', $indexno)->first(['id']);

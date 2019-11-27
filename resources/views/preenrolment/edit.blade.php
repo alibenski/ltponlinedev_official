@@ -127,7 +127,7 @@
 
     <div class="col-sm-8">
         <div class="box box-success">
-            <div class="box-header"><h3>Modifications</h3></div>
+            <div class="box-header"><h3>Modification Options</h3></div>
             <div class="box-body">
                 <div class="alert alert-warning">
                     <h4>
@@ -138,25 +138,25 @@
                     </h4>
                 </div>
                 
-                <form method="POST" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">
+                <form id="updateForm" method="POST" enctype="multipart/form-data" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">
                     {{ csrf_field() }}
                 <div class="input-group col-md-12">
-                    <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font radio-full-select-dropdown" type="checkbox" value="1">
+                    <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font modify-option radio-full-select-dropdown" type="checkbox" value="1">
                     <label for="radioFullSelectDropdown" class="label-full-select-dropdown">Change selected course</label>
 
                     <div class="insert-full-select-dropdown"></div>
                 </div>
 
                 <div class="input-group col-md-12">
-                    <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font radio-change-hr-approval" type="checkbox" value="1">
+                    <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font modify-option radio-change-hr-approval" type="checkbox" value="1">
                     <label for="radioChangeHRApproval" class="label-change-hr-approval">Change HR approval status</label>
 
                     <div class="insert-change-hr-approval"></div>
                 </div>
 
                 <div class="input-group col-md-12">
-                    <input id="radioChangeOrgInForm" name="radioChangeOrgInForm" class="with-font radio-change-org-in-form" type="checkbox" value="1">
-                    <label for="radioChangeOrgInForm" class="label-change-org-in-form">Change Organization (Only applies to this form)</label>
+                    <input id="radioChangeOrgInForm" name="radioChangeOrgInForm" class="with-font modify-option radio-change-org-in-form" type="checkbox" value="1">
+                    <label for="radioChangeOrgInForm" class="label-change-org-in-form">Change Organization (only applies to this form)</label>
 
                     <div class="insert-change-org-in-form"></div>
                 </div>                
@@ -167,17 +167,22 @@
                         
                         <div class="decision-section hidden">
                             <div class="col-sm-12">
-                                <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font decision-convert-to-selfpay" type="radio">
+                                <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font modify-option decision-convert-to-selfpay" type="radio">
                                 <label for="decisionConvertToSelfpay">Convert to a self-payment form</label>
                             </div>
                             <div class="insert-convert-to-selfpay"></div>
 
                             <div class="col-sm-12">
-                                <input id="decisionConvertToRegular" name="decisionConvert" class="with-font decision-convert-to-regular" type="radio">
+                                <input id="decisionConvertToRegular" name="decisionConvert" class="with-font modify-option decision-convert-to-regular" type="radio">
                                 <label for="decisionConvertToRegular">Convert to a non-self-payment form</label>
                             </div>
                             <div class="insert-convert-to-regular"></div>
                         </div>
+                </div>
+
+                <div class="input-group col-md-12">
+                    <input id="radioUndoDeleteStatus" name="radioUndoDeleteStatus" class="with-font modify-option radio-undo-delete-status" type="checkbox" value="1">
+                    <label for="radioUndoDeleteStatus" class="label-selfpay-options">Undo delete/cancelled status</label>
                 </div>
 
                 <div class="form-group">
@@ -207,7 +212,7 @@
   $(document).ready(function(){
     $('input[type=radio]').prop('checked',false);
     $('input[type=checkbox]').prop('checked',false);
-    
+
     $('.select2-basic-single').select2({
     placeholder: "--- No Change ---",
     });
@@ -392,5 +397,29 @@
           }
       });
   }); 
+</script>
+
+<script>
+    // Check if at least one input field is filled 
+    $(function checkAtLeastOneInput(){
+        $("#updateForm").submit(function(event){
+            // event.preventDefault();
+            var valid=0;
+            $(this).find('input.modify-option').each(function(){
+                if($(this).prop('checked') == true) 
+                    valid+=1;
+            });
+                        
+            if(valid){
+                $('button[type="submit"]').attr('disabled', true);
+                // alert(valid + " input(s) filled. Thank you.");
+                return true;
+            }
+            else {
+                alert("Error: you must select and modify at least one field.");
+                return false;
+            }
+        });
+    });
 </script>
 @stop

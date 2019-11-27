@@ -6,13 +6,13 @@
           </div>
         
           <div class="form-group">
-            <label for="identityfile">Upload Proof of Identity: </label>
-            <input name="identityfile" type="file">
+            <label for="identityfile">Upload Proof of Identity: (required)</label>
+            <input name="identityfile" type="file" required="">
           </div>
 
           <div class="form-group">
-            <label for="payfile">Upload Proof of Payment: </label>
-            <input name="payfile" type="file">
+            <label for="payfile">Upload Proof of Payment: (required)</label>
+            <input name="payfile" type="file" required="">
           </div>  
         </div>
     </div>
