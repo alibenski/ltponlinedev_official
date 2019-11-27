@@ -148,8 +148,8 @@
                 </div>
 
                 <div class="input-group col-md-12">
-                    <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font modify-option radio-change-hr-approval" type="checkbox" value="1">
-                    <label for="radioChangeHRApproval" class="label-change-hr-approval">Change HR approval status</label>
+                    <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font modify-option radio-change-hr-approval" type="checkbox" value="1" @if ($enrolment_details->is_self_pay_form == 1) disabled="" @endif>
+                    <label for="radioChangeHRApproval" class="label-change-hr-approval">Change HR approval status (if applicable)</label>
 
                     <div class="insert-change-hr-approval"></div>
                 </div>
@@ -167,13 +167,13 @@
                         
                         <div class="decision-section hidden">
                             <div class="col-sm-12">
-                                <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font modify-option decision-convert-to-selfpay" type="radio">
+                                <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font modify-option decision-convert-to-selfpay" type="radio" value="1">
                                 <label for="decisionConvertToSelfpay">Convert to a self-payment form</label>
                             </div>
                             <div class="insert-convert-to-selfpay"></div>
 
                             <div class="col-sm-12">
-                                <input id="decisionConvertToRegular" name="decisionConvert" class="with-font modify-option decision-convert-to-regular" type="radio">
+                                <input id="decisionConvertToRegular" name="decisionConvert" class="with-font modify-option decision-convert-to-regular" type="radio" value="0">
                                 <label for="decisionConvertToRegular">Convert to a non-self-payment form</label>
                             </div>
                             <div class="insert-convert-to-regular"></div>

@@ -809,12 +809,14 @@ class PreenrolmentController extends Controller
 
     public function editEnrolmentFields($indexno, $term, $tecode, $eform_submit_count)
     {
-        $enrolment_details = Preenrolment::where('INDEXID', $indexno)
+        $enrolment_details = Preenrolment::withTrashed()
+            ->where('INDEXID', $indexno)
             ->where('Term', $term)->where('Te_Code', $tecode)->where('eform_submit_count', $eform_submit_count)
             ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ])
             ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ]);
         
-        $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
+        $enrolment_schedules = Preenrolment::withTrashed()
+            ->orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
             ->where('eform_submit_count', $eform_submit_count)
@@ -864,70 +866,89 @@ class PreenrolmentController extends Controller
         return $data;
     }
 
+    public function changeHRApproval($request, $enrolment_to_be_copied)
+    {
+        $enrolment_to_be_modified = $enrolment_to_be_copied;
+
+        $input = $request->all();
+        $input = array_filter($input, 'strlen');
+
+        foreach ($enrolment_to_be_modified as $new_data) {
+            $new_data->fill($input)->save(); 
+            if ($request->approval_hr == 1) {
+                $new_data->overall_approval = $request->approval_hr;   
+                $new_data->save();  
+                $new_data->restore();  
+            } elseif ($request->approval_hr == 0) {
+                $new_data->overall_approval = $request->approval_hr; 
+                $new_data->save();   
+                $new_data->delete();   
+            }
+        }
+    }
+
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {   
         // dd(array_filter($request->all()), $indexno, $term, $tecode, $eform_submit_count);
         
-        // check if assigned course was already assigned
-        $data = $this->checkIfSameCourse($request, $indexno, $term, $tecode, $eform_submit_count);
-
-        $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+        $enrolment_to_be_copied = Preenrolment::withTrashed()
+            ->orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', $indexno)
             ->where('eform_submit_count', $eform_submit_count)
             ->where('Term', $term)
             ->get();
 
-        dd($enrolment_to_be_copied, $data);
+        $enrolmentID = Preenrolment::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('Term', $term)
+            ->get(['id']);
 
-        $enrolment_to_be_modified = $enrolment_to_be_copied;
-        // $user_id = User::where('indexno', $indexno)->first(['id']);
-
-        // foreach ($enrolment_to_be_copied as $data) {
-        //     $data->fill(['updated_by_admin' => 1,'modified_by' => Auth::user()->id ])->save();
-
-        //     $arr = $data->attributesToArray();
-        //     $clone_forms = ModifiedForms::create($arr);
-        // }
-
-
-        // $count_form = $enrolment_to_be_copied->count();
-        // if ($count_form > 1) {
-        //     $delform = Preenrolment::orderBy('id', 'desc')
-        //     ->where('Te_Code', $tecode)
-        //     ->where('INDEXID', $indexno)
-        //     ->where('eform_submit_count', $eform_submit_count)
-        //     ->where('Term', $term)
-        //     ->first();
-        //     $delform->Code = null;
-        //     $delform->CodeIndexID = null;
-        //     $delform->Te_Code = null;
-        //     $delform->INDEXID = null;
-        //     $delform->Term = null;
-        //     $delform->schedule_id = null;             
-        //     $delform->save();
-        //     $delform->delete();
-        // }
-
-        // $enrolment_to_be_modified = Preenrolment::orderBy('id', 'asc')
-        //     ->where('Te_Code', $tecode)
-        //     ->where('INDEXID', $indexno)
-        //     ->where('eform_submit_count', $eform_submit_count)
-        //     ->where('Term', $term)
-        //     ->get();
-
-        $input = $request->all();
-        $input = array_filter($input, 'strlen');
-        
-        foreach ($enrolment_to_be_modified as $new_data) {
-            $new_data->fill($input)->save(); 
-            $new_data->overall_approval = $request->approval_hr;   
-            $new_data->save();   
-
-            // $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
-            // $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
-            // $new_data->save();
+        // get what fields are being modified
+        if ($request->radioFullSelectDropdown) {
+            // check if assigned course was already assigned
+            $data = $this->checkIfSameCourse($request, $indexno, $term, $tecode, $eform_submit_count);
+            // change course
+            return '';
         }
+        if ($request->radioChangeHRApproval) {
+            // change HR approval
+            $this->changeHRApproval($request, $enrolment_to_be_copied);
+
+        }
+        
+        if ($request->radioChangeOrgInForm) {
+            // change organization
+            return '1';
+        }
+        if ($request->radioSelfPayOptions) {
+            // self-payment options
+            return '2';
+            if ($request->decisionConvert == 1) {
+                // convert to self-payment
+                return '3';
+            }
+            if ($request->decisionConvert == 0) {
+                // convert to regular
+                return '4';
+            }
+        }
+        if ($request->radioUndoDeleteStatus) {
+            // undo delete/cancel status
+            return '5';
+        }
+        // always log who modified the record
+        $input_1 = [ 'modified_by' => Auth::user()->id ];
+        $input_1 = array_filter($input_1, 'strlen');
+
+        foreach ($enrolmentID as $data) {
+                $enrolmentForm = Preenrolment::withTrashed()->find($data->id);
+                $enrolmentForm->fill($input_1)->save();
+        }
+
         $request->session()->flash('success', 'Update successful!');
         // return redirect()->route('manage-user-enrolment-data', $user_id);
         return redirect()->back();
