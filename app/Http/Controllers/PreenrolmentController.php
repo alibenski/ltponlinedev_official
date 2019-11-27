@@ -946,6 +946,8 @@ class PreenrolmentController extends Controller
 
         foreach ($enrolmentID as $data) {
                 $enrolmentForm = Preenrolment::withTrashed()->find($data->id);
+                // add logic to check if form has been disapproved or undo delete/cancel
+                // insert soft-delete or restore after all fields have been updated above
                 $enrolmentForm->fill($input_1)->save();
         }
 
