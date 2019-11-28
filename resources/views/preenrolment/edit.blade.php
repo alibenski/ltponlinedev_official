@@ -207,14 +207,22 @@
                         
                         <div class="decision-section hidden">
                             <div class="col-sm-12">
-                                <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font modify-option decision-convert-to-selfpay" type="radio" value="1">
-                                <label for="decisionConvertToSelfpay">Convert to a self-payment form</label>
+                                <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font modify-option decision-convert-to-selfpay" type="radio" value="1" @if ($enrolment_details->is_self_pay_form == 1) disabled="" @endif>
+                                <label for="decisionConvertToSelfpay">
+                                    @if ($enrolment_details->is_self_pay_form == 1)<del class="text-danger">Convert to a self-payment form</del>
+                                    @else Convert to a self-payment form
+                                    @endif
+                                </label>
                             </div>
                             <div class="insert-convert-to-selfpay"></div>
 
                             <div class="col-sm-12">
-                                <input id="decisionConvertToRegular" name="decisionConvert" class="with-font modify-option decision-convert-to-regular" type="radio" value="0">
-                                <label for="decisionConvertToRegular">Convert to a non-self-payment form</label>
+                                <input id="decisionConvertToRegular" name="decisionConvert" class="with-font modify-option decision-convert-to-regular" type="radio" value="0" @if (is_null($enrolment_details->is_self_pay_form)) disabled="" @endif>
+                                <label for="decisionConvertToRegular">
+                                    @if (is_null($enrolment_details->is_self_pay_form))<del class="text-danger">Convert to a non-self-payment form</del>
+                                    @else Convert to a non-self-payment form
+                                    @endif
+                                </label>
                             </div>
                             <div class="insert-convert-to-regular"></div>
                         </div>

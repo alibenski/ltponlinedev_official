@@ -925,9 +925,66 @@ class PreenrolmentController extends Controller
         }
     }
 
-    public function undoDeleteStatus($value='')
+    public function convertToSelfPaymentForm($request, $enrolmentID)
     {
-        # code...
+        foreach ($enrolmentID as $datum) {
+            $enrolmentForm = Preenrolment::withTrashed()->find($datum->id);
+
+                if (!is_null($enrolmentForm->INDEXID)) {
+                    $index_id = $enrolmentForm->INDEXID;
+                }
+
+                if (!is_null($enrolmentForm->Term)) {
+                    $term_id = $enrolmentForm->Term;
+                }
+
+                if (!is_null($enrolmentForm->Te_Code)) {
+                    $course_id = $enrolmentForm->Te_Code;
+                }
+
+                if (!is_null($enrolmentForm->L)) {
+                    $language_id = $enrolmentForm->L;
+                }
+        }
+
+        // store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'converted_id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            //Create new record in db table
+            $attachment_identity_file = new File([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_identity_file->save();
+        }
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'converted_payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            //Create new record in db table
+            $attachment_pay_file = new File([
+                    'filename' => $filename,
+                    'size' => $request->payfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_pay_file->save();
+        }
+
+        // set is_self_pay_form flag and other relevant fields
+        foreach ($enrolmentID as $valueObj) {
+            $formToBeConverted = Preenrolment::withTrashed()->find($valueObj->id);
+            $formToBeConverted->is_self_pay_form = 1;
+            $formToBeConverted->approval_hr = null;
+            $formToBeConverted->approval = null;
+            $formToBeConverted->attachment_id => $attachment_identity_file->id;
+            $formToBeConverted->attachment_pay => $attachment_pay_file->id;
+            $formToBeConverted->save();
+        }
     }
 
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
@@ -987,7 +1044,14 @@ class PreenrolmentController extends Controller
             // self-payment options
 
             if ($request->decisionConvert == 1) {
+                $this->validate($request, [
+                    'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+                    'payfile' => 'mimes:pdf,doc,docx|max:8000',
+                ]);
+
                 // convert to self-payment
+                $this->convertToSelfPaymentForm($request, $enrolmentID);
+                
                 return '3';
             }
 
@@ -996,9 +1060,11 @@ class PreenrolmentController extends Controller
                 return '4';
             }
         }
-        
+
         if ($request->radioUndoDeleteStatus) {
-            $this->undoDeleteStatus();
+            foreach ($enrolment_to_be_copied as $enrolmentToBeRestore) {
+                $enrolmentToBeRestore->restore();
+            }
         }
 
         // always log who modified the record

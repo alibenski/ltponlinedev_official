@@ -175,6 +175,8 @@
 									@foreach($student_enrolments as $key=>$form)
 									<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 										<td>
+											<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank" class="btn btn-info btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+
 												@if($form->deleted_at)
 												@else
 													
@@ -281,21 +283,17 @@
 													@elseif($form->approval == 1 && is_null($form->approval_hr))
 													<span id="status" class="label label-warning margin-label">
 													Pending Approval</span>
-													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank">_</a>
 													@elseif($form->approval == 1 && $form->approval_hr == 1)
 													<span id="status" class="label label-success margin-label">
 													Approved</span>
-													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" style="text-decoration: none" target="_blank">_</a>
 													@elseif($form->approval == 1 && $form->approval_hr == 0)
 													<span id="status" class="label label-danger margin-label">
-													Disapproved</span>
-													<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank">_</a>
+													Disapproved</span>												
 													@endif
 												@endif
 											@else
 											<span id="status" class="label label-info margin-label">
-											N/A - Self-Payment</span>
-											<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank">_</a>
+											N/A - Self-Payment</span>										
 											@endif											
 										</td>
 										<td>
@@ -865,6 +863,7 @@ $(document).ready(function() {
     	if (!jQuery.isEmptyObject( data )) {
     		$(".course-delete-main").addClass('hidden');
     		$(".placement-delete").addClass('hidden');
+    		$(".btn-edit-form").addClass('hidden');
     	}
 
     })
