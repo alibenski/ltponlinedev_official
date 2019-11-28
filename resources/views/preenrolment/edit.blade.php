@@ -129,6 +129,42 @@
         <div class="box box-success">
             <div class="box-header"><h3>Modification Options</h3></div>
             <div class="box-body">
+
+                @if (Session::has('msg-same-course')) 
+                    <div class="alert alert-danger alert-block" role="alert">
+                        <strong>Message on course modification: </strong> {{ Session::get('msg-same-course') }}
+                    </div>
+
+                @endif
+                
+                @if (Session::has('msg-course-updated')) 
+                    <div class="alert alert-success alert-block" role="alert">
+                        <strong>Message on course modification: </strong> {{ Session::get('msg-course-updated') }}
+                    </div>
+
+                @endif
+
+                @if (Session::has('msg-delete-form')) 
+                    <div class="alert alert-danger alert-block" role="alert">
+                        <strong>Message on HR approval: </strong> {{ Session::get('msg-delete-form') }}
+                    </div>
+
+                @endif
+
+                @if (Session::has('msg-restore-form')) 
+                    <div class="alert alert-success alert-block" role="alert">
+                        <strong>Message on HR approval: </strong> {{ Session::get('msg-restore-form') }}
+                    </div>
+
+                @endif
+
+                @if (Session::has('msg-change-org')) 
+                    <div class="alert alert-success alert-block" role="alert">
+                        <strong>Message on organization field: </strong> {{ Session::get('msg-change-org') }}
+                    </div>
+
+                @endif
+
                 <div class="alert alert-warning">
                     <h4>
                         <p><i class="fa fa-warning"></i> Warning</p>
@@ -149,7 +185,11 @@
 
                 <div class="input-group col-md-12">
                     <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font modify-option radio-change-hr-approval" type="checkbox" value="1" @if ($enrolment_details->is_self_pay_form == 1) disabled="" @endif>
-                    <label for="radioChangeHRApproval" class="label-change-hr-approval">Change HR approval status (if applicable)</label>
+                    <label for="radioChangeHRApproval" class="label-change-hr-approval">
+                        @if ($enrolment_details->is_self_pay_form == 1) <del class="text-danger">Change HR approval status (if applicable)</del>
+                        @else Change HR approval status (if applicable)
+                        @endif
+                    </label>
 
                     <div class="insert-change-hr-approval"></div>
                 </div>
@@ -181,14 +221,18 @@
                 </div>
 
                 <div class="input-group col-md-12">
-                    <input id="radioUndoDeleteStatus" name="radioUndoDeleteStatus" class="with-font modify-option radio-undo-delete-status" type="checkbox" value="1">
-                    <label for="radioUndoDeleteStatus" class="label-selfpay-options">Undo delete/cancelled status</label>
+                    <input id="radioUndoDeleteStatus" name="radioUndoDeleteStatus" class="with-font modify-option radio-undo-delete-status" type="checkbox" @if (is_null($enrolment_details->deleted_at)) disabled="" @endif value="1">
+                    <label for="radioUndoDeleteStatus" class="label-selfpay-options">
+                        @if (is_null($enrolment_details->deleted_at))<del class="text-danger">Undo delete/cancelled status</del> 
+                        @else Undo delete/cancelled status
+                        @endif
+                    </label>
                 </div>
 
                 <div class="form-group">
                 	<button type="submit" class="btn btn-success btn-space pull-right"><i class="fa fa-save"></i> Save</button>
 	                <input type="hidden" name="Term" value="{{ $enrolment_details->Term }}">
-	                <input type="hidden" name="form_counter" value="{{ $enrolment_details->form_counter }}">
+	                <input type="hidden" name="eform_submit_count" value="{{ $enrolment_details->eform_submit_count }}">
 	                <input type="hidden" name="_token" value="{{ Session::token() }}">
 	                {{ method_field('PUT') }}
                 </div>

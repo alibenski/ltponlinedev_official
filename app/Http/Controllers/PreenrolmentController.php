@@ -850,41 +850,84 @@ class PreenrolmentController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function checkIfSameCourse($request, $indexno, $term, $tecode, $eform_submit_count)
+    public function checkIfSameCourse($request, $indexno)
     {
         // check if assigned course was already assigned
-        $assignedNewCourse = $tecode.'-'.$request->schedule_id.'-'.$term.'-'.$indexno;
-        $checkNewCourseExists = Preenrolment::where('CodeIndexID', $assignedNewCourse)
-            // ->where('updated_by_admin', '1')
-            ->first();
+        $assignedNewCourse = $request->Te_Code.'-'.$request->schedule_id.'-'.$request->Term.'-'.$indexno;
+        $checkNewCourseExists = Preenrolment::where('CodeIndexID', $assignedNewCourse)->first();
+
         if ($checkNewCourseExists) {
-            $data = 0;
+            $data = 1;
             return $data;
         }
-
-        $data = 1; 
+        $data = 0; 
         return $data;
     }
 
-    public function changeHRApproval($request, $enrolment_to_be_copied)
+    public function changeSelectedCourse($enrolment_to_be_copied, $indexno, $term, $tecode, $eform_submit_count, $input)
     {
-        $enrolment_to_be_modified = $enrolment_to_be_copied;
-
-        $input = $request->all();
-        $input = array_filter($input, 'strlen');
-
-        foreach ($enrolment_to_be_modified as $new_data) {
-            $new_data->fill($input)->save(); 
-            if ($request->approval_hr == 1) {
-                $new_data->overall_approval = $request->approval_hr;   
-                $new_data->save();  
-                $new_data->restore();  
-            } elseif ($request->approval_hr == 0) {
-                $new_data->overall_approval = $request->approval_hr; 
-                $new_data->save();   
-                $new_data->delete();   
-            }
+        foreach ($enrolment_to_be_copied as $data) {
+            $arr = $data->attributesToArray();
+            $clone_forms = ModifiedForms::create($arr); // save original value in ModifiedForms table
         }
+
+        $count_form = $enrolment_to_be_copied->count();
+        // if 2 forms with same course was submitted, delete 1 of them  
+        if ($count_form > 1) {
+            $delform = Preenrolment::withTrashed()
+                ->orderBy('id', 'desc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->first();
+                $delform->Code = null;
+                $delform->CodeIndexID = null;
+                $delform->Te_Code = null;
+                $delform->INDEXID = null;
+                $delform->Term = null;
+                $delform->schedule_id = null;             
+                $delform->save();
+                $delform->delete();
+        }
+
+        $enrolment_to_be_modified = Preenrolment::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', $indexno)
+            ->where('eform_submit_count', $eform_submit_count)
+            ->where('Term', $term)
+            ->get();
+        
+        foreach ($enrolment_to_be_modified as $new_data) {
+            $new_data->fill($input)->save();    
+            // update fields with new data
+            $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
+            $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
+            $new_data->save();
+        }
+
+    }
+
+    public function changeHRApproval($request, $enrolment_to_be_copied, $input)
+    {
+        foreach ($enrolment_to_be_copied as $new_data) {
+            $new_data->fill($input)->save(); 
+            $new_data->overall_approval = $request->approval_hr;   
+            $new_data->save();  
+        }
+    }
+
+    public function changeOrgInForm($request, $enrolment_to_be_copied, $input)
+    {
+        foreach ($enrolment_to_be_copied as $new_data) {
+            $new_data->fill($input)->save(); 
+        }
+    }
+
+    public function undoDeleteStatus($value='')
+    {
+        # code...
     }
 
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
@@ -907,53 +950,94 @@ class PreenrolmentController extends Controller
             ->where('Term', $term)
             ->get(['id']);
 
+        $input = $request->all();
+        $input = array_filter($input, 'strlen');
+
+        // insert compare db field values to request values method here
+        // if $data == 0 on any of the request values then copy original form(s) to Modified Forms table
+        // else return nothing to modify message 
+
         // get what fields are being modified
         if ($request->radioFullSelectDropdown) {
             // check if assigned course was already assigned
-            $data = $this->checkIfSameCourse($request, $indexno, $term, $tecode, $eform_submit_count);
+            $data = $this->checkIfSameCourse($request, $indexno);
+
+            if ($data == 1) {
+                $request->session()->flash('msg-same-course', 'No modification done because existing course and schedule chosen.');                
+            }
             // change course
-            return '';
+            if ($data == 0) {
+                $this->changeSelectedCourse($enrolment_to_be_copied, $indexno, $term, $tecode, $eform_submit_count, $input);
+                $request->session()->flash('msg-course-updated', 'Course selection has been updated.');
+            }
         }
+
         if ($request->radioChangeHRApproval) {
             // change HR approval
-            $this->changeHRApproval($request, $enrolment_to_be_copied);
-
+            $this->changeHRApproval($request, $enrolment_to_be_copied, $input);
         }
         
         if ($request->radioChangeOrgInForm) {
             // change organization
-            return '1';
+            $this->changeOrgInForm($request, $enrolment_to_be_copied, $input);
+            $request->session()->flash('msg-change-org', 'Organization field has been updated.');
         }
+
         if ($request->radioSelfPayOptions) {
             // self-payment options
-            return '2';
+
             if ($request->decisionConvert == 1) {
                 // convert to self-payment
                 return '3';
             }
+
             if ($request->decisionConvert == 0) {
                 // convert to regular
                 return '4';
             }
         }
+        
         if ($request->radioUndoDeleteStatus) {
-            // undo delete/cancel status
-            return '5';
+            $this->undoDeleteStatus();
         }
+
         // always log who modified the record
         $input_1 = [ 'modified_by' => Auth::user()->id ];
         $input_1 = array_filter($input_1, 'strlen');
 
         foreach ($enrolmentID as $data) {
-                $enrolmentForm = Preenrolment::withTrashed()->find($data->id);
-                // add logic to check if form has been disapproved or undo delete/cancel
-                // insert soft-delete or restore after all fields have been updated above
-                $enrolmentForm->fill($input_1)->save();
+            $enrolmentForm = Preenrolment::withTrashed()->find($data->id);
+            $enrolmentForm->fill($input_1)->save();
+
+                if (!is_null($enrolmentForm->INDEXID)) {
+                    $indexnoNew = $enrolmentForm->INDEXID;
+                }
+
+                if (!is_null($enrolmentForm->Term)) {
+                    $termNew = $enrolmentForm->Term;
+                }
+
+                if (!is_null($enrolmentForm->Te_Code)) {
+                    $tecodeNew = $enrolmentForm->Te_Code;
+                }
+
+                if (!is_null($enrolmentForm->eform_submit_count)) {
+                    $eform_submit_countNew = $enrolmentForm->eform_submit_count;
+                }
+
+                // logic if need to delete or restore the record(s)
+                // use triple = sign to compare datatype and value
+                // et distinguez 0 <> null
+                if ($request->approval_hr === '0') {
+                    $enrolmentForm->delete();
+                    $request->session()->flash('msg-delete-form', 'HR approval updated. Form has been cancelled.');
+                } elseif ($request->approval_hr === '1') {
+                    $enrolmentForm->restore();
+                    $request->session()->flash('msg-restore-form', 'HR approval updated.');
+                }
         }
 
-        $request->session()->flash('success', 'Update successful!');
-        // return redirect()->route('manage-user-enrolment-data', $user_id);
-        return redirect()->back();
+        return redirect()->action('PreenrolmentController@editEnrolmentFields', [$indexnoNew, $termNew, $tecodeNew, $eform_submit_countNew]);
     }
 
     /**
