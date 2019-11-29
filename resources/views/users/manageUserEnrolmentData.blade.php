@@ -375,6 +375,8 @@
 									@foreach($student_placements as $form)
 									<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 										<td>
+											<a href="{{ route('edit-placement-fields', ['id' => $form->id]) }}" target="_blank" class="btn btn-default btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+
 											@if($form->deleted_at)
 											@else
 												<a class="btn btn-info btn-space" data-toggle="modal" href="#modalshowplacementinfo" data-mid ="{{ $form->id }}" data-mtitle="Placement Form Info"><span><i class="fa fa-eye"></i></span> View Info</a>

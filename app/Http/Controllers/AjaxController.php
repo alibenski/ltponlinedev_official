@@ -24,6 +24,15 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxShowLanguageDropdown(Request $request)
+    {
+        if ($request->ajax()) {
+            $languages = DB::table('languages')->pluck("name","code")->all();
+            $data = view('ajax-language-select-dropdown', compact('languages'))->render();
+            return response()->json(['options'=>$data]);  
+        }
+    }
+
     public function ajaxShowFullSelectDropdown(Request $request)
     {
         if ($request->ajax()) {

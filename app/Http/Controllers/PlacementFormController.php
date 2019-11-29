@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classroom;
 use App\Course;
 use App\Day;
+use App\File;
 use App\FocalPoints;
 use App\Language;
 use App\Mail\MailPlacementTesttoApprover;
@@ -34,6 +35,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Session;
 use Spatie\Permission\Models\Role;
@@ -971,6 +973,185 @@ class PlacementFormController extends Controller
 
             $data = view('placement_forms.manage_exam_table', compact('placement_forms', 'term', 'rooms', 'teachers'))->render();
             return response()->json(['options'=>$data]);
+        }
+    }
+
+    public function editPlacementFields($id)
+    {
+        $enrolment_details = PlacementForm::withTrashed()->find($id);
+        $schedule = $enrolment_details;
+
+        $languages = DB::table('languages')->pluck("name","code")->all();
+        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+
+        return view('placement_forms.editPlacementFormFields', compact('enrolment_details', 'schedule', 'languages', 'org'));
+    }
+
+    public function updatePlacementFields(Request $request, $id)
+    {
+        $enrolment_to_be_copied = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('id', $id)
+            ->get();
+
+        $enrolmentID = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('id', $id)
+            ->get(['id']);
+
+        $input = $request->all();
+        $input = array_filter($input, 'strlen');
+        
+        // get what fields are being modified
+        if ($request->radioFullSelectDropdown) {
+            // change language
+            $this->changeSelectedField($enrolment_to_be_copied, $input);
+            $request->session()->flash('msg-language-updated', 'Selected language has been updated.');
+        }
+
+        if ($request->radioChangeHRApproval) {
+            // change HR approval
+            $this->changeSelectedField($enrolment_to_be_copied, $input);
+        }
+
+        if ($request->radioChangeOrgInForm) {
+            // change organization
+            $this->changeSelectedField($enrolment_to_be_copied, $input);
+            $request->session()->flash('msg-change-org', 'Organization field has been updated.');
+        }
+
+        if ($request->radioSelfPayOptions) {
+            // self-payment options
+            if ($request->decisionConvert == 1) {
+                $this->validate($request, [
+                    'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+                    'payfile' => 'mimes:pdf,doc,docx|max:8000',
+                ]);
+
+                // convert to self-payment
+                $this->convertToSelfPaymentForm($request, $enrolmentID);
+                $request->session()->flash('msg-convert-to-selfpay-form', 'Form has been converted.');
+            }
+
+            if ($request->decisionConvert == 0) {
+                // convert to regular
+                $this->convertToRegularForm($request, $enrolmentID);
+                $request->session()->flash('msg-convert-to-selfpay-form', 'Form has been converted.');
+            }
+        }
+
+        if ($request->radioUndoDeleteStatus) {
+            foreach ($enrolment_to_be_copied as $enrolmentToBeRestore) {
+                $enrolmentToBeRestore->restore();
+                $request->session()->flash('msg-restore-form', 'Form has been restored.');
+            }
+        }
+
+        // always log who modified the record
+        $input_1 = [ 'modified_by' => Auth::user()->id ];
+        $input_1 = array_filter($input_1, 'strlen');
+
+        foreach ($enrolmentID as $data) {
+            $enrolmentForm = PlacementForm::withTrashed()->find($data->id);
+            $enrolmentForm->fill($input_1)->save();
+                // logic if need to delete or restore the record(s)
+                // use triple = sign to compare datatype and value
+                // et distinguez 0 <> null
+                if ($request->approval_hr === '0') {
+                    $enrolmentForm->delete();
+                    $request->session()->flash('msg-delete-form', 'HR approval updated. Form has been cancelled.');
+                } elseif ($request->approval_hr === '1') {
+                    $enrolmentForm->restore();
+                    $request->session()->flash('msg-restore-form', 'HR approval updated.');
+                }
+        }
+
+        return redirect()->back();
+    }
+
+    public function changeSelectedField($enrolment_to_be_copied, $input)
+    {
+        foreach ($enrolment_to_be_copied as $new_data) {
+            $new_data->fill($input)->save();
+        }
+    }
+
+    public function convertToSelfPaymentForm($request, $enrolmentID)
+    {
+        $course_id = null;
+        
+        foreach ($enrolmentID as $datum) {
+            $enrolmentForm = PlacementForm::withTrashed()->find($datum->id);
+
+                if (!is_null($enrolmentForm->INDEXID)) {
+                    $index_id = $enrolmentForm->INDEXID;
+                }
+
+                if (!is_null($enrolmentForm->Term)) {
+                    $term_id = $enrolmentForm->Term;
+                }
+
+                if (!is_null($enrolmentForm->Te_Code)) {
+                    $course_id = $enrolmentForm->Te_Code;
+                }
+
+                if (!is_null($enrolmentForm->L)) {
+                    $language_id = $enrolmentForm->L;
+                }
+        }
+
+        // store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')){
+            $request->file('identityfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'converted_id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            //Create new record in db table
+            $attachment_identity_file = new File([
+                    'filename' => $filename,
+                    'size' => $request->identityfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_identity_file->save();
+        }
+        if ($request->hasFile('payfile')){
+            $request->file('payfile');
+            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'converted_payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            //Create new record in db table
+            $attachment_pay_file = new File([
+                    'filename' => $filename,
+                    'size' => $request->payfile->getClientSize(),
+                    'path' => $filestore,
+                            ]); 
+            $attachment_pay_file->save();
+        }
+
+        // set is_self_pay_form flag and other relevant fields
+        foreach ($enrolmentID as $valueObj) {
+            $formToBeConverted = PlacementForm::withTrashed()->find($valueObj->id);
+            $formToBeConverted->is_self_pay_form = 1;
+            $formToBeConverted->approval_hr = null;
+            $formToBeConverted->approval = null;
+            $formToBeConverted->attachment_id = $attachment_identity_file->id;
+            $formToBeConverted->attachment_pay = $attachment_pay_file->id;
+            $formToBeConverted->save();
+        }
+    }
+
+    public function convertToRegularForm($request, $enrolmentID)
+    {       
+        // set is_self_pay_form flag = 0 and other relevant fields
+        foreach ($enrolmentID as $valueObj) {
+            $formToBeConverted = PlacementForm::withTrashed()->find($valueObj->id);
+            $formToBeConverted->is_self_pay_form = null;
+            $formToBeConverted->selfpay_approval = null;
+            $formToBeConverted->approval_hr = null;
+            $formToBeConverted->approval = 1;
+            $formToBeConverted->attachment_id = null;
+            $formToBeConverted->attachment_pay = null;
+            $formToBeConverted->save();
         }
     }
 }

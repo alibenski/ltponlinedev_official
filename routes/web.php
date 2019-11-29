@@ -241,6 +241,10 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('/placement-form-filtered', ['as'=>'placement-form-filtered','uses'=>'PlacementFormController@getFilteredPlacementForms']);
     Route::get('/placement-form-approved-view', ['as'=>'placement-form-approved-view','uses'=>'PlacementFormController@getApprovedPlacementFormsView']);
 
+    // route of edit placement form fields
+    Route::get('/placement/edit-fields/{id}/id', ['as' => 'edit-placement-fields', 'uses' => 'PlacementFormController@editPlacementFields']);
+    Route::put('/placement/update-fields/{id}/id', ['as'=>'update-placement-fields','uses'=>'PlacementFormController@updatePlacementFields']);
+
     // route of assign course form to placement view 
     Route::get('/placement-form-assign/{id}', ['as'=>'placement-form-assign','uses'=>'PlacementFormController@editAssignCourse']);
     
@@ -395,6 +399,7 @@ Route::get('ajax-change-hr-approval', ['as'=>'ajax-change-hr-approval','uses'=>'
 Route::get('ajax-change-org-in-form', ['as'=>'ajax-change-org-in-form','uses'=>'AjaxController@ajaxChangeOrgInForm']);
 Route::get('ajax-convert-to-selfpay', ['as'=>'ajax-convert-to-selfpay','uses'=>'AjaxController@ajaxConvertToSelfpay']);
 Route::get('ajax-convert-to-regular', ['as'=>'ajax-convert-to-regular','uses'=>'AjaxController@ajaxConvertToRegular']);
+Route::get('ajax-show-language-dropdown', ['as'=>'ajax-show-language-dropdown','uses'=>'AjaxController@ajaxShowLanguageDropdown']);
 
 
 // ajax use to get section number of cs_unique
