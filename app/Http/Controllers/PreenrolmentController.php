@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\File;
 use App\FocalPoints;
 use App\Mail\MailaboutCancel;
 use App\Mail\SendMailable;
@@ -981,8 +982,23 @@ class PreenrolmentController extends Controller
             $formToBeConverted->is_self_pay_form = 1;
             $formToBeConverted->approval_hr = null;
             $formToBeConverted->approval = null;
-            $formToBeConverted->attachment_id => $attachment_identity_file->id;
-            $formToBeConverted->attachment_pay => $attachment_pay_file->id;
+            $formToBeConverted->attachment_id = $attachment_identity_file->id;
+            $formToBeConverted->attachment_pay = $attachment_pay_file->id;
+            $formToBeConverted->save();
+        }
+    }
+
+    public function convertToRegularForm($request, $enrolmentID)
+    {       
+        // set is_self_pay_form flag = 0 and other relevant fields
+        foreach ($enrolmentID as $valueObj) {
+            $formToBeConverted = Preenrolment::withTrashed()->find($valueObj->id);
+            $formToBeConverted->is_self_pay_form = null;
+            $formToBeConverted->selfpay_approval = null;
+            $formToBeConverted->approval_hr = null;
+            $formToBeConverted->approval = 1;
+            $formToBeConverted->attachment_id = null;
+            $formToBeConverted->attachment_pay = null;
             $formToBeConverted->save();
         }
     }
@@ -1051,19 +1067,20 @@ class PreenrolmentController extends Controller
 
                 // convert to self-payment
                 $this->convertToSelfPaymentForm($request, $enrolmentID);
-                
-                return '3';
+                $request->session()->flash('msg-convert-to-selfpay-form', 'Form has been converted.');
             }
 
             if ($request->decisionConvert == 0) {
                 // convert to regular
-                return '4';
+                $this->convertToRegularForm($request, $enrolmentID);
+                $request->session()->flash('msg-convert-to-selfpay-form', 'Form has been converted.');
             }
         }
 
         if ($request->radioUndoDeleteStatus) {
             foreach ($enrolment_to_be_copied as $enrolmentToBeRestore) {
                 $enrolmentToBeRestore->restore();
+                $request->session()->flash('msg-restore-form', 'Form has been restored.');
             }
         }
 

@@ -132,37 +132,38 @@
 
                 @if (Session::has('msg-same-course')) 
                     <div class="alert alert-danger alert-block" role="alert">
-                        <strong>Message on course modification: </strong> {{ Session::get('msg-same-course') }}
+                        <strong>Course modification: </strong> {{ Session::get('msg-same-course') }}
                     </div>
-
                 @endif
                 
                 @if (Session::has('msg-course-updated')) 
                     <div class="alert alert-success alert-block" role="alert">
-                        <strong>Message on course modification: </strong> {{ Session::get('msg-course-updated') }}
+                        <strong>Course modification: </strong> {{ Session::get('msg-course-updated') }}
                     </div>
-
                 @endif
 
                 @if (Session::has('msg-delete-form')) 
                     <div class="alert alert-danger alert-block" role="alert">
-                        <strong>Message on HR approval: </strong> {{ Session::get('msg-delete-form') }}
+                        <strong>HR approval: </strong> {{ Session::get('msg-delete-form') }}
                     </div>
-
                 @endif
 
                 @if (Session::has('msg-restore-form')) 
                     <div class="alert alert-success alert-block" role="alert">
-                        <strong>Message on HR approval: </strong> {{ Session::get('msg-restore-form') }}
+                        <strong>HR approval: </strong> {{ Session::get('msg-restore-form') }}
                     </div>
-
                 @endif
 
                 @if (Session::has('msg-change-org')) 
                     <div class="alert alert-success alert-block" role="alert">
-                        <strong>Message on organization field: </strong> {{ Session::get('msg-change-org') }}
+                        <strong>Organization field: </strong> {{ Session::get('msg-change-org') }}
                     </div>
+                @endif
 
+                @if (Session::has('msg-convert-to-selfpay-form')) 
+                    <div class="alert alert-success alert-block" role="alert">
+                        <strong>Conversion: </strong> {{ Session::get('msg-convert-to-selfpay-form') }}
+                    </div>
                 @endif
 
                 <div class="alert alert-warning">
@@ -177,64 +178,77 @@
                 <form id="updateForm" method="POST" enctype="multipart/form-data" action="{{ route('update-enrolment-fields', [$enrolment_details->INDEXID, $enrolment_details->Term, $enrolment_details->Te_Code, $enrolment_details->eform_submit_count]) }}" class="col-sm-12">
                     {{ csrf_field() }}
                 <div class="input-group col-md-12">
-                    <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font modify-option radio-full-select-dropdown" type="checkbox" value="1">
-                    <label for="radioFullSelectDropdown" class="label-full-select-dropdown">Change selected course</label>
+                    <h4>
+                        <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font modify-option radio-full-select-dropdown" type="checkbox" value="1">
+                        <label for="radioFullSelectDropdown" class="label-full-select-dropdown"> Change selected course</label>
+                    </h4>
 
                     <div class="insert-full-select-dropdown"></div>
                 </div>
 
                 <div class="input-group col-md-12">
-                    <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font modify-option radio-change-hr-approval" type="checkbox" value="1" @if ($enrolment_details->is_self_pay_form == 1) disabled="" @endif>
-                    <label for="radioChangeHRApproval" class="label-change-hr-approval">
-                        @if ($enrolment_details->is_self_pay_form == 1) <del class="text-danger">Change HR approval status (if applicable)</del>
-                        @else Change HR approval status (if applicable)
-                        @endif
-                    </label>
+                    <h4>
+                        <input id="radioChangeHRApproval" name="radioChangeHRApproval" class="with-font modify-option radio-change-hr-approval" type="checkbox" value="1" @if ($enrolment_details->is_self_pay_form == 1 || in_array($enrolment_details->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO'])) disabled="" @endif>
+                        <label for="radioChangeHRApproval" class="label-change-hr-approval">
+                            @if ($enrolment_details->is_self_pay_form == 1 || in_array($enrolment_details->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))<del class="text-danger">Change HR approval status (if applicable)</del>
+                            @else Change HR approval status (if applicable)
+                            @endif
+                        </label>
+                    </h4>
 
                     <div class="insert-change-hr-approval"></div>
                 </div>
 
                 <div class="input-group col-md-12">
-                    <input id="radioChangeOrgInForm" name="radioChangeOrgInForm" class="with-font modify-option radio-change-org-in-form" type="checkbox" value="1">
-                    <label for="radioChangeOrgInForm" class="label-change-org-in-form">Change Organization (only applies to this form)</label>
+                    <h4>
+                        <input id="radioChangeOrgInForm" name="radioChangeOrgInForm" class="with-font modify-option radio-change-org-in-form" type="checkbox" value="1">
+                        <label for="radioChangeOrgInForm" class="label-change-org-in-form"> Change Organization (only applies to this form)</label>
+                    </h4>
 
                     <div class="insert-change-org-in-form"></div>
                 </div>                
                 
                 <div class="input-group col-md-12">
-                    <input id="radioSelfPayOptions" name="radioSelfPayOptions" class="with-font radio-selfpay-options" type="checkbox" value="1">
-                    <label for="radioSelfPayOptions" class="label-selfpay-options">Self-payment form options</label>
-                        
+                    <h4>
+                        <input id="radioSelfPayOptions" name="radioSelfPayOptions" class="with-font radio-selfpay-options" type="checkbox" value="1">
+                        <label for="radioSelfPayOptions" class="label-selfpay-options"> Self-payment form options</label>
+                    </h4>
                         <div class="decision-section hidden">
                             <div class="col-sm-12">
+                                <h4>
                                 <input id="decisionConvertToSelfpay" name="decisionConvert" class="with-font modify-option decision-convert-to-selfpay" type="radio" value="1" @if ($enrolment_details->is_self_pay_form == 1) disabled="" @endif>
                                 <label for="decisionConvertToSelfpay">
-                                    @if ($enrolment_details->is_self_pay_form == 1)<del class="text-danger">Convert to a self-payment form</del>
+                                    @if ($enrolment_details->is_self_pay_form == 1)<del class="text-danger"> Convert to a self-payment form</del>
                                     @else Convert to a self-payment form
                                     @endif
                                 </label>
+                                </h4>
                             </div>
                             <div class="insert-convert-to-selfpay"></div>
 
                             <div class="col-sm-12">
+                                <h4>
                                 <input id="decisionConvertToRegular" name="decisionConvert" class="with-font modify-option decision-convert-to-regular" type="radio" value="0" @if (is_null($enrolment_details->is_self_pay_form)) disabled="" @endif>
                                 <label for="decisionConvertToRegular">
-                                    @if (is_null($enrolment_details->is_self_pay_form))<del class="text-danger">Convert to a non-self-payment form</del>
+                                    @if (is_null($enrolment_details->is_self_pay_form))<del class="text-danger"> Convert to a non-self-payment form</del>
                                     @else Convert to a non-self-payment form
                                     @endif
                                 </label>
+                                </h4>
                             </div>
                             <div class="insert-convert-to-regular"></div>
                         </div>
                 </div>
 
                 <div class="input-group col-md-12">
-                    <input id="radioUndoDeleteStatus" name="radioUndoDeleteStatus" class="with-font modify-option radio-undo-delete-status" type="checkbox" @if (is_null($enrolment_details->deleted_at)) disabled="" @endif value="1">
-                    <label for="radioUndoDeleteStatus" class="label-selfpay-options">
-                        @if (is_null($enrolment_details->deleted_at))<del class="text-danger">Undo delete/cancelled status</del> 
-                        @else Undo delete/cancelled status
-                        @endif
-                    </label>
+                    <h4>
+                        <input id="radioUndoDeleteStatus" name="radioUndoDeleteStatus" class="with-font modify-option radio-undo-delete-status" type="checkbox" @if (is_null($enrolment_details->deleted_at)) disabled="" @endif value="1">
+                        <label for="radioUndoDeleteStatus" class="label-selfpay-options">
+                            @if (is_null($enrolment_details->deleted_at))<del class="text-danger"> Undo delete/cancelled status</del> 
+                            @else Undo delete/cancelled status
+                            @endif
+                        </label>
+                    </h4>
                 </div>
 
                 <div class="form-group">
