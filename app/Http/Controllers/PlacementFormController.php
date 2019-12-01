@@ -468,7 +468,8 @@ class PlacementFormController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if (!Session::has('Term') ) {
-            $placement_forms = null;
+            // count(): Parameter must be an array or an object that implements Countable
+            $placement_forms = [];
             return view('placement_forms.index', compact('placement_forms', 'languages', 'org', 'terms'));
         }
             $placement_forms = new PlacementForm;

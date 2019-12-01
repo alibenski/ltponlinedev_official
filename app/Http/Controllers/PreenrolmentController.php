@@ -707,8 +707,6 @@ class PreenrolmentController extends Controller
         $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-
-
         if (!Session::has('Term')) {
             $enrolment_forms = null;
             return view('preenrolment.index', compact('enrolment_forms', 'languages', 'org', 'terms'));
