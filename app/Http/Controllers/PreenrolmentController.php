@@ -813,8 +813,8 @@ class PreenrolmentController extends Controller
         $enrolment_details = Preenrolment::withTrashed()
             ->where('INDEXID', $indexno)
             ->where('Term', $term)->where('Te_Code', $tecode)->where('eform_submit_count', $eform_submit_count)
-            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ])
-            ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'mgr_email', 'mgr_fname', 'mgr_lname' ]);
+            ->groupBy(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L', 'attachment_id', 'attachment_pay', 'updated_by_admin', 'mgr_fname', 'mgr_lname' ])
+            ->first(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'eform_submit_count','deleted_at', 'eform_submit_count', 'cancelled_by_student', 'created_at', 'L' , 'attachment_id', 'attachment_pay', 'updated_by_admin', 'mgr_fname', 'mgr_lname' ]);
         
         $enrolment_schedules = Preenrolment::withTrashed()
             ->orderBy('id', 'asc')

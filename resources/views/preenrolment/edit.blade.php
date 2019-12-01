@@ -179,8 +179,13 @@
                     {{ csrf_field() }}
                 <div class="input-group col-md-12">
                     <h4>
-                        <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font modify-option radio-full-select-dropdown" type="checkbox" value="1">
-                        <label for="radioFullSelectDropdown" class="label-full-select-dropdown"> Change selected course</label>
+                        <input id="radioFullSelectDropdown" name="radioFullSelectDropdown" class="with-font modify-option radio-full-select-dropdown" type="checkbox" value="1"@if ($enrolment_details->updated_by_admin == 1)
+                            disabled="" 
+                        @endif>
+                        <label for="radioFullSelectDropdown" class="label-full-select-dropdown"> @if ($enrolment_details->updated_by_admin == 1)<span class="text-danger"><del>Change selected course</del> (change course via Assign Course button)</span>
+                            @else Change selected course
+                            @endif
+                        </label>
                     </h4>
 
                     <div class="insert-full-select-dropdown"></div>
