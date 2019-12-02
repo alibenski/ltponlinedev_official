@@ -11,7 +11,7 @@ class Repo extends Model
 
     protected $table = 'LTP_PASHQTcur';
     protected $fillable = [
-        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'is_self_pay_form', 'flexibleBtn', 'form_counter', 'eform_submit_count', 'convocation_email_sent', 'Written', 'Oral', 'Result', 'Overall_Grade', 'cancelled_by', 'teacher_comments', 'admin_eform_comment', 'admin_plform_comment', 'admin_eform_cancel_comment', 'admin_plform_cancel_comment', 'std_comments', 'hr_comments', 'course_preference_comment', 'pash_remark', 'last_remark_by',
+        'CodeIndexIDClass','CodeClass', 'schedule_id','CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'is_self_pay_form', 'flexibleBtn', 'form_counter', 'eform_submit_count', 'convocation_email_sent', 'Written', 'Oral', 'Result', 'Overall_Grade', 'cancelled_by', 'teacher_comments', 'admin_eform_comment', 'admin_plform_comment', 'admin_eform_cancel_comment', 'admin_plform_cancel_comment', 'std_comments', 'hr_comments', 'course_preference_comment', 'pash_remark', 'last_remark_by', 'exclude_from_billing', 'excluded_by'
     ];
     
     /**

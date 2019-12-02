@@ -60,6 +60,7 @@ class BillingController extends Controller
 	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->with('courses')
 	        	->with('languages')
+	        	->whereNull('exclude_from_billing')
 	        	->with(['courseschedules' => function ($q1) {
 					    $q1->with('prices')->with('courseduration');
 					}])
@@ -87,6 +88,7 @@ class BillingController extends Controller
 	        	->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
 	        	->with('courses')
 	        	->with('languages')
+	        	->whereNull('exclude_from_billing')
 	        	->with(['courseschedules' => function ($q0) {
 					    $q0->with('prices')->with('courseduration');
 					}])
@@ -118,6 +120,7 @@ class BillingController extends Controller
 	        	->whereNull('cancelled_but_not_billed')
 	        	->with('courses')
 	        	->with('languages')
+	        	->whereNull('exclude_from_billing')
 	        	->with(['courseschedules' => function ($q2) {
 					    $q2->with('prices')->with('courseduration');
 					}])
@@ -147,6 +150,7 @@ class BillingController extends Controller
 	        	->whereNull('cancelled_but_not_billed')
 	        	->with('courses')
 	        	->with('languages')
+	        	->whereNull('exclude_from_billing')
 	        	->with(['courseschedules' => function ($q3) {
 					    $q3->with('prices')->with('courseduration');
 					}])

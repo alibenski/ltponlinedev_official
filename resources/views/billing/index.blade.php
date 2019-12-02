@@ -65,6 +65,7 @@
 	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>
+				<th>Operation</th>
 				<th>Term</th>
 				<th>Language</th>
 				<th>Description</th>
@@ -78,6 +79,7 @@
 		</thead>
 		<tfoot>
 			<tr>
+				<th>Operation</th>
 				<th>Term</th>
 				<th>Language</th>
 				<th>Description</th>
@@ -161,6 +163,11 @@ $(document).ready(function() {
 	        "bAutoWidth": false,
 	        "aaData": data.data,
 	        "columns": [
+			        {
+		                "data": null,
+		                "className": "record_id",
+		                "defaultContent": '<button class="btn btn-sm btn-danger btn-exclude">Exclude</button>'
+		            },
 	        		{ "data": "Term" }, 
 	        		{ "data": "languages.name" }, 
 	        		{ "data": "courses.Description" }, 
@@ -172,6 +179,8 @@ $(document).ready(function() {
 	        		{ "data": "deleted_at" }
 				        ],
 			"createdRow": function( row, data, dataIndex ) {
+						$(row).find("td.record_id").attr('id', data['id']);
+
 					    if ( data['Result'] == 'P') {
 					      $(row).addClass( 'pass' );
 					      $(row).find("td.result").text('PASS');
@@ -199,6 +208,34 @@ $(document).ready(function() {
 	$.when.apply($.ajax(), promises).then(function() {
         $(".preloader2").fadeOut(600);
     }); 
+
+
+	$('#sampol').on('click', 'button.btn-exclude', function() {
+	    var id = $(this).closest('td.record_id').attr('id');
+	    var tableRow = ($(this).closest('tr'));
+
+		var r = confirm("You are about to exclude this from the billing report. Are you sure?");
+		if (r == true) {
+	    	$.ajax({
+	    		url: "{{ route('ajax-exclude-from-billing') }}",
+	    		type: 'PUT',
+	    		data: {id: id, _token:token},
+	    	})
+	    	.done(function(data) {
+	    		console.log(data);
+		   		tableRow.fadeOut('slow', function() {
+		   			$(this).remove();
+		   		});
+				
+	    	})
+	    	.fail(function() {
+	    		console.log("error");
+	    	})
+	    	.always(function() {
+	    		console.log("complete");
+	    	}); 	
+		}
+	});
 });
 </script>
 

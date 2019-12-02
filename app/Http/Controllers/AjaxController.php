@@ -24,6 +24,20 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function ajaxExcludeFromBilling(Request $request)
+    {
+        if ($request->ajax()) {
+            $pashRecord = Repo::withTrashed()->find($request->id);
+            $pashRecord->update([
+                'exclude_from_billing' => 1,
+                'excluded_by' => Auth::id(),
+            ]);
+
+            $data = $pashRecord;
+            return response()->json(['options'=>$data]);  
+        }
+    }
+
     public function ajaxShowLanguageDropdown(Request $request)
     {
         if ($request->ajax()) {
