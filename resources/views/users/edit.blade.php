@@ -17,8 +17,8 @@
 
         <div class="form-group">
             <label class="control-label">Email: </label>
-            {{-- <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email', $user->email) }}">  --}}
-            <input name="email" type="email" class="form-control" readonly value="{{ old('email', $user->email) }}"> 
+            <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email', $user->email) }}"> 
+            {{-- <input name="email" type="email" class="form-control" readonly value="{{ old('email', $user->email) }}">  --}}
         </div>
 
         <h5><b>Give Role</b></h5>
