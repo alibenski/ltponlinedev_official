@@ -132,13 +132,17 @@ $(document).ready(function () {
         type: 'GET',
         data: {indexid:indexid, L:L,_token: token},
       })
-      .done(function(data) {
-        console.log("show assign view : success");
+      .done(function(data, status) {
+        console.log("show assign view status: "+status);
         $('.modal-body-content').html(data)
         $('#modalshow').modal('show');
       })
-      .fail(function() {
-        console.log("error");
+      .fail(function(e) {
+        if (e.status == 403) {
+              alert('Session Expired!')
+              // window.location.reload();
+              window.location.href = "{{ route('login') }}";
+          }
       })
       .always(function() {
         console.log("complete show assign view");
