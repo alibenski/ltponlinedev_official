@@ -137,9 +137,26 @@
                   @endif
                 </td>
                 <td>
-                  <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}]</small></h4> 
-                  @if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif
+                  <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}] </small></h4> 
                   
+                  @if(empty($form->users->profile)) No Profile 
+                  @else  
+                  <span class="label label-default">
+                      @if($form->users->profile == "STF") Staff Member @endif
+                      @if($form->users->profile == "INT") Intern @endif
+                      @if($form->users->profile == "CON") Consultant @endif
+                      @if($form->users->profile == "JPO") JPO @endif
+                      @if($form->users->profile == "MSU") Staff of Permanent Mission @endif
+                      @if($form->users->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif
+                      @if($form->users->profile == "RET") Retired UN Staff Member @endif
+                      @if($form->users->profile == "SERV") Staff of Service Organizations in the Palais @endif
+                      @if($form->users->profile == "NGO") Staff of UN-accredited NGO's @endif
+                      @if($form->users->profile == "PRESS") Staff of UN Press Corps @endif
+                  </span>
+                  @endif
+                        
+                  <p>@if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif</p>
+
                   @if ($form->enrolments)
                   <p>
                     @foreach ($form->enrolments as $element)
