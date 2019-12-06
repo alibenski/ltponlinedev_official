@@ -1,4 +1,3 @@
-<option>--- Select Class ---</option>
 @if(!empty($collection))
   @foreach($collection as $value)
     <option class="col-md-8 wx" value="{{ $value->Code }}">{{ $value->scheduler->name }} - section # {{ $value->sectionNo }}
