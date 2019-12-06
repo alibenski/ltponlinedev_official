@@ -2361,6 +2361,15 @@ class PreviewController extends Controller
                     if ($countCodeClass < 14) {
                         foreach ($getPashStudents as $valuePashStudents) {
                             $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
+
+                            // validate if duplicate record
+                            $codeindexidclass0 = $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID;
+                            $checkDupe0 = $pashUpdate->first();
+                            if ($checkDupe0->CodeIndexIDClass == $codeindexidclass0) {
+                                $data = 'already-inserted-in-preview';
+                                return response()->json($data);
+                            }
+
                             // update record with classroom assigned
                             $pashUpdate->update([
                                 'CodeClass' => $valueClassRoomDetails->Code, 
@@ -2428,6 +2437,15 @@ class PreviewController extends Controller
                 // then assign it to the student
 
                 $insertStudentRecord = Preview::where('INDEXID', $getIndividualStudent->INDEXID)->where('Code', $valueCode2->Code);
+                
+                // validate if duplicate record
+                $codeindexidclass = $ingredients->Code.'-'.$getIndividualStudent->INDEXID;
+                $checkDupe = $insertStudentRecord->first();
+                if ($checkDupe->CodeIndexIDClass == $codeindexidclass) {
+                    $data = 'already-inserted-in-preview';
+                    return response()->json($data);
+                }
+
                 // update record with classroom assigned
                 $insertStudentRecord->update([
                     'CodeClass' => $ingredients->Code, 

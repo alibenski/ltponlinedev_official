@@ -904,6 +904,9 @@ $(document).ready(function () {
         } else if(data == 'already-inserted'){
         	alert('The form has already been inserted to a class. Please check convocation details on this page.')
         	location.reload(true);
+        } else if(data == 'already-inserted-in-preview'){
+        	alert('The form has already been used to insert the student to a class. Please manually create another form to insert student to another class. Policy states 1 form = 1 class.')
+        	location.reload(true);
         } else {
         	location.reload(true);
         }
