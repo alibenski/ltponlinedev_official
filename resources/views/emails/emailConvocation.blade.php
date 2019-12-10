@@ -233,7 +233,7 @@
                                         Please read carefully the <strong>information before start of term</strong> on our website (<a href="https://learning.unog.ch/node/1472">click here</a>).
                                     </p>
                                     <p>
-                                        If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at clm_language@un.org 
+                                        If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p>
                                         If you are unable to attend the first week of the term, you must inform your instructor and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
@@ -248,8 +248,9 @@
                                         A technical reason for not having been able to cancel on time will not be considered as a valid reason for re-imbursement nor a reason for not charging your organization. Thank you for your understanding.
                                     </p>
                                     <p style="margin: 0;">
-                                        If you have any question please contact us at: clm_language@un.org
-                                    </p>    
+                                        If you have any question please contact us at: <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
+                                    </p>   
+                                    <br> 
                                     <p>
                                         The Language Training Programme wishes you a rich learning experience next term.
                                     </p>
@@ -307,7 +308,7 @@
                                         Veuillez lire attentivement <strong>les informations avant le début du trimestre</strong> disponibles sur notre site web en cliquant <a href="https://learning.unog.ch/fr/node/1472">ici</a>.
                                     </p>
                                     <p>
-                                        Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse clm_language@un.org 
+                                        Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p>
                                         Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
@@ -322,8 +323,9 @@
                                         En cas de retard dans l’annulation, la raison technique ne sera pas considérée comme valable pour le remboursement, ni pour une non-facturation de votre organisation. Merci de votre compréhension.
                                     </p>
                                     <p style="margin: 0;">
-                                        Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : clm_language@un.org
+                                        Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
                                     </p>
+                                    <br>
                                     <p>
                                         Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage pour le prochain trimestre.
                                     </p>
