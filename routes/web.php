@@ -346,6 +346,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('add-attachments-placement/{indexid}/{lang}/{term}/{date}/{eform}', ['as'=>'add-attachments-placement','uses'=>'SelfPayController@addAttachmentsPlacementView']);
     Route::put('add-attachments-store', ['as'=>'add-attachments-store','uses'=>'SelfPayController@addAttachmentsStore']);
     Route::put('add-attachments-placement-store', ['as'=>'add-attachments-placement-store','uses'=>'SelfPayController@addAttachmentsPlacementStore']);
+
+    // route for student printing certificates
+    Route::get('pdfAttestation', ['as'=>'pdfAttestation','uses'=>'PrinterController@pdfAttestation']);
 });
 
 // route to update email of student - this should be outside of auth middleware for the student to have access to this route 

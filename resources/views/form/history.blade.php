@@ -6,7 +6,7 @@
 @section('content')
 <div class="container">
   <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-info">
                 <div class="panel-heading"><strong>Past Language Course Enrolment for {{ Auth::user()->name }}
                 </div>
@@ -41,7 +41,13 @@
                                 @endif
                                 </em>
 
-                                (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else @endif)</li>
+                                (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else @endif)
+                
+                                @if($hist_datum->Term >= 191 )
+                                <a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'En', 'download'=>'pdf', 'id'=> $hist_datum->id]) }}" target="_blank"><i class="fa fa-print"></i> Print EN</a>
+                                <a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'Fr', 'download'=>'pdf', 'id'=> $hist_datum->id]) }}" target="_blank"><i class="fa fa-print"></i> Print FR</a>
+                                @endif
+                            </li>
                             @endif
                         @endforeach
                     </ul>
