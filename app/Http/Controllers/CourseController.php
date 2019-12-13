@@ -173,6 +173,7 @@ class CourseController extends Controller
         $course = Course::find($id);
 
         $course->Description = $request->CourseName;
+        $course->EDescription = $request->CourseName;
         $course->FDescription = $request->FrenchCourseName;
         $course->updated_by = $request->user_id;
         $course->save();         

@@ -44,8 +44,8 @@
                                 (@if($hist_datum->Result == 'P') Passed @elseif($hist_datum->Result == 'F') Failed @elseif($hist_datum->Result == 'I') Incomplete @else @endif)
                 
                                 @if($hist_datum->Term >= 191 )
-                                <a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'En', 'download'=>'pdf', 'id'=> $hist_datum->id]) }}" target="_blank"><i class="fa fa-print"></i> Print EN</a>
-                                <a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'Fr', 'download'=>'pdf', 'id'=> $hist_datum->id]) }}" target="_blank"><i class="fa fa-print"></i> Print FR</a>
+                                <a class="btn btn-default hidden" href="{{ route('pdfAttestation',['language' =>'En', 'download'=>'pdf', 'id'=> $hist_datum->id]) }}" target="_blank"><i class="fa fa-print"></i> Print EN</a>
+                                <a class="btn btn-default hidden" href="{{ route('pdfAttestation',['language' =>'Fr', 'download'=>'pdf', 'id'=> $hist_datum->id]) }}" target="_blank"><i class="fa fa-print"></i> Print FR</a>
                                 @endif
                             </li>
                             @endif
