@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="referrer" content="origin-when-cross-origin">
-  <title>Class List</title>
+  <title>Attestation</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -104,7 +104,11 @@
     <tr>
       <td></td>
       <td>
-        <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">A complété avec succès le cours mentionné ci-dessous&nbsp;:</span></p>
+        @if ($result == 'P')
+          <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">A complété avec succès @if ($selfPay == 1) et a payé pour @endif le cours mentionné ci-dessous&nbsp;:</span></p>
+        @else
+          <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">A suivi @if ($selfPay == 1) et a payé pour @endif le cours mentionné ci-dessous&nbsp;:</span></p>
+        @endif
         <br>
         <br>
       </td>

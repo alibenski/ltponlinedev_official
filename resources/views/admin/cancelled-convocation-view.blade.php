@@ -15,8 +15,8 @@
 			        	<th>#</th>
 			            <th>Name</th>
 			            <th>Term</th>
-			            <th>Course</th>
 			            <th>Organization</th>
+			            <th>Course</th>
 			            <th>Date/Time Cancelled</th>
 			        </tr>
 			    </thead>

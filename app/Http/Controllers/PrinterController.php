@@ -21,7 +21,8 @@ class PrinterController extends Controller
         $termSeasonFr = $pashId->terms->Comments_fr;
         $termYear = Carbon::parse($pashId->terms->Term_Begin)->year;
     	$dateOfPrinting = Carbon::now()->format('d F Y');
-
+        $result = $pashId->Result;
+        $selfPay = $pashId->is_self_pay_form;
     	$teCode = $pashId->Te_Code;
         $teCodeOld = $pashId->Te_Code_old;
         if ($teCode != null) {
@@ -46,11 +47,11 @@ class PrinterController extends Controller
         }
         if($request->has('download')){
             if ($printLanguage == 'Fr') {
-            $pdf = PDF::loadView('pdf_forms.pdfFrAttestationCompletedCourse', compact('userName', 'termSeasonFr', 'termYear', 'dateOfPrinting', 'courseFr'));
+            $pdf = PDF::loadView('pdf_forms.pdfFrAttestationCompletedCourse', compact('userName', 'termSeasonFr', 'termYear', 'dateOfPrinting', 'courseFr', 'result', 'selfPay'));
             return $pdf->stream();
             }
             if ($printLanguage == 'En') {
-            $pdf = PDF::loadView('pdf_forms.pdfEnAttestationCompletedCourse', compact('userName', 'termSeasonEn', 'termYear', 'dateOfPrinting', 'courseEn'));
+            $pdf = PDF::loadView('pdf_forms.pdfEnAttestationCompletedCourse', compact('userName', 'termSeasonEn', 'termYear', 'dateOfPrinting', 'courseEn', 'result', 'selfPay'));
             return $pdf->stream();
             }
         }
