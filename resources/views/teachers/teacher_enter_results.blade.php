@@ -1,6 +1,9 @@
 <div class="reload">
 <div class="table-responsive filtered-table">
   <div class="preloader2"><p>Please wait... Loading results interface...</p></div>
+  <div class="alert alert-warning alert-dismissible">
+    <h5 class="text-center"><i class="icon fa fa-bullhorn fa-2x"></i> <strong>Overall result is mandatory. Save button will remain disabled until a result has been chosen. </strong></h5>
+  </div>
   <h4><strong>Enter Results for Students of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
   <table class="table table-bordered table-striped">
       <thead>
@@ -74,7 +77,7 @@
           </td>
           <td>
             <button type="button" class="btn btn-warning btn-sm btn-space quick-edit">Edit</button>
-            <button type="button" class="btn btn-success btn-sm btn-space quick-save" >Save</button>
+            <button type="button" class="btn btn-success btn-sm btn-space quick-save" disabled>Save</button>
             <button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
             <input type="hidden" name="_token" value="{{ Session::token() }}">
           </td>
@@ -234,13 +237,20 @@ $(document).ready(function() {
 </script>
 <script>
 $(document).ready(function() {
-  $(".quick-edit").click(function(){
+  $(".quick-edit").on('click', function(){
     $(this).attr('disabled', 'true');
     var Written = $(this).closest("tr").find("span.written").text();
     var Oral = $(this).closest("tr").find("span.oral").text();
     var Overall_Grade = $(this).closest("tr").find("span.overall-grade").text();
     var Result = $(this).closest("tr").find("span.result").text();
     var trimmedResult = $.trim(Result); // trim away whitespaces
+
+    var spanResultValue = $(this).closest("tr").find("span.result").text();
+    if (spanResultValue) {
+      $(this).closest("tr").find(".quick-save").attr('disabled', false);
+    } else {
+      console.log('no action')
+    }
 
     $(this).closest("tr").find("span.written").html('<input type="number" name="Written" value="" placeholder="'+Written+'">');
     $(this).closest("tr").find("span.oral").html('<input type="number" name="Oral" value="" placeholder="'+Oral+'">');
@@ -257,6 +267,14 @@ $(document).ready(function() {
     }
 
   }); 
+
+  $('select.input-result').on('change', function() {
+    $(this).closest("tr").find(".quick-save").attr('disabled', false);
+  });
+
+  $('.quick-save :disabled').on('click', function() {
+    alert('y');
+  });
 
   $('.quick-save').on('click', function() {
     var id = $(this).closest("tr").find("input[name='id']").val();
