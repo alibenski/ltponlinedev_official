@@ -93,7 +93,7 @@ class CustomPassword extends ResetPassword
             ->from('clm_language@unog.ch', 'CLM Language')
             ->subject( 'CLM Online Registration Password Reset' )
             ->priority(1)
-            ->line('We are sending this email because we recieved a forgot password request.')
+            ->line('We are sending this email because we recieved a forgot password request. Reset password request will expire in '.config('auth.passwords.users.expire').' minutes.')
             ->action('Reset Password', url(config('app.url') . route('password.reset', $this->token, false)))
             ->line('If you did not request a password reset, no further action is required. Please contact us if you did not submit this request.');
     }
