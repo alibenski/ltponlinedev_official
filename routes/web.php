@@ -349,6 +349,10 @@ Route::middleware(['auth'])->group(function () {
 
     // route for student printing certificates
     Route::get('pdfAttestation', ['as'=>'pdfAttestation','uses'=>'PrinterController@pdfAttestation']);
+
+    Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
+    Route::get('thankyouPlacement', function () { return view('thankyouPlacement'); })->name('thankyouPlacement');
+    Route::get('thankyouSelfPay', function () { return view('thankyouSelfPay'); })->name('thankyouSelfPay');
 });
 
 // route to update email of student - this should be outside of auth middleware for the student to have access to this route 
@@ -441,9 +445,7 @@ Route::get('confirmationLinkExpired', function () { return view('confirmationLin
 Route::get('updateLinkExpired', function () { return view('updateLinkExpired'); })->name('updateLinkExpired');
 Route::get('new_user_msg', function () { return view('new_user_msg'); })->name('new_user_msg');
 Route::get('page_not_available', function () { return view('page_not_available'); })->name('page_not_available');
-Route::get('thankyou', function () { return view('thankyou'); })->name('thankyou');
-Route::get('thankyouPlacement', function () { return view('thankyouPlacement'); })->name('thankyouPlacement');
-Route::get('thankyouSelfPay', function () { return view('thankyouSelfPay'); })->name('thankyouSelfPay');
+
 
 // route for verification of UN staff
 Route::resource('newuser', 'NewUserController',['only' => ['create', 'store']]);
