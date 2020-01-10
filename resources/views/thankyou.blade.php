@@ -31,8 +31,8 @@
             <div class="row">
               <div class="col-md-10 col-md-offset-1"> 
                 <div class="left-text col-md-8">
-                  <h4><em>Thank You</em><br>Your enrolment form request has been submitted </h4>
-                  <p>You will receive further email notifications to let you know about the status of your request and other information.</p>
+                  <h4><em>Thank You <strong>{{ Auth::user()->name }}</strong></em><br>Your enrolment form request has been submitted </h4>
+                  <p>At anytime, you can go to the tab “Submitted Forms” to check the status of your enrolment. Please note that <u>your enrolment will only be confirmed after approval from your learning focal point (if applicable)</u>. Once all is confirmed, you will receive an email with an indication of the date and time of your class.</p>
 	                <div>
 	                	<a href="/home" class="btn btn-success">Back to Home Page</a>
 	                </div>
