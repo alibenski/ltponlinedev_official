@@ -53,6 +53,13 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
 
     Route::get('admin-student-email-view', 'AdminController@adminStudentEmailView')->name('admin-student-email-view');
 
+    /*
+     * Reporting Routes
+     */
+    Route::get('reports', 'ReportsController@baseView')->name('reports');
+    Route::get('get-reports-table', ['as'=>'get-reports-table','uses'=>'ReportsController@getReportsTable']);
+
+
     /**
      * Text Routes
      */
