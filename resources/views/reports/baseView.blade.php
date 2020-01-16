@@ -17,6 +17,7 @@
 @section('content')
 
 <section id="filter">
+	<form id="reportForm" method="get" action="">
 	<div class="row">
 		<div class="form-group">
 	      <label for="organization" class="col-md-12 control-label">Organization Select:</label>
@@ -24,8 +25,8 @@
 	        <div class="dropdown">
 	          <select id="organization" name="organization" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
 	            @foreach($orgs as $org)
-	                <option></option>
-	                <option value="{{$org->OrgCode}}">{{$org['Org Name']}} - {{ $org['Org Full Name'] }}</option>
+	                <option value=""></option>
+	                <option value="{{$org['Org Name']}}">{{$org['Org Name']}} - {{ $org['Org Full Name'] }}</option>
 	            @endforeach
 	          </select>
 	        </div>
@@ -56,7 +57,7 @@
 	      <label for="year" class="col-md-12 control-label">Year Select:</label>
 	      <div class="form-group col-sm-12">
 	        <div class="dropdown">
-	          <select id="year" name="year" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
+	          <select id="year" name="year" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
 	            @foreach($years as $value)
 	                <option></option>
 	                <option value="{{$value}}">{{$value}}</option>
@@ -70,7 +71,7 @@
 	      <label for="term" class="col-md-12 control-label">Term Select:</label>
 	      <div class="form-group col-sm-12">
 	        <div class="dropdown">
-	          <select id="term" name="term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
+	          <select id="term" name="term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
 	            @foreach($terms as $term)
 	                <option></option>
 	                <option value="{{$term->Term_Code}}">{{$term->Term_Code}} - {{$term->Comments}} - {{$term->Term_Name}}</option>
@@ -84,7 +85,7 @@
 	      <label for="language" class="col-md-12 control-label">Language Select:</label>
 	      <div class="form-group col-sm-12">
 	        <div class="dropdown">
-	          <select id="language" name="language" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
+	          <select id="language" name="language" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
 	            @foreach($languages as $id => $name)
 	                <option></option>
 	                <option value="{{ $id }}">{{$name}}</option>
@@ -95,8 +96,9 @@
 	    </div>
 	</div> {{-- end filter div --}}
 	<div class="row">
-		<button type="button" class="btn btn-success submit-filter">Submit</button>
+		<button type="button" class="btn btn-success submit-filter" >Submit</button>
 	</div>
+	</form>
 </section>
 
 <div class="reports-section">
@@ -107,13 +109,13 @@
 				{{-- <th>Operation</th> --}}
 				<th>Term</th>
 				<th>Language</th>
-				<th>Description</th>
+				{{-- <th>Description</th> --}}
 				{{-- <th>Price USD</th> --}}
 				{{-- <th>Duration</th> --}}
 				<th>Organization</th>
 				<th>Name</th>
 				{{-- <th>RESULT</th> --}}
-				{{-- <th>Cancel Date</th> --}}
+				<th>Cancel Date</th>
 			</tr>
 		</thead>
 		<tfoot>
@@ -121,13 +123,13 @@
 				{{-- <th>Operation</th> --}}
 				<th>Term</th>
 				<th>Language</th>
-				<th>Description</th>
+				{{-- <th>Description</th> --}}
 				{{-- <th>Price USD</th> --}}
 				{{-- <th>Duration</th> --}}
 				<th>Organization</th>
 				<th>Name</th>
 				{{-- <th>RESULT</th> --}}
-				{{-- <th>Cancel Date</th> --}}
+				<th>Cancel Date</th>
 			</tr>
 		</tfoot>
 	</table>
@@ -138,7 +140,9 @@
 
 @section('java_script')
 
-<script src="{{ asset('js/select2.min.js') }}"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 
@@ -164,18 +168,18 @@
 	    });
 
 	    $('button.submit-filter').on('click', function() {
-	    	const organizationId = $('select[name="organization"]').children("option:selected").val();
-	    	const yearId = $('select[name="year"]').children("option:selected").val();
-	    	const termId = $('select[name="term"]').children("option:selected").val();
-	    	const languageId = $('select[name="language"]').children("option:selected").val();
+	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
+	    	const year = $('select[name="year"]').children("option:selected").val();
+	    	const Term = $('select[name="term"]').children("option:selected").val();
+	    	const L = $('select[name="language"]').children("option:selected").val();
 	    	
 	    	$.ajax({
 	    		url: 'get-reports-table',
 	    		type: 'GET',
-	    		data: {organizationId: organizationId, yearId, termId, languageId},
+	    		data: {DEPT: DEPT, year: year, Term: Term, L: L},
 	    	})
 	    	.done(function(data) {
-	    		console.log(data);
+	    		assignToEventsColumns(data);
 	    	})
 	    	.fail(function() {
 	    		console.log("error");
@@ -209,6 +213,7 @@
 				        'copy', 'csv', 'excel', 'pdf'
 				    ],
 		    	"scrollX": true,
+		    	"destroy": true, // destroy the existing table to apply the new options
 		    	"responsive": false,
 		    	"orderCellsTop": true,
 		    	"fixedHeader": true,
@@ -223,38 +228,38 @@
 			         //    },
 		        		{ "data": "Term" }, 
 		        		{ "data": "languages.name" }, 
-		        		{ "data": "courses.Description" }, 
-		        		{ "data": "courseschedules.prices.price_usd" }, 
-		        		{ "data": "courseschedules.courseduration.duration_name_en" }, 
+		        		// { "data": "courses.Description" }, 
+		        		// { "data": "courseschedules.prices.price_usd" }, 
+		        		// { "data": "courseschedules.courseduration.duration_name_en" }, 
 		        		{ "data": "DEPT" },  
 		        		{ "data": "users.name" }, 
-		        		{ "data": "Result", "className": "result" },
+		        		// { "data": "Result", "className": "result" },
 		        		{ "data": "deleted_at" }
 					        ],
-				"createdRow": function( row, data, dataIndex ) {
-							$(row).find("td.record_id").attr('id', data['id']);
+				// "createdRow": function( row, data, dataIndex ) {
+				// 			$(row).find("td.record_id").attr('id', data['id']);
 
-						    if ( data['Result'] == 'P') {
-						      $(row).addClass( 'pass' );
-						      $(row).find("td.result").text('PASS');
-						    }
+				// 		    if ( data['Result'] == 'P') {
+				// 		      $(row).addClass( 'pass' );
+				// 		      $(row).find("td.result").text('PASS');
+				// 		    }
 
-						    if ( data['Result'] == 'F') {
-						      $(row).addClass( 'label-danger' );
-						      $(row).find("td.result").text('Fail');
-						    }
+				// 		    if ( data['Result'] == 'F') {
+				// 		      $(row).addClass( 'label-danger' );
+				// 		      $(row).find("td.result").text('Fail');
+				// 		    }
 
-						    if ( data['Result'] == 'I') {
-						      $(row).addClass( 'label-warning' );
-						      $(row).find("td.result").text('Incomplete');
-						    }
+				// 		    if ( data['Result'] == 'I') {
+				// 		      $(row).addClass( 'label-warning' );
+				// 		      $(row).find("td.result").text('Incomplete');
+				// 		    }
 
-						    if ( data['deleted_at'] !== null) {
-						      $(row).addClass( 'bg-navy' );
-						      $(row).find("td.result").text('Late Cancellation');
-						    }
+				// 		    if ( data['deleted_at'] !== null) {
+				// 		      $(row).addClass( 'bg-navy' );
+				// 		      $(row).find("td.result").text('Late Cancellation');
+				// 		    }
 
-					    }
+					    // }
 		    })
 		}
 	});

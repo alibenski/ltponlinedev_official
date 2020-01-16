@@ -31,9 +31,27 @@ class ReportsController extends Controller
     public function getReportsTable(Request $request)
     {
     	if ($request->ajax()) {
-    		$records = Repo::where()
+            // insert validation
+            
+    		$records = new Repo;
+            $queries = [];
 
-    		return response()->json($data); 
+            $columns = [
+                'DEPT', 'L', 'Term'
+            ];
+
+            foreach ($columns as $column) {
+                if (\Request::has($column)) {
+                    $records = $records->where($column, \Request::input($column) )
+                        ->with('languages')
+                        ->with('users');
+                    $queries[$column] = \Request::input($column);
+                }  
+            } 
+
+            $data = $records->get();
+
+    		return response()->json(['data' => $data]); 
     	}
     }
 }
