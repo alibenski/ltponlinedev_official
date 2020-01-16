@@ -47,6 +47,7 @@
 					<th>Last Name</th>
 					<th>First Name</th>
 					<th>Email</th>
+					<th>Roles</th>
 					<th>Language</th>
 					<th>Active</th>
 					<th>Operation</th>
@@ -60,14 +61,29 @@
 							<td class="input-Tch_Lastname">{{ $teacher->Tch_Lastname }}</td>
 							<td class="input-Tch_Firstname">{{ $teacher->Tch_Firstname }}</td>
 							<td class="input-email">{{ $teacher->email }}</td>
+							<td class="input-role">
+								@if ($teacher->users)
+								{{ $teacher->users->roles()->pluck('name')->implode(' / ') }}
+								@endif
+							</td>
 							<td class="input-Tch_L">{{ $teacher->Tch_L }}</td>
 							<td>
 								<input value="" type="checkbox" name="In_Out" @if($teacher->In_Out == 1) checked="checked" @else @endif>
 							</td>
 							<td>
-								<button type="button" class="btn btn-warning btn-sm quick-edit">Quick edit</button>
-								<button type="button" class="btn btn-success btn-sm quick-save hidden" disabled="">Quick Save</button>
-								<a href="#"  class="btn btn-default btn-sm" disabled>Edit</a>
+								<button type="button" class="btn btn-warning btn-sm quick-edit">
+									Quick edit
+								</button>
+								<button type="button" class="btn btn-success btn-sm quick-save hidden" disabled="">		Quick Save
+								</button>
+								<a @if ($teacher->users)
+									href="{{ route('users.edit', $teacher->users->id) }}"
+									@else
+									disabled
+									@endif   
+									class="btn btn-default btn-sm" >
+									Edit
+								</a>
 								<input type="hidden" name="_token" value="{{ Session::token() }}">
 							</td>
 						</tr>
