@@ -110,7 +110,7 @@
 	    </div>
 	</div> {{-- end filter div --}}
 	<div class="row">
-		<button type="button" class="btn btn-success submit-filter">Submit</button>
+		<input type="submit" class="btn btn-success submit-filter" value="Submit">
 	</div>
 	</form>
 </section>
@@ -157,7 +157,7 @@
 @section('java_script')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
@@ -168,6 +168,18 @@
 			placeholder: "Select Filter",
 	    });
 
+		var form = $("#reportForm");
+		form.validate({
+		    rules: {
+				'organization': {
+	                required: true
+	            }
+		  	},
+		    messages: {
+		    	'organization': "this is required",
+		    }  
+		      });
+		
 	    $('input.decision').on('click', function(event) {
 	    	let decision = event.target.value;
 	    	if (decision === '1') {
@@ -195,7 +207,17 @@
 	    		}
 	    });
 
-	    $('button.submit-filter').on('click', function() {
+	    $('input.submit-filter').on('click', function(e) {
+	    	e.preventDefault();
+	    	if (form.valid()) {
+	    		getReportsTable();
+	    	}	else {
+
+			console.log('no')	    	
+	    	}
+	    });
+
+	    function getReportsTable() {
 	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
 	    	const year = $('select[name="year"]').children("option:selected").val();
 	    	const Term = $('select[name="term"]').children("option:selected").val();
@@ -212,13 +234,11 @@
 	    	})
 	    	.fail(function(data) {
 	    		console.log(data)
-	    		alert('Required fields');
 	    	})
 	    	.always(function() {
 	    		console.log("complete");
 	    	});
-	    	
-	    });
+	    }
 
 	    function assignToEventsColumns(data) {
 		$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
