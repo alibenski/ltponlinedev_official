@@ -20,7 +20,7 @@
 	<form id="reportForm" method="get" action="">
 	<div class="row">
 		<div class="form-group">
-	      <label for="organization" class="col-md-12 control-label">Organization Select:</label>
+	      <label for="organization" class="col-md-12 control-label">Organization Select: (required)</label>
 	      <div class="form-group col-sm-12">
 	        <div class="dropdown">
 	          <select id="organization" name="organization" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
@@ -34,6 +34,7 @@
 	    </div>
 
 		<div class="col-md-12">
+				<label for="decision" class="col-md-12 control-label">Year or Term: (required)</label>
 			<div class="form-group col-md-4">
 				<div class="input-group"> 
 			      <span class="input-group-addon">       
@@ -81,7 +82,20 @@
 	      </div>
 	    </div>
 
-		<div class="form-group">
+		<div class="col-md-12">
+			<div class="form-group col-md-4">
+				<div class="input-group"> 
+			      <span class="input-group-addon">       
+			        <input type="checkbox" name="all-languages-toggle" class="all-languages-toggle">   
+			      </span>
+			        <label type="text" class="form-control">
+			        	Choose Specific Language
+			      </label>
+			    </div>
+			</div>
+		</div>
+
+		<div class="filter-by-language form-group hidden">
 	      <label for="language" class="col-md-12 control-label">Language Select:</label>
 	      <div class="form-group col-sm-12">
 	        <div class="dropdown">
@@ -96,7 +110,7 @@
 	    </div>
 	</div> {{-- end filter div --}}
 	<div class="row">
-		<button type="button" class="btn btn-success submit-filter" >Submit</button>
+		<button type="button" class="btn btn-success submit-filter">Submit</button>
 	</div>
 	</form>
 </section>
@@ -109,13 +123,14 @@
 				{{-- <th>Operation</th> --}}
 				<th>Term</th>
 				<th>Language</th>
-				{{-- <th>Description</th> --}}
+				<th>Description</th>
+				<th>Description (< 2019)</th>
 				{{-- <th>Price USD</th> --}}
 				{{-- <th>Duration</th> --}}
 				<th>Organization</th>
 				<th>Name</th>
 				{{-- <th>RESULT</th> --}}
-				<th>Cancel Date</th>
+				<th>Cancelled After Convocation</th>
 			</tr>
 		</thead>
 		<tfoot>
@@ -123,13 +138,14 @@
 				{{-- <th>Operation</th> --}}
 				<th>Term</th>
 				<th>Language</th>
-				{{-- <th>Description</th> --}}
+				<th>Description</th>
+				<th>Description (< 2019)</th>
 				{{-- <th>Price USD</th> --}}
 				{{-- <th>Duration</th> --}}
 				<th>Organization</th>
 				<th>Name</th>
 				{{-- <th>RESULT</th> --}}
-				<th>Cancel Date</th>
+				<th>Cancelled After Convocation</th>
 			</tr>
 		</tfoot>
 	</table>
@@ -141,7 +157,7 @@
 @section('java_script')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
@@ -158,13 +174,25 @@
 	    		$('.filter-by-year').removeClass('hidden');
 	    		$('.filter-by-term').addClass('hidden');
 	    		$('select[name="term"]').prop('selectedIndex',-1);
+	    		$('select[name="term"]').select2({placeholder: "Select Term"});
 	    	}
 	    	if (decision === '0') {
 	    		$('.filter-by-term').removeClass('hidden');
 	    		$('.filter-by-year').addClass('hidden');
 	    		$('select[name="year"]').prop('selectedIndex',-1);
+	    		$('select[name="year"]').select2({placeholder: "Select Year"});
 	    	}
 
+	    });
+
+	    $('input.all-languages-toggle').on('click', function() {
+	    		$('.filter-by-language').toggleClass('hidden');
+
+	    		if (!$(this).is(':checked')) {
+	    			$('select[name="language"]').prop('selectedIndex',-1);
+	    			$('select[name="language"]').select2({placeholder: "Select Language"});
+	    			console.log('reset')
+	    		}
 	    });
 
 	    $('button.submit-filter').on('click', function() {
@@ -179,10 +207,12 @@
 	    		data: {DEPT: DEPT, year: year, Term: Term, L: L},
 	    	})
 	    	.done(function(data) {
+	    		console.log(data)
 	    		assignToEventsColumns(data);
 	    	})
-	    	.fail(function() {
-	    		console.log("error");
+	    	.fail(function(data) {
+	    		console.log(data)
+	    		alert('Required fields');
 	    	})
 	    	.always(function() {
 	    		console.log("complete");
@@ -221,45 +251,19 @@
 		        "bAutoWidth": false,
 		        "aaData": data.data,
 		        "columns": [
-				        // {
-			         //        "data": null,
-			         //        "className": "record_id",
-			         //        "defaultContent": '<button class="btn btn-sm btn-danger btn-exclude">Exclude</button>'
-			         //    },
 		        		{ "data": "Term" }, 
 		        		{ "data": "languages.name" }, 
-		        		// { "data": "courses.Description" }, 
-		        		// { "data": "courseschedules.prices.price_usd" }, 
-		        		// { "data": "courseschedules.courseduration.duration_name_en" }, 
+		        		{ "data": "courses.Description",
+		        			"defaultContent": "" }, 
+		        		{ "data": "courses_old.Description",
+		        			"defaultContent": "" }, 
 		        		{ "data": "DEPT" },  
-		        		{ "data": "users.name" }, 
-		        		// { "data": "Result", "className": "result" },
-		        		{ "data": "deleted_at" }
+		        		{ "data": "users.name",
+		        			"defaultContent": ""  }, 
+		        		{ "data": "deleted_at" },
 					        ],
-				// "createdRow": function( row, data, dataIndex ) {
-				// 			$(row).find("td.record_id").attr('id', data['id']);
 
-				// 		    if ( data['Result'] == 'P') {
-				// 		      $(row).addClass( 'pass' );
-				// 		      $(row).find("td.result").text('PASS');
-				// 		    }
 
-				// 		    if ( data['Result'] == 'F') {
-				// 		      $(row).addClass( 'label-danger' );
-				// 		      $(row).find("td.result").text('Fail');
-				// 		    }
-
-				// 		    if ( data['Result'] == 'I') {
-				// 		      $(row).addClass( 'label-warning' );
-				// 		      $(row).find("td.result").text('Incomplete');
-				// 		    }
-
-				// 		    if ( data['deleted_at'] !== null) {
-				// 		      $(row).addClass( 'bg-navy' );
-				// 		      $(row).find("td.result").text('Late Cancellation');
-				// 		    }
-
-					    // }
 		    })
 		}
 	});
