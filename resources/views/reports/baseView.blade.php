@@ -38,14 +38,14 @@
 			<div class="form-group col-md-4">
 				<div class="input-group"> 
 			      <span class="input-group-addon">       
-			        <input type="radio" name="decision" value="1" class="decision">                 
+			        <input type="radio" name="decision" value="1" class="decision validateMe">                 
 			      </span>
 			        <label type="text" class="form-control">
 			        	Year
 			      </label>
 
 			      <span class="input-group-addon">       
-			        <input type="radio" name="decision" value="0" class="decision">                 
+			        <input type="radio" name="decision" value="0" class="decision validateMe">                 
 			      </span>
 			        <label type="text" class="form-control">
 			        	Term
@@ -115,8 +115,8 @@
 	</form>
 </section>
 
-<div class="reports-section">
-	{{-- <div class="preloader2"><p><strong>Please wait... Fetching data from the database...</strong></p></div> --}}
+<div class="reports-section hidden">
+	<div class="preloader2"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
 	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>
@@ -169,6 +169,7 @@
 	    });
 
 		var form = $("#reportForm");
+
 		form.validate({
 		    rules: {
 				'organization': {
@@ -179,18 +180,24 @@
 		    	'organization': "this is required",
 		    }  
 		      });
-		
+
+		$.validator.addClassRules("validateMe", {
+		     required: true
+		});
+
 	    $('input.decision').on('click', function(event) {
 	    	let decision = event.target.value;
 	    	if (decision === '1') {
 	    		$('.filter-by-year').removeClass('hidden');
 	    		$('.filter-by-term').addClass('hidden');
+	    		$('select[name="year"]').addClass('validateMe');
 	    		$('select[name="term"]').prop('selectedIndex',-1);
 	    		$('select[name="term"]').select2({placeholder: "Select Term"});
 	    	}
 	    	if (decision === '0') {
 	    		$('.filter-by-term').removeClass('hidden');
 	    		$('.filter-by-year').addClass('hidden');
+	    		$('select[name="term"]').addClass('validateMe');
 	    		$('select[name="year"]').prop('selectedIndex',-1);
 	    		$('select[name="year"]').select2({placeholder: "Select Year"});
 	    	}
@@ -210,6 +217,7 @@
 	    $('input.submit-filter').on('click', function(e) {
 	    	e.preventDefault();
 	    	if (form.valid()) {
+	    		$('.reports-section').removeClass('hidden');
 	    		getReportsTable();
 	    	}	else {
 
@@ -223,21 +231,28 @@
 	    	const Term = $('select[name="term"]').children("option:selected").val();
 	    	const L = $('select[name="language"]').children("option:selected").val();
 	    	
-	    	$.ajax({
-	    		url: 'get-reports-table',
-	    		type: 'GET',
-	    		data: {DEPT: DEPT, year: year, Term: Term, L: L},
-	    	})
-	    	.done(function(data) {
-	    		console.log(data)
-	    		assignToEventsColumns(data);
-	    	})
-	    	.fail(function(data) {
-	    		console.log(data)
-	    	})
-	    	.always(function() {
-	    		console.log("complete");
-	    	});
+	    	let promises = [];
+
+	    	promises.push(
+		    	$.ajax({
+		    		url: 'get-reports-table',
+		    		type: 'GET',
+		    		data: {DEPT: DEPT, year: year, Term: Term, L: L},
+		    	})
+		    	.done(function(data) {
+		    		console.log(data)
+		    		assignToEventsColumns(data);
+		    	})
+		    	.fail(function(data) {
+		    		console.log(data)
+		    	})
+		    	.always(function() {
+		    		console.log("complete");
+		    	}));
+
+	    	$.when.apply($.ajax(), promises).then(function() {
+		        $(".preloader2").fadeOut(600);
+		    }); 
 	    }
 
 	    function assignToEventsColumns(data) {
