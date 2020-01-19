@@ -1,4 +1,4 @@
-@extends('admin.no_sidebar_admin')
+@extends('admin.admin')
 
 @section('customcss')
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -11,144 +11,162 @@
     <style>
     	table { table-layout:fixed; }
 		th, td { word-wrap:break-word; overflow:hidden; text-overflow: ellipsis; }
+		.error { color: red; }
     </style>
 @stop
 
 @section('content')
 
 <section id="filter">
-	<form id="reportForm" method="get" action="">
-	<div class="row">
-		<div class="form-group">
-	      <label for="organization" class="col-md-12 control-label">Organization Select: (required)</label>
-	      <div class="form-group col-sm-12">
-	        <div class="dropdown">
-	          <select id="organization" name="organization" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
-	            @foreach($orgs as $org)
-	                <option value=""></option>
-	                <option value="{{$org['Org Name']}}">{{$org['Org Name']}} - {{ $org['Org Full Name'] }}</option>
-	            @endforeach
-	          </select>
-	        </div>
-	      </div>
-	    </div>
-
-		<div class="col-md-12">
-				<label for="decision" class="col-md-12 control-label">Year or Term: (required)</label>
-			<div class="form-group col-md-4">
-				<div class="input-group"> 
-			      <span class="input-group-addon">       
-			        <input type="radio" name="decision" value="1" class="decision validateMe">                 
-			      </span>
-			        <label type="text" class="form-control">
-			        	Year
-			      </label>
-
-			      <span class="input-group-addon">       
-			        <input type="radio" name="decision" value="0" class="decision validateMe">                 
-			      </span>
-			        <label type="text" class="form-control">
-			        	Term
-			      </label>
-			    </div>
-			</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Filter Section
 		</div>
-
-		<div class="filter-by-year form-group hidden">
-	      <label for="year" class="col-md-12 control-label">Year Select:</label>
-	      <div class="form-group col-sm-12">
-	        <div class="dropdown">
-	          <select id="year" name="year" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
-	            @foreach($years as $value)
-	                <option></option>
-	                <option value="{{$value}}">{{$value}}</option>
-	            @endforeach
-	          </select>
-	        </div>
-	      </div>
-	    </div>
-
-	    <div class="filter-by-term form-group hidden">
-	      <label for="term" class="col-md-12 control-label">Term Select:</label>
-	      <div class="form-group col-sm-12">
-	        <div class="dropdown">
-	          <select id="term" name="term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
-	            @foreach($terms as $term)
-	                <option></option>
-	                <option value="{{$term->Term_Code}}">{{$term->Term_Code}} - {{$term->Comments}} - {{$term->Term_Name}}</option>
-	            @endforeach
-	          </select>
-	        </div>
-	      </div>
-	    </div>
-
-		<div class="col-md-12">
-			<div class="form-group col-md-4">
-				<div class="input-group"> 
-			      <span class="input-group-addon">       
-			        <input type="checkbox" name="all-languages-toggle" class="all-languages-toggle">   
-			      </span>
-			        <label type="text" class="form-control">
-			        	Choose Specific Language
-			      </label>
+		<div class="panel-body">
+			<form id="reportForm" method="get" action="" class="col-md-6">
+			<div class="row">
+				<div class="form-group">
+			      <label for="organization" class="col-md-12 control-label">Organization Select: (required)</label>
+			      <div class="form-group col-sm-12">
+			        <div class="dropdown">
+			          <select id="organization" name="organization" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
+			            @foreach($orgs as $org)
+			                <option value=""></option>
+			                <option value="{{$org['Org Name']}}">{{$org['Org Name']}} - {{ $org['Org Full Name'] }}</option>
+			            @endforeach
+			          </select>
+			        </div>
+			      </div>
 			    </div>
-			</div>
-		</div>
 
-		<div class="filter-by-language form-group hidden">
-	      <label for="language" class="col-md-12 control-label">Language Select:</label>
-	      <div class="form-group col-sm-12">
-	        <div class="dropdown">
-	          <select id="language" name="language" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
-	            @foreach($languages as $id => $name)
-	                <option></option>
-	                <option value="{{ $id }}">{{$name}}</option>
-	            @endforeach
-	          </select>
-	        </div>
-	      </div>
-	    </div>
-	</div> {{-- end filter div --}}
-	<div class="row">
-		<input type="submit" class="btn btn-success submit-filter" value="Submit">
+				<div class="col-md-12">
+						<label for="decision" class="col-md-12 control-label">Year or Term: (required)</label>
+					<div class="form-group col-md-8">
+						<div class="input-group"> 
+					      <span class="input-group-addon">       
+					        <input type="radio" name="decision" value="1" class="decision validateMe">                 
+					      </span>
+					        <label type="text" class="form-control">
+					        	Year
+					      </label>
+
+					      <span class="input-group-addon">       
+					        <input type="radio" name="decision" value="0" class="decision validateMe">                 
+					      </span>
+					        <label type="text" class="form-control">
+					        	Term
+					      </label>
+					    </div>
+					</div>
+				</div>
+
+				<div class="filter-by-year form-group hidden">
+			      <label for="year" class="col-md-12 control-label">Year Select:</label>
+			      <div class="form-group col-sm-12">
+			        <div class="dropdown">
+			          <select id="year" name="year" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+			            @foreach($years as $value)
+			                <option></option>
+			                <option value="{{$value}}">{{$value}}</option>
+			            @endforeach
+			          </select>
+			        </div>
+			      </div>
+			    </div>
+
+			    <div class="filter-by-term form-group hidden">
+			      <label for="term" class="col-md-12 control-label">Term Select:</label>
+			      <div class="form-group col-sm-12">
+			        <div class="dropdown">
+			          <select id="term" name="term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+			            @foreach($terms as $term)
+			                <option></option>
+			                <option value="{{$term->Term_Code}}">{{$term->Term_Code}} - {{$term->Comments}} - {{$term->Term_Name}}</option>
+			            @endforeach
+			          </select>
+			        </div>
+			      </div>
+			    </div>
+
+				<div class="col-md-12">
+					<div class="form-group col-md-8">
+						<div class="input-group"> 
+					      <span class="input-group-addon">       
+					        <input type="checkbox" name="all-languages-toggle" class="all-languages-toggle">   
+					      </span>
+					        <label type="text" class="form-control">
+					        	Choose Specific Language
+					      </label>
+					    </div>
+					</div>
+				</div>
+
+				<div class="filter-by-language form-group hidden">
+			      <label for="language" class="col-md-12 control-label">Language Select:</label>
+			      <div class="form-group col-sm-12">
+			        <div class="dropdown">
+			          <select id="language" name="language" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+			            @foreach($languages as $id => $name)
+			                <option></option>
+			                <option value="{{ $id }}">{{$name}}</option>
+			            @endforeach
+			          </select>
+			        </div>
+			      </div>
+			    </div>
+			</div> {{-- end filter div --}}
+			<div class="row col-sm-12">
+				<div class="col-sm-12">
+					<input type="submit" class="btn btn-success submit-filter" value="Submit">		
+				</div>
+			</div>
+			</form>
+		</div>
 	</div>
-	</form>
 </section>
 
+
 <div class="reports-section hidden">
-	<div class="preloader2"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
-	<table id="sampol" class="table table-striped no-wrap" width="100%">
-		<thead>
-			<tr>
-				{{-- <th>Operation</th> --}}
-				<th>Term</th>
-				<th>Language</th>
-				<th>Description</th>
-				<th>Description (< 2019)</th>
-				{{-- <th>Price USD</th> --}}
-				{{-- <th>Duration</th> --}}
-				<th>Organization</th>
-				<th>Name</th>
-				{{-- <th>RESULT</th> --}}
-				<th>Cancelled After Convocation</th>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				{{-- <th>Operation</th> --}}
-				<th>Term</th>
-				<th>Language</th>
-				<th>Description</th>
-				<th>Description (< 2019)</th>
-				{{-- <th>Price USD</th> --}}
-				{{-- <th>Duration</th> --}}
-				<th>Organization</th>
-				<th>Name</th>
-				{{-- <th>RESULT</th> --}}
-				<th>Cancelled After Convocation</th>
-			</tr>
-		</tfoot>
-	</table>
+	<div class="preloader3">
+		<h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3>
+		<br><br><br><br>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table id="sampol" class="table table-striped no-wrap" width="100%">
+				<thead>
+					<tr>
+						{{-- <th>Operation</th> --}}
+						<th>Term</th>
+						<th>Language</th>
+						<th>Description</th>
+						<th>Description (< 2019)</th>
+						{{-- <th>Price USD</th> --}}
+						{{-- <th>Duration</th> --}}
+						<th>Organization</th>
+						<th>Name</th>
+						{{-- <th>RESULT</th> --}}
+						<th>Cancelled After Convocation</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						{{-- <th>Operation</th> --}}
+						<th>Term</th>
+						<th>Language</th>
+						<th>Description</th>
+						<th>Description (< 2019)</th>
+						{{-- <th>Price USD</th> --}}
+						{{-- <th>Duration</th> --}}
+						<th>Organization</th>
+						<th>Name</th>
+						{{-- <th>RESULT</th> --}}
+						<th>Cancelled After Convocation</th>
+					</tr>
+				</tfoot>
+			</table>	
+		</div>
+	</div>
 </div>
 
 
@@ -177,7 +195,7 @@
 	            }
 		  	},
 		    messages: {
-		    	'organization': "this is required",
+		    	'organization': "Please select an organization.",
 		    }  
 		      });
 
@@ -214,14 +232,18 @@
 	    		}
 	    });
 
+	    $("select").on('change', function() {
+	    	$(".reports-section").addClass('hidden');
+	    	$(".preloader3").removeAttr('style');
+	    });
+
 	    $('input.submit-filter').on('click', function(e) {
 	    	e.preventDefault();
 	    	if (form.valid()) {
-	    		$('.reports-section').removeClass('hidden');
 	    		getReportsTable();
+	    		$(".reports-section").removeClass('hidden');
 	    	}	else {
-
-			console.log('no')	    	
+				console.log('no')	    	
 	    	}
 	    });
 
@@ -251,7 +273,7 @@
 		    	}));
 
 	    	$.when.apply($.ajax(), promises).then(function() {
-		        $(".preloader2").fadeOut(600);
+		        $(".preloader3").fadeOut(600);
 		    }); 
 	    }
 
@@ -259,7 +281,7 @@
 		$('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
 		    $('#sampol thead tr:eq(1) th').each( function (i) {
 		        var title = $(this).text();
-			        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+			        $(this).html( '<input type="text" placeholder="Search Column" />' );
 			 
 			        $( 'input', this ).on( 'keyup change', function () {
 			            if ( table.column(i).search() !== this.value ) {

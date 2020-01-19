@@ -40,6 +40,10 @@
         @endhasrole
         
         @hasrole('Admin')
+        <li class="{{ Request::is(route('reports')) ? "active" : ""}}"><a href="{{ route('reports') }}"><i class="fa fa-line-chart"></i> <span>Reports</span></a></li>
+        @endhasrole
+
+        @hasrole('Admin')
         <li class="treeview {{ Request::is('admin/billing-*') ? "active" : ""}}">
           <a href="#"><i class="fa fa-money"></i> <span>Billing</span>
             <span class="pull-right-container">
