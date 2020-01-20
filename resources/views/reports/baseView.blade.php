@@ -32,7 +32,7 @@
 			          <select id="organization" name="organization" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
 			            @foreach($orgs as $org)
 			                <option value=""></option>
-			                <option value="{{$org['Org Name']}}">{{$org['Org Name']}} - {{ $org['Org Full Name'] }}</option>
+			                <option value="{{$org['Org name']}}">{{$org['Org name']}} - {{ $org['Org Full Name'] }}</option>
 			            @endforeach
 			          </select>
 			        </div>

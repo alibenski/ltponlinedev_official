@@ -40,7 +40,7 @@
 	            @if(!empty($org))
 	              @foreach($org as $value)
 	                <option></option>
-	                <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+	                <option value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
 	              @endforeach
 	            @endif
 	          </select>

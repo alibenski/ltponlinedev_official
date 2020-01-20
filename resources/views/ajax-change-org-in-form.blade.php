@@ -6,7 +6,7 @@
         @if(!empty($org))
             <option value="">Select</option>
             @foreach($org as $value)
-            <option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+            <option value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
             @endforeach
         @endif
         </select>

@@ -8,7 +8,7 @@
                                         <option value="">--- Please Select Organization ---</option>
 											@if(!empty($select_org))
 											  @foreach($select_org as $value)
-											    <option class="col-md-8 wx" value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+											    <option class="col-md-8 wx" value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
 											  @endforeach
 											@endif
                                     </select>

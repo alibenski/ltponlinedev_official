@@ -59,7 +59,7 @@
 				<select name="DEPT" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
 				@foreach($orgs as $org)
 				  <option></option>
-		          <option value="{{ $org['Org Name'] }}">{{ $org['Org Name'] }} - {{ $org['Org Full Name'] }}</option>
+		          <option value="{{ $org['Org name'] }}">{{ $org['Org name'] }} - {{ $org['Org Full Name'] }}</option>
 		        @endforeach
 		        </select>
 			</div>

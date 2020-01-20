@@ -45,10 +45,10 @@
                       <select id="org" name="org" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
                         @if(!empty($org))
                           @foreach($org as $value)
-                          	@if (old('org', $new_user_info->org) == $value['Org Name'])
-						    	<option value="{{ $value['Org Name'] }}" selected>{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+                          	@if (old('org', $new_user_info->org) == $value['Org name'])
+						    	<option value="{{ $value['Org name'] }}" selected>{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
 							@else
-						    	<option value="{{ $value['Org Name'] }}">{{ $value['Org Name'] }} - {{ $value['Org Full Name'] }}</option>
+						    	<option value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
 							@endif
                           @endforeach
                         @endif
