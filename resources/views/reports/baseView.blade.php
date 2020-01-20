@@ -18,18 +18,18 @@
 @section('content')
 
 <section id="filter">
-	<div class="panel panel-default">
-		<div class="panel-heading">
+	<div class="box box-default">
+		<div class="box-header with-border">
 			Filter Section
 		</div>
-		<div class="panel-body">
-			<form id="reportForm" method="get" action="" class="col-md-6">
+		<div class="box-body">
+			<form id="reportForm" method="get" action="" class="col-sm-6">
 			<div class="row">
 				<div class="form-group">
-			      <label for="organization" class="col-md-12 control-label">Organization Select: (required)</label>
+			      <label for="organization" class="col-sm-12 control-label">Organization Select: (required)</label>
 			      <div class="form-group col-sm-12">
 			        <div class="dropdown">
-			          <select id="organization" name="organization" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
+			          <select id="organization" name="organization" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
 			            @foreach($orgs as $org)
 			                <option value=""></option>
 			                <option value="{{$org['Org Name']}}">{{$org['Org Name']}} - {{ $org['Org Full Name'] }}</option>
@@ -39,9 +39,9 @@
 			      </div>
 			    </div>
 
-				<div class="col-md-12">
-						<label for="decision" class="col-md-12 control-label">Year or Term: (required)</label>
-					<div class="form-group col-md-8">
+				<div class="col-sm-12">
+					<label for="decision" class="col-sm-12 control-label">Year or Term? (required)</label>
+					<div class="form-group col-sm-8">
 						<div class="input-group"> 
 					      <span class="input-group-addon">       
 					        <input type="radio" name="decision" value="1" class="decision validateMe">                 
@@ -61,10 +61,10 @@
 				</div>
 
 				<div class="filter-by-year form-group hidden">
-			      <label for="year" class="col-md-12 control-label">Year Select:</label>
+			      <label for="year" class="col-sm-12 control-label">Year Select:</label>
 			      <div class="form-group col-sm-12">
 			        <div class="dropdown">
-			          <select id="year" name="year" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+			          <select id="year" name="year" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
 			            @foreach($years as $value)
 			                <option></option>
 			                <option value="{{$value}}">{{$value}}</option>
@@ -75,10 +75,10 @@
 			    </div>
 
 			    <div class="filter-by-term form-group hidden">
-			      <label for="term" class="col-md-12 control-label">Term Select:</label>
+			      <label for="term" class="col-sm-12 control-label">Term Select:</label>
 			      <div class="form-group col-sm-12">
 			        <div class="dropdown">
-			          <select id="term" name="term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+			          <select id="term" name="term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
 			            @foreach($terms as $term)
 			                <option></option>
 			                <option value="{{$term->Term_Code}}">{{$term->Term_Code}} - {{$term->Comments}} - {{$term->Term_Name}}</option>
@@ -88,24 +88,25 @@
 			      </div>
 			    </div>
 
-				<div class="col-md-12">
-					<div class="form-group col-md-8">
+				<div class="col-sm-12">
+					<label for="decision" class="col-sm-12 control-label">Choose language? (optional)</label>
+					<div class="form-group col-sm-8">
 						<div class="input-group"> 
 					      <span class="input-group-addon">       
 					        <input type="checkbox" name="all-languages-toggle" class="all-languages-toggle">   
 					      </span>
 					        <label type="text" class="form-control">
-					        	Choose Specific Language
+					        	Yes
 					      </label>
 					    </div>
 					</div>
 				</div>
 
 				<div class="filter-by-language form-group hidden">
-			      <label for="language" class="col-md-12 control-label">Language Select:</label>
+			      <label for="language" class="col-sm-12 control-label">Language Select:</label>
 			      <div class="form-group col-sm-12">
 			        <div class="dropdown">
-			          <select id="language" name="language" class="col-md-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+			          <select id="language" name="language" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
 			            @foreach($languages as $id => $name)
 			                <option></option>
 			                <option value="{{ $id }}">{{$name}}</option>
@@ -127,41 +128,32 @@
 
 
 <div class="reports-section hidden">
-	<div class="preloader3">
-		<h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3>
-		<br><br><br><br>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-body">
+	<div class="box box-success">
+		<div class="overlay">
+			<i class="fa fa-refresh fa-spin"></i>
+		</div>
+		<div class="box-body">
 			<table id="sampol" class="table table-striped no-wrap" width="100%">
 				<thead>
 					<tr>
-						{{-- <th>Operation</th> --}}
 						<th>Term</th>
 						<th>Language</th>
 						<th>Description</th>
 						<th>Description (< 2019)</th>
-						{{-- <th>Price USD</th> --}}
-						{{-- <th>Duration</th> --}}
 						<th>Organization</th>
 						<th>Name</th>
-						{{-- <th>RESULT</th> --}}
-						<th>Cancelled After Convocation</th>
+						<th>Cancelled</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
-						{{-- <th>Operation</th> --}}
 						<th>Term</th>
 						<th>Language</th>
 						<th>Description</th>
 						<th>Description (< 2019)</th>
-						{{-- <th>Price USD</th> --}}
-						{{-- <th>Duration</th> --}}
 						<th>Organization</th>
 						<th>Name</th>
-						{{-- <th>RESULT</th> --}}
-						<th>Cancelled After Convocation</th>
+						<th>Cancelled</th>
 					</tr>
 				</tfoot>
 			</table>	
@@ -192,11 +184,16 @@
 		    rules: {
 				'organization': {
 	                required: true
-	            }
+	            },
 		  	},
 		    messages: {
 		    	'organization': "Please select an organization.",
-		    }  
+		    },
+		    errorPlacement: function (error, element) {
+		    	console.log(element)
+	            error.insertBefore(element.offsetParent("div.input-group"));
+	        },
+	        errorElement: 'div'
 		      });
 
 		$.validator.addClassRules("validateMe", {
@@ -234,7 +231,7 @@
 
 	    $("select").on('change', function() {
 	    	$(".reports-section").addClass('hidden');
-	    	$(".preloader3").removeAttr('style');
+	    	$(".overlay").removeAttr('style');
 	    });
 
 	    $('input.submit-filter').on('click', function(e) {
@@ -273,7 +270,7 @@
 		    	}));
 
 	    	$.when.apply($.ajax(), promises).then(function() {
-		        $(".preloader3").fadeOut(600);
+		        $(".overlay").fadeOut(600);
 		    }); 
 	    }
 
