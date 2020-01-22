@@ -62,7 +62,6 @@ class PlacementScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //validate the data
         $this->validate($request, array(
                 'term' => 'required|',
                 'L' => 'required|',
@@ -70,14 +69,27 @@ class PlacementScheduleController extends Controller
                 'format_id' => 'required|',
             ));
 
+        if ($request->format_id == 1) {
+            $message = [
+                'required' => 'The online Placement Test Date End field is required.',
+            ];
+            $this->validate($request, ['date_of_plexam_end' => 'required'], $message);
+        }
+
+        $filteredDateArray = [];
+        $filteredDateArray = array_filter($request->date_of_plexam);
+        if (empty($filteredDateArray)) {
+            return redirect()->back()->with('error','No dates submitted.');
+        }
+        $filteredDateArray = array_values($filteredDateArray);
         try{
             //loop for storing data to database
             $ingredients = [];        
-            for ($i = 0; $i < count($request->date_of_plexam); $i++) {
+            for ($i = 0; $i < count($filteredDateArray); $i++) {
                 $ingredients[] = new  PlacementSchedule([
                     'term' => $request->term,
                     'language_id' => $request->L,
-                    'date_of_plexam' => $request->date_of_plexam[$i],
+                    'date_of_plexam' => $filteredDateArray[$i],
                     'date_of_plexam_end' => $request->date_of_plexam_end,
                     'is_online' => $request->format_id,
                     ]); 
@@ -86,7 +98,7 @@ class PlacementScheduleController extends Controller
                         }
             }
             
-            $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
+            $request->session()->flash('success', 'Entry has been saved!');
 
             return redirect()->route('placement-schedule.index');
         } catch(Exception $e) {
