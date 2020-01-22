@@ -44,7 +44,7 @@ class TeachersController extends Controller
     public function teacherEnrolmentPreview(Request $request)
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         $term = Session::get('Term');
@@ -789,7 +789,7 @@ class TeachersController extends Controller
                 ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
 
             $languages = DB::table('languages')->pluck("name","code")->all();
-            $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
 
             $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
             $history = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->get();

@@ -13,7 +13,7 @@ class ReportsController extends Controller
 {
     public function baseView()
     {
-    	$orgs = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name', 'OrgCode']);
+    	$orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name', 'OrgCode']);
     	$languages = DB::table('languages')->pluck("name","code")->all();
     	$terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
     	$queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);

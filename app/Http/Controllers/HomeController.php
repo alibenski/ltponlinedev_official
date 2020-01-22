@@ -143,7 +143,7 @@ class HomeController extends Controller
         // actual enrolment term
         $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
         // ->pluck('Org name','Org name', 'Org Full Name');
 
         return view('form.whatorg', compact('terms', 'next_term', 'org'));

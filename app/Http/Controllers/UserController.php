@@ -681,7 +681,7 @@ class UserController extends Controller
         $student = User::find($id);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $languages = Language::pluck("name","code")->all();
-        $orgs = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
 
         // dd($request, $id);
         return view('users.enrol-student-to-course-form', compact('languages', 'terms', 'student', 'orgs'));
@@ -870,7 +870,7 @@ class UserController extends Controller
         $student = User::find($id);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $languages = Language::pluck("name","code")->all();
-        $orgs = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
         $times = Time::all();
 
         // dd($request, $id);

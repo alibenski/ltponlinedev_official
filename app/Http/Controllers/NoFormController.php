@@ -116,13 +116,13 @@ class NoFormController extends Controller
             ->where('INDEXID', $current_user)->first(['Term']);
         if ($student_last_term == null) {
                 $repos_lang = null;
-                $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+                $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name','Org name');
                 return view('form.myform2', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
             } 
             
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
             ->where('INDEXID', $current_user)->get();
-        $org = Torgan::orderBy('Org Name', 'asc')->get()->pluck('Org name','Org name');
+        $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name','Org name');
 
         return view('form.myform2', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {

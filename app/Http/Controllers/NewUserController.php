@@ -355,7 +355,7 @@ class NewUserController extends Controller
     {
         if($request->ajax()){     
             $new_user_info = NewUser::find($request->id);
-            $org = TORGAN::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $org = TORGAN::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
             $ext_index = 'EXT'.$new_user_info->id;
 
             if (is_null($new_user_info->indexno_new)) {

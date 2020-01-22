@@ -17,7 +17,7 @@ class ExcelController extends Controller
     public function getBladeExcel()
     {
     	$languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
                 $placement_forms = new PlacementForm;
         // $currentQueries = \Request::query();
         $queries = [];

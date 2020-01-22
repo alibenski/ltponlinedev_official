@@ -67,7 +67,7 @@ class AjaxController extends Controller
     public function ajaxChangeOrgInForm(Request $request)
     {
         if ($request->ajax()) {
-            $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
             $data = view('ajax-change-org-in-form', compact('org'))->render();
             return response()->json(['options'=>$data]);   
         }
@@ -290,7 +290,7 @@ class AjaxController extends Controller
 
     public function ajaxOrgSelect()
     {
-        $select_org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $select_org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
         $data = view('ajax-org-select',compact('select_org'))->render();
         return response()->json([$data]);  
     }

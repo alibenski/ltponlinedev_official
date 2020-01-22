@@ -259,7 +259,7 @@ class PreenrolmentController extends Controller
                 ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
 
             $languages = DB::table('languages')->pluck("name","code")->all();
-            $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
             $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
             $history = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->get();
 
@@ -334,7 +334,7 @@ class PreenrolmentController extends Controller
                 ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
 
             $languages = DB::table('languages')->pluck("name","code")->all();
-            $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
             $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
             $history = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->get();
 
@@ -704,7 +704,7 @@ class PreenrolmentController extends Controller
     public function index(Request $request)
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if (!Session::has('Term')) {
@@ -822,7 +822,7 @@ class PreenrolmentController extends Controller
             ->where('Term', $term)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code' ]);
 
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
 
         return view('preenrolment.edit', compact('enrolment_details', 'enrolment_schedules', 'languages', 'org'));
     }

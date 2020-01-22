@@ -464,7 +464,7 @@ class PlacementFormController extends Controller
     public function index(Request $request)
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if (!Session::has('Term') ) {
@@ -581,7 +581,7 @@ class PlacementFormController extends Controller
     public function getFilteredPlacementForms(Request $request)
     {      
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
 
             $placement_forms = new PlacementForm;
             $queries = [];
@@ -983,7 +983,7 @@ class PlacementFormController extends Controller
         $schedule = $enrolment_details;
 
         $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
 
         return view('placement_forms.editPlacementFormFields', compact('enrolment_details', 'schedule', 'languages', 'org'));
     }
