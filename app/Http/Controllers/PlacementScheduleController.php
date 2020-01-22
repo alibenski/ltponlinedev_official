@@ -49,7 +49,7 @@ class PlacementScheduleController extends Controller
     public function create()
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $languages = DB::table('languages')->pluck("name","code")->all();
+        $languages = DB::table('languages')->pluck("name", "code")->all();
 
         return view('placement_schedule.create', compact('languages', 'terms'));
     }
@@ -64,15 +64,15 @@ class PlacementScheduleController extends Controller
     {
         //validate the data
         $this->validate($request, array(
-                'term' => 'required|',
-                'L' => 'required|',
-                'date_of_plexam' => 'required|',
-                'format_id' => 'required|',
-            ));
+            'term' => 'required|',
+            'L' => 'required|',
+            'date_of_plexam' => 'required|',
+            'format_id' => 'required|',
+        ));
 
-        try{
+        try {
             //loop for storing data to database
-            $ingredients = [];        
+            $ingredients = [];
             for ($i = 0; $i < count($request->date_of_plexam); $i++) {
                 $ingredients[] = new  PlacementSchedule([
                     'term' => $request->term,
@@ -80,18 +80,18 @@ class PlacementScheduleController extends Controller
                     'date_of_plexam' => $request->date_of_plexam[$i],
                     'date_of_plexam_end' => $request->date_of_plexam_end,
                     'is_online' => $request->format_id,
-                    ]); 
-                        foreach ($ingredients as $data) {
-                            $data->save();
-                        }
+                ]);
+                foreach ($ingredients as $data) {
+                    $data->save();
+                }
             }
-            
+
             $request->session()->flash('success', 'Entry has been saved!'); //laravel 5.4 version
 
             return redirect()->route('placement-schedule.index');
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
-            return redirect()->back()->with('error','placement test schedule already exists');
+            return redirect()->back()->with('error', 'placement test schedule already exists');
         }
     }
 
@@ -116,7 +116,7 @@ class PlacementScheduleController extends Controller
     {
         $course = Course::find($id);
         // get first element in Schedule collection
-        $schedule_id = Schedule::first(); 
+        $schedule_id = Schedule::first();
         // variable "exists" returns a boolean for the specific course
         $exists = $course->schedule->contains($schedule_id);
         return view('courses.edit', compact('course', 'exists'));
@@ -133,15 +133,15 @@ class PlacementScheduleController extends Controller
     {
         // Validate data
         $course = Course::find($id);
-            $this->validate($request, array(
-                'name' => 'required|max:255',
-            )); 
+        $this->validate($request, array(
+            'name' => 'required|max:255',
+        ));
 
         // Save the data to db
         $course = Course::find($id);
 
         $course->name = $request->input('name');
-        $course->save();         
+        $course->save();
         // Set flash data with message
         $request->session()->flash('success', 'Changes have been saved!');
         // Redirect to flash data to posts.show
