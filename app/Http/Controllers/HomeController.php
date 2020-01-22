@@ -47,30 +47,30 @@ class HomeController extends Controller
         $currentEnrolmentTerm = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
         $cancel_date_limit_string = '';
         $cancel_date_limit_string_fr = '';
-        
-        if(!is_null($currentEnrolmentTerm)) {
+
+        if (!is_null($currentEnrolmentTerm)) {
             $currentEnrolmentTermCode = $currentEnrolmentTerm->Term_Code;
-    
+
             // get cancel date limit
             $queryCancelDateLimit = Term::where('Term_Code', $currentEnrolmentTermCode)->first()->Cancel_Date_Limit;
             $cancel_date_limit = new Carbon($queryCancelDateLimit);
             $cancel_date_limit->subDay();
-    
+
             $termCancelMonth = date('F', strtotime($cancel_date_limit));
             $termCancelDate = date('d', strtotime($cancel_date_limit));
             $termCancelYear = date('Y', strtotime($cancel_date_limit));
-    
+
             // cancel limit date convert to string
             $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
-    
+
             // translate 
-            $termCancelMonthFr = __('months.'.$termCancelMonth, [], 'fr');
-            $cancel_date_limit_string_fr = $termCancelDate.' '.$termCancelMonthFr.' '.$termCancelYear;
+            $termCancelMonthFr = __('months.' . $termCancelMonth, [], 'fr');
+            $cancel_date_limit_string_fr = $termCancelDate . ' ' . $termCancelMonthFr . ' ' . $termCancelYear;
         }
 
         return view('home', compact('cancel_date_limit_string', 'cancel_date_limit_string_fr'));
     }
-       
+
     public function homeHowToCheckStatus()
     {
         return view('home_how_to_check_status');
@@ -104,12 +104,12 @@ class HomeController extends Controller
         $forms_submitted = Preenrolment::withTrashed()
             ->distinct('Te_Code')
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $termValue )
-            ->get(['Te_Code', 'Term', 'INDEXID' , 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count', 'cancelled_by_student' ]);
-            // ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count']);
+            ->where('Term', $termValue)
+            ->get(['Te_Code', 'Term', 'INDEXID', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter', 'deleted_at', 'eform_submit_count', 'cancelled_by_student']);
+        // ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count']);
         $plforms_submitted = PlacementForm::withTrashed()
             ->where('INDEXID', '=', $current_user)
-            ->where('Term', $termValue )
+            ->where('Term', $termValue)
             ->get();
 
         //$str = $forms_submitted->pluck('Te_Code');
@@ -119,8 +119,8 @@ class HomeController extends Controller
         //var_dump($str_codes);
         //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $termValue)->get()->min();
-        
-        $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $current_user)->where('Term', $termValue)->get(); 
+
+        $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $current_user)->where('Term', $termValue)->get();
 
 
         return view('form.submitted', compact('forms_submitted', 'plforms_submitted', 'next_term', 'term_select', 'student_convoked'));
@@ -136,11 +136,11 @@ class HomeController extends Controller
             ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)
-            ->where('Term', $term_code )->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'selfpay_approval']);
-            // ->pluck('schedule.name', 'approval');
+            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'selfpay_approval']);
+        // ->pluck('schedule.name', 'approval');
 
         // render and return data values via AJAX
-            $data = view('form.modalshowinfo',compact('schedules'))->render();
+        $data = view('form.modalshowinfo', compact('schedules'))->render();
         return response()->json([$data]);
     }
 
@@ -148,7 +148,7 @@ class HomeController extends Controller
     {
         $current_user = Auth::user()->indexno;
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->get();
-        
+
         if ($historical_data->isEmpty()) {
             $historical_data = null;
             return view('form.history', compact('historical_data'));
@@ -167,12 +167,12 @@ class HomeController extends Controller
         // actual enrolment term
         $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
-        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         // ->pluck('Org name','Org name', 'Org Full Name');
 
         return view('form.whatorg', compact('terms', 'next_term', 'org'));
     }
-    
+
     public function whatform(Request $request)
     {
         // if part of new organization, then save the new organization to sddextr     
@@ -191,24 +191,21 @@ class HomeController extends Controller
             ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
 
         if ($request->decision == 1) {
-            session()->flash('success','Please fill in the payment-based enrolment form');
+            session()->flash('success', 'Please fill in the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
-        } 
-        elseif ($request->decision == 0 && $org_status == 1) {
-            session()->flash('success','Please fill in the payment-based enrolment form');
+        } elseif ($request->decision == 0 && $org_status == 1) {
+            session()->flash('success', 'Please fill in the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
-        } 
-        elseif ($request->decision == 0 && $org_status == 0) {
-            session()->flash('success','Please fill in the enrolment form');
+        } elseif ($request->decision == 0 && $org_status == 0) {
+            session()->flash('success', 'Please fill in the enrolment form');
             return redirect(route('myform.create'));
-        } 
+        }
         // elseif ($request->decision == 0) {
         //     session()->flash('success','Please fill in the enrolment form');
         //     return redirect(route('myform.create'));
         // } 
-        else 
-        return redirect(route('whatorg'));
-
+        else
+            return redirect(route('whatorg'));
     }
 
     public function destroy(Request $request, $staff, $tecode,  $term, $form)
@@ -217,18 +214,18 @@ class HomeController extends Controller
 
         //query submitted forms based from tblLTP_Enrolment table
         $forms = Preenrolment::orderBy('Term', 'desc')
-                ->where('Te_Code', $tecode)
-                ->where('INDEXID', '=', $current_user)
-                ->where('Term', $term )
-                ->where('form_counter', $form )
-                ->get();
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', '=', $current_user)
+            ->where('Term', $term)
+            ->where('form_counter', $form)
+            ->get();
         $display_language = Preenrolment::orderBy('Term', 'desc')
-                ->where('Te_Code', $tecode)
-                ->where('INDEXID', '=', $current_user)
-                ->where('Term', $term )
-                ->where('form_counter', $form )
-                ->first();
-        
+            ->where('Te_Code', $tecode)
+            ->where('INDEXID', '=', $current_user)
+            ->where('Term', $term)
+            ->where('form_counter', $form)
+            ->first();
+
         //get email address of the Manager
         $mgr_email = $forms->pluck('mgr_email')->first();
 
@@ -236,7 +233,7 @@ class HomeController extends Controller
         $is_self_pay_form = $forms->pluck('is_self_pay_form')->first();
 
         //if self-paying enrolment form do this
-        if ($is_self_pay_form == 1){
+        if ($is_self_pay_form == 1) {
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
@@ -245,18 +242,18 @@ class HomeController extends Controller
                 $delform->save();
                 $delform->delete();
             }
-            session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
+            session()->flash('cancel_success', 'Enrolment Form for ' . $display_language->courses->EDescription . ' has been cancelled.');
             return redirect()->back();
         }
 
         $staff_member_name = $forms->first()->users->name;
         //email notification to Manager    
-            //     Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
-        
+        //     Mail::to($mgr_email)->send(new MailaboutCancel($forms, $display_language, $staff_member_name));
+
         // get term values and convert to strings
         $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
         $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
-        
+
         $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
         $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
 
@@ -270,11 +267,11 @@ class HomeController extends Controller
         $check_learning_partner = Torgan::where('Org name', $org)->first();
         $learning_partner = $check_learning_partner->has_learning_partner;
         // Add more organizations in the IF statement below
-        if ($org !== 'UNOG' && $learning_partner == '1'){
-            
+        if ($org !== 'UNOG' && $learning_partner == '1') {
+
             //if not UNOG, email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
-            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']);
 
             //use map function to iterate through the collection and store value of email to var $org_email
             //subjects each value to a callback function
@@ -282,11 +279,10 @@ class HomeController extends Controller
                 return $val->email;
             });
             //make collection to array
-            $org_email_arr = $org_email->toArray(); 
+            $org_email_arr = $org_email->toArray();
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailaboutCancel($forms, $display_language, $staff_member_name, $term_season_en, $term_year));
-
+                ->send(new MailaboutCancel($forms, $display_language, $staff_member_name, $term_season_en, $term_year));
         }
 
         $enrol_form = [];
@@ -298,7 +294,7 @@ class HomeController extends Controller
             $delform->delete();
         }
 
-        session()->flash('cancel_success', 'Enrolment Form for '.$display_language->courses->EDescription. ' has been cancelled.');
+        session()->flash('cancel_success', 'Enrolment Form for ' . $display_language->courses->EDescription . ' has been cancelled.');
         return redirect()->back();
     }
 
@@ -306,18 +302,18 @@ class HomeController extends Controller
     {
         //query submitted forms based from tblLTP_Enrolment table
         $forms = PlacementForm::orderBy('Term', 'desc')
-                ->where('L', $lang)
-                ->where('INDEXID', '=', $staff)
-                ->where('Term', $term )
-                ->where('eform_submit_count', $eform )
-                ->get();
+            ->where('L', $lang)
+            ->where('INDEXID', '=', $staff)
+            ->where('Term', $term)
+            ->where('eform_submit_count', $eform)
+            ->get();
         $display_language = PlacementForm::orderBy('Term', 'desc')
-                ->where('L', $lang)
-                ->where('INDEXID', '=', $staff)
-                ->where('Term', $term )
-                ->where('eform_submit_count', $eform )
-                ->first();
-        
+            ->where('L', $lang)
+            ->where('INDEXID', '=', $staff)
+            ->where('Term', $term)
+            ->where('eform_submit_count', $eform)
+            ->first();
+
         //get email address of the Manager
         $mgr_email = $forms->pluck('mgr_email')->first();
 
@@ -325,7 +321,7 @@ class HomeController extends Controller
         $is_self_pay_form = $forms->pluck('is_self_pay_form')->first();
 
         //if self-paying enrolment form
-        if ($is_self_pay_form == 1){
+        if ($is_self_pay_form == 1) {
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
@@ -334,18 +330,18 @@ class HomeController extends Controller
                 $delform->save();
                 $delform->delete();
             }
-            session()->flash('cancel_success', 'Placement Test Request for '.$display_language->languages->name. ' has been cancelled.');
+            session()->flash('cancel_success', 'Placement Test Request for ' . $display_language->languages->name . ' has been cancelled.');
             return redirect()->back();
         }
 
         $staff_member_name = $forms->first()->users->name;
         //email notification to Manager    
-            //     Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
-        
+        //     Mail::to($mgr_email)->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name));
+
         // get term values and convert to strings
         $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
         $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
-        
+
         $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
         $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
 
@@ -360,11 +356,11 @@ class HomeController extends Controller
         $learning_partner = $torgan->has_learning_partner;
 
         // if there is a learning partner, email them as well
-        if ($learning_partner == '1'){
-            
+        if ($learning_partner == '1') {
+
             // email to HR Learning Partner of $other_org
             $other_org = Torgan::where('Org name', $org)->first();
-            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']);
 
             //use map function to iterate through the collection and store value of email to var $org_email
             //subjects each value to a callback function
@@ -372,11 +368,10 @@ class HomeController extends Controller
                 return $val->email;
             });
             //make collection to array
-            $org_email_arr = $org_email->toArray(); 
+            $org_email_arr = $org_email->toArray();
             //send email to array of email addresses $org_email_arr
             Mail::to($org_email_arr)
-                    ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name, $term_season_en, $term_year));
-
+                ->send(new MailaboutPlacementCancel($forms, $display_language, $staff_member_name, $term_season_en, $term_year));
         }
 
         $enrol_form = [];
@@ -388,7 +383,7 @@ class HomeController extends Controller
             $delform->delete();
         }
 
-        session()->flash('cancel_success', 'Placement Form Request for '.$display_language->languages->name. ' has been cancelled.');
+        session()->flash('cancel_success', 'Placement Form Request for ' . $display_language->languages->name . ' has been cancelled.');
         return redirect()->back();
     }
 }

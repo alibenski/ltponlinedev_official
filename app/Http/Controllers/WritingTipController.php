@@ -61,7 +61,7 @@ class WritingTipController extends Controller
             ], 5);
 
             $job = (new SendEmailJob($drupalEmailRecords, $writingTip))->delay($setDelay);
-            dispatch($job);
+            dispatch_now($job);
         }
 
 

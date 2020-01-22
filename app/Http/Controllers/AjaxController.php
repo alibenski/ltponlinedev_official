@@ -34,25 +34,25 @@ class AjaxController extends Controller
             ]);
 
             $data = $pashRecord;
-            return response()->json(['options'=>$data]);  
+            return response()->json(['options' => $data]);
         }
     }
 
     public function ajaxShowLanguageDropdown(Request $request)
     {
         if ($request->ajax()) {
-            $languages = DB::table('languages')->pluck("name","code")->all();
+            $languages = DB::table('languages')->pluck("name", "code")->all();
             $data = view('ajax-language-select-dropdown', compact('languages'))->render();
-            return response()->json(['options'=>$data]);  
+            return response()->json(['options' => $data]);
         }
     }
 
     public function ajaxShowFullSelectDropdown(Request $request)
     {
         if ($request->ajax()) {
-            $languages = DB::table('languages')->pluck("name","code")->all();
+            $languages = DB::table('languages')->pluck("name", "code")->all();
             $data = view('ajax-full-select-dropdown', compact('languages'))->render();
-            return response()->json(['options'=>$data]);  
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -60,16 +60,16 @@ class AjaxController extends Controller
     {
         if ($request->ajax()) {
             $data = view('ajax-change-hr-approval')->render();
-            return response()->json(['options'=>$data]);
+            return response()->json(['options' => $data]);
         }
     }
 
     public function ajaxChangeOrgInForm(Request $request)
     {
         if ($request->ajax()) {
-            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
+            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
             $data = view('ajax-change-org-in-form', compact('org'))->render();
-            return response()->json(['options'=>$data]);   
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -77,7 +77,7 @@ class AjaxController extends Controller
     {
         if ($request->ajax()) {
             $data = view('ajax-convert-to-selfpay')->render();
-            return response()->json(['options'=>$data]);
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -85,7 +85,7 @@ class AjaxController extends Controller
     {
         if ($request->ajax()) {
             $data = view('ajax-convert-to-regular')->render();
-            return response()->json(['options'=>$data]);
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -113,14 +113,14 @@ class AjaxController extends Controller
             ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)
-            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'selfpay_approval' ]);
-            // ->pluck('schedule.name', 'approval');
+            ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval']);
+        // ->pluck('schedule.name', 'approval');
 
         $query = Preenrolment::withTrashed()->where('INDEXID', $current_user)
             ->where('Term', $term_code)
             ->where('Te_Code', $request->tecode)
             ->where('form_counter', $request->form_counter)
-            ->groupBy(['Te_Code', 'Term', 'INDEXID','form_counter', 'deleted_at'])
+            ->groupBy(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at'])
             ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
 
         // render and return data values via AJAX
@@ -139,18 +139,17 @@ class AjaxController extends Controller
 
         // query if student is in waitlist table 
         // $waitlists = PlacementForm::with('waitlist')->where('INDEXID',$placement_form->INDEXID)->get();
-        
-        $waitlists = Repo::where('INDEXID',$placement_form->INDEXID)
-            ->where('Term',$prev_termCode)
+
+        $waitlists = Repo::where('INDEXID', $placement_form->INDEXID)
+            ->where('Term', $prev_termCode)
             ->whereHas('classrooms', function ($query) {
-                    $query->whereNull('Tch_ID')
-                            ->orWhere('Tch_ID', '=', 'TBD')
-                            ;
-                    })
+                $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD');
+            })
             ->get();
 
         // render and return data values via AJAX
-        $data = view('ajax-show-modal-placement', compact('placement_form','waitlists'))->render();
+        $data = view('ajax-show-modal-placement', compact('placement_form', 'waitlists'))->render();
         return response()->json([$data]);
     }
 
@@ -159,12 +158,12 @@ class AjaxController extends Controller
      */
     public function showScheduleSelfPay(Request $request)
     {
-        if($request->ajax()){
-            $selfpay_student = Preenrolment::select( 'INDEXID','Te_Code','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $request->index)->where('Te_Code', $request->tecode)->where('Term', $request->term)->first();    
+        if ($request->ajax()) {
+            $selfpay_student = Preenrolment::select('INDEXID', 'Te_Code', 'profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $request->index)->where('Te_Code', $request->tecode)->where('Term', $request->term)->first();
             $show_sched_selfpay = Preenrolment::where('INDEXID', $request->index)->where('Te_Code', $request->tecode)->where('Term', $request->term)->get();
-            
-            $data = view('selfpayforms.show',compact('selfpay_student','show_sched_selfpay'))->render();
-            return response()->json(['options'=>$data]);
+
+            $data = view('selfpayforms.show', compact('selfpay_student', 'show_sched_selfpay'))->render();
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -173,7 +172,6 @@ class AjaxController extends Controller
      */
     public function postDecisionSelfPay()
     {
-        
     }
     /**
      * delete day parameter when editing classrooms in classroom view
@@ -218,21 +216,21 @@ class AjaxController extends Controller
             $deleteDayParam->save();
         }
 
-        return response()->json($deleteDayParam); 
+        return response()->json($deleteDayParam);
     }
 
     /**
      * show sections in modal in classroom view
      */
     public function ajaxShowSection(Request $request)
-    {    
-        if($request->ajax()){            
+    {
+        if ($request->ajax()) {
             $show_classrooms = Classroom::where('cs_unique', $request->cs_unique)
-            ->orderBy('sectionNo', 'asc')
-            ->get();
+                ->orderBy('sectionNo', 'asc')
+                ->get();
 
-            $data = view('classrooms.show',compact('show_classrooms'))->render();
-            return response()->json(['options'=>$data]);
+            $data = view('classrooms.show', compact('show_classrooms'))->render();
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -251,19 +249,19 @@ class AjaxController extends Controller
             // $data = var_dump($data);
         } else { // if exists, plus 1 to the value and return to DOM
             $data = $cs_exist[0]['sectionNo'] + 1;
-        }       
-        
-        return response()->json($data); 
+        }
+
+        return response()->json($data);
     }
 
     public function ajaxGetSectionParam(Request $request)
     {
-        if($request->ajax()){            
+        if ($request->ajax()) {
             $show_classrooms = Classroom::where('cs_unique', $request->cs_unique)
-            ->first();
+                ->first();
 
             $data = $show_classrooms;
-            return response()->json(['options'=>$data]);
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -273,26 +271,26 @@ class AjaxController extends Controller
     public function ajaxIsCancelled(Request $request)
     {
         if (Auth::check()) {
-        $current_user = Auth::user()->indexno;
-        
-        //query submitted forms based from tblLTP_Enrolment table
-        $forms_submitted = Preenrolment::withTrashed()
-            ->distinct('Te_Code')
-            ->where('INDEXID', '=', $current_user)
-            ->where('Term', $request->term )
-            ->get(['Te_Code', 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'deleted_at', 'form_counter']);
+            $current_user = Auth::user()->indexno;
 
-        $data = $forms_submitted;
+            //query submitted forms based from tblLTP_Enrolment table
+            $forms_submitted = Preenrolment::withTrashed()
+                ->distinct('Te_Code')
+                ->where('INDEXID', '=', $current_user)
+                ->where('Term', $request->term)
+                ->get(['Te_Code', 'INDEXID', 'approval', 'approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'deleted_at', 'form_counter']);
 
-        return response()->json($data);
-        } 
+            $data = $forms_submitted;
+
+            return response()->json($data);
+        }
     }
 
     public function ajaxOrgSelect()
     {
-        $select_org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
-        $data = view('ajax-org-select',compact('select_org'))->render();
-        return response()->json([$data]);  
+        $select_org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
+        $data = view('ajax-org-select', compact('select_org'))->render();
+        return response()->json([$data]);
     }
 
     /**
@@ -309,7 +307,7 @@ class AjaxController extends Controller
         } else {
             $data = true;
         }
-        return response()->json([$data, $torgan]);  
+        return response()->json([$data, $torgan]);
     }
 
     /**
@@ -318,11 +316,11 @@ class AjaxController extends Controller
     public function ajaxGetDate(Request $request)
     {
         //get current date
-        $now_date = Carbon::now();    
+        $now_date = Carbon::now();
         //return string of Cancel_Date_Limit 
         $cancel_date_limit = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', $request->term)
-                        ->value('Cancel_Date_Limit');
+            ->where('Term_Code', $request->term)
+            ->value('Cancel_Date_Limit');
         if ($now_date > $cancel_date_limit) {
             $data = 'disabled';
         } else {
@@ -330,7 +328,7 @@ class AjaxController extends Controller
         }
         return response()->json($data);
     }
-    
+
     /**
      * Show the application selectAjax.
      *
@@ -338,17 +336,17 @@ class AjaxController extends Controller
      */
     public function selectAjax(Request $request)
     {
-        if($request->ajax()){            
+        if ($request->ajax()) {
             $select_courses = CourseSchedule::where('L', $request->L)
-            ->where('Te_Term', $request->term_id)
-            ->orderBy('Te_Price', 'asc')
-            ->orderBy('Te_Code_New', 'asc')
-            ->with('course')
-            ->get()
-            ->pluck("course.Description","Te_Code_New");
+                ->where('Te_Term', $request->term_id)
+                ->orderBy('Te_Price', 'asc')
+                ->orderBy('Te_Code_New', 'asc')
+                ->with('course')
+                ->get()
+                ->pluck("course.Description", "Te_Code_New");
 
-            $data = view('ajax-select',compact('select_courses'))->render();
-            return response()->json(['options'=>$data]);
+            $data = view('ajax-select', compact('select_courses'))->render();
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -357,18 +355,18 @@ class AjaxController extends Controller
      */
     public function selectAjaxAdmin(Request $request)
     {
-        if($request->ajax()){            
+        if ($request->ajax()) {
             $select_courses = CourseSchedule::where('L', $request->L)
-            ->where('Te_Term', $request->term_id)
-            // ->whereNull('Code')
-            // ->orderBy('id', 'asc')
-            ->orderBy('Te_Code_New', 'asc')
-            ->with('course')
-            ->get()
-            ->pluck("course.Description","Te_Code_New");
+                ->where('Te_Term', $request->term_id)
+                // ->whereNull('Code')
+                // ->orderBy('id', 'asc')
+                ->orderBy('Te_Code_New', 'asc')
+                ->with('course')
+                ->get()
+                ->pluck("course.Description", "Te_Code_New");
 
-            $data = view('ajax-select',compact('select_courses'))->render();
-            return response()->json(['options'=>$data]);
+            $data = view('ajax-select', compact('select_courses'))->render();
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -377,15 +375,15 @@ class AjaxController extends Controller
      */
     public function selectAjaxLevelOne(Request $request)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             $select_courses = Course::where('L', $request->L)
-            ->whereNotNull('Te_Code_New')
-            ->orderBy('id', 'asc')
-            ->pluck("Description","Te_Code_New")
-            ->all();
+                ->whereNotNull('Te_Code_New')
+                ->orderBy('id', 'asc')
+                ->pluck("Description", "Te_Code_New")
+                ->all();
 
-            $data = view('ajax-select',compact('select_courses'))->render();
-            return response()->json(['options'=>$data]);
+            $data = view('ajax-select', compact('select_courses'))->render();
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -394,28 +392,27 @@ class AjaxController extends Controller
      */
     public function selectAjax2(Request $request)
     {
-        if($request->ajax()){
-            $select_schedules = CourseSchedule::where('Te_Code_New', $request->course_id)->where('Te_Term', $request->term_id )
-            //Eager Load scheduler function and pluck using "dot" 
-            ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
+        if ($request->ajax()) {
+            $select_schedules = CourseSchedule::where('Te_Code_New', $request->course_id)->where('Te_Term', $request->term_id)
+                //Eager Load scheduler function and pluck using "dot" 
+                ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
 
-            $data = view('ajax-select2',compact('select_schedules'))->render();
-            return response()->json(['options'=>$data]);
+            $data = view('ajax-select2', compact('select_schedules'))->render();
+            return response()->json(['options' => $data]);
         }
     }
 
     public function ajaxCheckEnrolmentEntries()
     {
         if (Auth::check()) {
-        $current_user = Auth::user()->indexno;
-        $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
-            ->where(function($q){ 
-                $latest_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
-                // do NOT count number of submitted forms disapproved by manager or HR learning partner  
-                $q->where('Term', $latest_term )->where('deleted_at', NULL)
-                    ->where('is_self_pay_form', NULL)
-                    ;
-            })->count('eform_submit_count');
+            $current_user = Auth::user()->indexno;
+            $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
+                ->where(function ($q) {
+                    $latest_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
+                    // do NOT count number of submitted forms disapproved by manager or HR learning partner  
+                    $q->where('Term', $latest_term)->where('deleted_at', NULL)
+                        ->where('is_self_pay_form', NULL);
+                })->count('eform_submit_count');
 
             $data = $eformGrouped;
             return response()->json($data);
@@ -437,7 +434,7 @@ class AjaxController extends Controller
             } else {
                 $data = false;
             }
-                $data = $placementData;
+            $data = $placementData;
             return response()->json($data);
         }
     }
@@ -445,15 +442,15 @@ class AjaxController extends Controller
     public function ajaxCheckPlacementEntries()
     {
         if (Auth::check()) {
-        $current_user = Auth::user()->indexno;
-        $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
+            $current_user = Auth::user()->indexno;
+            $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
 
-        $placementFromCount = PlacementForm::orderBy('Term', 'desc')
+            $placementFromCount = PlacementForm::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)
                 ->where('Term', $termCode)
                 ->get();
 
-        $data = $placementFromCount;
+            $data = $placementFromCount;
             return response()->json($data);
         }
     }
@@ -464,43 +461,42 @@ class AjaxController extends Controller
             $current_user = Auth::user()->indexno;
             $termCode = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
             $placementFromCount = PlacementForm::orderBy('Term', 'desc')
-                    ->where('INDEXID', $current_user)
-                    ->where('Term', $termCode)
-                    ->where('is_self_pay_form', 1)
-                    ->get();
+                ->where('INDEXID', $current_user)
+                ->where('Term', $termCode)
+                ->where('is_self_pay_form', 1)
+                ->get();
 
             $data = $placementFromCount;
-                return response()->json($data);        
+            return response()->json($data);
         }
     }
 
     public function ajaxCheckSelfpayEntries()
     {
         if (Auth::check()) {
-        $current_user = Auth::user()->indexno;
-        $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
-            ->where(function($q){ 
-                $latest_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
-                // do NOT count number of submitted forms disapproved by manager or HR learning partner  
-                $q->where('Term', $latest_term )->where('deleted_at', NULL)
-                    ->where('is_self_pay_form', 1)
-                    ;
-            })->count('eform_submit_count');
+            $current_user = Auth::user()->indexno;
+            $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
+                ->where(function ($q) {
+                    $latest_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
+                    // do NOT count number of submitted forms disapproved by manager or HR learning partner  
+                    $q->where('Term', $latest_term)->where('deleted_at', NULL)
+                        ->where('is_self_pay_form', 1);
+                })->count('eform_submit_count');
 
             $data = $eformGrouped;
             return response()->json($data);
         }
     }
-    
+
     /*
         checks whether student is NEW or missed 2 semesters
     */
     public function ajaxCheckPlacementCourse(Request $request)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             // get the last enrolment from PASHQ table
             $repos_lang = Repo::orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
-            
+
             if (is_null($repos_lang)) {
                 $repos_value = 0;
             } else {
@@ -520,17 +516,17 @@ class AjaxController extends Controller
                 $prev_term = $selectedTerm - 1;
                 $placementData = PlacementForm::where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->first();
             } else {
-                $placementData = null; 
+                $placementData = null;
             }
-            
+
 
             // if latest term for selected language is less than the 2 terms then true, take placement
-            if (($repos_value < $prev_prev_TermCode ) && empty($placementData)) {
+            if (($repos_value < $prev_prev_TermCode) && empty($placementData)) {
                 $data = true;
             } else {
                 $data = false;
             }
-            
+
             return response()->json($data);
         }
     }
@@ -541,7 +537,7 @@ class AjaxController extends Controller
 
             $placement_schedule = PlacementSchedule::where('language_id', $request->L)->where('term', $request->term_id)->get();
             $data = $placement_schedule;
-            return response()->json($data);            
+            return response()->json($data);
         }
     }
 
@@ -552,7 +548,7 @@ class AjaxController extends Controller
             $term_data = Term::where('Term_Code', $request->term)->get();
 
             $data = $term_data;
-            return response()->json($data); 
+            return response()->json($data);
         }
     }
 }

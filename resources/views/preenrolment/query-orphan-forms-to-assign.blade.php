@@ -68,7 +68,7 @@
 
 <div class="row">
 	<div class="col-sm-8">
-		<h3>Total @if(Request::has('L'))
+		<h3>Total @if(Request::filled('L'))
           <strong>  
           @if(Request::input('L') == 'A') <span>Arabic</span>
           @elseif(Request::input('L') == 'C') <span>Chinese</span>

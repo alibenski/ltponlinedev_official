@@ -45,7 +45,7 @@
 		<div class="info-box-content">
 			<p>Currently Viewing:</p> 
 				@if(Session::has('Term'))Term Code: {{ Session::get('Term') }}@else @endif 	
-				@if(Request::has('L')) / 
+				@if(Request::filled('L')) / 
 					<strong> 	
 					@if(Request::input('L') == 'A') Arabic
 					@elseif(Request::input('L') == 'C') Chinese
@@ -57,7 +57,7 @@
 					</strong>
 				@else / Viewing All Languages
 				@endif 
-				@if(Request::has('DEPT')) / {{ Request::input('DEPT') }} @else @endif 
+				@if(Request::filled('DEPT')) / {{ Request::input('DEPT') }} @else @endif 
 			<p>
 				Total count: {{ $count }} not assigned to a course
 			</p>

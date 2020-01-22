@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console;
+
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -25,26 +26,26 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-            // insert name and signature of you command and define the time of execution
-            // run command to send reminder emails to managers in class \App\Console\Commands\ApprovalReminder
+        // insert name and signature of you command and define the time of execution
+        // run command to send reminder emails to managers in class \App\Console\Commands\ApprovalReminder
         $schedule->command('ApprovalReminder:approvalreminder')
-                ->dailyAt('07:00')
-                ->withoutOverlapping();
-                
-        $schedule->command('queue:restart');            
-            // run command to execute queued jobs in the jobs table 
-            // Log::info("Start queue:work");
+            ->dailyAt('07:00')
+            ->withoutOverlapping();
+
+        $schedule->command('queue:restart');
+        // run command to execute queued jobs in the jobs table 
+        // Log::info("Start queue:work");
         $work = $schedule->command('queue:work');
-                // ->cron('* * * * * *')
-                // ->withoutOverlapping();
-            // Log::info("End queue:work");
-            // there is a 60 second delay to execute job with no changes occured to the code or the query due to queue:restart
+        // ->cron('* * * * * *')
+        // ->withoutOverlapping();
+        // Log::info("End queue:work");
+        // there is a 60 second delay to execute job with no changes occured to the code or the query due to queue:restart
         // if ($work) {
-            // Log::info("Start queue:restart");
-            // $schedule->command('queue:restart');
-            // Log::info("End queue:restart");
+        // Log::info("Start queue:restart");
+        // $schedule->command('queue:restart');
+        // Log::info("End queue:restart");
         // } else{
-            $schedule->command('queue:restart');
+        $schedule->command('queue:restart');
         // }
     }
 
@@ -55,6 +56,8 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
+        $this->load(__DIR__ . '/Commands');
+
         require base_path('routes/console.php');
     }
 }

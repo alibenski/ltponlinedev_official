@@ -43,7 +43,7 @@ class SelfPayController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
-        $this->middleware('opencloseenrolment')->only(['create','store']);
+        $this->middleware('opencloseenrolment')->only(['create', 'store']);
         // $this->middleware('checksubmissionselfpay')->except(['index','update']);
     }
 
@@ -54,8 +54,8 @@ class SelfPayController extends Controller
      */
     public function index(Request $request)
     {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         // $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if (!Session::has('Term')) {
@@ -63,7 +63,7 @@ class SelfPayController extends Controller
             return view('selfpayforms.index', compact('selfpayforms', 'languages', 'org'));
         }
 
-        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at','eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at','eform_submit_count');
+        $selfpayforms = Preenrolment::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count');
         // ->orderBy('created_at', 'asc')->get();
         // $selfpayforms = new Preenrolment;
         // $currentQueries = \Request::query();
@@ -72,32 +72,31 @@ class SelfPayController extends Controller
         $columns = [
             'L', 'DEPT', 'Te_Code', 'overall_approval', 'selfpay_approval',
         ];
-        
+
         foreach ($columns as $column) {
-            if (\Request::has($column)) {
-                $selfpayforms = $selfpayforms->where($column, \Request::input($column) );
+            if (\Request::filled($column)) {
+                $selfpayforms = $selfpayforms->where($column, \Request::input($column));
                 $queries[$column] = \Request::input($column);
             }
+        }
+        if (Session::has('Term')) {
+            $selfpayforms = $selfpayforms->where('Term', Session::get('Term'));
+            $queries['Term'] = Session::get('Term');
+        }
 
-        } 
-            if (Session::has('Term')) {
-                $selfpayforms = $selfpayforms->where('Term', Session::get('Term') );
-                $queries['Term'] = Session::get('Term');
-            }
+        if (\Request::filled('search')) {
+            $name = \Request::input('search');
+            $selfpayforms = $selfpayforms->with('users')
+                ->whereHas('users', function ($q) use ($name) {
+                    return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                });
+            $queries['search'] = \Request::input('search');
+        }
 
-            if (\Request::has('search')) {
-                    $name = \Request::input('search');
-                    $selfpayforms = $selfpayforms->with('users')
-                        ->whereHas('users', function($q) use ( $name) {
-                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-                        });
-                    $queries['search'] = \Request::input('search');
-                } 
-            
-            if (\Request::has('sort')) {
-                $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
-                $queries['sort'] = \Request::input('sort');
-            }
+        if (\Request::filled('sort')) {
+            $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort'));
+            $queries['sort'] = \Request::input('sort');
+        }
 
         $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
         return view('selfpayforms.index', compact('selfpayforms', 'languages', 'org'));
@@ -106,26 +105,26 @@ class SelfPayController extends Controller
 
     public function adminAddAttachmentsView($indexid, $lang, $tecode, $term, $eform)
     {
-        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
-            ->where('INDEXID',$indexid)
+        $selfpayforms = Preenrolment::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID', $indexid)
             ->where('L', $lang)
             ->where('Te_Code', $tecode)
             ->where('Term', $term)
             ->where('eform_submit_count', $eform)
             ->where('is_self_pay_form', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
             ->get();
 
         if (count($selfpayforms) < 1) {
             return redirect()->route('updateLinkExpired');
         }
 
-        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+        $selfpayforms_placement = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->where('is_self_pay_form', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->get();
-        
-        
+
+
 
         return view('selfpayforms.admin-add-attachments', compact('selfpayforms'));
     }
@@ -139,11 +138,11 @@ class SelfPayController extends Controller
 
         $index_id = $request->INDEXID;
         $term_id = $request->Term;
-        $language_id = $request->L; 
+        $language_id = $request->L;
         $course_id = $request->Te_Code;
         $eform_submit_count = $request->eform_submit_count;
 
-        $selfpayforms = Preenrolment::where('INDEXID',$index_id)
+        $selfpayforms = Preenrolment::where('INDEXID', $index_id)
             ->where('L', $language_id)
             ->where('Te_Code', $course_id)
             ->where('Term', $term_id)
@@ -157,56 +156,54 @@ class SelfPayController extends Controller
             $value->UpdatedOn = Carbon::now();
             $value->save(['timestamps' => FALSE]);
         }
-        
+
         //Store the attachments to storage path and save in db table
-        if ($request->hasFile('identityfile')){
+        if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
             $attachment_identity_file->update([
-                    'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->identityfile->getClientSize(),
+                'path' => $filestore,
             ]);
-
         }
-        if ($request->hasFile('payfile')){
+        if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
-                    'filename' => $filename,
-                    'size' => $request->payfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->payfile->getClientSize(),
+                'path' => $filestore,
             ]);
         }
 
         $request->session()->flash('success', 'Files have successfully been uploaded.');
         return redirect(route('selfpayform.index'));
-
     }
 
     public function adminAddAttachmentsPlacementView($indexid, $lang, $term, $eform)
     {
-        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
-            ->where('INDEXID',$indexid)
+        $selfpayforms_placement = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID', $indexid)
             ->where('L', $lang)
             ->where('Term', $term)
             ->where('eform_submit_count', $eform)
             ->where('is_self_pay_form', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
             ->get();
 
         if (count($selfpayforms_placement) < 1) {
             return redirect()->route('updateLinkExpired');
-        }      
-        
+        }
+
         return view('selfpayforms.admin-add-attachments-placement', compact('selfpayforms_placement'));
     }
 
@@ -219,11 +216,11 @@ class SelfPayController extends Controller
 
         $index_id = $request->INDEXID;
         $term_id = $request->Term;
-        $language_id = $request->L; 
+        $language_id = $request->L;
         $course_id = $request->Te_Code;
         $eform_submit_count = $request->eform_submit_count;
 
-        $selfpayforms = PlacementForm::where('INDEXID',$index_id)
+        $selfpayforms = PlacementForm::where('INDEXID', $index_id)
             ->where('L', $language_id)
             ->where('Term', $term_id)
             ->where('eform_submit_count', $eform_submit_count)
@@ -236,39 +233,37 @@ class SelfPayController extends Controller
             $value->UpdatedOn = Carbon::now();
             $value->save(['timestamps' => FALSE]);
         }
-        
+
         //Store the attachments to storage path and save in db table
-        if ($request->hasFile('identityfile')){
+        if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
             $attachment_identity_file->update([
-                    'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->identityfile->getClientSize(),
+                'path' => $filestore,
             ]);
-
         }
-        if ($request->hasFile('payfile')){
+        if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
-                    'filename' => $filename,
-                    'size' => $request->payfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->payfile->getClientSize(),
+                'path' => $filestore,
             ]);
         }
 
         $request->session()->flash('success', 'Files have been successfully uploaded.');
         return redirect(route('index-placement-selfpay'));
-
     }
 
 
@@ -278,27 +273,27 @@ class SelfPayController extends Controller
             abort('401');
         }
 
-        $selfpayforms = Preenrolment::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
-            ->where('INDEXID',$indexid)
+        $selfpayforms = Preenrolment::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID', $indexid)
             ->where('L', $lang)
             ->where('Te_Code', $tecode)
             ->where('Term', $term)
             ->where('UpdatedOn', $date)
             ->where('eform_submit_count', $eform)
             ->where('is_self_pay_form', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
             ->get();
 
         if (count($selfpayforms) < 1) {
             return redirect()->route('updateLinkExpired');
         }
 
-        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+        $selfpayforms_placement = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->where('is_self_pay_form', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->get();
-        
-        
+
+
 
         return view('selfpayforms.add-attachments', compact('selfpayforms'));
     }
@@ -312,11 +307,11 @@ class SelfPayController extends Controller
 
         $index_id = $request->INDEXID;
         $term_id = $request->Term;
-        $language_id = $request->L; 
+        $language_id = $request->L;
         $course_id = $request->Te_Code;
         $eform_submit_count = $request->eform_submit_count;
 
-        $selfpayforms = Preenrolment::where('INDEXID',$index_id)
+        $selfpayforms = Preenrolment::where('INDEXID', $index_id)
             ->where('L', $language_id)
             ->where('Te_Code', $course_id)
             ->where('Term', $term_id)
@@ -330,44 +325,42 @@ class SelfPayController extends Controller
             $value->UpdatedOn = Carbon::now();
             $value->save(['timestamps' => FALSE]);
         }
-        
+
         //Store the attachments to storage path and save in db table
-        if ($request->hasFile('identityfile')){
+        if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
             $attachment_identity_file->update([
-                    'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->identityfile->getClientSize(),
+                'path' => $filestore,
             ]);
-
         }
-        if ($request->hasFile('payfile')){
+        if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
-                    'filename' => $filename,
-                    'size' => $request->payfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->payfile->getClientSize(),
+                'path' => $filestore,
             ]);
         }
 
-        Mail::raw("Selfpay Student Attachment Update (Regular Form): ".Auth::user()->name.' ( '.$index_id.' )', function($message) {
-                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
-                $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update (Regular Form)');
-            });
+        Mail::raw("Selfpay Student Attachment Update (Regular Form): " . Auth::user()->name . ' ( ' . $index_id . ' )', function ($message) {
+            $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+            $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update (Regular Form)');
+        });
 
         $request->session()->flash('success', 'Thank you. Files successfully uploaded.');
         return redirect()->route('home');
-
     }
 
     public function addAttachmentsPlacementView($indexid, $lang, $term, $date, $eform)
@@ -376,20 +369,20 @@ class SelfPayController extends Controller
             abort('401');
         }
 
-        $selfpayforms_placement = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
-            ->where('INDEXID',$indexid)
+        $selfpayforms_placement = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->where('INDEXID', $indexid)
             ->where('L', $lang)
             ->where('Term', $term)
             ->where('UpdatedOn', $date)
             ->where('eform_submit_count', $eform)
             ->where('is_self_pay_form', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')
             ->get();
 
         if (count($selfpayforms_placement) < 1) {
             return redirect()->route('updateLinkExpired');
-        }      
-        
+        }
+
         return view('selfpayforms.add-attachments-placement', compact('selfpayforms_placement'));
     }
 
@@ -402,11 +395,11 @@ class SelfPayController extends Controller
 
         $index_id = $request->INDEXID;
         $term_id = $request->Term;
-        $language_id = $request->L; 
+        $language_id = $request->L;
         $course_id = $request->Te_Code;
         $eform_submit_count = $request->eform_submit_count;
 
-        $selfpayforms = PlacementForm::where('INDEXID',$index_id)
+        $selfpayforms = PlacementForm::where('INDEXID', $index_id)
             ->where('L', $language_id)
             ->where('Term', $term_id)
             ->where('eform_submit_count', $eform_submit_count)
@@ -419,44 +412,42 @@ class SelfPayController extends Controller
             $value->UpdatedOn = Carbon::now();
             $value->save(['timestamps' => FALSE]);
         }
-        
+
         //Store the attachments to storage path and save in db table
-        if ($request->hasFile('identityfile')){
+        if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
             $attachment_identity_file->update([
-                    'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->identityfile->getClientSize(),
+                'path' => $filestore,
             ]);
-
         }
-        if ($request->hasFile('payfile')){
+        if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
             $attachment_pay_file->update([
-                    'filename' => $filename,
-                    'size' => $request->payfile->getClientSize(),
-                    'path' => $filestore,
+                'filename' => $filename,
+                'size' => $request->payfile->getClientSize(),
+                'path' => $filestore,
             ]);
         }
 
-        Mail::raw("Selfpay Student Attachment Update (Placement Form): ".Auth::user()->name.' ( '.$index_id.' )', function($message) {
-                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
-                $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update (Placement Form)');
-            });
+        Mail::raw("Selfpay Student Attachment Update (Placement Form): " . Auth::user()->name . ' ( ' . $index_id . ' )', function ($message) {
+            $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+            $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update (Placement Form)');
+        });
 
         $request->session()->flash('success', 'Thank you. Files successfully uploaded.');
         return redirect()->route('home');
-
     }
 
     /**
@@ -467,13 +458,13 @@ class SelfPayController extends Controller
      */
     public function edit(Request $request, $indexid, $tecode, $term)
     {
-        $selfpay_student = Preenrolment::select( 'INDEXID', 'L', 'Te_Code', 'Term', 'eform_submit_count', 'profile', 'DEPT', 'flexibleBtn','attachment_id', 'attachment_pay')->where('is_self_pay_form', '1')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
-           
-        $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('Te_Code', $tecode)->where('Term',$term)->get();
+        $selfpay_student = Preenrolment::select('INDEXID', 'L', 'Te_Code', 'Term', 'eform_submit_count', 'profile', 'DEPT', 'flexibleBtn', 'attachment_id', 'attachment_pay')->where('is_self_pay_form', '1')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
 
-        $show_admin_comments = Preenrolment::select('CodeIndexID', 'INDEXID','Te_Code', 'Term','profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('is_self_pay_form', '1')->where('Term', $term)->first()->adminComment;
+        $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('Te_Code', $tecode)->where('Term', $term)->get();
 
-        return view('selfpayforms.edit',compact('selfpay_student','show_sched_selfpay', 'show_admin_comments'));
+        $show_admin_comments = Preenrolment::select('CodeIndexID', 'INDEXID', 'Te_Code', 'Term', 'profile', 'DEPT', 'flexibleBtn')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('is_self_pay_form', '1')->where('Term', $term)->first()->adminComment;
+
+        return view('selfpayforms.edit', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments'));
     }
 
     /**
@@ -486,21 +477,21 @@ class SelfPayController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, array(
-                            'Term' => 'required|',
-                            'INDEXID' => 'required|',
-                            'Te_Code' => 'required|',
-                            // 'admin_comment_show' => 'required|',
-                            'submit-approval' => 'required|',
-                        )); 
+            'Term' => 'required|',
+            'INDEXID' => 'required|',
+            'Te_Code' => 'required|',
+            // 'admin_comment_show' => 'required|',
+            'submit-approval' => 'required|',
+        ));
 
         $forms = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $request->INDEXID)
-                                ->where('Term', $request->Term)
-                                ->where('Te_Code', $request->Te_Code)
-                                ->where('eform_submit_count', $request->eform_submit_count)
-                                ->where('is_self_pay_form', '1')
-                                ->get();
-                                
+            ->where('INDEXID', $request->INDEXID)
+            ->where('Term', $request->Term)
+            ->where('Te_Code', $request->Te_Code)
+            ->where('eform_submit_count', $request->eform_submit_count)
+            ->where('is_self_pay_form', '1')
+            ->get();
+
         foreach ($forms as $form) {
             $enrolment_record = Preenrolment::where('id', $form->id)->first();
             // $enrolment_record->Comments = $request->admin_comment_show;
@@ -510,8 +501,8 @@ class SelfPayController extends Controller
         }
 
         $update_element = $enrolment_record->UpdatedOn->toDateTimeString(); // convert Carbon to string
-        $request->request->add([ 'UpdatedOn' => $update_element ]); //add to request
-        
+        $request->request->add(['UpdatedOn' => $update_element]); //add to request
+
         // save comments in the comments table and associate it to the enrolment form
         foreach ($forms as $form) {
             $admin_comment = new AdminComment;
@@ -520,12 +511,12 @@ class SelfPayController extends Controller
             $admin_comment->user_id = Auth::user()->id;
             $admin_comment->save();
         }
-        
+
         // get term values and convert to strings
         $term = $request->Term;
         $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
         $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
-        
+
         $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
         $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
 
@@ -535,15 +526,15 @@ class SelfPayController extends Controller
 
         $staff_email = User::where('indexno', $request->INDEXID)->first();
         Mail::to($staff_email)->send(new MailtoStudentSelfpay($request, $term_season_en, $term_year));
-        
+
         // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
         return redirect(route('selfpayform.index'));
     }
 
     public function indexPlacementSelfPay(Request $request)
     {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if (!Session::has('Term')) {
@@ -551,7 +542,7 @@ class SelfPayController extends Controller
             return view('selfpayforms.index-placement-selfpay', compact('selfpayforms', 'languages', 'org', 'terms'));
         }
 
-        $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count');
+        $selfpayforms = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count')->where('is_self_pay_form', '1')->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count');
 
         $queries = [];
 
@@ -559,33 +550,32 @@ class SelfPayController extends Controller
             'L', 'DEPT', 'overall_approval', 'selfpay_approval',
         ];
 
-        
+
         foreach ($columns as $column) {
-            if (\Request::has($column)) {
-                $selfpayforms = $selfpayforms->where($column, \Request::input($column) );
+            if (\Request::filled($column)) {
+                $selfpayforms = $selfpayforms->where($column, \Request::input($column));
                 $queries[$column] = \Request::input($column);
             }
+        }
 
-        } 
+        if (Session::has('Term')) {
+            $selfpayforms = $selfpayforms->where('Term', Session::get('Term'));
+            $queries['Term'] = Session::get('Term');
+        }
 
-            if (Session::has('Term')) {
-                $selfpayforms = $selfpayforms->where('Term', Session::get('Term') );
-                $queries['Term'] = Session::get('Term');
-            }
+        if (\Request::filled('search')) {
+            $name = \Request::input('search');
+            $selfpayforms = $selfpayforms->with('users')
+                ->whereHas('users', function ($q) use ($name) {
+                    return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                });
+            $queries['search'] = \Request::input('search');
+        }
 
-            if (\Request::has('search')) {
-                    $name = \Request::input('search');
-                    $selfpayforms = $selfpayforms->with('users')
-                        ->whereHas('users', function($q) use ( $name) {
-                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-                        });
-                    $queries['search'] = \Request::input('search');
-                } 
-
-            if (\Request::has('sort')) {
-                $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
-                $queries['sort'] = \Request::input('sort');
-            }
+        if (\Request::filled('sort')) {
+            $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort'));
+            $queries['sort'] = \Request::input('sort');
+        }
 
 
         $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
@@ -594,43 +584,42 @@ class SelfPayController extends Controller
 
     public function approvedPlacementSelfPay(Request $request)
     {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if (is_null($request->Term)) {
             // $selfpayforms = null;
-            $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')->where('Term', $request->session()->get('Term') )
-            ->where('is_self_pay_form', '1')->where('selfpay_approval', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+            $selfpayforms = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')->where('Term', $request->session()->get('Term'))
+                ->where('is_self_pay_form', '1')->where('selfpay_approval', '1')
+                ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
 
             $selfpayforms = $selfpayforms->paginate(30);
             return view('selfpayforms.approvedSelfpayPlacementForms', compact('selfpayforms', 'languages', 'org', 'terms'));
         }
 
-        $selfpayforms = PlacementForm::select( 'selfpay_approval', 'INDEXID','Term', 'DEPT', 'L','Te_Code','attachment_id', 'attachment_pay', 'created_at')
+        $selfpayforms = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->where('is_self_pay_form', '1')->where('selfpay_approval', '1')
-            ->groupBy('selfpay_approval', 'INDEXID','Term', 'DEPT','L','Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
-        
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at');
+
         $queries = [];
 
         $columns = [
             'L', 'DEPT', 'Term',
         ];
 
-        
+
         foreach ($columns as $column) {
-            if (\Request::has($column)) {
-                $selfpayforms = $selfpayforms->where($column, \Request::input($column) );
+            if (\Request::filled($column)) {
+                $selfpayforms = $selfpayforms->where($column, \Request::input($column));
                 $queries[$column] = \Request::input($column);
             }
+        }
 
-        } 
-
-            if (\Request::has('sort')) {
-                $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort') );
-                $queries['sort'] = \Request::input('sort');
-            }
+        if (\Request::filled('sort')) {
+            $selfpayforms = $selfpayforms->orderBy('created_at', \Request::input('sort'));
+            $queries['sort'] = \Request::input('sort');
+        }
 
         $selfpayforms = $selfpayforms->paginate(30)->appends($queries);
         return view('selfpayforms.approvedSelfpayPlacementForms', compact('selfpayforms', 'languages', 'org', 'terms'));
@@ -639,31 +628,31 @@ class SelfPayController extends Controller
     public function editPlacementSelfPay(Request $request, $indexid, $language, $term)
     {
         $selfpay_student = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term', $term)->first();
-           
-        $show_sched_selfpay = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term',$term)->get();
+
+        $show_sched_selfpay = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term', $term)->get();
 
         $show_admin_comments = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term', $term)->first()->adminCommentPlacement;
 
-        return view('selfpayforms.edit-placement-selfpay',compact('selfpay_student','show_sched_selfpay', 'show_admin_comments'));
+        return view('selfpayforms.edit-placement-selfpay', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments'));
     }
 
     public function postPlacementSelfPay(Request $request, $id)
     {
         $this->validate($request, array(
-                            'Term' => 'required|',
-                            'INDEXID' => 'required|',
-                            'L' => 'required|',
-                            // 'admin_comment_show' => 'required|',
-                            'submit-approval' => 'required|',
-                        )); 
+            'Term' => 'required|',
+            'INDEXID' => 'required|',
+            'L' => 'required|',
+            // 'admin_comment_show' => 'required|',
+            'submit-approval' => 'required|',
+        ));
 
         $forms = PlacementForm::orderBy('Term', 'desc')
-                                ->where('INDEXID', $request->INDEXID)
-                                ->where('Term', $request->Term)
-                                ->where('L', $request->L)
-                                ->where('eform_submit_count', $request->eform_submit_count)
-                                ->where('is_self_pay_form', '1')
-                                ->get();
+            ->where('INDEXID', $request->INDEXID)
+            ->where('Term', $request->Term)
+            ->where('L', $request->L)
+            ->where('eform_submit_count', $request->eform_submit_count)
+            ->where('is_self_pay_form', '1')
+            ->get();
 
         foreach ($forms as $form) {
             $enrolment_record = PlacementForm::where('id', $form->id)->first();
@@ -674,7 +663,7 @@ class SelfPayController extends Controller
         }
 
         $update_element = $enrolment_record->UpdatedOn->toDateTimeString(); // convert Carbon to string
-        $request->request->add([ 'UpdatedOn' => $update_element ]); //add to request
+        $request->request->add(['UpdatedOn' => $update_element]); //add to request
 
         // save comments in the comments table and associate it to the enrolment form
         foreach ($forms as $form) {
@@ -684,12 +673,12 @@ class SelfPayController extends Controller
             $admin_comment->user_id = Auth::user()->id;
             $admin_comment->save();
         }
-        
+
         // get term values and convert to strings
         $term = $request->Term;
         $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
         $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
-        
+
         $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
         $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
 
@@ -699,7 +688,7 @@ class SelfPayController extends Controller
 
         $staff_email = User::where('indexno', $request->INDEXID)->first();
         Mail::to($staff_email)
-                    ->send(new MailtoStudentSelfpayPlacement($request, $term_season_en, $term_year));
+            ->send(new MailtoStudentSelfpayPlacement($request, $term_season_en, $term_year));
         // $request->session()->flash('success', 'Enrolment form status updated. Student has also been emailed about this.'); 
         return redirect()->back();
     }
@@ -710,71 +699,70 @@ class SelfPayController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {  
+    {
         $sess = $request->session()->get('_previous');
         if (is_null($sess)) {
             return redirect('home')->with('interdire-msg', 'Whoops! Looks like something went wrong... Please report the problem to clm_language@un.org');
         }
         $result = array();
-            foreach($sess as $val)
-            {
-              $result = $val;
-            }
+        foreach ($sess as $val) {
+            $result = $val;
+        }
         // 'success' flash Session attribute comes from whatform() method @Homecontroller  
         // check if user did not directly access link   
         if ($request->session()->has('success') || $result == route('selfpayform.create')) {
 
-        //make collection values available
-        $courses = Course::all();
-        //get values directly from 'languages' table
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $days = Day::pluck("Week_Day_Name","Week_Day_Name")->except('Sunday', 'Saturday')->all();
-        //get current year and date
-        $now_date = Carbon::now()->toDateString();
-        $now_year = Carbon::now()->year;
+            //make collection values available
+            $courses = Course::all();
+            //get values directly from 'languages' table
+            $languages = DB::table('languages')->pluck("name", "code")->all();
+            $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
+            //get current year and date
+            $now_date = Carbon::now()->toDateString();
+            $now_year = Carbon::now()->year;
 
-        //query the current term based on year and Term_End column is greater than today's date
-        //whereYear('Term_End', $now_year)  
-        $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        // $terms = Term::orderBy('Term_Code', 'desc')
-        //                 ->whereDate('Term_End', '>=', $now_date)
-        //                 //->first();
-        //                 ->get()->min();
-        if (is_null($terms)) {
+            //query the current term based on year and Term_End column is greater than today's date
+            //whereYear('Term_End', $now_year)  
+            $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+            // $terms = Term::orderBy('Term_Code', 'desc')
+            //                 ->whereDate('Term_End', '>=', $now_date)
+            //                 //->first();
+            //                 ->get()->min();
+            if (is_null($terms)) {
                 $request->session()->flash('enrolment_closed', 'Enrolment Form error: Current Enrolment Model does not exist in the table. Please contact and report to the Language Secretariat.');
                 return redirect()->route('whatorg');
-        }
-        //query the next term based Term_Begin column is greater than today's date and then get min
-        $next_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', '=', $terms->Term_Next)->get();
-                        // ->min();
+            }
+            //query the next term based Term_Begin column is greater than today's date and then get min
+            $next_term = Term::orderBy('Term_Code', 'desc')
+                ->where('Term_Code', '=', $terms->Term_Next)->get();
+            // ->min();
 
-        $prev_term = Term::orderBy('Term_Code', 'desc')
-                        ->where('Term_Code', $terms->Term_Prev)->get();
+            $prev_term = Term::orderBy('Term_Code', 'desc')
+                ->where('Term_Code', $terms->Term_Prev)->get();
 
-        //define user variable as User collection
-        $user = Auth::user();
-        //define user index number for query 
-        $current_user = Auth::user()->indexno;
-        //using DB method to query latest CodeIndexID of current_user
-        $repos = Repo::orderBy('Term', 'desc')
-            ->where('INDEXID', $current_user)->value('CodeIndexID');
-        //not using DB method to get latest language course of current_user
-        $student_last_term = Repo::orderBy('Term', 'desc')
-            ->where('INDEXID', $current_user)->first(['Term']);
-        if ($student_last_term == null) {
+            //define user variable as User collection
+            $user = Auth::user();
+            //define user index number for query 
+            $current_user = Auth::user()->indexno;
+            //using DB method to query latest CodeIndexID of current_user
+            $repos = Repo::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)->value('CodeIndexID');
+            //not using DB method to get latest language course of current_user
+            $student_last_term = Repo::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)->first(['Term']);
+            if ($student_last_term == null) {
                 $repos_lang = null;
-                $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name','Org name');
+                $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name', 'Org name');
                 return view('form.myform3', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
-            }         
+            }
 
-        $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
-            ->where('INDEXID', $current_user)->get();
-        $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name','Org name');
+            $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
+                ->where('INDEXID', $current_user)->get();
+            $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name', 'Org name');
 
-        return view('form.myform3', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
+            return view('form.myform3', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {
-        return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. Click on "Register/Enrol Here" < '. route('whatorg') .' > from the Menu below and answer the mandatory question.');
+            return redirect('home')->with('interdire-msg', 'You cannot go directly to that link. Click on "Register/Enrol Here" < ' . route('whatorg') . ' > from the Menu below and answer the mandatory question.');
         }
     }
 
@@ -785,9 +773,9 @@ class SelfPayController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $index_id = $request->input('index_id');
-        $language_id = $request->input('L'); 
+        $language_id = $request->input('L');
         $course_id = $request->input('course_id');
         $term_id = $request->input('term_id');
         //$schedule_id is an array 
@@ -798,51 +786,51 @@ class SelfPayController extends Controller
         $agreementBtn = $request->input('agreementBtn');
         $consentBtn = $request->input('consentBtn');
         $flexibleBtn = $request->input('flexibleBtn');
-        $codex = [];     
+        $codex = [];
         //concatenate (implode) Code input before validation   
         if (!empty($schedule_id)) {
             //check if $code has no input
-            if ( empty( $uniquecode ) ) {
+            if (empty($uniquecode)) {
                 //loop based on $room_id count and store in $codex array
-                for ($i=0; $i < count($schedule_id); $i++) { 
-                    $codex[] = array( $course_id,$schedule_id[$i],$term_id,$index_id );
+                for ($i = 0; $i < count($schedule_id); $i++) {
+                    $codex[] = array($course_id, $schedule_id[$i], $term_id, $index_id);
                     //implode array elements and pass imploded string value to $codex array as element
                     $codex[$i] = implode('-', $codex[$i]);
                     //for each $codex array element stored, loop array merge method
                     //and output each array element to a string via $request->Code
-    
+
                     foreach ($codex as $value) {
-                        $request->merge( [ 'CodeIndexID' => $value ] );
+                        $request->merge(['CodeIndexID' => $value]);
                     }
-                            //var_dump($request->CodeIndexID);
-                            // the validation below fails when CodeIndexID is already taken AND 
-                            // deleted_at column is NULL which means it has not been cancelled AND
-                            // there is an existing self-pay form
-                            $this->validate($request, array(
-                                'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
-                                        $uniqueCodex = $request->CodeIndexID;
-                                        $query->where('CodeIndexID', $uniqueCodex)
-                                            ->where('deleted_at', NULL)
-                                            ->where('is_self_pay_form', 1);
-                                    })
-                            ));
-                }                              
+                    //var_dump($request->CodeIndexID);
+                    // the validation below fails when CodeIndexID is already taken AND 
+                    // deleted_at column is NULL which means it has not been cancelled AND
+                    // there is an existing self-pay form
+                    $this->validate($request, array(
+                        'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use ($request) {
+                            $uniqueCodex = $request->CodeIndexID;
+                            $query->where('CodeIndexID', $uniqueCodex)
+                                ->where('deleted_at', NULL)
+                                ->where('is_self_pay_form', 1);
+                        })
+                    ));
+                }
             }
         }
-                    // 1st part of validate other input fields 
-                        $this->validate($request, array(
-                            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
-                            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
-                        )); 
+        // 1st part of validate other input fields 
+        $this->validate($request, array(
+            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+        ));
         // control the number of submitted enrolment forms
         $qryEformCount = Preenrolment::withTrashed()
             ->where('INDEXID', $index_id)
             ->where('Term', $term_id)
             ->orderBy('eform_submit_count', 'desc')->first();
-           
+
         $eform_submit_count = 1;
-        if(isset($qryEformCount->eform_submit_count)){
-            $eform_submit_count = $qryEformCount->eform_submit_count + 1;    
+        if (isset($qryEformCount->eform_submit_count)) {
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;
         }
 
         // set default value of $form_counter to 1 and then add succeeding
@@ -851,49 +839,49 @@ class SelfPayController extends Controller
             ->where('INDEXID', $index_id)
             ->where('Term', $term_id)
             ->orderBy('form_counter', 'desc')->first();
-            
+
         $form_counter = 1;
-        if(isset($lastValueCollection->form_counter)){
-            $form_counter = $lastValueCollection->form_counter + 1;    
+        if (isset($lastValueCollection->form_counter)) {
+            $form_counter = $lastValueCollection->form_counter + 1;
         }
 
         //Store the attachments to storage path and save in db table
-        if ($request->hasFile('identityfile')){
+        if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('identityfile'), 'id_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
-                    'filename' => $filename,
-                    'size' => $request->identityfile->getClientSize(),
-                    'path' => $filestore,
-                            ]); 
+                'filename' => $filename,
+                'size' => $request->identityfile->getClientSize(),
+                'path' => $filestore,
+            ]);
             $attachment_identity_file->save();
         }
-        if ($request->hasFile('payfile')){
+        if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension();
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/'.$index_id, $request->file('payfile'), 'payment_'.$index_id.'_'.$term_id.'_'.$language_id.'_'.$course_id.'.'.$request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
-                    'filename' => $filename,
-                    'size' => $request->payfile->getClientSize(),
-                    'path' => $filestore,
-                            ]); 
+                'filename' => $filename,
+                'size' => $request->payfile->getClientSize(),
+                'path' => $filestore,
+            ]);
             $attachment_pay_file->save();
-        }  
+        }
 
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
             app('App\Http\Controllers\PlacementFormController')->postSelfPayPlacementInfo($request, $attachment_pay_file, $attachment_identity_file);
-            
+
             if ($request->is_self_pay_form == 1) {
                 $request->session()->flash('success', 'Your Placement Test request has been submitted.');
                 return redirect()->route('thankyouSelfPay');
-                } 
+            }
 
             $request->session()->flash('success', 'Your Placement Test request has been submitted.');
             return redirect()->route('thankyouPlacement');
@@ -905,14 +893,14 @@ class SelfPayController extends Controller
             'schedule_id' => 'required|',
             'course_id' => 'required|',
             'L' => 'required|',
-        )); 
+        ));
 
         //loop for storing Code value to database
-        $ingredients = [];        
+        $ingredients = [];
         for ($i = 0; $i < count($schedule_id); $i++) {
             $ingredients[] = new  Preenrolment([
-                'CodeIndexID' => $course_id.'-'.$schedule_id[$i].'-'.$term_id.'-'.$index_id,
-                'Code' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
+                'CodeIndexID' => $course_id . '-' . $schedule_id[$i] . '-' . $term_id . '-' . $index_id,
+                'Code' => $course_id . '-' . $schedule_id[$i] . '-' . $term_id,
                 'schedule_id' => $schedule_id[$i],
                 'L' => $language_id,
                 'profile' => $request->profile,
@@ -926,47 +914,47 @@ class SelfPayController extends Controller
                 'attachment_pay' => $attachment_pay_file->id,
                 'is_self_pay_form' => 1,
                 'eform_submit_count' => $eform_submit_count,
-                'form_counter' => $form_counter, 
+                'form_counter' => $form_counter,
                 'DEPT' => $org,
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
-                'flexibleBtn' => $flexibleBtn,  
-                ]); 
+                'flexibleBtn' => $flexibleBtn,
+            ]);
 
-                    foreach ($ingredients as $data) {
-                        $data->save();                    
-                    }
+            foreach ($ingredients as $data) {
+                $data->save();
+            }
         }
-        
+
         //execute Mail class before redirect         
         $mgr_email = $request->mgr_email;
         $staff = Auth::user();
         $current_user = Auth::user()->indexno;
         $now_date = Carbon::now()->toDateString();
         $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_End', '>=', $now_date)
-                ->get()->min();
+            ->whereDate('Term_End', '>=', $now_date)
+            ->get()->min();
         $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
         $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $current_user)
-                                ->value('Te_Code');
+            ->where('INDEXID', $current_user)
+            ->value('Te_Code');
         //query from Preenrolment table the needed information data to include in email
         $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
-                                ->where('INDEXID', $current_user)
-                                ->first();
+            ->where('INDEXID', $current_user)
+            ->first();
         $input_schedules = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $current_user)
-                                ->where('Term', $next_term_code)
-                                ->where('Te_Code', $course)
-                                ->where('form_counter', $form_counter)
-                                ->get();
+            ->where('INDEXID', $current_user)
+            ->where('Term', $next_term_code)
+            ->where('Te_Code', $course)
+            ->where('form_counter', $form_counter)
+            ->get();
 
         // email confirmation message to student enrolment form has been received 
         // Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
 
-        $request->session()->flash('success', 'Thank you. The enrolment form has been submitted to the Language Secretariat for processing.'); 
+        $request->session()->flash('success', 'Thank you. The enrolment form has been submitted to the Language Secretariat for processing.');
 
-        return redirect()->route('thankyouSelfPay');   
+        return redirect()->route('thankyouSelfPay');
     }
 
     /**

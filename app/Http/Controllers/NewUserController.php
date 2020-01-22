@@ -52,7 +52,7 @@ class NewUserController extends Controller
             ->where('name', 'LIKE', '%' . $query . '%')
             ->paginate(20);
 
-        return view('users_new.newuser_index_all', compact('users'));   
+        return view('users_new.newuser_index_all', compact('users'));
     }
 
     /**
@@ -64,13 +64,13 @@ class NewUserController extends Controller
     {
         $now_date = Carbon::now();
         $enrol_object = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        if ( is_null($enrol_object) ) {
+        if (is_null($enrol_object)) {
             return view('page_not_available');
         }
-        
+
         $enrol_object_start_date = $enrol_object->Enrol_Date_Begin;
         $enrol_object_end_date = $enrol_object->Enrol_Date_End;
-        
+
         if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
             return view('users_new.new_user');
         }
@@ -87,9 +87,9 @@ class NewUserController extends Controller
     {
         //validate the data
         $this->validate($request, array(
-                'indexno' => 'required|integer',
-                'email' => 'required|email',
-                'g-recaptcha-response' => 'required|captcha',
+            'indexno' => 'required|integer',
+            'email' => 'required|email',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         // check if staff exists in Auth table
@@ -97,21 +97,21 @@ class NewUserController extends Controller
 
         // if staff exists in auth table, redirect to login page
         if ($query_auth_record) {
-            $request->session()->flash('warning', 'Your Index ID ('.$query_auth_record->indexno.') and email address ('.$query_auth_record->email.') already exist in our records. Please login or reset your password.' );
+            $request->session()->flash('warning', 'Your Index ID (' . $query_auth_record->indexno . ') and email address (' . $query_auth_record->email . ') already exist in our records. Please login or reset your password.');
             return redirect('login');
         }
 
         // if staff exists in sddextr table, redirect to login page
         $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
-        
+
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
         if ($query_sddextr_record) {
-            $user = User::create([ 
+            $user = User::create([
                 'indexno' => $query_sddextr_record->INDEXNO,
-                'email' => $query_sddextr_record->EMAIL, 
+                'email' => $query_sddextr_record->EMAIL,
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
                 'nameLast' => $query_sddextr_record->LASTNAME,
-                'name' => $query_sddextr_record->FIRSTNAME.' '.$query_sddextr_record->LASTNAME,
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . $query_sddextr_record->LASTNAME,
                 'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
@@ -123,7 +123,7 @@ class NewUserController extends Controller
             //     $message->from('clm_language@unog.ch', 'CLM Language');
             //     $message->to($query_sddextr_record->EMAIL)->subject('MGR - This is a test automated message');
             // });
-            $request->session()->flash('warning', 'Login Credentials sent to: '.$query_sddextr_record->EMAIL );
+            $request->session()->flash('warning', 'Login Credentials sent to: ' . $query_sddextr_record->EMAIL);
             return redirect('login');
         }
         // if not in auth table and sddextr table, student fills out new user form
@@ -136,9 +136,9 @@ class NewUserController extends Controller
 
     public function getNewNewUser()
     {
-        $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
-        $student_status = DB::table('STU_STATUS')->pluck("StandFor","Abbreviation")->all();
-        $org = TORGAN::get(["Org Full Name","Org name"]);
+        $cat = DB::table('LTP_Cat')->pluck("Description", "Cat")->all();
+        $student_status = DB::table('STU_STATUS')->pluck("StandFor", "Abbreviation")->all();
+        $org = TORGAN::get(["Org Full Name", "Org name"]);
         return view('users_new.new_new_user', compact('cat', 'student_status', 'org'));
     }
 
@@ -146,18 +146,18 @@ class NewUserController extends Controller
     {
         //validate the data
         $this->validate($request, array(
-                'gender' => 'required|string|',
-                'title' => 'required|',
-                'profile' => 'required|',
-                'nameLast' => 'required|string|max:255',
-                'nameFirst' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
-                'org' => 'required|string|max:255',
-                'contact_num' => 'required|max:255',
-                // 'cat' => 'required|',
-                // 'student_cat' => 'required|',
-                'dob' => 'required',
-                'g-recaptcha-response' => 'required|captcha',
+            'gender' => 'required|string|',
+            'title' => 'required|',
+            'profile' => 'required|',
+            'nameLast' => 'required|string|max:255',
+            'nameFirst' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+            'org' => 'required|string|max:255',
+            'contact_num' => 'required|max:255',
+            // 'cat' => 'required|',
+            // 'student_cat' => 'required|',
+            'dob' => 'required',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         //store in database
@@ -166,7 +166,7 @@ class NewUserController extends Controller
         $newUser->gender = $request->gender;
         $newUser->title = $request->title;
         $newUser->profile = $request->profile;
-        $newUser->name = $request->nameFirst.' '.$request->nameLast;
+        $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
         $newUser->nameLast = $request->nameLast;
         $newUser->nameFirst = $request->nameFirst;
         $newUser->email = $request->email;
@@ -177,11 +177,11 @@ class NewUserController extends Controller
         // $newUser->student_cat = $request->student_cat;
         $newUser->save();
         // send email notification to Secretariat to approve his login credentials to the system and sddextr record
-        Mail::raw("New UN user request for: ".$request->nameFirst.' '.$request->nameLast, function($message) {
-                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
-                $message->to('clm_language@un.org')->subject('Notification: New UN User Request');
-            });
-         // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
+        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . $request->nameLast, function ($message) {
+            $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+            $message->to('clm_language@un.org')->subject('Notification: New UN User Request');
+        });
+        // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
 
         return redirect()->route('new_user_msg');
     }
@@ -190,13 +190,13 @@ class NewUserController extends Controller
     {
         $now_date = Carbon::now();
         $enrol_object = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        if ( is_null($enrol_object) ) {
+        if (is_null($enrol_object)) {
             return view('page_not_available');
         }
 
         $enrol_object_start_date = $enrol_object->Enrol_Date_Begin;
         $enrol_object_end_date = $enrol_object->Enrol_Date_End;
-        
+
         if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
             return view('users_new.new_outside_user');
         }
@@ -207,8 +207,8 @@ class NewUserController extends Controller
     {
         //validate the data
         $this->validate($request, array(
-                'email' => 'required|email',
-                'g-recaptcha-response' => 'required|captcha',
+            'email' => 'required|email',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         // check if staff exists in Auth table
@@ -216,7 +216,7 @@ class NewUserController extends Controller
 
         // if staff exists in auth table, redirect to login page
         if ($query_auth_record) {
-            $request->session()->flash('warning', 'Your Index ID ('.$query_auth_record->indexno.') and email address ('.$query_auth_record->email.') already exist in our records. Please login or reset your password.' );
+            $request->session()->flash('warning', 'Your Index ID (' . $query_auth_record->indexno . ') and email address (' . $query_auth_record->email . ') already exist in our records. Please login or reset your password.');
             return redirect('login');
         }
 
@@ -224,13 +224,13 @@ class NewUserController extends Controller
         $query_sddextr_record = SDDEXTR::where('EMAIL', $request->email)->first();
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
         if ($query_sddextr_record) {
-            $user = User::create([ 
+            $user = User::create([
                 'indexno_old' => $query_sddextr_record->INDEXNO_old,
                 'indexno' => $query_sddextr_record->INDEXNO,
-                'email' => $query_sddextr_record->EMAIL, 
+                'email' => $query_sddextr_record->EMAIL,
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
                 'nameLast' => $query_sddextr_record->LASTNAME,
-                'name' => $query_sddextr_record->FIRSTNAME.' '.$query_sddextr_record->LASTNAME,
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . $query_sddextr_record->LASTNAME,
                 'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
@@ -242,7 +242,7 @@ class NewUserController extends Controller
             //     $message->from('clm_language@unog.ch', 'CLM Language');
             //     $message->to($query_sddextr_record->EMAIL)->subject('MGR - This is a test automated message');
             // });
-            $request->session()->flash('warning', 'Login Credentials sent to: '.$query_sddextr_record->EMAIL );
+            $request->session()->flash('warning', 'Login Credentials sent to: ' . $query_sddextr_record->EMAIL);
             return redirect('login');
         }
 
@@ -255,17 +255,17 @@ class NewUserController extends Controller
 
     public function getNewOutsideUserForm()
     {
-        $org = TORGAN::get(["Org Full Name","Org name"]);
-        
+        $org = TORGAN::get(["Org Full Name", "Org name"]);
+
         $now_date = Carbon::now();
         $enrol_object = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        if ( is_null($enrol_object) ) {
+        if (is_null($enrol_object)) {
             return view('page_not_available');
         }
-        
+
         $enrol_object_start_date = $enrol_object->Enrol_Date_Begin;
         $enrol_object_end_date = $enrol_object->Enrol_Date_End;
-        
+
         if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
             return view('users_new.new_outside_user_form', compact('org'));
         }
@@ -277,33 +277,33 @@ class NewUserController extends Controller
     {
         //validate the data
         $this->validate($request, array(
-                'gender' => 'required|string|',
-                'title' => 'required|',
-                'profile' => 'required|',
-                'nameLast' => 'required|string|max:255',
-                'nameFirst' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
-                'org' => 'required|string|max:255',
-                'contact_num' => 'required|max:255',
-                // 'cat' => 'required|',
-                // 'student_cat' => 'required|',
-                'dob' => 'required',
-                'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
-                'g-recaptcha-response' => 'required|captcha',
+            'gender' => 'required|string|',
+            'title' => 'required|',
+            'profile' => 'required|',
+            'nameLast' => 'required|string|max:255',
+            'nameFirst' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+            'org' => 'required|string|max:255',
+            'contact_num' => 'required|max:255',
+            // 'cat' => 'required|',
+            // 'student_cat' => 'required|',
+            'dob' => 'required',
+            'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         //Store the attachments to storage path and save in db table
-        if ($request->hasFile('contractfile')){
+        if ($request->hasFile('contractfile')) {
             $request->file('contractfile');
-            $filename = 'new_user_request_'.$request->nameLast.'_'.$request->nameFirst.'.'.$request->contractfile->extension();
+            $filename = 'new_user_request_' . $request->nameLast . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
             //Create new record in db table
             $attachment_contract_file = new FileNewUser([
-                    'filename' => $filename,
-                    'size' => $request->contractfile->getClientSize(),
-                    'path' => $filestore,
-                            ]); 
+                'filename' => $filename,
+                'size' => $request->contractfile->getClientSize(),
+                'path' => $filestore,
+            ]);
             $attachment_contract_file->save();
         }
 
@@ -313,7 +313,7 @@ class NewUserController extends Controller
         $newUser->gender = $request->gender;
         $newUser->title = $request->title;
         $newUser->profile = $request->profile;
-        $newUser->name = $request->nameFirst.' '.$request->nameLast;
+        $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
         $newUser->nameLast = $request->nameLast;
         $newUser->nameFirst = $request->nameFirst;
         $newUser->email = $request->email;
@@ -325,11 +325,11 @@ class NewUserController extends Controller
         // $newUser->student_cat = $request->student_cat;
         $newUser->save();
         // send email notification to Secretariat to approve his login credentials to the system and sddextr record
-        Mail::raw("New UN user request for: ".$request->nameFirst.' '.$request->nameLast, function($message) {
-                $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
-                $message->to('clm_language@un.org')->subject('Notification: New Non-UN User Request');
-            });
-         // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
+        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . $request->nameLast, function ($message) {
+            $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+            $message->to('clm_language@un.org')->subject('Notification: New Non-UN User Request');
+        });
+        // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
 
         return redirect()->route('new_user_msg');
     }
@@ -342,7 +342,6 @@ class NewUserController extends Controller
      */
     public function show(Request $request)
     {
-                   
     }
 
     /**
@@ -353,13 +352,13 @@ class NewUserController extends Controller
      */
     public function editNewUser(Request $request)
     {
-        if($request->ajax()){     
+        if ($request->ajax()) {
             $new_user_info = NewUser::find($request->id);
-            $org = TORGAN::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
-            $ext_index = 'EXT'.$new_user_info->id;
+            $org = TORGAN::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
+            $ext_index = 'EXT' . $new_user_info->id;
 
             if (is_null($new_user_info->indexno_new)) {
-                $auto_index = 'EXT'.$new_user_info->id;
+                $auto_index = 'EXT' . $new_user_info->id;
             } else {
                 $auto_index = $new_user_info->indexno_new;
             }
@@ -368,8 +367,8 @@ class NewUserController extends Controller
                 ->orWhere('name', 'LIKE', '%' . $new_user_info->nameFirst . '%')
                 ->orWhere('name', 'LIKE', '%' . $new_user_info->email . '%')
                 ->get();
-            $data = view('users_new.edit',compact('new_user_info','org','auto_index','possible_dupes', 'ext_index'))->render();
-            return response()->json(['options'=>$data]);
+            $data = view('users_new.edit', compact('new_user_info', 'org', 'auto_index', 'possible_dupes', 'ext_index'))->render();
+            return response()->json(['options' => $data]);
         }
     }
 
@@ -393,13 +392,13 @@ class NewUserController extends Controller
 
         // check if there is a duplicate in Auth users table
         $this->validate($request, array(
-                'indexno' => 'required|unique:users,indexno',
-                'email' => 'unique:users,email',
-            )); 
+            'indexno' => 'required|unique:users,indexno',
+            'email' => 'unique:users,email',
+        ));
         $this->validate($request, array(
-                'indexno' => 'unique:SDDEXTR,INDEXNO_old',
-                'email' => 'unique:SDDEXTR,EMAIL',
-            )); 
+            'indexno' => 'unique:SDDEXTR,INDEXNO_old',
+            'email' => 'unique:SDDEXTR,EMAIL',
+        ));
 
         $newUser = NewUser::findOrFail($id);
         $newUser->approved_account = 1;
@@ -407,34 +406,34 @@ class NewUserController extends Controller
         $newUser->save();
 
         // save entry to Auth table
-        $user = User::create([ 
+        $user = User::create([
             'indexno_old' => $request->indexno,
             'indexno' => $request->indexno,
-            'email' => $request->email, 
-            'profile' => $request->profile, 
+            'email' => $request->email,
+            'profile' => $request->profile,
             'nameFirst' => $request->nameFirst,
             'nameLast' => $request->nameLast,
-            'name' => $request->nameFirst.' '.$request->nameLast,
+            'name' => $request->nameFirst . ' ' . $request->nameLast,
             'password' => Hash::make('Welcome2CLM'),
             'must_change_password' => 1,
             'approved_account' => 1,
-        ]); 
+        ]);
         // send email with credentials
         $sddextr_email_address = $request->email;
         Mail::to($request->email)->send(new SendAuthMail($sddextr_email_address));
-        
+
         // save entry to SDDEXTR table
         $sddextr = SDDEXTR::create([
             'INDEXNO_old' => $request->indexno,
             'INDEXNO' => $request->indexno,
             'TITLE' => $request->title,
             'FIRSTNAME' => $request->nameFirst,
-            'LASTNAME' => $request->nameLast,            
-            'SEX' => $request->gender,            
-            'DEPT' => $request->org,       
-            'PHONE' => $request->contact_num,       
-            'BIRTH' => $request->dob,       
-            'EMAIL' => $request->email, 
+            'LASTNAME' => $request->nameLast,
+            'SEX' => $request->gender,
+            'DEPT' => $request->org,
+            'PHONE' => $request->contact_num,
+            'BIRTH' => $request->dob,
+            'EMAIL' => $request->email,
         ]);
 
         return redirect()->route('newuser.index');

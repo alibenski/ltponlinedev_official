@@ -40,7 +40,7 @@ class ClassroomController extends Controller
         ];
 
         foreach ($columns as $column) {
-            if (\Request::has($column)) {
+            if (\Request::filled($column)) {
                 $classrooms = $classrooms->where($column, \Request::input($column));
                 $queries[$column] = \Request::input($column);
             }
@@ -64,7 +64,7 @@ class ClassroomController extends Controller
     {
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $rooms = Room::orderBy('Rl_Room', 'asc')->get()->pluck('Rl_Room', 'id');
-        
+
         return view('classrooms.index-calendar', compact('languages', 'rooms'));
     }
 
@@ -76,7 +76,7 @@ class ClassroomController extends Controller
             $classrooms = Classroom::orderBy('id', 'desc')->where('Te_Term', $term)
                 ->where('L', $language)
                 ->get();
-    
+
             $arrayRooms = [];
             foreach ($classrooms as $key => $value) {
                 array_push(
@@ -91,9 +91,9 @@ class ClassroomController extends Controller
             $arrayRooms = array_unique($arrayRooms);
             $arrayRooms = array_filter($arrayRooms);
             $arrayRooms = array_values($arrayRooms);
-    
+
             $rooms = Room::whereIn('id', $arrayRooms)->orderBy('Rl_Room', 'asc')->get();
-            
+
             $data = view('classrooms.view-calendar', compact('rooms', 'term', 'language'))->render();
 
             return response()->json(['options' => $data]);
@@ -161,7 +161,7 @@ class ClassroomController extends Controller
                     'daysOfWeek' => $arrayRecurrence,
                     'startRecur' => Carbon::parse($value->terms->Term_Begin)->toDateString(),
                     'endRecur' => Carbon::parse($value->terms->Term_End)->toDateString(),
-                    
+
                     'roomMon' => $value->Te_Mon_Room,
                     'roomTue' => $value->Te_Tue_Room,
                     'roomWed' => $value->Te_Wed_Room,

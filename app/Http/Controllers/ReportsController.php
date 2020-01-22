@@ -13,44 +13,44 @@ class ReportsController extends Controller
 {
     public function baseView()
     {
-    	$orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name', 'OrgCode']);
-    	$languages = DB::table('languages')->pluck("name","code")->all();
-    	$terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
-    	$queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
+        $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name', 'OrgCode']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
+        $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
 
         $years = [];
         foreach ($queryTerm as $key => $value) {
-            $years[] = Carbon::parse($value->Term_Begin)->year ;   
+            $years[] = Carbon::parse($value->Term_Begin)->year;
         }
 
         $years = array_unique($years);
 
-    	return view('reports.baseView',  compact('orgs', 'languages', 'terms', 'years'));
+        return view('reports.baseView',  compact('orgs', 'languages', 'terms', 'years'));
     }
 
-    
+
     public function getReportsTable(Request $request)
     {
         if ($request->ajax()) {
             $columns = [
                 'DEPT', 'L'
             ];
-    		
-    		if ($request->Term) {
+
+            if ($request->Term) {
                 $term = $request->Term;
-	            $recordsMerged = $this->queryRecordsMerged($term,$columns,$request);
-	            $data = $recordsMerged;
-    		}
-            
-    		if ($request->year) {
+                $recordsMerged = $this->queryRecordsMerged($term, $columns, $request);
+                $data = $recordsMerged;
+            }
+
+            if ($request->year) {
                 $arrayCollection = $this->queryByYear($request, $columns);
-    			$data = $arrayCollection;
-    		}
-            
-    		return response()->json(['data' => $data]); 
-    	}
+                $data = $arrayCollection;
+            }
+
+            return response()->json(['data' => $data]);
+        }
     }
-    
+
     public function ltpStatsGraphView()
     {
         return view('reports.ltpStatsGraphView');
@@ -72,13 +72,13 @@ class ReportsController extends Controller
             $termCodes[] = $value->Term_Code;
         }
 
-        $fixedArrayYears = [2012,2013,2014,2015,2016,2017,2018];
+        $fixedArrayYears = [2012, 2013, 2014, 2015, 2016, 2017, 2018];
         $yearArrayUnique = array_unique($years);
         $mergedArrayYears = array_merge($fixedArrayYears, $yearArrayUnique);
 
         $fixedArrayRegistrations = [2785,    2730,    2602,    2680,    2764,    3127,    3218];
         $registrations = [];
-        foreach ($termsCollection as $k => $v) {            
+        foreach ($termsCollection as $k => $v) {
             $registrations[] = [
                 $years[$k] => Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L')
                     ->where('Term', $v->Term_Code)
@@ -91,8 +91,8 @@ class ReportsController extends Controller
         }
 
         $sums = [];
-        foreach($years as $year){
-            $sums[$year] = array_sum(array_column($registrations,$year));    
+        foreach ($years as $year) {
+            $sums[$year] = array_sum(array_column($registrations, $year));
         }
 
         $mergedArrayRegistrations = array_merge($fixedArrayRegistrations, $sums);
@@ -141,7 +141,7 @@ class ReportsController extends Controller
         foreach ($termsCollection as $k => $v) {
             foreach ($languagesCollection as $language) {
                 $registrations[] = [
-                    $language->name.$years[$k] => Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L')
+                    $language->name . $years[$k] => Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L')
                         ->where('L', $language->code)
                         ->where('Term', $v->Term_Code)
                         ->whereHas('classrooms', function ($q) {
@@ -167,13 +167,13 @@ class ReportsController extends Controller
         $arrChunk = array_chunk($sums, count($languagesCollection));
         // $resetKeysOfSum = array_values($sums);
         $fixedArrayRegistrations = [
-            0 => [210,187,565,1138,184,501],
-            1 => [177,176,528,1270,166,413],
-            2 => [217,181,505,1182,136,381],
-            3 => [228,199,482,1181,126,464],
-            4 => [225,203,464,1284,157,431],
-            5 => [240,152,510,1495,239,491],
-            6 => [239,186,474,1558,243,518]
+            0 => [210, 187, 565, 1138, 184, 501],
+            1 => [177, 176, 528, 1270, 166, 413],
+            2 => [217, 181, 505, 1182, 136, 381],
+            3 => [228, 199, 482, 1181, 126, 464],
+            4 => [225, 203, 464, 1284, 157, 431],
+            5 => [240, 152, 510, 1495, 239, 491],
+            6 => [239, 186, 474, 1558, 243, 518]
         ];
 
         $mergedArrayRegistrations = array_merge($fixedArrayRegistrations, $arrChunk);
@@ -188,40 +188,39 @@ class ReportsController extends Controller
 
         $data = $obj;
 
-        return response()->json(['data' => $data]);    
+        return response()->json(['data' => $data]);
     }
 
-    public function queryRecordsMerged($term,$columns,$request)
+    public function queryRecordsMerged($term, $columns, $request)
     {
-    	$records = new Repo;
+        $records = new Repo;
         foreach ($columns as $column) {
-            if ($request->has($column)) {
-                $records = $records->where($column, $request->input($column) )
-                	->where('Term', $term)
+            if ($request->filled($column)) {
+                $records = $records->where($column, $request->input($column))
+                    ->where('Term', $term)
                     ->with('languages')
                     ->with('courses')
                     ->with('coursesOld')
                     ->with('users');
-            }  
+            }
         }
 
         $recordsCancelled = new Repo;
         $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
         foreach ($columns as $column) {
-            if ($request->has($column)) {
+            if ($request->filled($column)) {
                 if (is_null($termCancelDeadline)) {
-                	$recordsCancelled = $recordsCancelled->onlyTrashed();
+                    $recordsCancelled = $recordsCancelled->onlyTrashed();
                 } else {
-                	$recordsCancelled = $recordsCancelled->onlyTrashed()->where('deleted_at','>', $termCancelDeadline);
+                    $recordsCancelled = $recordsCancelled->onlyTrashed()->where('deleted_at', '>', $termCancelDeadline);
                 }
-                	$recordsCancelled = $recordsCancelled->where($column, $request->input($column) )
-	                	->where('Term', $term)
-	                    ->with('languages')
-	                    ->with('courses')
-	                    ->with('coursesOld')
-	                    ->with('users');
-
-            }  
+                $recordsCancelled = $recordsCancelled->where($column, $request->input($column))
+                    ->where('Term', $term)
+                    ->with('languages')
+                    ->with('courses')
+                    ->with('coursesOld')
+                    ->with('users');
+            }
         }
 
         $records = $records->get();
@@ -233,9 +232,9 @@ class ReportsController extends Controller
 
     public function queryByYear($request, $columns)
     {
-    	$terms = Term::orderBy('Term_Code', 'asc')
-                ->select('Term_Code', 'Term_Begin')
-                ->get();
+        $terms = Term::orderBy('Term_Code', 'asc')
+            ->select('Term_Code', 'Term_Begin')
+            ->get();
 
         $termCode = [];
         foreach ($terms as $key => $value) {
@@ -247,20 +246,19 @@ class ReportsController extends Controller
 
         $arrayCollection = [];
         foreach ($termCode as $term) {
-        	// 
-	        $recordsMerged = $this->queryRecordsMerged($term,$columns,$request);
-	        // 
-	        $arrayCollection[] = $recordsMerged;
+            // 
+            $recordsMerged = $this->queryRecordsMerged($term, $columns, $request);
+            // 
+            $arrayCollection[] = $recordsMerged;
         }
 
         $result = [];
         foreach ($arrayCollection as $k => $v) {
-        	foreach ($v as $a => $b) {
-        		$result[] = $b;
-        	}
+            foreach ($v as $a => $b) {
+                $result[] = $b;
+            }
         }
 
         return $result;
-
     }
 }

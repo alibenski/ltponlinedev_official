@@ -52,7 +52,7 @@
    		</div>
 	</div>
 
-	@if(!Request::has('Term'))
+	@if(!Request::filled('Term'))
 
 	@else
 

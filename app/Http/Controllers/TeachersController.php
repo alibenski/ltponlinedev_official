@@ -28,8 +28,8 @@ class TeachersController extends Controller
 {
     public function teacherDashboard()
     {
-        
-        $terms = Term::orderBy('Term_Code', 'desc')->get();       
+
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
         $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
             ->where('Te_Term', Session::get('Term'))
             ->get();
@@ -37,14 +37,14 @@ class TeachersController extends Controller
             ->where('Tch_ID', '!=', 'TBD')
             ->where('Te_Term', Session::get('Term'))
             ->get();
-        
-        return view('teachers.teacher_dashboard',compact('terms', 'assigned_classes', 'all_classes'));
+
+        return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
     }
 
     public function teacherEnrolmentPreview(Request $request)
     {
-        $languages = DB::table('languages')->pluck("name","code")->all();
-        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         $term = Session::get('Term');
@@ -54,13 +54,13 @@ class TeachersController extends Controller
             return view('teachers.teacher_enrolment_preview', compact('enrolment_forms', 'languages', 'org', 'terms'));
         }
 
-        $q = Preenrolment::where('Term', $term)->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
-        $q2 = PlacementForm::where('Term', $term)->whereNotNull('Te_Code')->where('overall_approval','1')->orderBy('created_at', 'asc')->get();
+        $q = Preenrolment::where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $q2 = PlacementForm::where('Term', $term)->whereNotNull('Te_Code')->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
         $merge = collect($q)->merge($q2);
 
         $enrolment_forms = $merge->unique(function ($item) {
-                return $item['INDEXID'].$item['Te_Code'];
-            })
+            return $item['INDEXID'] . $item['Te_Code'];
+        })
             ->sortBy('created_at');
 
         $queries = [];
@@ -69,41 +69,24 @@ class TeachersController extends Controller
             'L', 'DEPT', 'Te_Code', 'is_self_pay_form', 'overall_approval',
         ];
 
-        
+
         foreach ($columns as $column) {
-            if (\Request::has($column)) {
-                $enrolment_forms = $enrolment_forms->where($column, \Request::input($column) );
+            if (\Request::filled($column)) {
+                $enrolment_forms = $enrolment_forms->where($column, \Request::input($column));
                 $queries[$column] = \Request::input($column);
             }
+        }
+        if (Session::has('Term')) {
+            $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term'));
+            $queries['Term'] = Session::get('Term');
+        }
 
-        } 
-            if (Session::has('Term')) {
-                    $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term') );
-                    $queries['Term'] = Session::get('Term');
+        if (\Request::exists('approval_hr')) {
+            if (is_null(\Request::input('approval_hr'))) {
+                $enrolment_forms = $enrolment_forms->whereNotIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->whereNull('is_self_pay_form')->whereNull('approval_hr');
+                $queries['approval_hr'] = '';
             }
-
-            //     if (\Request::has('search')) {
-            //         $name = \Request::input('search');
-            //         $enrolment_forms = $enrolment_forms->with('users')
-            //             ->whereHas('users', function($q) use ( $name) {
-            //                 return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-            //             });
-            //         $queries['search'] = \Request::input('search');
-            // } 
-
-            // if (\Request::has('sort')) {
-            //     $enrolment_forms = $enrolment_forms->orderBy('created_at', \Request::input('sort') );
-            //     $queries['sort'] = \Request::input('sort');
-            // } else {
-            //     $enrolment_forms = $enrolment_forms->orderBy('created_at', 'asc');
-            // }
-
-            if (\Request::exists('approval_hr')) {
-                if (is_null(\Request::input('approval_hr'))) {
-                    $enrolment_forms = $enrolment_forms->whereNotIn('DEPT', ['UNOG', 'JIU','DDA','OIOS','DPKO'])->whereNull('is_self_pay_form')->whereNull('approval_hr');
-                    $queries['approval_hr'] = '';
-                }
-            }
+        }
 
         // $enrolment_forms->select('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at','std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by')->groupBy('INDEXID', 'Term', 'DEPT','L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form','selfpay_approval','deleted_at', 'updated_by_admin', 'modified_by');
         // $count = count($enrolment_forms->get());
@@ -120,33 +103,32 @@ class TeachersController extends Controller
      */
     public function index(Request $request)
     {
-        $languages = DB::table('languages')->pluck("name","code")->all();
+        $languages = DB::table('languages')->pluck("name", "code")->all();
 
         $teachers = new Teachers;
         // $currentQueries = \Request::query();
         $queries = [];
 
         $columns = [
-            'Tch_L', 
+            'Tch_L',
         ];
 
-        
+
         foreach ($columns as $column) {
-            if (\Request::has($column)) {
-                $teachers = $teachers->where($column, \Request::input($column) );
+            if (\Request::filled($column)) {
+                $teachers = $teachers->where($column, \Request::input($column));
                 $queries[$column] = \Request::input($column);
             }
+        }
 
-        } 
-
-                if (\Request::has('search')) {
-                    $name = \Request::input('search');
-                    $teachers = $teachers->with('users')
-                        ->whereHas('users', function($q) use ( $name) {
-                            return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
-                        });
-                    $queries['search'] = \Request::input('search');
-            } 
+        if (\Request::filled('search')) {
+            $name = \Request::input('search');
+            $teachers = $teachers->with('users')
+                ->whereHas('users', function ($q) use ($name) {
+                    return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                });
+            $queries['search'] = \Request::input('search');
+        }
 
         $teachers = $teachers->orderBy('In_Out', 'desc')->orderBy('Tch_Lastname', 'asc')->get();
 
@@ -161,7 +143,7 @@ class TeachersController extends Controller
         // get all teachers of the selected term
         $queryTeachers = Classroom::where('Te_Term', $request->session()->get('Term'))->select('Tch_ID')->groupBy('Tch_ID')
             ->whereNotNull('Tch_ID')
-            ->where('Tch_ID', '!=', 'TBD')                
+            ->where('Tch_ID', '!=', 'TBD')
             ->get();
         $teachers = [];
         if ($request->session()->has('Term')) {
@@ -171,19 +153,18 @@ class TeachersController extends Controller
                 $teachers[] = Teachers::where('Tch_ID', $value->Tch_ID)
                     ->with(['classrooms' => function ($query) use ($request) {
                         $query->where('Te_Term', $request->session()->get('Term'))
-                                ->whereNotNull('Tch_ID')
-                                ->where('Tch_ID', '!=', 'TBD')
-                                ;
-                        }])
+                            ->whereNotNull('Tch_ID')
+                            ->where('Tch_ID', '!=', 'TBD');
+                    }])
                     ->get()
                     // ->take(5)
-                    ;
+                ;
             }
 
             // dd($teachers);
             return view('teachers.teacher_show_classrooms_per_teacher', compact('terms', 'selectedTerm', 'teachers'));
         }
-        
+
         return view('teachers.teacher_show_classrooms_per_teacher', compact('terms'));
     }
     /**
@@ -194,11 +175,11 @@ class TeachersController extends Controller
     public function create()
     {
         $roles = Role::where('id', '>', 2)->get();
-        $cat = DB::table('LTP_Cat')->pluck("Description","Cat")->all();
-        $org = Torgan::get(["Org Full Name","Org name"]);
+        $cat = DB::table('LTP_Cat')->pluck("Description", "Cat")->all();
+        $org = Torgan::get(["Org Full Name", "Org name"]);
         $languages = Language::all();
 
-        return view('teachers.create', compact('roles', 'cat', 'org','languages'));
+        return view('teachers.create', compact('roles', 'cat', 'org', 'languages'));
     }
 
     /**
@@ -212,15 +193,15 @@ class TeachersController extends Controller
         if ($request->decision == 0) {
             //validate the data
             $this->validate($request, array(
-                    'gender' => 'required|string|',
-                    'title' => 'required|',
-                    'profile' => 'required|',
-                    'nameLast' => 'required|string|max:255',
-                    'nameFirst' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
-                    'org' => 'required|string|max:255',
-                    'contact_num' => 'required|max:255',
-                    'dob' => 'required',
+                'gender' => 'required|string|',
+                'title' => 'required|',
+                'profile' => 'required|',
+                'nameLast' => 'required|string|max:255',
+                'nameFirst' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+                'org' => 'required|string|max:255',
+                'contact_num' => 'required|max:255',
+                'dob' => 'required',
             ));
 
             //store in database
@@ -228,7 +209,7 @@ class TeachersController extends Controller
             $newUser->gender = $request->gender;
             $newUser->title = $request->title;
             $newUser->profile = $request->profile;
-            $newUser->name = $request->nameFirst.' '.$request->nameLast;
+            $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
             $newUser->nameLast = $request->nameLast;
             $newUser->nameFirst = $request->nameFirst;
             $newUser->email = $request->email;
@@ -238,24 +219,28 @@ class TeachersController extends Controller
             $newUser->approved_account = 1;
             $newUser->save();
 
-            $ext_index = 'EXT'.$newUser->id;
-            $request->merge(['indexno' => $ext_index]); 
+            $ext_index = 'EXT' . $newUser->id;
+            $request->merge(['indexno' => $ext_index]);
 
             $user = $this->teacherWithIndexID($request);
             $user = $this->storeAccountInTeacherTable($request);
 
             return redirect()->route('manage-user-enrolment-data', $user->id)
-            ->with('flash_message',
-             'User successfully added.');
-        } 
+                ->with(
+                    'flash_message',
+                    'User successfully added.'
+                );
+        }
 
         // else if decision == 1, then create with index no. 
         $user = $this->teacherWithIndexID($request);
         $user = $this->storeAccountInTeacherTable($request);
 
         return redirect()->route('manage-user-enrolment-data', $user->id)
-            ->with('flash_message',
-             'User successfully added.');
+            ->with(
+                'flash_message',
+                'User successfully added.'
+            );
     }
 
     public function teacherWithIndexID($request)
@@ -263,20 +248,20 @@ class TeachersController extends Controller
         //Validate name, email and password fields
         $rules_user = [
             'indexno' => 'required|unique:users',
-            'nameFirst'=>'required|max:120',
-            'nameLast'=>'required|max:120',
-            'email'=>'required|email|unique:users',
+            'nameFirst' => 'required|max:120',
+            'nameLast' => 'required|max:120',
+            'email' => 'required|email|unique:users',
             // 'password'=>'required|min:6|confirmed'
-            ];            
+        ];
         $customMessagesUser = [
-                'unique' => 'The :attribute already exists in the Auth Table.'
-                ];
+            'unique' => 'The :attribute already exists in the Auth Table.'
+        ];
 
         $this->validate($request, $rules_user, $customMessagesUser);
 
         // if staff exists in sddextr table, copy data to auth table
         $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
-        
+
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
         if ($query_sddextr_record) {
             $query_sddextr_record_array = $query_sddextr_record->toArray();
@@ -284,17 +269,17 @@ class TeachersController extends Controller
             $validator = Validator::make($query_sddextr_record_array, [
                 'INDEXNO' => 'required|unique:users,indexno',
                 'INDEXNO_old' => 'required|unique:users,indexno_old',
-                'EMAIL'=>'required|email|unique:users,email'
+                'EMAIL' => 'required|email|unique:users,email'
             ]);
 
-            $user = User::create([ 
+            $user = User::create([
                 'indexno_old' => $query_sddextr_record->INDEXNO_old,
                 'indexno' => $query_sddextr_record->INDEXNO,
                 'profile' => $request->profile,
-                'email' => $query_sddextr_record->EMAIL, 
+                'email' => $query_sddextr_record->EMAIL,
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
                 'nameLast' => $query_sddextr_record->LASTNAME,
-                'name' => $query_sddextr_record->FIRSTNAME.' '.$query_sddextr_record->LASTNAME,
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . $query_sddextr_record->LASTNAME,
                 'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
@@ -305,24 +290,24 @@ class TeachersController extends Controller
 
 
         // if not in auth table and sddextr table, create
-        $user = User::create([ 
+        $user = User::create([
             'indexno' => $request->indexno,
             'indexno_old' => $request->indexno,
             'profile' => $request->profile,
-            'email' => $request->email, 
+            'email' => $request->email,
             'nameFirst' => $request->nameFirst,
             'nameLast' => $request->nameLast,
-            'name' => $request->nameFirst.' '.$request->nameLast,
+            'name' => $request->nameFirst . ' ' . $request->nameLast,
             'password' => Hash::make('Welcome2CLM'),
             'must_change_password' => 1,
             'approved_account' => 1,
-        ]); 
-        
+        ]);
+
         //Send Auth credentials to student via email
         $sddextr_email_address = $request->email;
         // send credential email to user using email from sddextr 
         // Mail::to($sddextr_email_address)->send(new SendAuthMail($sddextr_email_address));
-        
+
         $this->validate($request, [
             'indexno' => 'required|unique:SDDEXTR,INDEXNO_old',
             'indexno' => 'required|unique:SDDEXTR,INDEXNO',
@@ -347,8 +332,8 @@ class TeachersController extends Controller
         if (isset($roles)) {
 
             foreach ($roles as $role) {
-            $role_r = Role::where('id', '=', $role)->firstOrFail();            
-            $user->assignRole($role_r); //Assigning role to user
+                $role_r = Role::where('id', '=', $role)->firstOrFail();
+                $user->assignRole($role_r); //Assigning role to user
             }
         }
 
@@ -360,14 +345,14 @@ class TeachersController extends Controller
         //Validate name, email and password fields
         $rules_user = [
             'indexno' => 'required|unique:LTP_TEACHERS',
-            'nameFirst'=>'required|max:120',
-            'nameLast'=>'required|max:120',
-            'email'=>'required|email|unique:LTP_TEACHERS',
+            'nameFirst' => 'required|max:120',
+            'nameLast' => 'required|max:120',
+            'email' => 'required|email|unique:LTP_TEACHERS',
             // 'password'=>'required|min:6|confirmed'
-            ];            
+        ];
         $customMessagesUser = [
-                'unique' => 'The :attribute already exists in the Teachers Table.'
-                ];
+            'unique' => 'The :attribute already exists in the Teachers Table.'
+        ];
 
         $this->validate($request, $rules_user, $customMessagesUser);
 
@@ -377,29 +362,29 @@ class TeachersController extends Controller
         $newTeacher->In_Out = 1;
         $newTeacher->IndexNo = $request->indexno;
         $newTeacher->Tch_Title = $request->title;
-        $newTeacher->Tch_Name = $request->nameLast.', '.$request->nameFirst;
+        $newTeacher->Tch_Name = $request->nameLast . ', ' . $request->nameFirst;
         $newTeacher->Tch_Lastname = $request->nameLast;
         $newTeacher->Tch_Firstname = $request->nameFirst;
         $newTeacher->User_Type = 'Teacher';
 
         $newTeacher->Tch_L = $request->L;
-        
+
         $newTeacher->email = $request->email;
         $newTeacher->DoB = $request->dob;
         $newTeacher->sex = $request->gender;
         $newTeacher->Phone = $request->contact_num;
-        
+
         $firstCharLastName = mb_substr($request->nameLast, 0, 1, "UTF-8");
         $firstCharFirstName = mb_substr($request->nameFirst, 0, 1, "UTF-8");
-        $combineChar = $firstCharLastName.$firstCharFirstName;
-        
+        $combineChar = $firstCharLastName . $firstCharFirstName;
+
         $checkTchID = Teachers::where('Tch_ID', $combineChar)->first();
-        
+
         $b = 1;
         if ($checkTchID) {
-            for ($i=0; $i < $b; $i++) { 
-                
-                $c = $combineChar.$i;
+            for ($i = 0; $i < $b; $i++) {
+
+                $c = $combineChar . $i;
                 $checkTchID2 = Teachers::where('Tch_ID', $c)->first();
                 if (!$checkTchID2) {
                     $newTeacher->Tch_ID = $c;
@@ -407,13 +392,9 @@ class TeachersController extends Controller
                 } else {
                     $b++;
                 }
-
-
             }
-
         } else {
             $newTeacher->Tch_ID = $combineChar;
-
         }
 
 
@@ -454,7 +435,6 @@ class TeachersController extends Controller
      */
     public function update(Request $request, Teachers $teachers)
     {
-        
     }
 
     public function ajaxTeacherUpdate(Request $request)
@@ -464,27 +444,27 @@ class TeachersController extends Controller
         $input = $request->all();
         $input = array_filter($input, 'strlen');
 
-        $teacher->fill($input)->save(); 
+        $teacher->fill($input)->save();
 
         // change data in the User table and SDDEXTR table
-        $user = User::where('indexno',$teacher->IndexNo)->first();
-        $sddextr = SDDEXTR::where('INDEXNO',$teacher->IndexNo)->first();
+        $user = User::where('indexno', $teacher->IndexNo)->first();
+        $sddextr = SDDEXTR::where('INDEXNO', $teacher->IndexNo)->first();
 
         if ($request->email) {
-            $user->update(['email'=>$request->email]);   
-            $sddextr->update(['EMAIL'=>$request->email]);   
+            $user->update(['email' => $request->email]);
+            $sddextr->update(['EMAIL' => $request->email]);
         }
         if ($request->Tch_Firstname) {
-            $user->update(['nameFirst'=>$request->Tch_Firstname]);   
-            $user->update(['name'=>$request->Tch_Firstname.' '.$user->nameLast]);   
-            $sddextr->update(['FIRSTNAME'=>$request->Tch_Firstname]);
-            $teacher->update(['Tch_Name'=>$teacher->Tch_Lastname.', '.$request->Tch_Firstname]);
+            $user->update(['nameFirst' => $request->Tch_Firstname]);
+            $user->update(['name' => $request->Tch_Firstname . ' ' . $user->nameLast]);
+            $sddextr->update(['FIRSTNAME' => $request->Tch_Firstname]);
+            $teacher->update(['Tch_Name' => $teacher->Tch_Lastname . ', ' . $request->Tch_Firstname]);
         }
         if ($request->Tch_Lastname) {
-            $user->update(['nameLast'=>$request->Tch_Lastname]);
-            $user->update(['name'=>$user->nameFirst.' '.$request->Tch_Lastname]);  
-            $sddextr->update(['LASTNAME'=>$request->Tch_Lastname]);
-            $teacher->update(['Tch_Name'=>$request->Tch_Lastname.', '.$teacher->Tch_Firstname]);  
+            $user->update(['nameLast' => $request->Tch_Lastname]);
+            $user->update(['name' => $user->nameFirst . ' ' . $request->Tch_Lastname]);
+            $sddextr->update(['LASTNAME' => $request->Tch_Lastname]);
+            $teacher->update(['Tch_Name' => $request->Tch_Lastname . ', ' . $teacher->Tch_Firstname]);
         }
 
         $data = $input;
@@ -533,7 +513,7 @@ class TeachersController extends Controller
         if (is_null($form_info)) {
             return view('errors.404_custom');
         }
-        
+
         $data = view('teachers.teacher_show_students', compact('course', 'form_info'))->render();
         return response()->json([$data]);
     }
@@ -542,15 +522,15 @@ class TeachersController extends Controller
     {
         if ($request->ajax()) {
             $qry = Attendance::whereIn('pash_id', $request->id)->get();
-                       
+
             // if no attendance has been entered yet, then 0 value
             if ($qry->isEmpty()) {
 
                 $data = 0;
-                return response()->json($data); 
+                return response()->json($data);
             }
 
-            $array_attributes = []; 
+            $array_attributes = [];
             foreach ($qry as $key => $value) {
                 $arr = $value;
                 $array_attributes[] = $arr->getAttributes();
@@ -565,17 +545,17 @@ class TeachersController extends Controller
                 $info['pash_id'] = $y['pash_id'];
 
                 foreach ($y as $k => $v) {
-                        if($v == 'P'){
-                            $sumP[] = 'P';  
-                        }
+                    if ($v == 'P') {
+                        $sumP[] = 'P';
+                    }
 
-                        if($v == 'E'){
-                            $sumE[] = 'E';
-                        } 
+                    if ($v == 'E') {
+                        $sumE[] = 'E';
+                    }
 
-                        if($v == 'A'){
-                            $sumA[] = 'A';  
-                        }
+                    if ($v == 'A') {
+                        $sumA[] = 'A';
+                    }
                 }
 
                 $info['P'] = count($sumP);
@@ -590,7 +570,7 @@ class TeachersController extends Controller
             }
 
             $data = $collector;
-            return response()->json($data);  
+            return response()->json($data);
         }
     }
 
@@ -624,7 +604,7 @@ class TeachersController extends Controller
                 ->get();
 
             $data = $enrolled_next_term_placement;
-            
+
             return response()->json($data);
         }
     }
@@ -632,11 +612,11 @@ class TeachersController extends Controller
     public function ajaxShowIfEnrolledNextTerm(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $indexid = $request->indexid;
             $language = $request->L;
             // $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next;
-            
+
             $selectedTerm = Session::get('Term'); // No need of type casting
             // echo substr($selectedTerm, 0, 1); // get first value
             // echo substr($selectedTerm, -1); // get last value
@@ -658,18 +638,18 @@ class TeachersController extends Controller
             }
 
             // $next_term_string = Term::where('Term_Code', $next_term )->first();
-            
+
             $enrolled_next_term_regular = Preenrolment::whereIn('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->select('Te_Code','INDEXID')
+                ->select('Te_Code', 'INDEXID')
                 ->groupBy('Te_Code', 'INDEXID')
                 ->with('courses')
                 ->get();
-                
+
             $data = $enrolled_next_term_regular;
 
-            return response()->json($data);  
+            return response()->json($data);
         }
     }
 
@@ -701,13 +681,13 @@ class TeachersController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('updated_by_admin', 1)
-                ->select('Te_Code', 'modified_by','INDEXID')
-                ->groupBy('Te_Code', 'modified_by','INDEXID')
+                ->select('Te_Code', 'modified_by', 'INDEXID')
+                ->groupBy('Te_Code', 'modified_by', 'INDEXID')
                 ->with('modifyUser')
                 ->get();
 
             $data = $check_if_assigned_regular;
-            
+
             return response()->json($data);
         }
     }
@@ -726,7 +706,7 @@ class TeachersController extends Controller
         $course = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
             ->first();
-        
+
         if (is_null($course)) {
             return view('errors.404_custom');
         }
@@ -742,7 +722,7 @@ class TeachersController extends Controller
     public function ajaxSaveResults(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $filtered = (array_filter($request->all()));
             $record = Repo::find($request->id);
 
@@ -750,7 +730,7 @@ class TeachersController extends Controller
 
             $data = $record;
 
-            return response()->json($data); 
+            return response()->json($data);
         }
     }
 
@@ -781,7 +761,7 @@ class TeachersController extends Controller
                 $next_term = $selectedTerm + 1;
             }
 
-            $next_term_string = Term::where('Term_Code', $next_term )->first();
+            $next_term_string = Term::where('Term_Code', $next_term)->first();
 
             $qry_enrolment_details = Preenrolment::withTrashed()
                 ->where('INDEXID', $indexid)
@@ -799,39 +779,39 @@ class TeachersController extends Controller
                     ->get();
 
                 $modified_forms[] = $qry_mod_forms;
-            }    
+            }
 
             $enrolment_details = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->select('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin', 'updatedOn', 'teacher_comments')
-                ->groupBy('INDEXID', 'L', 'Term','Te_Code', 'eform_submit_count', 'flexibleBtn','modified_by','updated_by_admin', 'updatedOn', 'teacher_comments')
+                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'modified_by', 'updated_by_admin', 'updatedOn', 'teacher_comments')
+                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'modified_by', 'updated_by_admin', 'updatedOn', 'teacher_comments')
                 ->get();
 
-            $arr1 = []; 
+            $arr1 = [];
             foreach ($enrolment_details as $key => $value) {
                 $arr1[] = Preenrolment::where('INDEXID', $indexid)
-                ->where('L', $language)
-                ->where('Term', $next_term)
-                ->where('Te_Code', $value->Te_Code)
-                ->get()
-                ->count();
+                    ->where('L', $language)
+                    ->where('Term', $next_term)
+                    ->where('Te_Code', $value->Te_Code)
+                    ->get()
+                    ->count();
             }
 
             $enrolment_schedules = Preenrolment::orderBy('id', 'asc')
                 ->where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term','Te_Code', 'eform_submit_count', 'form_counter' ]);
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'eform_submit_count', 'form_counter']);
 
-            $languages = DB::table('languages')->pluck("name","code")->all();
-            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
+            $languages = DB::table('languages')->pluck("name", "code")->all();
+            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
 
             $last_placement_test = PlacementForm::orderBy('Term', 'desc')->where('INDEXID', $indexid)->first();
             $history = Repo::orderBy('Term', 'desc')->where('INDEXID', $indexid)->get();
 
-            $data = view('teachers.teacher_assign_course', compact('arr1','enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms','last_placement_test', 'history', 'next_term_string'))->render();
-            return response()->json([$data]);             
+            $data = view('teachers.teacher_assign_course', compact('arr1', 'enrolment_details', 'enrolment_schedules', 'languages', 'org', 'modified_forms', 'last_placement_test', 'history', 'next_term_string'))->render();
+            return response()->json([$data]);
         }
     }
 
@@ -839,13 +819,13 @@ class TeachersController extends Controller
     {
         if ($request->ajax()) {
             $indexid = $request->INDEXID;
-            $term = $request->term_id; 
+            $term = $request->term_id;
             $language = $request->L;
 
             $enrolment_details = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
-                ->where('Term', $term)            
-                ->where('eform_submit_count', $request->eform_submit_count)            
+                ->where('Term', $term)
+                ->where('eform_submit_count', $request->eform_submit_count)
                 ->get();
 
             $data = count($enrolment_details);
@@ -857,7 +837,7 @@ class TeachersController extends Controller
     public function teacherNothingToModify(Request $request)
     {
         if ($request->ajax()) {
-            $indexno = $request->qry_indexid; 
+            $indexno = $request->qry_indexid;
             $term = $request->qry_term;
             $tecode = $request->qry_tecode;
             $eform_submit_count = $request->eform_submit_count;
@@ -869,8 +849,8 @@ class TeachersController extends Controller
                 ->where('eform_submit_count', $eform_submit_count)
                 ->where('Term', $term)
                 ->get();
-            
-            $input_1 = ['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ];
+
+            $input_1 = ['teacher_comments' => $teacher_comments, 'updated_by_admin' => 1, 'modified_by' => Auth::user()->id];
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_copied as $data) {
@@ -886,7 +866,7 @@ class TeachersController extends Controller
     public function teacherSaveAssignedCourse(Request $request)
     {
         if ($request->ajax()) {
-            $indexno = $request->qry_indexid; 
+            $indexno = $request->qry_indexid;
             $term = $request->qry_term;
             $tecode = $request->qry_tecode;
             $eform_submit_count = $request->eform_submit_count;
@@ -898,7 +878,7 @@ class TeachersController extends Controller
             }
 
             // check if assigned course was already assigned
-            $assignedNewCourse = $request->Te_Code.'-'.$request->schedule_id.'-'.$term.'-'.$indexno;
+            $assignedNewCourse = $request->Te_Code . '-' . $request->schedule_id . '-' . $term . '-' . $indexno;
             $checkNewCourseExists = Preenrolment::where('CodeIndexID', $assignedNewCourse)
                 ->where('updated_by_admin', '1')
                 ->first();
@@ -916,7 +896,7 @@ class TeachersController extends Controller
 
             $user_id = User::where('indexno', $indexno)->first(['id']);
 
-            $input_1 = ['teacher_comments' => $teacher_comments,'updated_by_admin' => 1,'modified_by' => Auth::user()->id ];
+            $input_1 = ['teacher_comments' => $teacher_comments, 'updated_by_admin' => 1, 'modified_by' => Auth::user()->id];
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_copied as $data) {
@@ -930,17 +910,17 @@ class TeachersController extends Controller
             $count_form = $enrolment_to_be_copied->count();
             if ($count_form > 1) {
                 $delform = Preenrolment::orderBy('id', 'desc')
-                ->where('Te_Code', $tecode)
-                ->where('INDEXID', $indexno)
-                ->where('eform_submit_count', $eform_submit_count)
-                ->where('Term', $term)
-                ->first();
+                    ->where('Te_Code', $tecode)
+                    ->where('INDEXID', $indexno)
+                    ->where('eform_submit_count', $eform_submit_count)
+                    ->where('Term', $term)
+                    ->first();
                 $delform->Code = null;
                 $delform->CodeIndexID = null;
                 $delform->Te_Code = null;
                 $delform->INDEXID = null;
                 $delform->Term = null;
-                $delform->schedule_id = null;             
+                $delform->schedule_id = null;
                 $delform->save();
                 $delform->delete();
             }
@@ -954,12 +934,12 @@ class TeachersController extends Controller
 
             $input = $request->all();
             $input = array_filter($input, 'strlen');
-            
-            foreach ($enrolment_to_be_modified as $new_data) {
-                $new_data->fill($input)->save();    
 
-                $new_data->Code = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term;
-                $new_data->CodeIndexID = $new_data->Te_Code.'-'.$new_data->schedule_id.'-'.$new_data->Term.'-'.$new_data->INDEXID;
+            foreach ($enrolment_to_be_modified as $new_data) {
+                $new_data->fill($input)->save();
+
+                $new_data->Code = $new_data->Te_Code . '-' . $new_data->schedule_id . '-' . $new_data->Term;
+                $new_data->CodeIndexID = $new_data->Te_Code . '-' . $new_data->schedule_id . '-' . $new_data->Term . '-' . $new_data->INDEXID;
                 $new_data->save();
             }
 
@@ -1001,7 +981,7 @@ class TeachersController extends Controller
     }
 
     public function teacherManageAttendances(Request $request)
-    {   
+    {
         $form_info = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
             ->get();
@@ -1027,26 +1007,26 @@ class TeachersController extends Controller
         //     ->get();
         //     foreach ($remark as $key => $valueR) {
         //         $arr[] = $valueR->attendanceRemarks[$key]['id'];
-                
+
         //     }
         // }
         // dd($arr);
         // return view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'));
-        $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom','day','time','week'))->render();
+        $data = view('teachers.teacher_manage_attendance', compact('course', 'form_info', 'classroom', 'day', 'time', 'week'))->render();
         return response()->json([$data]);
     }
 
     public function ajaxGetRemark(Request $request)
     {
-        $attendance_id_check = Attendance::whereIn('pash_id', explode(",",$request->id))->get();
+        $attendance_id_check = Attendance::whereIn('pash_id', explode(",", $request->id))->get();
         $count_attendance_id = $attendance_id_check->count();
 
-        if ($count_attendance_id > 0){
+        if ($count_attendance_id > 0) {
             // $attendance_id = Attendance::where('pash_id', $request->id)->first()->id;
             // 
-            $attendance_id = Attendance::whereIn('pash_id', explode(",",$request->id))->with('attendanceRemarks')->get();
+            $attendance_id = Attendance::whereIn('pash_id', explode(",", $request->id))->with('attendanceRemarks')->get();
             $data = $attendance_id;
-            
+
             // foreach ($attendance_id as $key => $value) {
             //     $remark = AttendanceRemarks::where('attendance_id', $attendance_id)
             //         ->where('wk_id', $request->wk)
@@ -1059,41 +1039,40 @@ class TeachersController extends Controller
             //     $data = $remark->remarks;
             //     return response()->json($data);
             // }
-            
+
             // $data = '';
-            return response()->json($data);  
+            return response()->json($data);
         }
 
         $data = '';
-        return response()->json($data);        
-
+        return response()->json($data);
     }
 
     public function ajaxTeacherAttendanceUpdate(Request $request)
     {
         $ids = $request->ids;
         $week = $request->wk;
-        
+
         $data_details = [];
-        $student_to_update = Repo::whereIn('id',explode(",",$ids))->get();
+        $student_to_update = Repo::whereIn('id', explode(",", $ids))->get();
 
         $attendance_status = explode(",", $request->attendanceStatus);
         $countAttendanceStatus = count($attendance_status);
 
         $remarks = explode(",", $request->remarks);
 
-        for ($i=0; $i < $countAttendanceStatus; $i++) { 
+        for ($i = 0; $i < $countAttendanceStatus; $i++) {
             $data_details[] = $student_to_update[$i]['id'];
 
             $data_update = Attendance::where('pash_id', $student_to_update[$i]['id'])->get();
 
-            if (count($data_update) > 0 ) {
+            if (count($data_update) > 0) {
 
                 // update record
                 $record_update = Attendance::where('pash_id', $student_to_update[$i]['id']);
                 $record_update->update([
                     $request->wk => $attendance_status[$i],
-                ]); 
+                ]);
 
                 $query = Attendance::where('pash_id', $student_to_update[$i]['id'])->first();
                 if (!empty($remarks[$i])) {
@@ -1104,10 +1083,7 @@ class TeachersController extends Controller
                     $attendance_remark->remarks = $remarks[$i];
                     $attendance_remark->save();
                 }
-
-                
-            } 
-                else {
+            } else {
 
                 // insert to attendance table
                 $record = new Attendance;
@@ -1138,7 +1114,7 @@ class TeachersController extends Controller
     public function teacherDeleteForm(Request $request)
     {
         if ($request->ajax()) {
-            $indexno = $request->qry_indexid; 
+            $indexno = $request->qry_indexid;
             $term = $request->qry_term;
             $tecode = $request->qry_tecode;
             $eform_submit_count = $request->eform_submit_count;
@@ -1155,14 +1131,15 @@ class TeachersController extends Controller
                 'teacher_comments' => $teacher_comments,
                 // 'updated_by_admin' => 1,
                 // 'modified_by' => Auth::user()->id, 
-                'cancelled_by_admin' => Auth::user()->id ];
+                'cancelled_by_admin' => Auth::user()->id
+            ];
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_deleted as $data) {
                 $data->fill($input_1)->save();
                 $data->delete();
             }
-            
+
             $data = $request->all();
 
             return response()->json($data);

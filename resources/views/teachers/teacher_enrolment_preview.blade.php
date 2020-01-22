@@ -113,7 +113,7 @@
 
 				<h3>Total # <span class="label label-info">{{$count}}</span></h3>
 			</div>
-			@if (Request::has('Te_Code')||Request::has('L'))
+			@if (Request::filled('Te_Code')||Request::filled('L'))
 			<div class="pull-right col-sm-4">
 				<div class="box box-default">
 					<div class="box-header with-border">

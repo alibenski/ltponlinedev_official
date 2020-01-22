@@ -33,7 +33,7 @@ class StudentController extends Controller
     {
         $this->middleware('auth')->except('updateProfileConfirmed');
         $this->middleware('prevent-back-history');
-        $this->middleware('redirect-if-not-profile')->except('index','updateProfileConfirmed');
+        $this->middleware('redirect-if-not-profile')->except('index', 'updateProfileConfirmed');
     }
 
     /**
@@ -43,10 +43,10 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $current_user = Auth::user()->indexno; 
+        $current_user = Auth::user()->indexno;
         //query last UN Language Course enrolled in the past based on PASHQ table
         $repos_lang = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->first();
-                
+
         return view('students.index', compact('repos_lang'));
     }
 
@@ -92,8 +92,8 @@ class StudentController extends Controller
     {
         $student = User::find($id);
         $gender = DB::table('SEX')->limit(4)->pluck('Title', 'Title');
-        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name','Org Full Name']);
-        
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
+
         return view('students.edit', compact('student', 'gender', 'org'));
     }
 
@@ -108,18 +108,18 @@ class StudentController extends Controller
     {
         // Validate data
         $this->validate($request, array(
-                // 'title' => 'required|',
-                // 'lastName' => 'required|string',
-                // 'firstName' => 'required|string',
-                // validate if email is unique 
-                'email' => 'required_without_all:profile,TITLE,lastName,firstName,org,contactNo,dob,jobAppointment,gradeLevel,organization|unique:users,email',
-                // 'org' => 'required|',
-                'contactNo' => 'regex:/^[0-9\-+]+$/|nullable',
-                // 'jobAppointment' => 'required|string',
-                // 'gradeLevel' => 'required|string',
+            // 'title' => 'required|',
+            // 'lastName' => 'required|string',
+            // 'firstName' => 'required|string',
+            // validate if email is unique 
+            'email' => 'required_without_all:profile,TITLE,lastName,firstName,org,contactNo,dob,jobAppointment,gradeLevel,organization|unique:users,email',
+            // 'org' => 'required|',
+            'contactNo' => 'regex:/^[0-9\-+]+$/|nullable',
+            // 'jobAppointment' => 'required|string',
+            // 'gradeLevel' => 'required|string',
 
-            ));        
-        
+        ));
+
         // Save the data to db
         $student = User::findOrFail($id);
 
@@ -138,64 +138,63 @@ class StudentController extends Controller
 
     public function updateNoEmail($student, $request)
     {
-            if (!is_null($request->input('profile'))) {
-                $student->profile = $request->input('profile');
-                $student->sddextr->CAT = $request->input('profile');
-            }
-            if (!is_null($request->input('TITLE'))) {
-                $student->sddextr->TITLE = $request->input('TITLE');
-            }
-            if (!is_null($request->input('firstName'))) {
-                $student->nameFirst = $request->input('firstName');
-                $student->sddextr->FIRSTNAME = $request->input('firstName');
-            }
-            if (!is_null($request->input('lastName'))) {
-                $student->nameLast = $request->input('lastName');
-                $student->sddextr->LASTNAME = $request->input('lastName');
-            }
-            if (!is_null($request->input('organization'))) {
-                        $student->sddextr->DEPT = $request->input('organization');
-                    }
-            if (!is_null($request->input('contactNo'))) {
-                        $student->sddextr->PHONE = $request->input('contactNo');
-                    }
-            if (!is_null($request->input('dob'))) {
-                        $student->sddextr->BIRTH = $request->input('dob');
-                    }
-            if (!is_null($request->input('jobAppointment'))) {
-                        $student->sddextr->CATEGORY = $request->input('jobAppointment');
-                    }
-            if (!is_null($request->input('gradeLevel'))) {
-                        $student->sddextr->LEVEL = $request->input('gradeLevel');
-                    }
+        if (!is_null($request->input('profile'))) {
+            $student->profile = $request->input('profile');
+            $student->sddextr->CAT = $request->input('profile');
+        }
+        if (!is_null($request->input('TITLE'))) {
+            $student->sddextr->TITLE = $request->input('TITLE');
+        }
+        if (!is_null($request->input('firstName'))) {
+            $student->nameFirst = $request->input('firstName');
+            $student->sddextr->FIRSTNAME = $request->input('firstName');
+        }
+        if (!is_null($request->input('lastName'))) {
+            $student->nameLast = $request->input('lastName');
+            $student->sddextr->LASTNAME = $request->input('lastName');
+        }
+        if (!is_null($request->input('organization'))) {
+            $student->sddextr->DEPT = $request->input('organization');
+        }
+        if (!is_null($request->input('contactNo'))) {
+            $student->sddextr->PHONE = $request->input('contactNo');
+        }
+        if (!is_null($request->input('dob'))) {
+            $student->sddextr->BIRTH = $request->input('dob');
+        }
+        if (!is_null($request->input('jobAppointment'))) {
+            $student->sddextr->CATEGORY = $request->input('jobAppointment');
+        }
+        if (!is_null($request->input('gradeLevel'))) {
+            $student->sddextr->LEVEL = $request->input('gradeLevel');
+        }
 
-            $student->name = $student->nameFirst.' '.$student->nameLast;
-            $student->save();
-            $student->sddextr->save();
+        $student->name = $student->nameFirst . ' ' . $student->nameLast;
+        $student->save();
+        $student->sddextr->save();
     }
 
     public function updateWithEmail($student, $request)
     {
-            $this->updateNoEmail($student, $request);
+        $this->updateNoEmail($student, $request);
 
-            $student->temp_email = $request->input('email');
-            $student->approved_update = '0';
-            $student->update_token = Str::random(60);
-            $student->save();         
+        $student->temp_email = $request->input('email');
+        $student->approved_update = '0';
+        $student->update_token = Str::random(60);
+        $student->save();
 
-            $this->sendUpdateEmail($student);
+        $this->sendUpdateEmail($student);
 
-            $request->session()->flash('success', 'You have been logged out. Update Confirmation Email sent to your email address.');
+        $request->session()->flash('success', 'You have been logged out. Update Confirmation Email sent to your email address.');
 
-            // log the user out of application
-            Auth::logout();
-
+        // log the user out of application
+        Auth::logout();
     }
 
     public function sendUpdateEmail($student)
     {
         // handle invalid email by catching error of Mail method
-        
+
         // send confirmation e-mail
         Mail::to($student['temp_email'])->send(new updateEmail($student));
     }
@@ -213,14 +212,14 @@ class StudentController extends Controller
         $temp_email = Crypt::decrypt($temp_email);
         $id = Crypt::decrypt($id);
 
-        $nullCheck = User::where(['id'=>$id])->first();
+        $nullCheck = User::where(['id' => $id])->first();
         if ($nullCheck->temp_email == NULL && $nullCheck->update_token == NULL) {
             return view('confirmationLinkExpired');
         }
-        
+
         // query the user from the Users table
-        $student = User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->first();
-        
+        $student = User::where(['id' => $id, 'temp_email' => $temp_email, 'update_token' => $update_token])->first();
+
         // check if student is clicking on the latest link
         if ($student == NULL) {
             return view('confirmationLinkExpired');
@@ -234,26 +233,26 @@ class StudentController extends Controller
         if ($student->updated_at->lt($expiration)) {
             if ($student) {
                 // change data in the User table
-                User::where(['id'=>$id, 'temp_email'=>$temp_email, 'update_token'=>$update_token])->update(['email'=>$temp_email, 'temp_email'=>NULL, 'approved_update'=>'1', 'update_token'=>NULL]);
+                User::where(['id' => $id, 'temp_email' => $temp_email, 'update_token' => $update_token])->update(['email' => $temp_email, 'temp_email' => NULL, 'approved_update' => '1', 'update_token' => NULL]);
                 // change e-mail address in the sddextr
-                SDDEXTR::where(['INDEXNO'=>$student->indexno])->update(['EMAIL'=>$temp_email]);
+                SDDEXTR::where(['INDEXNO' => $student->indexno])->update(['EMAIL' => $temp_email]);
 
                 // change e-mail address in the teachers table if profile is a teacher
                 $teacher = Teachers::where('IndexNo', $student->indexno)->first();
                 if ($teacher) {
-                    $teacher->update(['email'=>$temp_email]);
+                    $teacher->update(['email' => $temp_email]);
                 }
 
                 // redirect to login page to use new email as username 
                 $request->session()->flash('success', 'E-mail address has been updated. Please log back in with your new e-mail address');
                 return redirect('login');
             } else {
-                
+
                 return view('confirmationLinkUsed');
             }
         } else {
             // set data in the User table to NULL
-            User::where(['id'=>$id])->update(['temp_email'=>NULL, 'update_token'=>NULL]);
+            User::where(['id' => $id])->update(['temp_email' => NULL, 'update_token' => NULL]);
             return view('confirmationLinkExpired');
         }
     }
