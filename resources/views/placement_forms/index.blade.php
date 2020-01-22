@@ -53,9 +53,9 @@
 
 <div class="row">
 	<div class="col-sm-12">
-		@if (Request::has('overall_approval'))
+		@if (Request::filled('overall_approval'))
 		<a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'), 'is_self_pay_form' => \Request::input('is_self_pay_form') ]) }}" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Extract Approved Placement Forms Without Cancelled Students 
-			@if (Request::has('L'))
+			@if (Request::filled('L'))
 				@if (Request::get('L') == 'A') (Arabic)
 				@elseif (Request::get('L') == 'C') (Chinese)
 				@elseif (Request::get('L') == 'E') (English)

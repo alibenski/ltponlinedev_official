@@ -28,7 +28,7 @@
           <tbody>
             <tr>
               <td>
-               <img src="https://learning.unog.ch/sites/all/themes/sdlstheme/images/CLM-TextRight_En.jpg" width="260" height="93" alt="CLM Language Training" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; margin-right: 50px;"> 
+              <img src="{{ asset("img/CLM-TextRight_En.jpg") }}" width="260" height="93" alt="CLM Language Training" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; margin-right: 50px;"> 
               </td>
               <td class="pull-right" style="padding-left: 100px;">
                 <h4 class="text-right"><strong>Language Training Programme</strong></h4>

@@ -13,74 +13,73 @@ class ReportsController extends Controller
 {
     public function baseView()
     {
-    	$orgs = Torgan::orderBy('Org Name', 'asc')->get(['Org Name','Org Full Name', 'OrgCode']);
-    	$languages = DB::table('languages')->pluck("name","code")->all();
-    	$terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
-    	$queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
+        $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name', 'OrgCode']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
+        $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
 
         $years = [];
         foreach ($queryTerm as $key => $value) {
-            $years[] = Carbon::parse($value->Term_Begin)->year ;   
+            $years[] = Carbon::parse($value->Term_Begin)->year;
         }
 
         $years = array_unique($years);
 
-    	return view('reports.baseView',  compact('orgs', 'languages', 'terms', 'years'));
+        return view('reports.baseView',  compact('orgs', 'languages', 'terms', 'years'));
     }
 
     public function getReportsTable(Request $request)
     {
-    	if ($request->ajax()) {
+        if ($request->ajax()) {
             $columns = [
                 'DEPT', 'L'
             ];
-    		
-    		if ($request->Term) {
-	            $term = $request->Term;
-	            $recordsMerged = $this->queryRecordsMerged($term,$columns,$request);
-	            $data = $recordsMerged;
-    		}
 
-    		if ($request->year) {
-    			$arrayCollection = $this->queryByYear($request, $columns);
-    			$data = $arrayCollection;
-    		}
+            if ($request->Term) {
+                $term = $request->Term;
+                $recordsMerged = $this->queryRecordsMerged($term, $columns, $request);
+                $data = $recordsMerged;
+            }
 
-    		return response()->json(['data' => $data]); 
-    	}
+            if ($request->year) {
+                $arrayCollection = $this->queryByYear($request, $columns);
+                $data = $arrayCollection;
+            }
+
+            return response()->json(['data' => $data]);
+        }
     }
 
-    public function queryRecordsMerged($term,$columns,$request)
+    public function queryRecordsMerged($term, $columns, $request)
     {
-    	$records = new Repo;
+        $records = new Repo;
         foreach ($columns as $column) {
-            if ($request->has($column)) {
-                $records = $records->where($column, $request->input($column) )
-                	->where('Term', $term)
+            if ($request->filled($column)) {
+                $records = $records->where($column, $request->input($column))
+                    ->where('Term', $term)
                     ->with('languages')
                     ->with('courses')
                     ->with('coursesOld')
                     ->with('users');
-            }  
+            }
         }
 
         $recordsCancelled = new Repo;
         $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
         foreach ($columns as $column) {
-            if ($request->has($column)) {
+            if ($request->filled($column)) {
                 if (is_null($termCancelDeadline)) {
-                	$recordsCancelled = $recordsCancelled->onlyTrashed();
+                    $recordsCancelled = $recordsCancelled->onlyTrashed();
                 } else {
-                	$recordsCancelled = $recordsCancelled->onlyTrashed()->where('deleted_at','>', $termCancelDeadline);
+                    $recordsCancelled = $recordsCancelled->onlyTrashed()->where('deleted_at', '>', $termCancelDeadline);
                 }
-                	$recordsCancelled = $recordsCancelled->where($column, $request->input($column) )
-	                	->where('Term', $term)
-	                    ->with('languages')
-	                    ->with('courses')
-	                    ->with('coursesOld')
-	                    ->with('users');
-
-            }  
+                $recordsCancelled = $recordsCancelled->where($column, $request->input($column))
+                    ->where('Term', $term)
+                    ->with('languages')
+                    ->with('courses')
+                    ->with('coursesOld')
+                    ->with('users');
+            }
         }
 
         $records = $records->get();
@@ -92,9 +91,9 @@ class ReportsController extends Controller
 
     public function queryByYear($request, $columns)
     {
-    	$terms = Term::orderBy('Term_Code', 'asc')
-                ->select('Term_Code', 'Term_Begin')
-                ->get();
+        $terms = Term::orderBy('Term_Code', 'asc')
+            ->select('Term_Code', 'Term_Begin')
+            ->get();
 
         $termCode = [];
         foreach ($terms as $key => $value) {
@@ -106,20 +105,19 @@ class ReportsController extends Controller
 
         $arrayCollection = [];
         foreach ($termCode as $term) {
-        	// 
-	        $recordsMerged = $this->queryRecordsMerged($term,$columns,$request);
-	        // 
-	        $arrayCollection[] = $recordsMerged;
+            // 
+            $recordsMerged = $this->queryRecordsMerged($term, $columns, $request);
+            // 
+            $arrayCollection[] = $recordsMerged;
         }
 
         $result = [];
         foreach ($arrayCollection as $k => $v) {
-        	foreach ($v as $a => $b) {
-        		$result[] = $b;
-        	}
+            foreach ($v as $a => $b) {
+                $result[] = $b;
+            }
         }
 
         return $result;
-
     }
 }
