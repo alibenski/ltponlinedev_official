@@ -8,45 +8,55 @@
 @stop
 
 @section('content')
-
-<div class="table-section">
-	<div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
-	<h3>Viewing All Current Students</h3>
-	<table id="sampol" class="table table-striped no-wrap" width="100%">
-		<thead>
-			<tr>
-				<th>Term</th>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Language</th>
-				<th>Description</th>
-				<th>Teacher</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach ($query_students_current_term as $el)
-			<tr>
-				<td>{{ $el->Term }}</td>
-				<td>{{ $el->users->name }}</td>
-				<td>{{ $el->users->email }}</td>
-				<td>{{ $el->languages->name }}</td>
-				<td>{{ $el->courses->EDescription }}</td>
-				<td>{{ $el->classrooms->teachers->Tch_Name }}</td>
-			</tr>
-			@endforeach
-		</tbody>
-		<tfoot>
-			<tr>
-				<th>Term</th>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Language</th>
-				<th>Description</th>
-				<th>Teacher</th>
-			</tr>
-		</tfoot>
-	</table>
-</div>
+@if (!is_null($query_students_current_term))
+	<div class="table-section">
+		<div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
+		<h3>Viewing All Current Students</h3>
+		<table id="sampol" class="table table-striped no-wrap" width="100%">
+			<thead>
+				<tr>
+					<th>Term</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Language</th>
+					<th>Description</th>
+					<th>Teacher</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($query_students_current_term as $el)
+				<tr>
+					<td>{{ $el->Term }}</td>
+					<td>{{ $el->users->name }}</td>
+					<td>{{ $el->users->email }}</td>
+					<td>{{ $el->languages->name }}</td>
+					<td>{{ $el->courses->EDescription }}</td>
+					<td>{{ $el->classrooms->teachers->Tch_Name }}</td>
+				</tr>
+				@endforeach
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>Term</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Language</th>
+					<th>Description</th>
+					<th>Teacher</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+@else
+	<a href="{{ route('admin_dashboard') }}">
+		<div class="callout callout-danger col-sm-12">
+			<h4>Warning!</h4>
+			<p>
+				<b>Term</b> is not set. Click here to set the Term field for this session.
+			</p>
+		</div>
+	</a>
+@endif
 
 @stop
 
