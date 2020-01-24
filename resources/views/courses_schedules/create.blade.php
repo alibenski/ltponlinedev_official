@@ -205,8 +205,8 @@
                 @endforeach
               </div>                  
             </div>
-            <div class="col-md-4 float ">
-              <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block btn-space my-float">
+            <div class="col-md-4">
+              <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block btn-space">
             </div>
           </div>
         </div>
@@ -288,21 +288,6 @@
           }
       });
   }); 
-
-  // $("select[name='L']").change(function(){
-  //     var L = $(this).val();
-  //     var token = $("input[name='_token']").val();
-
-  //     $.ajax({
-  //         url: "{{ route('select-ajax') }}", 
-  //         method: 'POST',
-  //         data: {L:L, _token:token},
-  //         success: function(data, status) {
-  //           $("select[name='course_id']").html('');
-  //           $("select[name='course_id']").html(data.options);
-  //         }
-  //     });
-  // }); 
 </script>
 
 <script type="text/javascript">
