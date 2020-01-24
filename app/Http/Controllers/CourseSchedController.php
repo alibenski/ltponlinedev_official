@@ -15,6 +15,7 @@ use App\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseSchedController extends Controller
 {
@@ -27,8 +28,6 @@ class CourseSchedController extends Controller
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $course_schedule = CourseSchedule::orderBy('Te_Term', 'DESC')->paginate(15);
-
-        
 
         return view('courses_schedules.index', compact('course_schedule', 'terms'));
     }
@@ -109,6 +108,7 @@ class CourseSchedController extends Controller
                 'Te_Hours' => $request->duration_id, 
                 'Te_Description' => $request->format_id,
                 'Te_Price' => $request->price_id,
+                'created_by' => Auth::user()->id,
                 'created_at' =>  \Carbon\Carbon::now(),
                 'updated_at' =>  \Carbon\Carbon::now(),
                 ]);
@@ -154,7 +154,6 @@ class CourseSchedController extends Controller
         //         'time' => $implode_times,
         //         ]);
         //     $ingredients_csv->save();
-
 
         $request->session()->flash('success', 'Course + Schedule saved!'); //laravel 5.4 version
         return redirect()->back();
@@ -264,8 +263,21 @@ class CourseSchedController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $course_schedule = CourseSchedule::find($id);
+        $course_schedule->deleted_by = Auth::user()->id;
+        $course_schedule->save();
+
+        $classrooms = Classroom::orderBy('id', 'desc')->where('cs_unique', $course_schedule->cs_unique)->get();
+        foreach ($classrooms as $classroom) {
+            $classroom->deleted_by = Auth::user()->id;
+            $classroom->save();
+            $classroom->delete();
+        }        
+        $course_schedule->delete();
+
+        $request->session()->flash('warning', 'Record deleted!');
+        return redirect()->back();
     }
 }

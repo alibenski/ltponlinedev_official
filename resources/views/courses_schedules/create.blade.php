@@ -3,19 +3,37 @@
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <style>
+      .float{
+        position:fixed;
+        width:12%;
+        height:60px;
+        /* bottom:40px; */
+        right:40%;
+        /* background-color:#0C9;
+        color:#FFF;
+        border-radius:50px; */
+        text-align:center;
+        box-shadow: 4px 4px 3px #999;
+      }
+
+      .my-float{
+        margin-top:13px;
+      }
+    </style>
 @stop
 
 @section('content')
 
 <div class="row">
-  <div class="col-md-10 ">
+  <div class="col-md-12 ">
     <h2><i class="fa fa-calendar-o"></i> Create Course + Schedule</h2>
     <h5 class="alert alert-warning alert-block"><i class="fa fa-info-circle"></i> Use this function to create the class schedules (Course-Schedule combinations) which students see in the dropdown list on the enrolment form.</h5>
     <hr>
 
     <form method="POST" action="{{ route('course-schedule.store') }}">
       <div class="row">
-      <div class="col-md-6"> 
+      <div class="col-md-5"> 
       <div class="panel panel-primary">
         <div class="panel-heading"><strong>Basic Info</strong></div>
         <div class="panel-body">
@@ -49,32 +67,34 @@
               </select>
           </div>
 
-          <div class="form-group">
-            <label for="language_css" class="col-md-10 control-label" style="margin: 5px 5px;">Language CSS (Automatically Rendered based on Language selection above via JQuery): </label>
-            <div class="col-md-12 inputGroupContainer">
-                  <div class="input-group">
-                      <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="language_css" class="form-control"  type="text" value="" readonly>                                    
-                  </div>
-            </div>
-          </div> 
+          <div class="hidden">
+            <div class="form-group">
+              <label for="language_css" class="col-md-10 control-label" style="margin: 5px 5px;">Language CSS (Automatically Rendered based on Language selection above via JQuery): </label>
+              <div class="col-md-12 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="language_css" class="form-control"  type="text" value="" readonly>                                    
+                    </div>
+              </div>
+            </div> 
 
-          <div class="form-group">
-            <label for="availability_css" class="col-md-10 control-label" style="margin: 5px 5px;">Availability CSS (Automatically Rendered via Controller): </label>
-            <div class="col-md-12 inputGroupContainer">
-                  <div class="input-group">
-                      <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="availability_css" class="form-control"  type="text" value="" readonly>                                    
-                  </div>
-            </div>
-          </div> 
+            <div class="form-group">
+              <label for="availability_css" class="col-md-10 control-label" style="margin: 5px 5px;">Availability CSS (Automatically Rendered via Controller): </label>
+              <div class="col-md-12 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="availability_css" class="form-control"  type="text" value="" readonly>                                    
+                    </div>
+              </div>
+            </div> 
 
-          <div class="form-group">
-            <label for="website_language" class="col-md-10 control-label" style="margin: 5px 5px;">Website Language (Automatically Rendered via static HTML): </label>
-            <div class="col-md-12 inputGroupContainer">
-                  <div class="input-group">
-                      <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="website_language" class="form-control"  type="text" value="" readonly>                                    
-                  </div>
-            </div>
-          </div> 
+            <div class="form-group">
+              <label for="website_language" class="col-md-10 control-label" style="margin: 5px 5px;">Website Language (Automatically Rendered via static HTML): </label>
+              <div class="col-md-12 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="website_language" class="form-control"  type="text" value="" readonly>                                    
+                    </div>
+              </div>
+            </div> 
+          </div>
 
           <div class="form-group">
               <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course: </label>
@@ -88,7 +108,7 @@
       </div>
       </div>
 
-      <div class="col-md-6"> 
+      <div class="col-md-7"> 
       <div class="panel panel-info">
         <div class="panel-heading">Format Duration Pricing</div>
         <div class="panel-body">
@@ -146,15 +166,17 @@
       </div>
 
       <div class="row">
-      <div class="col-md-6">  
+      <div class="col-md-7">  
       <div class="panel panel-primary">
         <div class="panel-heading"><strong>Schedule</strong></div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-md-4 ">
-              <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block btn-space">
-            </div>
             <div class="col-md-12">
+              <h4 class="text-center">Select the schedule(s) then click Assign button. </h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
               <div class="col-md-12">
                 @foreach ($schedules as $id => $name)
                     <div class="checkbox">
@@ -183,12 +205,15 @@
                 @endforeach
               </div>                  
             </div>
+            <div class="col-md-4 float ">
+              <input type="button" value="Assign" id="buttonClass" class="btn btn-info btn-block btn-space my-float">
+            </div>
           </div>
         </div>
       </div>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-5">
       <div class="panel panel-info">
         <div class="panel-heading">Operation</div>
         <div class="panel-body">

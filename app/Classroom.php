@@ -3,12 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Classroom extends Model
 {
+    use SoftDeletes;
+    
     protected $table = 'LTP_TEVENTCur';
     protected $fillable = [
-        'Code', 'cs_unique', 'Te_Term', 'L', 'Te_Code_New', 'schedule_id', 'sectionNo', 'Tch_ID', 'Te_Mon', 'Te_Mon_Room', 'Te_Mon_BTime', 'Te_Mon_ETime', 'Te_Tue', 'Te_Tue_Room', 'Te_Tue_BTime', 'Te_Tue_ETime', 'Te_Wed', 'Te_Wed_Room', 'Te_Wed_BTime', 'Te_Wed_ETime', 'Te_Thu', 'Te_Thu_Room', 'Te_Thu_BTime', 'Te_Thu_ETime', 'Te_Fri', 'Te_Fri_Room', 'Te_Fri_BTime', 'Te_Fri_ETime', 
+        'Code', 'cs_unique', 'Te_Term', 'L', 'Te_Code_New', 'schedule_id', 'sectionNo', 'Tch_ID', 'Te_Mon', 'Te_Mon_Room', 'Te_Mon_BTime', 'Te_Mon_ETime', 'Te_Tue', 'Te_Tue_Room', 'Te_Tue_BTime', 'Te_Tue_ETime', 'Te_Wed', 'Te_Wed_Room', 'Te_Wed_BTime', 'Te_Wed_ETime', 'Te_Thu', 'Te_Thu_Room', 'Te_Thu_BTime', 'Te_Thu_ETime', 'Te_Fri', 'Te_Fri_Room', 'Te_Fri_BTime', 'Te_Fri_ETime', 'deleted_by'
     ];
 
     /**
