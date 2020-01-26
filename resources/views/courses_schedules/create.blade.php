@@ -219,20 +219,78 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-md-5 col-md-offset-1">
-              <a href="{{ route('course-schedule.index') }}" class="btn btn-danger btn-block btn-space">Back</a>
+              <a href="{{ route('course-schedule.index') }}" class="btn btn-default btn-block btn-space">Back</a>
             </div>
             <div class="col-md-5">  
-              <button id="saveBtn" type="submit" class="btn btn-space btn-success btn-block button-prevent-multi-submit" disabled="">Save</button>
-              <input type="hidden" name="_token" value="{{ Session::token() }}">
+              <button id="confirmBtn" type="submit" class="btn btn-space btn-success btn-block button-prevent-multi-submit" disabled="">Save</button>
             </div>
           </div>
         </div>
       </div>
       </div>
       </div>
-
       <input  name="cs_unique" type="hidden" value="" readonly> 
-      
+
+      <!-- Modal form to show a post -->
+      <div id="showModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">×</button>
+                      <h4 class="modal-title">Confirm Info</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="confirmTerm">Term:</label>
+                        <p class="confirm-term">--</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="confirmLanguage">Language:</label>
+                        <p class="confirm-language">--</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="confirmCourse">Course:</label>
+                        <p class="confirm-course">--</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="confirmFormat">Format:</label>
+                        <p class="confirm-format">--</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="confirmDuration">Duration:</label>
+                        <p class="confirm-duration">--</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="confirmPrice">Price:</label>
+                        <p class="confirm-price">--</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-12" for="confirmSchedule">Schedule:</label>
+
+                          <ul class="confirm-schedule"></ul>
+
+                    </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="col-md-5 col-md-offset-1">
+                      <button type="button" class="btn btn-space btn-danger btn-block" data-dismiss="modal">
+                          <span class='glyphicon glyphicon-remove'></span> 
+                          Cancel
+                      </button>
+                    </div>
+                    <div class="col-md-5">
+                      <button id="saveBtn" type="submit" class="btn btn-space btn-success btn-block button-prevent-multi-submit">
+                        Confirm & Save
+                      </button>
+                      <input type="hidden" name="_token" value="{{ Session::token() }}">
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
     </form>
   </div>
 </div>﻿
@@ -241,7 +299,52 @@
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
-  
+<script>
+  $('#confirmBtn').on('click', function(event) {
+    event.preventDefault();
+    $('#showModal').modal('show');
+    const term = $("select[name='term_id']").children('option:selected').text();
+    const language = $("select[name='L']").children('option:selected').text();
+    const course = $("select[name='course_id']").children('option:selected').text();
+    const format = $("input[name='format_id']:checked").parent('label').text();
+    const duration = $("input[name='duration_id']:checked").parent('label').text();
+    const price = $("input[name='price_id']:checked").parent('label').text();
+    let schedules = [];    
+    let chkArray = [];    
+    $('input[name="schedule_id[]"]:checked').each(function(i, v) {
+      schedules.push($(this).parent('label').text());
+      chkArray.push($(this).val());
+    });
+    let teachers = [];
+    let rooms = [];
+    $.each(chkArray, function(index, val) {
+      teachers.push($('select#Tch_ID_select_'+val).children('option:selected').text());
+      rooms.push($('select#room_id_select_'+val).children('option:selected').text());
+    });
+
+    $('p.confirm-term').text(term);
+    $('p.confirm-language').text(language);
+    $('p.confirm-course').text(course);
+    $('p.confirm-format').text(format);
+    $('p.confirm-duration').text(duration);
+    $('p.confirm-price').text(price);
+
+    $.each(schedules, function(index, val) {
+      $('ul.confirm-schedule').append("<li class='main schedule-"+index+"'>"+val+"</li>");
+    });
+    $.each(teachers, function(index, val) {
+      $('li.schedule-'+index).append("<ul class='confirm-teacher'><li class='teacher-"+index+"'>"+val+"</li></ul>");
+    });
+    $.each(rooms, function(index, val) {
+      $('li.schedule-'+index).append("<ul class='confirm-room'><li class='room-"+index+"'>"+val+"</li></ul>");
+    });
+  });
+
+  $('#showModal').on('hidden.bs.modal', function (e) {
+    $('li.main').remove();
+  })
+
+</script>  
 <script>
   $(document).ready(function(){
     $('input[type=checkbox]').prop('checked',false);
@@ -338,10 +441,10 @@ $(document).ready(function(){
     /* check if there is selected checkboxes, by default the length is 1 as it contains one single comma */
     if(selected.length > 0){
       console.log("You have selected " + selected)
-      $('#saveBtn').removeAttr('disabled');
+      $('#confirmBtn').removeAttr('disabled');
     }else{
       alert("Please at least check one of the checkbox");
-      $('#saveBtn').attr('disabled', 'disabled');
+      $('#confirmBtn').attr('disabled', 'disabled');
     }
   }
 });   
