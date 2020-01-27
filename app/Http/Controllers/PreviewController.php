@@ -484,6 +484,10 @@ class PreviewController extends Controller
     public function cancelConvocation(Request $request, $codeindexidclass)
     {
         $record = Repo::where('CodeIndexIDClass', $codeindexidclass)->first();
+        if(is_null($record)){
+            session()->flash('error', 'No action taken. The student might have already been moved to another class. ');
+            return back();
+        }
         $staff_name = $record->users->name;
         $display_language_en = $record->courses->EDescription;
         $display_language_fr = $record->courses->FDescription;

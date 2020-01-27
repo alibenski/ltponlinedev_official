@@ -169,12 +169,17 @@ $(document).ready(function () {
 </script>
 
 <script>
-	$('.btn-move-student').on('click', function () {
+	$('.btn-move-student').on('click', function (event) {
 		var classroom_id = $("select[name='CodeClass']").val();
     var term = $("input[name='term_id']").val();
   	var admin_comment = $("textarea[name='admin_comment']").val();
   	var token = $("input[name='_token']").val();
 
+    if (classroom_id === null) {
+      event.preventDefault();
+      return alert('Please fill the required fields.');
+    }
+    
   	var allVals = [];  
       $(".sub_chk:checked").each(function() {  
           allVals.push($(this).attr('data-id'));

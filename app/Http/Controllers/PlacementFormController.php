@@ -657,11 +657,14 @@ class PlacementFormController extends Controller
     /**
      * Page/View to assign course to a placement examination
      */
-    public function editAssignCourse($id)
+    public function editAssignCourse(Request $request, $id)
     {
         $languages = DB::table('languages')->pluck("name","code")->all();
         $placement_form = PlacementForm::find($id);
-        
+        if(is_null($placement_form)){
+            $request->session()->flash('error', 'Placement form record id # '.$id.' is not valid. The form may have already been cancelled.'); 
+            return redirect()->route('placement-form-filtered');
+        }
         $prev_termCode = Term::where('Term_Code', $placement_form->Term)->first()->Term_Prev;
         $waitlists = Repo::where('INDEXID',$placement_form->INDEXID)
             ->where('Term',$prev_termCode)
