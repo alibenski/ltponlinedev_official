@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Session;
 
 class CourseSchedController extends Controller
 {
@@ -26,10 +27,10 @@ class CourseSchedController extends Controller
      */
     public function index()
     {
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $course_schedule = CourseSchedule::orderBy('Te_Term', 'DESC')->paginate(15);
+        $term = Session::get('Term');
+        $course_schedule = CourseSchedule::orderBy('L', 'asc')->where('Te_Term', $term)->get();
 
-        return view('courses_schedules.index', compact('course_schedule', 'terms'));
+        return view('courses_schedules.index', compact('course_schedule', 'term'));
     }
 
     /**
@@ -40,13 +41,13 @@ class CourseSchedController extends Controller
     public function create()
     {
         $courses = Course::all();
-        $languages = Language::pluck("name","code")->all();
-        $schedules = Schedule::pluck("name","id")->all();
+        $languages = Language::pluck("name", "code")->all();
+        $schedules = Schedule::pluck("name", "id")->all();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en","id")->all();
-        $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en","id")->all();
-        $price = DB::table('tblLTP_Course_Price')->pluck("price","id")->all();
+        $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en", "id")->all();
+        $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en", "id")->all();
+        $price = DB::table('tblLTP_Course_Price')->pluck("price", "id")->all();
         $teachers = Teachers::where('In_Out', '1')->get();
         $rooms = Room::all();
 
@@ -67,70 +68,70 @@ class CourseSchedController extends Controller
         $Tch_ID = $request->Tch_ID;
         $room_id = $request->room_id;
         $cs_unique = $request->cs_unique;
-        $codex = [];     
+        $codex = [];
         //concatenate (implode) Code input before validation   
         //check if $code has no input
-        if ( empty( $code ) ) {
+        if (empty($code)) {
             //loop based on $room_id count and store in $codex array
-            for ($i=0; $i < count($schedule_id); $i++) { 
+            for ($i = 0; $i < count($schedule_id); $i++) {
                 $codex[] = array($course_id, $schedule_id[$i], $term_id);
                 //implode array elements and pass imploded string value to $codex array as element
                 $codex[$i] = implode('-', $codex[$i]);
                 //for each $codex array element stored, loop array merge method
                 //and output each array element to a string via $request->Code
                 foreach ($codex as $value) {
-                    $request->merge( [ 'cs_unique' => $value ] );
+                    $request->merge(['cs_unique' => $value]);
                 }
-                        var_dump($request->cs_unique);
-                        $this->validate($request, array(
-                            'cs_unique' => 'unique:tblLTP_CourseSchedule,cs_unique|',
-                        ));
+                var_dump($request->cs_unique);
+                $this->validate($request, array(
+                    'cs_unique' => 'unique:tblLTP_CourseSchedule,cs_unique|',
+                ));
             }
         }
-                        $this->validate($request, array(
-                            'course_id' => 'required|alpha_num', 
-                            'term_id' => 'required|integer|',
-                            'schedule_id' => 'required|array',
-                            'Tch_ID' => 'required|array',
-                            'room_id' => 'required|array',
-                        ));
+        $this->validate($request, array(
+            'course_id' => 'required|alpha_num',
+            'term_id' => 'required|integer|',
+            'schedule_id' => 'required|array',
+            'Tch_ID' => 'required|array',
+            'room_id' => 'required|array',
+        ));
         //loop for storing Code value to database
-        $ingredients = [];        
+        $ingredients = [];
         for ($i = 0; $i < count($schedule_id); $i++) {
             $ingredients[] = new  CourseSchedule([
-                'L'=> $request->L,
+                'L' => $request->L,
                 'Te_Code_New' => $course_id,
                 'Te_Term' => $term_id,
                 'schedule_id' => $schedule_id[$i],
                 'Tch_ID' => $Tch_ID[$i],
                 'room_id' => $room_id[$i],
-                'cs_unique' => $course_id.'-'.$schedule_id[$i].'-'.$term_id,
-                'Te_Hours' => $request->duration_id, 
+                'cs_unique' => $course_id . '-' . $schedule_id[$i] . '-' . $term_id,
+                'Te_Hours' => $request->duration_id,
                 'Te_Description' => $request->format_id,
                 'Te_Price' => $request->price_id,
                 'created_by' => Auth::user()->id,
                 'created_at' =>  \Carbon\Carbon::now(),
                 'updated_at' =>  \Carbon\Carbon::now(),
-                ]);
-                    foreach ($ingredients as $data) {
-                        $data->save();
-                    }
+            ]);
+            foreach ($ingredients as $data) {
+                $data->save();
+            }
 
             // fetch and create classroom according to the newly created record(s)  
-            $unique_key = $course_id.'-'.$schedule_id[$i].'-'.$term_id;                
+            $unique_key = $course_id . '-' . $schedule_id[$i] . '-' . $term_id;
             $new_record = CourseSchedule::where('cs_unique', $unique_key)->get();
 
-            $this->saveClassRoom($new_record); 
+            $this->saveClassRoom($new_record);
         }
         // dd($new_record);
-        
+
         //query newly saved course+schedule entries to produce needed csv extract
         // $get_courses = CourseSchedule::where('Te_Code_New', $request->course_id)
         //     ->where('Te_Term', $term_id )->get();
         // $get_courses_first = CourseSchedule::where('Te_Code_New', $request->course_id)
         //     ->where('Te_Term', $term_id )->first();
         // $get_course_name = $get_courses_first->course->Description;
-        
+
         // $days_arr = [];
         // for ($i = 0; $i < count($get_courses); $i++) {
         //     $days_arr[] = [$get_courses[$i]->scheduler->begin_day]; 
@@ -138,7 +139,7 @@ class CourseSchedController extends Controller
         // }
         //     $implode_days = implode('>', $days_arr);
         //     var_dump($implode_days);
-        
+
         // $times_arr = [];
         // for ($i = 0; $i < count($get_courses); $i++) {
         //     $times_arr[] = [$get_courses[$i]->scheduler->time_combination];
@@ -157,14 +158,13 @@ class CourseSchedController extends Controller
 
         $request->session()->flash('success', 'Course + Schedule saved!'); //laravel 5.4 version
         return redirect()->back();
-
     }
 
     public function saveClassRoom($new_record)
     {
         foreach ($new_record as $value) {
             $new_class = new Classroom;
-            $new_class->Code = $value->Te_Code_New.'-'.$value->schedule_id.'-'.$value->Te_Term.'-1';
+            $new_class->Code = $value->Te_Code_New . '-' . $value->schedule_id . '-' . $value->Te_Term . '-1';
             $new_class->Te_Term = $value->Te_Term;
             $new_class->cs_unique = $value->cs_unique;
             $new_class->L = $value->L;
@@ -228,12 +228,12 @@ class CourseSchedController extends Controller
     public function edit($id)
     {
         $course_schedule = CourseSchedule::find($id);
-        $languages = Language::pluck("name","code")->all();
-        $schedules = Schedule::pluck("name","id")->all();
+        $languages = Language::pluck("name", "code")->all();
+        $schedules = Schedule::pluck("name", "id")->all();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en","id")->all();
-        $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en","id")->all();
+        $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en", "id")->all();
+        $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en", "id")->all();
         $teachers = Teachers::where('In_Out', '1')->get();
         $rooms = Room::all();
 
@@ -250,10 +250,10 @@ class CourseSchedController extends Controller
     public function update(Request $request, $id)
     {
         $classroom = Classroom::where('cs_unique', $request->cs_unique)->first();
-        
+
         $course_schedule = CourseSchedule::find($id);
 
-        
+
         dd($classroom, $course_schedule);
     }
 
@@ -274,7 +274,7 @@ class CourseSchedController extends Controller
             $classroom->deleted_by = Auth::user()->id;
             $classroom->save();
             $classroom->delete();
-        }        
+        }
         $course_schedule->delete();
 
         $request->session()->flash('warning', 'Record deleted!');
