@@ -71,6 +71,9 @@
 					{{-- <th>Class Code</th> --}}
 					<th>Course Name</th>
 					<th>Schedule</th>
+                    <th>Format</th>
+                    <th>Duration</th>
+                    <th>Price</th>
 					<th>Sections</th>
 					<th>Operation</th>
 				</thead>
@@ -97,6 +100,27 @@
 								{{ $classroom->scheduler->name }}
 								@endif
 							</td>
+                            <td>
+                                @if(empty( $classroom->courseformat->format_name_en ))
+                                null
+                                @else 
+                                {{ $classroom->courseformat->format_name_en }}
+                                @endif
+                            </td>
+                            <td>
+                                @if(empty( $classroom->courseduration->duration_name_en ))
+                                null
+                                @else 
+                                {{ $classroom->courseduration->duration_name_en }}
+                                @endif
+                            </td>
+                            <td>
+                                @if(empty( $classroom->prices->price ))
+                                null
+                                @else 
+                                {{ $classroom->prices->price }}
+                                @endif
+                            </td>
 							<td>
 								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
                             </td>

@@ -57,4 +57,8 @@ class CourseSchedule extends Model
     public function courseformat() {
     return $this->belongsTo('App\CourseFormat', 'Te_Description', 'id'); 
     }
+
+    public function classroom() {
+    return $this->hasMany('App\Classroom', 'cs_unique', 'cs_unique'); 
+    }
 }

@@ -68,4 +68,8 @@ class Classroom extends Model
     public function pash() {
     return $this->hasMany('App\Repo', 'CodeClass', 'Code'); 
     }
+
+    public function courseSchedule() {
+    return $this->belongsTo('App\CourseSchedule', 'cs_unique', 'cs_unique'); 
+    }
 }
