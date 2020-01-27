@@ -4,8 +4,12 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
 @section('content')
+<div class="row">
+	<div class="col-md-12">
+		@include('admin.partials._termSessionMsg')
+	</div>
+</div>
 <div class="container">
-	@include('admin.partials._termSessionMsg')
 	<div class="row">
 		<div class="col-md-12">
 			<span><h2><i class="fa fa-calendar-o"></i> Course + Schedule Before Enrolment</h2></span>
@@ -22,7 +26,7 @@
 @if (Session::has('Term'))
 <div class="row">
 	<div class="col-md-12">
-		{{-- <div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div> --}}
+		<div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
 		<div class="filtered-table table-responsive">
 			<table id="sampol" class="table table-bordered table-striped">
 				<thead>
@@ -99,15 +103,15 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script>
-// $('#sampol').DataTable({
-// 	"fixedHeader": true,
-// 	"deferRender": true,
-// 	"dom": 'B<"clear">lfrtip',
-// 	"buttons": [
-// 			'copy', 'csv', 'excel', 'pdf'
-// 		],
-// });
-// $(".preloader2").fadeOut(600);
+$('#sampol').DataTable({
+	"fixedHeader": true,
+	"deferRender": true,
+	"dom": 'B<"clear">lfrtip',
+	"buttons": [
+			'copy', 'csv', 'excel', 'pdf'
+		],
+});
+$(".preloader2").fadeOut(600);
 </script>
 <script>
 $('input.delete-record').on('click', function(event) {

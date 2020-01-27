@@ -10,13 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @stop
 @section('content')
+@include('admin.partials._termSessionMsg')
 <div class="container">
 	<div class="row">
         <div class="alert bg-gray col-sm-12">
             <h4 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Classes - Assign Rooms and Teachers</strong></h4>
         </div>
-
-        @include('admin.partials._termSessionMsg')
         
         <div class="col-sm-12">
             <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
