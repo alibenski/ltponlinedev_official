@@ -110,6 +110,9 @@ $('#sampol').DataTable({
 	"buttons": [
 			'copy', 'csv', 'excel', 'pdf'
 		],
+	"oLanguage": {
+		"sSearch": "Search Filter:"
+		}
 });
 $(".preloader2").fadeOut(600);
 </script>

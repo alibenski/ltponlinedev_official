@@ -3,9 +3,9 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
     <!-- icheck checkboxes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/square/yellow.css">
-
     <!-- toastr notifications -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @stop
@@ -16,11 +16,9 @@
         <div class="alert bg-gray col-sm-12">
             <h4 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Classes - Assign Rooms and Teachers</strong></h4>
         </div>
-        
+    @if(Session::has('Term'))
         <div class="col-sm-12">
             <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
-
-                @if(Session::has('Term'))
                 <input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
                     
                     <div class="form-group">
@@ -54,16 +52,17 @@
                     <button type="submit" class="btn btn-success">Submit</button>
                     <a href="/admin/classrooms/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
                 </div>
-                @endif
             </form>
         </div>
 
 	</div> 
     {{-- End of Filter Row --}}
-
+    
 	<div class="row">
-		<div class="col-sm-10 class-sm-offset-2">
-			<table class="table">
+		<div class="col-sm-12">
+            <div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
+		    <div class="filtered-table table-responsive">
+			<table id="sampol" class="table">
 				<thead>
 					<th>#</th>
 					<th>Term</th>
@@ -131,7 +130,7 @@
 
 				</tbody>
 			</table>
-			{{ $classrooms->links() }}		
+		    </div>		
 		</div>
 	</div>
     <!-- Modal form to show a post -->
@@ -479,10 +478,14 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 
 @section('java_script')
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <!-- toastr notifications -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -512,6 +515,19 @@ $(document).ready(function() {
     .always(function() {
         console.log("complete check if batch has ran");
     });
+
+    $('#sampol').DataTable({
+        "fixedHeader": true,
+        "deferRender": true,
+        "dom": 'B<"clear">lfrtip',
+        "buttons": [
+                'copy', 'csv', 'excel', 'pdf'
+            ],
+        "oLanguage": {
+            "sSearch": "Search Filter:"
+            }
+    });
+    $(".preloader2").fadeOut(600);
 
 });
 </script>
@@ -763,34 +779,6 @@ $(document).ready(function() {
                     } else {
                         toastr.success('Successfully created!', 'Success Alert', {timeOut: 5000});
                         location.reload(true);
-                        // $('.item' + data.id).replaceWith("<tr class='item" + data.id + "'><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.content + "</td><td class='text-center'><input type='checkbox' class='edit_published' data-id='" + data.id + "'></td><td>Right now</td><td><button class='show-modal btn btn-success' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-eye-open'></span> Show</button> <button class='edit-modal btn btn-info' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" + data.id + "' data-title='" + data.title + "' data-content='" + data.content + "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>");
-
-                        // if (data.is_published) {
-                        //     $('.edit_published').prop('checked', true);
-                        //     $('.edit_published').closest('tr').addClass('warning');
-                        // }
-                        // $('.edit_published').iCheck({
-                        //     checkboxClass: 'icheckbox_square-yellow',
-                        //     radioClass: 'iradio_square-yellow',
-                        //     increaseArea: '20%'
-                        // });
-                        // $('.edit_published').on('ifToggled', function(event) {
-                        //     $(this).closest('tr').toggleClass('warning');
-                        // });
-                        // $('.edit_published').on('ifChanged', function(event){
-                        //     id = $(this).data('id');
-                        //     $.ajax({
-                        //         type: 'POST',
-                        //         url: "",
-                        //         data: {
-                        //             '_token': $('input[name=_token]').val(),
-                        //             'id': id
-                        //         },
-                        //         success: function(data) {
-                        //             // empty
-                        //         },
-                        //     });
-                        // });
                     }
                 }
             });

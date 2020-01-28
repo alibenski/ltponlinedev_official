@@ -2,7 +2,7 @@
 <div class="alert alert-success col-sm-12">
     <h4><i class="icon fa fa-bullhorn fa-2x"></i>Reminder!</h4>
     <p>
-        All <b>Term</b> fields are currently set to: <strong>{{ Session::get('Term') }}</strong>
+        All <b>Term</b> fields are currently set to: <span class="badge" style="font-size: 150%;"><strong>{{ Session::get('Term') }}</strong></span>
     </p>
 </div>
 @else
