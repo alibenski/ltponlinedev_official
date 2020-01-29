@@ -50,10 +50,13 @@
                             <p class="lead">You are brought to this page either because... <br>
                                 <ol>
                                     <h3>
-                                        <p><i class="fa fa-star"></i> You are <strong>the HR Learning Partner of CLM UNOG</strong> and have made a decision to approve or disapprove an enrolment course of your staff member or,</p>
+                                        <p><i class="fa fa-star"></i> You are <strong>the HR Learning Partner of UNOG CLM</strong> and have made a decision to approve or disapprove an enrolment course of your staff member </p>
                                     </h3>
                                     <h3>
-                                        <p><i class="fa fa-star"></i> You have already made a decision and unfortunately, you cannot change it anymore.</p>
+                                        <p><i class="fa fa-star"></i> You have already made a decision and unfortunately, you cannot change it anymore </p>
+                                    </h3>
+                                    <h3>
+                                        <p><i class="fa fa-star"></i> The student has cancelled the enrolment form before you could make a decision </p>
                                     </h3>
                                     <br>
                                 </ol>

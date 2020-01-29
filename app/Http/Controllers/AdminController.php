@@ -220,7 +220,8 @@ class AdminController extends Controller
             ->where('is_self_pay_form', '1')
             ->where('selfpay_approval', null)
             ->get()->count();
-
+        
+        $arr3_count = 0;
         if (Session::has('Term')) {
             $term = Session::get('Term');
             $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
@@ -286,6 +287,8 @@ class AdminController extends Controller
             ->where('overall_approval', 1)
             ->whereNull('updated_by_admin')
             ->get()->count();
+
+        $merge= [];
 
         if ($request->session()->has('Term')) {
             $termSet = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();

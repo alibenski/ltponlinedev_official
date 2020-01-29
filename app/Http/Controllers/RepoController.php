@@ -157,34 +157,36 @@ class RepoController extends Controller
         
         $codex = [];     
         //concatenate (implode) Code input before validation   
-        //check if $code has no input
-        if ( empty( $uniquecode ) ) {
-            //loop based on $room_id count and store in $codex array
-            for ($i=0; $i < count($schedule_id); $i++) { 
-                $codex[] = array( $course_id,$schedule_id[$i],$term_id,$index_id );
-                //implode array elements and pass imploded string value to $codex array as element
-                $codex[$i] = implode('-', $codex[$i]);
-                //for each $codex array element stored, loop array merge method
-                //and output each array element to a string via $request->Code
-
-                foreach ($codex as $value) {
-                    $request->merge( [ 'CodeIndexID' => $value ] );
-                }
-                        var_dump($request->CodeIndexID);
-                        // validate using custom validator based on unique validation helper
-                        // with where clauses to specify customized validation 
-                        // the validation below fails when CodeIndexID is already taken AND 
-                        // deleted_at column is NULL which means it has not been cancelled AND
-                        // not disapproved by manager or HR learning partner
-                        $this->validate($request, array(
-                            'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
-                                    $uniqueCodex = $request->CodeIndexID;
-                                    $query->where('CodeIndexID', $uniqueCodex)
-                                        ->where('deleted_at', NULL);
-                                })
-                            // 'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
-                        ));
-            }                              
+        if (!empty($schedule_id)) {
+            //check if $code has no input
+            if ( empty( $uniquecode ) ) {
+                //loop based on $room_id count and store in $codex array
+                for ($i=0; $i < count($schedule_id); $i++) { 
+                    $codex[] = array( $course_id,$schedule_id[$i],$term_id,$index_id );
+                    //implode array elements and pass imploded string value to $codex array as element
+                    $codex[$i] = implode('-', $codex[$i]);
+                    //for each $codex array element stored, loop array merge method
+                    //and output each array element to a string via $request->Code
+    
+                    foreach ($codex as $value) {
+                        $request->merge( [ 'CodeIndexID' => $value ] );
+                    }
+                            var_dump($request->CodeIndexID);
+                            // validate using custom validator based on unique validation helper
+                            // with where clauses to specify customized validation 
+                            // the validation below fails when CodeIndexID is already taken AND 
+                            // deleted_at column is NULL which means it has not been cancelled AND
+                            // not disapproved by manager or HR learning partner
+                            $this->validate($request, array(
+                                'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use($request) {
+                                        $uniqueCodex = $request->CodeIndexID;
+                                        $query->where('CodeIndexID', $uniqueCodex)
+                                            ->where('deleted_at', NULL);
+                                    })
+                                // 'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID|',
+                            ));
+                }                              
+            }
         }
 
         // control the number of submitted enrolment forms
@@ -215,13 +217,13 @@ class RepoController extends Controller
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
             app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request);
-            // $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
-            // return redirect()->route('placementinfo');
+            
             if ($request->is_self_pay_form == 1) {
-            $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
-            return redirect()->route('thankyouSelfPay');
-            } 
-            $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
+                $request->session()->flash('success', 'Your Placement Test request has been submitted.');
+                return redirect()->route('thankyouSelfPay');
+                } 
+
+            $request->session()->flash('success', 'Your Placement Test request has been submitted.');
             return redirect()->route('thankyouPlacement');
         }
 
