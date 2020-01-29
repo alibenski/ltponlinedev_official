@@ -83,7 +83,7 @@ class PreenrolmentController extends Controller
 
             return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3')); 
         }
-            return redirect('/');   
+        return redirect('/');   
     }
 
     public function queryRegularFormsToAssign(Request $request)
@@ -203,7 +203,7 @@ class PreenrolmentController extends Controller
             return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3', 'count_not_assigned'));
         }
 
-        return view('preenrolment.query-regular-forms-to-assign', compact('languages', 'arr3', 'count_not_assigned'));
+        return view('preenrolment.query-regular-forms-to-assign', compact('languages'));
     }
 
     /**

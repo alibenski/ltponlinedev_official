@@ -894,18 +894,18 @@ class SelfPayController extends Controller
                 $request->session()->flash('success', 'Your Placement Test request has been submitted.');
                 return redirect()->route('thankyouSelfPay');
                 } 
-                
+
             $request->session()->flash('success', 'Your Placement Test request has been submitted.');
             return redirect()->route('thankyouPlacement');
         }
 
-                    // 2nd part of validate other input fields 
-                        $this->validate($request, array(
-                            'term_id' => 'required|',
-                            'schedule_id' => 'required|',
-                            'course_id' => 'required|',
-                            'L' => 'required|',
-                        )); 
+        // 2nd part of validate other input fields 
+        $this->validate($request, array(
+            'term_id' => 'required|',
+            'schedule_id' => 'required|',
+            'course_id' => 'required|',
+            'L' => 'required|',
+        )); 
 
         //loop for storing Code value to database
         $ingredients = [];        

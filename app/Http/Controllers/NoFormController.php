@@ -222,22 +222,22 @@ class NoFormController extends Controller
                 $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
                 return redirect()->route('thankyouSelfPay');
                 } 
-                
+
             $request->session()->flash('success', 'Your Placement Test request has been submitted.'); //laravel 5.4 version
             return redirect()->route('thankyouPlacement');
         }
 
-                    //validate other input fields outside of above loop
-                        $this->validate($request, array(
-                            'term_id' => 'required|',
-                            'schedule_id' => 'required|',
-                            'course_id' => 'required|',
-                            'L' => 'required|',
-                            // 'mgr_email' => 'required|email',
-                            'approval' => 'required',
-                            'org' => 'required',
-                            'agreementBtn' => 'required|',
-                        ));
+        //validate other input fields outside of above loop
+        $this->validate($request, array(
+            'term_id' => 'required|',
+            'schedule_id' => 'required|',
+            'course_id' => 'required|',
+            'L' => 'required|',
+            // 'mgr_email' => 'required|email',
+            'approval' => 'required',
+            'org' => 'required',
+            'agreementBtn' => 'required|',
+        ));
 
         //loop for storing Code value to database
         $ingredients = [];        
