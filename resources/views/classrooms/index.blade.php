@@ -491,7 +491,6 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <!-- icheck checkboxes -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
-<script src="{{ asset('js/select2.min.js') }}"></script>
 
 <script>
 $(document).ready(function() {

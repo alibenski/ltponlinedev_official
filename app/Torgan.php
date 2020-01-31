@@ -28,6 +28,6 @@ class TORGAN extends Model
     }
 
     public function focalpoints() {
-    return $this->hasMany('App\FocalPoints'); 
+    return $this->hasMany('App\FocalPoints', 'org_id', 'OrgCode'); 
     }
 }

@@ -3,23 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MailtoApprover;
-use App\Language;
-use App\Course;
-use App\User;
-use App\Repo;
-use App\Term;
-use App\Classroom;
-use App\Schedule;
-use App\Preenrolment;
-use App\SDDEXTR;
 use App\Torgan;
 use Session;
 use Carbon\Carbon;
 use DB;
-use Illuminate\Support\Facades\Crypt;
 
 class OrgController extends Controller
 {
@@ -40,11 +27,9 @@ class OrgController extends Controller
      */
     public function index()
     {
-        $repos = Repo::orderBy('INDEXID', 'asc')->paginate(15);
-
-        $terms = Term::all(['Term_Code', 'Term_Name']);
-
-        return view('form.index', compact('repos', 'terms'));
+        $organizations = Torgan::orderBy('Org name', 'asc')->with('focalpoints')->get();
+        
+        return view('organizations.index', compact('organizations'));
     }
     
     /**

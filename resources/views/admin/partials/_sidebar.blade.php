@@ -113,11 +113,11 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">View All</a></li>
-            <li><a href="#">Create</a></li>
+          <li><a href="{{ route('organizations.index')}}">View All</a></li>
+            {{-- <li><a href="#">Create</a></li> --}}
           </ul>
         </li>        
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="#"><i class="fa fa-handshake-o"></i> <span>Focal Points</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -127,7 +127,7 @@
             <li><a href="#">View All</a></li>
             <li><a href="#">Create</a></li>
           </ul>
-        </li>
+        </li> --}}
         <li class="{{ Request::is('admin/email-manager*') ? "active" : ""}}"><a href="{{ route('mailTracker_Index') }}" target="_blank"><i class="fa fa-envelope"></i> <span>Emails</span></a></li>
         <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-btn fa-sign-out btn-space" aria-hidden="true"></i>
               <span>Logout</span>

@@ -12,7 +12,7 @@ class FocalPoints extends Model
     protected $table = 'tblLTP_FocalPoints';
 
     public function torgan() {
-    return $this->belongsTo('App\Torgan'); 
+    return $this->belongsTo('App\Torgan', 'OrgCode', 'org_id'); 
     }
 
 }
