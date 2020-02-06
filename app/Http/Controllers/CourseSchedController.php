@@ -236,15 +236,18 @@ class CourseSchedController extends Controller
     public function destroy(Request $request, $id)
     {
         $course_schedule = CourseSchedule::find($id);
-        $course_schedule->deleted_by = Auth::user()->id;
-        $course_schedule->save();
-
+        
         $classrooms = Classroom::orderBy('id', 'desc')->where('cs_unique', $course_schedule->cs_unique)->get();
         foreach ($classrooms as $classroom) {
+            $classroom->Code = $classroom->Code.'_del_'.$classroom->id;
             $classroom->deleted_by = Auth::user()->id;
             $classroom->save();
             $classroom->delete();
         }
+        
+        $course_schedule->cs_unique = $course_schedule->cs_unique.'_del_'.$course_schedule->id;
+        $course_schedule->deleted_by = Auth::user()->id;
+        $course_schedule->save();
         $course_schedule->delete();
 
         $request->session()->flash('warning', 'Record deleted!');
