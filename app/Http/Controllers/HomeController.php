@@ -44,7 +44,31 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $currentEnrolmentTerm = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        $cancel_date_limit_string = '';
+        $cancel_date_limit_string_fr = '';
+        
+        if(!is_null($currentEnrolmentTerm)) {
+            $currentEnrolmentTermCode = $currentEnrolmentTerm->Term_Code;
+    
+            // get cancel date limit
+            $queryCancelDateLimit = Term::where('Term_Code', $currentEnrolmentTermCode)->first()->Cancel_Date_Limit;
+            $cancel_date_limit = new Carbon($queryCancelDateLimit);
+            $cancel_date_limit->subDay();
+    
+            $termCancelMonth = date('F', strtotime($cancel_date_limit));
+            $termCancelDate = date('d', strtotime($cancel_date_limit));
+            $termCancelYear = date('Y', strtotime($cancel_date_limit));
+    
+            // cancel limit date convert to string
+            $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+    
+            // translate 
+            $termCancelMonthFr = __('months.'.$termCancelMonth, [], 'fr');
+            $cancel_date_limit_string_fr = $termCancelDate.' '.$termCancelMonthFr.' '.$termCancelYear;
+        }
+
+        return view('home', compact('cancel_date_limit_string', 'cancel_date_limit_string_fr'));
     }
        
     public function homeHowToCheckStatus()
