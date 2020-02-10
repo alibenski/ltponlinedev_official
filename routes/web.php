@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     /**
      * Admin Routes
      */
+    Route::get('calendar', function () { return view('calendar'); })->name('calendar');
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-broadcast-reminder', 'SystemController@sendBroadcastReminder')->name('send-broadcast-reminder');
     Route::get('send-reminder-to-current-students', 'SystemController@sendReminderToCurrentStudents')->name('send-reminder-to-current-students');
