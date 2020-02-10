@@ -316,8 +316,7 @@
                         <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>
                         <br><br>
                         Language Training Secretariat<br>
-                        For French Annex Bocage 2 - Room 5 (ground floor)<br>
-                        For all other languages Annex Bocage 2 - Room 108 (1st floor)<br>
+                        Annex Bocage 2 - Room 5 (ground floor)<br>
                         Telephone: 00 41 22 917 44 09
                         <br><br>
                         <hr>

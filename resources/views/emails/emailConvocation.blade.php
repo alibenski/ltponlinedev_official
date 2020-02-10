@@ -257,7 +257,7 @@
                                     <br><br>
                                     <p>
                                         <h4><strong>Language Training Secretariat</strong></h4>
-                                        For French Annex Bocage 2 - Room 5 (ground floor)<br>
+                                        Annex Bocage 2 - Room 5 (ground floor)<br>
                                         <br>
                                         Opening hours : 9:00-12:30 from Monday to Friday.<br>
                                         Telephone: 00 41 22 917 44 09<br><br>
@@ -332,7 +332,7 @@
                                     <br><br>
                                     <p>
                                         <h4><strong>Secrétariat du Programme de formation linguistique</strong></h4>
-                                        Pour les cours de français : Annexe Bocage II - bureau 5 (Rez-de-chaussée) <br>
+                                        Annexe Bocage II - bureau 5 (Rez-de-chaussée) <br>
                                         <br>
                                         Heures d’ouverture: 9:00-12:30 du lundi au vendredi.<br>
                                         Téléphone: + 41 22 917 44 09<br><br>
