@@ -72,6 +72,8 @@ $(document).ready(function() {
     });
 });
 
+var myLineChart = [];
+
 $('select#Term').change(function() {
 	var year = $(this).val();
 	var token = $("input[name='_token']").val();
@@ -95,9 +97,13 @@ $('select#Term').change(function() {
 });
 
 function createChart(data) {
+	if (myLineChart.id != undefined) {
+		myLineChart.chart.destroy();
+	}
 
 	$('p.total-year-product').remove();
-	$('p.total-year-sum').remove();
+	$('h4.total-year-sum').remove();
+	$('div.each-income-per-season').children('p').remove();
 
 	// Set new default font family and font color to mimic Bootstrap's default styling
 	Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -277,7 +283,7 @@ function createChart(data) {
 
 	// Area Chart 
 	var ctx = document.getElementById("myAreaChart");
-	var myLineChart = new Chart(ctx, {
+	myLineChart = new Chart(ctx, {
 	  type: 'bar',
 	  data: {
 	    labels: uniqueSeasons,
@@ -346,6 +352,10 @@ function createChart(data) {
 	      display: true
 	    }
 	  }
+	});
+	myLineChart.chart.update({
+		duration: 800,
+    	easing: 'easeInOutBounce'
 	});
 }
 
