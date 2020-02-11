@@ -175,7 +175,11 @@
 									@foreach($student_enrolments as $key=>$form)
 									<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 										<td>
-											<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank" class="btn btn-info btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+											@if (Carbon\Carbon::now() > $form->terms->Enrol_Date_End)
+												<a href="{{ route('edit-enrolment-fields', ['indexno' => $form->INDEXID, 'term' => $form->Term, 'tecode' => $form->Te_Code, 'form' => $form->eform_submit_count]) }}" target="_blank" class="btn btn-info btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+											@else 
+												<a href="#" class="btn btn-info btn-edit-form" disabled><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+											@endif
 
 												@if($form->deleted_at)
 												@else
@@ -375,7 +379,11 @@
 									@foreach($student_placements as $form)
 									<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 										<td>
-											<a href="{{ route('edit-placement-fields', ['id' => $form->id]) }}" target="_blank" class="btn btn-default btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+											@if (Carbon\Carbon::now() > $form->terms->Enrol_Date_End)
+												<a href="{{ route('edit-placement-fields', ['id' => $form->id]) }}" target="_blank" class="btn btn-default btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+											@else 
+												<a href="#" class="btn btn-info btn-edit-form" disabled><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+											@endif
 
 											@if($form->deleted_at)
 											@else
