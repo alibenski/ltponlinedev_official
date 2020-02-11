@@ -1,4 +1,8 @@
-.modal-background{
+body {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Open Sans', sans-serif;
+}
+
+.modal-background {
   background-color: #ecf0f5;
 }
 
