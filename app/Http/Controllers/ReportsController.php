@@ -28,26 +28,92 @@ class ReportsController extends Controller
     	return view('reports.baseView',  compact('orgs', 'languages', 'terms', 'years'));
     }
 
+    
     public function getReportsTable(Request $request)
     {
-    	if ($request->ajax()) {
+        if ($request->ajax()) {
             $columns = [
                 'DEPT', 'L'
             ];
     		
     		if ($request->Term) {
-	            $term = $request->Term;
+                $term = $request->Term;
 	            $recordsMerged = $this->queryRecordsMerged($term,$columns,$request);
 	            $data = $recordsMerged;
     		}
-
+            
     		if ($request->year) {
-    			$arrayCollection = $this->queryByYear($request, $columns);
+                $arrayCollection = $this->queryByYear($request, $columns);
     			$data = $arrayCollection;
     		}
-
+            
     		return response()->json(['data' => $data]); 
     	}
+    }
+    
+    public function ltpStatsGraphView()
+    {
+        $terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
+        $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
+
+        $years = [];
+        foreach ($queryTerm as $key => $value) {
+            $years[] = Carbon::parse($value->Term_Begin)->year ;   
+        }
+
+        $years = array_unique($years);
+
+        return view('reports.ltpStatsGraphView',  compact('years'));
+    }
+
+    public function getLtpStatsGraphView()
+    {
+        $terms = new Term;
+        $termsCollection = $terms->select('Term_Begin', 'Term_Code')
+            ->where('Term_Code', '>=', '191')
+            ->orderBy('Term_Code', 'asc')
+            ->get();
+
+        $years = [];
+        $termCodes = [];
+        foreach ($termsCollection as $value) {
+            $parseYear = Carbon::parse($value->Term_Begin)->year;
+            $years[] = $parseYear;
+            $termCodes[] = $value->Term_Code;
+        }
+
+        $fixedArrayYears = [2012,2013,2014,2015,2016,2017,2018];
+        $yearArrayUnique = array_unique($years);
+        $mergedArrayYears = array_merge($fixedArrayYears, $yearArrayUnique);
+
+        $fixedArrayRegistrations = [2785,    2730,    2602,    2680,    2764,    3127,    3218];
+        // foreach ($termsCollection as $v) {
+        //     $parseYear = Carbon::parse($value->Term_Begin)->year;
+            
+        // }
+        // $registrations = Repo::whereIn('Term', $termCodes)
+        //     ->
+        //     ->count();
+
+        $data = $termCodes;
+
+        return response()->json(['data' => $data]);
+
+        $obj = (object) [
+            'aString' => 'some string',
+            'labelYears' => $mergedArrayYears,
+            'arrSum' => $fixedArrayRegistrations
+        ];
+
+
+        $data = $obj;
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function getLtpStatsGraphViewByTerm(Request $request)
+    {
+
     }
 
     public function queryRecordsMerged($term,$columns,$request)
