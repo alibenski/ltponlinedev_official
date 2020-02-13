@@ -53,17 +53,7 @@ class ReportsController extends Controller
     
     public function ltpStatsGraphView()
     {
-        $terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
-        $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
-
-        $years = [];
-        foreach ($queryTerm as $key => $value) {
-            $years[] = Carbon::parse($value->Term_Begin)->year ;   
-        }
-
-        $years = array_unique($years);
-
-        return view('reports.ltpStatsGraphView',  compact('years'));
+        return view('reports.ltpStatsGraphView');
     }
 
     public function getLtpStatsGraphView()
@@ -108,7 +98,7 @@ class ReportsController extends Controller
         $mergedArrayRegistrations = array_merge($fixedArrayRegistrations, $sums);
 
         $obj = (object) [
-            'title' => 'Evolution Of Registrations In Language Courses',
+            'title' => 'Evolution of Registrations in Language Courses',
             'labelYears' => $mergedArrayYears,
             'regSum' => $mergedArrayRegistrations
         ];
@@ -119,9 +109,73 @@ class ReportsController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function getLtpStatsGraphViewByTerm(Request $request)
+    public function ltpStatsGraphViewByLanguage()
     {
+        return view('reports.ltpStatsGraphViewByLanguage');
+    }
 
+    public function getLtpStatsGraphViewByLanguage()
+    {
+        $languagesCollection = DB::table('languages')->select('id', 'name', 'code')->orderBy('id', 'asc')->get();
+        $languages = $languagesCollection->pluck(['name']);
+
+        $terms = new Term;
+        $termsCollection = $terms->select('Term_Begin', 'Term_Code')
+            ->where('Term_Code', '>=', '191')
+            ->orderBy('Term_Code', 'asc')
+            ->get();
+
+        $years = [];
+        $termCodes = [];
+        foreach ($termsCollection as $value) {
+            $parseYear = Carbon::parse($value->Term_Begin)->year;
+            $years[] = $parseYear;
+            $termCodes[] = $value->Term_Code;
+        }
+
+        $fixedArrayYears = [2012, 2013, 2014, 2015, 2016, 2017, 2018];
+        $yearArrayUnique = array_unique($years);
+        $mergedArrayYears = array_merge($fixedArrayYears, $yearArrayUnique);
+
+        $registrations = [];
+        foreach ($termsCollection as $k => $v) {
+            foreach ($languagesCollection as $language) {
+                $registrations[] = [
+                    $language->name.$years[$k] => Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L')
+                        ->where('L', $language->code)
+                        ->where('Term', $v->Term_Code)
+                        ->whereHas('classrooms', function ($q) {
+                            // query all students enrolled to current term excluding waitlisted
+                            $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                        })
+                        ->count()
+                ];
+            }
+        }
+
+        $keys = [];
+        foreach ($registrations as $subarr) {
+            $keys[] = key($subarr);
+        }
+        // remove duplicate keys
+        $keysUnique = array_unique($keys);
+
+        $sums = [];
+        foreach ($keysUnique as $key) {
+            $sums[$key] = array_sum(array_column($registrations, $key));
+        }
+
+        $obj = (object) [
+            'title' => 'Number of Registrations in Language Courses',
+            'xAxis' => $languages,
+            'years' => $yearArrayUnique,
+            'registrationsPerYearPerLanguage' => [228,249,265,541,542,1741]
+
+        ];
+
+        $data = $obj;
+
+        return response()->json(['data' => $data]);    
     }
 
     public function queryRecordsMerged($term,$columns,$request)
