@@ -90,7 +90,13 @@ class ReportsController extends Controller
         $registrations = [];
         foreach ($termsCollection as $k => $v) {            
             $registrations[] = [
-                $years[$k] => Repo::where('Term', $v->Term_Code)->count()
+                $years[$k] => Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L')
+                    ->where('Term', $v->Term_Code)
+                    ->whereHas('classrooms', function ($q) {
+                        // query all students enrolled to current term excluding waitlisted
+                        $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                    })
+                    ->count()
             ];
         }
 
