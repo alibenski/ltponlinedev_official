@@ -102,7 +102,7 @@ class ReportsController extends Controller
         $mergedArrayRegistrations = array_merge($fixedArrayRegistrations, $sums);
 
         $obj = (object) [
-            'aString' => 'some string',
+            'title' => 'Evolution Of Registrations In Language Courses',
             'labelYears' => $mergedArrayYears,
             'regSum' => $mergedArrayRegistrations
         ];

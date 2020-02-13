@@ -25,8 +25,8 @@
                     <th>Has Learning Partner</th>
                     <th>Self Paying Students</th>
                     <th>Not Billed</th>
-					<th>Billed via Umoja</th>
-					<th>Billed Externally</th>
+					<th>Billed via FRMS</th>
+					<th>Billed By Secretariat</th>
 				</thead>
 
 				<tbody>
