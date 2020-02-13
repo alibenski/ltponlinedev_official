@@ -87,22 +87,24 @@ class ReportsController extends Controller
         $mergedArrayYears = array_merge($fixedArrayYears, $yearArrayUnique);
 
         $fixedArrayRegistrations = [2785,    2730,    2602,    2680,    2764,    3127,    3218];
-        // foreach ($termsCollection as $v) {
-        //     $parseYear = Carbon::parse($value->Term_Begin)->year;
-            
-        // }
-        // $registrations = Repo::whereIn('Term', $termCodes)
-        //     ->
-        //     ->count();
+        $registrations = [];
+        foreach ($termsCollection as $k => $v) {            
+            $registrations[] = [
+                $years[$k] => Repo::where('Term', $v->Term_Code)->count()
+            ];
+        }
 
-        $data = $termCodes;
+        $sums = [];
+        foreach($years as $year){
+            $sums[$year] = array_sum(array_column($registrations,$year));    
+        }
 
-        return response()->json(['data' => $data]);
+        $mergedArrayRegistrations = array_merge($fixedArrayRegistrations, $sums);
 
         $obj = (object) [
             'aString' => 'some string',
             'labelYears' => $mergedArrayYears,
-            'arrSum' => $fixedArrayRegistrations
+            'regSum' => $mergedArrayRegistrations
         ];
 
 

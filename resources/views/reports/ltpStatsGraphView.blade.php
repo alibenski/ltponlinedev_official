@@ -91,7 +91,6 @@ $(document).ready(function() {
   let arr2 = [1,2,3];
 
   function createChart(data) {
-    let arrSum =  data.arrSum;
     // Area Chart 
     const ctx = document.getElementById("myAreaChart");
     myLineChart = new Chart(ctx, {
@@ -102,7 +101,7 @@ $(document).ready(function() {
           type: 'line',
           fill: "false",
           label: "Registrations",
-          lineTension: 0.3,
+          lineTension: 0.2,
           backgroundColor: "rgba(2,117,216,0.2)",
           borderColor: "rgba(2,117,216,1)",
           pointRadius: 5,
@@ -112,12 +111,12 @@ $(document).ready(function() {
           pointHoverBackgroundColor: "rgba(2,117,216,1)",
           pointHitRadius: 50,
           pointBorderWidth: 2,
-          data: arrSum,
+          data: data.regSum,
         },
         {
             // Changes this dataset to become a line
             
-            label: "USD 365 Income",
+            label: "",
           data: arr1,
           backgroundColor: "rgba(142,94,162,0.2)",
           borderColor: "rgba(142,94,162)",
@@ -126,7 +125,7 @@ $(document).ready(function() {
         },
         {
           
-            label: "USD 600 Income",
+            label: "",
           data: arr2,
           backgroundColor: "rgba(68,186,81,0.2)", 
           borderColor: "rgba(68,186,81)",
@@ -151,9 +150,9 @@ $(document).ready(function() {
           }],
           yAxes: [{
             ticks: {
-              min: 2000,
+              min: 1000,
               max: 4000,
-              maxTicksLimit: 5
+              maxTicksLimit: 10
             },
             gridLines: {
               color: "rgba(0, 0, 0, .125)",
