@@ -58,7 +58,17 @@
         </li> 
         @endhasrole
 
-        <li class="{{ Request::is('admin-stats/stats') ? "active" : ""}}"><a href="{{ route('stats') }}"><i class="fa fa-bar-chart"></i> <span>Admin Stats</span></a></li>
+        <li class="treeview {{ Request::is('admin/reports/ltp-stats-*') ? "active" : ""}}">
+          <a href="#"><i class="fa fa-bar-chart"></i> <span>Statistics</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{ route('reports/ltp-stats-graph-view') }}" {{ Request::is('admin/reports/ltp-stats-graph-view') ? "style=color:white" : ""}}>Evolution per Year</a></li>
+            <li><a href="{{ route('reports/ltp-stats-graph-view-by-language') }}" {{ Request::is('admin/reports/ltp-stats-graph-view-by-language') ? "style=color:white" : ""}}>Evolution per Language</a></li>
+          </ul>
+        </li>
 
         <li class="treeview {{ Request::is('admin/preenrolment') ? "active" : ""}}">
           <a href="#"><i class="fa fa-file-o"></i> <span>Enrolment Forms</span>
@@ -106,7 +116,7 @@
         <li><a href="{{ route('teacher-dashboard') }}" target="_blank"><i class="fa fa-pied-piper"></i> <span>Teacher Dashboard</span></a></li>
         @endhasrole
 
-        <li class="treeview">
+        <li class="treeview {{ Request::is('admin/organizations') ? "active" : ""}}">
           <a href="#"><i class="fa fa-globe"></i> <span>Organizations</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>

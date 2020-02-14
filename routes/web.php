@@ -63,7 +63,6 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('get-ltp-stats-graph-view', ['as'=>'get-ltp-stats-graph-view','uses'=> 'ReportsController@getLtpStatsGraphView']);
     Route::get('reports/ltp-stats-graph-view-by-language', 'ReportsController@ltpStatsGraphViewByLanguage')->name('reports/ltp-stats-graph-view-by-language');
     Route::get('get-ltp-stats-graph-view-by-language', ['as'=>'get-ltp-stats-graph-view-by-language','uses'=> 'ReportsController@getLtpStatsGraphViewByLanguage']);
-
     /**
      * Text Routes
      */
@@ -308,10 +307,6 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     // temporary page for sorting queries /admin/sort-page
     Route::post('sort-page', ['as'=>'sort-page','uses'=>'TempSortController@orderCodes']);
 
-});
-Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin-stats'],function(){
-    //admin routes
-    Route::get('stats', function () { return view('admin.adminStats'); })->name('stats');
 });
 
 //middleware to prevent back button and access cache
