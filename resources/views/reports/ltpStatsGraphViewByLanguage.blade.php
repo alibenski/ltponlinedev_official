@@ -37,21 +37,24 @@ $(document).ready(function() {
     .always(function() {
       console.log("complete");
     });
-  
-  let arr1 = [1600,2000,5000, 4500, 3000, 2500];
+
+  function randomColor() {  
+    const rand = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' ];
+    let color = '#' + rand[Math.ceil(Math.random() * 15)] + rand[Math.ceil(Math.random() * 15)] + rand[Math.ceil(Math.random() * 15)] + rand[Math.ceil(Math.random() * 15)] + rand[Math.ceil(Math.random() * 15)] + rand[Math.ceil(Math.random() * 15)];
+
+    return color;
+  }
 
   function createChart(data) {
+    Chart.plugins.unregister(ChartDataLabels);
     let myDataSet = [];
     let x = [];
     $.each(data.years, function (indexInArray, valueOfElement) {
-        console.log(data.registrationsPerYearPerLanguage)
         x = {            
             label: valueOfElement,
-            data: arr1,
-            backgroundColor: "rgba(142,94,162,0.2)",
-            borderColor: "rgba(142,94,162)",
-            borderWidth: "2",
-            fill: "false",
+            data: data.registrationsPerYearPerLanguage[indexInArray],
+            backgroundColor: randomColor(),
+            fill: "true",
           } 
         myDataSet.push(x);
     }); 
@@ -79,7 +82,7 @@ $(document).ready(function() {
           yAxes: [{
             ticks: {
               min: 0,
-              maxTicksLimit: 10
+              // maxTicksLimit: 10
             },
             gridLines: {
               color: "rgba(0, 0, 0, .125)",
@@ -87,7 +90,8 @@ $(document).ready(function() {
           }],
         },
         legend: {
-          display: true
+          display: true,
+          position: 'bottom',
         },
         title: {
           display: true,
@@ -98,7 +102,7 @@ $(document).ready(function() {
     });
     myLineChart.chart.update({
       duration: 800,
-        easing: 'easeInOutBounce'
+      easing: 'easeInCubic'
     });
   }
 });

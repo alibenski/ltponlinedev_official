@@ -145,12 +145,9 @@ class ReportsController extends Controller
                         ->where('L', $language->code)
                         ->where('Term', $v->Term_Code)
                         ->whereHas('classrooms', function ($q) {
-                            // query all students enrolled to current term excluding waitlisted
                             $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
                         })
                         ->count(),
-                    $years[$k] => $language->name,
-                    $language->name => $years[$k]
                 ];
             }
         }
@@ -159,27 +156,37 @@ class ReportsController extends Controller
         foreach ($registrations as $subarr) {
             $keys[] = key($subarr);
         }
-        // remove duplicate keys
+
         $keysUnique = array_unique($keys);
 
         $sums = [];
-        $arr = [];
-        foreach ($variable as $key => $value) {
-            foreach ($keysUnique as $key) {
-                $sums[$key] = array_sum(array_column($registrations, $key));
-            }
-            
+        foreach ($keysUnique as $key) {
+            $sums[$key] = array_sum(array_column($registrations, $key));
         }
+
+        $arrChunk = array_chunk($sums, count($languagesCollection));
+        // $resetKeysOfSum = array_values($sums);
+        $fixedArrayRegistrations = [
+            0 => [210,187,565,1138,184,501],
+            1 => [177,176,528,1270,166,413],
+            2 => [217,181,505,1182,136,381],
+            3 => [228,199,482,1181,126,464],
+            4 => [225,203,464,1284,157,431],
+            5 => [240,152,510,1495,239,491],
+            6 => [239,186,474,1558,243,518]
+        ];
+
+        $mergedArrayRegistrations = array_merge($fixedArrayRegistrations, $arrChunk);
 
         $obj = (object) [
             'title' => 'Number of Registrations in Language Courses',
             'xAxis' => $languages,
-            'years' => $yearArrayUnique,
-            'registrationsPerYearPerLanguage' => $sums
+            'years' => $mergedArrayYears,
+            'registrationsPerYearPerLanguage' => $mergedArrayRegistrations,
 
         ];
 
-        $data = $sums;
+        $data = $obj;
 
         return response()->json(['data' => $data]);    
     }
