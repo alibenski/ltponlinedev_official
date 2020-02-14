@@ -43,15 +43,16 @@ $(document).ready(function() {
   function createChart(data) {
     let myDataSet = [];
     let x = [];
-    $.each(data.years, function (indexInArray, valueOfElement) { 
-      x = {            
-          label: valueOfElement,
-          data: arr1,
-          backgroundColor: "rgba(142,94,162,0.2)",
-          borderColor: "rgba(142,94,162)",
-          borderWidth: "2",
-          fill: "false",
-        }
+    $.each(data.years, function (indexInArray, valueOfElement) {
+        console.log(data.registrationsPerYearPerLanguage)
+        x = {            
+            label: valueOfElement,
+            data: arr1,
+            backgroundColor: "rgba(142,94,162,0.2)",
+            borderColor: "rgba(142,94,162)",
+            borderWidth: "2",
+            fill: "false",
+          } 
         myDataSet.push(x);
     }); 
 

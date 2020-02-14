@@ -148,7 +148,9 @@ class ReportsController extends Controller
                             // query all students enrolled to current term excluding waitlisted
                             $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
                         })
-                        ->count()
+                        ->count(),
+                    $years[$k] => $language->name,
+                    $language->name => $years[$k]
                 ];
             }
         }
@@ -161,19 +163,23 @@ class ReportsController extends Controller
         $keysUnique = array_unique($keys);
 
         $sums = [];
-        foreach ($keysUnique as $key) {
-            $sums[$key] = array_sum(array_column($registrations, $key));
+        $arr = [];
+        foreach ($variable as $key => $value) {
+            foreach ($keysUnique as $key) {
+                $sums[$key] = array_sum(array_column($registrations, $key));
+            }
+            
         }
 
         $obj = (object) [
             'title' => 'Number of Registrations in Language Courses',
             'xAxis' => $languages,
             'years' => $yearArrayUnique,
-            'registrationsPerYearPerLanguage' => [228,249,265,541,542,1741]
+            'registrationsPerYearPerLanguage' => $sums
 
         ];
 
-        $data = $obj;
+        $data = $sums;
 
         return response()->json(['data' => $data]);    
     }
