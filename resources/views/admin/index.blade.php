@@ -37,7 +37,8 @@
 					<div class="info-box-content">
 						<span class="info-box-text">Regular Enrolment Forms</span>
 						<span class="info-box-number">@if(Session::has('Term')) Submission Total: {{$enrolment_forms}} @else Set the Term @endif</span>
-						<span class="info-box-text">Total number of submitted forms (approved + unapproved)</span>
+						<span class="info-box-text">Total number of submitted forms</span>
+						<span class="info-box-text">(approved + unapproved)</span>
 					</div>
 					<!-- /.info-box-content -->
 					</div>
@@ -132,7 +133,8 @@
 					<div class="info-box-content">
 						<span class="info-box-text">Placement Forms</span>
 						<span class="info-box-number">@if(Session::has('Term')) Submission Total: {{$placement_forms}} @else Set the Term @endif</span>
-						<span class="info-box-text">Total number of submitted forms (approved + unapproved)</span>
+						<span class="info-box-text">Total number of submitted forms</span>
+						<span class="info-box-text">(approved + unapproved)</span>
 					</div>
 					<!-- /.info-box-content -->
 					</div>
@@ -186,10 +188,7 @@
 					<!-- /.info-box -->
 				@endif
 			</div>
-		</div>
-
-	
-		
+		</div>	
 	</div>
 
 
