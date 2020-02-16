@@ -2,6 +2,36 @@ body {
     font-family: 'Helvetica Neue', Helvetica, 'Source Sans Pro', Arial, sans-serif;
 }
 
+@media (min-width: 900px) {
+    .admin-index-container {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.admin-index-column-1 {
+    padding: 10px;
+    flex: 1;
+}
+
+.admin-index-column-2 {
+    padding: 10px;
+    flex: 1;
+}
+
+@media (min-width: 900px) {
+    .admin-index-container-2 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+}
+.admin-index-items-2 {
+    padding: 10px;
+    box-sizing: border-box;
+    flex-basis: 50%;
+}
+
 .modal-background {
   background-color: #ecf0f5;
 }
