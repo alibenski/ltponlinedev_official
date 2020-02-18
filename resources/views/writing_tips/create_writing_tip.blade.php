@@ -1,4 +1,4 @@
-@extends('shared_template')
+@extends('writing_tips.template_writing_tip')
 
 @section('customcss')
 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>

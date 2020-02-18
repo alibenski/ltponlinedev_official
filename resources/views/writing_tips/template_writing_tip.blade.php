@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="referrer" content="origin-when-cross-origin">
-  <title>CLM Online Enrolment Teacher Administration</title>
+  <title>CLM Online Writing Tips</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- CSRF Token -->
@@ -74,125 +74,25 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-black sidebar-collapse">
+<body class="hold-transition skin-green sidebar-collapse">
 <div class="wrapper">
 
   <!-- Main Header -->
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="/" target="_blank" class="logo">
+    <a href="{{ route('teacher-dashboard') }}" target="_blank" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>C</b>LM</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><i class="fa fa-external-link"></i><b> Online Enrolment </b></span>
+      <span class="logo-lg"><i class="fa fa-external-link"></i><b> CLM SMS </b></span>
     </a> 
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      {{-- <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a> --}}
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-          {{-- <li class="dropdown messages-menu">
-            <!-- Menu toggle button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
-                <!-- inner menu: contains the messages -->
-                <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <!-- User Image -->
-                        <img src="{{asset('img/generic-profile-icon-10.jpg')}}" class="img-circle" alt="User Image">
-                      </div>
-                      <!-- Message title and timestamp -->
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <!-- The message -->
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <!-- end message -->
-                </ul>
-                <!-- /.menu -->
-              </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
-            </ul>
-          </li> --}}
-          <!-- /.messages-menu -->
-
-          <!-- Notifications Menu -->
-          {{-- <li class="dropdown notifications-menu">
-            <!-- Menu toggle button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
-              <li>
-                Inner Menu: contains the notifications
-                <ul class="menu">
-                  <li><!-- start notification -->
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <!-- end notification -->
-                </ul>
-              </li>
-              <li class="footer"><a href="#">View all</a></li>
-            </ul>
-          </li> --}}
-          <!-- Tasks Menu -->
-          {{-- <li class="dropdown tasks-menu">
-            <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- Inner menu: contains the tasks -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <!-- Task title and progress text -->
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <!-- The progress bar -->
-                      <div class="progress xs">
-                        <!-- Change the css width attribute to simulate progress -->
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
-            </ul>
-          </li> --}}
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
@@ -252,29 +152,14 @@ desired effect
     </nav>
   </header>
 
-  {{-- @include('admin.partials._sidebar') --}}
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <div class="col-md-10 col-md-offset-1"> 
     <section class="content-header">
-
-      @hasrole('Admin')
         <h1>
-          <a href="{{ route('admin_dashboard') }}"><i class="fa fa-home"></i> CLM Online Enrolment Administration</a>
-          <small>Language Training Programme</small>
+          <a href="/admin/writing-tips"><i class="fa fa-home"></i> Writing Tips </a>
         </h1>
-      @else
-        <h1>
-          <a href="{{ route('teacher-dashboard') }}"><i class="fa fa-home"></i> CLM Student Management System (SMS)</a>
-        </h1>
-      @endhasrole
-
-      
-      {{-- <ol class="breadcrumb">
-        <li><a href="{{ route('teacher-dashboard') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li class="active">Here</li>
-      </ol> --}}
     </section>
 
     <!-- Main content -->
@@ -292,38 +177,13 @@ desired effect
           </div>
       </div>
 
-      @hasrole('Admin')
-        @if(!Session::has('Term'))
-          <a href="{{ route('admin_dashboard') }}">
-          <div class="callout callout-danger col-sm-12">
-              <h4>Warning!</h4>
-              <p>
-                  <b>Term</b> is not set. Click here to go to the Dashboard and set the Term field for this session.
-              </p>
-          </div>
-          </a>
-        @endif
-      @else
-        @if(!Session::has('Term'))
-          <a href="{{ route('teacher-dashboard') }}">
-          <div class="callout callout-danger col-sm-12">
-              <h4>Warning!</h4>
-              <p>
-                  <b>Term</b> is not set. Click here to go to the Teacher's Dashboard and set the Term field for this session.
-              </p>
-          </div>
-          </a>
-        @endif
-      @endhasrole
-
-      {{-- @hasrole('Admin')
-        @include('admin.partials._termSessionMsg')
-      @endhasrole --}}
-
+      
       @yield('content')
+      
 
     </section>
     <!-- /.content -->
+    </div>
   </div>
   <!-- /.content-wrapper -->
 

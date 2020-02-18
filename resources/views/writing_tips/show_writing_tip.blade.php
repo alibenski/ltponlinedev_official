@@ -1,4 +1,4 @@
-@extends('shared_template')
+@extends('writing_tips.template_writing_tip')
 
 @section('customcss')
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">

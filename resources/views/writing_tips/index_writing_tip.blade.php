@@ -1,4 +1,4 @@
-@extends('shared_template')
+@extends('writing_tips.template_writing_tip')
 
 @section('customcss')
 
@@ -8,7 +8,7 @@
 
 <div class='col-md-12'>
     <h3>
-        Writing Tip Entries
+        Entries
     </h3>
     <div class="form-group">
         <a href="{{ route('writing-tips.create') }}" class="btn btn-success"><i class="fa fa-pencil"></i> Create a new entry</a>

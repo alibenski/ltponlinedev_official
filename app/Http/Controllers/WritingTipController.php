@@ -113,10 +113,14 @@ class WritingTipController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'L' => 'required|',
             'subject' => 'string|required',
             'text' => 'string|required',
         ]);
+
+        $message = [
+            'required' => 'The Language field is required.',
+        ];
+        $this->validate($request, ['L' => 'required'], $message);
 
         $record = new WritingTip;
         $record->L = $request->L;
