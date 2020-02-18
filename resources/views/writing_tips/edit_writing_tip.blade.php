@@ -2,7 +2,7 @@
 
 @section('customcss')
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-<script src="{{ asset('bower_components/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 @stop
 
 @section('content')

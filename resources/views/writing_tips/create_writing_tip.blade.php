@@ -1,8 +1,7 @@
 @extends('shared_template')
 
 @section('customcss')
-{{-- <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script> --}}
-<script src="{{ asset('bower_components/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 @stop
 
 @section('content')
@@ -54,8 +53,6 @@
 
 @section('java_script')
 <script>
-    // Replace the <textarea id="editor1"> with a CKEditor
-    // instance, using default configuration.
-    CKEDITOR.replace( 'editor' );
+  CKEDITOR.replace( 'editor');
 </script>
 @stop

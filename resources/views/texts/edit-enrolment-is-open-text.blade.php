@@ -1,7 +1,7 @@
 @extends('admin.no_sidebar_admin')
 
 @section('customcss')
-<script src="{{ asset('bower_components/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 @stop
 
 @section('content')
