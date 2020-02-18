@@ -232,6 +232,13 @@ desired effect
                 <div class="pull-left">
                   <a href="{{ route('students.index') }}" class="btn btn-default btn-flat">Profile</a>
                 </div>
+                
+                @if (Auth::user()->id == 2742)
+                  <div class="pull-left">
+                    <a href="/admin/writing-tips" class="btn btn-default btn-flat">Writing Tips</a>
+                  </div>
+                @endif
+                
                 <div class="pull-right">
                   <a href="{{ route('logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <span>Sign out</span>

@@ -74,14 +74,14 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-green sidebar-collapse">
+<body class="hold-transition sidebar-collapse skin-black">
 <div class="wrapper">
 
   <!-- Main Header -->
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{ route('teacher-dashboard') }}" target="_blank" class="logo">
+    <a href="{{ route('teacher-dashboard') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>C</b>LM</span>
       <!-- logo for regular state and mobile devices -->
@@ -132,6 +132,9 @@ desired effect
                 <div class="pull-left">
                   <a href="{{ route('students.index') }}" class="btn btn-default btn-flat">Profile</a>
                 </div>
+                <div class="pull-left">
+                  <a href="{{ route('teacher-dashboard') }}" class="btn btn-default btn-flat">SMS</a>
+                </div>
                 <div class="pull-right">
                   <a href="{{ route('logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     <span>Sign out</span>
@@ -177,24 +180,13 @@ desired effect
           </div>
       </div>
 
-      
-      @yield('content')
-      
+      @yield('content')     
 
     </section>
     <!-- /.content -->
     </div>
   </div>
   <!-- /.content-wrapper -->
-
-  @include('admin.partials._footer')
-
-  <!-- Control Sidebar -->
-  @include('admin.partials._controlsidebar')
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-  immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
   @yield('java_script')
