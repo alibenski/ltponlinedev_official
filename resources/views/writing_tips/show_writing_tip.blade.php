@@ -38,7 +38,7 @@
     </div>
     
 
-    <h3 class="alert text-center" style="font-weight: 800;">SUBJECT: Writing Tip - {{ $writingTip->subject }}</h3>
+    <h3 class="alert text-center" style="font-weight: 800; color: #2f5496;">SUBJECT: Writing Tip - {{ $writingTip->subject }}</h3>
 
 
     <div class="row">

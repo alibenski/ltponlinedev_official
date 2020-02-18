@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html>
 <head>
   <meta charset="utf-8">
@@ -23,7 +19,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
-  <link rel="stylesheet" href="{{ asset('dist/css/skins/skin-black.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('dist/css/skins/_all-skins.min.css') }}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -54,27 +50,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
      Both of these plugins are recommended to enhance the
      user experience. -->
 </head>
-<!--
-BODY TAG OPTIONS:
-=================
-Apply one or more of the following classes to get the
-desired effect
-|---------------------------------------------------------|
-| SKINS         | skin-blue                               |
-|               | skin-black                              |
-|               | skin-purple                             |
-|               | skin-yellow                             |
-|               | skin-red                                |
-|               | skin-green                              |
-|---------------------------------------------------------|
-|LAYOUT OPTIONS | fixed                                   |
-|               | layout-boxed                            |
-|               | layout-top-nav                          |
-|               | sidebar-collapse                        |
-|               | sidebar-mini                            |
-|---------------------------------------------------------|
--->
-<body class="hold-transition sidebar-collapse skin-black">
+
+<body class="hold-transition skin-black-light sidebar-collapse">
 <div class="wrapper">
 
   <!-- Main Header -->
@@ -112,21 +89,6 @@ desired effect
                   <small>Member since {{ date('d M Y', strtotime(Auth::user()->created_at))}}</small>
                 </p>
               </li>
-              <!-- Menu Body -->
-              {{-- <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">X</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Y</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Z</a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li> --}}
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
@@ -155,8 +117,10 @@ desired effect
     </nav>
   </header>
 
+  @include('writing_tips.partials._sidebar')
+
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="background-color: #f9fafc;">
     <!-- Content Header (Page header) -->
     <div class="col-md-10 col-md-offset-1"> 
     <section class="content-header">
@@ -184,7 +148,6 @@ desired effect
 
     </section>
     <!-- /.content -->
-    </div>
   </div>
   <!-- /.content-wrapper -->
 </div>

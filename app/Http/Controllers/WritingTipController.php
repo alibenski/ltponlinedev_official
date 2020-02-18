@@ -17,14 +17,14 @@ class WritingTipController extends Controller
     public function selectiveSendWritingTipEmail(Request $request, WritingTip $writingTip)
     {
         if ($request->ajax()) {
-            
+
             $drupalEmailRecords = explode(',', $request->join_selected_values);
 
             $arr = [];
             foreach ($drupalEmailRecords as $emailAddress) {
                 Mail::to($emailAddress)
                     ->send(new sendWritingTip($writingTip));
-                    $arr[] = $emailAddress;
+                $arr[] = $emailAddress;
             }
 
             $data = $drupalEmailRecords;
@@ -36,9 +36,9 @@ class WritingTipController extends Controller
     {
         $drupalEmailRecordsArray = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')->get(["data"])
             ->unique();
-            // ->take(3);
-            // ->first();
-        
+        // ->take(3);
+        // ->first();
+
         // test sample dataset
         // $drupalEmailRecordsArray =collect(    [
         //         0 => ["data" => "allyson.frias@un.org"],
@@ -88,7 +88,7 @@ class WritingTipController extends Controller
     {
         $records = WritingTip::all();
 
-        return view('writing_tips.index_writing_tip', compact('records') );
+        return view('writing_tips.index_writing_tip', compact('records'));
     }
 
     /**
@@ -99,7 +99,7 @@ class WritingTipController extends Controller
     public function create()
     {
         // $emails = DB::connection('drupal')->table('')->get()->pluck('val','key');
-        $languages = DB::table('languages')->pluck("name","code")->all();
+        $languages = DB::table('languages')->pluck("name", "code")->all();
 
         return view('writing_tips.create_writing_tip', compact('languages'));
     }
@@ -140,11 +140,11 @@ class WritingTipController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(WritingTip $writingTip)
-    {   
+    {
         $drupalEmailRecords = DB::connection('drupal')->table('webform_submitted_data')->where('nid', '16098')
-        ->get(["data"])->unique();
+            ->get(["data"])->unique();
         // ->unique("data");
-        
+
         return view('writing_tips.show_writing_tip', compact('writingTip', 'drupalEmailRecords'));
     }
 
@@ -174,14 +174,14 @@ class WritingTipController extends Controller
         ]);
 
         $text = $writingTip;
-        
+
         if (!is_null($request->subject)) {
             $text->subject = $request->subject;
         }
         if (!is_null($request->text)) {
             $text->text = $request->text;
         }
-        
+
         $text->save();
 
         return redirect()->route('writing-tips.show', $writingTip->id);
