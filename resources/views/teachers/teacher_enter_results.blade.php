@@ -106,8 +106,6 @@
 </div>  
 </div>
 
-
-{{-- <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script> --}}
 <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
 <script>
@@ -156,85 +154,120 @@ $(document).ready(function () {
 </script>
 <script> 
 $(document).ready(function() {
-  var promises = [];
-    $('tr.table-row').each(function(){
-      var indexid = $(this).closest("tr").find("input[name='indexid']").val();
-      var L = $(this).closest("tr").find("input[name='L']").val();
-      var token = $("input[name='_token']").val();
+  var id = [];
+  var indexid = [];
+  var L = $("tr.table-row").find("input[name='L']").val();
+  var token = $("input[name='_token']").val();
 
-      promises.push($.ajax({
-            url: '{{ route('ajax-show-if-enrolled-next-term') }}',
+  $('tr.table-row').each(function(){
+    var each_id = $(this).closest("tr.table-row").find("input[name='id']").val();
+    var each_indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
+
+    id.push(each_id);
+    indexid.push(each_indexid);
+  });
+  
+  showIfEnrolledNextTerm();
+    
+  function showIfEnrolledNextTerm() {
+      // var promises = [];    
+      // promises.push(
+            $.ajax({
+              url: '{{ route('ajax-show-if-enrolled-next-term') }}',
+              type: 'GET',
+              dateType:"json",
+              data: {indexid:indexid, L:L, _token:token},
+            })
+            .then(function(data) {
+              $.each(data, function (indexInArray, valueOfElement) { 
+                  $("td#"+valueOfElement.INDEXID+".enrolled-next-term").find('ol').append("<li class='appended-value-1' data-name='"+valueOfElement['Te_Code']+"'></li>");
+                  $("td#"+valueOfElement.INDEXID+".enrolled-next-term").find("li.appended-value-1[data-name='"+valueOfElement['Te_Code']+"']").append(valueOfElement['courses']['Description']);
+              });
+              
+              showIfEnrolledNextTermPlacement();
+            })
+            .fail(function(data) {
+              console.log("error on showing enrol next term: " + data);
+              alert("An error occured while checking if student enrolled to the next term. Click OK to reload.");
+              window.location.reload();
+            })
+            .always(function() {
+              console.log("complete append next term courses");
+            })
+      // ); 
+
+      // $.when.apply($('tr.table-row'), promises).then(function() {
+      //     $('[data-toggle="tooltip"]').tooltip(); 
+      //     $(".preloader2").fadeOut(600);
+      // }); 
+      return this;
+  }
+
+  function showIfEnrolledNextTermPlacement() {
+      // var promises = [];    
+      // promises.push(
+            $.ajax({
+              url: '{{ route('ajax-show-if-enrolled-next-term-placement') }}',
+              type: 'GET',
+              dateType:"json",
+              data: {indexid:indexid, _token:token},
+            })
+            .then(function(data) {
+              $.each(data, function (indexInArray, valueOfElement) { 
+                $("td#"+valueOfElement.INDEXID+".enrolled-next-term").find('ol').append("<li class='appended-value-2'>Submitted Placement: "+valueOfElement['languages']['name']+"</li>");
+              });
+
+              checkIfAssigned();
+            })
+            .fail(function(data) {
+              console.log("error on showing enrol next term placement: " + data);
+              alert("An error occured while checking placement forms. Click OK to reload.");
+              window.location.reload();
+            })
+            .always(function() {
+              console.log("complete append next term placement");
+            })
+      // ); 
+
+      // $.when.apply($('tr.table-row'), promises).then(function() {
+      //     $(".preloader2").fadeOut(600);
+      // }); 
+      return this;
+  }
+
+  function checkIfAssigned() {
+    var promises = [];    
+    promises.push(
+          $.ajax({
+            url: '{{ route('ajax-check-if-assigned') }}',
             type: 'GET',
             dateType:"json",
             data: {indexid:indexid, L:L, _token:token},
           })
           .then(function(data) {
-
-            if (data != 'not enrolled') {
-
-              if (data[0].length > 0) {
-                // console.log(data[0]);
-                $.each(data[0], function(index, val) {
-                  $.each(data[4], function(i1, v1) {
-                    if (index == i1) {
-                      $("td#"+indexid+".enrolled-next-term").find('ol').append("<li class='appended-value-1' data-name='"+val+"'></li>");
-
-                      $("td#"+indexid+".enrolled-next-term").find("li.appended-value-1[data-name='"+val+"']").append(v1);
-                    }
-
-                  }); // end of foreach data[4]
-
-                }); // end of foreach data[0]
-
-              }
-              
-              if (data[2].length > 0) {
-                $.each(data[2], function(x1, y1) {
-                  $.each(data[3], function(x, y) {
-
-                      if(y1 != null){
-                        if (x == x1) {
-                          $("td#"+indexid+".enrolled-next-term").find("li.appended-value-1[data-name='"+y+"']").append("<span><i class='fa fa-star text-success' data-toggle='tooltip' title='This form has been assigned to a course''></i> </span>");
-                          
-                        }
-                          
-                      }
-                  }); // end of foreach data[3]                    
-                    
-                }); // end of foreach data[2]
-                
-              }
-
-              if (data[1].length > 0) {
-                // console.log(data[1]);
-                $.each(data[1], function(i, v) {
-                  $("td#"+indexid+".enrolled-next-term").find('ol').append("<li class='appended-value-2'>Placement: "+v+"</li>");
-                });
-                
-              }
-
-              
-
-            }
-
+            $.each(data, function (indexInArray, valueOfElement) {
+                $("td#"+valueOfElement.INDEXID+".enrolled-next-term").find("li.appended-value-1[data-name='"+valueOfElement['Te_Code']+"']").append("<span><i class='fa fa-star text-success' data-toggle='tooltip' title='This form has been assigned to a course by "+valueOfElement['modify_user']['name']+"'></i> </span>");
+            });
           })
-          .fail(function() {
-            console.log("error");
-            alert("An error occured. Click OK to reload.");
+          .fail(function(data) {
+            console.log("error on showing enrol next term: " + data);
+            alert("An error occured while fetching data. Click OK to reload.");
             window.location.reload();
           })
           .always(function() {
-            console.log("complete append next term courses");
-          })); 
-    }); //end of $.each
+            console.log("complete check if assigned");
+          })
+    ); 
 
     $.when.apply($('tr.table-row'), promises).then(function() {
         $('[data-toggle="tooltip"]').tooltip(); 
         $(".preloader2").fadeOut(600);
     }); 
+    return this;
+  }
 });
-
 </script>
+
 <script>
 $(document).ready(function() {
   $(".quick-edit").on('click', function(){

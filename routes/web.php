@@ -103,6 +103,8 @@ Route::group(['middleware' => ['auth','isAdmin'], 'prefix' => 'admin'],function(
     Route::get('ajax-get-remark', ['as'=>'ajax-get-remark','uses'=>'TeachersController@ajaxGetRemark']);
 
     Route::get('ajax-show-if-enrolled-next-term', ['as'=>'ajax-show-if-enrolled-next-term','uses'=>'TeachersController@ajaxShowIfEnrolledNextTerm']);
+    Route::get('ajax-show-if-enrolled-next-term-placement', ['as'=>'ajax-show-if-enrolled-next-term-placement','uses'=>'TeachersController@ajaxShowIfEnrolledNextTermPlacement']);
+    Route::get('ajax-check-if-assigned', ['as'=>'ajax-check-if-assigned','uses'=>'TeachersController@ajaxCheckIfAssigned']);
 
     Route::get('ajax-show-overall-attendance', ['as'=>'ajax-show-overall-attendance','uses'=>'TeachersController@ajaxShowOverallAttendance']);
 

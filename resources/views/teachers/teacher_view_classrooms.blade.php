@@ -146,7 +146,7 @@ $("button[id='showStudentsBtn']").click(function(){
   })
   .fail(function(data) {
       console.log("error");
-      alert("An error occured. Click OK to reload.");
+      alert("An error occured while loading Show Students Page. Click OK to reload.");
       window.location.reload();
   })
   .always(function(data) {
@@ -176,7 +176,7 @@ $("button[id='enterResultsBtn']").click(function(){
   })
   .fail(function(data) {
       console.log("error");
-      alert("An error occured. Click OK to reload.");
+      alert("An error occured while loading Enter Results Page. Click OK to reload.");
       window.location.reload();
   })
   .always(function(data) {

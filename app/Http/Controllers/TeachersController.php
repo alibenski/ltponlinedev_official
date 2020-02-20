@@ -594,6 +594,41 @@ class TeachersController extends Controller
         }
     }
 
+    public function ajaxShowIfEnrolledNextTermPlacement(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $indexid = $request->indexid;
+
+            $selectedTerm = Session::get('Term');
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                $next_term = $selectedTerm + 2;
+            }
+
+            if ($lastDigit == 1) {
+                $next_term = $selectedTerm + 3;
+            }
+
+            if ($lastDigit == 4) {
+                $next_term = $selectedTerm + 5;
+            }
+            if ($lastDigit == 8) {
+                $next_term = $selectedTerm + 1;
+            }
+
+            $enrolled_next_term_placement = PlacementForm::whereIn('INDEXID', $indexid)
+                ->where('Term', $next_term)
+                ->with('languages')
+                ->get();
+
+            $data = $enrolled_next_term_placement;
+            
+            return response()->json($data);
+        }
+    }
+
     public function ajaxShowIfEnrolledNextTerm(Request $request)
     {
         if ($request->ajax()) {
@@ -624,55 +659,56 @@ class TeachersController extends Controller
 
             // $next_term_string = Term::where('Term_Code', $next_term )->first();
             
-            $enrolled_next_term_regular = Preenrolment::where('INDEXID', $indexid)
+            $enrolled_next_term_regular = Preenrolment::whereIn('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->select('Te_Code')
-                ->groupBy('Te_Code')
+                ->select('Te_Code','INDEXID')
+                ->groupBy('Te_Code', 'INDEXID')
+                ->with('courses')
                 ->get();
+                
+            $data = $enrolled_next_term_regular;
 
-            $arr1 = [];
-            $arr5 = [];
+            return response()->json($data);  
+        }
+    }
 
-            foreach ($enrolled_next_term_regular as $value1) {
-                $arr1[] = $value1->Te_Code;
-                $arr5[] = $value1->courses->Description;
+    public function ajaxCheckIfAssigned(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexid = $request->indexid;
+            $language = $request->L;
+
+            $selectedTerm = Session::get('Term'); // No need of type casting
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                $next_term = $selectedTerm + 2;
             }
 
-            $check_if_assigned_regular = Preenrolment::where('INDEXID', $indexid)
+            if ($lastDigit == 1) {
+                $next_term = $selectedTerm + 3;
+            }
+
+            if ($lastDigit == 4) {
+                $next_term = $selectedTerm + 5;
+            }
+            if ($lastDigit == 8) {
+                $next_term = $selectedTerm + 1;
+            }
+
+            $check_if_assigned_regular = Preenrolment::whereIn('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('updated_by_admin', 1)
-                ->select('Te_Code','modified_by')
-                ->groupBy('Te_Code','modified_by')
+                ->select('Te_Code', 'modified_by','INDEXID')
+                ->groupBy('Te_Code', 'modified_by','INDEXID')
+                ->with('modifyUser')
                 ->get();
 
-            $arr3 = [];
-            $arr4 = [];
-            foreach ($check_if_assigned_regular as $value3) {
-                $arr3[] = $value3->modified_by;
-                $arr4[] = $value3->Te_Code;
-            }
-
-            $enrolled_next_term_placement = PlacementForm::where('INDEXID', $indexid)
-                // ->where('L', $language)
-                ->where('Term', $next_term)
-                ->get();
-
-            $arr2 = [];
-            foreach ($enrolled_next_term_placement as $value2) {
-                $arr2[] = $value2->languages->name;
-            }
-
-            if (count($enrolled_next_term_regular) < 1 && count($enrolled_next_term_placement) < 1) {
-                $data = 'not enrolled';
-                return response()->json($data); 
-            } 
-
-            $data = [$arr1, $arr2, $arr3, $arr4, $arr5];
-            // $data = [$enrolled_next_term_regular, $enrolled_next_term_placement];
-            return response()->json($data);  
+            $data = $check_if_assigned_regular;
             
+            return response()->json($data);
         }
     }
 

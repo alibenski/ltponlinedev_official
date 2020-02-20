@@ -70,8 +70,6 @@
     </div>
 </div>
 
-{{-- <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script> --}}
-
 <script>
 $(document).ready(function () {
     var counter = 0;
@@ -79,12 +77,11 @@ $(document).ready(function () {
         counter++;
         $(this).attr('id', counter);
         $('#'+counter).html(counter);
-        // console.log(counter)
     });    
     
     var id = [];
     var indexid = [];
-    var L = $(this).closest("tr.table-row").find("input[name='L']").val();
+    var L = $("tr.table-row").find("input[name='L']").val();
     var token = $("input[name='_token']").val();
 
     $('tr.table-row').each(function(){
@@ -95,93 +92,102 @@ $(document).ready(function () {
       indexid.push(each_indexid);
     });
 
-          $.ajax({
-            url: '{{ route('ajax-show-overall-attendance') }}',
-            type: 'GET',
-            dateType:"json",
-            data: {indexid:indexid, L:L,id:id, _token:token},
-          })
-          .done(function(data) {
-              console.log(data)
-
-              if (data == 0) {
-                  $("td.days-present").append("<p>0</p>");
-                  $("td.days-excused").append("<p>0</p>");
-                  $("td.days-absent").append("<p>0</p>");
-              } else {
-                $.each(data, function(index, val) {
-                   $("td#"+val.pash_id+".days-present").append("<p>"+val.P+"</p>");
-                   $("td#"+val.pash_id+".days-excused").append("<p>"+val.E+"</p>");
-                   $("td#"+val.pash_id+".days-absent").append("<p>"+val.A+"</p>");
-                });
-              }
-          })
-          .fail(function(data) {
-              console.log("error on loading attendance summary: " + data);
-              alert("An error occured. Click OK to reload.");
-              window.location.reload();
-          })
-          .always(function() {
-              console.log("load complete attendance summary");
+    $.ajax({
+      url: '{{ route('ajax-show-overall-attendance') }}',
+      type: 'GET',
+      dateType:"json",
+      data: {indexid:indexid, L:L,id:id, _token:token},
+    })
+    .done(function(data) {
+        if (data == 0) {
+            $("td.days-present").append("<p>0</p>");
+            $("td.days-excused").append("<p>0</p>");
+            $("td.days-absent").append("<p>0</p>");
+        } else {
+          $.each(data, function(index, val) {
+              $("td#"+val.pash_id+".days-present").append("<p>"+val.P+"</p>");
+              $("td#"+val.pash_id+".days-excused").append("<p>"+val.E+"</p>");
+              $("td#"+val.pash_id+".days-absent").append("<p>"+val.A+"</p>");
           });
+        }
+
+        showIfEnrolledNextTerm();
+        showIfEnrolledNextTermPlacement();
+    })
+    .fail(function(data) {
+        console.log("error on loading attendance summary: " + data);
+        alert("An error occured. Click OK to reload.");
+        window.location.reload();
+    })
+    .always(function() {
+        console.log("load complete attendance summary");
+    });
+          
+    function showIfEnrolledNextTerm() {
+        var promises = [];    
+        promises.push(
+              $.ajax({
+                url: '{{ route('ajax-show-if-enrolled-next-term') }}',
+                type: 'GET',
+                dateType:"json",
+                data: {indexid:indexid, L:L, _token:token},
+              })
+              .then(function(data) {
+                console.log(data);
+                $.each(data, function (indexInArray, valueOfElement) { 
+                   console.log(valueOfElement.INDEXID)
+                   $("td#"+valueOfElement.INDEXID+".enrolled-next-term").append("<p>"+valueOfElement['courses']['Description']+"</p>");
+                });
+              })
+              .fail(function(data) {
+                console.log("error on showing enrol next term: " + data);
+                alert("An error occured. Click OK to reload.");
+                window.location.reload();
+              })
+              .always(function() {
+                console.log("complete show if enrolled");
+              })
+        ); 
+
+        $.when.apply($('tr.table-row'), promises).then(function() {
+            $(".preloader2").fadeOut(600);
+        }); 
+    }
+
+    function showIfEnrolledNextTermPlacement() {
+        var promises = [];    
+        promises.push(
+              $.ajax({
+                url: '{{ route('ajax-show-if-enrolled-next-term-placement') }}',
+                type: 'GET',
+                dateType:"json",
+                data: {indexid:indexid, _token:token},
+              })
+              .then(function(data) {
+                console.log(data);
+                $.each(data, function (indexInArray, valueOfElement) { 
+                  $("td#"+valueOfElement.INDEXID+".enrolled-next-term").append("<p>Submitted Placement: "+valueOfElement['languages']['name']+"</p>");
+                   
+                });
+              })
+              .fail(function(data) {
+                console.log("error on showing enrol next term: " + data);
+                alert("An error occured. Click OK to reload.");
+                window.location.reload();
+              })
+              .always(function() {
+                console.log("complete show if placement");
+              })
+        ); 
+
+        $.when.apply($('tr.table-row'), promises).then(function() {
+            $(".preloader2").fadeOut(600);
+        }); 
+    }
 });
 </script>
 <script> 
 $(document).ajaxError(function(e, xhr, opt, exc){
     console.log("Error requesting " + opt.url + ": " + xhr.status + " " + xhr.statusText + " " + exc);
 });
-
-$(document).ready(function() {
-    var promises = [];
-    $('tr.table-row').each(function(){
-      var indexid = $(this).closest("tr.table-row").find("input[name='indexid']").val();
-      var L = $(this).closest("tr.table-row").find("input[name='L']").val();
-      var token = $("input[name='_token']").val();
-      var id = $(this).closest("tr.table-row").find("input[name='id']").val();         
-
-          promises.push(
-          $.ajax({
-            url: '{{ route('ajax-show-if-enrolled-next-term') }}',
-            type: 'GET',
-            dateType:"json",
-            data: {indexid:indexid, L:L, _token:token},
-          })
-          .then(function(data) {
-            // console.log("success");
-            if (data != 'not enrolled') {
-
-              if (data[0].length > 0) {
-                // console.log(data[0]);
-                $.each(data[0], function(index, val) {
-                  $("td#"+indexid+".enrolled-next-term").append("<p>"+val+"</p>");
-                  console.log('append enrolled course')
-                });
-                
-              }
-
-              if (data[1].length > 0) {
-                // console.log(data[1]);
-                $.each(data[1], function(i, v) {
-                  $("td#"+indexid+".enrolled-next-term").append("<p>Placement: "+v+"</p>");
-                  console.log('append enrolled pl course')
-                });
-              }
-            }
-
-          })
-          .fail(function(data) {
-            console.log("error on showing enrol next term: " + data);
-            alert("An error occured. Click OK to reload.");
-            window.location.reload();
-          })
-          .always(function() {
-            // console.log("complete");
-          })); 
-    }); //end of $.each
-
-    $.when.apply($('tr.table-row'), promises).then(function() {
-        $(".preloader2").fadeOut(600);
-    }); 
-});
-
 </script>
