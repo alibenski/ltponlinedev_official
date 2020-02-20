@@ -155,7 +155,7 @@ $("button[id='enterResultsBtn']").click(function(){
   var Code = $(this).val();
   var token = $("input[name='_token']").val();
 
-  $("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-success');
+  $("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-success').attr('disabled', true);;
   $("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-default');
   $("button").not("button[id='enterResultsBtn'][value='"+Code+"']").addClass('btn-default');
   $("button").not("button[id='enterResultsBtn'][value='"+Code+"']").removeClass('btn-success');
@@ -167,8 +167,11 @@ $("button[id='enterResultsBtn']").click(function(){
       data: {Code:Code, _token:token},
   })
   .done(function(data) {
-        $(".students-here").html(data);
-        $(".students-here").html(data.options);
+      $(".students-here").html(data);
+      $(".students-here").html(data.options);
+      setTimeout(function() {
+          $("button[id='enterResultsBtn'][value='"+Code+"']").removeAttr('disabled');
+      }, 2000);
       console.log("loading students after click Enter Results button")
   })
   .fail(function(data) {
