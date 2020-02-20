@@ -74,7 +74,7 @@
 					<div class="info-box-content">
 						<span class="info-box-text">Manage ALL Unassigned Enrolment Forms </span>
 						<span class="info-box-number">{{$all_unassigned_enrolment_form}} Form(s)</span>
-						<span class="info-box-text">Shows ALL APPROVED regular enrolment forms</span>
+						<span class="info-box-text" style="font-size: 11px;">Shows ALL APPROVED regular enrolment forms</span>
 					</div>
 					<!-- /.info-box-content -->
 					</div>
@@ -103,7 +103,7 @@
 					<div class="info-box-content">
 						<span class="info-box-text">Manage Unassigned Enrolment Forms </span>
 						<span class="info-box-number">{{$arr3_count}} forms</span>
-						<span class="info-box-text"><small>Shows only students not in a class</small></span>
+						<span class="info-box-text" style="font-size: 11px;">Shows forms from students who are currently not in a class</span>
 					</div>
 					<!-- /.info-box-content -->
 					</div>
@@ -201,7 +201,7 @@
 			<div class="info-box-content">
 				<span class="info-box-text">Students not in a class after batch run</span>
 				<span class="info-box-number">@if(Session::has('Term')) {{count($merge)}} @else Set the Term @endif</span>
-				<span class="info-box-text" style="font-size: 13px;">Shows fully approved & assigned forms</span>
+				<span class="info-box-text" style="font-size: 11px;">Shows fully approved & assigned forms</span>
 			</div>
 			<!-- /.info-box-content -->
 			</div>

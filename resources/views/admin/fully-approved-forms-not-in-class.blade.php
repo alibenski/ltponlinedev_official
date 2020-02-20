@@ -18,12 +18,6 @@
 		          </h3>
 		          	<small class="text-danger"><p>Note: This view is only avaiable after the batch has run. The purpose of this view is to show the number of students who are not in a class or not in the waitlist after batch run due to various reasons such as late registration, late payment, etc.</p>
 		          		<p>Please click on the Index No. or Name to open the User Administration view of the student.</p></small>
-
-		          <div class="box-tools pull-right">
-		            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-		            </button>
-		            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-		          </div>
 		        </div>
 		        <!-- /.box-header -->
 		        <div class="box-body">
