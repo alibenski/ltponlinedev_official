@@ -193,6 +193,22 @@
 
 
 <div class="admin-index-container-2">
+	<div class="admin-index-items-2 students-not-in-class hidden">
+		<a href="{{ route('fully-approved-forms-not-in-class') }}">
+			<div class="info-box">
+			<!-- Apply any bg-* class to to the icon to color it -->
+			<span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle"></i></span>
+			<div class="info-box-content">
+				<span class="info-box-text">Students not in a class after batch run</span>
+				<span class="info-box-number">@if(Session::has('Term')) {{count($merge)}} @else Set the Term @endif</span>
+				<span class="info-box-text" style="font-size: 13px;">Shows fully approved & assigned forms</span>
+			</div>
+			<!-- /.info-box-content -->
+			</div>
+			<!-- /.info-box -->
+		</a>
+	</div>
+
 	<div class="admin-index-items-2">
 		@if ($new_user_count < 5)
 		<a href="{{ route('newuser.index') }}">
@@ -211,7 +227,7 @@
 		<a href="{{ route('newuser.index') }}">
 			<div class="info-box">
 			<!-- Apply any bg-* class to to the icon to color it -->
-			<span class="info-box-icon bg-red"><i class="fa fa-warning"></i></span>
+			<span class="info-box-icon bg-green"><i class="fa fa-user"></i></span>
 			<div class="info-box-content">
 				<span class="info-box-text">New User Request </span>
 				<span class="info-box-number">{{ $new_user_count }}</span>
@@ -299,22 +315,6 @@
 			<div class="info-box-content">
 				<span class="info-box-text">Class Table </span>
 				<span class="info-box-number">@if(Session::has('Term')) @else Set the Term @endif</span>
-			</div>
-			<!-- /.info-box-content -->
-			</div>
-			<!-- /.info-box -->
-		</a>
-	</div>
-
-	<div class="admin-index-items-2 students-not-in-class hidden">
-		<a href="{{ route('fully-approved-forms-not-in-class') }}">
-			<div class="info-box">
-			<!-- Apply any bg-* class to to the icon to color it -->
-			<span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle"></i></span>
-			<div class="info-box-content">
-				<span class="info-box-text">Students not in a class after batch run</span>
-				<span class="info-box-number">@if(Session::has('Term')) {{count($merge)}} @else Set the Term @endif</span>
-				<span class="info-box-text"><small>Shows fully approved and assigned forms</small></span>
 			</div>
 			<!-- /.info-box-content -->
 			</div>
