@@ -62,6 +62,24 @@ class ClassroomController extends Controller
 
     public function indexCalendar()
     {
+        $classrooms = Classroom::orderBy('Te_Term', 'desc')->where('Te_Term', 204)->where('L', 'S')->with('course')->get(['id', 'Te_Mon_Room', 'Te_Tue_Room', 'Te_Wed_Room', 'Te_Thu_Room', 'Te_Fri_Room']);
+
+        $arrayRooms = [];
+        foreach ($classrooms as $key => $value) {
+            array_push(
+                $arrayRooms,
+                $value->Te_Mon_Room,
+                $value->Te_Tue_Room,
+                $value->Te_Wed_Room,
+                $value->Te_Thu_Room,
+                $value->Te_Fri_Room
+            );
+        }
+        $arrayRooms = array_unique($arrayRooms);
+        $arrayRooms = array_filter($arrayRooms);
+        $arrayRooms = array_values($arrayRooms);
+
+        dd($classrooms, $arrayRooms);
         return view('classrooms.calendar');
     }
 
