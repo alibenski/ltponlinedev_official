@@ -14,6 +14,12 @@ use Session;
 
 class TextController extends Controller
 {
+    public function viewGeneralEmailText($id)
+    {
+        $text = Text::find($id);
+        return view('texts.view-general-email-text', compact('text'));
+    }
+
 	public function viewEnrolmentIsOpenText($id)
 	{
 		$text = Text::find($id);
@@ -39,7 +45,11 @@ class TextController extends Controller
         
     	$text->save();
 
-    	return redirect(route('view-enrolment-is-open-text', ['id' => $id]));
+        if ($id == 1 ) {
+            return redirect(route('view-enrolment-is-open-text', ['id' => $id]));
+        }
+
+        return redirect(route('view-general-email-text', ['id' => $id]));
     }
 
     public function viewConvocationEmailText()

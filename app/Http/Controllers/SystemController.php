@@ -6,6 +6,7 @@ use App\Classroom;
 use App\Course;
 use App\Mail\sendBroadcastEnrolmentIsOpen;
 use App\Mail\sendConvocation;
+use App\Mail\sendGeneralEmail;
 use App\Mail\sendReminderToCurrentStudents;
 use App\PlacementForm;
 use App\Preenrolment;
@@ -29,6 +30,42 @@ class SystemController extends Controller
 		return view('system.system-index', compact('term', 'texts'));
 	}
 
+    public function sendGeneralEmail(Request $request)
+    {
+        // query students who have logged in
+        $query_email_addresses = User::where('must_change_password', 0)
+            ->select('email')
+            ->groupBy('email')
+            ->get()
+            ->pluck('email');
+
+        $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        if (!$term) {
+            $request->session()->flash('warning', 'No emails sent! Create a valid term.');
+            return redirect()->back();
+        }
+
+        $query_students_current_year = Repo::where('Term', $term->Term_Code)
+            ->select('INDEXID')
+            ->groupBy('INDEXID')
+            ->with('users')
+            ->get()
+            ->pluck('users.email');
+
+        $merge = $query_email_addresses->merge($query_students_current_year);
+        $unique_email_address = $merge->unique();
+
+        // dd($merge->unique());
+
+        // $sddextr_email_address = 'allyson.frias@gmail.com';
+        foreach ($unique_email_address as $sddextr_email_address) {
+            Mail::to($sddextr_email_address)->send(new sendGeneralEmail($sddextr_email_address));
+        }
+
+        $request->session()->flash('success', 'Email sent!');
+        return redirect()->back();
+    }
+
     /**
      * Send broadcast reminder email to all students who have logged in
      * Use during START of enrolment 
@@ -44,8 +81,8 @@ class SystemController extends Controller
     		->get()
     		->pluck('email');
 
-    	$term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
-    	if (count($term) < 1) {
+        $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+    	if (!$term) {
     		$request->session()->flash('warning', 'No emails sent! Create a valid term.');
     		return redirect()->back();
     	}

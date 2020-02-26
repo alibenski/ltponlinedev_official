@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], functio
      * Admin Routes
      */
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
+    Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
     Route::get('send-broadcast-reminder', 'SystemController@sendBroadcastReminder')->name('send-broadcast-reminder');
     Route::get('send-reminder-to-current-students', 'SystemController@sendReminderToCurrentStudents')->name('send-reminder-to-current-students');
     Route::get('system-index', 'SystemController@systemIndex')->name('system-index');
@@ -70,6 +71,7 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], functio
     Route::get('edit-enrolment-is-open-text/{id}', ['as' => 'edit-enrolment-is-open-text', 'uses' => 'TextController@editEnrolmentIsOpenText']);
     Route::get('view-enrolment-is-open-text/{id}', ['as' => 'view-enrolment-is-open-text', 'uses' => 'TextController@viewEnrolmentIsOpenText']);
     Route::put('store-enrolment-is-open-text/{id}', ['as' => 'store-enrolment-is-open-text', 'uses' =>  'TextController@storeEnrolmentIsOpenText']);
+    Route::get('view-general-email-text/{id}', ['as' => 'view-general-email-text', 'uses' => 'TextController@viewGeneralEmailText']);
     Route::resource('text', 'TextController');
     Route::get('view-convocation-email-text', ['as' => 'view-convocation-email-text', 'uses' => 'TextController@viewConvocationEmailText']);
 
