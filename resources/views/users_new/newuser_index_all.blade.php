@@ -14,13 +14,13 @@
     	</div>
     </div>
     <div class="form-group col-lg-4">
-        <form method="GET" action="{{ route('newuser.index') }}">
+        <form method="GET" action="{{ route('newuser-index-all') }}">
             {{-- search by name or email--}}
             <div class="input-group">           
                 <input type="text" name="search" class="form-control">
                 <div class="input-group-btn">
                     <button type="submit" class="btn btn-info button-prevent-multi-submit">Search by Name</button>
-                    <a href="/admin/newuser/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                    <a href="{{ route('newuser-index-all')}}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
                 </div>
             </div>
         </form>    

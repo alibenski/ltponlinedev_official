@@ -7,7 +7,7 @@
 	            <label class="control-label text-danger">Possible duplicates (Please review before approving): {{ count($possible_dupes) }}</label>
 		        @foreach($possible_dupes as $dupe)
 		        <ul>
-					<li>{{ $dupe->name }} : {{ $dupe->email }}</li>
+					<li>{{ $dupe->name }} : <strong> {{ $dupe->email }} </strong></li>
 		        </ul>
 		        @endforeach
 	        </div>

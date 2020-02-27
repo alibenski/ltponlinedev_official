@@ -43,7 +43,11 @@
 	            <td>{{ $user->id }}</td>
 	            <td>{{ $user->name }}</td>
 	            <td>{{ $user->email }}</td>
-	            <td>{{ $user->approved_account }}</td>
+	            <td>
+					@if ($user->approved_account == 0)
+						<span class="label label-info">Waiting for Admin</span>
+					@endif
+	            </td>
 	            <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
 	            <td>
 	            <button class="show-modal btn btn-warning" data-id="{{$user->id}}"
