@@ -2,6 +2,7 @@
 
 @section('customcss')
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 @stop
 
@@ -9,7 +10,7 @@
 @section('content')
 @include('admin.partials._userAdminNav')
 <div class="row col-sm-12">
-	<a href="{{ route('users.index') }}" class="btn btn-danger btn-space"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
+	<a href="{{ route('users.index') }}" class="btn btn-default btn-space"><span class="glyphicon glyphicon-arrow-left"></span> Back to User Admin</a>
 	<button type="button" class="show-modal btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>  View Student Profile</button>
 	<button type="button" class="show-modal-history-main btn btn-primary btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View History / Attestation</button>
 	<button type="button" class="show-modal-placement-history btn bg-orange btn-space" data-toggle="modal"><span class="glyphicon glyphicon-list-alt"></span> Placement Tests & Results</button>
@@ -541,6 +542,15 @@
 		
 	@endif
 </div>
+
+@if (Auth::user()->id == 701)
+	<form id="deleteUser" method="POST" action="{{ route('users.destroy', $id) }}" class="form-prevent-multi-submit">
+		<button  type="submit" class="btn btn-danger btn-space btn-delete-user button-prevent-multi-submit"><span class="glyphicon glyphicon-trash"></span> Delete User</button>
+		<input type="hidden" name="_token" value="{{ Session::token() }}">
+		{{ method_field('DELETE') }}
+	</form>
+@endif
+
 <!-- Modal form to show student profile -->
 <div id="showModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -867,6 +877,7 @@
 
 @section('java_script')
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/submit.js') }}"></script>
 
 <script>
 $(document).ready(function() {
@@ -898,6 +909,15 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function () {
+	$('button.btn-delete-user').click(function (e) { 
+		e.preventDefault();
+		
+		var c = confirm("You are about to delete a user. This cannot be undone. Are you sure?");
+        if (c === true) {
+			$('form#deleteUser').submit();
+		}
+	});
+
     $('button.insert-to-class').click( function() {
       var INDEXID = $(this).attr('data-indexno');
       var L = $(this).attr('data-language');

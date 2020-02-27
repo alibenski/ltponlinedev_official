@@ -622,6 +622,8 @@ class UserController extends Controller
     {
         //Find a user with a given id and delete
         $user = User::findOrFail($id); 
+        $sddextr = SDDEXTR::where('INDEXNO', $user->indexno)->first();
+        $sddextr->delete();
         $user->delete();
 
         return redirect()->route('users.index')
