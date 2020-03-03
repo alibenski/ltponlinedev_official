@@ -62,7 +62,9 @@ class ClassroomController extends Controller
 
     public function indexCalendar()
     {
-        $classrooms = Classroom::orderBy('Te_Term', 'desc')->where('Te_Term', 204)->where('L', 'S')->with('course')->get(['id', 'Te_Mon_Room', 'Te_Tue_Room', 'Te_Wed_Room', 'Te_Thu_Room', 'Te_Fri_Room']);
+        $classrooms = Classroom::orderBy('id', 'desc')->where('Te_Term', 204)
+            ->where('L', 'S')
+            ->get();
 
         $arrayRooms = [];
         foreach ($classrooms as $key => $value) {
@@ -79,18 +81,33 @@ class ClassroomController extends Controller
         $arrayRooms = array_filter($arrayRooms);
         $arrayRooms = array_values($arrayRooms);
 
-        dd($classrooms, $arrayRooms);
-        return view('classrooms.calendar');
+        $rooms = Room::whereIn('id', $arrayRooms)->get();
+
+        return view('classrooms.calendar', compact('rooms'));
     }
 
     public function ajaxIndexCalendar(Request $request)
     {
         if ($request->ajax()) {
-            $classrooms = Classroom::orderBy('Te_Term', 'desc')->where('Te_Term', 204)->where('L', 'S')->with('course')->get();
+            $classrooms = Classroom::orderBy('Te_Term', 'desc')->where('Te_Term', 204)
+                ->where('L', 'S')
+                ->with('course')
+                ->with('teachers')
+                ->get();
 
             $array = [];
             $arrayRecurrence = [];
+            $arrayRooms = [];
             foreach ($classrooms as $value) {
+                array_push(
+                    $arrayRooms,
+                    $value->Te_Mon_Room,
+                    $value->Te_Tue_Room,
+                    $value->Te_Wed_Room,
+                    $value->Te_Thu_Room,
+                    $value->Te_Fri_Room
+                );
+
                 $day1 = $value->scheduler->day_1;
                 if ($day1 != null) {
                     $day1 = $day1 - 1;
@@ -127,13 +144,44 @@ class ClassroomController extends Controller
                     'daysOfWeek' => $arrayRecurrence,
                     'startRecur' => Carbon::parse($value->terms->Term_Begin)->toDateString(),
                     'endRecur' => Carbon::parse($value->terms->Term_End)->toDateString(),
-                    'teacher' => $value->Tch_ID,
-
+                    'teacher' => $value->teachers->Tch_Name,
+                    'roomMon' => $value->Te_Mon_Room,
+                    'roomTue' => $value->Te_Tue_Room,
+                    'roomWed' => $value->Te_Wed_Room,
+                    'roomThu' => $value->Te_Thu_Room,
+                    'roomFri' => $value->Te_Fri_Room
                 ];
                 $arrayRecurrence = [];
             }
 
-            $data = $array;
+            $arrayRooms = array_unique($arrayRooms);
+            $arrayRooms = array_filter($arrayRooms);
+            $arrayRooms = array_values($arrayRooms);
+
+            $array2 = [];
+            foreach ($arrayRooms as $v) {
+                foreach ($array as $value1) {
+                    if ($v == $value1['roomMon']) {
+                        $array2[] = ['room' => $v, 'class' => $value1];
+                    }
+                    if ($v == $value1['roomTue']) {
+                        $array2[] = ['room' => $v, 'class' => $value1];
+                    }
+                    if ($v == $value1['roomWed']) {
+                        $array2[] = ['room' => $v, 'class' => $value1];
+                    }
+                    if ($v == $value1['roomThu']) {
+                        $array2[] = ['room' => $v, 'class' => $value1];
+                    }
+                    if ($v == $value1['roomFri']) {
+                        $array2[] = ['room' => $v, 'class' => $value1];
+                    }
+                }
+            }
+
+            $array2 = array_unique($array2, SORT_REGULAR);
+
+            $data = $array2;
 
             return response()->json(['data' => $data]);
         }

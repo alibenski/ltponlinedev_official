@@ -67,7 +67,7 @@
                             <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
                             <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
                         </div>
-                        <p class="small text-danger"><strong>Please check that you belong to the correct organization in this field.</strong></p>
+                        {{-- <p class="small text-danger"><strong>Please check that you belong to the correct organization in this field.</strong></p> --}}
                   </div>
                 </div>
 
