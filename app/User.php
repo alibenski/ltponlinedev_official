@@ -8,18 +8,29 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Traits\FullTextSearch;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use FullTextSearch;
+
+    /**
+     * The columns of the full text index
+     */
+    protected $searchable = [
+        'name',
+        'email',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'indexno', 'name', 'indexno_old', 'nameFirst', 'nameLast', 'profile', 'email', 'temp_email', 'password', 'must_change_password', 'approved_account', 'approved_update', 'account_token', 'update_token', 'last_login_at', 'last_login_ip', 
+        'indexno', 'name', 'indexno_old', 'nameFirst', 'nameLast', 'profile', 'email', 'temp_email', 'password', 'must_change_password', 'approved_account', 'approved_update', 'account_token', 'update_token', 'last_login_at', 'last_login_ip',
     ];
 
     /**
@@ -33,44 +44,50 @@ class User extends Authenticatable
 
     public function preenrolment()
     {
-    return $this->hasMany('App\Preenrolment', 'INDEXID', 'indexno');
+        return $this->hasMany('App\Preenrolment', 'INDEXID', 'indexno');
     }
     public function placement()
     {
-    return $this->hasMany('App\PlacementForm', 'INDEXID', 'indexno');
+        return $this->hasMany('App\PlacementForm', 'INDEXID', 'indexno');
     }
     public function adminCommentPlacement()
     {
-    return $this->hasMany('App\AdminCommentPlacement','user_id', 'id');
+        return $this->hasMany('App\AdminCommentPlacement', 'user_id', 'id');
     }
 
     public function adminComment()
     {
-    return $this->hasMany('App\AdminComment', 'user_id', 'id');
+        return $this->hasMany('App\AdminComment', 'user_id', 'id');
     }
 
-    public function courses() {
-    return $this->belongsTo('App\Course', 'created_by'); 
+    public function courses()
+    {
+        return $this->belongsTo('App\Course', 'created_by');
     }
 
-    public function languages() {
-    return $this->belongsTo('App\Language', 'language_id'); 
-    }
-    
-    public function repos() {
-    return $this->hasMany('App\Repo', 'INDEXID', 'indexno'); 
+    public function languages()
+    {
+        return $this->belongsTo('App\Language', 'language_id');
     }
 
-    public function preview() {
-    return $this->hasMany('App\Preview'); 
+    public function repos()
+    {
+        return $this->hasMany('App\Repo', 'INDEXID', 'indexno');
     }
 
-    public function sddextr() {
-    return $this->hasOne('App\SDDEXTR', 'INDEXNO', 'indexno'); 
+    public function preview()
+    {
+        return $this->hasMany('App\Preview');
     }
 
-    public function teachers() {
-    return $this->hasOne('App\Teachers', 'IndexNo', 'indexno'); 
+    public function sddextr()
+    {
+        return $this->hasOne('App\SDDEXTR', 'INDEXNO', 'indexno');
+    }
+
+    public function teachers()
+    {
+        return $this->hasOne('App\Teachers', 'IndexNo', 'indexno');
     }
 
     /**
@@ -91,9 +108,9 @@ class CustomPassword extends ResetPassword
     {
         return (new MailMessage)
             ->from('clm_language@unog.ch', 'CLM Language')
-            ->subject( 'CLM Online Registration Password Reset' )
+            ->subject('CLM Online Registration Password Reset')
             ->priority(1)
-            ->line('We are sending this email because we recieved a forgot password request. Reset password request will expire in '.config('auth.passwords.users.expire').' minutes.')
+            ->line('We are sending this email because we recieved a forgot password request. Reset password request will expire in ' . config('auth.passwords.users.expire') . ' minutes.')
             ->action('Reset Password', url(config('app.url') . route('password.reset', $this->token, false)))
             ->line('If you did not request a password reset, no further action is required. Please contact us if you did not submit this request.');
     }

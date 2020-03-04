@@ -21,7 +21,7 @@
         @if(Session::has('Term'))
         <div class="box box-default">
             <div class="box-body">
-                <a href="{{ route('index-calendar')}}" class="filter-reset btn btn-default pull-right"><i class="fa fa-calendar"></i></a>
+                <a href="{{ route('index-calendar')}}" class="filter-reset btn btn-default btn-space"><i class="fa fa-calendar"></i></a>
                 <div class="col-sm-12">
                     <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
                         <input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
