@@ -218,6 +218,7 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], functio
     Route::get('get-schedule-days', ['as' => 'get-schedule-days', 'uses' => 'ClassroomController@getScheduleDays']);
     Route::get('ajax-index-calendar', ['as' => 'ajax-index-calendar', 'uses' => 'ClassroomController@ajaxIndexCalendar']);
     Route::get('index-calendar', ['as' => 'index-calendar', 'uses' => 'ClassroomController@indexCalendar']);
+    Route::post('view-calendar', ['as' => 'view-calendar', 'uses' => 'ClassroomController@viewCalendar']);
 
     Route::resource('course-schedule', 'CourseSchedController');
     Route::resource('schedules', 'ScheduleController');

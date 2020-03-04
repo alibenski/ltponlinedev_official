@@ -62,35 +62,50 @@ class ClassroomController extends Controller
 
     public function indexCalendar()
     {
-        $classrooms = Classroom::orderBy('id', 'desc')->where('Te_Term', 204)
-            ->where('L', 'S')
-            ->get();
+        $languages = DB::table('languages')->pluck("name", "code")->all();
 
-        $arrayRooms = [];
-        foreach ($classrooms as $key => $value) {
-            array_push(
-                $arrayRooms,
-                $value->Te_Mon_Room,
-                $value->Te_Tue_Room,
-                $value->Te_Wed_Room,
-                $value->Te_Thu_Room,
-                $value->Te_Fri_Room
-            );
+        return view('classrooms.index-calendar', compact('languages'));
+    }
+
+    public function viewCalendar(Request $request)
+    {
+        if ($request->ajax()) {
+            $language = $request->L;
+            $term = $request->term;
+            $classrooms = Classroom::orderBy('id', 'desc')->where('Te_Term', $term)
+                ->where('L', $language)
+                ->get();
+    
+            $arrayRooms = [];
+            foreach ($classrooms as $key => $value) {
+                array_push(
+                    $arrayRooms,
+                    $value->Te_Mon_Room,
+                    $value->Te_Tue_Room,
+                    $value->Te_Wed_Room,
+                    $value->Te_Thu_Room,
+                    $value->Te_Fri_Room
+                );
+            }
+            $arrayRooms = array_unique($arrayRooms);
+            $arrayRooms = array_filter($arrayRooms);
+            $arrayRooms = array_values($arrayRooms);
+    
+            $rooms = Room::whereIn('id', $arrayRooms)->orderBy('Rl_Room', 'asc')->get();
+            
+            $data = view('classrooms.view-calendar', compact('rooms', 'term', 'language'))->render();
+
+            return response()->json(['options' => $data]);
         }
-        $arrayRooms = array_unique($arrayRooms);
-        $arrayRooms = array_filter($arrayRooms);
-        $arrayRooms = array_values($arrayRooms);
-
-        $rooms = Room::whereIn('id', $arrayRooms)->get();
-
-        return view('classrooms.calendar', compact('rooms'));
     }
 
     public function ajaxIndexCalendar(Request $request)
     {
         if ($request->ajax()) {
-            $classrooms = Classroom::orderBy('Te_Term', 'desc')->where('Te_Term', 204)
-                ->where('L', 'S')
+            $language = $request->L;
+            $term = $request->term;
+            $classrooms = Classroom::orderBy('Te_Term', 'desc')->where('Te_Term', $term)
+                ->where('L', $language)
                 ->with('course')
                 ->with('teachers')
                 ->get();
