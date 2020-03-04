@@ -16,45 +16,50 @@
         <div class="alert bg-gray col-sm-12">
             <h4 class="text-center"><i class="fa fa-pencil-square-o"></i><strong> Classes - Assign Rooms and Teachers</strong></h4>
         </div>
-    @if(Session::has('Term'))
-        <div class="col-sm-12">
-            <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
-                <input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
-                    
-                    <div class="form-group">
-                        <label for="L" class="control-label"> Language:</label>
-                        <div class="col-sm-12">
-                        @foreach ($languages as $id => $name)
-                        <div class="col-sm-4">
-                            <div class="input-group"> 
-                              <span class="input-group-addon">       
-                                <input type="radio" name="L" value="{{ $id }}" >                 
-                              </span>
-                                <label type="text" class="form-control">{{ $name }}</label>
+	</div>
+    <div class="row">
+        @if(Session::has('Term'))
+        <div class="box box-default">
+            <div class="box-body">
+                <a href="{{ route('index-calendar')}}" class="filter-reset btn btn-default pull-right"><i class="fa fa-calendar"></i></a>
+                <div class="col-sm-12">
+                    <form method="GET" action="{{ route('classrooms.index',['Term' => Request::input('Te_Term')]) }}">
+                        <input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
+                            <div class="form-group">
+                                <label for="L" class="control-label"> Language:</label>
+                                <div class="col-sm-12">
+                                @foreach ($languages as $id => $name)
+                                <div class="col-sm-4">
+                                    <div class="input-group"> 
+                                    <span class="input-group-addon">       
+                                        <input type="radio" name="L" value="{{ $id }}" >                 
+                                    </span>
+                                        <label type="text" class="form-control">{{ $name }}</label>
+                                    </div>
+                                </div>
+                                @endforeach 
+                                </div>
                             </div>
-                        </div>
-                        @endforeach 
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="Te_Code_New" class="control-label"> Course: </label>
-                        <div class="form-group">
-                          <div class="dropdown">
-                            <select class="col-md-10 form-control select2-basic-single" style="width: 100%;" name="Te_Code_New" autocomplete="off">
-                                <option value="">--- Select ---</option>
-                            </select>
-                          </div>
-                        </div>
-                    </div>
+                            <div class="form-group">
+                                <label for="Te_Code_New" class="control-label"> Course: </label>
+                                <div class="form-group">
+                                <div class="dropdown">
+                                    <select class="col-md-10 form-control select2-basic-single" style="width: 100%;" name="Te_Code_New" autocomplete="off">
+                                        <option value="">--- Select ---</option>
+                                    </select>
+                                </div>
+                                </div>
+                            </div>
 
-                <div class="form-group col-sm-12 add-margin">           
-                    <button type="submit" class="btn btn-success">Submit</button>
-                    <a href="/admin/classrooms/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                        <div class="form-group col-sm-12 add-margin">           
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <a href="/admin/classrooms/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
-
 	</div> 
     {{-- End of Filter Row --}}
     
