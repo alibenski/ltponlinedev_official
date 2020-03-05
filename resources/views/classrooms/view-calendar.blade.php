@@ -104,13 +104,17 @@ $(document).ready(function() {
             }
             ],
             eventRender: function(event) {
-            const title = $(event.el).find('.fc-title');
-            console.log(event.event._def.extendedProps.teacher)
-            title.html(
-                '<b>'+title.text()+'</b>'+
-                '<p>'+event.event._def.extendedProps.teacher+'</p>'
-            
-            );
+                const title = $(event.el).find('.fc-title');
+                console.log(event.el.style)
+                title.html(
+                    '<b>'+title.text()+'</b>'+
+                    '<p>'+event.event._def.extendedProps.teacher+'</p>'
+
+                );
+                if (event.event._def.extendedProps.teacher === 'NA') {
+                    event.el.style.backgroundColor = "#eccaca";
+                    event.el.style.color = "black";
+                }
             }
         });
 

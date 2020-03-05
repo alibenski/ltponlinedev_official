@@ -111,6 +111,7 @@ class ClassroomController extends Controller
                 ->get();
 
             $array = [];
+            $object = [];
             $arrayRecurrence = [];
             $arrayRooms = [];
             foreach ($classrooms as $value) {
@@ -149,7 +150,7 @@ class ClassroomController extends Controller
                     array_push($arrayRecurrence, $day5);
                 }
 
-                $array[] = [
+                $object = [
                     'id' => $value->id,
                     'title' => $value->course->Description,
                     'start' => Carbon::parse($value->terms->Term_Begin)->toDateString(),
@@ -159,13 +160,21 @@ class ClassroomController extends Controller
                     'daysOfWeek' => $arrayRecurrence,
                     'startRecur' => Carbon::parse($value->terms->Term_Begin)->toDateString(),
                     'endRecur' => Carbon::parse($value->terms->Term_End)->toDateString(),
-                    'teacher' => $value->teachers->Tch_Name,
+                    
                     'roomMon' => $value->Te_Mon_Room,
                     'roomTue' => $value->Te_Tue_Room,
                     'roomWed' => $value->Te_Wed_Room,
                     'roomThu' => $value->Te_Thu_Room,
                     'roomFri' => $value->Te_Fri_Room
                 ];
+
+                if ($value->teachers) {
+                    $object['teacher'] =  $value->teachers->Tch_Name;
+                } else {
+                    $object['teacher'] =  'NA';
+                }
+
+                array_push($array, $object);
                 $arrayRecurrence = [];
             }
 
