@@ -6,7 +6,7 @@ use App\FileNewUser;
 use App\Mail\SendAuthMail;
 use App\NewUser;
 use App\SDDEXTR;
-use App\TORGAN;
+use App\Torgan;
 use App\User;
 use Carbon\Carbon;
 use DB;
@@ -138,7 +138,7 @@ class NewUserController extends Controller
     {
         $cat = DB::table('LTP_Cat')->pluck("Description", "Cat")->all();
         $student_status = DB::table('STU_STATUS')->pluck("StandFor", "Abbreviation")->all();
-        $org = TORGAN::get(["Org Full Name", "Org name"]);
+        $org = Torgan::get(["Org Full Name", "Org name"]);
         return view('users_new.new_new_user', compact('cat', 'student_status', 'org'));
     }
 
@@ -255,7 +255,7 @@ class NewUserController extends Controller
 
     public function getNewOutsideUserForm()
     {
-        $org = TORGAN::get(["Org Full Name", "Org name"]);
+        $org = Torgan::get(["Org Full Name", "Org name"]);
 
         $now_date = Carbon::now();
         $enrol_object = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
@@ -354,7 +354,7 @@ class NewUserController extends Controller
     {
         if ($request->ajax()) {
             $new_user_info = NewUser::find($request->id);
-            $org = TORGAN::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
+            $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
             $ext_index = 'EXT' . $new_user_info->id;
 
             if (is_null($new_user_info->indexno_new)) {

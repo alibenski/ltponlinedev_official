@@ -10,7 +10,7 @@ use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
 use App\SDDEXTR;
-use App\TORGAN;
+use App\Torgan;
 use App\Term;
 use App\Time;
 use App\User;
@@ -359,7 +359,7 @@ class UserController extends Controller
         //Get all roles and pass it to the view
         $roles = Role::get();
         $cat = DB::table('LTP_Cat')->pluck("Description", "Cat")->all();
-        $org = TORGAN::get(["Org Full Name", "Org name"]);
+        $org = Torgan::get(["Org Full Name", "Org name"]);
 
         return view('users.create', ['roles' => $roles, 'org' => $org, 'cat' => $cat]);
     }

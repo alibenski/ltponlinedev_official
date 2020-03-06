@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TORGAN extends Model
+class Torgan extends Model
 {
-    protected $table = 'TORGAN';
-    
+	protected $table = 'TORGAN';
+
 	/**
 	 * primaryKey 
 	 * 
@@ -23,11 +23,13 @@ class TORGAN extends Model
 	 */
 	public $incrementing = true;
 
-    public function sddextr() {
-    return $this->belongsTo('App\SDDEXTR'); 
-    }
+	public function sddextr()
+	{
+		return $this->belongsTo('App\SDDEXTR');
+	}
 
-    public function focalpoints() {
-    return $this->hasMany('App\FocalPoints', 'org_id', 'OrgCode'); 
-    }
+	public function focalpoints()
+	{
+		return $this->hasMany('App\FocalPoints', 'org_id', 'OrgCode');
+	}
 }
