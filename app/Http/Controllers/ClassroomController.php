@@ -63,8 +63,9 @@ class ClassroomController extends Controller
     public function indexCalendar()
     {
         $languages = DB::table('languages')->pluck("name", "code")->all();
-
-        return view('classrooms.index-calendar', compact('languages'));
+        $rooms = Room::orderBy('Rl_Room', 'asc')->get()->pluck('Rl_Room', 'id');
+        
+        return view('classrooms.index-calendar', compact('languages', 'rooms'));
     }
 
     public function viewCalendar(Request $request)
@@ -104,7 +105,7 @@ class ClassroomController extends Controller
         if ($request->ajax()) {
             $language = $request->L;
             $term = $request->term;
-            $classrooms = Classroom::orderBy('Te_Term', 'desc')->where('Te_Term', $term)
+            $classrooms = Classroom::orderBy('id', 'desc')->where('Te_Term', $term)
                 ->where('L', $language)
                 ->with('course')
                 ->with('teachers')
