@@ -7,8 +7,8 @@
 @section('content')
 
 <div class='col-md-12'>
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="box box-default">
+        <div class="box-body">
 
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-aqua">
@@ -30,10 +30,13 @@
                 <a href="{{ route('writing-tips.edit', $writingTip->id) }}" class="btn btn-warning btn-space"><i class="fa fa-pencil"></i> Edit</a>
                 <a class="btn btn-primary" data-toggle="modal" href='#modal-id'><i class="fa fa-list"></i> View Mailing List</a>
                 <a class="btn btn-info open-modal-selective-send" data-toggle="modal" href='#modal-id-selective'><i class="fa fa-check-square"></i> Select and Send</a>
-                <a href="{{ route('send-writing-tip-email', $writingTip->id) }}" class="btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to Mailing List</a>
+                <a href="{{ route('send-writing-tip-email', $writingTip->id) }}" class="btn btn-success btn-space send-emails"><i class="fa fa-envelope"></i> Send to Mailing List</a>
                 <input type="hidden" name="_token" value="{{ Session::token() }}">
             </div>
             
+        </div>
+        <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
         </div>
     </div>
     
@@ -103,6 +106,18 @@
 @section('java_script')
 <script>
     $(document).ready(function() {
+        $(".overlay").fadeOut(800);
+
+        $('a.send-emails').on('click', function(e) {
+            var c = confirm("This is a mass email function. Are you sure?");
+            if (c === true) {
+                $(".overlay").fadeIn(400);
+                window.location.reload();
+                return c; //you can just return c because it will be true or false  
+            } else {
+                e.preventDefault();
+            }
+        });
 
         $('a.open-modal-selective-send').click(function() {
             $(".sub_chk").prop('checked',false); 

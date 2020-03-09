@@ -104,11 +104,15 @@
 		$(".overlay").fadeOut(600);
 	});
 
-	$('a.send-emails').on('click', function() {
+	$('a.send-emails').on('click', function(e) {
         var c = confirm("This is a mass email function. Are you sure?");
-        $(".overlay").fadeIn(600);
-        window.location.reload();
-        return c; //you can just return c because it will be true or false
+        if (c === true) {
+			$(".overlay").fadeIn(400);
+			window.location.reload();
+			return c; //you can just return c because it will be true or false  
+		} else {
+			e.preventDefault();
+		}
     });	
 </script>
 
