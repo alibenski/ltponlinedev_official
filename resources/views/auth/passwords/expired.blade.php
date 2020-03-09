@@ -1,5 +1,24 @@
 @extends('layouts.app')
-
+@section('customcss')
+<style>
+    #register .short{
+    font-weight:bold;
+    color:#FF0000;
+    }
+    #register .weak{
+    font-weight:bold;
+    color:orange;
+    }
+    #register .good{
+    font-weight:bold;
+    color:#2D98F3;
+    }
+    #register .strong{
+    font-weight:bold;
+    color: limegreen;
+    }
+</style>
+@stop
 @section('content')
 <div class="container">
     <div class="row">
@@ -20,8 +39,11 @@
                     <div class="alert alert-info">
                         For security reasons, you are required to change your password upon first login.
                     </div>
-                    <form class="form-horizontal" method="POST" action="{{ route('password.post_expired') }}">
+                    <form id="register" class="form-horizontal" method="POST" action="{{ route('password.post_expired') }}">
                         {{ csrf_field() }}
+                        <input id="email" type="hidden" name="email" value="{{ Auth::user()->email }}">
+                        <input id="firstName" type="hidden" name="firstName" value="{{ Auth::user()->nameFirst }}">
+                        <input id="lastName" type="hidden" name="lastName" value="{{ Auth::user()->nameLast }}">
 
                         <div class="form-group{{ $errors->has('current_password') ? ' has-error' : '' }}">
                             <label for="current_password" class="col-md-4 control-label">Current Password</label>
@@ -42,6 +64,7 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password" required>
+                                <span id="result" style="font-size: 80%;"></span>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -55,6 +78,7 @@
                             <label for="password-confirm" class="col-md-4 control-label">Confirm New Password</label>
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <span id="result" style="font-size: 80%;"></span>
 
                                 @if ($errors->has('password_confirmation'))
                                     <span class="help-block">
@@ -66,7 +90,7 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary button-prevent-multi-submit">
+                                <button type="submit" class="btn btn-primary btn-submit button-prevent-multi-submit" disabled>
                                     Change Password
                                 </button>
                             </div>
@@ -78,4 +102,8 @@
         </div>
     </div>
 </div>
-@endsection
+@stop
+
+@section('java_script')
+<script src="{{ asset('js/passwordscheck.js') }}"></script>
+@stop

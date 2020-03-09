@@ -28,7 +28,7 @@ Route::get('release-notes', function () {
 /**
  * Authenticated User Routes
  */
-Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], function () {
+Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' => 'admin'], function () {
     /**
      * Admin Routes
      */
