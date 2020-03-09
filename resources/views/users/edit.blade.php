@@ -21,13 +21,26 @@
             {{-- <input name="email" type="email" class="form-control" readonly value="{{ old('email', $user->email) }}">  --}}
         </div>
 
+        @if (!$user->roles->isEmpty())
+        <h5><b>Current Role</b></h5>
+        <div class='form-group'>
+            <ul  class="list-group">
+            @foreach ($user->roles as $item)
+                <li class="list-group-item">
+                   {{$item->name}}  <i class="fa fa-check" aria-hidden="true"></i>
+                </li>
+            @endforeach
+            </ul>
+        </div>
+        @endif
+
         <h5><b>Give Role</b></h5>
         
         <div class='form-group'>
             <div class="checkbox">
                 <label>
                     @foreach ($roles as $role)
-                      <input type="checkbox" name="roles[]" value="{{ $role->id, $user->roles }}" /> {{ ucfirst($role->name) }}
+                      <input type="checkbox" name="roles[]" value="{{ $role->id }}" /> {{ ucfirst($role->name) }}
                       <br>
                     @endforeach
                 </label>
