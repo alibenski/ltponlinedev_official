@@ -17,12 +17,15 @@
     font-weight:bold;
     color: limegreen;
     }
+    ul {
+    padding-left: 10px;
+    }
 </style>
 @stop
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">Change Password</div>
 
@@ -97,6 +100,28 @@
                         </div>
                     </form>
                     @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Password Strength and Complexity</div>
+
+                <div class="panel-body">
+                    <ul>
+                        <li>At least twelve characters long; more than 14 characters is better</li>
+                        <li>Different from the default (initial) password</li>
+                        <li>Not be the same as the username</li>
+                        <li>Composed of at least two (2) of the following character classes:</li>
+                        <ul>
+                            <li>upper case letters: ABCDEFGHIJKLMNOPQRSTUVWXYZ</li>
+                            <li>lower case letters: abcdefghij klmnopqrstuvwxyz</li>
+                            <li>numbers: 0123456789</li>
+                            <li>punctuation marks:   !@#$%^&*()+=\`{}[]:";'< >?,./)</li>
+                        </ul>
+                        <li>Not be based on any personal information that is easily available to potential adversaries, such as names of family members, pets, friends, co-workers, birthdays, addresses, phone numbers etc.</li>
+                    </ul>
+                    <p>Compliance to <a href="https://iseek.un.org/webpgdept1637_8" target="_blank">UN Secretariat Password Guideline</a></p>
                 </div>
             </div>
         </div>
