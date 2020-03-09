@@ -151,6 +151,9 @@
             .done(function(data) {
                 console.log(data);
                 $('#modal-id-selective').modal('hide');
+                $('div.message').html(
+                '<div class="alert alert-success alert-block" role="alert"><strong>Message: </strong> Entry has been sent!</div>'
+                );
             })
             .fail(function() {
                 console.log("error");

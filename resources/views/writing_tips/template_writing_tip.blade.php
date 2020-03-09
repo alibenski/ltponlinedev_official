@@ -139,7 +139,7 @@
       @endif 
 
       <div class="row">
-          <div class="col-md-8 col-md-offset-2">              
+          <div class="col-md-8 col-md-offset-2 message">              
               @include ('partials._messages') {{-- Include session error messages --}}
           </div>
       </div>
