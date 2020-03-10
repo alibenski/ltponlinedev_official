@@ -105,19 +105,19 @@
         </div>
         <div class="col-md-4">
             <div class="panel panel-default">
-                <div class="panel-heading">Password Strength and Complexity</div>
+                <div class="panel-heading"><i class="fa fa-lock" aria-hidden="true"></i> Password Strength and Complexity</div>
 
                 <div class="panel-body">
                     <ul>
-                        <li>At least twelve characters long; more than 14 characters is better</li>
+                        <li>At least twelve (12) characters long; more than fourteen (14) characters is better</li>
                         <li>Different from the default (initial) password</li>
-                        <li>Not be the same as the username</li>
+                        <li>Should not be the same as the username</li>
                         <li>Composed of at least two (2) of the following character classes:</li>
                         <ul>
-                            <li>upper case letters: ABCDEFGHIJKLMNOPQRSTUVWXYZ</li>
-                            <li>lower case letters: abcdefghij klmnopqrstuvwxyz</li>
-                            <li>numbers: 0123456789</li>
-                            <li>punctuation marks:   !@#$%^&*()+=\`{}[]:";'< >?,./)</li>
+                            <li><strong>upper case letters:</strong> ABCDEFGHIJKLMNOPQRSTUVWXYZ</li>
+                            <li><strong>lower case letters:</strong> abcdefghij klmnopqrstuvwxyz</li>
+                            <li><strong>numbers:</strong> 0123456789</li>
+                            <li><strong>special characters:</strong>   !@#$%^&*()+=\`{}[]:";'< >?,./)</li>
                         </ul>
                         <li>Not be based on any personal information that is easily available to potential adversaries, such as names of family members, pets, friends, co-workers, birthdays, addresses, phone numbers etc.</li>
                     </ul>

@@ -27,7 +27,7 @@ $(document).ready(function() {
       $("#result").removeClass();
       $("#result").addClass("short");
       $("button.btn-submit").attr("disabled", true);
-      return "Password cannot contain part of your name/email.";
+      return "Password cannot contain parts of your name/email.";
     }
     if (password.length < 11) {
       $("#result").removeClass();
