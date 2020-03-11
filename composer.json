@@ -8,7 +8,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.1.3",
+        "php": "^7.1.3",
         "anhskohbo/no-captcha": "^3.1.*",
         "barryvdh/laravel-debugbar": "~3.2.*",
         "barryvdh/laravel-dompdf": "^0.8.6",
@@ -19,11 +19,11 @@
         "spatie/laravel-permission": "^2.38.0"
     },
     "require-dev": {
-        "filp/whoops": "~2.0",
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "~1.0",
-        "phpunit/phpunit": "^7.0",
-        "symfony/thanks": "^1.0"
+        "filp/whoops": "^2.0",
+        "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^2.0",
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "classmap": [
@@ -60,5 +60,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

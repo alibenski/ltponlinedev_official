@@ -18,7 +18,7 @@ return [
     'after'                => 'The :attribute must be a date after :date.',
     'after_or_equal'       => 'The :attribute must be a date after or equal to :date.',
     'alpha'                => 'The :attribute may only contain letters.',
-    'alpha_dash'           => 'The :attribute may only contain letters, numbers, and dashes.',
+    'alpha_dash'           => 'The :attribute may only contain letters, numbers, dashes and underscores.',
     'alpha_num'            => 'The :attribute may only contain letters and numbers.',
     'array'                => 'The :attribute must be an array.',
     'before'               => 'The :attribute must be a date before :date.',
@@ -42,6 +42,18 @@ return [
     'exists'               => 'The selected :attribute is invalid.',
     'file'                 => 'The :attribute must be a file.',
     'filled'               => 'The :attribute field must have a value.',
+    'gt'                   => [
+        'numeric' => 'The :attribute must be greater than :value.',
+        'file'    => 'The :attribute must be greater than :value kilobytes.',
+        'string'  => 'The :attribute must be greater than :value characters.',
+        'array'   => 'The :attribute must have more than :value items.',
+    ],
+    'gte'                  => [
+        'numeric' => 'The :attribute must be greater than or equal :value.',
+        'file'    => 'The :attribute must be greater than or equal :value kilobytes.',
+        'string'  => 'The :attribute must be greater than or equal :value characters.',
+        'array'   => 'The :attribute must have :value items or more.',
+    ],
     'image'                => 'The :attribute must be an image.',
     'in'                   => 'The selected :attribute is invalid.',
     'in_array'             => 'The :attribute field does not exist in :other.',
@@ -50,6 +62,18 @@ return [
     'ipv4'                 => 'The :attribute must be a valid IPv4 address.',
     'ipv6'                 => 'The :attribute must be a valid IPv6 address.',
     'json'                 => 'The :attribute must be a valid JSON string.',
+    'lt'                   => [
+        'numeric' => 'The :attribute must be less than :value.',
+        'file'    => 'The :attribute must be less than :value kilobytes.',
+        'string'  => 'The :attribute must be less than :value characters.',
+        'array'   => 'The :attribute must have less than :value items.',
+    ],
+    'lte'                  => [
+        'numeric' => 'The :attribute must be less than or equal :value.',
+        'file'    => 'The :attribute must be less than or equal :value kilobytes.',
+        'string'  => 'The :attribute must be less than or equal :value characters.',
+        'array'   => 'The :attribute must not have more than :value items.',
+    ],
     'max'                  => [
         'numeric' => 'The :attribute may not be greater than :max.',
         'file'    => 'The :attribute may not be greater than :max kilobytes.',
@@ -65,6 +89,7 @@ return [
         'array'   => 'The :attribute must have at least :min items.',
     ],
     'not_in'               => 'The selected :attribute is invalid.',
+    'not_regex'            => 'The :attribute format is invalid.',
     'numeric'              => 'The :attribute must be a number.',
     'present'              => 'The :attribute field must be present.',
     'regex'                => 'The :attribute format is invalid.',
@@ -117,16 +142,16 @@ return [
         ],
         'email' => [
             'required_without_all' => 'Nothing to update. Fill up at least one field to update.',
-                ],
+        ],
         // Validation message on manager's approval page
         'decision-*' => [
             'required' => 'Decision required. Please make a decision for each of the chosen schedules.',
             'boolean' => 'Decision must only be true or false.',
-                ],
+        ],
         'g-recaptcha-response' => [
             'required' => 'Please verify that you are not a robot.',
             'captcha' => 'Captcha error! try again later or contact site admin.',
-                ],
+        ],
     ],
 
     /*

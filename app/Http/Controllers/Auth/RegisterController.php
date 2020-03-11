@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -99,18 +100,18 @@ class RegisterController extends Controller
     {
         if (is_null($data['indexno'])) {
             $qryLatestIndex = User::orderBy('id', 'desc')->first();
-            $qryLatestIndexID = $qryLatestIndex->id ;
+            $qryLatestIndexID = $qryLatestIndex->id;
 
-            $indexGenerate = 'Z'.$qryLatestIndexID;
+            $indexGenerate = 'Z' . $qryLatestIndexID;
             $data['indexno'] = $indexGenerate;
         }
         $user = User::create([
             'indexno' => $data['indexno'],
-            'name' => $data['nameFirst'].' '.$data['nameLast'],
+            'name' => $data['nameFirst'] . ' ' . $data['nameLast'],
             'nameFirst' => $data['nameFirst'],
             'nameLast' => $data['nameLast'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
         ]);
 
         // $user->sddextr()->create([
@@ -123,5 +124,4 @@ class RegisterController extends Controller
 
         return $user;
     }
-
 }
