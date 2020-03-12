@@ -51,7 +51,7 @@
           </div>
         </div> {{-- end of panel --}}
 
-          <div class="form-group{{ $errors->has('profile') ? ' has-error' : '' }}">
+          <div class="form-group{{ $errors->has('profile') ? 'is-invalid' : '' }}">
               <label for="profile">Profile:</label>
               <select name="profile" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
                   <option></option>
@@ -76,7 +76,7 @@
               </div>
           </div>
 
-          <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+          <div class="form-group{{ $errors->has('title') ? 'is-invalid' : '' }}">
               <label for="title">Title:</label>
               <select name="title" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
                   <option></option>
@@ -120,7 +120,7 @@
 						  </div>
 			    </div>
 
-          <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
+          <div class="form-group{{ $errors->has('gender') ? 'is-invalid' : '' }}">
               <label for="gender" class=" control-label">Gender</label>
               <div class="dropdown">
                   <select class="form-control select2-basic-single" style="width: 50%;" name="gender" autocomplete="off" >
@@ -141,7 +141,7 @@
               </div>
           </div>
 
-          <div class="form-group{{ $errors->has('org') ? ' has-error' : '' }}">
+          <div class="form-group{{ $errors->has('org') ? 'is-invalid' : '' }}">
               <label for="org" class=" control-label">Organization</label>
 
                   {{-- <input id="org" type="text" class="form-control" name="org" value="{{ old('org') }}" required autofocus> --}}
@@ -164,7 +164,7 @@
                   @endif
           </div>
           
-          <div class="form-group{{ $errors->has('dob') ? ' has-error' : '' }}">
+          <div class="form-group{{ $errors->has('dob') ? 'is-invalid' : '' }}">
               <label for="dob" class="control-label">Date of Birth <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
 
@@ -183,7 +183,7 @@
 
           </div>
 
-          <div class="form-group{{ $errors->has('contact_num') ? ' has-error' : '' }}">
+          <div class="form-group{{ $errors->has('contact_num') ? 'is-invalid' : '' }}">
               <label for="contact_num" class=" control-label">Contact Number</label>
 
                   <input id="contact_num" type="text" class="form-control" name="contact_num" value="{{ old('contact_num') }}" required autofocus>

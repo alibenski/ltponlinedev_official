@@ -15,7 +15,7 @@
       <div class="alert alert-info">
         <h5 class="text-center">Please select the desired <b>Term</b> from the dropdown and click <b>Submit</b> to see the forms submitted during that semester.</h5>
       </div>
-      <div class="panel panel-body">
+      <div class="card card-body">
       <form method="GET" action="{{ route('previous-submitted') }}">
         <div class="form-group">
           <label for="termValue" class="col-md-12 control-label">Term Select:</label>
@@ -47,10 +47,10 @@
       
   <div class="row">
       <div class="col-sm-12">
-          <div class="panel panel-success">
-              <div class="panel-heading"><strong>Your Language Training Course for {{ $next_term->Term_Name }}</strong></div>
+          <div class="card">
+              <div class="card-header bg-success"><strong>Your Language Training Course for {{ $next_term->Term_Name }}</strong></div>
 
-              <div class="panel-body">
+              <div class="card-body">
                 <p>
                   @foreach ($student_convoked as $element)
                   <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong></h3>
@@ -102,8 +102,8 @@
   @else
   <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-info">
-                    <div class="panel-heading text-center"><strong>Submitted Enrolment Forms for the 
+            <div class="card">
+                    <div class="card-header bg-info text-center"><strong>Submitted Enrolment Forms for the 
                         @if(empty($next_term->Term_Name))
                         DB NO ENTRY
                         @else
@@ -113,7 +113,7 @@
                       </strong>
                       <input id="termIdSubmitted" type="hidden" value="@if(is_null($next_term->Term_Code)) @else {{ $next_term->Term_Code }} @endif">
                     </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                         @if(count($forms_submitted) > 0)
                           @foreach($forms_submitted as $form)
                             <div class="row">
@@ -184,8 +184,8 @@
         </div>
         
         <div class="col-md-6">
-          <div class="panel panel-warning">
-            <div class="panel-heading text-center"><strong>Placement Test Request Forms for the 
+          <div class="card">
+            <div class="card-header bg-warning text-center"><strong>Placement Test Request Forms for the 
             @if(empty($next_term->Term_Name))
                 DB NO ENTRY
               @else
@@ -193,7 +193,7 @@
             @endif
                 Term</strong>
           </div>
-            <div class="panel-body">
+            <div class="card-body">
             @if(count($plforms_submitted) > 0)
               @foreach($plforms_submitted as $plform)
                 <div class="row">

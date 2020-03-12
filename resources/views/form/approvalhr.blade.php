@@ -9,10 +9,10 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
+      <div class="card">
 
-        <div class="panel-heading">CLM Learning Partner Approval Page Enrolment Form for: <strong>{{ $next_term_name }}</strong></div>
-          <div class="panel-body">
+        <div class="card-header bg-primary">CLM Learning Partner Approval Page Enrolment Form for: <strong>{{ $next_term_name }}</strong></div>
+          <div class="card-body">
             <form method="POST" action="{{ route('approval.updateform2hr', [$input_staff->INDEXID, $input_staff->Te_Code, $input_staff->form_counter, $next_term_code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>

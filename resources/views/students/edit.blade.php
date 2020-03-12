@@ -29,10 +29,10 @@
 
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-info">
-                <div class="panel-heading">Edit Student Profile</div>
+            <div class="card">
+                <div class="card-header bg-info">Edit Student Profile</div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('dob') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('dob') ? 'is-invalid' : '' }}">
                             <label for="dob" class="col-md-2 control-label">Date of birth </label>
 
                             <div class="col-md-6">

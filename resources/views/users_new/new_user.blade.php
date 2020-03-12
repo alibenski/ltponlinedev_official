@@ -3,18 +3,18 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Validate & Register with Umoja Information</div>
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">Validate & Register with Umoja Information</div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('newuser.store') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('indexno') ? ' has-error' : '' }}">
-                            <label for="indexno" class="col-md-4 control-label">Index # <span class="small text-danger"></span></label>
+                        <div class="form-group row {{ $errors->has('indexno') ? 'is-invalid' : '' }}">
+                            <label for="indexno" class="col-md-3 control-label">Index # <span class="small text-danger"></span></label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <input id="indexno" type="text" class="form-control" name="indexno" value="{{ old('indexno') }}" autofocus>
 
                                 @if ($errors->has('indexno'))
@@ -22,11 +22,11 @@
                                         <strong>{{ $errors->first('indexno') }}</strong>
                                     </span>
                                 @endif
-                            <p class="small text-danger"><strong>Please delete trailing zeroes if you have an index number which is less than 8 digits e.g. 00012345 -> 12345</strong></p>
+                            <small class="form-text text-muted"><strong>Please delete trailing zeroes if you have an index number which is less than 8 digits e.g. 00012345 -> 12345</strong></small>
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('email') ? 'is-invalid' : '' }}">
                             <label for="email" class="col-md-4 control-label">UN email address</label>
 
                             <div class="col-md-6">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? 'is-invalid' : '' }}">
                             <label class="col-md-4 control-label">Captcha</label>
                             <div class="col-md-6">
                                 {!! NoCaptcha::renderJs() !!}
@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
+                            <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary button-prevent-multi-submit">
                                     Validate
                                 </button>

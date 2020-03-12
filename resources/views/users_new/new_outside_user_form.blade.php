@@ -18,7 +18,7 @@
                     <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('post-new-outside-user-form') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('indexno') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('indexno') ? 'is-invalid' : '' }}">
                             <label for="indexno" class="col-md-4 control-label">Index # <span class="small text-danger"></span></label>
 
                             <div class="col-md-6">
@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('contractfile') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('contractfile') ? 'is-invalid' : '' }}">
                             <label for="contractfile" class="col-md-4 control-label">Copy of badge ID / Carte de légitimation <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6">
                             <input name="contractfile" type="file" class="col-md-12 form-control-static" required="required">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('gender') ? 'is-invalid' : '' }}">
                             <label for="gender" class="col-md-4 control-label">Gender <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6">
                             <div class="dropdown">
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('title') ? 'is-invalid' : '' }}">
                             <label for="title" class="col-md-4 control-label">Title <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6">
                             <div class="dropdown">
@@ -93,7 +93,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('profile') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('profile') ? 'is-invalid' : '' }}">
                             <label for="profile" class="col-md-4 control-label">Profile <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-6">
                             <div class="dropdown">
@@ -119,7 +119,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('nameLast') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('nameLast') ? 'is-invalid' : '' }}">
                             <label for="nameLast" class="col-md-4 control-label">Last name <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
@@ -133,7 +133,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('nameFirst') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('nameFirst') ? 'is-invalid' : '' }}">
                             <label for="nameFirst" class="col-md-4 control-label">First name <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
@@ -147,7 +147,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('email') ? 'is-invalid' : '' }}">
                             <label for="email" class="col-md-4 control-label">Professional email address <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
@@ -161,7 +161,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('org') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('org') ? 'is-invalid' : '' }}">
                             <label for="org" class="col-md-4 control-label">Organization <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
@@ -186,7 +186,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('contact_num') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('contact_num') ? 'is-invalid' : '' }}">
                             <label for="contact_num" class="col-md-4 control-label">Contact number <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
@@ -200,7 +200,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('dob') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('dob') ? 'is-invalid' : '' }}">
                             <label for="dob" class="col-md-4 control-label">Date of birth <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
@@ -218,7 +218,7 @@
                                 @endif
                             </div>
                         </div>
-                        {{-- <div class="form-group{{ $errors->has('cat') ? ' has-error' : '' }}">
+                        {{-- <div class="form-group{{ $errors->has('cat') ? 'is-invalid' : '' }}">
                             <label for="cat" class="col-md-4 control-label">Category</label>
                             <div class="col-md-6">
                                 <div class="dropdown">
@@ -242,7 +242,7 @@
                             </div>
                         </div> --}}
 
-                        {{-- <div class="form-group{{ $errors->has('student_cat') ? ' has-error' : '' }}">
+                        {{-- <div class="form-group{{ $errors->has('student_cat') ? 'is-invalid' : '' }}">
                             <label for="student_cat" class="col-md-4 control-label">Student Status</label>
                             <div class="col-md-6">
                                 <div class="dropdown">
@@ -266,7 +266,7 @@
                             </div>
                         </div> --}}
 
-                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? 'is-invalid' : '' }}">
                             <label class="col-md-4 control-label">Captcha</label>
                             <div class="col-md-6">
                                 {!! NoCaptcha::renderJs() !!}

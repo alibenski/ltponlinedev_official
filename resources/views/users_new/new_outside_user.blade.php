@@ -12,7 +12,7 @@
                     </div>
                     <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('post-new-outside-user') }}">
                         {{ csrf_field() }}
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('email') ? 'is-invalid' : '' }}">
                             <label for="email" class="col-md-4 control-label">Email Address</label>
 
                             <div class="col-md-6">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? 'is-invalid' : '' }}">
                             <label class="col-md-4 control-label">Captcha</label>
                             <div class="col-md-6">
                                 {!! NoCaptcha::renderJs() !!}

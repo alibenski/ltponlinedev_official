@@ -11,7 +11,7 @@
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('indexno') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('indexno') ? 'is-invalid' : '' }}">
                             <label for="indexno" class="col-md-4 control-label">Index # <span class="small text-danger">(Leave blank if you are not in the Umoja system)</span></label>
 
                             <div class="col-md-6">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('nameLast') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('nameLast') ? 'is-invalid' : '' }}">
                             <label for="nameLast" class="col-md-4 control-label">Last Name</label>
 
                             <div class="col-md-6">
@@ -39,7 +39,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('nameFirst') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('nameFirst') ? 'is-invalid' : '' }}">
                             <label for="nameFirst" class="col-md-4 control-label">First Name</label>
 
                             <div class="col-md-6">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('email') ? 'is-invalid' : '' }}">
                             <label for="email" class="col-md-4 control-label">Email Address</label>
 
                             <div class="col-md-6">
@@ -67,7 +67,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('password') ? 'is-invalid' : '' }}">
                             <label for="password" class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? 'is-invalid' : '' }}">
                             <label class="col-md-4 control-label">Captcha</label>
                             <div class="col-md-6">
                                 {!! NoCaptcha::renderJs() !!}

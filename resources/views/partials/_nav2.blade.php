@@ -6,15 +6,15 @@
         	@endif
         </div>
     </div>
-<ul class="nav nav-pills">
-	<li role="presentation" class="{{ Request::is('home*') ? "active" : ""}}"><a href="/home">Home</a></li>
-	<li role="presentation" class="{{ Request::is('students') ? "active" : ""}}"><a href="{{ route('students.index') }}">My Profile</a></li>
+<ul class="nav nav-pills ml-auto">
+	<li role="presentation" class="nav-item"><a class="nav-link {{ Request::is('home*') ? "active" : ""}}" href="/home">Home</a></li>
+	<li role="presentation" class="nav-item"><a class="nav-link {{ Request::is('students') ? "active" : ""}}" href="{{ route('students.index') }}">My Profile</a></li>
 	{{-- <li role="presentation" class="{{ Request::is('submitted') ? "active" : ""}}"><a href="/submitted">Current Submitted Forms</a></li> --}}
-	<li role="presentation" class="{{ Request::is('previous-submitted') ? "active" : ""}}"><a href="/previous-submitted">Submitted Forms</a></li>
-	<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">History</a></li>
+	<li role="presentation" class="nav-item"><a class="nav-link {{ Request::is('previous-submitted') ? "active" : ""}}" href="/previous-submitted">Submitted Forms</a></li>
+	<li role="presentation" class="nav-item"><a class="nav-link {{ Request::is('history') ? "active" : ""}}" href="/history">History</a></li>
 
-	<li role="presentation" class="pull-right {{ Request::is('whatorg') ? "active" : ""}}">@if(is_null($term)) @else 
-		@if($term->Enrol_Date_Begin <= \Carbon\Carbon::now() && \Carbon\Carbon::now() <= $term->Enrol_Date_End) <a  href="/whatorg "><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a></li>  
+	<li role="presentation" class="nav-item float-right">@if(is_null($term)) @else 
+		@if($term->Enrol_Date_Begin <= \Carbon\Carbon::now() && \Carbon\Carbon::now() <= $term->Enrol_Date_End) <a class="nav-link {{ Request::is('whatorg') ? "active" : ""}}"  href="/whatorg "><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a></li>  
 		@else 
 		<a href="#" class="text-danger"><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Enrolment Closed</strong></a>
 		@endif

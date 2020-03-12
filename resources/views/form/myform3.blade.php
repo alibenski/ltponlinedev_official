@@ -14,8 +14,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
-          <div class="panel-heading"><strong>Self-Payment</strong> Enrolment Form for: 
+      <div class="card">
+          <div class="card-header bg-primary"><strong>Self-Payment</strong> Enrolment Form for: 
             <strong>
               @if(empty($next_term && $terms)) 
               NO DB ENTRY
@@ -24,7 +24,7 @@
               @endif
             </strong>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             <form method="POST" enctype="multipart/form-data" action="{{ route('selfpayform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
@@ -158,9 +158,9 @@
                     </div>
 
                     <div class="col-md-12">
-                      <div class="panel panel-info">
-                        <div class="panel-heading col-md-12"><strong>Placement test dates</strong></div>
-                        <div class="panel-body">
+                      <div class="card">
+                        <div class="card-header bg-primary col-md-12"><strong>Placement test dates</strong></div>
+                        <div class="card-body">
                           <div class="row col-md-10 col-md-offset-1">
                             <div class="alert alert-info alert-dismissible alert-placement-instruction">
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -195,15 +195,15 @@
                     </div>
 
                     <div class="col-md-12">
-                      <div class="panel panel-danger">
-                        <div class="panel-heading col-md-12"><strong>Information about your course preference</strong></div>
-                        <div class="panel-body">
+                      <div class="card">
+                        <div class="card-header bg-primary col-md-12"><strong>Information about your course preference</strong></div>
+                        <div class="card-body">
                           <div class="row col-md-10 col-md-offset-1">
                             <div class="alert alert-danger">
                             <p>Please indicate the time and the days you are available to attend the course. Check/tick all that apply.</p>
                             </div>
                           </div>
-                          <div class="row panel panel-danger col-md-10 col-md-offset-1">
+                          <div class="row card col-md-10 col-md-offset-1">
                             <div class="otherQuestions col-md-5">
                               <div class="form-group">
                                 <label for="" class="control-label">Time:</label>
@@ -251,7 +251,7 @@
                             </div>
 
                           </div>
-                        </div> {{-- end panel body --}}
+                        </div> {{-- end card body --}}
                       </div>
                     </div>
 

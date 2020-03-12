@@ -10,10 +10,10 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
+      <div class="card">
 
-        <div class="panel-heading">Manager/Supervisor Placement Test Approval Page for: <strong>{{ $next_term_name }}</strong></div>
-          <div class="panel-body">
+        <div class="card-header bg-default">Manager/Supervisor Placement Test Approval Page for: <strong>{{ $next_term_name }}</strong></div>
+          <div class="card-body">
             <form method="POST" action="{{ route('approval.updateplacementformdata', [$input_staff->INDEXID, $input_staff->L, $input_staff->eform_submit_count, $next_term_code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>

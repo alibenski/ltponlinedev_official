@@ -3,12 +3,12 @@
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
-    .active-home>a {
+    .active-home {
         color: #fff;
         font-weight: bold;
         background-color: #636b6f;
         }
-    .nav-pills>li.active-home>a:hover {
+    .active-home:hover {
         color: #fff;
         background-color: #636b6f;
         }
@@ -63,10 +63,10 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><strong>Dashboard</strong></div>
+            <div class="card">
+                <div class="card-header text-white bg-primary"><strong>Dashboard</strong></div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
@@ -115,9 +115,9 @@
         </div>  
 
         {{-- <div class="col-md-3">
-            <div class="panel panel-info">
-                <div class="panel-heading text-center"><strong>UN Language Courses</strong></div>
-                <div class="panel-body">
+            <div class="card card-info">
+                <div class="card-heading text-center"><strong>UN Language Courses</strong></div>
+                <div class="card-body">
                     <ul  class="list-group">
                         <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a>
                         <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a>

@@ -13,7 +13,8 @@
 
         <!-- Bootstrap -->
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+        {{-- <link rel="stylesheet" href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}"> --}}
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}">
         {{-- <script src="https://use.fontawesome.com/e401b0faaf.js"></script> --}}
         <!-- Custom styles for this template -->

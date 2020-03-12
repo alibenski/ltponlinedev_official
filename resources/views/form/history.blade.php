@@ -7,10 +7,10 @@
 <div class="container">
   <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><strong>Past Language Course Enrolment for {{ Auth::user()->name }}
+            <div class="card">
+                <div class="card-header bg-primary"><strong>Past Language Course Enrolment for {{ Auth::user()->name }}
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     @if(empty($historical_data))
                     <div class="alert alert-warning">
                         <p>There were no historical records found.</p>

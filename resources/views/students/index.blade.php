@@ -17,10 +17,10 @@
 
     <div class="row">
         <div class="col-md-9">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><strong>Student Profile</strong></div>
+            <div class="card">
+                <div class="card-header bg-primary"><strong>Student Profile</strong></div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
@@ -147,9 +147,9 @@
             </div>
         </div>  
         <div class="col-md-3">
-            <div class="panel panel-info">
-                <div class="panel-heading text-center"><strong>UN Language Courses</strong></div>
-                <div class="panel-body">
+            <div class="card">
+                <div class="card-header bg-info text-center"><strong>UN Language Courses</strong></div>
+                <div class="card-body">
                     <ul  class="list-group">
                         <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a>
                         <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a>

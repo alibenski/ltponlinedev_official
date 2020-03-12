@@ -48,7 +48,7 @@
                         <input id="firstName" type="hidden" name="firstName" value="{{ Auth::user()->nameFirst }}">
                         <input id="lastName" type="hidden" name="lastName" value="{{ Auth::user()->nameLast }}">
 
-                        <div class="form-group{{ $errors->has('current_password') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('current_password') ? 'is-invalid' : '' }}">
                             <label for="current_password" class="col-md-4 control-label">Current Password</label>
 
                             <div class="col-md-6">
@@ -62,7 +62,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('password') ? 'is-invalid' : '' }}">
                             <label for="password" class="col-md-4 control-label">New Password</label>
 
                             <div class="col-md-6">
@@ -77,7 +77,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}">
                             <label for="password-confirm" class="col-md-4 control-label">Confirm New Password</label>
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>

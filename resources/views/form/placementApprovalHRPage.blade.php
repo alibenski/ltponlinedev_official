@@ -10,10 +10,10 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
+      <div class="card">
 
-        <div class="panel-heading">CLM Learning Partner Approval Page Placement Test: <strong>{{ $next_term_name }}</strong></div>
-          <div class="panel-body">
+        <div class="card-header bg-default">CLM Learning Partner Approval Page Placement Test: <strong>{{ $next_term_name }}</strong></div>
+          <div class="card-body">
             <form method="POST" action="{{ route('approval.updateplacementformdata2hr', [$input_staff->INDEXID, $input_staff->L, $input_staff->eform_submit_count,$next_term_code]) }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <input  name="INDEXID" type="hidden" value="{{$input_staff->INDEXID}}" readonly>

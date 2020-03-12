@@ -12,8 +12,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <div class="panel panel-info">
-          <div class="panel-heading">Enrolment Form for: 
+      <div class="card">
+          <div class="card-header bg-info">Enrolment Form for: 
             <strong>
               @if(empty($next_term))
               Enrolment Period Closed
@@ -22,7 +22,7 @@
               @endif
             </strong>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-12">

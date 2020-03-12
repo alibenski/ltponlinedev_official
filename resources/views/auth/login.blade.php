@@ -18,56 +18,52 @@
 @endif
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
-                <div class="panel-body">
-                    <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('login') }}">
+        <div class="col-lg-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">Login</div>
+                <div class="card-body">
+                    <form class="form-prevent-multi-submit" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Email Address</label>
+                        <div class="form-group row">
+                            <label for="email" class="col-md-3 col-form-label"><strong>Email Address</strong></label>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                            <div class="col-md-8">
+                                <input id="email" type="email" class="form-control  {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" value="{{ old('email') }}" aria-describedby="emailHelpBlock" required autofocus>
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
+                                {{-- @if ($errors->has('email'))
+                                <small id="emailHelpBlock" class="form-text text-danger">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </small>
+                                @endif --}}
 
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
+                        <div class="form-group row">
+                            <label for="password" class="col-md-3 col-form-label"><strong>Password</strong></label>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                            <div class="col-md-8">
+                                <input id="password" type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" name="password" aria-describedby="pwdHelpBlock" required>
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
+                                {{-- @if ($errors->has('password'))
+                                    <small id="pwdHelpBlock" class="form-text text-danger">
                                         <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+                                    </small>
+                                @endif --}}
+                                
                                 @if (count($errors) > 0)
-                                    <div class="alert alert-danger alert-block" role="alert" style="margin-top: 10px;">
-                                        <strong>Errors:</strong>
-                                        <ul>
+                                    <div class="alert alert-danger mt-2" role="alert">
                                         @foreach ($errors->all() as $error)
-                                            
-                                            <li>{{ $error }}</li>
-                                            
+                                            <small>{{ $error }}</small>
                                         @endforeach
-                                        </ul>
                                     </div>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
+                            <div class="col-md-6 offset-md-4">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
@@ -77,8 +73,8 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary button-prevent-multi-submit">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-outline-primary button-prevent-multi-submit">
                                     Login
                                 </button>
 
