@@ -17,7 +17,9 @@
 				<tr>
 					<th>Term</th>
 					<th>Name</th>
+					<th>Profile</th>
 					<th>Email</th>
+					<th>Organization</th>
 					<th>Language</th>
 					<th>Description</th>
 					<th>Teacher</th>
@@ -28,7 +30,9 @@
 				<tr>
 					<td>{{ $el->Term }}</td>
 					<td>{{ $el->users->name }}</td>
+					<td>{{ $el->users->profile }}</td>
 					<td>{{ $el->users->email }}</td>
+					<td>{{ $el->users->sddextr->DEPT }}</td>
 					<td>{{ $el->languages->name }}</td>
 					<td>{{ $el->courses->EDescription }}</td>
 					<td>{{ $el->classrooms->teachers->Tch_Name }}</td>
@@ -39,7 +43,9 @@
 				<tr>
 					<th>Term</th>
 					<th>Name</th>
+					<th>Profile</th>
 					<th>Email</th>
+					<th>Organization</th>
 					<th>Language</th>
 					<th>Description</th>
 					<th>Teacher</th>
