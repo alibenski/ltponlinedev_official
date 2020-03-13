@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('admin-view-classrooms', ['as' => 'admin-view-classrooms', 'uses' => 'AdminController@adminViewClassrooms']);
 
     Route::get('admin-student-email-view', 'AdminController@adminStudentEmailView')->name('admin-student-email-view');
+    Route::get('get-admin-all-current-student-in-term', 'AdminController@getAdminAllCurrentStudentInTerm')->name('get-admin-all-current-student-in-term');
 
     /*
      * Reporting Routes

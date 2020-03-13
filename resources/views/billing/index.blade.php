@@ -61,7 +61,7 @@
 </div> --}}
 
 <div class="billing-section">
-	<div class="preloader2"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
+	<div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
 	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>

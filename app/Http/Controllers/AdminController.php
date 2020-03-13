@@ -26,8 +26,13 @@ class AdminController extends Controller
 {
     public function adminStudentEmailView()
     {
-        if (Session::has('Term')) {
-            $term = Term::where('Term_Code', Session::get('Term'))->first();
+        return view('admin.admin-student-email-view');
+    }
+
+    public function getAdminAllCurrentStudentInTerm(Request $request)
+    {
+        if ($request->ajax()) {
+            $term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first();
             // query all students enrolled to current term excluding waitlisted
             $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L')->where('Term', $term->Term_Code)
                 ->whereHas('classrooms', function ($q)
@@ -35,14 +40,15 @@ class AdminController extends Controller
                     $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
                     
                 })
+                ->with('users.sddextr') // access sddextr model via user model relationship
+                ->with('languages')
+                ->with('courses')
+                ->with('classrooms.teachers')
                 ->get();
-            // dd($query_students_current_term);
-        
-            return view('admin.admin-student-email-view', compact('query_students_current_term'));
-        }
 
-        $query_students_current_term = null;
-        return view('admin.admin-student-email-view', compact('query_students_current_term'));
+            $data = $query_students_current_term;
+            return response()->json($data);
+        }
     }
 
     /**
