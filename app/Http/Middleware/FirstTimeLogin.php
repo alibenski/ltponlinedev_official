@@ -22,6 +22,10 @@ class FirstTimeLogin
         $user = $request->user();
         $checker = $request->user()->must_change_password;
 
+        if ($user->hasRole('Admin')) {
+            return $next($request);
+        }
+
         if ($checker == 1) {
             return redirect()->route('password.expired');
         }
