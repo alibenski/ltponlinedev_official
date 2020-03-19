@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      */
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
+    Route::get('send-email-to-enrolled-students-of-selected-term', 'SystemController@sendEmailToEnrolledStudentsOfSelectedTerm')->name('send-email-to-enrolled-students-of-selected-term');
     Route::get('send-broadcast-reminder', 'SystemController@sendBroadcastReminder')->name('send-broadcast-reminder');
     Route::get('send-reminder-to-current-students', 'SystemController@sendReminderToCurrentStudents')->name('send-reminder-to-current-students');
     Route::get('system-index', 'SystemController@systemIndex')->name('system-index');

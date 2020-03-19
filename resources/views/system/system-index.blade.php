@@ -76,8 +76,8 @@
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dLabel">
 									<li><a href="{{route('send-general-email')}}" class="send-send-general-email send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to All Students (Current and Past)</a></li>
-									{{-- <li><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to <strong> Students Not Yet Enrolled </strong></a></li>
-									<li><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to <strong> Current Students </strong> Not Yet Enrolled</a></li> --}}
+									<li><a href="{{route('send-email-to-enrolled-students-of-selected-term')}}" class="send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to <strong> Students  Who Submitted Enrolment Forms for {{Session::get('Term')}}</strong></a></li>
+									{{-- <li><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to <strong> Current Students </strong> Not Yet Enrolled</a></li> --}}
 									</ul>
 									<a href="{{ route('view-general-email-text', ['id' => 2]) }}" class="btn btn-info btn-space"><i class="fa fa-eye"></i> View</a>
 									<a href="{{ route('edit-enrolment-is-open-text', ['id' => 2]) }}" class="btn btn-warning btn-space"><i class="fa fa-pencil"></i> Edit</a>

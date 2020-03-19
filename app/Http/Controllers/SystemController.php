@@ -23,12 +23,12 @@ use Session;
 
 class SystemController extends Controller
 {
-	public function systemIndex()
-	{
+    public function systemIndex()
+    {
         $term = Term::where('Term_Code', Session::get('Term'))->first();
         $texts = Text::get();
-		return view('system.system-index', compact('term', 'texts'));
-	}
+        return view('system.system-index', compact('term', 'texts'));
+    }
 
     public function sendGeneralEmail(Request $request)
     {
@@ -66,6 +66,45 @@ class SystemController extends Controller
         return redirect()->back();
     }
 
+    public function sendEmailToEnrolledStudentsOfSelectedTerm(Request $request)
+    {
+        $term = Session::get('Term');
+        if (!$term) {
+            $request->session()->flash('warning', 'No emails sent! Select a valid term.');
+            return redirect()->back();
+        }
+
+        $query_students_regular_enrolment = Preenrolment::where('Term', $term)
+            ->where('overall_approval', 1)
+            ->select('INDEXID')
+            ->groupBy('INDEXID')
+            ->with('users')
+            ->get()
+            ->pluck('users.email');
+
+        $query_students_regular_placement = PlacementForm::where('Term', $term)
+            ->where('overall_approval', 1)
+            ->select('INDEXID')
+            ->groupBy('INDEXID')
+            ->with('users')
+            ->get()
+            ->pluck('users.email');
+
+        $merge = $query_students_regular_enrolment->merge($query_students_regular_placement);
+        $unique_email_address = $merge->unique();
+
+        $countOfEmails = count($unique_email_address);
+        // dd($term, $query_students_regular_enrolment, $query_students_regular_placement, $unique_email_address);
+
+        // $sddextr_email_address = 'allyson.frias@gmail.com';
+        foreach ($unique_email_address as $sddextr_email_address) {
+            Mail::to($sddextr_email_address)->send(new sendGeneralEmail($sddextr_email_address));
+        }
+
+        $request->session()->flash('success', 'Email sent to ' . $countOfEmails . ' students!');
+        return redirect()->back();
+    }
+
     /**
      * Send broadcast reminder email to all students who have logged in
      * Use during START of enrolment 
@@ -74,38 +113,38 @@ class SystemController extends Controller
      */
     public function sendBroadcastEnrolmentIsOpen(Request $request)
     {
-    	// query students who have logged in
-    	$query_email_addresses = User::where('must_change_password', 0)
-    		->select('email')
-    		->groupBy('email')
-    		->get()
-    		->pluck('email');
+        // query students who have logged in
+        $query_email_addresses = User::where('must_change_password', 0)
+            ->select('email')
+            ->groupBy('email')
+            ->get()
+            ->pluck('email');
 
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
-    	if (!$term) {
-    		$request->session()->flash('warning', 'No emails sent! Create a valid term.');
-    		return redirect()->back();
-    	}
+        if (!$term) {
+            $request->session()->flash('warning', 'No emails sent! Create a valid term.');
+            return redirect()->back();
+        }
 
-    	$query_students_current_year = Repo::where('Term', $term->Term_Code )
-    		->select('INDEXID')
-    		->groupBy('INDEXID')
-    		->with('users')
-    		->get()
-    		->pluck('users.email');
+        $query_students_current_year = Repo::where('Term', $term->Term_Code)
+            ->select('INDEXID')
+            ->groupBy('INDEXID')
+            ->with('users')
+            ->get()
+            ->pluck('users.email');
 
-    	$merge = $query_email_addresses->merge($query_students_current_year);
-    	$unique_email_address = $merge->unique();
+        $merge = $query_email_addresses->merge($query_students_current_year);
+        $unique_email_address = $merge->unique();
 
-    	// dd($merge->unique());
-    	
-    	// $sddextr_email_address = 'allyson.frias@gmail.com';
+        // dd($merge->unique());
+
+        // $sddextr_email_address = 'allyson.frias@gmail.com';
         foreach ($unique_email_address as $sddextr_email_address) {
-        	Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
+            Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
         }
 
         $request->session()->flash('success', 'Broadcast email sent!');
-    	return redirect()->back();
+        return redirect()->back();
     }
 
     /**
@@ -128,14 +167,14 @@ class SystemController extends Controller
             return redirect()->back();
         }
 
-        $queryStudentsAlreadyEnrolled = Preenrolment::where('Term', $term->Term_Next )
+        $queryStudentsAlreadyEnrolled = Preenrolment::where('Term', $term->Term_Next)
             ->select('INDEXID')
             ->groupBy('INDEXID')
             ->with('users')
             ->get()
             ->pluck('users.email');
 
-        $queryStudentsAlreadyPlaced = PlacementForm::where('Term', $term->Term_Next )
+        $queryStudentsAlreadyPlaced = PlacementForm::where('Term', $term->Term_Next)
             ->select('INDEXID')
             ->groupBy('INDEXID')
             ->with('users')
@@ -150,7 +189,7 @@ class SystemController extends Controller
 
         $collectDifferenceEmails = collect($differenceInEmails);
 
-        $query_students_current_year = Repo::where('Term', $term->Term_Code )
+        $query_students_current_year = Repo::where('Term', $term->Term_Code)
             ->select('INDEXID')
             ->groupBy('INDEXID')
             ->with('users')
@@ -163,11 +202,11 @@ class SystemController extends Controller
         $collectDifferenceEmails2 = collect($differenceInEmails2);
 
         $merge = $collectDifferenceEmails->merge($collectDifferenceEmails2);
-        
+
         $unique_email_address = $merge->unique();
 
         // dd($uniqueEmailAddressNotEmailed, $collectDifferenceEmails, $unique_email_address);
-        
+
         // $sddextr_email_address = 'allyson.frias@gmail.com';
         foreach ($unique_email_address as $sddextr_email_address) {
             Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
@@ -175,7 +214,6 @@ class SystemController extends Controller
 
         $request->session()->flash('success', 'Broadcast reminder email sent!');
         return redirect()->back();
-
     }
 
 
@@ -189,7 +227,7 @@ class SystemController extends Controller
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
         // query all students enrolled to current term
         $query_students_current_term = Repo::where('Term', $term->Term_Code)->get();
-        
+
         $arr1 = [];
         $arr0 = [];
         foreach ($query_students_current_term as $key => $value) {
@@ -198,7 +236,6 @@ class SystemController extends Controller
             $query_not_enrolled_stds = Preenrolment::where('INDEXID', $value->INDEXID)->where('Term', $term->Term_Next)->get();
             foreach ($query_not_enrolled_stds as $key2 => $value2) {
                 $arr1[] = $value2->INDEXID;
-                
             }
         }
 
@@ -213,12 +250,12 @@ class SystemController extends Controller
         $arr0 = array_unique($arr0); // remove dupes
         $arr1 = array_unique($arr1); // remove dupes
         $arr3 = array_unique($arr3); // remove dupes
-        
+
         $difference = array_diff($arr0, $arr1); // get difference
         $difference = array_unique($difference); // remove dupes
 
         $diff = array_diff($difference, $arr3);
-        $diff = array_unique($diff); 
+        $diff = array_unique($diff);
 
         $difftest = array_diff($arr1, $arr3);
         $difftest = array_unique($difftest);
@@ -231,11 +268,11 @@ class SystemController extends Controller
                 $sddextr_email_address = $value4->email;
                 $arr2[] = $sddextr_email_address;
                 // Mail::to($sddextr_email_address)->send(new sendReminderToCurrentStudents($sddextr_email_address));    
-                Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));    
+                Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
             }
         }
 
-        $request->session()->flash('success', 'Reminder email sent to '.count($arr2).' students!');
+        $request->session()->flash('success', 'Reminder email sent to ' . count($arr2) . ' students!');
         return redirect()->back();
     }
 }
