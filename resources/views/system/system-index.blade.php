@@ -2,6 +2,7 @@
 
 @section('customcss')
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
 <style>
     .admin-index-container {
         display: flex;
@@ -22,8 +23,16 @@
 @section('content')
 
 <h2>System Operations</h2>
-
-@include('admin.partials._termSessionMsg')
+<div class="row">
+	<div class="col-md-12">
+	@include('admin.partials._termSessionMsg')
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+	@include('admin.partials._dropdownSetSessionTerm')
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-md-12">
@@ -64,6 +73,13 @@
 									<a href="{{ route('edit-enrolment-is-open-text', ['id' => 1]) }}" class="btn btn-warning btn-space"><i class="fa fa-pencil"></i> Edit</a>
 								</div>
 							</h4>
+							@if ($onGoingTerm)
+							<h5>
+								<i class="fa fa-info-circle"></i>
+									Queries related to on-going term:<strong> {{$onGoingTerm->Term_Code }} / {{$onGoingTerm->Comments }} {{ date('Y', strtotime($onGoingTerm->Term_End)) }}
+								</strong>
+							</h5>
+							@endif
 						</div>
 						
 						<div class="admin-index-column-1">
@@ -76,7 +92,9 @@
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dLabel">
 									<li><a href="{{route('send-general-email')}}" class="send-send-general-email send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to All Students (Current and Past)</a></li>
-									<li><a href="{{route('send-email-to-enrolled-students-of-selected-term')}}" class="send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to <strong> Students  Who Submitted Enrolment Forms for {{Session::get('Term')}}</strong></a></li>
+									@if (Session::has('Term'))
+									<li><a href="{{route('send-email-to-enrolled-students-of-selected-term')}}" class="send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to Students Who Have Enrolled [ {{Session::get('Term')}} ]</a></li>
+									@endif
 									{{-- <li><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to <strong> Current Students </strong> Not Yet Enrolled</a></li> --}}
 									</ul>
 									<a href="{{ route('view-general-email-text', ['id' => 2]) }}" class="btn btn-info btn-space"><i class="fa fa-eye"></i> View</a>
@@ -86,9 +104,12 @@
 						</div>
 				</form>
 			</div>
-			<div class="overlay">
-        		<i class="fa fa-refresh fa-spin"></i>
-        	</div>
+			@if (!Session::has('Term'))
+				<div class="overlay"></div>
+			@endif
+				<div class="overlay overlay-sending">
+					<i class="fa fa-refresh fa-spin"></i>
+				</div>
 		</div>
 		
 	</div>
@@ -98,10 +119,13 @@
 @stop
 
 @section('java_script')
-
+<script src="{{ asset('js/select2.full.js') }}"></script>
 <script>
 	$(document).ready(function() {
-		$(".overlay").fadeOut(600);
+		$(".overlay.overlay-sending").fadeOut(600);
+		$('.select2-basic-single').select2({
+		placeholder: "select here",
+		});
 	});
 
 	$('a.send-emails').on('click', function(e) {

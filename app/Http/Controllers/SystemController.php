@@ -25,9 +25,13 @@ class SystemController extends Controller
 {
     public function systemIndex()
     {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
         $term = Term::where('Term_Code', Session::get('Term'))->first();
         $texts = Text::get();
-        return view('system.system-index', compact('term', 'texts'));
+        $onGoingTermObj = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        $onGoingTerm = Term::where('Term_Code', $onGoingTermObj->Term_Code)->first();
+
+        return view('system.system-index', compact('terms', 'term', 'texts', 'onGoingTerm'));
     }
 
     public function sendGeneralEmail(Request $request)
@@ -162,7 +166,7 @@ class SystemController extends Controller
             ->pluck('email');
 
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
-        if (count($term) < 1) {
+        if (!$term) {
             $request->session()->flash('warning', 'No emails sent! Create a valid term.');
             return redirect()->back();
         }
