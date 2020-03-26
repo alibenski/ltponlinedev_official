@@ -198,7 +198,7 @@ $(document).ready(function() {
     promises.push(
     $.ajax({
       url: '{{ route('ajax-preview-get-student-current-class') }}',
-      type: 'GET',
+      type: 'POST',
       data: {arr:arr,term:term,_token:token},
     })
     .then(function(data) {
