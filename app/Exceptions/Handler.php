@@ -84,7 +84,7 @@ class Handler extends ExceptionHandler
 
 
         if ($exception instanceof TokenMismatchException) {
-            $request->session()->flash('expired', 'You have been logged out.');
+            $request->session()->flash('expired', 'You have been logged out. Forms not submitted due to token mismatch error.');
             return redirect()
                 ->route('login')
                 ->withInput($request->except('password', 'password_confirmation', '_token'));

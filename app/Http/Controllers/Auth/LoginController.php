@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Spatie\Permission\Traits\HasRoles;
 use Session;
+use URL;
 
 class LoginController extends Controller
 {
@@ -42,7 +43,8 @@ class LoginController extends Controller
         $intendedURL = Session::get('url.intended');
 
         if ($intendedURL) {
-            Session::flash('expired', 'You have been logged out.');
+            Session::put($intendedURL, URL::previous());
+            Session::flash('expired', 'You have been logged out');
         }
 
         return view('auth.login');

@@ -202,7 +202,7 @@ $(document).ready(function() {
       data: {arr:arr,term:term,_token:token},
     })
     .then(function(data) {
-      // console.log(data)
+      console.log(data)
       // console.time('jquery');
       $.each(data, function(x, y) {
         // console.log(y.INDEXID)
