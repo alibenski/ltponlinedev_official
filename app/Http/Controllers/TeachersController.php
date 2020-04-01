@@ -737,6 +737,11 @@ class TeachersController extends Controller
     public function teacherAssignCourseView(Request $request)
     {
         if ($request->ajax()) {
+            if (!Session::has('Term')) {
+                $data = 'missingSelectedTerm';
+                return response()->json([$data]);
+            }
+
             $indexid = $request->indexid;
             $language = $request->L;
             // $next_term = Term::where('Term_Code', Session::get('Term') )->first()->Term_Next; 
