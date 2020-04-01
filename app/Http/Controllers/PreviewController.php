@@ -172,25 +172,33 @@ class PreviewController extends Controller
      */
     public function ajaxPreviewGetStudentCurrentClass(Request $request)
     {
-        $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
+        if ($request->ajax()) {
+            $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
 
-        $get_class = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
-            $query->whereNotNull('Tch_ID')
-                ->where('Tch_ID', '!=', 'TBD');
-        })
-            ->get();
+            $getEnrolmentForms = Preenrolment::where('Term', $request->term)
+                ->where('overall_approval', 1)
+                ->where('L', $request->L)
+                ->with('users.sddextr')
+                ->with('courses')
+                ->with('languages')
+                ->with('modifyUser')
+                ->with('pash.classrooms.teachers')
+                ->with('pash.courses')
+                ->with(['pash' => function ($q1) use ($prev_term) {
+                    $q1->where('Term', $prev_term)
+                        ->whereHas('classrooms', function ($q2) {
+                            $q2->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        });
+                }])
+                // ->whereNull('updated_by_admin')
+                ->select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count', 'updated_by_admin', 'modified_by')
+                ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count', 'updated_by_admin', 'modified_by')
+                ->get();
 
-        $class_info = [];
-        $collect = [];
-        foreach ($get_class as $key5 => $value5) {
-            $class_info['INDEXID'] = $value5->INDEXID;
-            $class_info['course_name'] = $value5->courses->Description;
-            $class_info['teacher'] = $value5->classrooms->teachers->Tch_Name;
-            $collect[] = $class_info;
+            $data = $getEnrolmentForms;
+            return response()->json($data);
         }
-
-        $data = $collect;
-        return response()->json($data);
     }
 
     public function vsaPage1()
@@ -476,7 +484,7 @@ class PreviewController extends Controller
     public function cancelConvocation(Request $request, $codeindexidclass)
     {
         $record = Repo::where('CodeIndexIDClass', $codeindexidclass)->first();
-        if(is_null($record)){
+        if (is_null($record)) {
             session()->flash('error', 'No action taken. The student might have already been moved to another class. ');
             return back();
         }

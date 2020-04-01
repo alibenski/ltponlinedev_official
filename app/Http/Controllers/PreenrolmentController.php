@@ -81,7 +81,7 @@ class PreenrolmentController extends Controller
 
             return view('preenrolment.query-orphan-forms-to-assign', compact('languages', 'arr3'));
         }
-        return redirect('/');
+        return redirect('/admin');
     }
 
     public function queryRegularFormsToAssign(Request $request)
