@@ -143,6 +143,11 @@ $("button[id='showStudentsBtn']").click(function(){
   		// console.log(data)
         $(".students-here").html(data);
         $(".students-here").html(data.options);
+        
+        if (!$.isArray(data)) {
+            alert("An error occured while loading Show Students Page. Click OK to reload.");
+            window.location.reload();
+        }
   })
   .fail(function(data) {
       console.log("error");
@@ -176,6 +181,11 @@ $("button[id='enterResultsBtn']").click(function(){
             $("button[id='enterResultsBtn'][value='"+Code+"']").removeAttr('disabled');
         }, 2000);
   		console.log("loading students after click Enter Results button")
+        
+        if (!$.isArray(data)) {
+            alert("An error occured while loading Enter Results Page. Click OK to reload.");
+            window.location.reload();
+        }
   })
   .fail(function(data) {
       console.log("error");
