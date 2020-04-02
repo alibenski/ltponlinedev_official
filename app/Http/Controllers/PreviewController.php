@@ -1609,13 +1609,13 @@ class PreviewController extends Controller
 
     public function checkDuplicatesInPreview(Request $request)
     {
-        $duplicates = DB::table('tblltp_preview')
+        $duplicates = DB::table('tblLTP_preview')
             ->select('CodeIndexID', (DB::raw('COUNT(CodeIndexID)')))
             ->groupBy('CodeIndexID')
             ->having(DB::raw('COUNT(CodeIndexID)'), '>', '1')
             ->get();
         dd($duplicates);
-        
+
         // try {
         //     DB::table('users')->insert($userData);  
         // } catch(\Illuminate\Database\QueryException $e){
