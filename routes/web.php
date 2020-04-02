@@ -135,6 +135,13 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('preview-classrooms/{code}', ['as' => 'preview-classrooms', 'uses' => 'PreviewController@previewClassrooms']);
 
     Route::any('preview-validate-page', ['as' => 'preview-validate-page', 'uses' => 'PreviewController@getApprovedEnrolmentForms']);
+    Route::any('order-codes', ['as' => 'order-codes', 'uses' => 'PreviewController@orderCodes']);
+    Route::any('assign-course-sched-to-student', ['as' => 'assign-course-sched-to-student', 'uses' => 'PreviewController@assignCourseScheduleToStudent']);
+    Route::any('check-code-if-exists-in-preview', ['as' => 'check-code-if-exists-in-preview', 'uses' => 'PreviewController@checkCodeIfExistsInPreview']);
+    Route::any('create-classrooms', ['as' => 'create-classrooms', 'uses' => 'PreviewController@createClassrooms']);
+    Route::any('check-duplicate-in-preview', ['as' => 'check-duplicate-in-preview', 'uses' => 'PreviewController@checkDuplicatesInPreview']);
+    Route::any('check-undefined-offset', ['as' => 'check-undefined-offset', 'uses' => 'PreviewController@checkUndefinedOffset']);
+
 
     Route::post('preview-sort-page', ['as' => 'preview-sort-page', 'uses' => 'PreviewController@orderCodes']);
 

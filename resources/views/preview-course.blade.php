@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-<div class="fancy-pants"></div>
+{{-- <div class="fancy-pants"></div> --}}
 <div class="alert bg-black col-sm-12">
 	<h4 class="text-center"><strong>Run Batch</strong></h4>
 </div>
@@ -36,7 +36,109 @@
       </div>
 
       <div class="form-group col-sm-12 add-margin">           
-            <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Execute </button>
+            <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Execute Phase 1</button>
+        <input type="hidden" name="_token" value="{{ Session::token() }}">
+      </div>
+    </form>
+
+    <form method="POST" action="{{ route('order-codes') }}" class="form-prevent-multi-submit">
+      {{ csrf_field() }}
+      <div class="form-group col-sm-12 add-margin">
+        <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+            <option value="">--- Select Term ---</option>
+            @foreach ($terms as $value)
+                <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+            @endforeach
+        </select>
+      </div>
+
+      <div class="form-group col-sm-12 add-margin">           
+            <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Execute Phase 2</button>
+        <input type="hidden" name="_token" value="{{ Session::token() }}">
+      </div>
+    </form>
+
+    <form method="POST" action="{{ route('assign-course-sched-to-student') }}" class="form-prevent-multi-submit">
+      {{ csrf_field() }}
+      <div class="form-group col-sm-12 add-margin">
+        <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+            <option value="">--- Select Term ---</option>
+            @foreach ($terms as $value)
+                <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+            @endforeach
+        </select>
+      </div>
+
+      <div class="form-group col-sm-12 add-margin">           
+            <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Execute Phase 3</button>
+        <input type="hidden" name="_token" value="{{ Session::token() }}">
+      </div>
+    </form>
+
+    <form method="POST" action="{{ route('check-code-if-exists-in-preview') }}" class="form-prevent-multi-submit">
+      {{ csrf_field() }}
+      <div class="form-group col-sm-12 add-margin">
+        <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+            <option value="">--- Select Term ---</option>
+            @foreach ($terms as $value)
+                <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+            @endforeach
+        </select>
+      </div>
+
+      <div class="form-group col-sm-12 add-margin">           
+            <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Execute Phase 4</button>
+        <input type="hidden" name="_token" value="{{ Session::token() }}">
+      </div>
+    </form>
+
+    <form method="POST" action="{{ route('check-duplicate-in-preview') }}" class="form-prevent-multi-submit">
+      {{ csrf_field() }}
+      <div class="form-group col-sm-12 add-margin">
+        <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+            <option value="">--- Select Term ---</option>
+            @foreach ($terms as $value)
+                <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+            @endforeach
+        </select>
+      </div>
+
+      <div class="form-group col-sm-12 add-margin">           
+            <button type="submit" class="btn btn-warning button-prevent-multi-submit execute-batch">Check Duplicate Forms</button>
+        <input type="hidden" name="_token" value="{{ Session::token() }}">
+      </div>
+    </form>
+
+    <form method="POST" action="{{ route('check-undefined-offset') }}" class="form-prevent-multi-submit">
+      {{ csrf_field() }}
+      <div class="form-group col-sm-12 add-margin">
+        <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+            <option value="">--- Select Term ---</option>
+            @foreach ($terms as $value)
+                <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+            @endforeach
+        </select>
+      </div>
+
+      <div class="form-group col-sm-12 add-margin">           
+            <button type="submit" class="btn btn-warning button-prevent-multi-submit execute-batch">Check Undefined Offset</button>
+        <input type="hidden" name="_token" value="{{ Session::token() }}">
+      </div>
+    </form>
+
+    <form method="POST" action="{{ route('create-classrooms') }}" class="form-prevent-multi-submit">
+      {{ csrf_field() }}
+      <div class="form-group col-sm-12 add-margin">
+        <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+            <option value="">--- Select Term ---</option>
+            @foreach ($terms as $value)
+                <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+            @endforeach
+        </select>
+      </div>
+
+      <div class="form-group col-sm-12 add-margin">           
+            <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Execute Phase 5</button>
         <input type="hidden" name="_token" value="{{ Session::token() }}">
       </div>
     </form>

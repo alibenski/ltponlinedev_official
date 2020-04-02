@@ -203,7 +203,6 @@ class PreviewController extends Controller
 
     public function vsaPage1()
     {
-        DB::table('tblLTP_preview_TempSort')->truncate();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         return view('preview-course', compact('terms'));
     }
@@ -955,6 +954,7 @@ class PreviewController extends Controller
      */
     public function getApprovedEnrolmentForms(Request $request)
     {
+        DB::table('tblLTP_preview_TempSort')->truncate();
 
         // copy waitlisted student from previous term to Waitlist table
         $prev_term = Term::where('Term_Code', $request->Term)->first()->Term_Prev;
@@ -1403,15 +1403,21 @@ class PreviewController extends Controller
             }
         }
 
-        /**
-         * Order Codes by count per code
-         */
+        $request->session()->flash('success', 'Phase 1 - Sorting/Ordering Complete!');
+        return redirect()->back();
+    }
+
+    /**
+     * Order Codes by count per code
+     */
+    public function orderCodes(Request $request)
+    {
         DB::table('tblLTP_preview_TempOrder')->truncate();
         DB::table('tblLTP_preview')->truncate();
-
+    
         // collect the courses offered for the term entered
         $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
-
+    
         // insert Codes in Preview TempOrder Table
         foreach ($te_code_collection as $te_code) {
             $codeSortByCountIndexID = PreviewTempSort::select('Code', 'Te_Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code', 'Te_Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
@@ -1421,6 +1427,15 @@ class PreviewController extends Controller
                 );
             }
         }
+
+        $request->session()->flash('success', 'Phase 2 - Insert Codes in Preview TempOrder Table Complete!');
+        return redirect()->back();
+    }
+        
+    public function assignCourseScheduleToStudent(Request $request)
+    {
+        // collect the courses offered for the term entered
+        $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
 
         foreach ($te_code_collection as $te_code) {
             $getCode = PreviewTempSort::select('Code')->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code')->get()->toArray();
@@ -1445,18 +1460,18 @@ class PreviewController extends Controller
             }
 
             if (!empty($arrCodeCount)) {
-
+        
                 //  get the min of the counts for each Code
                 $minValue = min($arrCodeCount);
                 $arr = [];
                 $arrSaveToPash = [];
-
+        
                 // use min to determine the first course-schedule assignment
                 for ($i = 0; $i < count($arrPerCode); $i++) {
-
+        
                     if ($minValue >= $arrCodeCount[$i]) {
                         // $arr = $arrPerCode[$i]; 
-
+        
                         // if there are 2 or more codes with equal count
                         // run query with leftJoin() to remove duplicates
                         $queryEnrolForms = DB::table('tblLTP_preview_TempSort')
@@ -1473,7 +1488,7 @@ class PreviewController extends Controller
                             ->orderBy('PS', 'asc')
                             ->orderBy('created_at', 'asc')
                             ->get();
-
+        
                         // $queryEnrolForms = PreviewTempSort::where('Code', $arrPerCode[$i])->get();
                         // assign course-schedule to student and save in PASHQTcur
                         foreach ($queryEnrolForms as $value) {
@@ -1516,6 +1531,12 @@ class PreviewController extends Controller
             } // end of if statement
         } // end of foreach statement
 
+        $request->session()->flash('success', 'Phase 3 - Assign course-schedule to student Complete!');
+        return redirect()->back();
+    }
+
+    public function checkCodeIfExistsInPreview(Request $request)
+    {
         $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Te_Code', 'Term')->orderBy('id')->get()->toArray();
         $arr = [];
         $arrStd = [];
@@ -1525,7 +1546,7 @@ class PreviewController extends Controller
             $queryPashForCodes = Preview::where('Code', $value->Code)->get();
 
             if (empty($queryPashForCodesArr)) {
-                echo 'none exists';
+                echo 'none exists: ' . $value->Code;
                 echo '<br>';
                 // check INDEXID of students if existing in Preview table
                 $students = DB::table('tblLTP_preview_TempSort')
@@ -1582,12 +1603,35 @@ class PreviewController extends Controller
             }
         }
 
+        $request->session()->flash('success', 'Phase 4 - Save other students to Preview table Complete!');
+        return redirect()->back();
+    }
 
-        /*
-         Start process of creating classes based on number of students assigned per course-schedule 
-         */
+    public function checkDuplicatesInPreview(Request $request)
+    {
+        $duplicates = DB::table('tblltp_preview')
+            ->select('CodeIndexID', (DB::raw('COUNT(CodeIndexID)')))
+            ->groupBy('CodeIndexID')
+            ->having(DB::raw('COUNT(CodeIndexID)'), '>', '1')
+            ->get();
+        dd($duplicates);
+        
+        // try {
+        //     DB::table('users')->insert($userData);  
+        // } catch(\Illuminate\Database\QueryException $e){
+        //     $errorCode = $e->errorInfo[1];
+        //     if($errorCode == '1062'){
+        //         dd('Duplicate Entry');
+        //     }
+        // }
+
+        $request->session()->flash('success', 'Duplicates - Complete!');
+        return redirect()->back();
+    }
+
+    public function checkUndefinedOffset(Request $request)
+    {
         $getCodeForSectionNo = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get();
-
         $arrCountStdPerCode = [];
         foreach ($getCodeForSectionNo as $value) {
             // query student count who are not yet assigned to a class section (null)
@@ -1595,16 +1639,62 @@ class PreviewController extends Controller
             $arrCountStdPerCode[] = $countStdPerCode;
         }
 
-        // calculate sum per code and divide by 14 or 15 for number of classes
+        // calculate sum per code and divide by 11, 14 or 15 for number of classes
         $num_classes = [];
         for ($i = 0; $i < count($arrCountStdPerCode); $i++) {
-            $num_classes[] = intval(ceil($arrCountStdPerCode[$i] / 14));
+            $num_classes[] = intval(ceil($arrCountStdPerCode[$i] / 11));
         }
 
         $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
         $arrGetCode = [];
         $arrGetDetails = [];
 
+        foreach ($getCode as $valueCode) {
+            $arrGetCode[] = $valueCode->Code;
+
+            $getDetails = CourseSchedule::where('cs_unique', $valueCode->Code)->get();
+            foreach ($getDetails as $valueDetails) {
+                $arrGetDetails[] = $valueDetails;
+            }
+        }
+
+        $arrExistingSection = [];
+        for ($i = 0; $i < count($num_classes); $i++) {
+            // check existing section(s) first
+            // value of section is 1, if $existingSection is empty
+            $counter = $num_classes[$i];
+            $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
+            $existingSectionGet = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get();
+            echo $existingSectionGet;
+            echo '<br>';
+            $arrExistingSection[] = $existingSection;
+        }
+        dd($arrExistingSection);
+    }
+
+    /*
+     Start process of creating classes based on number of students assigned per course-schedule 
+     */
+    public function createClassrooms(Request $request)
+    {
+        $getCodeForSectionNo = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get();
+        $arrCountStdPerCode = [];
+        foreach ($getCodeForSectionNo as $value) {
+            // query student count who are not yet assigned to a class section (null)
+            $countStdPerCode = Preview::where('Code', $value->Code)->where('CodeIndexIDClass', null)->get()->count();
+            $arrCountStdPerCode[] = $countStdPerCode;
+        }
+                
+        // calculate sum per code and divide by 14 or 15 for number of classes
+        $num_classes = [];
+        for ($i = 0; $i < count($arrCountStdPerCode); $i++) {
+            $num_classes[] = intval(ceil($arrCountStdPerCode[$i] / 11));
+        }
+        
+        $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+        $arrGetCode = [];
+        $arrGetDetails = [];
+        
         foreach ($getCode as $valueCode) {
             $arrGetCode[] = $valueCode->Code;
 
@@ -1616,7 +1706,7 @@ class PreviewController extends Controller
                 $arrGetDetails[] = $valueDetails;
             }
         }
-
+        
         // $num_classes=[5,2];
         $ingredients = [];
         $k = count($num_classes);
@@ -1711,21 +1801,6 @@ class PreviewController extends Controller
         return redirect()->route('preview-vsa-page-2');
     }
 
-    public function getApprovedPlacementForms(Request $request)
-    {
-    }
-
-    public function orderCodes(Request $request)
-    {
-    }
-
-    public function sortEnrolmentForms($te_code)
-    {
-    }
-
-    public function checkCodeIfExistsInPash()
-    {
-    }
 
     public function assignAndAnalyze($getCode)
     {
@@ -1754,7 +1829,7 @@ class PreviewController extends Controller
                     ->orderBy('id', 'asc')
                     ->orderBy('PS', 'asc')
                     ->get()
-                    ->take(14);
+                    ->take(11);
                 foreach ($getPashStudents as $valuePashStudents) {
                     $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
                     // update record with classroom assigned
@@ -1796,7 +1871,7 @@ class PreviewController extends Controller
                         // $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
                     }
 
-                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 14) {
+                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 11) {
                         $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
                         $arrNotCompleteCode[] = $valueCountCodeClass->Code;
                         $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
@@ -1812,7 +1887,7 @@ class PreviewController extends Controller
         if ($c != 0) {
             for ($iCount = 0; $iCount < $c; $iCount++) {
                 // $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
-                $jNotCompleteCount = intVal(14 - $arrNotCompleteCount[$iCount]);
+                $jNotCompleteCount = intVal(11 - $arrNotCompleteCount[$iCount]);
                 $arrjNotCompleteCount[] = $jNotCompleteCount;
 
                 for ($iCounter2 = 0; $iCounter2 < $jNotCompleteCount; $iCounter2++) {
