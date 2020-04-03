@@ -106,7 +106,8 @@
 						{ "data": "users.name" }, 
 						{ "data": "users.profile" }, 
 						{ "data": "users.email" }, 
-						{ "data": "users.sddextr.DEPT" }, 
+						// { "data": "users.sddextr.DEPT" }, 
+						{ "data": "DEPT" }, 
 						{ "data": "languages.name" }, 
 						{ "data": "courses.Description" },  
 						{ "data": "classrooms.teachers.Tch_Name" }

@@ -134,7 +134,12 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('preview-vsa-page-2', ['as' => 'preview-vsa-page-2', 'uses' => 'PreviewController@vsaPage2']);
     Route::get('preview-classrooms/{code}', ['as' => 'preview-classrooms', 'uses' => 'PreviewController@previewClassrooms']);
 
-    Route::any('preview-validate-page', ['as' => 'preview-validate-page', 'uses' => 'PreviewController@getApprovedEnrolmentForms']);
+    Route::any('insert-priority-1', ['as' => 'insert-priority-1', 'uses' => 'PreviewController@insertPriority1']);
+    Route::any('insert-priority-2', ['as' => 'insert-priority-2', 'uses' => 'PreviewController@insertPriority2']);
+    Route::any('insert-priority-2-placement', ['as' => 'insert-priority-2-placement', 'uses' => 'PreviewController@insertPriority2Placement']);
+    Route::any('insert-priority-3', ['as' => 'insert-priority-3', 'uses' => 'PreviewController@insertPriority3']);
+    Route::any('insert-priority-4', ['as' => 'insert-priority-4', 'uses' => 'PreviewController@insertPriority4']);
+
     Route::any('order-codes', ['as' => 'order-codes', 'uses' => 'PreviewController@orderCodes']);
     Route::any('assign-course-sched-to-student', ['as' => 'assign-course-sched-to-student', 'uses' => 'PreviewController@assignCourseScheduleToStudent']);
     Route::any('check-code-if-exists-in-preview', ['as' => 'check-code-if-exists-in-preview', 'uses' => 'PreviewController@checkCodeIfExistsInPreview']);

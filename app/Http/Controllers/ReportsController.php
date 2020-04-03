@@ -198,6 +198,9 @@ class ReportsController extends Controller
             if ($request->filled($column)) {
                 $records = $records->where($column, $request->input($column))
                     ->where('Term', $term)
+                    ->whereHas('classrooms', function ($q) {
+                        $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                    })
                     ->with('languages')
                     ->with('courses')
                     ->with('coursesOld')

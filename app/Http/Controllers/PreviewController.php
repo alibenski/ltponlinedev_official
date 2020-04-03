@@ -954,8 +954,6 @@ class PreviewController extends Controller
      */
     public function getApprovedEnrolmentForms(Request $request)
     {
-        DB::table('tblLTP_preview_TempSort')->truncate();
-
         // copy waitlisted student from previous term to Waitlist table
         $prev_term = Term::where('Term_Code', $request->Term)->first()->Term_Prev;
 
@@ -1076,6 +1074,21 @@ class PreviewController extends Controller
             }
         }
 
+        $data = [
+            'arrINDEXID' => $arrINDEXID,
+            'arrValue' => $arrValue
+        ];
+
+        return $data;
+    }
+
+    public function insertPriority1(Request $request)
+    {
+        DB::table('tblLTP_preview_TempSort')->truncate();
+
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrValue = $data['arrValue'];
+
         $arr_enrolment_forms_reenrolled = [];
         $ingredients = [];
         $countArrValue = count($arrValue);
@@ -1087,7 +1100,7 @@ class PreviewController extends Controller
 
             // assigning of students to classes and saved in Preview TempSort table
             foreach ($enrolment_forms_reenrolled as $value) {
-                $ingredients[] = new  PreviewTempSort([
+                $ingredients[] = [
                     'CodeIndexID' => $value->CodeIndexID,
                     'Code' => $value->Code,
                     'schedule_id' => $value->schedule_id,
@@ -1116,17 +1129,20 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value->admin_eform_comment,
                     'admin_plform_comment' => $value->admin_plform_comment,
                     'course_preference_comment' => $value->course_preference_comment,
-                ]);
-                foreach ($ingredients as $data) {
-                    $data->save();
-                }
+                ];
             }
         }
+        PreviewTempSort::insert($ingredients);
+        $request->session()->flash('success', 'Insert Priority 1 Students Complete!');
+        return redirect()->back();
+    }
 
-        /**
-         * Priority 2 query enrolment forms/placement forms and check if they exist in waitlist table of 
-         * 2 previous terms
-         */
+    /**
+     * Priority 2 query enrolment forms/placement forms and check if they exist in waitlist table of 
+     * 2 previous terms
+     */
+    public function getArrValue2($arrINDEXID, $arrValue)
+    {
         $arrPriority2 = [];
         $ingredients2 = [];
         $arrValue2 = [];
@@ -1147,6 +1163,16 @@ class PreviewController extends Controller
                 }
             }
         }
+        return $arrValue2;
+    }
+
+    public function insertPriority2(Request $request)
+    {
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrINDEXID = $data['arrINDEXID'];
+        $arrValue = $data['arrValue'];
+
+        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
 
         $arr_enrolment_forms_waitlisted = [];
         $ingredients2 = [];
@@ -1160,7 +1186,7 @@ class PreviewController extends Controller
 
             // assigning of students to classes and saved in Preview TempSort table
             foreach ($enrolment_forms_waitlisted as $value) {
-                $ingredients2[] = new  PreviewTempSort([
+                $ingredients2[] = [
                     'CodeIndexID' => $value->CodeIndexID,
                     'Code' => $value->Code,
                     'schedule_id' => $value->schedule_id,
@@ -1189,17 +1215,23 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value->admin_eform_comment,
                     'admin_plform_comment' => $value->admin_plform_comment,
                     'course_preference_comment' => $value->course_preference_comment,
-                ]);
-                foreach ($ingredients2 as $data2) {
-                    $data2->save();
-                }
+                ];
+                // foreach ($ingredients2 as $data2) {
+                //     $data2->save();
+                // }
             }
         }
+        PreviewTempSort::insert($ingredients2);
+        $request->session()->flash('success', 'Insert Priority 2 Students Complete!');
+        return redirect()->back();
+    }
 
-        /**
-         * Get all approved/ validated placement forms 
-         * and compare to waitlist table to set priority 2
-         */
+    /**
+     * Get all approved/ validated placement forms 
+     * and compare to waitlist table to set priority 2
+     */
+    public function getDataPlacement(Request $request)
+    {
         // sort enrolment forms by date of submission
         $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
@@ -1249,6 +1281,18 @@ class PreviewController extends Controller
             }
         }
 
+        $dataPlacement = [
+            'arrINDEXIDPlacement' => $arrINDEXIDPlacement,
+            'arrValuePlacement' => $arrValuePlacement
+        ];
+        return $dataPlacement;
+    }
+
+    public function insertPriority2Placement(Request $request)
+    {
+        $dataPlacement = $this->getDataPlacement($request);
+        $arrValuePlacement = $dataPlacement['arrValuePlacement'];
+
         $arr_placement_forms_waitlisted = [];
         $placement_ingredients2 = [];
         $countArrValuePlacement = count($arrValuePlacement);
@@ -1261,7 +1305,7 @@ class PreviewController extends Controller
 
             // assigning of students to classes and saved in Preview TempSort table
             foreach ($placement_forms_waitlisted as $value_placement) {
-                $placement_ingredients2[] = new  PreviewTempSort([
+                $placement_ingredients2[] = [
                     'CodeIndexID' => $value_placement->CodeIndexID,
                     'Code' => $value_placement->Code,
                     'schedule_id' => $value_placement->schedule_id,
@@ -1290,12 +1334,23 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value_placement->admin_eform_comment,
                     'admin_plform_comment' => $value_placement->admin_plform_comment,
                     'course_preference_comment' => $value_placement->course_preference_comment,
-                ]);
-                foreach ($placement_ingredients2 as $placement_data2) {
-                    $placement_data2->save();
-                }
+                ];
+                // foreach ($placement_ingredients2 as $placement_data2) {
+                //     $placement_data2->save();
+                // }
             }
         }
+        PreviewTempSort::insert($placement_ingredients2);
+        $request->session()->flash('success', 'Insert Priority 2 Placement Students Complete!');
+        return redirect()->back();
+    }
+
+    public function insertPriority3(Request $request)
+    {
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrINDEXID = $data['arrINDEXID'];
+        $arrValue = $data['arrValue'];
+        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
 
         $arrValue1_2 = [];
         $arrValue1_2 = array_merge($arrValue, $arrValue2);
@@ -1318,7 +1373,7 @@ class PreviewController extends Controller
             $arrPriority3[] = $enrolment_forms_priority3;
 
             foreach ($enrolment_forms_priority3 as $value) {
-                $ingredients3[] = new  PreviewTempSort([
+                $ingredients3[] = [
                     'CodeIndexID' => $value->CodeIndexID,
                     'Code' => $value->Code,
                     'schedule_id' => $value->schedule_id,
@@ -1347,16 +1402,26 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value->admin_eform_comment,
                     'admin_plform_comment' => $value->admin_plform_comment,
                     'course_preference_comment' => $value->course_preference_comment,
-                ]);
-                foreach ($ingredients3 as $data) {
-                    $data->save();
-                }
+                ];
+                // foreach ($ingredients3 as $data) {
+                //     $data->save();
+                // }
             }
         }
+        PreviewTempSort::insert($ingredients3);
+        $request->session()->flash('success', 'Insert Priority 3 Students Complete!');
+        return redirect()->back();
+    }
 
-        /*
-        Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
-         */
+    /*
+    Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
+     */
+    public function insertPriority4(Request $request)
+    {
+        $dataPlacement = $this->getDataPlacement($request);
+        $arrINDEXIDPlacement = $dataPlacement['arrINDEXIDPlacement'];
+        $arrValuePlacement = $dataPlacement['arrValuePlacement'];
+
         $priority4_not_reset = array_diff($arrINDEXIDPlacement, $arrValuePlacement); // get the difference of INDEXID's between placement waitlisted and other placement forms
         $priority4 = array_values($priority4_not_reset);
         $countPriority4 = count($priority4);
@@ -1367,7 +1432,7 @@ class PreviewController extends Controller
             $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
             foreach ($placement_forms_priority4 as $value4) {
-                $ingredients4[] = new  PreviewTempSort([
+                $ingredients4[] = [
                     'CodeIndexID' => $value4->CodeIndexID,
                     'Code' => $value4->Code,
                     'schedule_id' => $value4->schedule_id,
@@ -1396,14 +1461,14 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value4->admin_eform_comment,
                     'admin_plform_comment' => $value4->admin_plform_comment,
                     'course_preference_comment' => $value4->course_preference_comment,
-                ]);
-                foreach ($ingredients4 as $data4) {
-                    $data4->save();
-                }
+                ];
+                // foreach ($ingredients4 as $data4) {
+                //     $data4->save();
+                // }
             }
         }
-
-        $request->session()->flash('success', 'Phase 1 - Sorting/Ordering Complete!');
+        PreviewTempSort::insert($ingredients4);
+        $request->session()->flash('success', 'Insert Priority 4 Students Complete!');
         return redirect()->back();
     }
 
@@ -1414,10 +1479,10 @@ class PreviewController extends Controller
     {
         DB::table('tblLTP_preview_TempOrder')->truncate();
         DB::table('tblLTP_preview')->truncate();
-    
+
         // collect the courses offered for the term entered
         $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
-    
+
         // insert Codes in Preview TempOrder Table
         foreach ($te_code_collection as $te_code) {
             $codeSortByCountIndexID = PreviewTempSort::select('Code', 'Te_Code', 'Term', DB::raw('count(*) as CountIndexID'))->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code', 'Te_Code', 'Term')->orderBy(\DB::raw('count(INDEXID)'), 'ASC')->get();
@@ -1431,7 +1496,7 @@ class PreviewController extends Controller
         $request->session()->flash('success', 'Phase 2 - Insert Codes in Preview TempOrder Table Complete!');
         return redirect()->back();
     }
-        
+
     public function assignCourseScheduleToStudent(Request $request)
     {
         // collect the courses offered for the term entered
@@ -1460,18 +1525,18 @@ class PreviewController extends Controller
             }
 
             if (!empty($arrCodeCount)) {
-        
+
                 //  get the min of the counts for each Code
                 $minValue = min($arrCodeCount);
                 $arr = [];
                 $arrSaveToPash = [];
-        
+
                 // use min to determine the first course-schedule assignment
                 for ($i = 0; $i < count($arrPerCode); $i++) {
-        
+
                     if ($minValue >= $arrCodeCount[$i]) {
                         // $arr = $arrPerCode[$i]; 
-        
+
                         // if there are 2 or more codes with equal count
                         // run query with leftJoin() to remove duplicates
                         $queryEnrolForms = DB::table('tblLTP_preview_TempSort')
@@ -1488,7 +1553,7 @@ class PreviewController extends Controller
                             ->orderBy('PS', 'asc')
                             ->orderBy('created_at', 'asc')
                             ->get();
-        
+
                         // $queryEnrolForms = PreviewTempSort::where('Code', $arrPerCode[$i])->get();
                         // assign course-schedule to student and save in PASHQTcur
                         foreach ($queryEnrolForms as $value) {
@@ -1684,17 +1749,17 @@ class PreviewController extends Controller
             $countStdPerCode = Preview::where('Code', $value->Code)->where('CodeIndexIDClass', null)->get()->count();
             $arrCountStdPerCode[] = $countStdPerCode;
         }
-                
+
         // calculate sum per code and divide by 14 or 15 for number of classes
         $num_classes = [];
         for ($i = 0; $i < count($arrCountStdPerCode); $i++) {
             $num_classes[] = intval(ceil($arrCountStdPerCode[$i] / 11));
         }
-        
+
         $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
         $arrGetCode = [];
         $arrGetDetails = [];
-        
+
         foreach ($getCode as $valueCode) {
             $arrGetCode[] = $valueCode->Code;
 
@@ -1706,7 +1771,7 @@ class PreviewController extends Controller
                 $arrGetDetails[] = $valueDetails;
             }
         }
-        
+
         // $num_classes=[5,2];
         $ingredients = [];
         $k = count($num_classes);
