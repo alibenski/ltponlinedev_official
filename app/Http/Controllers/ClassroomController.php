@@ -50,7 +50,11 @@ class ClassroomController extends Controller
             $classrooms = $classrooms->where('Te_Term', Session::get('Term'));
             $queries['Term'] = Session::get('Term');
         }
-        $classrooms = $classrooms->orderBy('L', 'asc')->get();
+        $classrooms = $classrooms->orderBy('L', 'asc')
+            ->with(['classroom' => function ($q1) {
+                $q1->with('teachers');
+            }])
+            ->get();
         // ->paginate(20)->appends($queries);
 
         $rooms = Room::all();
