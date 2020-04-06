@@ -14,7 +14,7 @@
 
 			<div class="box box-info">
 		        <div class="box-header with-border">
-		          <h3 class="box-title"><strong>Term: [{{ Session::get('Term') }}] {{$termSet->Comments}} {{ date('Y', strtotime($termSet->Term_Begin)) }} - </strong> {{count($merge)}} Student(s) with fully approved forms and assigned by teacher/admin but not inserted/placed in a class
+		          <h3 class="box-title"><strong>Term: [{{ Session::get('Term') }}] {{$termSet->Comments}} {{ date('Y', strtotime($termSet->Term_Begin)) }} - </strong> {{count($merge)}} Student(s) with fully approved forms which have been modified by admin/teachers but have not been imported in the batch.
 		          </h3>
 		          	<small class="text-danger"><p>Note: This view is only avaiable after the batch has run. The purpose of this view is to show the number of students who are not in a class or not in the waitlist after batch run due to various reasons such as late registration, late payment, etc.</p>
 		          		<p>Please click on the Index No. or Name to open the User Administration view of the student.</p></small>
