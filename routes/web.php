@@ -164,8 +164,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     Route::get('preview-merged-forms', 'PreviewController@previewMergedForms')->name('preview-merged-forms');
     Route::post('ajax-preview-course-boxes', ['as' => 'ajax-preview-course-boxes', 'uses' => 'PreviewController@ajaxPreviewCourseBoxes']);
-    Route::get('ajax-preview-get-student-count', ['as' => 'ajax-preview-get-student-count', 'uses' => 'PreviewController@ajaxPreviewGetStudentCount']);
-    Route::get('ajax-preview-get-student-priority-status', ['as' => 'ajax-preview-get-student-priority-status', 'uses' => 'PreviewController@ajaxPreviewGetStudentPriorityStatus']);
+    Route::post('ajax-preview-get-student-count', ['as' => 'ajax-preview-get-student-count', 'uses' => 'PreviewController@ajaxPreviewGetStudentCount']);
+    Route::post('ajax-preview-get-student-priority-status', ['as' => 'ajax-preview-get-student-priority-status', 'uses' => 'PreviewController@ajaxPreviewGetStudentPriorityStatus']);
     Route::post('ajax-preview-get-student-current-class', ['as' => 'ajax-preview-get-student-current-class', 'uses' => 'PreviewController@ajaxPreviewGetStudentCurrentClass']);
 
     Route::get('ajax-preview-get-remarks', ['as' => 'ajax-preview-get-remarks', 'uses' => 'PreviewController@ajaxPreviewGetRemarks']);

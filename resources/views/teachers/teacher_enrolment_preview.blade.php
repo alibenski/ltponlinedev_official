@@ -405,7 +405,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			url: '{{ route('ajax-preview-get-student-priority-status') }}',
-			type: 'GET',
+			type: 'POST',
 			data: {arr:arr,eform_submit_count:eform_submit_count,L:L,term:term,_token:token},
 		})
 		.done(function(data) {
