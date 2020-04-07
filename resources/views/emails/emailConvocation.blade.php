@@ -195,7 +195,7 @@
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;"></h1>
                                     <p>Dear {{ $staff_name }}, </p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>.  Please see below the information about your course:
                                     </p>
                                     
@@ -204,50 +204,113 @@
                                         
                                         Schedule: <strong>{{$schedule}}</strong> 
                                         <br> 
+                                        Teacher: <strong>{{ $teacher }}</strong> ({{ $teacher_email }})
+                                        <br>
+                                        <br>
                                         @foreach($classrooms as $classroom)
                                           @if(!empty($classroom->Te_Mon_Room))
-                                          <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+                                          <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }} *</strong></p>
                                           {{-- <p>Monday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Tue_Room))
-                                          <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+                                          <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }} *</strong></p>
                                           {{-- <p>Tuesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Wed_Room))
-                                          <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+                                          <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }} *</strong></p>
                                           {{-- <p>Wednesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Thu_Room))
-                                          <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+                                          <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }} *</strong></p>
                                           {{-- <p>Thursday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Fri_Room))
-                                          <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+                                          <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }} *</strong></p>
                                           {{-- <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
-                                        Teacher: <strong>{{ $teacher }}</strong> ({{ $teacher_email }})
-                                        <br> 
                                     </p>
-                                    <p>
+                                    <br>
+                                    <p style="text-align: justify">
+                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19</span>, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.
+                                    </p>
+                                        
+                                    <p style="text-align: justify">
+                                        Please note that the group size will be exceptionally reduced from 15 to 12 participants in most courses to offer you better learning conditions. This is not applicable to English courses initially advertised as online.
+                                    </p>
+
+                                    <p style="text-align: justify">
+                                        How are we going to interact and which tools are we going to use?
+                                    </p>
+                                    <ol>
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>Skype</b> <br>
+                                            We will use Skype (not Skype for Business) as the teleconferencing tool to replace your face-to-face sessions (except for English courses initially advertised as online, which will use Webex). Online sessions will take place at the same time as your course, as indicated above. In order to ensure that you can join the Skype sessions, create a personal Skype account (if you do not have one already) and install the application on your computer. Further details about how to join your session will be sent by your teachers before the beginning of the term.
+                                            </p>
+                                        </li>
+
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>Moodle</b> <br>
+                                            <ul>
+                                                <li style="text-align: justify">
+                                                    You can find your learning material and autonomous activities on the CLM e-learning platform Moodle. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Update your profile by adding your Skype ID and a picture in your profile.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    If you are new to the Language Training Programme and don’t have your Moodle access yet, you will receive your credentials and the log-in instructions by email before your first class. 
+                                                </li>
+                                            </ul>
+                                            </p>
+                                        </li>
+
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>IT requirements</b> <br>
+                                            <ul>
+                                                <li style="text-align: justify">
+                                                    Ensure that you have a camera, headphones and a microphone.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Test the connection before the course. Ensure that your internet connection is stable and that there are not too many appliances connected. 
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Contact your Organization’s IT department if you have any problems.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    When attending the course, close all other applications and files. This will ensure that you focus on the content of the course as if you were attending a face-to-face course and will not overload the bandwidth.
+                                                </li>
+                                            </ul>
+                                            </p>
+                                        </li>
+                                    </ol>
+
+                                    <p style="text-align: justify">
+                                        The mode of communication to use with your teacher outside of your class time is email. The teachers are working very hard, but they also need time for themselves and/or their families; therefore, please be aware that they are not available 24/7. Thank you for your understanding. 
+                                    </p>
+
+                                    <p style="text-align: justify">
                                         Please read carefully the <strong>information before start of term</strong> on our website (<a href="https://learning.unog.ch/node/1472">click here</a>).
                                     </p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         If you are unable to attend the first week of the term, you must inform your instructor and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
-                                    <p style="color: red;">
+                                    <p style="color: red;text-align: justify;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/PaymentReimbursementEn.pdf">here</a>.
                                     </p>
-                                    <p> 
+                                    <p style="text-align: justify"> 
                                         To cancel, log into the platform <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, go to “Submitted Forms”, select the appropriate term and click ”View Forms” to display your applications. Click the red button “Cancel Enrolment” on the registration form you wish to cancel.
                                     </p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         A technical reason for not having been able to cancel on time will not be considered as a valid reason for re-imbursement nor a reason for not charging your organization. Thank you for your understanding.
                                     </p>
-                                    <p style="margin: 0;">
+                                    <p style="margin: 0;text-align: justify;">
                                         If you have any question please contact us at: <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
                                     </p>   
                                     <br> 
@@ -257,7 +320,7 @@
                                     <br><br>
                                     <p>
                                         <h4><strong>Language Training Secretariat</strong></h4>
-                                        Annex Bocage 2 - Room 5 (ground floor)<br>
+                                        Annex Bocage 2 - Room 5 (ground floor) - During the confinement we are available via email<br>
                                         <br>
                                         Opening hours : 9:00-12:30 from Monday to Friday.<br>
                                         Telephone: 00 41 22 917 44 09<br><br>
@@ -270,7 +333,7 @@
                             <tr>
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
                                     <p>Cher / Chère {{ $staff_name }},</p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         Nous avons le plaisir de vous informer que vous êtes inscrit·e avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
                                     </p>
                                     
@@ -279,60 +342,123 @@
 
                                         Horaire : <strong>{{$schedule}}</strong> 
                                         <br> 
+                                        Professeur : <strong>{{ $teacher }}</strong> ({{ $teacher_email }})
+                                        <br> 
+                                        <br> 
                                         @foreach($classrooms as $classroom)
                                           @if(!empty($classroom->Te_Mon_Room))
-                                          <p>Salle du lundi : <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+                                          <p>Salle du lundi : <strong>{{ $classroom->roomsMon->Rl_Room }} *</strong></p>
                                           {{-- <p>horaire lundi : <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Tue_Room))
-                                          <p>Salle du mardi : <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+                                          <p>Salle du mardi : <strong>{{ $classroom->roomsTue->Rl_Room }} *</strong></p>
                                           {{-- <p>horaire mardi : <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Wed_Room))
-                                          <p>Salle du mercredi : <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+                                          <p>Salle du mercredi : <strong>{{ $classroom->roomsWed->Rl_Room }} *</strong></p>
                                           {{-- <p>horaire mercredi : <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Thu_Room))
-                                          <p>Salle du jeudi : <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+                                          <p>Salle du jeudi : <strong>{{ $classroom->roomsThu->Rl_Room }} *</strong></p>
                                           {{-- <p>horaire jeudi : <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Fri_Room))
-                                          <p>Salle du vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+                                          <p>Salle du vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }} *</strong></p>
                                           {{-- <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
-                                        Professeur : <strong>{{ $teacher }}</strong> ({{ $teacher_email }})
-                                        <br> 
                                     </p>
-                                    <p>
+                                    <br>
+                                    <p style="text-align: justify">
+                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19</span>, tle trimestre commencera à distance et la composante en face à face sera dispensée en ligne. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.
+                                    </p>
+                                        
+                                    <p style="text-align: justify">
+                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours d'anglais annoncés comme étant en ligne.
+                                    </p>
+
+                                    <p style="text-align: justify">
+                                        Comment allons-nous interagir et quels outils allons-nous utiliser ?
+                                    </p>
+                                    <ol>
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>Skype</b> <br>
+                                            Nous utiliserons Skype (pas Skype for business) comme outil de téléconférence pour remplacer vos sessions en face-à-face (sauf pour les cours d'anglais annoncés comme étant en ligne qui utiliseront Webex). Les sessions auront lieu au moment de votre cours, comme indiqué ci-dessus. Afin de vous assurer que vous pouvez participer aux sessions Skype, créez un compte Skype personnel (si vous n'en avez pas déjà un) et installez l'application sur votre ordinateur. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
+                                            </p>
+                                        </li>
+
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>Moodle</b> <br>
+                                            <ul>
+                                                <li style="text-align: justify">
+                                                    Vous pouvez trouver votre matériel d'apprentissage et vos activités autonomes sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme :  <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Mettez également à jour votre profil en ajoutant votre identifiant Skype et une photo dans votre profil.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
+                                                </li>
+                                            </ul>
+                                            </p>
+                                        </li>
+
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>Exigences informatiques</b> <br>
+                                            <ul>
+                                                <li style="text-align: justify">
+                                                    Assurez-vous que vous avez une caméra, des écouteurs et un microphone.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Testez la connexion avant le cours. Assurez-vous que votre connexion internet est stable et qu'il n'y a pas trop d'appareils connectés. 
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Contactez le département informatique de votre organisation si vous avez un problème.
+                                                </li>
+                                                <li style="text-align: justify">
+                                                    Lorsque vous assistez au cours, fermez toutes les autres applications et tous les autres dossiers. Cela vous permettra de vous concentrer sur le contenu du cours comme si vous suiviez un cours en face à face et de ne pas surcharger la bande passante.
+                                                </li>
+                                            </ul>
+                                            </p>
+                                        </li>
+                                    </ol>
+
+                                    <p style="text-align: justify">
+                                        Le mode de communication avec votre professeur en dehors de vos heures de cours est le courrier électronique. Les enseignants travaillent très dur, mais ils ont également besoin de se reposer et de prendre du temps pour eux ou leur famille ; vous comprendrez donc qu'ils ne sont pas disponibles 24 heures sur 24, 7 jours sur 7. Nous vous remercions de votre compréhension. 
+                                    </p>
+
+                                    <p style="text-align: justify">
                                         Veuillez lire attentivement <strong>les informations avant le début du trimestre</strong> disponibles sur notre site web en cliquant <a href="https://learning.unog.ch/fr/node/1472">ici</a>.
                                     </p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
                                     </p>    
-                                    <p style="color: red;">
+                                    <p style="color: red;text-align: justify;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit(e) à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/sites/default/files/ContainerFr/LTP/Admin/PaymentReimbursementFr.pdf">ici</a>.
                                     </p>
-                                    <p> 
+                                    <p style="text-align: justify"> 
                                         Pour annuler, connectez-vous à la plate-forme <a href="https://clmlanguageregistration.unog.ch">https://clmlanguageregistration.unog.ch</a>, allez à «Submitted Forms», sélectionnez le trimestre approprié, puis cliquez sur «View Forms» pour afficher vos formulaires. Cliquez sur le bouton rouge «Cancel Enrolment» sur le formulaire d'inscription que vous souhaitez annuler.
                                     </p>
-                                    <p>
+                                    <p style="text-align: justify">
                                         En cas de retard dans l’annulation, la raison technique ne sera pas considérée comme valable pour le remboursement, ni pour une non-facturation de votre organisation. Merci de votre compréhension.
                                     </p>
-                                    <p style="margin: 0;">
+                                    <p style="margin: 0;text-align: justify;">
                                         Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
                                     </p>
                                     <br>
-                                    <p>
+                                    <p style="text-align: justify">
                                         Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage pour le prochain trimestre.
                                     </p>
                                     <br><br>
                                     <p>
                                         <h4><strong>Secrétariat du Programme de formation linguistique</strong></h4>
-                                        Annexe Bocage II - bureau 5 (Rez-de-chaussée) <br>
+                                        Annexe Bocage II - bureau 5 (Rez-de-chaussée) – pendant le confinement, vous pouvez nous joindre par email<br>
                                         <br>
                                         Heures d’ouverture: 9:00-12:30 du lundi au vendredi.<br>
                                         Téléphone: + 41 22 917 44 09<br><br>
@@ -344,45 +470,6 @@
                     </td>
                 </tr>
                 <!-- 1 Column Text + Button : END -->
-
-                <!-- 2 Even Columns : BEGIN 
-                <tr>
-                    <td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding-bottom: 40px">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:560px;">
-                            <tr>
-                                <td align="center" valign="top" width="50%">
-                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size: 14px;text-align: left;">
-                                        <tr>
-                                            <td style="text-align: center; padding: 0 10px;">
-                                                <img src="http://placehold.it/200" width="200" height="" alt="alt_text" border="0" align="center" style="width: 100%; max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center;font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 10px 10px 0;" class="stack-column-center">
-                                                <p style="margin: 0;">Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora per conubia nostra, per torquent inceptos&nbsp;himenaeos.</p>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td align="center" valign="top" width="50%">
-                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size: 14px;text-align: left;">
-                                        <tr>
-                                            <td style="text-align: center; padding: 0 10px;">
-                                                <img src="http://placehold.it/200" width="200" height="" alt="alt_text" border="0" align="center" style="width: 100%; max-width: 200px; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center;font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; padding: 10px 10px 0;" class="stack-column-center">
-                                                <p style="margin: 0;">Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora per conubia nostra, per torquent inceptos&nbsp;himenaeos.</p>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <!-- Two Even Columns : END -->
 
                 <!-- Clear Spacer : BEGIN -->
                 <tr>
@@ -399,10 +486,10 @@
                             <tr>
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <p style="margin: 0;text-align:left;"><strong>The Language Training Programme at the United Nations Office at Geneva</strong></p> 
-                                    <p style="margin: 0;text-align: left;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. To meet this goal, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+                                    <p style="margin: 0;text-align: justify;">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. To meet this goal, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
                                     <br>
                                     <p style="margin: 0;text-align:left;"><strong>Le Programme de formation linguistique à l'Office des Nations Unies à Genève</strong></p> 
-                                    <p style="margin: 0;text-align: left;">Nous croyons au multilinguisme et au multiculturalisme en tant qu'éléments clés de la compréhension mutuelle dans un contexte mondial. À cette fin, nous proposons des cours de langues dans les six langues officielles des Nations Unies (anglais, arabe, chinois, espagnol, français et russe).</p>
+                                    <p style="margin: 0;text-align: justify;">Nous croyons au multilinguisme et au multiculturalisme en tant qu'éléments clés de la compréhension mutuelle dans un contexte mondial. À cette fin, nous proposons des cours de langues dans les six langues officielles des Nations Unies (anglais, arabe, chinois, espagnol, français et russe).</p>
                                 </td>
                             </tr>
                         </table>
