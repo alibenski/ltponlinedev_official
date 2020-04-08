@@ -18,12 +18,20 @@
 <h2 class="text-center" style="text-align: center; font-family: Roboto">Potential Reimbursement/Carry-over</h2>
 
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-4">
 	@include('admin.partials._termSessionMsg')
 	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
+    
+    <div class="col-md-4">
+        <div class="alert alert-info">
+            <h4><i class="icon fa fa-info-circle fa-2x"></i>For Your Information</h4>
+            <p>
+                View of self-paying students who may use their payment to the next term or ask for a reimbursement.
+            </p>
+        </div>
+    </div>
+    
+	<div class="col-md-4">
 	@include('admin.partials._dropdownSetSessionTerm')
 	</div>
 </div>
