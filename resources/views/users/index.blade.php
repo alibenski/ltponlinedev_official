@@ -17,7 +17,7 @@
     <hr>
     
     <div class="form-group col-sm-12">
-        <form method="GET" action="{{ route('users.index') }}">
+        <form method="GET" action="{{ route('users.index', ['search' => \Request::input('search')]) }}">
             {{-- search by name or email--}}
                 <label for="search" class="control-label">Search here to check if the student has a login account in the system:</label>         
             <div class="input-group">  

@@ -334,12 +334,14 @@ class UserController extends Controller
     public function index()
     {
         if (\Request::input('search')) {
+            $queries = [];
             $query = \Request::input('search');
             // Returns an array of users that have the query string located somewhere within 
             // our users name or email fields. Paginates them so we can break up lots of search results.
+            $queries['search'] = \Request::input('search');
             $users = User::search($query)->paginate(20);
+            $users->appends($queries);
             if ($users->getCollection()->count() == 0) {
-                // $request->session()->flash('interdire-msg', 'No such user found in the login accounts records of the system. ');
                 return redirect()->route('users.index')->with('users', $users)->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
             }
 
