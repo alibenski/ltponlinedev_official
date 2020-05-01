@@ -47,10 +47,12 @@
                             <h4><strong>What should I do if I want to cancel my language course?</strong></h4>
                             <p>Go to the tab “current submitted forms”, select the cancellation form and click on the button: “Cancel Enrolment”  or “cancel placement test”.</p>
 
-                            @if (!empty($cancel_date_limit_string) )
+                            {{-- @if (!empty($cancel_date_limit_string) )
                                 <p>The deadline for cancelling your course is {{ $cancel_date_limit_string }} at 11:59 p.m.</p>
-                            @endif
+                            @endif --}}
                             
+                            <p>The deadline for cancelling your Summer course is 2 August 2020 at 11:59 p.m. and your Autumn term course is 7 September 2020 at 11:59 p.m.</p>
+
                             <h4><strong>Contact:</strong></h4>
                             <p>If you have any questions, please contact the Language Secretariat by email: <strong>clm_language@un.org.</strong></p>
                         </div>                   
@@ -73,10 +75,12 @@
                             <h4><strong>Que devrais-je faire si je veux annuler mon cours de langue ?</strong></h4>
                             <p>Allez à l’onglet " Register/Enrol Here ", choisissez le formulaire d'annulation et cliquez sur le bouton : "cancel enrolment " ou « cancel placement test »</p>
 
-                            @if (!empty($cancel_date_limit_string_fr))
+                            {{-- @if (!empty($cancel_date_limit_string_fr))
                                 <p>Le délai d’annulation pour votre cours de langues est le {{$cancel_date_limit_string_fr}} à 23h59.</p>
-                            @endif
+                            @endif --}}
                             
+                            <p>Le délai d’annulation pour votre cours de langues d’été est le 2 août 2020 à 23h59 et la date pour les cours du trimestre d’automne est le 7 septembre 2020 à 23h59.</p>
+
                             <h4><strong>Contact:</strong></h4>
                             <p>Si vous avez des questions, veuillez contacter, le secrétariat par courriel à : <strong>clm_language@un.org.</strong></p>
                         </div>   
