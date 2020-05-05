@@ -139,7 +139,7 @@ class SystemController extends Controller
 
         $merge = $query_email_addresses->merge($query_students_current_year);
         $unique_email_address = $merge->unique();
-        $unique_email_address = $unique_email_address->toArray();
+        // $unique_email_address = $unique_email_address->toArray();
 
         // dd($merge->unique());
 
@@ -149,9 +149,10 @@ class SystemController extends Controller
         //     var_dump($email);
         // }
 
-        $emailArrayIterator = new \ArrayIterator($unique_email_address);
+        // $emailArrayIterator = new \ArrayIterator($unique_email_address);
         $emailError = [];
-        foreach (new \LimitIterator($emailArrayIterator, 252) as $sddextr_email_address) {
+        // foreach (new \LimitIterator($emailArrayIterator, 252) as $sddextr_email_address) {
+        foreach ($unique_email_address as $sddextr_email_address) {
             try {
                 Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
             }
