@@ -139,6 +139,7 @@ class SystemController extends Controller
 
         $merge = $query_email_addresses->merge($query_students_current_year);
         $unique_email_address = $merge->unique();
+        $unique_email_address = $unique_email_address->toArray();
 
         // dd($merge->unique());
 
