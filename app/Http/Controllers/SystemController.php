@@ -153,12 +153,10 @@ class SystemController extends Controller
         $emailError = [];
         // foreach (new \LimitIterator($emailArrayIterator, 252) as $sddextr_email_address) {
         foreach ($unique_email_address as $sddextr_email_address) {
-            try {
-                Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
-            }
-            catch (\Exception $e) {
-                echo $e;
-                $emailError[] = $sddextr_email_address;
+            $dataResult = $this->sendBroadcastEmail($sddextr_email_address);
+            
+            if ($dataResult) {
+                $emailError[] = $dataResult;
             }
         }
 
@@ -227,11 +225,16 @@ class SystemController extends Controller
         // dd($uniqueEmailAddressNotEmailed, $collectDifferenceEmails, $unique_email_address);
 
         // $sddextr_email_address = 'allyson.frias@gmail.com';
+        $emailError = [];
         foreach ($unique_email_address as $sddextr_email_address) {
-            Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
+            $dataResult = $this->sendBroadcastEmail($sddextr_email_address);
+            
+            if ($dataResult) {
+                $emailError[] = $dataResult;
+            }
         }
 
-        $request->session()->flash('success', 'Broadcast reminder email sent!');
+        $request->session()->flash('success', 'Broadcast reminder email sent! Error sending to: ' . json_encode($emailError) );
         return redirect()->back();
     }
 
@@ -280,18 +283,36 @@ class SystemController extends Controller
         $difftest = array_unique($difftest);
 
         $arr2 = [];
+        $emailError = [];
         foreach ($diff as $key3 => $value3) {
 
             $query_email_addresses = User::where('indexno', $value3)->get(['email']);
             foreach ($query_email_addresses as $key4 => $value4) {
                 $sddextr_email_address = $value4->email;
                 $arr2[] = $sddextr_email_address;
-                // Mail::to($sddextr_email_address)->send(new sendReminderToCurrentStudents($sddextr_email_address));    
-                Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
+                // Mail::to($sddextr_email_address)->send(new sendReminderToCurrentStudents($sddextr_email_address));
+                
+                $dataResult = $this->sendBroadcastEmail($sddextr_email_address);
+
+                if ($dataResult) {
+                    $emailError[] = $dataResult;
+                }
             }
         }
 
-        $request->session()->flash('success', 'Reminder email sent to ' . count($arr2) . ' students!');
+        $request->session()->flash('success', 'Reminder email sent to ' . count($arr2) . ' students! Error sending to: ' . json_encode($emailError) );
         return redirect()->back();
+    }
+
+    public function sendBroadcastEmail($sddextr_email_address)
+    {
+        $emailError = [];
+        try {
+            Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
+        }  catch ( \Exception $e) {
+            $emailError = $sddextr_email_address;
+        }
+
+        return $emailError;
     }
 }
