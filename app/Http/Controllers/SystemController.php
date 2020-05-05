@@ -142,12 +142,25 @@ class SystemController extends Controller
 
         // dd($merge->unique());
 
-        // $sddextr_email_address = 'allyson.frias@gmail.com';
-        foreach ($unique_email_address as $sddextr_email_address) {
-            Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
+        // $sddextr_email_address_sample = ['annegretbrauss@web.de-','allyson.frias@gmail.com','kkepaladin@yahoo.com'];
+        // $emailArrayIterator = new \ArrayIterator($sddextr_email_address_sample);
+        // foreach (new \LimitIterator($emailArrayIterator, 1) as $email) {
+        //     var_dump($email);
+        // }
+
+        $emailArrayIterator = new \ArrayIterator($unique_email_address);
+        $emailError = [];
+        foreach (new \LimitIterator($emailArrayIterator, 252) as $sddextr_email_address) {
+            try {
+                Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
+            }
+            catch (\Exception $e) {
+                echo $e;
+                $emailError[] = $sddextr_email_address;
+            }
         }
 
-        $request->session()->flash('success', 'Broadcast email sent!');
+        $request->session()->flash('success', 'Broadcast email sent! Error sending to: ' . json_encode($emailError) );
         return redirect()->back();
     }
 
