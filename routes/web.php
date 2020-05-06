@@ -302,6 +302,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::resource('selfpayform', 'SelfPayController', ['only' => ['index', 'update']]);
     Route::get('selfpayform/{indexid}/{tecode}/{term}', ['as' => 'selfpayform.edit', 'uses' => 'SelfPayController@edit']);
     Route::get('selfpayform/index-placement-selfpay', ['as' => 'index-placement-selfpay', 'uses' => 'SelfPayController@indexPlacementSelfPay']);
+    Route::get('selfpayform/waitlisted-and-valid-cancelled-forms-view', ['as' => 'waitlisted-and-valid-cancelled-forms-view', 'uses' => 'SelfPayController@waitlistedAndValidCancelledFormsView']);
+    Route::post('selfpayform/waitlisted-and-valid-cancelled-forms', ['as' => 'waitlisted-and-valid-cancelled-forms', 'uses' => 'SelfPayController@waitlistedAndValidCancelledForms']);
 
     Route::get('selfpayform/approved-placement-selfpay', ['as' => 'approved-placement-selfpay', 'uses' => 'SelfPayController@approvedPlacementSelfPay']);
     Route::get('selfpayform/pending-placement-selfpay', ['as' => 'pending-placement-selfpay', 'uses' => 'SelfPayController@pendingPlacementSelfPay']);

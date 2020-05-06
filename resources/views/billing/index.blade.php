@@ -62,6 +62,7 @@
 
 <div class="billing-section">
 	<div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
+	<input type="hidden" name="_token" value="{{ Session::token() }}">
 	<table id="sampol" class="table table-striped no-wrap" width="100%">
 		<thead>
 			<tr>
