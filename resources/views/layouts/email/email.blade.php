@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
-    @include('layouts.email.partials._emailHead')
+        @include('layouts.email.partials._emailHead')
     </head>
     <body width="100%" bgcolor="#fff" style="margin: 0; mso-line-height-rule: exactly;">
         <center style="width: 100%; background: #fff; text-align: left;">

@@ -30,7 +30,10 @@
                              <ul>
                                  {{ $schedule }}
                              </ul>
-                             
+                            <p>
+                                <a href="{{ url('/storage/pdf/reimbursement/BIRD.txt') }}">R Form</a>
+                                <a href="{{ url('/storage/pdf/reimbursement/BIRD.txt') }}">R Form Sample</a>
+                            </p> 
                         </td>
                     </tr>
                     <tr>
