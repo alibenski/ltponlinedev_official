@@ -9,12 +9,14 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Traits\FullTextSearch;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
     use FullTextSearch;
+    use SoftDeletes;
 
     /**
      * The columns of the full text index
