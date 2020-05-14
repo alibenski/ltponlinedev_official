@@ -592,15 +592,22 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $id,
             // 'password'=>'required|min:6|confirmed'
         ]);
+        $mailingList = 0;
+        if ($request->mailing_list) {
+            $mailingList = 1;
+        }
+
+        //Retreive the name, email and password fields
         $input = ([
             'email' => $request->email,
             'name' => $request->name,
-            // 'password' => Hash::make($request->password),
-        ]); //Retreive the name, email and password fields
+            'mailing_list' => $mailingList,
+        ]); 
+        $filteredInput = array_filter($input, function ($v){return ! is_null($v);});
         $roles = $request['roles']; //Retreive all roles
 
         // update users table with new email
-        $user->fill($input)->save();
+        $user->fill($filteredInput)->save();
 
         // update SDDEXTR table with new email
         $sddextr = SDDEXTR::where('INDEXNO', $user->indexno)->get();
