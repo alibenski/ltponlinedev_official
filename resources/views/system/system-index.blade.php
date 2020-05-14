@@ -65,8 +65,8 @@
 									<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dLabel">
-									<li><a href="{{route('send-broadcast-enrolment-is-open')}}" class="send-broadcast-enrolment-is-open send-emails btn-space"><i class="fa fa-envelope"></i> Send Broadcast Email That Enrolment is Open</a></li>
-									<li><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to All Students Not Yet Enrolled</a></li>
+									<li><a href="{{route('send-broadcast-enrolment-is-open')}}" class="send-broadcast-enrolment-is-open send-emails btn-space"><i class="fa fa-envelope"></i> Send Broadcast Email That Enrolment is Open (Current and Past Students)</a></li>
+									<li><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to All Current and Past Students Not Yet Enrolled</a></li>
 									<li><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled</a></li>
 									</ul>
 									<a href="{{ route('view-enrolment-is-open-text', ['id' => 1]) }}" class="btn btn-info btn-space"><i class="fa fa-eye"></i> View</a>
@@ -91,7 +91,7 @@
 									<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dLabel">
-									<li><a href="{{route('send-general-email')}}" class="send-send-general-email send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to All Students (Current and Past)</a></li>
+									<li><a href="{{route('send-general-email')}}" class="send-send-general-email send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to All Current and Past Students</a></li>
 									@if (Session::has('Term'))
 									<li><a href="{{route('send-email-to-enrolled-students-of-selected-term')}}" class="send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to Students Who Have Enrolled [ {{Session::get('Term')}} ]</a></li>
 									@endif
