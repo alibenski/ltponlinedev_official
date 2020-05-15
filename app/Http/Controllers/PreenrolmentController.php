@@ -862,7 +862,7 @@ class PreenrolmentController extends Controller
         }
 
         $count_form = $enrolment_to_be_copied->count();
-        // if 2 forms with same course was submitted, delete 1 of them  
+        // if 2 forms with same course was submitted, delete the 2nd greater id value 
         if ($count_form > 1) {
             $delform = Preenrolment::withTrashed()
                 ->orderBy('id', 'desc')
