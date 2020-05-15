@@ -463,10 +463,10 @@ Route::group(['middleware' => 'open-close-approval-routes'], function () {
 
 Route::group(['middleware' => 'open-close-approval-routes-hr'], function () {
     //url routing for hr partner approval page
-    Route::get('/approvalhr/{staff}/{tecode}/{id}/{form}/{term}', ['as' => 'approval.getform2hr', 'uses' => 'ApprovalController@getForm2hr']);
+    Route::get('/approvalhr/{id}/{term}', ['as' => 'approval.getform2hr', 'uses' => 'ApprovalController@getForm2hr']);
 
     //url routing for hr partner placement test approval page
-    Route::get('/approvalhr/{staff}/{lang}/placement/{id}/{form}/{term}', ['as' => 'approval.getplacementformdata2hr', 'uses' => 'ApprovalController@getPlacementFormData2hr']);
+    Route::get('/approvalhr/placement/{id}/{term}', ['as' => 'approval.getplacementformdata2hr', 'uses' => 'ApprovalController@getPlacementFormData2hr']);
 });
 
 Route::put('/approval/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm'])->where('tecode', '(.*)'); // where clause accepts routes with slashes

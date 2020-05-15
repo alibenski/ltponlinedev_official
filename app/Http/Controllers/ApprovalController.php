@@ -169,14 +169,16 @@ class ApprovalController extends Controller
         return redirect()->route('eform');
     }
 
-    public function getPlacementFormData2hr($staff, $lang, $id, $form, $term)
+    public function getPlacementFormData2hr($id,$term)
     {   
         //get variables from URL to decrypt and pass to controller logic 
-        $staff = Crypt::decrypt($staff);
-        $lang = Crypt::decrypt($lang);
         $id = Crypt::decrypt($id);
-        $form_counter = Crypt::decrypt($form);
-        $term = Crypt::decrypt($term);
+        $formDetails = PlacementForm::where('id', $id)->first();
+
+        $staff = $formDetails->INDEXID;
+        $lang = $formDetails->L;
+        $form_counter = $formDetails->eform_submit_count;
+        $term = $formDetails->Term;
 
         $next_term_code = $term; 
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
@@ -491,14 +493,16 @@ class ApprovalController extends Controller
      * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
      */
-    public function getForm2hr($staff, $tecode, $id, $form, $term)
+    public function getForm2hr($id, $term)
     {
         //get variables from URL to decrypt and pass to controller logic 
-        $staff = Crypt::decrypt($staff);
-        $tecode = Crypt::decrypt($tecode);
         $id = Crypt::decrypt($id);
-        $form_counter = Crypt::decrypt($form);
-        $term = Crypt::decrypt($term);
+        $formDetails = Preenrolment::where('id', $id)->first();
+
+        $staff = $formDetails->INDEXID;
+        $tecode = $formDetails->Te_Code;
+        $form_counter = $formDetails->form_counter;
+        $term = $formDetails->Term;
 
         $next_term_code = $term;
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
