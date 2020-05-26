@@ -38,6 +38,20 @@
 
                 <!-- Email Body : BEGIN -->
                     @yield('content')
+
+                    <!-- Clear Spacer : BEGIN -->
+                    <tr>
+                        <td aria-hidden="true" height="40" style="font-size: 0; line-height: 0;">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <!-- Clear Spacer : END -->
+
+                    <!-- 1 Column Text : BEGIN -->
+                        @include('layouts.email.partials._emailMotto')
+                    <!-- 1 Column Text : END -->
+
+                </table>
                 <!-- Email Body : END -->
 
 
