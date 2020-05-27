@@ -19,12 +19,20 @@ class PrinterController extends Controller
         $userName = $pashId->users->name;
         $termSeasonEn = $pashId->terms->Comments;
         $termSeasonFr = $pashId->terms->Comments_fr;
+        $termNameEn = $pashId->terms->Term_Name;
+        $termNameFr = $pashId->terms->Term_Name_Fr;
         $termYear = Carbon::parse($pashId->terms->Term_Begin)->year;
         $dateOfPrinting = Carbon::now()->format('d F Y');
         $result = $pashId->Result;
         $selfPay = $pashId->is_self_pay_form;
         $teCode = $pashId->Te_Code;
         $teCodeOld = $pashId->Te_Code_old;
+        $pashCourseSched = $pashId->courseschedules;
+        if ($pashCourseSched != null) {
+            $price = $pashId->courseschedules->prices->price;
+        } else {
+            $price = '';
+        }
         if ($teCode != null) {
             if ($pashId->courses) {
                 $courseEn = $pashId->courses->Description;
@@ -47,11 +55,11 @@ class PrinterController extends Controller
         }
         if ($request->filled('download')) {
             if ($printLanguage == 'Fr') {
-                $pdf = PDF::loadView('pdf_forms.pdfFrAttestationCompletedCourse', compact('userName', 'termSeasonFr', 'termYear', 'dateOfPrinting', 'courseFr', 'result', 'selfPay'));
+                $pdf = PDF::loadView('pdf_forms.pdfFrAttestationCompletedCourse', compact('userName', 'termSeasonFr', 'termYear', 'dateOfPrinting', 'courseFr', 'result', 'selfPay', 'termNameFr', 'price'));
                 return $pdf->stream();
             }
             if ($printLanguage == 'En') {
-                $pdf = PDF::loadView('pdf_forms.pdfEnAttestationCompletedCourse', compact('userName', 'termSeasonEn', 'termYear', 'dateOfPrinting', 'courseEn', 'result', 'selfPay'));
+                $pdf = PDF::loadView('pdf_forms.pdfEnAttestationCompletedCourse', compact('userName', 'termSeasonEn', 'termYear', 'dateOfPrinting', 'courseEn', 'result', 'selfPay', 'termNameEn', 'price'));
                 return $pdf->stream();
             }
         }
