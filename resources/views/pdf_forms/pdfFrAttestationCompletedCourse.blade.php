@@ -8,7 +8,6 @@
         Genève, {{$dateOfPrinting}}
         <br>
         <br>
-        <br>
       </td>
     </tr>
     <tr>
@@ -28,7 +27,6 @@
       <td>
         <p class="MsoNormal" style="text-align:center;"><span lang="FR" style="font-family:Century Gothic,sans-serif;">Le secrétariat du Programme de formation linguistique du Centre de formation et de multilinguisme de l’Office des Nations Unies à Genève certifie que :</span></p>
         <br>
-        <br>
       </td>
     </tr>
   </tbody>
@@ -39,7 +37,6 @@
       <td></td>
       <td>
         <p class="MsoNormal" style="text-align:center;"><span lang="FR" style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $userName }}</span></p>
-        <br>
         <br>
       </td>
     </tr>
@@ -71,7 +68,6 @@
           </span></p>
 
         @endif
-        <br>
         <br>
       </td>
     </tr>

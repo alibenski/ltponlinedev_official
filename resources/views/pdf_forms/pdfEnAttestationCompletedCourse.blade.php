@@ -8,7 +8,6 @@
         {{$dateOfPrinting}}
         <br>
         <br>
-        <br>
       </td>
     </tr>
     <tr>
@@ -28,7 +27,6 @@
       <td>
         <p class="MsoNormal" style="text-align:center;"><span lang="EN-GB" style="font-family:Century Gothic,sans-serif;">The Language Training Programme Secretariat of the Centre for Learning and Multilingualism, United Nations Office at Geneva, certifies that:</span></p>
         <br>
-        <br>
       </td>
     </tr>
   </tbody>
@@ -39,7 +37,6 @@
       <td></td>
       <td>
         <p class="MsoNormal" style="text-align:center;"><span lang="EN" style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;"><b>{{ $userName }}</b></span></p>
-        <br>
         <br>
       </td>
     </tr>

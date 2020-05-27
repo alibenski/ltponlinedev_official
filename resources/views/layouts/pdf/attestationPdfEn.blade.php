@@ -58,19 +58,16 @@
 
     @yield('content')
 
-<br>
-<br>
-<br>
-<br>
-<br>
-
+<br />
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 800px;">
   <tbody>
     <div style="border:none;border-bottom:none windowtext 1.5pt;padding:0cm 0cm 1.0pt 0cm;">
+      <div align="right">
+        <img src="{{ asset('img/CLMStamp.png') }}" >
+      </div>
       <p class="MsoNormal" style="border:none;padding:0cm;text-align: right;"><span lang="FR" style="font-size:13px;font-family:Arial,sans-serif;">The Language Training Programme Secretariat</span>
       <br />Centre for Learning and Multilingualism
       <br />United Nations Office at Geneva</p>
-      <br />
         <hr>
         <span style="font-size:11px;font-family:Arial,sans-serif;">* For more information on the United Nations Language proficiency levels and their equivalents with other frameworks, please refer to the following page:
         <a href="https://learning.unog.ch/node/1301#position9" target="_blank">https://learning.unog.ch/node/1301#position9</a></span>
