@@ -173,7 +173,7 @@ class ApprovalController extends Controller
     {   
         //get variables from URL to decrypt and pass to controller logic 
         $id = Crypt::decrypt($id);
-        $formDetails = PlacementForm::where('id', $id)->first();
+        $formDetails = PlacementForm::withTrashed()->where('id', $id)->first();
 
         $staff = $formDetails->INDEXID;
         $lang = $formDetails->L;
@@ -502,7 +502,7 @@ class ApprovalController extends Controller
     {
         //get variables from URL to decrypt and pass to controller logic 
         $id = Crypt::decrypt($id);
-        $formDetails = Preenrolment::where('id', $id)->first();
+        $formDetails = Preenrolment::withTrashed()->where('id', $id)->first();
 
         $staff = $formDetails->INDEXID;
         $tecode = $formDetails->Te_Code;
