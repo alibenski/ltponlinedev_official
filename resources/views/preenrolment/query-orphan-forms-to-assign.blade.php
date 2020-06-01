@@ -96,7 +96,9 @@
                 <th>Action</th>
 			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
-		            <th>Course</th>
+                <th>Current Class</th>
+                <th>Current Teacher</th>
+		            <th>Enrolled to Course</th>
 		            <th>Language</th>
 		            <th>Email</th>
 		            <th>Contact #</th>
@@ -108,7 +110,9 @@
                 <th>Action</th>
 			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
-		            <th>Course</th>
+                <th>Current Class</th>
+                <th>Current Teacher</th>
+		            <th>Enrolled to Course</th>
 		            <th>Language</th>
 		            <th>Email</th>
 		            <th>Contact #</th>
@@ -193,7 +197,7 @@
             "scrollX": true,
             "responsive": false,
             "orderCellsTop": true,
-            "fixedHeader": true,
+            "fixedHeader": false,
             "paging": false,
             "oLanguage": {
               "sSearch": "Search Student:"
@@ -219,6 +223,12 @@
                   "data": "users.name",
                   "className": "self-paying record_id",
                   render: function (dataField) { return '<h4 class="user-name"><strong>'+dataField+'</strong></h4>'; }
+                }, 
+                { "data": "pash.courses.Description",
+                  "defaultContent": ''
+                }, 
+                { "data": "pash.classrooms.teachers.Tch_Name",
+                  "defaultContent": ''
                 }, 
                 { "data": "courses.Description" }, 
                 { "data": "languages.name" }, 
@@ -247,9 +257,9 @@
                     $(row).find("td.self-paying").append(' <span class="label label-success margin-label"><i class="fa fa-usd" title="Self-paying Student"></i>Self-paying Student</span>');
                   }
 
-                  if (data['pash'] != null) {
-                    $(row).find("td.record_id").append(' <p><small><b>Current Class:</b></small></p> <p><span id="xcourse" class="label label-info margin-label" data-course="'+data['pash']['courses']['Description']+'">'+data['pash']['courses']['Description']+'</span></p><p><span class="label label-info margin-label">'+data['pash']['classrooms']['teachers']['Tch_Name']+'</span></p>');
-                  }
+                  // if (data['pash'] != null) {
+                  //   $(row).find("td.record_id").append(' <p><small><b>Current Class:</b></small></p> <p><span id="xcourse" class="label label-info margin-label" data-course="'+data['pash']['courses']['Description']+'">'+data['pash']['courses']['Description']+'</span></p><p><span class="label label-info margin-label">'+data['pash']['classrooms']['teachers']['Tch_Name']+'</span></p>');
+                  // }
 
                 }
           });
