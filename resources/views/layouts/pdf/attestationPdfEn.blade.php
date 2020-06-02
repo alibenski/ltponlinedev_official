@@ -30,7 +30,7 @@
         <p class="MsoNormal" style="line-height:7.2pt;"><span lang="EN-GB">&nbsp;</span></p>
         <p class="MsoNormal"><span lang="EN-GB" style="font-size:13px;font-family:Arial,sans-serif;">&nbsp;</span></p>
         <div style="border:none;border-bottom:solid windowtext 1.5pt;padding:0cm 0cm 1.0pt 0cm;">
-          <p class="MsoNormal" style="border:none;padding:0cm;"><span lang="FR" style="font-size:13px;font-family:Arial,sans-serif;">OFFICE DES NATIONS UNIES A GENEVE</span></p>
+          <p class="MsoNormal" style="border:none;padding:0cm;"><span lang="FR" style="font-size:13px;font-family:Arial,sans-serif;">OFFICE DES NATIONS UNIES À GENEVE</span></p>
         </div>
         <p class="MsoNormal" style="text-align:justify;"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;</span></p>
         <p class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Centre for Learning and Multilingualism</span></p>
@@ -50,14 +50,17 @@
           <p class="MsoNormal" style="border:none;padding:0cm;text-align: right;"><span lang="FR" style="font-size:13px;font-family:Arial,sans-serif;">UNITED NATIONS OFFICE AT GENEVA</span></p>
         </div>
         <p class="MsoNormal" style="text-align:right;"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;</span></p>
-        <p class="MsoNormal" style="text-align:right;"><span style="font-size:11px;font-family:Arial,sans-serif;">Telephone</span><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;0041 22 917 4409</span></p>
-        <p class="MsoNormal" style="text-align:right;"><span lang="DE-CH" style="font-size:11px;font-family:Arial,sans-serif;">E-mail: clm_language@un.org</span></p>
+        <p class="MsoNormal" style="text-align:right;"><span style="font-size:11px;font-family:Arial,sans-serif;">Telephone:</span><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;0041 22 917 4409</span></p>
+        <p class="MsoNormal" style="text-align:right;"><span lang="DE-CH" style="font-size:11px;font-family:Arial,sans-serif;">Email: clm_language@un.org</span></p>
         <p class="MsoNormal" style="text-align:right;"><span lang="DE-CH" style="font-size:11px;font-family:Arial,sans-serif;">Website: https://learning.unog.ch</span></p>
       </td>
     </tr>
 
     @yield('content')
 
+<br />
+<br />
+<br />
 <br />
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 800px;">
   <tbody>

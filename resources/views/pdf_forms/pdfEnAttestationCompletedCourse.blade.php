@@ -25,7 +25,7 @@
   <tbody>
     <tr>
       <td>
-        <p class="MsoNormal" style="text-align:center;"><span lang="EN-GB" style="font-family:Century Gothic,sans-serif;">The Language Training Programme Secretariat of the Centre for Learning and Multilingualism, United Nations Office at Geneva, certifies that:</span></p>
+        <p class="MsoNormal" style="text-align:center;"><span lang="EN-GB" style="font-family:Century Gothic,sans-serif;">The Language Training Programme Secretariat of the Centre for Learning and Multilingualism,<br> United Nations Office at Geneva, certifies that:</span></p>
         <br>
       </td>
     </tr>
@@ -50,20 +50,24 @@
         @if ($result == 'P')
 
           <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
-          @if ($selfPay == 1) 
-          has paid {{$price}} CHF for and successfully completed for the following course:
+          @if ($term >= 191 && $selfPay == 1) 
+          has paid {{$price}} CHF for and has successfully completed for the following course:
+          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', '']))
+          has paid for and has successfully completed for the following course:
           @else
-          successfully completed the following course:
+          has successfully completed the following course:
           @endif
           </span></p>
 
         @else 
 
           <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
-          @if ($selfPay == 1) 
-          has paid {{$price}} CHF for and attended the following course:
+          @if ($term >= 191 && $selfPay == 1) 
+          has paid {{$price}} CHF for and has attended the following course:
+          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', '']))
+          has paid for and has attended the following course:
           @else
-          attended the following course:
+          has attended the following course:
           @endif
           </span></p>
         
@@ -79,7 +83,6 @@
     <tr>
       
       <td class="text-center">
-        <p><u>Course</u></p>
         <p style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $courseEn }}*</p>
       </td>
       
@@ -87,7 +90,6 @@
     <tr>
 
       <td class="text-center">
-        <p><u>Term</u></p>
         <p style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $termSeasonEn }} {{ $termYear }} ({{ $termNameEn }})</p>
       </td>
 

@@ -14,17 +14,18 @@ class PrinterController extends Controller
     public function pdfAttestation(Request $request)
     {
         $printLanguage = $request->language;
-        $pashId = Repo::orderBy('id', 'desc')
-            ->where('id', $request->id)->first();
+        $pashId = Repo::orderBy('id', 'desc')->where('id', $request->id)->first();
         $userName = $pashId->users->name;
-        $termSeasonEn = $pashId->terms->Comments;
-        $termSeasonFr = $pashId->terms->Comments_fr;
+        $term = $pashId->Term;
+        $termSeasonEn = ucfirst(strtolower($pashId->terms->Comments));
+        $termSeasonFr = ucfirst(strtolower($pashId->terms->Comments_fr));
         $termNameEn = $pashId->terms->Term_Name;
         $termNameFr = $pashId->terms->Term_Name_Fr;
         $termYear = Carbon::parse($pashId->terms->Term_Begin)->year;
-        $dateOfPrinting = Carbon::now()->format('d F Y');
+        $dateOfPrinting = Carbon::now()->format('j F Y');
         $result = $pashId->Result;
         $selfPay = $pashId->is_self_pay_form;
+        $cat = $pashId->CAT;
         $teCode = $pashId->Te_Code;
         $teCodeOld = $pashId->Te_Code_old;
         $pashCourseSched = $pashId->courseschedules;
@@ -55,11 +56,16 @@ class PrinterController extends Controller
         }
         if ($request->filled('download')) {
             if ($printLanguage == 'Fr') {
-                $pdf = PDF::loadView('pdf_forms.pdfFrAttestationCompletedCourse', compact('userName', 'termSeasonFr', 'termYear', 'dateOfPrinting', 'courseFr', 'result', 'selfPay', 'termNameFr', 'price'));
+
+                $setLocale = Carbon::setLocale('fr_FR');
+                setlocale(LC_ALL, "fr_FR");
+                $dateOfPrintingFr = Carbon::now()->formatLocalized('%#d %B %Y');
+                
+                $pdf = PDF::loadView('pdf_forms.pdfFrAttestationCompletedCourse', compact('userName', 'termSeasonFr', 'termYear', 'dateOfPrintingFr', 'courseFr', 'result', 'selfPay', 'termNameFr', 'price', 'cat', 'term'));
                 return $pdf->stream();
             }
             if ($printLanguage == 'En') {
-                $pdf = PDF::loadView('pdf_forms.pdfEnAttestationCompletedCourse', compact('userName', 'termSeasonEn', 'termYear', 'dateOfPrinting', 'courseEn', 'result', 'selfPay', 'termNameEn', 'price'));
+                $pdf = PDF::loadView('pdf_forms.pdfEnAttestationCompletedCourse', compact('userName', 'termSeasonEn', 'termYear', 'dateOfPrinting', 'courseEn', 'result', 'selfPay', 'termNameEn', 'price', 'cat', 'term'));
                 return $pdf->stream();
             }
         }
