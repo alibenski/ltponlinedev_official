@@ -32,13 +32,15 @@
         <div style="border:none;border-bottom:solid windowtext 1.5pt;padding:0cm 0cm 1.0pt 0cm;">
           <p class="MsoNormal" style="border:none;padding:0cm;"><span lang="FR" style="font-size:13px;font-family:Arial,sans-serif;">OFFICE DES NATIONS UNIES À GENEVE</span></p>
         </div>
-        <p class="MsoNormal" style="text-align:justify;"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;</span></p>
-        <p class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Centre de formation et de multilinguisme</span></p>
-        <p class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Annex Bocage 2 - Bureau 5</span></p>
-        <p class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Office des Nations Unies à Genève</span></p>
-        <p class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">Palais des Nations</span></p>
-        <p class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">CH-1211 Genève 10 - Suisse</span></p>
-        <p class="MsoNormal" style="line-height:12.0pt;"><span lang="EN-GB" style="font-size:13px;font-family:Arial,sans-serif;">&nbsp;</span></p>
+        <p>
+        <span class="MsoNormal" style="text-align:justify;"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;</span></span><br>
+        <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Centre de formation et de multilinguisme</span></span><br>
+        <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Annexe Bocage</span></span><br>
+        <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Office des Nations Unies à Genève</span></span><br>
+        <span class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">Palais des Nations</span></span>
+        <span class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">CH-1211 Genève 10 - Suisse</span></span>
+        <span class="MsoNormal" style="line-height:12.0pt;"><span lang="EN-GB" style="font-size:13px;font-family:Arial,sans-serif;">&nbsp;</span></span>
+        </p>
       </td>
       <td class="text-center">
         <img width="150px" src={{ asset('img/Logo_UN.jpg') }}>
