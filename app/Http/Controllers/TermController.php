@@ -87,15 +87,15 @@ class TermController extends Controller
         }
 
         // manipulate strings before storing
-        $termBeginStr = date('d F', strtotime($request->Term_Begin));
-        $termEndStr = date('d F Y', strtotime($request->Term_End));
+        $termBeginStr = date('j F', strtotime($request->Term_Begin));
+        $termEndStr = date('j F Y', strtotime($request->Term_End));
         $termNameStr = $termBeginStr.' - '.$termEndStr;
 
         // translate 
         $termBeginMonth = date('F', strtotime($request->Term_Begin));
         $termEndMonth = date('F', strtotime($request->Term_End));
-        $termBeginDate = date('d', strtotime($request->Term_Begin));
-        $termEndDate = date('d', strtotime($request->Term_End));
+        $termBeginDate = date('j', strtotime($request->Term_Begin));
+        $termEndDate = date('j', strtotime($request->Term_End));
         $termBeginYear = date('Y', strtotime($request->Term_Begin));
         $termEndYear = date('Y', strtotime($request->Term_End));
         
