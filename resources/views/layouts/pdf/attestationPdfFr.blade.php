@@ -52,7 +52,7 @@
           <p class="MsoNormal" style="border:none;padding:0cm;text-align: right;"><span lang="FR" style="font-size:13px;font-family:Arial,sans-serif;">UNITED NATIONS OFFICE AT GENEVA</span></p>
         </div>
         <p class="MsoNormal" style="text-align:right;"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;</span></p>
-        <p class="MsoNormal" style="text-align:right;"><span style="font-size:11px;font-family:Arial,sans-serif;">Téléphone :</span><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;0041 22 917 4409</span></p>
+        <p class="MsoNormal" style="text-align:right;"><span style="font-size:11px;font-family:Arial,sans-serif;">Téléphone :</span><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;+41 22 917 44 09</span></p>
         <p class="MsoNormal" style="text-align:right;"><span lang="DE-CH" style="font-size:11px;font-family:Arial,sans-serif;">Email : clm_language@un.org</span></p>
         <p class="MsoNormal" style="text-align:right;"><span lang="DE-CH" style="font-size:11px;font-family:Arial,sans-serif;">Site Internet : https://learning.unog.ch</span></p>
       </td>
