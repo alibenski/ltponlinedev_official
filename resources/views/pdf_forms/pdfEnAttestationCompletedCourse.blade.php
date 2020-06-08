@@ -51,7 +51,7 @@
 
           <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
-          has paid {{$price}} CHF for and has successfully completed for the following course:
+          has paid {{$price}} CHF for and has successfully completed the following course:
           @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', '']))
           has paid for and has successfully completed for the following course:
           @else
