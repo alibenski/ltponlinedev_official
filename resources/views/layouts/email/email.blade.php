@@ -56,7 +56,7 @@
 
 
                 <!-- Email Footer : BEGIN -->
-                    @include('layouts.email.partials._emailFooter')
+                    {{-- @include('layouts.email.partials._emailFooter') --}}
                 <!-- Email Footer : END -->
 
                 <!--[if mso]>

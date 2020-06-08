@@ -24,36 +24,42 @@
                         <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: justify;">
                             <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal; text-align: center;">CLM Online Enrolment</h1>
                             <p> Dear {{ $staff_name }}, </p>
-                            <p> You have <strong>cancelled</strong> the enrolment for CLM language course: <strong>{{ $display_language_en }}</strong></p>
+                            <p> You have cancelled your enrolment for CLM language course: <strong>{{ $display_language_en }}</strong></p>
                             <p>Cancelled Schedule:</p>
                              
                             <ul>
                                 {{ $schedule }}
                             </ul>
                             <p>
-                                If you are a self-paying student, you can ask for the reimbursement of your fee or you can carry over the fee for next term. 
+                                If you are a self-paying student, you can request the reimbursement of your fee or you can carry over the fee to the next term. 
                             </p>
                             <p>
-                                If you want to be reimbursed, please send the documents below to clm_language@un.org:
-                                <ul>
-                                    <li>Complete the attached document (<a href="{{ url('/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC') }}">UNOG-TR-BIRD-GNL.DOC</a>) using word and send it back to us signed.                                        
+                                <b>If you would like to be reimbursed, please send the following documents to clm_language@un.org: </b>
+                                <ol>
+                                    <li>the document attached (<a href="{{ url('/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC') }}">UNOG-TR-BIRD-GNL.DOC</a>)), completed using word and sent back signed                                        
                                     </li>
-                                    <li>A copy of an official bank information/bank statement with your IBAN and Bic information (<a href="{{ url('/storage/pdf/reimbursement/RIBExample.pdf') }}">see attached example</a>).
+                                    <li>a copy of an official bank information slip / bank statement with your IBAN and Bic information – see example: <a href="{{ url('/storage/pdf/reimbursement/RIBExample.pdf') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/RIBExample.pdf</a>
                                     </li> 
-                                    <li>A copy of the pay slip if you have paid through the post office or the bank account debit advice if you have paid through e-banking.
+                                    <li>a copy of the pay slip if paid through the post office or the bank account debit advice slip if paid through e-banking – see example: <a href="{{ url('/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC</a>
                                     </li>
-                                    <li>We also need a copy of the bank account holder’s passport to create his or her profile in our system.
+                                    <li>a copy of the bank account holder’s passport to create your profile in our system
                                     </li>
-                                </ul> 
+                                </ol> 
                             </p>
                             <p>
-                                There is the possibility of keeping your fee paid for a course until the next term. Should you wish not to re-enroll the next term or should we not be in a position to offer you the desired course, we would return the funds at that time. Please confirm to us whether you wish to take this option otherwise please send us the filled in attached document along with the above requested documents in order for us to reimburse your fee. 
+                                You have the facility of keeping <b>your fee paid for a course until the next term.</b> Should you wish not to re-enrol for the next term, or should we not be in a position to offer you your desired course, we will return the funds at that time.  
                             </p>
                             <p>
-                                The time to process reimbursements can take from 4 to 6 weeks. 
+                                Please confirm whether you wish to take this option; otherwise, please send us the documents requested for us to reimburse your fee. 
+                            </p>
+                            <p>
+                                Please also note that the time to process reimbursements can take from four to six weeks. 
                             </p>
                         </td>
                     </tr>
+
+                    @include('layouts.email.partials._emailFooterEn')
+                    
                     <tr>
                         <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: justify;">
                             <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal; text-align: center;">Inscription en ligne du CFM</h1>
@@ -64,9 +70,35 @@
                              <ul>
                                  {{ $schedule }}
                              </ul>
-                             
+                             <p>
+                                Si n’êtes pas exempté(e) des frais de cours, vous pouvez en demander le remboursement ou vous pouvez les reporter au trimestre suivant.  
+                            </p>
+                            <p>
+                                <b>Si vous souhaitez être remboursé(e), veuillez envoyer les documents ci-dessous à clm_language@un.org :</b> 
+                                <ol>
+                                    <li>Le document ci-joint dûment complété en format Word et signé : <a href="{{ url('/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC </a>                            
+                                    </li>
+                                    <li>Une copie d'un relevé d'identité bancaire officiel avec votre IBAN et les informations BIC (voir exemple :  <a href="{{ url('/storage/pdf/reimbursement/RIBExample.pdf') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/RIBExample.pdf</a>)
+                                    </li> 
+                                    <li>Une copie de la fiche de paie (si vous avez payé par la poste) ou de l'avis de débit du compte bancaire (si vous avez payé par e-banking).
+                                    </li>
+                                    <li>Nous avons également besoin d'une copie du passeport du titulaire du compte bancaire pour créer votre profil dans notre système.
+                                    </li>
+                                </ol> 
+                            </p>
+                            <p>
+                                <b>Vous avez également la possibilité de conserver les frais de cours</b> jusqu'au trimestre suivant. Si, au moment des inscriptions au trimestre suivant, vous ne souhaitez pas vous réinscrire ou si nous ne sommes pas en mesure de vous offrir le cours souhaité, nous vous restituerons les fonds à ce moment-là.  
+                            </p>
+                            <p>
+                                Veuillez nous contacter si vous souhaitez choisir cette seconde option. Sinon veuillez nous faire parvenir les documents demandés ci-dessus afin que nous puissions procéder au remboursement.  
+                            </p>
+                            <p>
+                                Merci de noter que le délai de traitement des remboursements peut prendre de 4 à 6 semaines.
+                            </p>
                         </td>
                     </tr>
+
+                    @include('layouts.email.partials._emailFooterFr')
                     <!-- <tr>
                         <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                             <!-- Button : BEGIN
