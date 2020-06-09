@@ -7,6 +7,7 @@ use App\FocalPoints;
 use App\Mail\MailaboutCancel;
 use App\Mail\SendMailable;
 use App\Mail\SendReminderEmailHR;
+use App\Mail\cancelConvocation;
 use App\ModifiedForms;
 use App\PlacementForm;
 use App\Preenrolment;
@@ -1156,6 +1157,31 @@ class PreenrolmentController extends Controller
 
         //if self-paying enrolment form do this
         if ($is_self_pay_form == 1) {
+            $type = 0; // 0 = regular enrolment form
+            $display_language_en = $display_language->courses->EDescription;
+            $display_language_fr = $display_language->courses->FDescription;
+
+            $arraySchedule = [];
+            foreach ($forms as $valueForms) {
+                $arraySchedule[] = $valueForms->schedule->name;
+            }
+
+            $schedule = implode(' / ', $arraySchedule);
+            $staff_name = $display_language->users->name;
+            $std_email = $display_language->users->email;
+
+            $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+            $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+            $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+            $term_year = new Carbon($term_date_time);
+            $term_year = $term_year->year;
+            $seasonYear = $term_season_en.' '.$term_year;
+
+            $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+
+            Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
+
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;

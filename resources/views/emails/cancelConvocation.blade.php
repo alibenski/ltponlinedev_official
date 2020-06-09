@@ -24,12 +24,16 @@
                         <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: justify;">
                             <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal; text-align: center;">CLM Online Enrolment</h1>
                             <p> Dear {{ $staff_name }}, </p>
-                            <p> You have cancelled your enrolment for CLM language course: <strong>{{ $display_language_en }}</strong></p>
+                            <p> You have cancelled your @if($type === 0) enrolment for CLM language course: @endif <strong>{{ $display_language_en }}</strong></p>
+                            
+                            @if($type === 0) 
                             <p>Cancelled Schedule:</p>
-                             
-                            <ul>
-                                {{ $schedule }}
-                            </ul>
+                            
+                                <ul>
+                                    {{ $schedule }}
+                                </ul>
+                            @endif
+
                             <p>
                                 If you are a self-paying student, you can request the reimbursement of your fee or you can carry over the fee to the next term. 
                             </p>
@@ -64,12 +68,16 @@
                         <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: justify;">
                             <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal; text-align: center;">Inscription en ligne du CFM</h1>
                              <p> Chère / cher {{ $staff_name }}, </p>
-                             <p> Vous avez <strong>annulé</strong> votre inscription au cours de language du CFM suivant : <strong>{{ $display_language_fr }}</strong></p>
+                             <p> Vous avez <strong>annulé</strong> votre @if($type === 0) inscription au cours de language du CFM suivant : @endif <strong>{{ $display_language_fr }}</strong></p>
+                            
+                            @if($type === 0)
                              <p>Horaires annulés : </p>
-
+                            
                              <ul>
                                  {{ $schedule }}
                              </ul>
+                             @endif
+
                              <p>
                                 Si n’êtes pas exempté(e) des frais de cours, vous pouvez en demander le remboursement ou vous pouvez les reporter au trimestre suivant.  
                             </p>

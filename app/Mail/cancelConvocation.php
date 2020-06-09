@@ -16,19 +16,21 @@ class cancelConvocation extends Mailable
     public $display_language_en; 
     public $schedule;
     public $subject;
+    public $type;
     
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($staff_name, $display_language_fr, $display_language_en, $schedule, $subject)
+    public function __construct($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type)
     {
         $this->staff_name = $staff_name;
         $this->display_language_fr = $display_language_fr;
         $this->display_language_en = $display_language_en;
         $this->schedule = $schedule;
         $this->subject = $subject;
+        $this->type = $type;
     }
 
     /**

@@ -235,19 +235,8 @@ class HomeController extends Controller
 
         //if self-paying enrolment form do this
         if ($is_self_pay_form == 1) {
-
-            $staff_name = $display_language->users->name;
-            $display_language_en = $display_language->courses->EDescription;
-            $display_language_fr = $display_language->courses->FDescription;
-
-            $arraySchedule = [];
-            foreach ($forms as $valueForms) {
-                $arraySchedule[] = $valueForms->schedule->name;
-            }
-            $schedule = implode(' / ', $arraySchedule);
-            $std_email = $display_language->users->email;
-
-            Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
+            $type = 0; // 0 = regular enrolment form
+            $this->sendMailToStudent($display_language, $term, $type, $forms);
 
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
@@ -313,13 +302,23 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
-    public function sendMailToStudent($display_language, $term)
+    public function sendMailToStudent($display_language, $term, $type, $forms)
     {
-        $staff_name = $display_language->users->name;
-        $display_language_en = $display_language->languages->name.' Placement Test';
-        $display_language_fr = 'Test de placement - '.$display_language->languages->name_fr;
+        if ($type === 1) {
+            $display_language_en = $display_language->languages->name.' Placement Test';
+            $display_language_fr = 'Test de placement - '.$display_language->languages->name_fr;
+            $schedule = 'n/a';
+        } else {
+            $display_language_en = $display_language->courses->EDescription;
+            $display_language_fr = $display_language->courses->FDescription;
+            $arraySchedule = [];
+            foreach ($forms as $valueForms) {
+                $arraySchedule[] = $valueForms->schedule->name;
+            }
+            $schedule = implode(' / ', $arraySchedule);
+        }
 
-        $schedule = 'n/a';
+        $staff_name = $display_language->users->name;
         $std_email = $display_language->users->email;
 
         $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
@@ -328,9 +327,11 @@ class HomeController extends Controller
         $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
         $term_year = new Carbon($term_date_time);
         $term_year = $term_year->year;
+        $seasonYear = $term_season_en.' '.$term_year;
 
-        $seasonYear = '('.$term_season_en.' '.$term_year.')';
-        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en,$schedule, $seasonYear));
+        $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+
+        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
     }
 
     public function destroyPlacement(Request $request, $staff, $lang, $term, $eform)
@@ -357,7 +358,8 @@ class HomeController extends Controller
 
         //if self-paying enrolment form
         if ($is_self_pay_form == 1) {
-            $this->sendMailToStudent($display_language, $term);
+            $type = 1; // 1 = placement form
+            $this->sendMailToStudent($display_language, $term, $type, $forms);
             
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {

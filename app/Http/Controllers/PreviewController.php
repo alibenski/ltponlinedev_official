@@ -496,7 +496,6 @@ class PreviewController extends Controller
 
         $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
         $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
-
         $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
         $term_year = new Carbon($term_date_time);
         $term_year = $term_year->year;
@@ -504,10 +503,11 @@ class PreviewController extends Controller
 
         $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
 
-
+        $type = 0; // 0 != placement form
+        
         // also send email notification if admin cancelled the convocation
         // if (Auth::id() == $record->users->id) {
-        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject));
+        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
         // }
 
         if ($request->cancelled_but_not_billed) {
