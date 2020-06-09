@@ -12,6 +12,7 @@ use App\Mail\MailPlacementTesttoApprover;
 use App\Mail\MailPlacementTesttoApproverHR;
 use App\Mail\MailaboutPlacementCancel;
 use App\Mail\MailtoApprover;
+use App\Mail\cancelConvocation;
 use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailPlacementHR;
 use App\PlacementForm;
@@ -821,6 +822,25 @@ class PlacementFormController extends Controller
 
         //if self-paying placement form
         if ($is_self_pay_form == 1) {
+            $type = 1; // 1 = placement form
+            $display_language_en = $display_language->languages->name.' Placement Test';
+            $display_language_fr = 'Test de placement - '.$display_language->languages->name_fr;
+            $schedule = 'n/a';
+            $staff_name = $display_language->users->name;
+            $std_email = $display_language->users->email;
+
+            $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+            $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+            $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+            $term_year = new Carbon($term_date_time);
+            $term_year = $term_year->year;
+            $seasonYear = $term_season_en.' '.$term_year;
+
+            $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+
+            Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
+            
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;

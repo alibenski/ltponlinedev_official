@@ -487,15 +487,28 @@ class PreviewController extends Controller
             session()->flash('error', 'No action taken. The student might have already been moved to another class. ');
             return back();
         }
+        $term = $record->Term;
         $staff_name = $record->users->name;
         $display_language_en = $record->courses->EDescription;
         $display_language_fr = $record->courses->FDescription;
         $schedule = $record->schedules->name;
         $std_email = $record->users->email;
-        // do not send email notification if admin cancelled the convocation
-        if (Auth::id() == $record->users->id) {
-            Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
-        }
+
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+        $seasonYear = $term_season_en.' '.$term_year;
+
+        $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+
+        $type = 0; // 0 != placement form
+        
+        // also send email notification if admin cancelled the convocation
+        // if (Auth::id() == $record->users->id) {
+        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
+        // }
 
         if ($request->cancelled_but_not_billed) {
             $record->cancelled_but_not_billed = $request->cancelled_but_not_billed;

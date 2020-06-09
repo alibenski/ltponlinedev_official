@@ -7,6 +7,7 @@ use App\FocalPoints;
 use App\Language;
 use App\Mail\MailaboutCancel;
 use App\Mail\MailaboutPlacementCancel;
+use App\Mail\cancelConvocation;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Preview;
@@ -234,6 +235,9 @@ class HomeController extends Controller
 
         //if self-paying enrolment form do this
         if ($is_self_pay_form == 1) {
+            $type = 0; // 0 = regular enrolment form
+            $this->sendMailToStudent($display_language, $term, $type, $forms);
+
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
@@ -298,6 +302,38 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
+    public function sendMailToStudent($display_language, $term, $type, $forms)
+    {
+        if ($type === 1) {
+            $display_language_en = $display_language->languages->name.' Placement Test';
+            $display_language_fr = 'Test de placement - '.$display_language->languages->name_fr;
+            $schedule = 'n/a';
+        } else {
+            $display_language_en = $display_language->courses->EDescription;
+            $display_language_fr = $display_language->courses->FDescription;
+            $arraySchedule = [];
+            foreach ($forms as $valueForms) {
+                $arraySchedule[] = $valueForms->schedule->name;
+            }
+            $schedule = implode(' / ', $arraySchedule);
+        }
+
+        $staff_name = $display_language->users->name;
+        $std_email = $display_language->users->email;
+
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+        $seasonYear = $term_season_en.' '.$term_year;
+
+        $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+
+        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
+    }
+
     public function destroyPlacement(Request $request, $staff, $lang, $term, $eform)
     {
         //query submitted forms based from tblLTP_Enrolment table
@@ -322,6 +358,9 @@ class HomeController extends Controller
 
         //if self-paying enrolment form
         if ($is_self_pay_form == 1) {
+            $type = 1; // 1 = placement form
+            $this->sendMailToStudent($display_language, $term, $type, $forms);
+            
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
@@ -330,6 +369,7 @@ class HomeController extends Controller
                 $delform->save();
                 $delform->delete();
             }
+
             session()->flash('cancel_success', 'Placement Test Request for ' . $display_language->languages->name . ' has been cancelled.');
             return redirect()->back();
         }
