@@ -575,6 +575,7 @@
 		                                        @if( $student->profile == "STF") Staff Member @endif
 		                                        @if( $student->profile == "INT") Intern @endif
 		                                        @if( $student->profile == "CON") Consultant @endif
+		                                        @if( $student->profile == "WAE") When Actually Employed @endif
 		                                        @if( $student->profile == "JPO") JPO @endif
 		                                        @if( $student->profile == "MSU") Staff of Permanent Mission @endif
 		                                        @if( $student->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif

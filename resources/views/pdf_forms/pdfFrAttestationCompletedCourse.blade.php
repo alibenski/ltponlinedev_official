@@ -53,7 +53,7 @@
           <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           s’est acquitté(e) des frais de cours de {{$price}} CHF et a réussi le cours mentionné ci-dessous :
-          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', '']))
+          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', 'GST', '']))
           s’est acquitté(e) des frais de cours et a réussi le cours mentionné ci-dessous :
           @else
           a réussi le cours mentionné ci-dessous :
@@ -65,7 +65,7 @@
           <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           s’est acquitté(e) des frais de cours de {{$price}} CHF et a suivi le cours mentionné ci-dessous :
-          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', '']))
+          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', 'GST', '']))
           s’est acquitté(e) des frais de cours et a suivi le cours mentionné ci-dessous :
           @else
           a suivi le cours mentionné ci-dessous :
