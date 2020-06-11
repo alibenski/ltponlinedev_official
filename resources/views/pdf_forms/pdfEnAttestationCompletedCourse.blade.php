@@ -52,7 +52,7 @@
           <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           has paid {{$price}} CHF for and has successfully completed the following course:
-          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', '']))
+          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', '']))
           has paid for and has successfully completed for the following course:
           @else
           has successfully completed the following course:
@@ -64,7 +64,7 @@
           <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           has paid {{$price}} CHF for and has attended the following course:
-          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', '']))
+          @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', '']))
           has paid for and has attended the following course:
           @else
           has attended the following course:
