@@ -19,7 +19,8 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Preferred Day(s)</th>
 	            <th>Preferred Time(s)</th>
 	            <th>Comments Placement Exam</th>	            
-	            <th>Comments Course Preference</th>	            
+	            <th>Comments Course Preference</th>            
+	            <th>Assigned to Course?</th>            
 	            <th>Overall Approval</th>
 	            <th>Time Stamp</th>
 	        </tr>
@@ -49,6 +50,7 @@ Total Count: {{ count($placement_forms) }}
 				<td>{{ $form->timeInput }}</td>
 				<td>{{ $form->std_comments }}</td>
 				<td>{{ $form->course_preference_comment }}</td>
+				<td>@if($form->assigned_to_course == 1) Yes @endif</td>
 				<td>{{ $form->overall_approval }}</td>
 				<td>{{ $form->created_at }}</td>
 			</tr>
@@ -65,7 +67,8 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Preferred Day(s)</th>
 	            <th>Preferred Time(s)</th>
 	            <th>Comments Placement Exam</th>	            
-	            <th>Comments Course Preference</th>	            
+	            <th>Comments Course Preference</th>	
+	            <th>Assigned to Course?</th>             
 	            <th>Overall Approval</th>
 	            <th>Time Stamp</th>
 	        </tr>
