@@ -42,7 +42,12 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
+@if(env('APP_ENV')!='production')
+<body class="hold-transition skin-red sidebar-mini">
+@else
 <body class="hold-transition skin-blue sidebar-mini">
+@endif
+
 <div class="wrapper">
 
   <!-- Main Header -->

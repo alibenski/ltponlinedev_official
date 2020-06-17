@@ -187,14 +187,15 @@ class SystemController extends Controller
             return redirect()->back();
         }
 
-        $queryStudentsAlreadyEnrolled = Preenrolment::where('Term', $term->Term_Next)
+        $selectedTerm = $request->session()->get('Term');
+        $queryStudentsAlreadyEnrolled = Preenrolment::where('Term', $selectedTerm)
             ->select('INDEXID')
             ->groupBy('INDEXID')
             ->with('users')
             ->get()
             ->pluck('users.email');
 
-        $queryStudentsAlreadyPlaced = PlacementForm::where('Term', $term->Term_Next)
+        $queryStudentsAlreadyPlaced = PlacementForm::where('Term', $selectedTerm)
             ->select('INDEXID')
             ->groupBy('INDEXID')
             ->with('users')
@@ -250,6 +251,7 @@ class SystemController extends Controller
     public function sendReminderToCurrentStudents(Request $request)
     {
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        $selectedTerm = $request->session()->get('Term'); 
         // query all students enrolled to current term
         $query_students_current_term = Repo::where('Term', $term->Term_Code)->get();
 
@@ -258,7 +260,7 @@ class SystemController extends Controller
         foreach ($query_students_current_term as $key => $value) {
             $arr0[] = $value->INDEXID;
 
-            $query_not_enrolled_stds = Preenrolment::where('INDEXID', $value->INDEXID)->where('Term', $term->Term_Next)->get();
+            $query_not_enrolled_stds = Preenrolment::where('INDEXID', $value->INDEXID)->where('Term', $selectedTerm)->get();
             foreach ($query_not_enrolled_stds as $key2 => $value2) {
                 $arr1[] = $value2->INDEXID;
             }
@@ -266,7 +268,7 @@ class SystemController extends Controller
 
         $arr3 = [];
         foreach ($query_students_current_term as $key5 => $value5) {
-            $query_not_enrolled_stds_pl = PlacementForm::where('INDEXID', $value5->INDEXID)->where('Term', $term->Term_Next)->get();
+            $query_not_enrolled_stds_pl = PlacementForm::where('INDEXID', $value5->INDEXID)->where('Term', $selectedTerm)->get();
             foreach ($query_not_enrolled_stds_pl as $key6 => $value6) {
                 $arr3[] = $value6->INDEXID;
             }

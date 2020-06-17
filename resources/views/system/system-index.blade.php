@@ -66,8 +66,8 @@
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dLabel">
 									<li><a href="{{route('send-broadcast-enrolment-is-open')}}" class="send-broadcast-enrolment-is-open send-emails btn-space"><i class="fa fa-envelope"></i> Send Broadcast Email That Enrolment is Open (Current and Past Students)</a></li>
-									<li><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to All Current and Past Students Not Yet Enrolled</a></li>
-									<li><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled</a></li>
+									<li><a href="{{route('send-broadcast-reminder')}}" class="send-broadcast-reminder send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to All Current and Past Students Not Yet Enrolled [ {{Session::get('Term')}} ]</a></li>
+									<li><a href="{{route('send-reminder-to-current-students')}}" class="send-reminder-to-current-students send-emails btn-space"><i class="fa fa-envelope"></i> Send Reminder Email to Current Students Not Yet Enrolled [ {{Session::get('Term')}} ]</a></li>
 									</ul>
 									<a href="{{ route('view-enrolment-is-open-text', ['id' => 1]) }}" class="btn btn-info btn-space"><i class="fa fa-eye"></i> View</a>
 									<a href="{{ route('edit-enrolment-is-open-text', ['id' => 1]) }}" class="btn btn-warning btn-space"><i class="fa fa-pencil"></i> Edit</a>
