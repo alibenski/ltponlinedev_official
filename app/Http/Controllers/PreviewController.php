@@ -977,7 +977,7 @@ class PreviewController extends Controller
         }
 
         // forceDelete PASHQTcur records related to the selected term before running the batch
-        $reset_pash_records = Repo::where('Term',  $request->Term);
+        $reset_pash_records = Repo::where('Term',  $request->Term)->where('Te_Code', '!=', 'CEW2');
         if ($reset_pash_records) {
             $reset_pash_records->forceDelete();
         }
@@ -1063,7 +1063,7 @@ class PreviewController extends Controller
             // echo $i. " - " .$arrINDEXID[$i] ;
             // echo "<br>";
 
-            // priority 1: check each index id if they are already in re-enroling students from previous term via PASHQTcur table
+            // priority 1: check each index id if they are re-enrolling students from previous term via PASHQTcur table
             $student_reenrolled = Repo::select('INDEXID')
                 ->where('Term', $prev_term)
                 ->where('L', $arrL[$i])
@@ -1107,7 +1107,9 @@ class PreviewController extends Controller
         $countArrValue = count($arrValue);
         for ($i = 0; $i < $countArrValue; $i++) {
             // collect priority 1 enrolment forms 
-            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])
+            ->whereNotIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+            ->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
             // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
             $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
@@ -1193,7 +1195,9 @@ class PreviewController extends Controller
 
         for ($z = 0; $z < $countArrValue2; $z++) {
             // collect priority 2 enrolment forms 
-            $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])
+                ->whereNotIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+                ->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
             $arr_enrolment_forms_waitlisted[] = $enrolment_forms_waitlisted;
 
@@ -1377,12 +1381,15 @@ class PreviewController extends Controller
         $ingredients3 = [];
         // get the INDEXID's which are not existing in priority 1 & 2
         $priority3_not_reset = array_diff($arrINDEXID, $arrValue1_2);
+        // reset keys values to zero
         $priority3 = array_values($priority3_not_reset);
         $countPriority3 = count($priority3);
 
         for ($i = 0; $i < $countPriority3; $i++) {
             // collect priority 3 enrolment forms 
-            $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])
+                ->whereNotIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+                ->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
             $arrPriority3[] = $enrolment_forms_priority3;
 
             foreach ($enrolment_forms_priority3 as $value) {
@@ -1426,11 +1433,42 @@ class PreviewController extends Controller
         return redirect()->back();
     }
 
+
+    public function levelOneEnrolments($request)
+    {
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrINDEXID = $data['arrINDEXID'];
+
+        $levelOneEnrolmentIds = [];
+        $levelOneEnrolments = [];
+        $countarrINDEXID = count($arrINDEXID);
+
+        for ($i = 0; $i < $countarrINDEXID; $i++) {
+            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrINDEXID[$i])
+            ->whereIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+            ->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            foreach ($enrolment_forms_reenrolled as $value) {
+                $levelOneEnrolmentIds[] = $value->id;
+            }
+        }
+
+        foreach ($levelOneEnrolmentIds as $levelOneId) {
+            $levelOneEnrolments[] = Preenrolment::where('id', $levelOneId)->get();
+        }
+
+        return $levelOneEnrolments;
+    }
+
     /*
-    Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
+    * Priority 4 new students: 
+    * 1. no PASHQTcur records and comes from Placement Test table and its results
+    * 2. level 1 enrolment forms from very new and not re-enrolled students (level 1 forms from re-enrolled students
+    *    are considered as priority 1 even if they students are from other languages)
+    * 
      */
     public function insertPriority4(Request $request)
     {
+        $levelOneEnrolments = $this->levelOneEnrolments($request);
         $dataPlacement = $this->getDataPlacement($request);
         $arrINDEXIDPlacement = $dataPlacement['arrINDEXIDPlacement'];
         $arrValuePlacement = $dataPlacement['arrValuePlacement'];
@@ -1439,12 +1477,18 @@ class PreviewController extends Controller
         $priority4 = array_values($priority4_not_reset);
         $countPriority4 = count($priority4);
         $ingredients4 = [];
+        $arr_placement_forms_priority4 = [];
 
         for ($d = 0; $d < $countPriority4; $d++) {
             // collect leftover priority 4 enrolment forms 
             $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $arr_placement_forms_priority4[] = $placement_forms_priority4;
+        }
 
-            foreach ($placement_forms_priority4 as $value4) {
+        $merge_levelone_placement = collect($arr_placement_forms_priority4)->merge($levelOneEnrolments)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        
+        foreach ($merge_levelone_placement as $value4data) {
+            foreach ($value4data as $value4) {
                 $ingredients4[] = [
                     'CodeIndexID' => $value4->CodeIndexID,
                     'Code' => $value4->Code,
@@ -1480,7 +1524,8 @@ class PreviewController extends Controller
                 // }
             }
         }
-        PreviewTempSort::insert($ingredients4);
+        $sortedIngredients4 = collect($ingredients4)->sortBy('created_at')->all();
+        PreviewTempSort::insert($sortedIngredients4);
         $request->session()->flash('success', 'Insert Priority 4 Students Complete!');
         return redirect()->back();
     }
