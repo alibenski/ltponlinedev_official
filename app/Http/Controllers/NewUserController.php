@@ -58,7 +58,7 @@ class NewUserController extends Controller
     public function closeNewUserForm($enrol_object_start_date, $enrol_object_end_date, $now_date)
     {
         if($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
-            return true;
+            return false;
         }
         return true;
     }
