@@ -62,6 +62,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /*
      * Reporting Routes
      */
+    Route::get('reports/ltp-stats-view-students-per-term', 'ReportsController@viewStudentsPerTerm')->name('reports/ltp-stats-view-students-per-term');
+    Route::get('reports/stats-students-per-term', 'ReportsController@statsStudentsPerTerm')->name('reports/stats-students-per-term');
     Route::get('reports', 'ReportsController@baseView')->name('reports');
     Route::get('get-reports-table', ['as' => 'get-reports-table', 'uses' => 'ReportsController@getReportsTable']);
     Route::get('reports/ltp-stats-graph-view', 'ReportsController@ltpStatsGraphView')->name('reports/ltp-stats-graph-view');
