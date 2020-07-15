@@ -121,9 +121,12 @@ class CourseSchedController extends Controller
 
             // fetch and create classroom according to the newly created record(s)  
             $unique_key = $course_id . '-' . $schedule_id[$i] . '-' . $term_id;
-            $new_record = CourseSchedule::where('cs_unique', $unique_key)->get();
+            $new_record = CourseSchedule::where('cs_unique', $unique_key);
+            
+            $record_name = $new_record->first()->course->Description;
+            $new_record->update(['name' => 'LTP - '.$record_name.' - '.$course_id]);
 
-            $this->saveClassRoom($new_record);
+            $this->saveClassRoom($new_record->get());
         }
 
         $request->session()->flash('success', 'Course + Schedule saved!'); 
