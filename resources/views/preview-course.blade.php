@@ -25,7 +25,7 @@
 {{-- @include('admin.partials._termSessionMsg') --}}
 <div class="row">
   <div class="col-md-12">
-    <div class="row">
+    <div class="row" style="border: solid 1px skyblue; margin-bottom: 75px">
       <div class="col-md-4">
         <form method="POST" action="{{ route('insert-priority-1') }}" class="form-prevent-multi-submit">
           {{ csrf_field() }}
@@ -121,9 +121,28 @@
         </form>
       </div>
 
+      <div class="col-md-4">
+        <form method="POST" action="{{ route('insert-priority-5') }}" class="form-prevent-multi-submit">
+          {{ csrf_field() }}
+          <div class="form-group col-sm-12 add-margin">
+            <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+                <option value="">--- Select Term ---</option>
+                @foreach ($terms as $value)
+                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+                @endforeach
+            </select>
+          </div>
+    
+          <div class="form-group col-sm-12 add-margin">           
+                <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Insert Priority 5</button>
+            <input type="hidden" name="_token" value="{{ Session::token() }}">
+          </div>
+        </form>
+      </div>
+
     </div>
     
-    <div class="row">
+    <div class="row" style="border: solid 1px skyblue; margin-bottom: 75px">
       <div class="col-md-4">
         <form method="POST" action="{{ route('order-codes') }}" class="form-prevent-multi-submit">
           {{ csrf_field() }}
@@ -182,7 +201,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="border: solid 1px skyblue; margin-bottom: 75px">
       <div class="col-md-4">
         <form method="POST" action="{{ route('check-duplicate-in-preview') }}" class="form-prevent-multi-submit">
           {{ csrf_field() }}
@@ -232,9 +251,14 @@
                 @endforeach
             </select>
           </div>
+          
+          <div class="form-group col-sm-12 add-margin">
+            <label for="minimum">Enter Minimum No. of Students</label>
+            <input type="number" name="minimum">
+          </div>
     
           <div class="form-group col-sm-12 add-margin">           
-                <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Execute Phase 5</button>
+                <button type="submit" class="btn btn-success button-prevent-multi-submit">Execute Phase 5</button>
             <input type="hidden" name="_token" value="{{ Session::token() }}">
           </div>
         </form>
