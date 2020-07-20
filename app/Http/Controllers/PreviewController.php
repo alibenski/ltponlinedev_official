@@ -2056,7 +2056,7 @@ class PreviewController extends Controller
             }
             // var_dump('section value starts at: '.$sectionNo);
         }
-        $this->assignAndAnalyze($getCode);
+        $this->assignAndAnalyze($getCode, $minimum);
         $this->getOrphans($getCode);
 
         // move everything to PASHQTCur table
@@ -2069,7 +2069,7 @@ class PreviewController extends Controller
     }
 
 
-    public function assignAndAnalyze($getCode)
+    public function assignAndAnalyze($getCode, $minimum)
     {
         // query PASHQTcur and take 14 students to assign classroom created in TEVENTcur
         $arrGetClassRoomDetails = [];
@@ -2096,7 +2096,7 @@ class PreviewController extends Controller
                     ->orderBy('id', 'asc')
                     ->orderBy('PS', 'asc')
                     ->get()
-                    ->take(11);
+                    ->take($minimum);
                 foreach ($getPashStudents as $valuePashStudents) {
                     $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
                     // update record with classroom assigned
@@ -2154,7 +2154,7 @@ class PreviewController extends Controller
         if ($c != 0) {
             for ($iCount = 0; $iCount < $c; $iCount++) {
                 // $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
-                $jNotCompleteCount = intVal(11 - $arrNotCompleteCount[$iCount]);
+                $jNotCompleteCount = intVal($minimum - $arrNotCompleteCount[$iCount]);
                 $arrjNotCompleteCount[] = $jNotCompleteCount;
 
                 for ($iCounter2 = 0; $iCounter2 < $jNotCompleteCount; $iCounter2++) {
