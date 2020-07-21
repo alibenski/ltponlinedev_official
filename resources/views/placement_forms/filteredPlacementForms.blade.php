@@ -77,6 +77,7 @@
 	        <tr>
 	        	<th>Operation</th>
 	            <th>Validated/Assigned Course?</th>
+	            <th>Course</th>
 	            <th>Name</th>
 	            {{-- <th>Convoked?</th> --}}
 	            <th>Language</th>
@@ -103,9 +104,18 @@
                 	@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 					@else
 					  @if ($form->modified_by)
-					    <span class="label label-success margin-label">Yes by @if($form->modifyUser->name) {{$form->modifyUser->name }}  @else   User ID {{ $form->modified_by }} @endif</span>
+					    <span class="label label-success margin-label">Yes by @if($form->modifyUser->name) {{$form->modifyUser->name }}  @else   User ID {{ $form->modified_by }} @endif </span>
 					  @endif
 					@endif
+                </td>
+                <td>
+                	@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+					@else
+					  @if ($form->modified_by)
+					    <span> {{$form->courses->Description}} </span>
+					  @endif
+					@endif
+					
                 </td>
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
