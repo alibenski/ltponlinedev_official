@@ -29,6 +29,8 @@
 					</div>
 					<div class="panel-body">
 						<h4>You are currently viewing teachers and their respective classes for <strong> [{{ $selectedTerm->Term_Code }}] - {{ $selectedTerm->Comments }}: {{ $selectedTerm->Term_Name }} </strong> </h4>
+						
+						<a href="{{ route('teacher-email-classrooms-to-teachers') }}" class="btn btn-primary"><i class="fa fa-envelope"></i> send email</a><span class="text-danger"> <i class="fa fa-info-circle"></i> send classroom info to teachers via email</span>
 					</div>
 				</div>
 			</div>

@@ -84,6 +84,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      * Teachers Routes
      */
     Route::resource('teachers', 'TeachersController');
+    Route::get('teacher-email-classrooms-to-teachers', ['as' => 'teacher-email-classrooms-to-teachers', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachers']);
+    
     Route::get('teacher-show-classrooms-per-teacher', ['as' => 'teacher-show-classrooms-per-teacher', 'uses' => 'TeachersController@teacherShowClassroomsPerTeacher']);
 
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard')->middleware('first-time-login');
