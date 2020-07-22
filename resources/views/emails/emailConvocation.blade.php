@@ -246,7 +246,7 @@
                                         <li>
                                             <p style="text-align: justify">
                                             <b>Microsoft Teams</b> <br>
-                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the same time as your course, as indicated above. Further details about how to join your session will be sent by your teachers before the beginning of the term.
+                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the same time as your course, as indicated above. Further details about how to join your session will be sent by your teachers before the beginning of the course.
                                             </p>
                                         </li>
 
@@ -299,7 +299,7 @@
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p style="text-align: justify">
-                                        If you are unable to attend the first week of the term, you must inform your instructor and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
+                                        If you are unable to attend the first day of the course, you must inform your instructor and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first day of the course may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
                                     <p style="color: red;text-align: justify;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/PaymentReimbursementEn.pdf">here</a>.
@@ -384,7 +384,7 @@
                                         <li>
                                             <p style="text-align: justify">
                                             <b>Microsoft Teams</b> <br>
-                                            Nous utiliserons Microsoft Teams comme outil de téléconférence pour remplacer vos sessions en face-à-face. Les sessions virtuelles auront lieu au moment de votre cours, comme indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
+                                            Nous utiliserons Microsoft Teams comme outil de téléconférence pour remplacer vos sessions en face-à-face. Les sessions virtuelles auront lieu au moment de votre cours, comme indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du cours.
                                             </p>
                                         </li>
 
@@ -396,7 +396,7 @@
                                                     Quelques jours avant le début de votre cours, vous pouvez trouver votre matériel d'apprentissage sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme :  <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
                                                 </li>
                                                 <li style="text-align: justify">
-                                                    o   Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
+                                                    Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
                                                 </li>
                                             </ul>
                                             </p>
@@ -434,7 +434,7 @@
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p style="text-align: justify">
-                                        Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
+                                        Si vous ne pouvez pas être présent(e)s le premier jour du cours, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s le premier jour du cours peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
                                     </p>    
                                     <p style="color: red;text-align: justify;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit(e) à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/sites/default/files/ContainerFr/LTP/Admin/PaymentReimbursementFr.pdf">ici</a>.
