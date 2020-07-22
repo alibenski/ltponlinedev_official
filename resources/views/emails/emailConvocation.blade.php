@@ -232,11 +232,11 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19</span>, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.
+                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19</span>, the summer courses will be delivered virtually except for the course Chinese: Summer Course - Handwriting and Calligraphy for Beginners (UN I and II).
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Please note that the group size will be exceptionally reduced from 15 to 12 participants in most courses to offer you better learning conditions. This is not applicable to English courses initially advertised as online.
+                                        Please note that the group size will be exceptionally reduced from 15 to a maximum of 13 participants in most courses to offer you better learning conditions.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -245,8 +245,8 @@
                                     <ol>
                                         <li>
                                             <p style="text-align: justify">
-                                            <b>Skype</b> <br>
-                                            We will use Skype (not Skype for Business) as the teleconferencing tool to replace your face-to-face sessions (except for English courses initially advertised as online, which will use Webex). Online sessions will take place at the same time as your course, as indicated above. In order to ensure that you can join the Skype sessions, create a personal Skype account (if you do not have one already) and install the application on your computer. Further details about how to join your session will be sent by your teachers before the beginning of the term.
+                                            <b>Microsoft Teams</b> <br>
+                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the same time as your course, as indicated above. Further details about how to join your session will be sent by your teachers before the beginning of the term.
                                             </p>
                                         </li>
 
@@ -255,10 +255,10 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    You can find your learning material and autonomous activities on the CLM e-learning platform Moodle. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
+                                                    Just before starting the course, you can find your learning material. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
                                                 </li>
                                                 <li style="text-align: justify">
-                                                    Update your profile by adding your Skype ID and a picture in your profile.
+                                                    Update your profile by adding a picture in your profile.
                                                 </li>
                                                 <li style="text-align: justify">
                                                     If you are new to the Language Training Programme and don’t have your Moodle access yet, you will receive your credentials and the log-in instructions by email before your first class. 
@@ -370,11 +370,11 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19</span>, tle trimestre commencera à distance et la composante en face à face sera dispensée en ligne. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.
+                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19</span>, les cours d’été se seront dispensés de façon virtuelle à l’exception du cours de chinois : écriture des caractères et initiation à la calligraphie (UN I et II).
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours d'anglais annoncés comme étant en ligne.
+                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -383,8 +383,8 @@
                                     <ol>
                                         <li>
                                             <p style="text-align: justify">
-                                            <b>Skype</b> <br>
-                                            Nous utiliserons Skype (pas Skype for business) comme outil de téléconférence pour remplacer vos sessions en face-à-face (sauf pour les cours d'anglais annoncés comme étant en ligne qui utiliseront Webex). Les sessions auront lieu au moment de votre cours, comme indiqué ci-dessus. Afin de vous assurer que vous pouvez participer aux sessions Skype, créez un compte Skype personnel (si vous n'en avez pas déjà un) et installez l'application sur votre ordinateur. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
+                                            <b>Microsoft Teams</b> <br>
+                                            Nous utiliserons Microsoft Teams comme outil de téléconférence pour remplacer vos sessions en face-à-face. Les sessions virtuelles auront lieu au moment de votre cours, comme indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
                                             </p>
                                         </li>
 
@@ -393,13 +393,10 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    Vous pouvez trouver votre matériel d'apprentissage et vos activités autonomes sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme :  <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
+                                                    Quelques jours avant le début de votre cours, vous pouvez trouver votre matériel d'apprentissage sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme :  <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
                                                 </li>
                                                 <li style="text-align: justify">
-                                                    Mettez également à jour votre profil en ajoutant votre identifiant Skype et une photo dans votre profil.
-                                                </li>
-                                                <li style="text-align: justify">
-                                                    Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
+                                                    o   Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
                                                 </li>
                                             </ul>
                                             </p>
