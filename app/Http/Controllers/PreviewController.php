@@ -977,7 +977,8 @@ class PreviewController extends Controller
         }
 
         // forceDelete PASHQTcur records related to the selected term before running the batch
-        $reset_pash_records = Repo::where('Term',  $request->Term)->where('Te_Code', '!=', 'CEW2');
+        $reset_pash_records = Repo::where('Term',  $request->Term);
+        // ->where('Te_Code', '!=', 'CEW2');
         if ($reset_pash_records) {
             $reset_pash_records->forceDelete();
         }
