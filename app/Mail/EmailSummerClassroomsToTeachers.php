@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailClassroomsToTeachers extends Mailable
+class EmailSummerClassroomsToTeachers extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -26,7 +26,6 @@ class EmailClassroomsToTeachers extends Mailable
         $this->queryTeachers = $queryTeachers;
         $this->selectedTerm = $selectedTerm;
     }
-
     /**
      * Build the message.
      *
@@ -34,7 +33,7 @@ class EmailClassroomsToTeachers extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.emailClassroomsToTeachers')
+        return $this->view('emails.emailSummerClassroomsToTeachers')
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->cc(['clm_language@un.org', 'virginie.ferre@un.org'])
                     ->priority(1)

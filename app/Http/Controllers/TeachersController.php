@@ -7,6 +7,7 @@ use App\AttendanceRemarks;
 use App\Classroom;
 use App\Language;
 use App\Mail\EmailClassroomsToTeachers;
+use App\Mail\EmailSummerClassroomsToTeachers;
 use App\ModifiedForms;
 use App\NewUser;
 use App\PlacementForm;
@@ -146,27 +147,37 @@ class TeachersController extends Controller
 
         if ($request->session()->has('Term')) {
             $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
+            $languages = Language::all();
 
             // get all teachers with a class of the selected term
             $queryTeachers = Teachers::whereHas('classrooms', function ($query) use ($request) {
-                    $query->where('Te_Term', $request->session()->get('Term'))
+                $query->where('Te_Term', $request->session()->get('Term'))
                         ->whereNotNull('Tch_ID')
                         ->where('Tch_ID', '!=', 'TBD');
                 })
-                ->with(['classrooms' => function ($query) use ($request) {
-                    $query->where('Te_Term', $request->session()->get('Term'))
+                ->with(['classrooms' => function ($q) use ($request) {
+                $q->where('Te_Term', $request->session()->get('Term'))
                         ->whereNotNull('Tch_ID')
                         ->where('Tch_ID', '!=', 'TBD')
                         ->with('course')
                         ->with('scheduler');
-                }])->get();
-
+                }])
+                ->orderBy('Tch_L', 'asc')
+                ->get();
+            
+            $recipients = [];
             foreach ($queryTeachers as $teacher) {
-                Mail::to($teacher->email)->send(new EmailClassroomsToTeachers($teacher));
-                dd($teacher);
+                $recipients[] = $teacher->email;
+            }
+
+            if ($selectedTerm->Comments === 'SUMMER') {
+                Mail::to($recipients)->send(new EmailSummerClassroomsToTeachers($languages, $queryTeachers, $selectedTerm));
+            } else {
+                Mail::to($recipients)->send(new EmailClassroomsToTeachers($languages, $queryTeachers, $selectedTerm));
             }
 
 
+            $request->session()->flash('success', 'Email sent to the teachers.');
             return redirect()->back();
         }
 
