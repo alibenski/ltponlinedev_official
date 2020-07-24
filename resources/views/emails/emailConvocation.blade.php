@@ -232,11 +232,11 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19</span>, the summer courses will be delivered virtually except for the course Chinese: Summer Course - Handwriting and Calligraphy for Beginners (UN I and II).
+                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Please note that the group size will be exceptionally reduced from 15 to a maximum of 13 participants in most courses to offer you better learning conditions.
+                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions. This is not applicable to English courses initially advertised as online.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -246,7 +246,9 @@
                                         <li>
                                             <p style="text-align: justify">
                                             <b>Microsoft Teams</b> <br>
-                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the same time as your course, as indicated above. Further details about how to join your session will be sent by your teachers before the beginning of the course.
+                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the same time as your course, as indicated above. Further details about how to join your session will be sent by your teachers before the beginning of the term.
+                                            </p>
+                                            <p style="text-align: justify"><u>For English courses initially advertised as online, we will use Webex</u>. The online courses are: Intermediate grammar workout UN II, Advanced grammar workout UN III, Writing for professional purposes OCHA UN II – III, Writing for professional purposes UN III – IV, Writing for professional purposes (WHO) UN III - IV and Report Writing Workshop OHCHR UN III – IV.
                                             </p>
                                         </li>
 
@@ -255,11 +257,11 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    Just before starting the course, you can find your learning material. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
+                                                    Just before starting the course, you can find your learning material and autonomous activities on the CLM e-learning platform Moodle. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
                                                 </li>
-                                                <li style="text-align: justify">
+                                                {{-- <li style="text-align: justify">
                                                     Update your profile by adding a picture in your profile.
-                                                </li>
+                                                </li> --}}
                                                 <li style="text-align: justify">
                                                     If you are new to the Language Training Programme and don’t have your Moodle access yet, you will receive your credentials and the log-in instructions by email before your first class. 
                                                 </li>
@@ -299,7 +301,7 @@
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p style="text-align: justify">
-                                        If you are unable to attend the first day of the course, you must inform your instructor and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first day of the course may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
+                                        If you are unable to attend the first week of the term, you must inform your teacher and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
                                     <p style="color: red;text-align: justify;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/PaymentReimbursementEn.pdf">here</a>.
@@ -370,11 +372,11 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19</span>, les cours d’été se seront dispensés de façon virtuelle à l’exception du cours de chinois : écriture des caractères et initiation à la calligraphie (UN I et II).
+                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19</span>, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage.
+                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours d'anglais annoncés comme étant en ligne.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -384,7 +386,10 @@
                                         <li>
                                             <p style="text-align: justify">
                                             <b>Microsoft Teams</b> <br>
-                                            Nous utiliserons Microsoft Teams comme outil de téléconférence pour remplacer vos sessions en face-à-face. Les sessions virtuelles auront lieu au moment de votre cours, comme indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du cours.
+                                            Nous utiliserons Microsoft Teams comme outil de téléconférence pour remplacer vos sessions en face-à-face. Les sessions auront lieu au moment de votre cours, comme indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
+                                            </p>
+
+                                            <p style="text-align: justify"><u>Pour les cours d'anglais annoncés comme étant en ligne, nous utiliseront Webex</u>. Les cours d’anglais annoncées comme étant en ligne sont : Musclez votre grammaire – niveau intermédiaire (ONU II) – en ligne, Musclez votre grammaire – niveau avancé (ONU III) – en ligne, Rédaction professionnelle- OMS (ONU III-IV) - en ligne, Rédaction professionnelle - OCHA (ONU II - III)- cours en ligne et Rédaction professionnelle (ONU III-IV) - en ligne et Rédaction de rapport en anglais - OHCHR (ONU III - IV)- en ligne.
                                             </p>
                                         </li>
 
@@ -393,7 +398,7 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    Quelques jours avant le début de votre cours, vous pouvez trouver votre matériel d'apprentissage sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme :  <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
+                                                    Quelques jours avant le début de votre cours, vous pouvez trouver votre matériel d'apprentissage et vos activités autonomes sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
                                                 </li>
                                                 <li style="text-align: justify">
                                                     Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
@@ -434,7 +439,7 @@
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p style="text-align: justify">
-                                        Si vous ne pouvez pas être présent(e)s le premier jour du cours, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s le premier jour du cours peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
+                                        Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
                                     </p>    
                                     <p style="color: red;text-align: justify;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit(e) à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/sites/default/files/ContainerFr/LTP/Admin/PaymentReimbursementFr.pdf">ici</a>.
