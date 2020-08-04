@@ -16,7 +16,7 @@
 @endif
 
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-9" style="margin-bottom: 1rem">
             <div class="card">
                 <div class="card-header bg-primary"><strong>Student Profile</strong></div>
 
@@ -29,10 +29,10 @@
 
                     <form class="form-horizontal">
                         
-                        <div class="form-group">
-                            <label for="fullName" class="col-md-4 control-label">Profile:</label>
+                        <div class="form-group row">
+                            <label for="fullName" class="col-md-4 col-form-label">Profile:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p> 
                                     @if(empty( Auth::user()->profile )) Update Needed 
                                     @else
@@ -52,83 +52,75 @@
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="title" class="col-md-4 control-label">Title:</label>
+                        <div class="form-group row">
+                            <label for="title" class="col-md-4 col-form-label">Title:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty ( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->TITLE }} @endif</p>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="fullName" class="col-md-4 control-label">Full Name:</label>
+                        <div class="form-group row">
+                            <label for="fullName" class="col-md-4 col-form-label">Full Name:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->LASTNAME }}, {{ Auth::user()->sddextr->FIRSTNAME }} @endif</p>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="email" class="col-md-4 control-label">Email Address:</label>
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label">Email Address:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>{{ Auth::user()->email }}</p>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="org" class="col-md-4 control-label">Organization:</label>
+                        <div class="form-group row">
+                            <label for="org" class="col-md-4 col-form-label">Organization:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }} @endif</p>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="contactNo" class="col-md-4 control-label">Contact Number:</label>
+                        <div class="form-group row">
+                            <label for="contactNo" class="col-md-4 col-form-label">Contact Number:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->PHONE }} @endif</p>
                             </div>
                         </div>
                         
 
-                        <div class="form-group">
-                            <label for="contactNo" class="col-md-4 control-label">Date of Birth:</label>
+                        <div class="form-group row">
+                            <label for="contactNo" class="col-md-4 col-form-label">Date of Birth:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->BIRTH }} @endif</p>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="jobAppointment" class="col-md-4 control-label">Type of Appointment:</label>
+                        <div class="form-group row">
+                            <label for="jobAppointment" class="col-md-4 col-form-label">Type of Appointment:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->CATEGORY }} @endif</p>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="gradeLevel" class="col-md-4 control-label">Grade Level:</label>
+                        <div class="form-group row">
+                            <label for="gradeLevel" class="col-md-4 col-form-label">Grade Level:</label>
 
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->LEVEL }}@endif</p>
                             </div>
                         </div>
 
-                        {{-- <div class="form-group">
-                            <label for="contractExp" class="col-md-4 control-label">Contract Expiration:</label>
+                        <div class="form-group row">
+                            <label for="course" class="col-md-4 col-form-label">Last UN Language Course:</label>
 
-                            <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->CONEXP }}</p>
-                            </div>
-                        </div> --}}
-
-                        <div class="form-group">
-                            <label for="course" class="col-md-4 control-label">Last UN Language Course:</label>
-
-                            <div class="col-md-8 form-control-static">
+                            <div class="col-md-8 font-weight-bold">
                                 <p>
                                     @if(empty ($repos_lang))
                                     None
@@ -141,7 +133,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="col-md-4 col-md-offset-4"><a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-block btn-info btn-md">Edit CLM Online Profile</a>
+                        <div class="col-md-4 offset-md-4"><a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-block btn-info btn-md">Edit CLM Online Profile</a>
                         </div>
                     </form>
                 </div>
