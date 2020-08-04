@@ -129,20 +129,28 @@ $(document).ready(function () {
       var token = $("input[name='_token']").val();
 
       $.ajax({
-        url: '{{ route('teacher-assign-course-view') }}',
+        url: "{{ route('teacher-assign-course-view') }}",
         type: 'GET',
         data: {indexid:indexid, L:L,_token: token},
       })
       .done(function(data, status) {
         console.log("show assign view status: "+status);
-        $('.modal-body-content').html(data)
-        $('#modalshow').modal('show');
+        if (data == 'missingSelectedTerm') {
+            alert('Something went wrong. Missing selected term.')
+            window.location.href = "{{ route('teacher-dashboard') }}";
+          } else {
+            $('.modal-body-content').html(data)
+            $('#modalshow').modal('show');
+          }
       })
-      .fail(function(e) {
+      .fail(function(e, data) {
         if (e.status == 403) {
               alert('Session Expired!')
               // window.location.reload();
               window.location.href = "{{ route('login') }}";
+          } else {
+            alert('Something went wrong. Session may have expired.')
+            window.location.href = "{{ route('login') }}";
           }
       })
       .always(function() {
@@ -319,7 +327,7 @@ $(document).ready(function() {
     console.log(id)
 
     $.ajax({
-      url: '{{ route('ajax-save-results') }}',
+      url: "{{ route('ajax-save-results') }}",
       type: 'PUT',
       data: {id:id, Written:Written, Oral:Oral, Overall_Grade:Overall_Grade, Result:Result, _token:token},
     })
@@ -369,7 +377,7 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
 
 
   $.ajax({
-    url: '{{ route('teacher-nothing-to-modify') }}',
+    url: "{{ route('teacher-nothing-to-modify') }}",
     type: 'PUT',
     data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
   })
@@ -382,7 +390,7 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
     var L = $("input[name='L']").val();
 
       $.ajax({
-          url: '{{ route('teacher-assign-course-view') }}',
+          url: "{{ route('teacher-assign-course-view') }}",
           type: 'GET',
           data: {indexid:qry_indexid, L:L,_token: token},
         })
@@ -392,7 +400,8 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
         })
   })
   .fail(function() {
-    console.log("error");
+    alert("An error occured. Click OK to reload.");
+    window.location.reload();
   })
   .always(function() {
     console.log("complete");
@@ -414,7 +423,7 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
   $(".overlay").fadeIn('fast'); 
 
   $.ajax({
-    url: '{{ route('teacher-save-assigned-course') }}',
+    url: "{{ route('teacher-save-assigned-course') }}",
     type: 'PUT',
     data: {Te_Code:Te_Code, schedule_id:schedule_id, teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
   })
@@ -426,7 +435,7 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
     var L = $("input[name='L']").val();
 
     $.ajax({
-      url: '{{ route('teacher-assign-course-view') }}',
+      url: "{{ route('teacher-assign-course-view') }}",
       type: 'GET',
       data: {indexid:qry_indexid, L:L,_token: token},
     })
@@ -440,7 +449,8 @@ $('#modalshow').on('click', '.modal-save-btn',function() {
 
   })
   .fail(function() {
-    console.log("error");
+    alert("An error occured. Click OK to reload.");
+    window.location.reload();
   })
   .always(function() {
     console.log("complete save assigned course");
@@ -464,7 +474,7 @@ $('#modalshow').on('click', 'button.course-delete',function() {
     $(".overlay").fadeIn('fast'); 
 
     $.ajax({
-      url: '{{ route('teacher-delete-form') }}',
+      url: "{{ route('teacher-delete-form') }}",
       type: 'POST',
       data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token, _method:method},
     })
@@ -473,13 +483,22 @@ $('#modalshow').on('click', 'button.course-delete',function() {
       var L = $("input[name='L']").val();
 
       $.ajax({
-        url: '{{ route('teacher-assign-course-view') }}',
+        url: "{{ route('teacher-assign-course-view') }}",
         type: 'GET',
         data: {indexid:qry_indexid, L:L,_token: token},
       })
       .done(function(data) {
         console.log("refreshing the assign view : success"); 
-        $('.modal-body-content').html(data);    
+        if (data == 'missingSelectedTerm') {
+            alert('Something went wrong. Missing selected term.')
+            window.location.href = "{{ route('teacher-dashboard') }}";
+          } else {
+            $('.modal-body-content').html(data);    
+          }
+      })
+      .fail(function() {
+        alert("An error occured. Click OK to reload.");
+        window.location.reload();
       })
       .always(function() {
         console.log("complete refresh modal view");
@@ -487,7 +506,8 @@ $('#modalshow').on('click', 'button.course-delete',function() {
 
     })
     .fail(function() {
-      console.log("error");
+      alert("An error occured. Click OK to reload.");
+      window.location.reload();
     })
     .always(function() {
       console.log("complete delete form");

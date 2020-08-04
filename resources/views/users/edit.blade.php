@@ -4,7 +4,7 @@
 
 <div class='col-lg-4 col-lg-offset-4'>
 
-    <h1><i class='fa fa-user-plus'></i> Edit {{$user->name}}</h1>
+    <h1><i class='fa fa-user-plus'></i> Edit {{$user->name}} [index # {{ $user->indexno}}]</h1>
     <hr>
     
     <form method="POST" action="{{ route('users.update', $user->id) }}">
@@ -19,6 +19,11 @@
             <label class="control-label">Email: </label>
             <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email', $user->email) }}"> 
             {{-- <input name="email" type="email" class="form-control" readonly value="{{ old('email', $user->email) }}">  --}}
+        </div>
+
+        <div class="form-group">
+            <input type="checkbox" name="mailing_list" @if ($user->mailing_list == 1) checked="true" 
+            @endif/> Subscribed to Mailing List
         </div>
 
         @if (!$user->roles->isEmpty())

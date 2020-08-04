@@ -99,19 +99,61 @@
 		                  	@if($element->classrooms->Tch_ID == 'TBD')
 		                  	@elseif(empty($element->classrooms->Tch_ID))
 		                    @else
-		                    <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
+		                    <!-- <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="form-prevent-multi-submit">
 		                        <input type="submit" value="@if($element->deleted_at) Cancelled @else Cancel Enrolment @endif" class="btn btn-danger btn-space button-prevent-multi-submit" @if($element->deleted_at) disabled="" @else @endif>
 		                        {{-- name="deleteTerm" attribute for LimitCancelPeriod middleware --}}
 		                        <input type="hidden" name="deleteTerm" value="{{ $element->Term }}">
 		                        <input type="hidden" name="_token" value="{{ Session::token() }}">
 		                       {{ method_field('DELETE') }}
-		                    </form>
+		                    </form> -->
+
+		                    <button type="button" class="btn btn-danger btn-space pash-delete" data-toggle="modal" data-id="{{ $element->id }}" @if($element->deleted_at) disabled="" @endif> @if($element->deleted_at)<i class="fa fa-remove"></i> Cancelled @else <i class="fa fa-trash"></i> Cancel Enrolment @endif</button>
+
+							<div id="modalDeletePash-{{ $element->id }}" class="modal fade" role="dialog">
+							  <div class="modal-dialog">
+							      <div class="modal-content">
+
+							          <div class="modal-header bg-danger">
+							              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="text: white;">&times;</button>
+							              <h3 class="modal-title">Class Cancellation</h3>
+							          </div>
+							          <div class="modal-body-pash-delete">
+							            <div class="col-sm-12">
+
+							              <form method="POST" action="{{ route('cancel-convocation', [$element->CodeIndexIDClass]) }}" class="delete-form form-prevent-multi-submit">
+
+							                  <h4>Index # {{ $element->INDEXID }} : <strong> {{ $element->users->name }}</strong></h4>
+							                  <h4>Cancelling participation from <strong> {{ $element->courses->Description }}</strong></h4>
+							                  
+							                  <div class="form-group">
+							                    <h4><input type="checkbox" name="cancelled_but_not_billed" value=1> Student will <strong class="text-danger"><u>NOT</u></strong> be billed</h4>
+							                  </div>
+
+							                  <input type="submit" value="@if($element->deleted_at) Cancelled @else Delete @endif" class="delete-form btn btn-danger btn-space button-prevent-multi-submit" @if($element->deleted_at) disabled="" @else @endif>
+
+							                  <input type="hidden" name="deleteTerm" value="{{ $element->Term }}">
+							                  <input type="hidden" name="_token" value="{{ Session::token() }}">
+							                 {{ method_field('DELETE') }}
+							              </form>
+
+							            </div>
+							          </div>
+							          <div class="modal-footer modal-background">
+							            
+							          </div>
+							      
+							      </div>
+							  </div>
+							</div>
+
 		                    @endif
 		                  @endforeach
 		                </p>
 		              </div>
 		      </div>
 		  </div>
+
+
 		@else
 		@endif 
 		{{-- EOF convoked info --}}
@@ -575,6 +617,7 @@
 		                                        @if( $student->profile == "STF") Staff Member @endif
 		                                        @if( $student->profile == "INT") Intern @endif
 		                                        @if( $student->profile == "CON") Consultant @endif
+		                                        @if( $student->profile == "WAE") When Actually Employed @endif
 		                                        @if( $student->profile == "JPO") JPO @endif
 		                                        @if( $student->profile == "MSU") Staff of Permanent Mission @endif
 		                                        @if( $student->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif
@@ -880,6 +923,12 @@
 <script src="{{ asset('js/submit.js') }}"></script>
 
 <script>
+$(document).on('click', '.pash-delete', function() {
+  var pash_id = $(this).attr('data-id');
+  console.log(pash_id) 
+    $('#modalDeletePash-'+pash_id).modal('show'); 
+});
+
 $(document).ready(function() {
 	var Term = "{{ Request::input('Term') }}";
     var token = $("input[name='_token']").val();

@@ -1,7 +1,6 @@
 @extends('shared_template')
 
 @section('customcss')
-	{{-- <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> --}}
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 @stop
@@ -17,8 +16,7 @@
 @include('admin.partials._termSessionMsg')
 
 <div class="preloader">
-  <p class="text-center"><strong>Please wait... Fetching data from the database... </strong></p>
-  <p class="text-center"><strong>It may take some time to load... Patience is a virtue...</strong></p>
+  <h4 class="text-center"><strong>Please wait... Fetching data from the database... </strong></h4>
 </div>
 <div class="row">
     <div class="col-sm-12">
@@ -31,7 +29,7 @@
         </div>
 	    <div class="box-body">
 	    <form method="GET" action="{{ route('query-orphan-forms-to-assign',['L' => \Request::input('L'), 'Term' => Session::get('Term')]) }}">
-			
+			<input type="hidden" name="_token" value="{{ Session::token() }}">
 			<div class="form-group col-sm-12">
 		      <label for="L" class="control-label"> Language:</label>
 		      <div class="col-sm-12">
@@ -64,11 +62,13 @@
 	</div>
 </div>
 @if(Session::has('Term'))
+<input type="hidden" name="term" value="{{ Session::get('Term') }}">
 @if (!empty($arr3)) 
 
 <div class="row">
 	<div class="col-sm-8">
-		<h3>Total @if(Request::filled('L'))
+    <h3>Total @if(Request::filled('L'))
+          <input type="hidden" name="selectedLanguage" value="{{ Request::input('L') }}">
           <strong>  
           @if(Request::input('L') == 'A') <span>Arabic</span>
           @elseif(Request::input('L') == 'C') <span>Chinese</span>
@@ -86,61 +86,39 @@
   </div>
 </div>
 
-{{-- {{$arr3->links()}} --}}
-
 <div class="row">
 	<div class="col-sm-12">
 		<div class="filtered-table table-responsive">
-			<table id="myTable" class="table table-bordered table-striped">
+			<table id="sampol" class="table display">
 			    <thead>
 			        <tr>
-			        	<th>#</th>
+			        	<th></th>
                 <th>Action</th>
 			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
-		            <th>Course</th>
+                <th>Current Class</th>
+                <th>Current Teacher</th>
+		            <th>Enrolled to Course</th>
 		            <th>Language</th>
 		            <th>Email</th>
 		            <th>Contact #</th>
 			        </tr>
 			    </thead>
-			    <tbody>
-					@foreach($arr3 as $element)
-						<tr id="tr_{{$element->INDEXID}}">
-							<td>
-              	<div class="counter"></div>
-            	</td>
-            	<td>
-            		<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>
-            		<input type="hidden" name="_token" value="{{ Session::token() }}">
-            	</td>
-              <td>
-                @if(empty($element->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
-                @else
-                  @if ($element->modified_by)
-                    <span class="label label-success margin-label">Yes by {{$element->modifyUser->name }} </span>
-                  @endif
-                @endif
-              </td>
-							<td>
-  							<h4>@if(empty($element->users->name)) None @else {{$element->users->name }} @endif @if($element->selfpay_approval)<span><i class="fa fa-usd" title="Self-paying Student"></i></span>@endif</h4>
-                <div class="student-classroom-here-{{ $element->INDEXID }}"></div>
-
-  							<input type="hidden" name="eform_submit_count" value="{{$element->eform_submit_count}}">
-                <input type="hidden" name="indexid" value="{{$element->INDEXID}}">	
-                <input type="hidden" name="L" value="{{$element->L}}">
-                <input type="hidden" name="term" value="{{$element->Term}}">
-  							<input type="hidden" name="Te_Code_Input" value="{{$element->Te_Code}}">
-
-							</td>
-							<td>{{$element->courses->Description }}</td>
-							<td>{{$element->languages->name }}</td>
-							<td>@if(empty($element->users->email)) None @else {{$element->users->email }} @endif</td>
-							<td>@if(empty($element->users->sddextr->PHONE)) None @else {{$element->users->sddextr->PHONE }} @endif</td>
-						</tr>
-					@endforeach
-			    </tbody>
-			</table>
+          <tfoot>
+			        <tr>
+			        	<th></th>
+                <th>Action</th>
+			        	<th>Validated/Assigned Course?</th>
+		            <th>Name</th>
+                <th>Current Class</th>
+                <th>Current Teacher</th>
+		            <th>Enrolled to Course</th>
+		            <th>Language</th>
+		            <th>Email</th>
+		            <th>Contact #</th>
+			        </tr>
+			    </tfoot>
+      </table>
 		</div>	
 	</div>
 </div>
@@ -170,121 +148,165 @@
 @stop
 
 @section('java_script')
-{{-- <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script>
-$(document).ready(function() {
-  var arr = [];
-  var eform_submit_count = [];
-  var token = $("input[name='_token']").val();
-  var term = $("input[name='term']").val();
-  var L = $("input[name='L']").val();
-
-  var promises = [];
-
-  $("input[name='indexid']").each(function() {
-    var indexno = $(this).val();
-    var each_eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
-    arr.push(indexno); //insert values to array per iteration
-    eform_submit_count.push(each_eform_submit_count); //insert values to array per iteration
-  });
-  
-  if (arr.length < 1) {
-    $(".preloader").fadeOut(600);
-  }
-  
-  if (term) {
-
-    promises.push(
-    $.ajax({
-      url: '{{ route('ajax-preview-get-student-current-class') }}',
-      type: 'GET',
-      data: {arr:arr,term:term,_token:token},
-    })
-    .then(function(data) {
-      // console.log(data)
-      // console.time('jquery');
-      $.each(data, function(x, y) {
-        // console.log(y.INDEXID)
-        // console.log(y.course_name)
-        $("input[name='indexid']").each(function() {
-          if ($(this).val() == y.INDEXID) {
-            var course = $(this).closest("tr").find('span#xcourse').attr('data-course');
-            // console.log(course)
-            if (course != y.course_name) {
-              $('div.student-classroom-here-'+y.INDEXID).append('<strong>Current Class:</strong> <p><span id="xcourse" class="label label-info margin-label" data-course="'+y.course_name+'">'+y.course_name+'</span></p><p><span class="label label-info margin-label">'+y.teacher+'</span></p>');
-            }
-          }
-        });
-      });
-      // console.timeEnd('jquery');
-    })
-    .fail(function() {
-      console.log("error");
-    })
-    .always(function() {
-      console.log("complete");
-    }));
-
-    $.when.apply($.ajax(), promises).then(function() {
-        $(".preloader").fadeOut(600);
-    });
-  }
-});
-</script>
-<script>
-$(document).ready(function () {
-    var counter = 0;
+  $(document).ready(function() {
+    var eform_submit_count = [];
+    var token = $("input[name='_token']").val();
+    var term = $("input[name='term']").val();
+    var L = $("input[name='selectedLanguage']").val();
     var promises = [];
 
+    console.log(term,L)
+
+    $('.dropdown-toggle').dropdown();
+    if (L == undefined) {
+      $(".preloader").fadeOut(800);
+    }
     $("button.filter-submit-btn").click(function() {
       $(".preloader").fadeIn('fast');
     });
 
-    $('.counter').each(function() {
-        counter++;
-        $(this).attr('id', counter);
-        promises.push($('#'+counter).html(counter));
-    });   
+    if (term && L) {
 
-    $.when.apply($('.counter'), promises).then(function() {
-        // $(".preloader").fadeOut(600);
-    });
-
-    $('.dropdown-toggle').dropdown();
-    
-    $('#myTable').DataTable({
-    	"deferRender": true,
-      "paging":   false,
-      // "searching": false,
-      // "order": [[ 2, "asc" ]]
-    }); 
-
-    $('.assign-course').click( function() {
-      var indexid = $(this).closest("tr").find("input[name='indexid']").val();
-      var L = $(this).closest("tr").find("input[name='L']").val();
-      var Te_Code_Input = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
-      var token = $("input[name='_token']").val();
-
+      promises.push(
       $.ajax({
-        url: '{{ route('admin-assign-course-view') }}',
-        type: 'GET',
-        data: {indexid:indexid, L:L,Te_Code:Te_Code_Input,_token: token},
+        url: '{{ route('ajax-preview-get-student-current-class') }}',
+        type: 'POST',
+        data: {L:L,term:term,_token:token},
       })
-      .done(function(data) {
-        console.log("show assign view : success");
-        $('.modal-body-content').html(data)
-        $('#modalshow').modal('show');
+      .then(function(data) {
+        console.log(data)
+        console.time('jquery');
+        assignToEventsColumns(data)
+        console.timeEnd('jquery');
       })
       .fail(function() {
         console.log("error");
       })
       .always(function() {
-        console.log("complete show assign view");
-      });
+        console.log("complete");
+      }));
 
-    });
-});
+      function assignToEventsColumns(data) {
+          var table = $('#sampol').DataTable({
+            "dom": 'B<"clear">lfrtip',
+            "buttons": [
+                  'copy', 'csv', 'excel', 'pdf'
+              ],
+            "scrollX": true,
+            "responsive": false,
+            "orderCellsTop": true,
+            "fixedHeader": false,
+            "paging": false,
+            "oLanguage": {
+              "sSearch": "Search Student:"
+              },
+            "bAutoWidth": false,
+            "order": [[ 3, "asc" ]],
+            "aaData": data,
+            "columns": [
+                {
+                  "data": null,
+                  "defaultContent": ''
+                },
+                {
+                  "data": null,
+                  "className": "assign-course",
+                  "defaultContent": '<button type="button" class="btn btn-primary btn-sm btn-space assign-course" data-toggle="modal"><i class="fa fa-upload"></i> Assign Course</button>'
+                },
+                { 
+                  "data": "updated_by_admin",
+                  "className": "updated-by-admin"
+                }, 
+                { 
+                  "data": "users.name",
+                  "className": "self-paying record_id",
+                  render: function (dataField) { return '<h4 class="user-name"><strong>'+dataField+'</strong></h4>'; }
+                }, 
+                { "data": "pash.courses.Description",
+                  "defaultContent": ''
+                }, 
+                { "data": "pash.classrooms.teachers.Tch_Name",
+                  "defaultContent": ''
+                }, 
+                { "data": "courses.Description" }, 
+                { "data": "languages.name" }, 
+                { "data": "users.email" }, 
+                { "data": "users.sddextr.PHONE" }
+                  ],
+            "columnDefs": [ {
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+                } ],
+            "createdRow": function( row, data, dataIndex ) {
+                  $(row).find("td.record_id").attr('id', dataIndex);
+
+                  $(row).find("td.record_id").append('<input type="hidden" name="eform_submit_count" value="'+data['eform_submit_count']+'">                <input type="hidden" name="indexid" value="'+data['INDEXID']+'">	                <input type="hidden" name="L" value="'+data['L']+'">                <input type="hidden" name="term" value="'+data['Term']+'">  							<input type="hidden" name="Te_Code_Input" value="'+data['Te_Code']+'">              ');
+
+                  if ( data['updated_by_admin'] != 1) {
+                    $(row).find("td.updated-by-admin").html('<span class="label label-danger margin-label">Not Assigned</span>');
+                  }
+
+                  if ( data['updated_by_admin'] == 1) {
+                    $(row).find("td.updated-by-admin").html('<span class="label label-success margin-label">Yes by '+data['modify_user']['name']+'</span>');
+                  }
+
+                  if ( data['selfpay_approval'] == 1) {
+                    $(row).find("td.self-paying").append(' <span class="label label-success margin-label"><i class="fa fa-usd" title="Self-paying Student"></i>Self-paying Student</span>');
+                  }
+
+                  // if (data['pash'] != null) {
+                  //   $(row).find("td.record_id").append(' <p><small><b>Current Class:</b></small></p> <p><span id="xcourse" class="label label-info margin-label" data-course="'+data['pash']['courses']['Description']+'">'+data['pash']['courses']['Description']+'</span></p><p><span class="label label-info margin-label">'+data['pash']['classrooms']['teachers']['Tch_Name']+'</span></p>');
+                  // }
+
+                }
+          });
+
+          table.on( 'order.dt search.dt', function () {
+              table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                  cell.innerHTML = i+1;
+              } );
+          } ).draw();
+
+      }
+
+      $.when.apply($.ajax(), promises).then(function() {
+          $(".preloader").fadeOut(800);
+      });
+    }
+
+
+  });
+</script>
+<script>
+  $(document).ready(function () {
+      $('#sampol').on('click', 'button.assign-course', function() {
+        var indexid = $(this).closest("tr").find("input[name='indexid']").val();
+        var L = $(this).closest("tr").find("input[name='L']").val();
+        var Te_Code_Input = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
+        var token = $("input[name='_token']").val();
+
+        $.ajax({
+          url: '{{ route('admin-assign-course-view') }}',
+          type: 'GET',
+          data: {indexid:indexid, L:L,Te_Code:Te_Code_Input,_token: token},
+        })
+        .done(function(data) {
+          console.log("show assign view : success");
+          $('.modal-body-content').html(data)
+          $('#modalshow').modal('show');
+        })
+        .fail(function() {
+          console.log("error");
+        })
+        .always(function() {
+          console.log("complete show assign view");
+        });
+
+      });
+  });
 </script>
 
 <script>  
@@ -295,7 +317,6 @@ $(document).ready(function () {
     var qry_term = $(this).attr('data-term');
     var token = $("input[name='_token']").val();
     var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-no-change").val();
-
 
     $.ajax({
       url: '{{ route('admin-nothing-to-modify') }}',

@@ -172,30 +172,37 @@ class PreviewController extends Controller
      */
     public function ajaxPreviewGetStudentCurrentClass(Request $request)
     {
-        $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
+        if ($request->ajax()) {
+            $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
 
-        $get_class = Repo::whereIn('INDEXID', $request->arr)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
-            $query->whereNotNull('Tch_ID')
-                ->where('Tch_ID', '!=', 'TBD');
-        })
-            ->get();
+            $getEnrolmentForms = Preenrolment::where('Term', $request->term)
+                ->where('overall_approval', 1)
+                ->where('L', $request->L)
+                ->with('users.sddextr')
+                ->with('courses')
+                ->with('languages')
+                ->with('modifyUser')
+                ->with('pash.classrooms.teachers')
+                ->with('pash.courses')
+                ->with(['pash' => function ($q1) use ($prev_term) {
+                    $q1->where('Term', $prev_term)
+                        ->whereHas('classrooms', function ($q2) {
+                            $q2->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        });
+                }])
+                // ->whereNull('updated_by_admin')
+                ->select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count', 'updated_by_admin', 'modified_by')
+                ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at', 'eform_submit_count', 'updated_by_admin', 'modified_by')
+                ->get();
 
-        $class_info = [];
-        $collect = [];
-        foreach ($get_class as $key5 => $value5) {
-            $class_info['INDEXID'] = $value5->INDEXID;
-            $class_info['course_name'] = $value5->courses->Description;
-            $class_info['teacher'] = $value5->classrooms->teachers->Tch_Name;
-            $collect[] = $class_info;
+            $data = $getEnrolmentForms;
+            return response()->json($data);
         }
-
-        $data = $collect;
-        return response()->json($data);
     }
 
     public function vsaPage1()
     {
-        DB::table('tblLTP_preview_TempSort')->truncate();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         return view('preview-course', compact('terms'));
     }
@@ -476,19 +483,32 @@ class PreviewController extends Controller
     public function cancelConvocation(Request $request, $codeindexidclass)
     {
         $record = Repo::where('CodeIndexIDClass', $codeindexidclass)->first();
-        if(is_null($record)){
+        if (is_null($record)) {
             session()->flash('error', 'No action taken. The student might have already been moved to another class. ');
             return back();
         }
+        $term = $record->Term;
         $staff_name = $record->users->name;
         $display_language_en = $record->courses->EDescription;
         $display_language_fr = $record->courses->FDescription;
         $schedule = $record->schedules->name;
         $std_email = $record->users->email;
-        // do not send email notification if admin cancelled the convocation
-        if (Auth::id() == $record->users->id) {
-            Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule));
-        }
+
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+        $seasonYear = $term_season_en.' '.$term_year;
+
+        $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+
+        $type = 0; // 0 != placement form
+        
+        // also send email notification if admin cancelled the convocation
+        // if (Auth::id() == $record->users->id) {
+        Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
+        // }
 
         if ($request->cancelled_but_not_billed) {
             $record->cancelled_but_not_billed = $request->cancelled_but_not_billed;
@@ -947,7 +967,6 @@ class PreviewController extends Controller
      */
     public function getApprovedEnrolmentForms(Request $request)
     {
-
         // copy waitlisted student from previous term to Waitlist table
         $prev_term = Term::where('Term_Code', $request->Term)->first()->Term_Prev;
 
@@ -959,6 +978,7 @@ class PreviewController extends Controller
 
         // forceDelete PASHQTcur records related to the selected term before running the batch
         $reset_pash_records = Repo::where('Term',  $request->Term);
+        // ->where('Te_Code', '!=', 'CEW2');
         if ($reset_pash_records) {
             $reset_pash_records->forceDelete();
         }
@@ -1044,7 +1064,7 @@ class PreviewController extends Controller
             // echo $i. " - " .$arrINDEXID[$i] ;
             // echo "<br>";
 
-            // priority 1: check each index id if they are already in re-enroling students from previous term via PASHQTcur table
+            // priority 1: check each index id if they are re-enrolling students from previous term via PASHQTcur table
             $student_reenrolled = Repo::select('INDEXID')
                 ->where('Term', $prev_term)
                 ->where('L', $arrL[$i])
@@ -1068,18 +1088,40 @@ class PreviewController extends Controller
             }
         }
 
+        $data = [
+            'arrINDEXID' => $arrINDEXID,
+            'arrValue' => $arrValue
+        ];
+
+        return $data;
+    }
+
+    public function insertPriority1(Request $request)
+    {
+        DB::table('tblLTP_preview_TempSort')->truncate();
+
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrValue = $data['arrValue'];
+        $enrolmentEndDate = Term::where('Term_Code', $request->Term)
+            ->first()->Enrol_Date_End;
+
         $arr_enrolment_forms_reenrolled = [];
         $ingredients = [];
         $countArrValue = count($arrValue);
         for ($i = 0; $i < $countArrValue; $i++) {
             // collect priority 1 enrolment forms 
-            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue[$i])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)
+            ->where('INDEXID', $arrValue[$i])
+            ->whereNotIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+            ->where('updated_by_admin', 1)->where('overall_approval', 1)
+            ->where('created_at', '<', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
             // $enrolment_forms_reenrolled = $enrolment_forms_reenrolled->unique('INDEXID')->values()->all();
             $arr_enrolment_forms_reenrolled[] = $enrolment_forms_reenrolled;
 
             // assigning of students to classes and saved in Preview TempSort table
             foreach ($enrolment_forms_reenrolled as $value) {
-                $ingredients[] = new  PreviewTempSort([
+                $ingredients[] = [
                     'CodeIndexID' => $value->CodeIndexID,
                     'Code' => $value->Code,
                     'schedule_id' => $value->schedule_id,
@@ -1108,17 +1150,20 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value->admin_eform_comment,
                     'admin_plform_comment' => $value->admin_plform_comment,
                     'course_preference_comment' => $value->course_preference_comment,
-                ]);
-                foreach ($ingredients as $data) {
-                    $data->save();
-                }
+                ];
             }
         }
+        PreviewTempSort::insert($ingredients);
+        $request->session()->flash('success', 'Insert Priority 1 Students Complete!');
+        return redirect()->back();
+    }
 
-        /**
-         * Priority 2 query enrolment forms/placement forms and check if they exist in waitlist table of 
-         * 2 previous terms
-         */
+    /**
+     * Priority 2 query enrolment forms/placement forms and check if they exist in waitlist table of 
+     * 2 previous terms
+     */
+    public function getArrValue2($arrINDEXID, $arrValue)
+    {
         $arrPriority2 = [];
         $ingredients2 = [];
         $arrValue2 = [];
@@ -1139,6 +1184,19 @@ class PreviewController extends Controller
                 }
             }
         }
+        return $arrValue2;
+    }
+
+    public function insertPriority2(Request $request)
+    {
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrINDEXID = $data['arrINDEXID'];
+        $arrValue = $data['arrValue'];
+
+        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
+
+        $enrolmentEndDate = Term::where('Term_Code', $request->Term)
+            ->first()->Enrol_Date_End;
 
         $arr_enrolment_forms_waitlisted = [];
         $ingredients2 = [];
@@ -1146,13 +1204,17 @@ class PreviewController extends Controller
 
         for ($z = 0; $z < $countArrValue2; $z++) {
             // collect priority 2 enrolment forms 
-            $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_waitlisted = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrValue2[$z])
+                ->whereNotIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+                ->where('updated_by_admin', 1)->where('overall_approval', 1)
+                ->where('created_at', '<', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
 
             $arr_enrolment_forms_waitlisted[] = $enrolment_forms_waitlisted;
 
             // assigning of students to classes and saved in Preview TempSort table
             foreach ($enrolment_forms_waitlisted as $value) {
-                $ingredients2[] = new  PreviewTempSort([
+                $ingredients2[] = [
                     'CodeIndexID' => $value->CodeIndexID,
                     'Code' => $value->Code,
                     'schedule_id' => $value->schedule_id,
@@ -1181,17 +1243,23 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value->admin_eform_comment,
                     'admin_plform_comment' => $value->admin_plform_comment,
                     'course_preference_comment' => $value->course_preference_comment,
-                ]);
-                foreach ($ingredients2 as $data2) {
-                    $data2->save();
-                }
+                ];
+                // foreach ($ingredients2 as $data2) {
+                //     $data2->save();
+                // }
             }
         }
+        PreviewTempSort::insert($ingredients2);
+        $request->session()->flash('success', 'Insert Priority 2 Students Complete!');
+        return redirect()->back();
+    }
 
-        /**
-         * Get all approved/ validated placement forms 
-         * and compare to waitlist table to set priority 2
-         */
+    /**
+     * Get all approved/ validated placement forms 
+     * and compare to waitlist table to set priority 2
+     */
+    public function getDataPlacement(Request $request)
+    {
         // sort enrolment forms by date of submission
         $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
 
@@ -1241,19 +1309,35 @@ class PreviewController extends Controller
             }
         }
 
+        $dataPlacement = [
+            'arrINDEXIDPlacement' => $arrINDEXIDPlacement,
+            'arrValuePlacement' => $arrValuePlacement
+        ];
+        return $dataPlacement;
+    }
+
+    public function insertPriority2Placement(Request $request)
+    {
+        $dataPlacement = $this->getDataPlacement($request);
+        $arrValuePlacement = $dataPlacement['arrValuePlacement'];
+        $enrolmentEndDate = Term::where('Term_Code', $request->Term)
+            ->first()->Enrol_Date_End;
+
         $arr_placement_forms_waitlisted = [];
         $placement_ingredients2 = [];
         $countArrValuePlacement = count($arrValuePlacement);
 
         for ($h = 0; $h < $countArrValuePlacement; $h++) {
             // collect priority 2 placement forms 
-            $placement_forms_waitlisted = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $arrValuePlacement[$h])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $placement_forms_waitlisted = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $arrValuePlacement[$h])->where('updated_by_admin', 1)->where('overall_approval', 1)
+                ->where('created_at', '<', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
 
             $arr_placement_forms_waitlisted[] = $placement_forms_waitlisted;
 
             // assigning of students to classes and saved in Preview TempSort table
             foreach ($placement_forms_waitlisted as $value_placement) {
-                $placement_ingredients2[] = new  PreviewTempSort([
+                $placement_ingredients2[] = [
                     'CodeIndexID' => $value_placement->CodeIndexID,
                     'Code' => $value_placement->Code,
                     'schedule_id' => $value_placement->schedule_id,
@@ -1282,15 +1366,29 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value_placement->admin_eform_comment,
                     'admin_plform_comment' => $value_placement->admin_plform_comment,
                     'course_preference_comment' => $value_placement->course_preference_comment,
-                ]);
-                foreach ($placement_ingredients2 as $placement_data2) {
-                    $placement_data2->save();
-                }
+                ];
+                // foreach ($placement_ingredients2 as $placement_data2) {
+                //     $placement_data2->save();
+                // }
             }
         }
+        PreviewTempSort::insert($placement_ingredients2);
+        $request->session()->flash('success', 'Insert Priority 2 Placement Students Complete!');
+        return redirect()->back();
+    }
+
+    public function insertPriority3(Request $request)
+    {
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrINDEXID = $data['arrINDEXID'];
+        $arrValue = $data['arrValue'];
+        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
 
         $arrValue1_2 = [];
         $arrValue1_2 = array_merge($arrValue, $arrValue2);
+
+        $enrolmentEndDate = Term::where('Term_Code', $request->Term)
+            ->first()->Enrol_Date_End;
 
         /**
          * Priority 3
@@ -1301,16 +1399,21 @@ class PreviewController extends Controller
         $ingredients3 = [];
         // get the INDEXID's which are not existing in priority 1 & 2
         $priority3_not_reset = array_diff($arrINDEXID, $arrValue1_2);
+        // reset keys values to zero
         $priority3 = array_values($priority3_not_reset);
         $countPriority3 = count($priority3);
 
         for ($i = 0; $i < $countPriority3; $i++) {
             // collect priority 3 enrolment forms 
-            $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $enrolment_forms_priority3 = Preenrolment::where('Term', $request->Term)->where('INDEXID', $priority3[$i])
+                ->whereNotIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+                ->where('updated_by_admin', 1)->where('overall_approval', 1)
+                ->where('created_at', '<', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
             $arrPriority3[] = $enrolment_forms_priority3;
 
             foreach ($enrolment_forms_priority3 as $value) {
-                $ingredients3[] = new  PreviewTempSort([
+                $ingredients3[] = [
                     'CodeIndexID' => $value->CodeIndexID,
                     'Code' => $value->Code,
                     'schedule_id' => $value->schedule_id,
@@ -1339,27 +1442,83 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value->admin_eform_comment,
                     'admin_plform_comment' => $value->admin_plform_comment,
                     'course_preference_comment' => $value->course_preference_comment,
-                ]);
-                foreach ($ingredients3 as $data) {
-                    $data->save();
-                }
+                ];
+                // foreach ($ingredients3 as $data) {
+                //     $data->save();
+                // }
+            }
+        }
+        PreviewTempSort::insert($ingredients3);
+        $request->session()->flash('success', 'Insert Priority 3 Students Complete!');
+        return redirect()->back();
+    }
+
+
+    public function levelOneEnrolments($request)
+    {
+        $data = $this->getApprovedEnrolmentForms($request);
+        $arrINDEXID = $data['arrINDEXID'];
+        $enrolmentEndDate = Term::where('Term_Code', $request->Term)
+            ->first()->Enrol_Date_End;
+
+        $levelOneEnrolmentIds = [];
+        $levelOneEnrolments = [];
+        $countarrINDEXID = count($arrINDEXID);
+
+        for ($i = 0; $i < $countarrINDEXID; $i++) {
+            $enrolment_forms_reenrolled = Preenrolment::where('Term', $request->Term)->where('INDEXID', $arrINDEXID[$i])
+            ->whereIn('Te_Code', ['A1R1','C1R1','E1R1','F1R1','R1R1','S1R1'])
+            ->where('updated_by_admin', 1)->where('overall_approval', 1)
+            ->where('created_at', '<', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+            foreach ($enrolment_forms_reenrolled as $value) {
+                $levelOneEnrolmentIds[] = $value->id;
             }
         }
 
-        /*
-        Priority 4 new students, no PASHQTcur records and comes from Placement Test table and its results
-         */
+        foreach ($levelOneEnrolmentIds as $levelOneId) {
+            $levelOneEnrolments[] = Preenrolment::where('id', $levelOneId)->get();
+        }
+
+        return $levelOneEnrolments;
+    }
+
+    /*
+    * Priority 4 new students: 
+    * 1. no PASHQTcur records and comes from Placement Test table and its results
+    * 2. level 1 enrolment forms from very new and not re-enrolled students (level 1 forms from re-enrolled students
+    *    are considered as priority 1 even if they students are from other languages)
+    * 
+     */
+    public function insertPriority4(Request $request)
+    {
+        $levelOneEnrolments = $this->levelOneEnrolments($request);
+        $dataPlacement = $this->getDataPlacement($request);
+        $arrINDEXIDPlacement = $dataPlacement['arrINDEXIDPlacement'];
+        $arrValuePlacement = $dataPlacement['arrValuePlacement'];
+        $enrolmentEndDate = Term::where('Term_Code', $request->Term)
+            ->first()->Enrol_Date_End;
+
         $priority4_not_reset = array_diff($arrINDEXIDPlacement, $arrValuePlacement); // get the difference of INDEXID's between placement waitlisted and other placement forms
         $priority4 = array_values($priority4_not_reset);
         $countPriority4 = count($priority4);
         $ingredients4 = [];
+        $arr_placement_forms_priority4 = [];
 
         for ($d = 0; $d < $countPriority4; $d++) {
             // collect leftover priority 4 enrolment forms 
-            $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
+            $placement_forms_priority4 = PlacementForm::whereNotNull('CodeIndexID')
+            ->where('Term', $request->Term)->where('INDEXID', $priority4[$d])->where('updated_by_admin', 1)->where('overall_approval', 1)
+            ->where('created_at', '<', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+            $arr_placement_forms_priority4[] = $placement_forms_priority4;
+        }
 
-            foreach ($placement_forms_priority4 as $value4) {
-                $ingredients4[] = new  PreviewTempSort([
+        $merge_levelone_placement = collect($arr_placement_forms_priority4)->merge($levelOneEnrolments)->sortBy('created_at'); // merge collections with sorting by submission date and time
+        
+        foreach ($merge_levelone_placement as $value4data) {
+            foreach ($value4data as $value4) {
+                $ingredients4[] = [
                     'CodeIndexID' => $value4->CodeIndexID,
                     'Code' => $value4->Code,
                     'schedule_id' => $value4->schedule_id,
@@ -1388,16 +1547,127 @@ class PreviewController extends Controller
                     'admin_eform_comment' => $value4->admin_eform_comment,
                     'admin_plform_comment' => $value4->admin_plform_comment,
                     'course_preference_comment' => $value4->course_preference_comment,
-                ]);
-                foreach ($ingredients4 as $data4) {
-                    $data4->save();
-                }
+                ];
+                // foreach ($ingredients4 as $data4) {
+                //     $data4->save();
+                // }
             }
         }
+        $sortedIngredients4 = collect($ingredients4)->sortBy('created_at')->all();
+        PreviewTempSort::insert($sortedIngredients4);
+        $request->session()->flash('success', 'Insert Priority 4 Students Complete!');
+        return redirect()->back();
+    }
 
-        /**
-         * Order Codes by count per code
-         */
+    public function insertPriority5(Request $request)
+    {
+        $enrolmentEndDate = Term::where('Term_Code', $request->Term)
+            ->first()->Enrol_Date_End;
+
+        $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+            ->where('created_at', '>=', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+        $approved_0_2_collect = Preenrolment::whereNotIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+            ->where('created_at', '>=', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+        $approved_0_3_collect = Preenrolment::where('selfpay_approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)
+            ->where('created_at', '>=', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+
+        $approved_collections = collect($approved_0_1_collect)->merge($approved_0_2_collect)->merge($approved_0_3_collect)->sortBy('created_at'); // merge collections
+
+        $lateEnrolment=[];
+        foreach ($approved_collections as $value) {
+                $lateEnrolment[] = [
+                    'CodeIndexID' => $value->CodeIndexID,
+                    'Code' => $value->Code,
+                    'schedule_id' => $value->schedule_id,
+                    'L' => $value->L,
+                    'profile' => $value->profile,
+                    'Te_Code' => $value->Te_Code,
+                    'Term' => $value->Term,
+                    'INDEXID' => $value->INDEXID,
+                    "created_at" =>  $value->created_at,
+                    "UpdatedOn" =>  $value->UpdatedOn,
+                    'mgr_email' =>  $value->mgr_email,
+                    'mgr_lname' => $value->mgr_lname,
+                    'mgr_fname' => $value->mgr_fname,
+                    'continue_bool' => $value->continue_bool,
+                    'DEPT' => $value->DEPT,
+                    'eform_submit_count' => $value->eform_submit_count,
+                    'form_counter' => $value->form_counter,
+                    'agreementBtn' => $value->agreementBtn,
+                    'flexibleBtn' => $value->flexibleBtn,
+                    'is_self_pay_form' => $value->is_self_pay_form,
+                    'PS' => 5,
+                    'std_comments' => $value->std_comments,
+                    'hr_comments' => $value->hr_comments,
+                    'teacher_comments' => $value->teacher_comments,
+                    'Comments' => $value->Comments,
+                    'admin_eform_comment' => $value->admin_eform_comment,
+                    'admin_plform_comment' => $value->admin_plform_comment,
+                    'course_preference_comment' => $value->course_preference_comment,
+                ];
+            }
+        PreviewTempSort::insert($lateEnrolment);
+// 
+        $approved_0_1_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+            ->where('created_at', '>=', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+        $approved_0_2_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+            ->where('created_at', '>=', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+        $approved_0_3_collect_placement = PlacementForm::whereNotNull('CodeIndexID')->where('selfpay_approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)
+            ->where('created_at', '>=', $enrolmentEndDate)
+            ->orderBy('created_at', 'asc')->get();
+
+        $approved_collections_placement = collect($approved_0_1_collect_placement)->merge($approved_0_2_collect_placement)->merge($approved_0_3_collect_placement)->sortBy('created_at');
+
+        $latePlacement=[];
+        foreach ($approved_collections_placement as $valuePlacement) {
+                $latePlacement[] = [
+                    'CodeIndexID' => $valuePlacement->CodeIndexID,
+                    'Code' => $valuePlacement->Code,
+                    'schedule_id' => $valuePlacement->schedule_id,
+                    'L' => $valuePlacement->L,
+                    'profile' => $valuePlacement->profile,
+                    'Te_Code' => $valuePlacement->Te_Code,
+                    'Term' => $valuePlacement->Term,
+                    'INDEXID' => $valuePlacement->INDEXID,
+                    "created_at" =>  $valuePlacement->created_at,
+                    "UpdatedOn" =>  $valuePlacement->UpdatedOn,
+                    'mgr_email' =>  $valuePlacement->mgr_email,
+                    'mgr_lname' => $valuePlacement->mgr_lname,
+                    'mgr_fname' => $valuePlacement->mgr_fname,
+                    'continue_bool' => $valuePlacement->continue_bool,
+                    'DEPT' => $valuePlacement->DEPT,
+                    'eform_submit_count' => $valuePlacement->eform_submit_count,
+                    'form_counter' => $valuePlacement->form_counter,
+                    'agreementBtn' => $valuePlacement->agreementBtn,
+                    'flexibleBtn' => $valuePlacement->flexibleBtn,
+                    'is_self_pay_form' => $valuePlacement->is_self_pay_form,
+                    'PS' => 5,
+                    'std_comments' => $valuePlacement->std_comments,
+                    'hr_comments' => $valuePlacement->hr_comments,
+                    'teacher_comments' => $valuePlacement->teacher_comments,
+                    'Comments' => $valuePlacement->Comments,
+                    'admin_eform_comment' => $valuePlacement->admin_eform_comment,
+                    'admin_plform_comment' => $valuePlacement->admin_plform_comment,
+                    'course_preference_comment' => $valuePlacement->course_preference_comment,
+                ];
+            }
+        PreviewTempSort::insert($latePlacement);
+
+        $request->session()->flash('success', 'Insert Priority 5 Late Students Complete! '.count($lateEnrolment).' Late Enrolments & '.count($latePlacement).' Late Placements');
+        return redirect()->back();
+
+    }
+
+    /**
+     * Order Codes by count per code
+     */
+    public function orderCodes(Request $request)
+    {
         DB::table('tblLTP_preview_TempOrder')->truncate();
         DB::table('tblLTP_preview')->truncate();
 
@@ -1413,6 +1683,15 @@ class PreviewController extends Controller
                 );
             }
         }
+
+        $request->session()->flash('success', 'Phase 2 - Insert Codes in Preview TempOrder Table Complete!');
+        return redirect()->back();
+    }
+
+    public function assignCourseScheduleToStudent(Request $request)
+    {
+        // collect the courses offered for the term entered
+        $te_code_collection = CourseSchedule::where('Te_Term', $request->Term)->select('Te_Code_New')->groupBy('Te_Code_New')->get('Te_Code_New');
 
         foreach ($te_code_collection as $te_code) {
             $getCode = PreviewTempSort::select('Code')->where('Te_Code', $te_code->Te_Code_New)->groupBy('Code')->get()->toArray();
@@ -1508,6 +1787,12 @@ class PreviewController extends Controller
             } // end of if statement
         } // end of foreach statement
 
+        $request->session()->flash('success', 'Phase 3 - Assign course-schedule to student Complete!');
+        return redirect()->back();
+    }
+
+    public function checkCodeIfExistsInPreview(Request $request)
+    {
         $checkCodeIfExisting = DB::table('tblLTP_preview_TempOrder')->select('Code', 'Te_Code', 'Term')->orderBy('id')->get()->toArray();
         $arr = [];
         $arrStd = [];
@@ -1517,7 +1802,7 @@ class PreviewController extends Controller
             $queryPashForCodes = Preview::where('Code', $value->Code)->get();
 
             if (empty($queryPashForCodesArr)) {
-                echo 'none exists';
+                echo 'none exists: ' . $value->Code;
                 echo '<br>';
                 // check INDEXID of students if existing in Preview table
                 $students = DB::table('tblLTP_preview_TempSort')
@@ -1574,12 +1859,93 @@ class PreviewController extends Controller
             }
         }
 
+        $request->session()->flash('success', 'Phase 4 - Save other students to Preview table Complete!');
+        return redirect()->back();
+    }
 
-        /*
-         Start process of creating classes based on number of students assigned per course-schedule 
-         */
+    public function checkDuplicatesInPreview(Request $request)
+    {
+        $duplicates = DB::table('tblLTP_preview')
+            ->select('CodeIndexID', (DB::raw('COUNT(CodeIndexID)')))
+            ->groupBy('CodeIndexID')
+            ->having(DB::raw('COUNT(CodeIndexID)'), '>', '1')
+            ->get();
+        dd($duplicates);
+
+        // try {
+        //     DB::table('users')->insert($userData);  
+        // } catch(\Illuminate\Database\QueryException $e){
+        //     $errorCode = $e->errorInfo[1];
+        //     if($errorCode == '1062'){
+        //         dd('Duplicate Entry');
+        //     }
+        // }
+
+        $request->session()->flash('success', 'Duplicates - Complete!');
+        return redirect()->back();
+    }
+
+    public function checkUndefinedOffset(Request $request)
+    {
         $getCodeForSectionNo = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get();
+        $arrCountStdPerCode = [];
+        foreach ($getCodeForSectionNo as $value) {
+            // query student count who are not yet assigned to a class section (null)
+            $countStdPerCode = Preview::where('Code', $value->Code)->where('CodeIndexIDClass', null)->get()->count();
+            $arrCountStdPerCode[] = $countStdPerCode;
+        }
 
+        // calculate sum per code and divide by 11, 14 or 15 for number of classes
+        $num_classes = [];
+        for ($i = 0; $i < count($arrCountStdPerCode); $i++) {
+            $num_classes[] = intval(ceil($arrCountStdPerCode[$i] / 11));
+        }
+
+        $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
+        $arrGetCode = [];
+        $arrGetDetails = [];
+
+        foreach ($getCode as $valueCode) {
+            $arrGetCode[] = $valueCode->Code;
+
+            $getDetails = CourseSchedule::where('cs_unique', $valueCode->Code)->get();
+            foreach ($getDetails as $valueDetails) {
+                $arrGetDetails[] = $valueDetails;
+            }
+        }
+
+        $arrExistingSection = [];
+        $emptyArraySection = [];
+        for ($i = 0; $i < count($num_classes); $i++) {
+            // check existing section(s) first
+            // value of section is 1, if $existingSection is empty
+            $counter = $num_classes[$i];
+            $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
+            $existingSectionGet = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get();
+            echo $existingSectionGet;
+            echo '<br>';
+            $arrExistingSection[] = $existingSection;
+
+            if (empty($existingSection)) {
+                $emptyArraySection[] = $i;
+            }
+        }
+        dd($arrExistingSection, $emptyArraySection);
+    }
+
+    /*
+     Start process of creating classes based on number of students assigned per course-schedule 
+     */
+    public function createClassrooms(Request $request)
+    {
+
+        $this->validate($request,[
+            'Term' => 'required|',
+            'minimum' => 'required|',
+        ]);
+        
+        $minimum = $request->minimum;
+        $getCodeForSectionNo = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get();
         $arrCountStdPerCode = [];
         foreach ($getCodeForSectionNo as $value) {
             // query student count who are not yet assigned to a class section (null)
@@ -1590,7 +1956,7 @@ class PreviewController extends Controller
         // calculate sum per code and divide by 14 or 15 for number of classes
         $num_classes = [];
         for ($i = 0; $i < count($arrCountStdPerCode); $i++) {
-            $num_classes[] = intval(ceil($arrCountStdPerCode[$i] / 14));
+            $num_classes[] = intval(ceil($arrCountStdPerCode[$i] / $minimum));
         }
 
         $getCode = DB::table('tblLTP_preview_TempOrder')->select('Code')->orderBy('id')->get()->toArray();
@@ -1691,7 +2057,7 @@ class PreviewController extends Controller
             }
             // var_dump('section value starts at: '.$sectionNo);
         }
-        $this->assignAndAnalyze($getCode);
+        $this->assignAndAnalyze($getCode, $minimum);
         $this->getOrphans($getCode);
 
         // move everything to PASHQTCur table
@@ -1703,23 +2069,8 @@ class PreviewController extends Controller
         return redirect()->route('preview-vsa-page-2');
     }
 
-    public function getApprovedPlacementForms(Request $request)
-    {
-    }
 
-    public function orderCodes(Request $request)
-    {
-    }
-
-    public function sortEnrolmentForms($te_code)
-    {
-    }
-
-    public function checkCodeIfExistsInPash()
-    {
-    }
-
-    public function assignAndAnalyze($getCode)
+    public function assignAndAnalyze($getCode, $minimum)
     {
         // query PASHQTcur and take 14 students to assign classroom created in TEVENTcur
         $arrGetClassRoomDetails = [];
@@ -1746,7 +2097,7 @@ class PreviewController extends Controller
                     ->orderBy('id', 'asc')
                     ->orderBy('PS', 'asc')
                     ->get()
-                    ->take(14);
+                    ->take($minimum);
                 foreach ($getPashStudents as $valuePashStudents) {
                     $pashUpdate = Preview::where('INDEXID', $valuePashStudents->INDEXID)->where('Code', $valueClassRoomDetails->cs_unique);
                     // update record with classroom assigned
@@ -1788,7 +2139,7 @@ class PreviewController extends Controller
                         // $pashUpdate->update(['CodeClass' => $valueClassRoomDetails->Code, 'CodeIndexIDClass' => $valueClassRoomDetails->Code.'-'.$valuePashStudents->INDEXID]);
                     }
 
-                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 14) {
+                    if ($valueCountCodeClass->CountCodeClass > 8 && $valueCountCodeClass->CountCodeClass < 11) {
                         $arrNotCompleteClasses[] = $valueCountCodeClass->CodeClass;
                         $arrNotCompleteCode[] = $valueCountCodeClass->Code;
                         $arrNotCompleteCount[] = $valueCountCodeClass->CountCodeClass;
@@ -1804,7 +2155,7 @@ class PreviewController extends Controller
         if ($c != 0) {
             for ($iCount = 0; $iCount < $c; $iCount++) {
                 // $arrjNotCompleteCount[] = $arrNotCompleteCount[$iCount]; 
-                $jNotCompleteCount = intVal(14 - $arrNotCompleteCount[$iCount]);
+                $jNotCompleteCount = intVal($minimum - $arrNotCompleteCount[$iCount]);
                 $arrjNotCompleteCount[] = $jNotCompleteCount;
 
                 for ($iCounter2 = 0; $iCounter2 < $jNotCompleteCount; $iCounter2++) {

@@ -11,6 +11,32 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
+    public function viewStudentsPerTerm()
+    {
+        return view('reports.viewStudentsPerTerm');
+    }
+
+    public function statsStudentsPerTerm()
+    {
+        $qryTerms = Repo::select('Term')->groupBy('Term')->get()->toArray();
+        $termsArray = [];
+        foreach ($qryTerms as $value) {
+            $termsArray[] = $value['Term'];
+        }
+
+        $qryStudentsArray = [];
+        $obj = [];
+        foreach ($termsArray as $term) {
+            $qryStudents = Repo::where('Term', $term)->get()->count();
+            $obj[] = (object) [
+                'term' => $term,
+                'count' => $qryStudents,
+            ]; 
+        }
+
+        return response()->json($obj);
+    }
+
     public function baseView()
     {
         $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name', 'OrgCode']);
@@ -198,6 +224,9 @@ class ReportsController extends Controller
             if ($request->filled($column)) {
                 $records = $records->where($column, $request->input($column))
                     ->where('Term', $term)
+                    ->whereHas('classrooms', function ($q) {
+                        $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                    })
                     ->with('languages')
                     ->with('courses')
                     ->with('coursesOld')

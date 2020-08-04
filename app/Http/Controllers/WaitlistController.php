@@ -14,6 +14,7 @@ use App\Mail\SendMailable;
 use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailHR;
 use App\Mail\SendReminderEmailPlacementHR;
+use App\Mail\MailPlacementTesttoApproverHR;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Preview;
@@ -38,6 +39,76 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function sendEmailApprovalHR()
+    {
+        $staff = 'EXT2097';
+        $next_term_code = '208';
+        $lang = 'F';
+        $formcount = '1';
+
+        // query from the table with the saved data and then
+        // execute Mail class before redirect
+        $formfirst = PlacementForm::orderBy('Term', 'desc')
+            ->where('INDEXID', $staff)
+            ->where('Term', $next_term_code)
+            ->where('L', $lang)
+            ->where('eform_submit_count', $formcount)
+            ->first();
+
+        $formItems = PlacementForm::orderBy('Term', 'desc')
+            ->where('INDEXID', $staff)
+            ->where('Term', $next_term_code)
+            ->where('L', $lang)
+            ->where('eform_submit_count', $formcount)
+            ->get();
+
+        // query student email from users model via index number in placement form model
+        $staff_name = $formfirst->users->name;
+        $staff_email = $formfirst->users->email;
+        $staff_index = $formfirst->INDEXID;
+        $mgr_email = $formfirst->mgr_email;
+
+        // get term values
+        $term = $next_term_code;
+        // get term values and convert to strings
+        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+
+        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_year = new Carbon($term_date_time);
+        $term_year = $term_year->year;
+
+        // query from placement form table the needed information data to include in email
+        $input_course = $formfirst;
+
+        // check the organization of the student to know which email process is followed by the system
+        $org = $formfirst->DEPT;
+
+        $torgan = Torgan::where('Org name', $org)->first();
+        $learning_partner = $torgan->has_learning_partner;
+
+        if ($learning_partner == '1') {
+            //if not UNOG, email to HR Learning Partner of $other_org
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']);
+
+            //use map function to iterate through the collection and store value of email to var $org_email
+            //subjects each value to a callback function
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+            //make collection to array
+            $org_email_arr = $org_email->toArray();
+            //send email to array of email addresses $org_email_arr
+            Mail::to($org_email_arr)
+                ->send(new MailPlacementTesttoApproverHR($formItems, $input_course, $staff_name, $mgr_email, $term_en, $term_fr, $term_season_en, $term_season_fr, $term_year));
+        }
+        return 'email sent!';
+    }
+
     public function updateOverallApproval()
     {
         $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])->where('Term', '191')->where('approval','1')->orderBy('created_at', 'asc')->update(['overall_approval'=> 1]);

@@ -957,15 +957,56 @@ class SelfPayController extends Controller
         return redirect()->route('thankyouSelfPay');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function waitlistedAndValidCancelledFormsView(Request $request)
     {
-        //
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        return view('selfpayforms.waitlisted-and-valid-cancelled-forms', compact('terms'));
+    }
+    public function waitlistedAndValidCancelledForms(Request $request)
+    {
+        $term = $request->term;
+        $cancelDateLimit = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $term)->first()->Cancel_Date_Limit;
+
+        // valid cases of waitlisted selfpaying students from PASH table
+        $pashRecordsWaitlistedQuery = Repo::orderBy('id', 'desc')->where('Term', $term)
+            ->where('is_self_pay_form', 1)->whereHas('classrooms', function ($query) {
+                $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD');
+            })->with('users')->with('languages')->with('courses')->with('classrooms.teachers');
+
+        $pashRecordsWaitlisted = $pashRecordsWaitlistedQuery->get();
+
+        // valid cases of valid cancelled selfpaying students from PASH table
+        $pashRecordValidCancelledQuery = Repo::onlyTrashed()->orderBy('id', 'desc')->where('Term', $term)->where('is_self_pay_form', 1)->where('deleted_at', '<', $cancelDateLimit)->with('users')->with('languages')->with('courses')->with('classrooms.teachers');
+
+        $pashRecordValidCancelled = $pashRecordValidCancelledQuery->get();
+
+        $mergedIndex = $pashRecordsWaitlisted->merge($pashRecordValidCancelled);
+
+        $mergedArrayIndex = [];
+        foreach ($mergedIndex as $value) {
+            $mergedArrayIndex[] = $value->INDEXID;
+        }
+
+        // valid cases of cancelled forms from selfpaying students from Enrolment table
+        $regularRecords = Preenrolment::onlyTrashed()
+            // ->whereNotIn('INDEXID', $mergedArrayIndex)
+            ->where('Term', $term)->where('is_self_pay_form', 1)->where('deleted_at', '<', $cancelDateLimit)->with('users')->with('languages')->with('courses')->get();
+
+        // valid cases of cancelled forms from selfpaying students from Placement table
+        $placementRecords = PlacementForm::onlyTrashed()
+            // ->whereNotIn('INDEXID', $mergedArrayIndex)
+            ->where('Term', $term)->where('is_self_pay_form', 1)->where('deleted_at', '<', $cancelDateLimit)->with('users')->with('languages')->with('courses')->get();
+
+        $data = [
+            'pashRecordsWaitlisted' => $pashRecordsWaitlisted,
+            'pashRecordValidCancelled' => $pashRecordValidCancelled,
+            'regularRecords' => $regularRecords,
+            'placementRecords' => $placementRecords,
+        ];
+
+        // $data = $mergedArrayIndex;
+        return response()->json($data);
     }
 
     /**

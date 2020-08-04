@@ -145,6 +145,7 @@
                       @if($form->users->profile == "STF") Staff Member @endif
                       @if($form->users->profile == "INT") Intern @endif
                       @if($form->users->profile == "CON") Consultant @endif
+                      @if($form->users->profile == "WAE") When Actually Employed @endif
                       @if($form->users->profile == "JPO") JPO @endif
                       @if($form->users->profile == "MSU") Staff of Permanent Mission @endif
                       @if($form->users->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif

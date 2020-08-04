@@ -11,6 +11,7 @@
 |
 */
 // test routes for test queries
+Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
 Route::get('update-overall-approval', 'WaitlistController@updateOverallApproval')->name('update-overall-approval');
 Route::get('send-auth-email', 'WaitlistController@sendAuthEmailIndividual')->name('send-auth-email');
@@ -34,6 +35,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      */
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
+    Route::get('send-email-to-enrolled-students-of-selected-term', 'SystemController@sendEmailToEnrolledStudentsOfSelectedTerm')->name('send-email-to-enrolled-students-of-selected-term');
     Route::get('send-broadcast-reminder', 'SystemController@sendBroadcastReminder')->name('send-broadcast-reminder');
     Route::get('send-reminder-to-current-students', 'SystemController@sendReminderToCurrentStudents')->name('send-reminder-to-current-students');
     Route::get('system-index', 'SystemController@systemIndex')->name('system-index');
@@ -55,10 +57,13 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('admin-view-classrooms', ['as' => 'admin-view-classrooms', 'uses' => 'AdminController@adminViewClassrooms']);
 
     Route::get('admin-student-email-view', 'AdminController@adminStudentEmailView')->name('admin-student-email-view');
+    Route::get('get-admin-all-current-student-in-term', 'AdminController@getAdminAllCurrentStudentInTerm')->name('get-admin-all-current-student-in-term');
 
     /*
      * Reporting Routes
      */
+    Route::get('reports/ltp-stats-view-students-per-term', 'ReportsController@viewStudentsPerTerm')->name('reports/ltp-stats-view-students-per-term');
+    Route::get('reports/stats-students-per-term', 'ReportsController@statsStudentsPerTerm')->name('reports/stats-students-per-term');
     Route::get('reports', 'ReportsController@baseView')->name('reports');
     Route::get('get-reports-table', ['as' => 'get-reports-table', 'uses' => 'ReportsController@getReportsTable']);
     Route::get('reports/ltp-stats-graph-view', 'ReportsController@ltpStatsGraphView')->name('reports/ltp-stats-graph-view');
@@ -79,6 +84,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      * Teachers Routes
      */
     Route::resource('teachers', 'TeachersController');
+    Route::get('teacher-email-classrooms-to-teachers', ['as' => 'teacher-email-classrooms-to-teachers', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachers']);
+    
     Route::get('teacher-show-classrooms-per-teacher', ['as' => 'teacher-show-classrooms-per-teacher', 'uses' => 'TeachersController@teacherShowClassroomsPerTeacher']);
 
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard')->middleware('first-time-login');
@@ -132,7 +139,20 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('preview-vsa-page-2', ['as' => 'preview-vsa-page-2', 'uses' => 'PreviewController@vsaPage2']);
     Route::get('preview-classrooms/{code}', ['as' => 'preview-classrooms', 'uses' => 'PreviewController@previewClassrooms']);
 
-    Route::any('preview-validate-page', ['as' => 'preview-validate-page', 'uses' => 'PreviewController@getApprovedEnrolmentForms']);
+    Route::any('insert-priority-1', ['as' => 'insert-priority-1', 'uses' => 'PreviewController@insertPriority1']);
+    Route::any('insert-priority-2', ['as' => 'insert-priority-2', 'uses' => 'PreviewController@insertPriority2']);
+    Route::any('insert-priority-2-placement', ['as' => 'insert-priority-2-placement', 'uses' => 'PreviewController@insertPriority2Placement']);
+    Route::any('insert-priority-3', ['as' => 'insert-priority-3', 'uses' => 'PreviewController@insertPriority3']);
+    Route::any('insert-priority-4', ['as' => 'insert-priority-4', 'uses' => 'PreviewController@insertPriority4']);
+    Route::any('insert-priority-5', ['as' => 'insert-priority-5', 'uses' => 'PreviewController@insertPriority5']);
+
+    Route::any('order-codes', ['as' => 'order-codes', 'uses' => 'PreviewController@orderCodes']);
+    Route::any('assign-course-sched-to-student', ['as' => 'assign-course-sched-to-student', 'uses' => 'PreviewController@assignCourseScheduleToStudent']);
+    Route::any('check-code-if-exists-in-preview', ['as' => 'check-code-if-exists-in-preview', 'uses' => 'PreviewController@checkCodeIfExistsInPreview']);
+    Route::any('create-classrooms', ['as' => 'create-classrooms', 'uses' => 'PreviewController@createClassrooms']);
+    Route::any('check-duplicate-in-preview', ['as' => 'check-duplicate-in-preview', 'uses' => 'PreviewController@checkDuplicatesInPreview']);
+    Route::any('check-undefined-offset', ['as' => 'check-undefined-offset', 'uses' => 'PreviewController@checkUndefinedOffset']);
+
 
     Route::post('preview-sort-page', ['as' => 'preview-sort-page', 'uses' => 'PreviewController@orderCodes']);
 
@@ -150,9 +170,9 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     Route::get('preview-merged-forms', 'PreviewController@previewMergedForms')->name('preview-merged-forms');
     Route::post('ajax-preview-course-boxes', ['as' => 'ajax-preview-course-boxes', 'uses' => 'PreviewController@ajaxPreviewCourseBoxes']);
-    Route::get('ajax-preview-get-student-count', ['as' => 'ajax-preview-get-student-count', 'uses' => 'PreviewController@ajaxPreviewGetStudentCount']);
-    Route::get('ajax-preview-get-student-priority-status', ['as' => 'ajax-preview-get-student-priority-status', 'uses' => 'PreviewController@ajaxPreviewGetStudentPriorityStatus']);
-    Route::get('ajax-preview-get-student-current-class', ['as' => 'ajax-preview-get-student-current-class', 'uses' => 'PreviewController@ajaxPreviewGetStudentCurrentClass']);
+    Route::post('ajax-preview-get-student-count', ['as' => 'ajax-preview-get-student-count', 'uses' => 'PreviewController@ajaxPreviewGetStudentCount']);
+    Route::post('ajax-preview-get-student-priority-status', ['as' => 'ajax-preview-get-student-priority-status', 'uses' => 'PreviewController@ajaxPreviewGetStudentPriorityStatus']);
+    Route::post('ajax-preview-get-student-current-class', ['as' => 'ajax-preview-get-student-current-class', 'uses' => 'PreviewController@ajaxPreviewGetStudentCurrentClass']);
 
     Route::get('ajax-preview-get-remarks', ['as' => 'ajax-preview-get-remarks', 'uses' => 'PreviewController@ajaxPreviewGetRemarks']);
     Route::put('ajax-preview-post-remarks', ['as' => 'ajax-preview-post-remarks', 'uses' => 'PreviewController@ajaxPreviewPostRemarks']);
@@ -161,7 +181,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::put('ajax-update-teacher', ['as' => 'ajax-update-teacher', 'uses' => 'PreviewController@ajaxUpdateTeacher']);
 
     Route::post('ajax-class-boxes', ['as' => 'ajax-class-boxes', 'uses' => 'PreviewController@ajaxClassBoxes']);
-    Route::get('ajax-get-student-count-per-class', ['as' => 'ajax-get-student-count-per-class', 'uses' => 'PreviewController@ajaxGetStudentCountPerClass']);
+    Route::post('ajax-get-student-count-per-class', ['as' => 'ajax-get-student-count-per-class', 'uses' => 'PreviewController@ajaxGetStudentCountPerClass']);
     Route::get('view-classrooms-per-section/{code}', ['as' => 'view-classrooms-per-section', 'uses' => 'PreviewController@viewClassroomsPerSection']);
 
     Route::post('insert-record-to-preview', ['as' => 'insert-record-to-preview', 'uses' => 'PreviewController@insertRecordToPreview']);
@@ -288,6 +308,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::resource('selfpayform', 'SelfPayController', ['only' => ['index', 'update']]);
     Route::get('selfpayform/{indexid}/{tecode}/{term}', ['as' => 'selfpayform.edit', 'uses' => 'SelfPayController@edit']);
     Route::get('selfpayform/index-placement-selfpay', ['as' => 'index-placement-selfpay', 'uses' => 'SelfPayController@indexPlacementSelfPay']);
+    Route::get('selfpayform/waitlisted-and-valid-cancelled-forms-view', ['as' => 'waitlisted-and-valid-cancelled-forms-view', 'uses' => 'SelfPayController@waitlistedAndValidCancelledFormsView']);
+    Route::post('selfpayform/waitlisted-and-valid-cancelled-forms', ['as' => 'waitlisted-and-valid-cancelled-forms', 'uses' => 'SelfPayController@waitlistedAndValidCancelledForms']);
 
     Route::get('selfpayform/approved-placement-selfpay', ['as' => 'approved-placement-selfpay', 'uses' => 'SelfPayController@approvedPlacementSelfPay']);
     Route::get('selfpayform/pending-placement-selfpay', ['as' => 'pending-placement-selfpay', 'uses' => 'SelfPayController@pendingPlacementSelfPay']);
@@ -447,10 +469,10 @@ Route::group(['middleware' => 'open-close-approval-routes'], function () {
 
 Route::group(['middleware' => 'open-close-approval-routes-hr'], function () {
     //url routing for hr partner approval page
-    Route::get('/approvalhr/{staff}/{tecode}/{id}/{form}/{term}', ['as' => 'approval.getform2hr', 'uses' => 'ApprovalController@getForm2hr']);
+    Route::get('/approvalhr/{id}/{term}', ['as' => 'approval.getform2hr', 'uses' => 'ApprovalController@getForm2hr']);
 
     //url routing for hr partner placement test approval page
-    Route::get('/approvalhr/{staff}/{lang}/placement/{id}/{form}/{term}', ['as' => 'approval.getplacementformdata2hr', 'uses' => 'ApprovalController@getPlacementFormData2hr']);
+    Route::get('/approvalhr/placement/{id}/{term}', ['as' => 'approval.getplacementformdata2hr', 'uses' => 'ApprovalController@getPlacementFormData2hr']);
 });
 
 Route::put('/approval/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform', 'uses' => 'ApprovalController@updateForm'])->where('tecode', '(.*)'); // where clause accepts routes with slashes

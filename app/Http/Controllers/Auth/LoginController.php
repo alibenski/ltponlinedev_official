@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Spatie\Permission\Traits\HasRoles;
+use Session;
+use URL;
 
 class LoginController extends Controller
 {
@@ -35,23 +37,35 @@ class LoginController extends Controller
     use HasRoles;
 
     protected $guard_name = 'web';
-    
+
+    public function showLoginForm()
+    {
+        $intendedURL = Session::get('url.intended');
+
+        if ($intendedURL) {
+            Session::put($intendedURL, URL::previous());
+            Session::flash('expired', 'You have been logged out');
+        }
+
+        return view('auth.login');
+    }
+
     protected function authenticated($request, $user)
     {
-    	$user->timestamps = false;
+        $user->timestamps = false;
         $user->update([
             'last_login_at' => Carbon::now()->toDateTimeString(),
             'last_login_ip' => $request->getClientIp(),
         ]);
 
-        if($user->hasRole('Admin')) {
+        if ($user->hasRole('Admin')) {
             return redirect()->intended('/admin');
         }
 
-        if($user->hasRole('Teacher')) {
+        if ($user->hasRole('Teacher')) {
             return redirect()->intended('/admin/teacher-dashboard');
         }
-        
+
         return redirect()->intended('/home');
     }
 

@@ -79,7 +79,7 @@
 
 			$.ajax({
 				url: '{{ route('ajax-get-student-count-per-class') }}',
-				type: 'GET',
+				type: 'POST',
 				data: {arr:arr,_token:token},
 			})
 			.done(function(data) {

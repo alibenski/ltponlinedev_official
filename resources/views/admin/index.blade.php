@@ -199,9 +199,24 @@
 			<!-- Apply any bg-* class to to the icon to color it -->
 			<span class="info-box-icon bg-red"><i class="fa fa-exclamation-triangle"></i></span>
 			<div class="info-box-content">
-				<span class="info-box-text">Students not in a class after batch run</span>
+				<span class="info-box-text">Modified forms not imported after batch run</span>
 				<span class="info-box-number">@if(Session::has('Term')) {{count($merge)}} @else Set the Term @endif</span>
-				<span class="info-box-text" style="font-size: 11px;">Shows fully approved & assigned forms</span>
+				<span class="info-box-text" style="font-size: 11px;">Shows fully approved forms but somehow were not imported.</span>
+			</div>
+			<!-- /.info-box-content -->
+			</div>
+			<!-- /.info-box -->
+		</a>
+	</div>
+
+	<div class="admin-index-items-2 cancelled-selfpayment hidden">
+		<a href="{{ route('waitlisted-and-valid-cancelled-forms-view') }}">
+			<div class="info-box">
+			<!-- Apply any bg-* class to to the icon to color it -->
+			<span class="info-box-icon bg-navy"><i class="fa fa-money"></i></span>
+			<div class="info-box-content">
+				<span class="info-box-text">Potential Reimbursement/Carry-Over</span>
+				<span class="info-box-number"></span>
 			</div>
 			<!-- /.info-box-content -->
 			</div>
@@ -352,6 +367,7 @@ $(document).ready(function() {
     .done(function(data) {
     	if (!jQuery.isEmptyObject( data )) {
     		$(".students-not-in-class").removeClass('hidden');
+    		$(".cancelled-selfpayment").removeClass('hidden');
     	}
 
     })

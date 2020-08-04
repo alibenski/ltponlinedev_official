@@ -67,6 +67,7 @@
           <ul class="treeview-menu">
             <li><a href="{{ route('reports/ltp-stats-graph-view') }}" {{ Request::is('admin/reports/ltp-stats-graph-view') ? "style=color:white" : ""}}>Evolution per Year</a></li>
             <li><a href="{{ route('reports/ltp-stats-graph-view-by-language') }}" {{ Request::is('admin/reports/ltp-stats-graph-view-by-language') ? "style=color:white" : ""}}>Evolution per Language</a></li>
+            <li><a href="{{ route('reports/ltp-stats-view-students-per-term') }}" {{ Request::is('admin/reports/ltp-stats-view-students-per-term') ? "style=color:white" : ""}}>Students per Term</a></li>
           </ul>
         </li>
 

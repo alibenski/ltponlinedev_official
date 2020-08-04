@@ -67,7 +67,7 @@
 		<div class="col-sm-12">
             <div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
 		    <div class="filtered-table table-responsive">
-			<table id="sampol" class="table">
+			<table id="sampol" class="table display" style="width:100%">
 				<thead>
 					<th>#</th>
 					<th>Term</th>
@@ -77,8 +77,10 @@
                     <th>Format</th>
                     <th>Duration</th>
                     <th>Price</th>
-					<th>Sections</th>
-					<th>Operation</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+					<th>Show Sections</th>
+					<th>Add Sections</th>
 				</thead>
 
 				<tbody>
@@ -124,11 +126,48 @@
                                 {{ $classroom->prices->price }}
                                 @endif
                             </td>
-							<td>
-								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-eye-open"></span> Show</button>
+                            <td>
+                                @if ($classroom->classroom)
+                                    @foreach ($classroom->classroom as $item)
+                                        <p>
+                                        @if ($item->Tch_ID)
+                                        <span class="badge badge-primary">{{$item->sectionNo}}</span> {{$item->teachers->Tch_Name}}
+                                        @else
+                                        <span class="badge badge-primary">{{$item->sectionNo}}</span> no teacher assigned
+                                        @endif
+                                        </p>
+                                    @endforeach
+                                @endif
                             </td>
-							<td>
-								<button class="add-section edit-modal btn btn-info hidden" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><span class="glyphicon glyphicon-edit"></span> Add Section</button>
+                            <td>
+                                @if ($classroom->classroom)
+                                    @foreach ($classroom->classroom as $item)
+                                        <p>
+                                            <div>Section <span class="badge badge-primary">{{$item->sectionNo}}</span></div>
+                                            @if ($item->Te_Mon_Room)
+                                            <span class="label label-primary">Mon</span> {{$item->roomsMon->Rl_Room}}
+                                            @endif
+                                            @if($item->Te_Tue_Room)
+                                            <span class="label label-primary">Tue</span> {{$item->roomsTue->Rl_Room}}
+                                            @endif
+                                            @if($item->Te_Wed_Room)
+                                            <span class="label label-primary">Wed</span> {{$item->roomsWed->Rl_Room}}
+                                            @endif
+                                            @if($item->Te_Thu_Room)
+                                            <span class="label label-primary">Thu</span> {{$item->roomsThu->Rl_Room}}
+                                            @endif
+                                            @if($item->Te_Fri_Room)
+                                            <span class="label label-primary">Fri</span> {{$item->roomsFri->Rl_Room}}
+                                            @endif
+                                        </p>
+                                    @endforeach
+                                @endif
+                            </td>
+							<td align="center">
+								<button class="show-modal btn btn-warning" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-csunique="{{ $classroom->cs_unique }}"><i class="fa fa-eye"></i></button>
+                            </td>
+							<td align="center">
+								<button class="add-section edit-modal btn btn-info hidden" data-id="{{$classroom->id}}" data-title="{{ $classroom->course->Description }} {{ $classroom->scheduler->name }}" data-term="{{ $classroom->Te_Term }}" data-language="{{ $classroom->L }}" data-tecode="{{ $classroom->Te_Code_New }}" data-schedule="{{ $classroom->schedule_id }}" data-csunique="{{ $classroom->cs_unique }}"><i class="fa fa-plus"></i></button>
 							</td>
 						</tr>
 					@endforeach
@@ -529,7 +568,11 @@ $(document).ready(function() {
             ],
         "oLanguage": {
             "sSearch": "Search Filter:"
-            }
+            },
+        "columnDefs": [
+            { "width": "20%", "targets": 7 },
+            { "width": "25%", "targets": 8 }
+        ]
     });
     $(".preloader2").fadeOut(600);
 

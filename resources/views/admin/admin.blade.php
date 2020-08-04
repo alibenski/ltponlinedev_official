@@ -5,6 +5,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170278635-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-170278635-1');
+  </script>
+
   @include('admin.partials._head')
 
 <!-- REQUIRED JS SCRIPTS -->
@@ -42,7 +52,12 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
+@if(env('APP_ENV')!='production')
+<body class="hold-transition skin-red sidebar-mini">
+@else
 <body class="hold-transition skin-blue sidebar-mini">
+@endif
+
 <div class="wrapper">
 
   <!-- Main Header -->

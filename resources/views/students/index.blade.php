@@ -39,6 +39,7 @@
                                         @if( Auth::user()->profile == "STF") Staff Member @endif
                                         @if( Auth::user()->profile == "INT") Intern @endif
                                         @if( Auth::user()->profile == "CON") Consultant @endif
+                                        @if( Auth::user()->profile == "WAE") When Actually Employed @endif
                                         @if( Auth::user()->profile == "JPO") JPO @endif
                                         @if( Auth::user()->profile == "MSU") Staff of Permanent Mission @endif
                                         @if( Auth::user()->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif

@@ -35,6 +35,7 @@
 					<th>Term</th>
 					{{-- <th>CS Code</th> --}}
 					<th>Code - Course Name</th>
+					<th>MS Teams Name</th>
 					<th>Day</th>
 					<th>Time</th>
 					<th>Format</th>
@@ -56,7 +57,8 @@
 							<th>{{ $class->id }}</th>
 							<th>{{ $class->Te_Term }}</th>
 							{{-- <th>{{ $class->cs_unique }}</th> --}}
-							<td>{{ $class->Te_Code_New}} - {{ $class->course->Description }}</td>
+							<td>{{ $class->Te_Code_New }} - {{ $class->course->Description }}</td>
+							<td>{{ $class->name }}</td>
 							<td>
 								@if(empty( $class->schedule_id ))
 								null

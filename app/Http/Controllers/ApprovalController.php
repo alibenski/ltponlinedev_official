@@ -169,14 +169,16 @@ class ApprovalController extends Controller
         return redirect()->route('eform');
     }
 
-    public function getPlacementFormData2hr($staff, $lang, $id, $form, $term)
+    public function getPlacementFormData2hr($id,$term)
     {   
         //get variables from URL to decrypt and pass to controller logic 
-        $staff = Crypt::decrypt($staff);
-        $lang = Crypt::decrypt($lang);
         $id = Crypt::decrypt($id);
-        $form_counter = Crypt::decrypt($form);
-        $term = Crypt::decrypt($term);
+        $formDetails = PlacementForm::withTrashed()->where('id', $id)->first();
+
+        $staff = $formDetails->INDEXID;
+        $lang = $formDetails->L;
+        $form_counter = $formDetails->eform_submit_count;
+        $term = $formDetails->Term;
 
         $next_term_code = $term; 
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
@@ -223,7 +225,8 @@ class ApprovalController extends Controller
                 'INDEXID' => 'required',
             )); 
 
-        // Save the data to db
+        try{
+            // Save the data to db
             $enrol_form = $forms->id;
             $course = PlacementForm::find($enrol_form);
             $course->approval_hr = $decision;
@@ -231,67 +234,71 @@ class ApprovalController extends Controller
             $course->overall_approval = $decision;
             $course->save();
 
-        // execute Mail class before redirect
-        $formfirst = PlacementForm::orderBy('Term', 'desc')
-                                ->where('INDEXID', $staff)
-                                ->where('Term', $next_term_code)
-                                ->where('L', $lang)
-                                ->where('eform_submit_count', $formcount)
-                                ->first();    
+            // execute Mail class before redirect
+            $formfirst = PlacementForm::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $staff)
+                                    ->where('Term', $next_term_code)
+                                    ->where('L', $lang)
+                                    ->where('eform_submit_count', $formcount)
+                                    ->first();    
 
-        $formItems = PlacementForm::orderBy('Term', 'desc')
-                                ->where('INDEXID', $staff)
-                                ->where('Term', $next_term_code)
-                                ->where('L', $lang)
-                                ->where('eform_submit_count', $formcount)
-                                ->get();
+            $formItems = PlacementForm::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $staff)
+                                    ->where('Term', $next_term_code)
+                                    ->where('L', $lang)
+                                    ->where('eform_submit_count', $formcount)
+                                    ->get();
 
-        // query student email from users model via index nmber in preenrolment model
-        $staff_name = $formfirst->users->name;
-        $staff_email = $formfirst->users->email;
-        $staff_index = $formfirst->INDEXID;   
-        $mgr_email = $formfirst->mgr_email;
-        
-        // get term values and convert to strings
-        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
-        
-        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
-        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+            // query student email from users model via index nmber in preenrolment model
+            $staff_name = $formfirst->users->name;
+            $staff_email = $formfirst->users->email;
+            $staff_index = $formfirst->INDEXID;   
+            $mgr_email = $formfirst->mgr_email;
+            
+            // get term values and convert to strings
+            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            
+            $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+            $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
 
-        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
-        $term_year = new Carbon($term_date_time);
-        $term_year = $term_year->year;
+            $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+            $term_year = new Carbon($term_date_time);
+            $term_year = $term_year->year;
 
-        //query from PlacementForm table the needed information data to include in email
-        $input_course = $formfirst;
+            //query from PlacementForm table the needed information data to include in email
+            $input_course = $formfirst;
 
-        // query org and clm hr partner emails addresses 
-        $org = $formfirst->DEPT; 
-        $other_org = Torgan::where('Org name', $org)->first();
-        $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+            // query org and clm hr partner emails addresses 
+            $org = $formfirst->DEPT; 
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
 
-        $org_email = $org_query->map(function ($val, $key) {
-            return $val->email;
-        });
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
 
-        $org_email_arr = $org_email->toArray(); 
+            $org_email_arr = $org_email->toArray(); 
 
-        Mail::to($staff_email)
-                // ->cc($mgr_email)
-                ->bcc($org_email_arr)
-                ->send(new MailPlacementHRApprovaltoStudent($formItems, $input_course, $staff_name, $request, $term_season_en, $term_year));
-        
-        if($decision == 1){
-            $decision_text = 'Yes, you approved the request.';
-        } else {
-            $decision_text = 'No, you did not approved the request.';
+            Mail::to($staff_email)
+                    // ->cc($mgr_email)
+                    ->bcc($org_email_arr)
+                    ->send(new MailPlacementHRApprovaltoStudent($formItems, $input_course, $staff_name, $request, $term_season_en, $term_year));
+            
+            if($decision == 1){
+                $decision_text = 'Yes, you approved the request.';
+            } else {
+                $decision_text = 'No, you did not approved the request.';
 
-                $enrol_form_d = $forms->id;
-                $course = PlacementForm::find($enrol_form_d);
-                $course->delete();
+                    $enrol_form_d = $forms->id;
+                    $course = PlacementForm::find($enrol_form_d);
+                    $course->delete();
+            }
         }
-    
+        catch (\Exception $exception){
+            abort(403, 'Error: Invalid Payload. Please click the link from the email message again to refresh the data.');
+        }
+
         // Set flash data with message
         $request->session()->flash('success', 'CLM Learning Partner Decision has been saved! Decision is: '.$decision_text);
 
@@ -491,14 +498,16 @@ class ApprovalController extends Controller
      * Show the pre-enrolment forms for approving the forms submitted by staff member 
      *
      */
-    public function getForm2hr($staff, $tecode, $id, $form, $term)
+    public function getForm2hr($id, $term)
     {
         //get variables from URL to decrypt and pass to controller logic 
-        $staff = Crypt::decrypt($staff);
-        $tecode = Crypt::decrypt($tecode);
         $id = Crypt::decrypt($id);
-        $form_counter = Crypt::decrypt($form);
-        $term = Crypt::decrypt($term);
+        $formDetails = Preenrolment::withTrashed()->where('id', $id)->first();
+
+        $staff = $formDetails->INDEXID;
+        $tecode = $formDetails->Te_Code;
+        $form_counter = $formDetails->form_counter;
+        $term = $formDetails->Term;
 
         $next_term_code = $term;
         $next_term_name = Term::where('Term_Code', $next_term_code)->first()->Term_Name;
@@ -539,86 +548,91 @@ class ApprovalController extends Controller
                     
         $hr_comment =  $request->input('hr_comment');
         $decision = $request->input('decisionhr'); 
-        // Validate data
+        try{
+            // Validate data: not_equal_to_existing found in AppServiceProvider
             $this->validate($request, array(
                 'decisionhr' => 'required|boolean|not_equal_to_existing',
                 'INDEXID' => 'required',
                 'Te_Code' => 'required',
             )); 
 
-        // Save the data to db
-        $enrol_form = [];
-        for ($i = 0; $i < count($forms); $i++) {
-            $enrol_form = $forms[$i]->id;
-            $course = Preenrolment::find($enrol_form);
-            $course->approval_hr = $decision;
-            $course->hr_comments = $hr_comment;
-            $course->overall_approval = $decision;
-            $course->save();
-        }
-
-        // execute Mail class before redirect
-        $formfirst = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $staff)
-                                ->where('Term', $next_term_code)
-                                ->where('Te_Code', $tecode)
-                                ->where('form_counter', $formcount)
-                                ->first();    
-
-        $formItems = Preenrolment::orderBy('Term', 'desc')
-                                ->where('INDEXID', $staff)
-                                ->where('Term', $next_term_code)
-                                ->where('Te_Code', $tecode)
-                                ->where('form_counter', $formcount)
-                                ->get();
-
-        // query student email from users model via index nmber in preenrolment model
-        $staff_name = $formfirst->users->name;
-        $staff_email = $formfirst->users->email;
-        $staff_index = $formfirst->INDEXID;   
-        $mgr_email = $formfirst->mgr_email;
-
-        // get term values and convert to strings
-        $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-        $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
-        
-        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
-        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
-
-        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
-        $term_year = new Carbon($term_date_time);
-        $term_year = $term_year->year;
-
-        // query from Preenrolment table the needed information data to include in email
-        $input_course = $formfirst;
-
-        // query org and clm hr partner emails addresses 
-        $org = $formfirst->DEPT; 
-        $other_org = Torgan::where('Org name', $org)->first();
-        $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
-
-        $org_email = $org_query->map(function ($val, $key) {
-            return $val->email;
-        });
-
-        $org_email_arr = $org_email->toArray(); 
-
-        Mail::to($staff_email)
-                // ->cc($mgr_email)
-                ->bcc($org_email_arr)
-                ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request, $term_season_en, $term_year));
-        
-        if($decision == 1){
-            $decision_text = 'Yes, you approved the enrolment.';
-        } else {
-            $decision_text = 'No, you did not approved the enrolment.';
-
-            $enrol_form_d = [];
+            // Save the data to db
+            $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
-                $enrol_form_d = $forms[$i]->id;
-                $course = Preenrolment::find($enrol_form_d);
-                $course->delete();
+                $enrol_form = $forms[$i]->id;
+                $course = Preenrolment::find($enrol_form);
+                $course->approval_hr = $decision;
+                $course->hr_comments = $hr_comment;
+                $course->overall_approval = $decision;
+                $course->save();
             }
+
+            // execute Mail class before redirect
+            $formfirst = Preenrolment::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $staff)
+                                    ->where('Term', $next_term_code)
+                                    ->where('Te_Code', $tecode)
+                                    ->where('form_counter', $formcount)
+                                    ->first();    
+
+            $formItems = Preenrolment::orderBy('Term', 'desc')
+                                    ->where('INDEXID', $staff)
+                                    ->where('Term', $next_term_code)
+                                    ->where('Te_Code', $tecode)
+                                    ->where('form_counter', $formcount)
+                                    ->get();
+
+            // query student email from users model via index nmber in preenrolment model
+            $staff_name = $formfirst->users->name;
+            $staff_email = $formfirst->users->email;
+            $staff_index = $formfirst->INDEXID;   
+            $mgr_email = $formfirst->mgr_email;
+
+            // get term values and convert to strings
+            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            
+            $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+            $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+            $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+            $term_year = new Carbon($term_date_time);
+            $term_year = $term_year->year;
+
+            // query from Preenrolment table the needed information data to include in email
+            $input_course = $formfirst;
+
+            // query org and clm hr partner emails addresses 
+            $org = $formfirst->DEPT; 
+            $other_org = Torgan::where('Org name', $org)->first();
+            $org_query = FocalPoints::where('org_id', $other_org->OrgCode)->get(['email']); 
+
+            $org_email = $org_query->map(function ($val, $key) {
+                return $val->email;
+            });
+
+            $org_email_arr = $org_email->toArray(); 
+
+            Mail::to($staff_email)
+                    // ->cc($mgr_email)
+                    ->bcc($org_email_arr)
+                    ->send(new MailtoStudentHR($formItems, $input_course, $staff_name, $request, $term_season_en, $term_year));
+            
+            if($decision == 1){
+                $decision_text = 'Yes, you approved the enrolment.';
+            } else {
+                $decision_text = 'No, you did not approved the enrolment.';
+
+                $enrol_form_d = [];
+                for ($i = 0; $i < count($forms); $i++) {
+                    $enrol_form_d = $forms[$i]->id;
+                    $course = Preenrolment::find($enrol_form_d);
+                    $course->delete();
+                }
+            }
+        } 
+        catch (\Exception $exception){
+            abort(403, 'Error: Invalid Payload. Please click the link from the email message again to refresh the data.');
         }
     
         // Set flash data with message

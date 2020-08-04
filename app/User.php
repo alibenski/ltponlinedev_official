@@ -9,12 +9,14 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Traits\FullTextSearch;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
     use FullTextSearch;
+    use SoftDeletes;
 
     /**
      * The columns of the full text index
@@ -30,7 +32,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'indexno', 'name', 'indexno_old', 'nameFirst', 'nameLast', 'profile', 'email', 'temp_email', 'password', 'must_change_password', 'approved_account', 'approved_update', 'account_token', 'update_token', 'last_login_at', 'last_login_ip',
+        'indexno', 'name', 'indexno_old', 'nameFirst', 'nameLast', 'profile', 'email', 'temp_email', 'password', 'must_change_password', 'approved_account', 'approved_update', 'mailing_list', 'account_token', 'update_token', 'last_login_at', 'last_login_ip',
     ];
 
     /**
