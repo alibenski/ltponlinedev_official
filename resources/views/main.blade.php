@@ -10,8 +10,8 @@
 
       gtag('config', 'UA-170278635-1');
     </script>
-
     @include('partials._head')
+    <script src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
         <div id="app">

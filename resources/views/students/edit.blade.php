@@ -1,7 +1,6 @@
 @extends('main')
 @section('tabtitle', '| Profile')
 @section('customcss')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 @stop
@@ -41,10 +40,9 @@
 
                     <form id="updateProfileForm" method="POST" action="{{ route('students.update', $student->id) }}" class="form-horizontal">
                         {{ csrf_field() }}
-                        
                         <div id="profileSelect" class="form-group">
                           <label for="profile" class="col-md-2 control-label">Profile:</label>
-                          <div class="col-md-9">
+                          <div class="col-md-10">
                             <div class="dropdown">
                               <select id="profile" name="profile" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
                                     <option></option>
@@ -67,41 +65,45 @@
                         <div class="form-group">
                             <label for="TITLE" class="col-md-2 control-label">Title:</label>
 
-                            <div class="col-md-2 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-venus-mars"></i></span><input  name="TITLE" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->TITLE }} @endif" class="form-control"  type="text">
+                            <div class="input-group col-md-2 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
                                 </div>
+                                <input  name="TITLE" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->TITLE }} @endif" class="form-control"  type="text">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="lastName" class="col-md-2 control-label">Last Name:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="lastName" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->LASTNAME }} @endif" class="form-control"  type="text">
+                            <div class="input-group col-md-8 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
                                 </div>
+                                <input  name="lastName" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->LASTNAME }} @endif" class="form-control"  type="text">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="firstName" class="col-md-2 control-label">First Name:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="firstName" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->FIRSTNAME }} @endif" class="form-control"  type="text">
+                            <div class="input-group col-md-8 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
                                 </div>
+                                <input  name="firstName" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->FIRSTNAME }} @endif" class="form-control"  type="text">
                             </div>
                         </div>
                             
                         <div class="form-group">
                             <label for="email" class="col-md-2 control-label">Email Address:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
+                            <div class="input-group col-md-8 inputGroupContainer">
+                                <div class="input-group-prepend">
                                     {{-- apply jS or HTML preferred characters for this field --}}
-                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input id="email" name="email" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->email }} @endif" class="form-control"  type="text">                                    
+                                    <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                                 </div>
+                                <input id="email" name="email" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->email }} @endif" class="form-control"  type="text">                                    
                                 <p class="small text-danger"><strong>IMPORTANT NOTE:</strong> Once you change your email address, this will become <strong>your login and your official email address</strong> to which we will be sending notifications and other future correspondences.</p>
                             </div>
                         </div>
@@ -109,10 +111,11 @@
                         <div class="form-group">
                             <label for="currentOrg" class="col-md-2 control-label">Organization:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif" class="form-control"  type="text" readonly="">
+                            <div class="input-group col-md-8 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-globe"></i></span>
                                 </div>
+                                <input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif" class="form-control"  type="text" readonly="">
                             </div>
                         </div>
 
@@ -132,10 +135,11 @@
                         <div class="form-group">
                             <label for="contactNo" class="col-md-2 control-label">Contact Number:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-phone"></i></span><input  name="contactNo" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->PHONE }} @endif" class="form-control"  type="text">                                    
+                            <div class="input-group col-md-8 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-phone"></i></span>
                                 </div>
+                                <input  name="contactNo" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->PHONE }} @endif" class="form-control"  type="text">                                    
                             </div>
                         </div>
                         
@@ -145,8 +149,8 @@
                             <div class="col-md-6">
                                 <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="dob">
                                 <input class="form-control" size="16" type="text" value="" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->BIRTH }} @endif" readonly>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                <span class="input-group-text"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-text"><span class="glyphicon glyphicon-th"></span></span>
                                 </div>
                                 <input type="hidden" name="dob" id="dob" value=""/>
 
@@ -161,30 +165,24 @@
                         <div class="form-group">
                             <label for="jobAppointment" class="col-md-2 control-label">Type of Appointment:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="jobAppointment" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->CATEGORY }} @endif" class="form-control"  type="text">
+                            <div class="input-group col-md-8 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-folder-open"></i></span>
                                 </div>
+                                <input  name="jobAppointment" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->CATEGORY }} @endif" class="form-control"  type="text">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="gradeLevel" class="col-md-2 control-label">Grade Level:</label>
 
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-folder-open"></i></span><input  name="gradeLevel" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->LEVEL }} @endif" class="form-control"  type="text">
+                            <div class="input-group col-md-8 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-folder-open"></i></span>
                                 </div>
+                                <input  name="gradeLevel" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->LEVEL }} @endif" class="form-control"  type="text">
                             </div>
                         </div>
-
-                        {{-- <div class="form-group">
-                            <label for="contractExp" class="col-md-2 control-label">Contract Expiration:</label>
-
-                            <div class="col-md-8 form-control-static">
-                                <p>{{ Auth::user()->sddextr->CONEXP }}</p>
-                            </div>
-                        </div> --}}
                         
                         <div class="col-md-4 col-md-offset-4">
                               <button type="submit" class="btn btn-success btn-block">Submit Changes</button>
@@ -197,7 +195,7 @@
         </div>
     </div>
         <!-- no further div -->
-@endsection
+@stop
 
 @section('scripts_code')
 

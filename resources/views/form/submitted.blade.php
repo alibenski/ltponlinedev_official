@@ -318,13 +318,8 @@
 <script src="{{ asset('js/select2.min.js') }}"></script>
 
 <script>
- $(window).load(function(){
- $("#loader").fadeOut(800);
- });
-</script>
-
-<script>
   $(document).ready(function($) {
+      $("#loader").fadeOut(800);
       $('.select2-term-single').select2({
         placeholder: "Select Term",
       });
