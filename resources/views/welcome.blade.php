@@ -12,8 +12,8 @@
     </script>
 
     @include('partials._head')
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/cover.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/cover.css') }}" rel="stylesheet">
 </head>
     <body>
         <div class="site-wrapper">
@@ -32,7 +32,7 @@
                         @endif
                         <div class="col-md-12">
                             <img src="{{ asset('img/Logo2016_transparent.png') }}" alt="CLM_logo">
-                        <h1 class="cover-heading tlt" style="margin-bottom: 50px;"> UNOG-CLM  Language Training Programme (LTP) Online Enrolment Platform</h1>
+                        <h1 class="cover-heading tlt" style="margin-bottom: 50px;"> UNOG-CLM  <br/>Language Training Programme (LTP) <br/>Online Enrolment Platform</h1>
                         </div>
 
                         <div class="container">
@@ -99,7 +99,7 @@
         </div>
 
         <!-- Scripts -->
-        @include('partials._js')
+        <script src="{{ asset('js/app.js') }}"></script>
         <script>
             $(document).on('click', '.show-modal', function() {
                 $('#showModal').modal('show');

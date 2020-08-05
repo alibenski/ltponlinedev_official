@@ -89,27 +89,6 @@
                 </div>
             </div>
         </div>  
-
-        {{-- <div class="col-md-3">
-            <div class="card card-info">
-                <div class="card-heading text-center"><strong>UN Language Courses</strong></div>
-                <div class="card-body">
-                    <ul  class="list-group">
-                        <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a>
-                        <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a>
-                        <a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English</a>
-                        <a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French</a>
-                        <a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian</a>
-                        <a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish</a>
-                    </ul>
-                </div>
-            </div>
-        </div>  --}}
     </div>
 </div>
 @endsection
-@section('scripts_link')
-
-<script src="{{ asset('js/app.js') }}"></script>
-
-@stop

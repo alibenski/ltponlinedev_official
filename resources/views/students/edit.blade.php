@@ -65,7 +65,7 @@
                         <div class="form-group">
                             <label for="TITLE" class="col-md-2 control-label">Title:</label>
 
-                            <div class="input-group col-md-2 inputGroupContainer">
+                            <div class="input-group col-md-6 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
                                 </div>
