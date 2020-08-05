@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      */
     Route::resource('teachers', 'TeachersController');
     Route::get('teacher-email-classrooms-to-teachers', ['as' => 'teacher-email-classrooms-to-teachers', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachers']);
-    
+
     Route::get('teacher-show-classrooms-per-teacher', ['as' => 'teacher-show-classrooms-per-teacher', 'uses' => 'TeachersController@teacherShowClassroomsPerTeacher']);
 
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard')->middleware('first-time-login');
@@ -508,8 +508,8 @@ Route::get('page_not_available', function () {
 Route::resource('newuser', 'NewUserController', ['only' => ['create', 'store']]);
 
 // route for web form request to create new account of UN staff
-Route::get('get-new-new-user', ['as' => 'get-new-new-user', 'uses' => 'NewUserController@getNewNewUser']);
-Route::post('post-new-new-user', ['as' => 'post-new-new-user', 'uses' => 'NewUserController@postNewNewUser']);
+// Route::get('get-new-new-user', ['as' => 'get-new-new-user', 'uses' => 'NewUserController@getNewNewUser']);
+// Route::post('post-new-new-user', ['as' => 'post-new-new-user', 'uses' => 'NewUserController@postNewNewUser']);
 
 // route for verification of non-UN staff
 Route::get('get-new-outside-user', ['as' => 'get-new-outside-user', 'uses' => 'NewUserController@getNewOutsideUser']);
