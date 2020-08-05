@@ -57,7 +57,7 @@ class NewUserController extends Controller
 
     public function closeNewUserForm($enrol_object_start_date, $enrol_object_end_date, $now_date)
     {
-        if($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
+        if ($enrol_object_start_date <= $now_date && $enrol_object_end_date >= $now_date) {
             return false;
         }
         return true;
@@ -82,7 +82,7 @@ class NewUserController extends Controller
         $closeNewUserForm = $this->closeNewUserForm($enrol_object_start_date, $enrol_object_end_date, $now_date);
         if ($closeNewUserForm != true) {
             return view('users_new.new_user');
-        } 
+        }
         return view('page_not_available');
     }
 
@@ -276,6 +276,7 @@ class NewUserController extends Controller
         $enrol_object_start_date = $enrol_object->Enrol_Date_Begin;
         $enrol_object_end_date = $enrol_object->Enrol_Date_End;
 
+        $closeNewUserForm = $this->closeNewUserForm($enrol_object_start_date, $enrol_object_end_date, $now_date);
         if ($closeNewUserForm != true) {
             return view('users_new.new_outside_user_form', compact('org'));
         }
