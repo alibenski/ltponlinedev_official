@@ -2,7 +2,7 @@
 @section('tabtitle', '| Profile')
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-    {{-- <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet" media="screen"> --}}
+    {{-- <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 @stop
 @section('content')

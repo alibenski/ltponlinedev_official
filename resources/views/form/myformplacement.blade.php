@@ -4,7 +4,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 @stop
 @section('content')
 <div id="loader">
@@ -141,64 +140,9 @@
 <script src="{{ asset('js/submit.js') }}"></script>    
 
 <script>
- $(window).load(function(){
- $("#loader").fadeOut(2000);
- });
+  $(document).ready(function(){
+    $("#loader").fadeOut(2000);
+  });
  </script>
-
-{{-- <script>
-  $(document).ready(function() {
-    $.get("/check-placement-form-ajax", function(data) {
-      $.each(data, function(index, val) {
-        console.log('placementFormLang = ' + val.L);
-        $("input[name='langInput'][value='"+ val.L +"']").attr('disabled', true);    
-      });
-    }); 
-  });
-</script>
-
-<script>
-  $(document).ready(function() {
-    $("input[name='langInput']").on('click', function() {
-      $("label[for='scheduleChoices']").remove();
-      $(".scheduleChoices").remove();
-      $('.insert-msg').remove();
-      $('.insert-container').append('<div class="insert-msg"></div>')
-
-      if ($(this).val() == 'F') {
-        $(".place-here").hide().append('<label for="scheduleChoices">The French Placement Test is Online. You may take the test anytime between the dates indicated below. Click on the radio button if you agree:</label>').fadeIn('fast');
-
-      } else {
-        $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
-      }
-
-      $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
-
-      var L = $(this).val();
-      var token = $("input[name='_token']").val();
-      console.log(L);
-      $.ajax({
-          url: "{{ route('check-placement-sched-ajax') }}", 
-          method: 'POST',
-          data: {L:L, _token:token},
-          success: function(data) {
-              $.each(data, function(index, val) {
-              console.log(val);
-                  $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
-                  if ($("input[name='langInput']:checked").val() == 'F') {
-                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space">from '+ val.date_of_plexam +' to ' + val.date_of_plexam_end + '</label>'+'<br>').fadeIn();
-                  } else {
-                    $(".scheduleChoices").append('<label for="placementLang'+val.language_id+'" class="label-place-sched form-control-static btn-space"> '+ val.date_of_plexam +'</label>'+'<br>').fadeIn();
-                  }
-              });
-                $('input[name="placementLang"]').on('click', function() {
-                  $('.insert-msg').hide();
-                  $('.insert-msg').html("<div class='alert alert-info'>You will receive a convocation email from the Language Secretariat to confirm the time and place of the placement test.</div>").fadeIn();
-                });
-            }
-      });
-    });
-  });
-</script> --}}
 
 @stop
