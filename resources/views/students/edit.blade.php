@@ -2,7 +2,8 @@
 @section('tabtitle', '| Profile')
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+    {{-- <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet" media="screen"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 @stop
 @section('content')
     {{-- Modal Dialog Box --}}
@@ -41,8 +42,8 @@
                     <form id="updateProfileForm" method="POST" action="{{ route('students.update', $student->id) }}" class="form-horizontal">
                         {{ csrf_field() }}
                         <div id="profileSelect" class="form-group">
-                          <label for="profile" class="col-md-2 control-label">Profile:</label>
-                          <div class="col-md-10">
+                          <label for="profile" class="col-md-12 control-label">Profile:</label>
+                          <div class="col-md-12">
                             <div class="dropdown">
                               <select id="profile" name="profile" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
                                     <option></option>
@@ -63,9 +64,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="TITLE" class="col-md-2 control-label">Title:</label>
+                            <label for="TITLE" class="col-md-12 control-label">Title:</label>
 
-                            <div class="input-group col-md-6 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
                                 </div>
@@ -74,9 +75,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="lastName" class="col-md-2 control-label">Last Name:</label>
+                            <label for="lastName" class="col-md-12 control-label">Last Name:</label>
 
-                            <div class="input-group col-md-8 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
                                 </div>
@@ -85,9 +86,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="firstName" class="col-md-2 control-label">First Name:</label>
+                            <label for="firstName" class="col-md-12 control-label">First Name:</label>
 
-                            <div class="input-group col-md-8 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
                                 </div>
@@ -96,9 +97,9 @@
                         </div>
                             
                         <div class="form-group">
-                            <label for="email" class="col-md-2 control-label">Email Address:</label>
+                            <label for="email" class="col-md-12 control-label">Email Address:</label>
 
-                            <div class="input-group col-md-8 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     {{-- apply jS or HTML preferred characters for this field --}}
                                     <span class="input-group-text"><i class="fa fa-envelope"></i></span>
@@ -109,9 +110,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="currentOrg" class="col-md-2 control-label">Organization:</label>
+                            <label for="currentOrg" class="col-md-12 control-label">Organization:</label>
 
-                            <div class="input-group col-md-8 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-globe"></i></span>
                                 </div>
@@ -122,9 +123,9 @@
                         <!-- MAKE A DECISION SECTION -->
                 
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Change Organization?</label>
+                            <label class="col-md-12 control-label">Change Organization?</label>
 
-                              <div class="col-md-8">
+                              <div class="col-md-12">
                                         <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
                                         <label for="decision1" class="form-control-static">YES</label> 
                               </div>
@@ -133,9 +134,9 @@
                         <div id="orgSelect"></div>
                         <input id="selectInput" type="hidden">
                         <div class="form-group">
-                            <label for="contactNo" class="col-md-2 control-label">Contact Number:</label>
+                            <label for="contactNo" class="col-md-12 control-label">Contact Number:</label>
 
-                            <div class="input-group col-md-8 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-phone"></i></span>
                                 </div>
@@ -144,15 +145,18 @@
                         </div>
                         
                         <div class="form-group{{ $errors->has('dob') ? 'is-invalid' : '' }}">
-                            <label for="dob" class="col-md-2 control-label">Date of birth </label>
+                            <label for="dob" class="col-md-12 control-label">Date of birth (YYYY-MM-DD)</label>
 
-                            <div class="col-md-6">
-                                <div class="input-group date form_datetime col-md-12" data-date="" data-date-format="dd MM yyyy" data-link-field="dob">
-                                <input class="form-control" size="16" type="text" value="" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->BIRTH }} @endif" readonly>
-                                <span class="input-group-text"><span class="glyphicon glyphicon-remove"></span></span>
-                                <span class="input-group-text"><span class="glyphicon glyphicon-th"></span></span>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                        <input type="text" id="dob" name="dob" class="form-control datetimepicker-input" data-target="#datetimepicker4" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->BIRTH }} @endif">
+
+                                        <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <input type="hidden" name="dob" id="dob" value=""/>
 
                                 @if ($errors->has('dob'))
                                     <span class="help-block">
@@ -163,9 +167,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="jobAppointment" class="col-md-2 control-label">Type of Appointment:</label>
+                            <label for="jobAppointment" class="col-md-12 control-label">Type of Appointment:</label>
 
-                            <div class="input-group col-md-8 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-folder-open"></i></span>
                                 </div>
@@ -174,9 +178,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gradeLevel" class="col-md-2 control-label">Grade Level:</label>
+                            <label for="gradeLevel" class="col-md-12 control-label">Grade Level:</label>
 
-                            <div class="input-group col-md-8 inputGroupContainer">
+                            <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-folder-open"></i></span>
                                 </div>
@@ -184,7 +188,7 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-4 col-md-offset-4">
+                        <div class="col-md-4 offset-md-4">
                               <button type="submit" class="btn btn-success btn-block">Submit Changes</button>
                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                               {{ method_field('PUT') }}
@@ -200,20 +204,14 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
-<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+{{-- <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script> --}}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('.form_datetime').datetimepicker({
-        //language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 4,
-        forceParse: 0,
-        showMeridian: 1,
-        minView: 2
+    $('#datetimepicker4').datetimepicker({
+        format: 'YYYY-MM-DD'
     });
   });
 </script>
@@ -230,7 +228,7 @@
     $(function(){
         $("#updateProfileForm").submit(function(){
             var valid=0;
-            $(this).find('input[type=text], #selectInput, select#profile').each(function(){
+            $(this).find('input[type=text], input.datetimepicker-input, #selectInput, select#profile').each(function(){
                 if($(this).val() != "") valid+=1;
             });
                         
