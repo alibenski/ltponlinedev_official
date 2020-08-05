@@ -12,9 +12,9 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row {{ $errors->has('indexno') ? 'is-invalid' : '' }}">
-                            <label for="indexno" class="col-md-3 control-label">Index # <span class="small text-danger"></span></label>
+                            <label for="indexno" class="col-md-12 control-label">Index # <span class="small text-danger"></span></label>
 
-                            <div class="col-md-9">
+                            <div class="col-md-12">
                                 <input id="indexno" type="text" class="form-control" name="indexno" value="{{ old('indexno') }}" autofocus>
 
                                 @if ($errors->has('indexno'))
@@ -22,14 +22,14 @@
                                         <strong>{{ $errors->first('indexno') }}</strong>
                                     </span>
                                 @endif
-                            <small class="form-text text-muted"><strong>Please delete trailing zeroes if you have an index number which is less than 8 digits e.g. 00012345 -> 12345</strong></small>
+                            <small class="form-text text-danger"><strong>Please delete trailing zeroes if you have an index number which is less than 8 digits e.g. 00012345 -> 12345</strong></small>
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? 'is-invalid' : '' }}">
-                            <label for="email" class="col-md-4 control-label">UN email address</label>
+                            <label for="email" class="col-md-12 control-label">UN email address</label>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
@@ -42,8 +42,8 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('g-recaptcha-response') ? 'is-invalid' : '' }}">
-                            <label class="col-md-4 control-label">Captcha</label>
-                            <div class="col-md-6">
+                            <label class="col-md-12 control-label">Captcha</label>
+                            <div class="col-md-12">
                                 {!! NoCaptcha::renderJs() !!}
                                 {!! NoCaptcha::display() !!}
 
