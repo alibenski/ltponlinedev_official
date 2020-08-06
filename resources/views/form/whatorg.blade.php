@@ -114,12 +114,12 @@
   </div>
 </div>
 
-<div class="modal fade" id="modalshow">
+<div class="modal fade" tabindex="-1" id="modalshow">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Ooops! Just a moment...</h4>
+              <h4 class="modal-title">Ooops! Just a moment...</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">{{ csrf_field() }}
               <div class="modal-body">

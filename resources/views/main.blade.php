@@ -11,7 +11,7 @@
       gtag('config', 'UA-170278635-1');
     </script>
     @include('partials._head')
-    <script src="{{ asset('js/app.js') }}"></script>
+    @include('partials._js')
     </head>
     <body>
         <div id="app">
@@ -24,9 +24,6 @@
                 @include('partials._foot')
             <!-- Scripts -->
                 @yield('scripts_link')<!-- use only for override -->
-                @include('partials._js')
                 @yield('scripts_code')
-    
-
     </body>
 </html>
