@@ -236,7 +236,7 @@
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions. This is not applicable to English courses initially advertised as online.
+                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions. This is not applicable to courses initially advertised as online.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -376,7 +376,7 @@
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours d'anglais annoncés comme étant en ligne.
+                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours annoncés comme étant en ligne.
                                     </p>
 
                                     <p style="text-align: justify">
