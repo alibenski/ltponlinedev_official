@@ -1,7 +1,6 @@
 @extends('main')
 @section('tabtitle', '| UN Enrolment Form')
 @section('customcss')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <style>
@@ -150,6 +149,16 @@
 <script>
   $(document).ready(function(){
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
+
+    //  select2 dropdown init
+    $('.select-profile-single').select2({
+    placeholder: "Select Profile",
+    });
+
+    $('.select2-basic-single').select2({
+    placeholder: "Select Organization",
+    });
+
     $("input[name='decision']").prop('checked', false);
   });
 </script>
@@ -171,18 +180,4 @@
 </script>
 
 <script src="{{ asset('js/whatOrg.js') }}"></script>
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    //  select2 dropdown init
-    $('.select-profile-single').select2({
-    placeholder: "Select Profile",
-    });
-
-    $('.select2-basic-single').select2({
-    placeholder: "Select Organization",
-    });
-  });
-</script>
-
 @stop
