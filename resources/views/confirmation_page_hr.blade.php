@@ -62,8 +62,6 @@
                 </div>
             </div>
         </div>
-        <!-- Scripts -->
-        @include('partials._js')
     </body>
 </html>
 
