@@ -12,6 +12,7 @@
     </script>
 
     @include('partials._head')
+    <script src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
             <!-- navBar Section -->
@@ -31,7 +32,5 @@
                 @yield('scripts_link')
                 @include('partials._js')
                 @yield('scripts_code')
-    
-
     </body>
 </html>
