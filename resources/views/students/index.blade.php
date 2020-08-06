@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-md-9" style="margin-bottom: 1rem">
             <div class="card">
-                <div class="card-header bg-primary"><strong>Student Profile</strong></div>
+                <div class="card-header bg-primary"><strong class="text-white">Student Profile</strong></div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -133,7 +133,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="col-md-4 offset-md-4"><a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-block btn-info btn-md">Edit CLM Online Profile</a>
+                        <div class="col-md-4 offset-md-4"><a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-block btn-outline-info">Edit Profile</a>
                         </div>
                     </form>
                 </div>

@@ -28,9 +28,9 @@
     </div>
 
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-info">Edit Student Profile</div>
+                <div class="card-header bg-info text-white"><strong> Edit Student Profile </strong></div>
 
                 <div class="card-body">
                     @if (session('status'))

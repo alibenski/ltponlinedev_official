@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header text-white bg-primary"><strong>Dashboard</strong></div>
+                <div class="card-header text-white bg-primary"><strong>Enrolment Information</strong></div>
 
                 <div class="card-body">
                     @if (session('status'))

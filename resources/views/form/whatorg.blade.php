@@ -11,9 +11,9 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-12">
       <div class="card">
-          <div class="card-header bg-info">Enrolment Form for: 
+          <div class="card-header bg-info text-white">Enrolment Form for: 
             <strong>
               @if(empty($next_term))
               Enrolment Period Closed
@@ -33,7 +33,7 @@
 
                 <!-- MAKE A DECISION SECTION -->
                 
-                <div class="form-group">
+                <div class="d-flex form-group">
                     <label class="col-md-3 control-label">Enrolment Type:</label>
 
                       <div class="col-md-5">
