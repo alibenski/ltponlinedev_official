@@ -161,17 +161,17 @@
                       </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-4">
                       <div class="card">
                         <div class="card-header bg-primary col-md-12"><strong>Information about your course preference</strong></div>
                         <div class="card-body">
-                          <div class="row col-md-10 col-md-offset-1">
-                            <div class="alert alert-danger">
+                          <div class="row">
+                            <div class="col-md-12 alert alert-danger">
                             <p>Please indicate the time and the days you are available to attend the course. Check/tick all that apply.</p>
                             </div>
                           </div>
-                          <div class="row card col-md-10 col-md-offset-1">
-                            <div class="otherQuestions col-md-5">
+                          <div class="row col-md-12">
+                            <div class="otherQuestions col-md-12">
                               <div class="form-group">
                                 <label for="" class="control-label">Time:</label>
                                 <div class="col-md-12">
@@ -188,7 +188,7 @@
                               </div>
                             </div>
 
-                            <div class="otherQuestions3 col-md-7">
+                            <div class="otherQuestions3 col-md-12">
                               <div class="form-group">
                                 <label for="" class="control-label">Day:</label>
                                 <div class="col-md-12">
@@ -203,8 +203,8 @@
                             </div>
 
                             <div class="col-md-12 form-group">
-                              <label class="col-md-3 control-label text-danger">Comments: <i>(required)</i></label>
-                              <div class="col-md-8 pink-border">
+                              <label class="col-md-12 control-label text-danger">Comments: <i>(required)</i></label>
+                              <div class="col-md-12 pink-border">
                               <small class="text-danger"><i class="fa fa-warning"></i> <strong>You are required to fill this comment box. Failure to do so will nullify your submission.</strong></small>
                               <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, passed LPE, etc." required=""></textarea>
                               </div>
@@ -228,10 +228,10 @@
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
                     
                     <div class="form-group">
-                        <label for="course_id" class="col-md-3 control-label">Course selected: </label>
-                        <div class="col-md-8">
+                        <label for="course_id" class="col-md-12 control-label">Course selected: </label>
+                        <div class="col-md-12">
                           <div class="dropdown">
-                            <select class="col-md-8 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
+                            <select class="col-md-12 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
                                 <option value="">--- Select Course ---</option>
                             </select>
                           </div>
@@ -239,14 +239,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="schedule_id" class="col-md-3 control-label">Available for the following schedule(s): </label>
-                        <button type="button" class="multi-clear button btn btn-danger" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
-                        <div class="col-md-8">
+                        <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
+                        <div class="col-md-12">
                           <div class="dropdown">
-                            <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
-                                <option value="">Fill Out Language and Course Options</option>
+                            <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
+                              <option value="">Fill Out Language and Course Options</option>
                             </select>
                           </div>
+                          <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
                         </div>
                     </div>
 
