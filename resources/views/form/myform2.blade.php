@@ -239,19 +239,19 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="schedule_id" class="col-md-3 control-label">Available for the following schedule(s): </label>
-                        <div class="col-md-8">
+                        <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
+                        <div class="col-md-12">
                           <div class="dropdown">
-                            <select class="col-md-8 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
+                            <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
                               <option value="">Fill Out Language and Course Options</option>
                             </select>
                           </div>
-                          <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear All</button>
+                          <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
                         </div>
                     </div>
 
                     <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-8 col-md-offset-3">
+                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
                         <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
                         <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another schedule (days/times) if the selected class is full. 
                         </label>
@@ -259,25 +259,25 @@
                     </div>  
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Comments: <i>(optional)</i></label>
-                        <div class="col-md-8">
+                        <label class="col-md-12 control-label">Comments: <i>(optional)</i></label>
+                        <div class="col-md-12">
                           <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder=""></textarea>
                           <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small>
                         </div>
                     </div>
 
                         <!-- SHOW CHOICES REAL TIME -->
-                    <div class="col-md-12">
-                      <div class="well">
+                    <div class="form-group col-md-12">
+                      <div class="card">
                         <div class="row">        
                             <div class="form-group">
-                              <label for="first" class="col-md-2 control-label" style="color: green;">Student availability 1:</label> 
-                              <div class="col-md-8 form-control-static"><p id="first" name=""></p></div>
+                              <label for="first" class="col-md-12 control-label" style="color: green;">Student availability 1:</label> 
+                              <div class="col-md-12 form-control-static"><p id="first" name=""></p></div>
                             </div>
 
                             <div class="form-group">
-                              <label for="second" class="col-md-2 control-label" style="color: #337ab7;">Student availability 2:</label>
-                              <div class="col-md-8 form-control-static"><p id="second"  name=""></p></div>
+                              <label for="second" class="col-md-12 control-label" style="color: #337ab7;">Student availability 2:</label>
+                              <div class="col-md-12 form-control-static"><p id="second"  name=""></p></div>
                             </div>
                         </div>    
                       </div>  
@@ -288,7 +288,7 @@
                   <div class="submission-part" style="display: none"> 
 
                     <div class="form-group col-md-12">
-                      <div class="disclaimer alert col-md-8 col-md-offset-2">
+                      <div class="disclaimer alert col-md-12">
                         <p class="small text-danger"><strong>Required field</strong></p>
                         <input id="approval" name="approval" class="with-font" type="radio" value="1" required="required">
                         <label for="approval" class="form-control-static">I have informed my supervisor about this enrolment and she/he has agreed that I will be able to attend the course. </label>
@@ -296,7 +296,7 @@
                     </div>
 
                     <div class="form-group col-md-12">
-                          <div class="disclaimer alert col-md-8 col-md-offset-2">
+                          <div class="disclaimer alert col-md-12">
                                     <p class="small text-danger"><strong>Required field</strong></p>
                                     <input id="agreementBtn" name="agreementBtn" class="with-font" type="radio" value="1" required="required">
                                     <label for="agreementBtn" class="form-control-static">I have read and understood the <a href="http://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank">Information Circular</a> regarding the Language Training Programme at UNOG.</label>
@@ -304,13 +304,13 @@
                     </div>
 
                     <div class="form-group col-md-12">
-                      <div class="disclaimer alert alert-danger col-md-8 col-md-offset-2">
+                      <div class="disclaimer alert alert-danger col-md-12">
                         <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
                         <p><strong>If you wish to enrol on two courses for the same term, you need to submit another form.</strong> However, if you wish to take one course, but are not sure which one to select, please indicate it in the comments box above. Do not fill in several forms. <strong>One form = one course</strong>.</p>
                       </div>
                     </div>
 
-                    <div class="col-sm-2 col-sm-offset-5">
+                    <div class="col-md-3 offset-md-5">
                       <button type="submit" class="btn btn-success button-prevent-multi-submit">Send Enrolment</button>
                       <input type="hidden" name="_token" value="{{ Session::token() }}">
                     </div>
