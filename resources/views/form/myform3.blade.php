@@ -375,10 +375,6 @@
 // });
 </script>
 <script>
- $(window).load(function(){
- $("#loader").fadeOut(500);
- });
-
   $('textarea').maxlength({
     alwaysShow: false,
     threshold: 500,
@@ -393,6 +389,7 @@
 
 <script>  
   $(document).ready(function () {
+      $("#loader").fadeOut(500);
       console.log('selfpay');
       $('#modal-check').modal('show');
   });

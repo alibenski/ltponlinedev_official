@@ -382,10 +382,6 @@
 // });
 </script>
 <script>
-  $(window).load(function(){
-  $("#loader").fadeOut(500);
-  });
-
   $('textarea').maxlength({
     alwaysShow: false,
     threshold: 500,
@@ -400,6 +396,7 @@
 
 <script>
   $(document).ready(function() {
+    $("#loader").fadeOut(500);
     $('.form_datetime').datetimepicker({
         //language:  'fr',
         weekStart: 1,
