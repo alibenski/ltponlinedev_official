@@ -29,7 +29,6 @@
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
-                {{-- <input  name="user_id" type="hidden" value="{{ $repos }}" readonly> --}}
                 <input  name="term_id" type="hidden" value="
                   @if(empty($terms))
                   NO DB ENTRY
@@ -39,47 +38,40 @@
                 " readonly>  
                 </div>
 
-                {{-- <div class="form-group">
-                    <label for="" class="col-md-3 control-label">Index Number:</label>
-
-                    <div class="col-md-8 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-qrcode"></i></span> --}}
-                            <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>
-                            <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                                    
-                        {{-- </div>
-                    </div>
-                </div> --}}
+                <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>
+                <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                                    
                 
                 <div class="form-group">
-                    <label for="" class="col-md-3 control-label">Name:</label>
+                    <label for="" class="col-md-12 control-label">Name:</label>
 
-                    <div class="col-md-8 inputGroupContainer">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user"></i></span><input  name="" class="form-control"  type="text" value="{{ Auth::user()->sddextr->FIRSTNAME }} {{ Auth::user()->sddextr->LASTNAME }}" readonly>                                    
+                    <div class="col-md-12 inputGroupContainer input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
                         </div>
+                        <input  name="" class="form-control"  type="text" value="{{ Auth::user()->sddextr->FIRSTNAME }} {{ Auth::user()->sddextr->LASTNAME }}" readonly>                                    
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="org" class="col-md-3 control-label">Organization:</label>
-                  <div class="col-md-8">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
+                    <label for="org" class="col-md-12 control-label">Organization:</label>
+
+                    <div class="col-md-12 inputGroupContainer input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
                             <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
                         </div>
-                  </div>
+                    </div>
                 </div>
 
                 <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
-                    <label for="name" class="col-md-3 control-label">Last/Current UN Language Course:</label>
+                    <label for="name" class="col-md-12 control-label">Last/Current UN Language Course:</label>
 
-                    <div class="col-md-8 inputGroupContainer">
+                    <div class="col-md-12 inputGroupContainer input-group">
                       @if(is_null($repos_lang)) None
                       @else
                         @foreach( $repos_lang as $value )
-                          <div class="input-group">
-                              <span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="@if(empty($value->Te_Code)) {{ $value->coursesOld->Description }} @else {{ $value->courses->Description}} @endif last @if(empty($value->terms->Term_Name) || is_null($value->terms->Term_Name))No record found @else {{ $value->terms->Term_Name }} (@if($value->Result == 'P') Passed @elseif($value->Result == 'F') Failed @elseif($value->Result == 'I') Incomplete @else -- @endif) @endif" readonly>                                       
+                          <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fa fa-graduation-cap"></i></span><input  name="" class="form-control"  type="text" value="@if(empty($value->Te_Code)) {{ $value->coursesOld->Description }} @else {{ $value->courses->Description}} @endif last @if(empty($value->terms->Term_Name) || is_null($value->terms->Term_Name))No record found @else {{ $value->terms->Term_Name }} (@if($value->Result == 'P') Passed @elseif($value->Result == 'F') Failed @elseif($value->Result == 'I') Incomplete @else -- @endif) @endif" readonly>                                       
                           </div>
                         @endforeach
                       @endif
@@ -87,8 +79,8 @@
                 </div>
 
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Select language:</label>
-                              <div class="col-md-8">
+                        <label class="col-md-12 control-label">Select language:</label>
+                              <div class="col-md-12">
                                   @foreach ($languages as $id => $name)
                                 <div class="input-group col-md-9">
                                           
@@ -135,25 +127,27 @@
                         <p>You are required to take a <strong>placement test</strong> unless you are a complete beginner.</p>
                         
                         <div class="form-group">
-                              <label class="col-md-4 control-label">Are you a complete beginner?</label>
-                                <div class="col-md-4">
-                                          <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
-                                          <label for="placementDecision3" class="form-control-static">YES</label>
+                              <label class="col-md-12 control-label">Are you a complete beginner?</label>
+                              <div class="d-flex justify-content-start">
+                                <div class="col-md-3">
+                                  <input id="placementDecision3" name="placementDecisionB" class="with-font" type="radio" value="1">
+                                  <label for="placementDecision3" class="form-control-static">YES</label>
                                 </div>
 
-                                <div class="col-md-4">
-                                          <input id="placementDecision4" name="placementDecisionB" class="with-font" type="radio" value="0">
-                                          <label for="placementDecision4" class="form-control-static">NO</label>
+                                <div class="col-md-3">
+                                  <input id="placementDecision4" name="placementDecisionB" class="with-font" type="radio" value="0">
+                                  <label for="placementDecision4" class="form-control-static">NO</label>
                                 </div>
+                              </div>
                         </div>
                       </div>
                     </div>
 
                   <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
                     <div class="form-group col-md-12">
-                      <div class="alert alert-danger col-md-8 col-md-offset-2">
+                      <div class="alert alert-danger col-md-12">
                         <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
-                        <p><strong>If you have already passed the LPE or the highest level of your chosen language but have not taken classes during two terms, you are still required to fill in the form below. However the placement test might not be necessary depending on the information you provide. The language training secretariat will examine your request and make a decision.</strong></p>
+                        <p class="text-justify"><strong>If you have already passed the LPE or the highest level of your chosen language but have not taken classes during two terms, you are still required to fill in the form below. However the placement test might not be necessary depending on the information you provide. The language training secretariat will examine your request and make a decision.</strong></p>
                       </div>
                     </div>
 
@@ -161,18 +155,18 @@
                       <div class="card">
                         <div class="card-header bg-primary col-md-12"><strong>Placement test dates</strong></div>
                         <div class="card-body">
-                          <div class="row col-md-10 col-md-offset-1">
+                          <div class="row col-md-12">
                             <div class="alert alert-info alert-dismissible alert-placement-instruction">
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                              <p>Please select a date (required) for your placement test from the options available. If you are unable to take the placement test on the given dates, then please write the reason in the comments box and indicate your availability.  Where possible, we will try to accommodate your wishes.  If it is not possible, you will need to apply again for the following term.</p> 
-                              <p> If you think that the placement test is not necessary for you, for whatever reason, please explain why in the box below.</p> 
+                              <p class="text-justify">Please select a date (required) for your placement test from the options available. If you are unable to take the placement test on the given dates, then please write the reason in the comments box and indicate your availability.  Where possible, we will try to accommodate your wishes.  If it is not possible, you will need to apply again for the following term.</p> 
+                              <p class="text-justify"> If you think that the placement test is not necessary for you, for whatever reason, please explain why in the box below.</p> 
                             </div>
                           </div>
                           
                           <div class="otherQuestions2 row col-md-12">
                             <div class="insert-container col-md-12">
                                 <div class="form-group">
-                                  <div class="place-here col-md-6 col-md-offset-3">
+                                  <div class="place-here col-md-12">
                                   <label for="scheduleChoices"></label>
                                     <div class="scheduleChoices col-md-12">
                                     {{-- insert jquery schedules here --}}
@@ -182,8 +176,8 @@
                               <div class="insert-msg"></div>
 
                               <div class="col-md-12 form-group">
-                                <label class="col-md-3 control-label">Comments: <i>(optional)</i></label>
-                                <div class="col-md-8 ">
+                                <label class="col-md-12 control-label">Comments: <i>(optional)</i></label>
+                                <div class="col-md-12 ">
                                 <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="For queries or comments about the placement test e.g. time, place, date, constraints, etc."></textarea>
                                 </div>
                               </div>
@@ -465,9 +459,9 @@
                   // $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" required="required">').fadeIn();
                   // $(".scheduleChoices").append('<input id="placementLang'+val.language_id+'" name="placementLang" type="radio" value="'+val.id+'" >').fadeIn();
                   if (val.is_online == 1) {
-                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label></div>').fadeIn();
+                    $(".scheduleChoices").append('<div class="input-group-prepend"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label></div>').fadeIn();
                   } else {
-                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label></div>').fadeIn();
+                    $(".scheduleChoices").append('<div class="input-group-prepend"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label></div>').fadeIn();
                   }
               }); // end of $.each
               // if no schedule, tell student there is none
@@ -480,7 +474,7 @@
               $('input[name="placementLang"]').on('click', function() {
                 // $("textarea[name='course_preference_comment']").attr('required', 'required');
                 $('.insert-msg').hide();
-                $('.insert-msg').addClass('col-md-6 col-md-offset-3');     
+                $('.insert-msg').addClass('col-md-12');     
                 $('.insert-msg').html("<div class='alert alert-info'>You will receive further information from the Language Secretariat regarding the placement test.</div>").fadeIn();
               });
             }
