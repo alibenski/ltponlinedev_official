@@ -141,8 +141,6 @@ class TeachersController extends Controller
 
     public function teacherEmailClassroomsToTeachers(Request $request)
     {
-        $request->session()->flash('error', 'Function not yet working. No emails sent.');
-        return redirect()->back();
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         if ($request->session()->has('Term')) {
@@ -152,11 +150,11 @@ class TeachersController extends Controller
             // get all teachers with a class of the selected term
             $queryTeachers = Teachers::whereHas('classrooms', function ($query) use ($request) {
                 $query->where('Te_Term', $request->session()->get('Term'))
-                        ->whereNotNull('Tch_ID')
-                        ->where('Tch_ID', '!=', 'TBD');
-                })
+                    ->whereNotNull('Tch_ID')
+                    ->where('Tch_ID', '!=', 'TBD');
+            })
                 ->with(['classrooms' => function ($q) use ($request) {
-                $q->where('Te_Term', $request->session()->get('Term'))
+                    $q->where('Te_Term', $request->session()->get('Term'))
                         ->whereNotNull('Tch_ID')
                         ->where('Tch_ID', '!=', 'TBD')
                         ->with('course')
@@ -164,7 +162,7 @@ class TeachersController extends Controller
                 }])
                 ->orderBy('Tch_L', 'asc')
                 ->get();
-            
+
             $recipients = [];
             foreach ($queryTeachers as $teacher) {
                 $recipients[] = $teacher->email;
