@@ -14,7 +14,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-          <div class="card-header bg-primary">Enrolment Form for: 
+          <div class="card-header bg-primary text-white">Enrolment Form for: 
             <strong>
               @if(empty($next_term && $terms))
               NO DB ENTRY
@@ -161,16 +161,16 @@
                       </div>
                     </div>
                     
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-4">
                       <div class="card">
                         <div class="card-header bg-primary col-md-12"><strong>Information about your course preference</strong></div>
                         <div class="card-body">
-                          <div class="row col-md-12">
-                            <div class="alert alert-danger">
+                          <div class="row">
+                            <div class="col-md-12 alert alert-danger">
                             <p>Please indicate the time and the days you are available to attend the course. Check/tick all that apply.</p>
                             </div>
                           </div>
-                          <div class="row card col-md-12">
+                          <div class="row col-md-12">
                             <div class="otherQuestions col-md-12">
                               <div class="form-group">
                                 <label for="" class="control-label">Time:</label>

@@ -14,7 +14,7 @@
   <div class="row">   
     <div class="col-md-12">  
       <div class="card">
-          <div class="card-header bg-primary">Enrolment Form for: 
+          <div class="card-header bg-primary text-white">Enrolment Form for: 
             <strong>
               @if(empty($next_term && $terms))
               NO DB ENTRY
