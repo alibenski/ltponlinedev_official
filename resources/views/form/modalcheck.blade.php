@@ -3,9 +3,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <span><h5 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>Reminder for self-paying students</h5></span>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <span><h4 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>Reminder for self-paying students</h4></span>
             </div>
             <div class="modal-body">
                 <p>This enrolment form is on a fee-paying basis. Please have the following ready:</p>

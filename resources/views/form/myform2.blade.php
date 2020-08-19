@@ -372,7 +372,7 @@
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
         $("input[name='L'][value='"+ val.L +"']").attr('disabled', true);    // check if the student already submitted placement form
-        $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='label label-danger'>Scheduled for placement test");
+        $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='badge-pill text-danger'>Scheduled for placement test");
       });
     }); 
   });

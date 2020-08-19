@@ -78,12 +78,12 @@
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-                <div class="alert alert-warning col-md-12 col-md-12 fset-3 text-center">
+                <div class="alert alert-warning col-md-12 fset-3 text-center">
                   <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once your decision is submitted.
                 </div>
                 <div class="form-group col-md-12 ">
                     <label class="col-md-12 control-label">Do you approve the request?</label>
-
+                    <div class="d-flex">
                       <div class="col-md-3" >
                                 <input id="decision1" name="decisionhr" class="with-font dyes" type="radio" value="1" >
                                 <label for="decision1" class="form-control-static">YES</label>
@@ -93,6 +93,7 @@
                                 <input id="decision2" name="decisionhr" class="with-font dno" type="radio" value="0">
                                 <label for="decision2" class="form-control-static">NO</label>
                       </div>
+                    </div>
                 </div>
 
                 <div class="form-group">

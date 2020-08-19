@@ -57,9 +57,10 @@
 
                     <div class="col-md-12 inputGroupContainer input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-globe"></i></span><input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
-                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
+                            <span class="input-group-text"><i class="fa fa-globe"></i></span>
                         </div>
+                            <input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}" readonly>
+                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
                     </div>
                 </div>
 
@@ -106,7 +107,7 @@
 
                           <div class="form-group">
                             <label for="payfile" class="col-md-3 control-label">Upload Proof of Payment: </label>
-                            <input name="payfile" type="file" class="col-md-8 form-control-static" required="required">
+                            <input name="payfile" type="file" class="col-md-9 form-control-static" required="required">
                           </div>
                           <div class="form-group col-md-12">
                                 <div class="disclaimer-consent alert alert-default alert-block col-md-10 col-md-offset-1">
@@ -395,7 +396,7 @@
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
         $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form
-        $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='label label-danger'>Scheduled for placement test");
+        $("input[name='L'][value='"+ val.L +"']:disabled").after("<span class='badge-pill text-danger'>Scheduled for placement test");
       });
     }); 
   });

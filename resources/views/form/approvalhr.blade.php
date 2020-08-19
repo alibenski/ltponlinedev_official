@@ -94,7 +94,7 @@
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-                <div class="alert alert-warning col-md-12 col-md-12 fset-3 text-center">
+                <div class="alert alert-warning col-md-12 fset-3 text-center">
                   <strong>Warning!</strong> Once you have made your decision, it cannot be changed. The page will redirect you to the confirmation page once your decision is submitted. 
                 </div>
                 <div class="form-group col-md-12">
