@@ -31,7 +31,7 @@
 						@foreach($selfpayforms_placement as $form)
 						<tr>
 							<td>
-			                	@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) <span class="alert alert-danger">Disapproved</span> @elseif ($form->selfpay_approval == 1) <span class="label label-success">Approved</span> @else <span class="label label-warning">Pending</span> @endif   
+			                	@if(is_null($form->selfpay_approval)) None @elseif( $form->selfpay_approval == 0 ) <span class="alert alert-danger">Disapproved</span> @elseif ($form->selfpay_approval == 1) <span class="badge badge-success">Approved</span> @else <span class="badge badge-warning">Pending</span> @endif   
 			                </td>
 							<td>
 								@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
@@ -69,6 +69,7 @@
 		</div>
 
 		<div class="form-group col-md-12 file-section">
+			<div class="col-md-12">
             <h3>Attach your valid documents here</h3>
 
               <div class="big text-danger">
@@ -89,7 +90,8 @@
               <div class="col-md-4 col-md-offset-4">
                   <button type="submit" class="btn btn-success btn-block">Submit Files</button>
                   <input type="hidden" name="_token" value="{{ Session::token() }}">
-                  {{ method_field('PUT') }}
+				  {{ method_field('PUT') }}
+              </div>
             </div>
 		</form>
         </div>
