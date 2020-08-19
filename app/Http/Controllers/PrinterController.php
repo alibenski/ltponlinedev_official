@@ -58,9 +58,9 @@ class PrinterController extends Controller
             if ($printLanguage == 'Fr') {
 
                 $setLocale = Carbon::setLocale('fr_FR');
-                setlocale(LC_ALL, "fr_FR");
-                $dateOfPrintingFr = Carbon::now()->formatLocalized('%#d %B %Y');
-                
+                setlocale(LC_ALL, "fr_FR.UTF-8"); // added .UTF-8 for linux
+                $dateOfPrintingFr = Carbon::now()->formatLocalized('%e %B %Y'); // changed format from %#d to %e for linux 
+
                 $pdf = PDF::loadView('pdf_forms.pdfFrAttestationCompletedCourse', compact('userName', 'termSeasonFr', 'termYear', 'dateOfPrintingFr', 'courseFr', 'result', 'selfPay', 'termNameFr', 'price', 'cat', 'term'));
                 return $pdf->stream();
             }

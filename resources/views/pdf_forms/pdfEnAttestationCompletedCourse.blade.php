@@ -5,7 +5,7 @@
       <td></td>
       <td></td>
       <td align="right" style="width:200.65pt;border:solid white 1.0pt;padding:0cm 6.0pt 0cm 6.0pt;" valign="top" width="284">
-        {{$dateOfPrinting}}
+        Geneva, {{$dateOfPrinting}}
         <br>
         <br>
       </td>

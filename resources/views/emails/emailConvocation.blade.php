@@ -232,11 +232,11 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.
+                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.</span>
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions. This is not applicable to English courses initially advertised as online.
+                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions. This is not applicable to courses initially advertised as online.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -322,7 +322,7 @@
                                     <br><br>
                                     <p>
                                         <h4><strong>Language Training Secretariat</strong></h4>
-                                        Annex Bocage 2 - Room 5 (ground floor) - During the confinement we are available via email<br>
+                                        Annex Bocage 2 - Room 5 (ground floor) - we are available via email or on the phone<br>
                                         <br>
                                         Opening hours : 9:00-12:30 from Monday to Friday.<br>
                                         Telephone: 00 41 22 917 44 09<br><br>
@@ -372,11 +372,11 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19</span>, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.
+                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.</span>
                                     </p>
                                         
                                     <p style="text-align: justify">
-                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours d'anglais annoncés comme étant en ligne.
+                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours annoncés comme étant en ligne.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -460,7 +460,7 @@
                                     <br><br>
                                     <p>
                                         <h4><strong>Secrétariat du Programme de formation linguistique</strong></h4>
-                                        Annexe Bocage II - bureau 5 (Rez-de-chaussée) – pendant le confinement, vous pouvez nous joindre par email<br>
+                                        Annexe Bocage II - bureau 5 (Rez-de-chaussée) – vous pouvez nous joindre par email ou par téléphone<br>
                                         <br>
                                         Heures d’ouverture: 9:00-12:30 du lundi au vendredi.<br>
                                         Téléphone: + 41 22 917 44 09<br><br>
