@@ -120,7 +120,7 @@
                   </div>
                 </div>
 
-                <div class="col-sm-offset-5">
+                <div class="offset-sm-5">
                   @component('form.modal')
                     @slot('buttonclass')
                       btn-primary
