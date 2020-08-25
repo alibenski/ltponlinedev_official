@@ -197,6 +197,9 @@
                     @if ($form->PS == 4)
                       Placement Forms/Others
                     @endif
+                    @if ($form->PS == 5)
+                      Late Enrolment
+                    @endif
                   </strong>
                    [ {{$form->PS}} ] 
                   <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
