@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                     <p>Hello, </p>
-                                    <p>As announced, CLM has developed a new online registration tool with the objective to update and make the registration process smoother. All the registration steps will be done online, removing the paperwork and the physical signatures.</p>
+                                    <p>Welcome to the UNOG-CLM LTP Online Enrolment Platform. CLM has developed this online registration tool with the objective to update and make the registration process smoother. All the registration steps will be done online, removing the paperwork and the physical signatures.</p>
                                     <p>You can already access the platform and check your profile; however, you will only be able to enrol in courses once registration is open.</p>
                                     <p>Your credentials are: 
                                         <ul>
@@ -205,7 +205,7 @@
                                     <p>All the information for registration will be available on the website (https://learning.unog.ch) when the it opens. </p>
                                     <hr>
                                     <p>Bonjour, </p>
-                                    <p>Comme annoncé récemment, nous avons développé un nouveau système d'inscription en ligne qui a l'objectif étant d'actualiser et de simplifier le processus d'inscription. Chaque étape de ce nouveau processus sera réalisée en ligne, permettant ainsi la suppression des formalités administratives et de la signature manuscrite </p>
+                                    <p>Bienvenue sur la plateforme d'inscription en ligne de ONUG-CFM. Nous avons développé ce système d'inscription en ligne qui a l'objectif étant d'actualiser et de simplifier le processus d'inscription. Chaque étape de ce nouveau processus sera réalisée en ligne, permettant ainsi la suppression des formalités administratives et de la signature manuscrite.</p>
                                     <p>Vous pouvez d'ores et déjà accéder à la plateforme et vérifier votre profile ; toutefois, vous ne pourrez vous inscrire qu'une fois la période d'inscription ouverte.</p>
                                     <p>Vos identifiants sont :  
                                         <ul>

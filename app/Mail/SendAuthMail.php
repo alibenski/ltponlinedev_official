@@ -11,7 +11,7 @@ class SendAuthMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $sddextr_email_address ;
+    public $sddextr_email_address;
     /**
      * Create a new message instance.
      *
@@ -30,9 +30,9 @@ class SendAuthMail extends Mailable
     public function build()
     {
         return $this->view('emails.sendAuthMail')
-                    ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@un.org')
-                    ->priority(1)
-                    ->subject("Information concerning the new online registration system - Information concernant le nouveau système d'inscription en ligne");
+            ->from('clm_language@unog.ch', 'CLM Language')
+            ->bcc('clm_language@un.org')
+            ->priority(1)
+            ->subject("Welcome to the UNOG-CLM LTP Online Enrolment Platform - Bienvenue sur la plateforme d'inscription en ligne de ONUG-CFM");
     }
 }
