@@ -11,7 +11,7 @@
 |
 */
 // test routes for test queries
-Route::get('generate-URL', 'Auth\LateRegisterController@generateRandomURL')->name('generate-URL');
+
 Route::get('late-register', 'Auth\LateRegisterController@lateRegister')->name('late-register');
 
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /**
      * Admin Routes
      */
+    Route::get('generate-URL', 'Auth\LateRegisterController@generateRandomURL')->name('generate-URL');
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
     Route::get('send-email-to-enrolled-students-of-selected-term', 'SystemController@sendEmailToEnrolledStudentsOfSelectedTerm')->name('send-email-to-enrolled-students-of-selected-term');

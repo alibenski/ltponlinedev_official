@@ -11,6 +11,7 @@ use DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Torgan;
 
 
 class LateRegisterController extends Controller
@@ -21,15 +22,15 @@ class LateRegisterController extends Controller
             ['user_id' => Auth::id()]
         );
 
-        return URL::temporarySignedRoute('late-register', now()->addMinutes(1), ['transaction' => $recordId]);
+        return URL::temporarySignedRoute('late-register', now()->addDays(1), ['transaction' => $recordId]);
     }
 
     public function lateRegister(Request $request)
     {
         if (!$request->hasValidSignature()) {
-            abort(405);
+            abort(401);
         }
-        return 'hello';
-        // dd($request);
+        $org = Torgan::get(["Org Full Name", "Org name"]);
+        return view('users_new.new_outside_user_form', compact('org'));
     }
 }
