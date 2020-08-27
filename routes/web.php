@@ -11,6 +11,9 @@
 |
 */
 // test routes for test queries
+Route::get('generate-URL', 'Auth\LateRegisterController@generateRandomURL')->name('generate-URL');
+Route::get('late-register', 'Auth\LateRegisterController@lateRegister')->name('late-register');
+
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
 Route::get('update-overall-approval', 'WaitlistController@updateOverallApproval')->name('update-overall-approval');
