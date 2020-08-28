@@ -2698,17 +2698,110 @@ class PreviewController extends Controller
                 }
             }
 
+            /*
+            Priority 5 late enrolment and placement forms
+             */
+            $late_approved_0_1_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+                ->where('created_at', '>=', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
+            $late_approved_0_2_collect = Preenrolment::where('INDEXID', $request->INDEXID)->whereNotIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+                ->where('created_at', '>=', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
+            $late_approved_0_3_collect = Preenrolment::where('INDEXID', $request->INDEXID)->where('selfpay_approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)
+                ->where('created_at', '>=', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
+
+            $late_approved_collections = collect($late_approved_0_1_collect)->merge($late_approved_0_2_collect)->merge($late_approved_0_3_collect)->sortBy('created_at'); // merge collections
+
+            $lateEnrolment = [];
+            foreach ($late_approved_collections as $value5) {
+                $lateEnrolment[] = new Preview([
+                    'CodeIndexID' => $value5->CodeIndexID,
+                    'Code' => $value5->Code,
+                    'schedule_id' => $value5->schedule_id,
+                    'L' => $value5->L,
+                    'profile' => $value5->profile,
+                    'Te_Code' => $value5->Te_Code,
+                    'Term' => $value5->Term,
+                    'INDEXID' => $value5->INDEXID,
+                    "created_at" =>  $value5->created_at,
+                    "UpdatedOn" =>  $value5->UpdatedOn,
+                    'mgr_email' =>  $value5->mgr_email,
+                    'mgr_lname' => $value5->mgr_lname,
+                    'mgr_fname' => $value5->mgr_fname,
+                    'continue_bool' => $value5->continue_bool,
+                    'DEPT' => $value5->DEPT,
+                    'eform_submit_count' => $value5->eform_submit_count,
+                    'form_counter' => $value5->form_counter,
+                    'agreementBtn' => $value5->agreementBtn,
+                    'flexibleBtn' => $value5->flexibleBtn,
+                    'is_self_pay_form' => $value5->is_self_pay_form,
+                    'PS' => 5,
+                    'std_comments' => $value5->std_comments,
+                    'hr_comments' => $value5->hr_comments,
+                    'teacher_comments' => $value5->teacher_comments,
+                    'Comments' => $value5->Comments,
+                    'admin_eform_comment' => $value5->admin_eform_comment,
+                    'admin_plform_comment' => $value5->admin_plform_comment,
+                    'course_preference_comment' => $value5->course_preference_comment,
+                ]);
+                foreach ($lateEnrolment as $data5) {
+                    $data5->save();
+                }
+            }
+
+            $late_approved_0_1_collect_placement = PlacementForm::where('INDEXID', $request->INDEXID)->whereNotNull('CodeIndexID')->whereIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+                ->where('created_at', '>=', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
+            $late_approved_0_2_collect_placement = PlacementForm::where('INDEXID', $request->INDEXID)->whereNotNull('CodeIndexID')->whereNotIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('approval_hr', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)
+                ->where('created_at', '>=', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
+            $late_approved_0_3_collect_placement = PlacementForm::where('INDEXID', $request->INDEXID)->whereNotNull('CodeIndexID')->where('selfpay_approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->whereNotNull('is_self_pay_form')->where('Term', $request->Term)
+                ->where('created_at', '>=', $enrolmentEndDate)
+                ->orderBy('created_at', 'asc')->get();
+
+            $late_approved_collections_placement = collect($late_approved_0_1_collect_placement)->merge($late_approved_0_2_collect_placement)->merge($late_approved_0_3_collect_placement)->sortBy('created_at');
+
+            $latePlacement = [];
+            foreach ($late_approved_collections_placement as $valuePlacement5) {
+                $latePlacement[] = new Preview([
+                    'CodeIndexID' => $valuePlacement5->CodeIndexID,
+                    'Code' => $valuePlacement5->Code,
+                    'schedule_id' => $valuePlacement5->schedule_id,
+                    'L' => $valuePlacement5->L,
+                    'profile' => $valuePlacement5->profile,
+                    'Te_Code' => $valuePlacement5->Te_Code,
+                    'Term' => $valuePlacement5->Term,
+                    'INDEXID' => $valuePlacement5->INDEXID,
+                    "created_at" =>  $valuePlacement5->created_at,
+                    "UpdatedOn" =>  $valuePlacement5->UpdatedOn,
+                    'mgr_email' =>  $valuePlacement5->mgr_email,
+                    'mgr_lname' => $valuePlacement5->mgr_lname,
+                    'mgr_fname' => $valuePlacement5->mgr_fname,
+                    'continue_bool' => $valuePlacement5->continue_bool,
+                    'DEPT' => $valuePlacement5->DEPT,
+                    'eform_submit_count' => $valuePlacement5->eform_submit_count,
+                    'form_counter' => $valuePlacement5->form_counter,
+                    'agreementBtn' => $valuePlacement5->agreementBtn,
+                    'flexibleBtn' => $valuePlacement5->flexibleBtn,
+                    'is_self_pay_form' => $valuePlacement5->is_self_pay_form,
+                    'PS' => 5,
+                    'std_comments' => $valuePlacement5->std_comments,
+                    'hr_comments' => $valuePlacement5->hr_comments,
+                    'teacher_comments' => $valuePlacement5->teacher_comments,
+                    'Comments' => $valuePlacement5->Comments,
+                    'admin_eform_comment' => $valuePlacement5->admin_eform_comment,
+                    'admin_plform_comment' => $valuePlacement5->admin_plform_comment,
+                    'course_preference_comment' => $valuePlacement5->course_preference_comment,
+                ]);
+                foreach ($latePlacement as $dataPlacement5) {
+                    $dataPlacement5->save();
+                }
+            }
+
             $getCode = Preview::select('Code')->where('INDEXID', $request->INDEXID)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->orderBy('id')->get();
 
             $arrGetClassRoomDetails = [];
-            $arrCountCodeClass = [];
-            $arrGetOrphanStudents = [];
-            $arrNotCompleteClasses = [];
-            $arrNotCompleteCount = [];
-            $arrjNotCompleteCount = [];
-            $arrNotCompleteCode = [];
-            $arrGetOrphanIndexID = [];
-            $arrNotCompleteScheduleID = [];
 
             $arrayCheck = [];
             foreach ($getCode as $valueCode2) {
