@@ -22,15 +22,20 @@ class LateRegisterController extends Controller
             ['user_id' => Auth::id()]
         );
 
-        return URL::temporarySignedRoute('late-register', now()->addDays(1), ['transaction' => $recordId]);
+        return URL::temporarySignedRoute('late-new-user-form', now()->addDays(1), ['transaction' => $recordId]);
     }
 
-    public function lateRegister(Request $request)
+    public function lateNewUserForm(Request $request)
     {
         if (!$request->hasValidSignature()) {
             abort(401);
         }
         $org = Torgan::get(["Org Full Name", "Org name"]);
-        return view('users_new.new_outside_user_form', compact('org'));
+        return view('users_new.late_new_user_form', compact('org'));
+    }
+
+    public function lateRegister(Request $request)
+    {
+        dd($request);
     }
 }
