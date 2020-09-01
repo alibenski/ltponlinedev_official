@@ -33,7 +33,6 @@ Route::get('release-notes', function () {
 Route::get('late-new-user-form', 'Auth\LateRegisterController@lateNewUserForm')->name('late-new-user-form');
 Route::post('late-register', 'Auth\LateRegisterController@lateRegister')->name('late-register');
 
-
 /**
  * Authenticated User Routes
  */
@@ -41,7 +40,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /**
      * Admin Routes
      */
-    Route::get('generate-URL', 'Auth\LateRegisterController@generateRandomURL')->name('generate-URL');
+    Route::get('late-user-management', 'Auth\LateRegisterController@lateUserManagement')->name('late-user-management');
+    Route::post('generate-URL', ['as' => 'generate-URL', 'uses' => 'Auth\LateRegisterController@generateRandomURL']);
 
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
