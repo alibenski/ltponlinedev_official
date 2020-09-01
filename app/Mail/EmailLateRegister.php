@@ -29,6 +29,7 @@ class EmailLateRegister extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.emailLateRegister');
+        return $this->view('emails.emailLateRegister')
+            ->subject('Student Registration Email');
     }
 }
