@@ -24,7 +24,7 @@
 										<p>{{ $e->Tch_Name }}:</p>
 											@foreach ($e->classrooms as $element)
 											<p style="margin-left: 50px">
-			                            		LTP - {{$element->course->Description}} - {{$element->Te_Code_New}}: {{$element->scheduler->name}} 
+			                            		LTP - {{ $selectedTerm->Term_Code }} - {{ $e->Tch_Lastname }} - {{$element->Te_Code_New}} - {{$element->course->Description}}: {{$element->scheduler->name}} 
 											</p>
 											@endforeach
 										@endif
