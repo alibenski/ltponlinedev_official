@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
 use DB;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use App\Torgan;
+use App\Mail\EmailLateRegister;
 
 
 class LateRegisterController extends Controller
@@ -27,6 +29,7 @@ class LateRegisterController extends Controller
             $url = URL::temporarySignedRoute('late-new-user-form', now()->addDays(1), ['transaction' => $recordId]);
 
             // send email with url to regitration form
+            Mail::to($request->email)->send(new EmailLateRegister($url));
 
             return response()->json($url);
         }
