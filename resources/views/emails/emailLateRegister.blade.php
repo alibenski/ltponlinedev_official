@@ -12,13 +12,13 @@
                     <tr>
                         <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: justify;">
                             <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal; text-align: center;">CLM Online Enrolment</h1>
-                            <p> Hello! </p>
-                        <p> Please click the button below to register.</p>
+                            <p> Hello! Thank you for your interest in our language training programme. </p>
+                        <p> Please click the button below to register your online registration user account.</p>
                             <p> Note: The link will expire in 24 hours.</p>
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                        <td style="padding: 10px 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                             <!-- Button : BEGIN -->
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                                 <tr>
@@ -32,6 +32,6 @@
                             <!-- Button : END -->
                         </td>
                     </tr>
-
+                    <br>
                     @include('layouts.email.partials._emailFooterEn')
 @stop

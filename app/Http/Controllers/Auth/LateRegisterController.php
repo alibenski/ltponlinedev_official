@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use App\Torgan;
+use App\FileNewUser;
+use App\NewUser;
 use App\Mail\EmailLateRegister;
 
 
@@ -28,7 +28,6 @@ class LateRegisterController extends Controller
 
             $url = URL::temporarySignedRoute('late-new-user-form', now()->addDays(1), ['transaction' => $recordId]);
 
-            // send email with url to regitration form
             Mail::to($request->email)->send(new EmailLateRegister($url));
 
             return response()->json($url);
@@ -51,7 +50,6 @@ class LateRegisterController extends Controller
 
     public function lateRegister(Request $request)
     {
-        dd($request);
         //validate the data
         $this->validate($request, array(
             'gender' => 'required|string|',
@@ -96,15 +94,13 @@ class LateRegisterController extends Controller
         $newUser->contact_num = $request->contact_num;
         $newUser->dob = $request->dob;
         $newUser->attachment_id = $attachment_contract_file->id;
-        // $newUser->cat = $request->cat;
-        // $newUser->student_cat = $request->student_cat;
         $newUser->save();
+
         // send email notification to Secretariat to approve his login credentials to the system and sddextr record
         Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . $request->nameLast, function ($message) {
-            $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
-            $message->to('clm_language@un.org')->subject('Notification: New Non-UN User Request');
+            $message->from('clm_onlineregistration@unog.ch', 'CLM Online Administrator');
+            $message->to('clm_language@un.org')->subject('Notification: New Late User Request');
         });
-        // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
 
         return redirect()->route('new_user_msg');
     }
