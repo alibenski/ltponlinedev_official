@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 // test routes for test queries
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
@@ -27,12 +28,21 @@ Route::get('release-notes', function () {
 })->name('release-notes');
 
 /**
+ * Late Account User Register Routes
+ */
+Route::get('late-new-user-form', 'Auth\LateRegisterController@lateNewUserForm')->name('late-new-user-form');
+Route::post('late-register', 'Auth\LateRegisterController@lateRegister')->name('late-register');
+
+/**
  * Authenticated User Routes
  */
 Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' => 'admin'], function () {
     /**
      * Admin Routes
      */
+    Route::get('late-user-management', 'Auth\LateRegisterController@lateUserManagement')->name('late-user-management');
+    Route::post('generate-URL', ['as' => 'generate-URL', 'uses' => 'Auth\LateRegisterController@generateRandomURL']);
+
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
     Route::get('send-email-to-enrolled-students-of-selected-term', 'SystemController@sendEmailToEnrolledStudentsOfSelectedTerm')->name('send-email-to-enrolled-students-of-selected-term');

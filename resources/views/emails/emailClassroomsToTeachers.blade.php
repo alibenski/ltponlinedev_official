@@ -12,7 +12,7 @@
             <td bgcolor="#ffffff">
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
-                        <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: justify;">
+                        <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: left;">
                             <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal; text-align: center;">CLM Online Enrolment</h1>
                             <p>Dear colleagues, </p>
                             <p>We are pleased to announce that the convocations for the {{ $selectedTerm->Comments }} courses have been sent. Please refer to the list below for the names of your course channels in MS Teams:</p>
@@ -24,7 +24,7 @@
 										<p>{{ $e->Tch_Name }}:</p>
 											@foreach ($e->classrooms as $element)
 											<p style="margin-left: 50px">
-			                            		LTP - {{$element->course->Description}} - {{$element->Te_Code_New}}: {{$element->scheduler->name}} 
+			                            		LTP-{{ $selectedTerm->Term_Code }}-{{ $e->Tch_ID }}-{{$element->course->Description}}-{{$element->Te_Code_New}}:{{$element->scheduler->name}} 
 											</p>
 											@endforeach
 										@endif
