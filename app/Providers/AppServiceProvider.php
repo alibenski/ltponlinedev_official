@@ -9,6 +9,9 @@ use Illuminate\Queue\Events\JobFailed;
 use Validator;
 use App\Preenrolment;
 use Illuminate\Support\Facades\Mail;
+use App\User;
+use App\SDDEXTR;
+use App\Observers\UserObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        User::observe(UserObserver::class);
+        SDDEXTR::observe(UserObserver::class);
+
         Schema::defaultStringLength(191);
 
         Queue::failing(function (JobFailed $event) {

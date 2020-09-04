@@ -19,6 +19,11 @@ class User extends Authenticatable
     use FullTextSearch;
     use SoftDeletes;
 
+    public function history()
+    {
+        return $this->morphMany(History::class, 'historical', 'reference_table', 'reference_id');
+    }
+
     /**
      * The columns of the full text index
      */
