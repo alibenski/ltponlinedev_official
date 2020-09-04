@@ -233,7 +233,13 @@ class StudentController extends Controller
         if ($student->updated_at->lt($expiration)) {
             if ($student) {
                 // change data in the User table
-                User::where(['id' => $id, 'temp_email' => $temp_email, 'update_token' => $update_token])->update(['email' => $temp_email, 'temp_email' => NULL, 'approved_update' => '1', 'update_token' => NULL]);
+                // User::where(['id' => $id, 'temp_email' => $temp_email, 'update_token' => $update_token])->update(['email' => $temp_email, 'temp_email' => NULL, 'approved_update' => '1', 'update_token' => NULL]);
+                $u = User::find($id);
+                $u->email = $temp_email;
+                $u->temp_email = NULL;
+                $u->approved_update = '1';
+                $u->update_token = NULL;
+                $u->save();
                 // change e-mail address in the sddextr
                 SDDEXTR::where(['INDEXNO' => $student->indexno])->update(['EMAIL' => $temp_email]);
 
