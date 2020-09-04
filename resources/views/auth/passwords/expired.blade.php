@@ -26,10 +26,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">Change Password</div>
+            <div class="card">
+                <div class="card-header">Change Password</div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
@@ -104,10 +104,10 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-lock" aria-hidden="true"></i> Password Strength and Complexity</div>
+            <div class="card">
+                <div class="card-header"><i class="fa fa-lock" aria-hidden="true"></i> Password Strength and Complexity</div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     <ul>
                         <li>At least twelve (12) characters long; more than fourteen (14) characters is better</li>
                         <li>Different from the default (initial) password</li>
