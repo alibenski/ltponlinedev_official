@@ -69,7 +69,9 @@
 		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong> <a href="{{ route('view-classrooms-per-section', ['Code' => $element->CodeClass]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h3>
 		                  
 		                  <p>Schedule: <strong>@if(!empty($element->schedules->name)){{$element->schedules->name}}@endif</strong></p>  
-
+						  <p>
+							MS Teams Class Name: <strong>LTP-{{ $element->Term }}-{{ $element->classrooms->Tch_ID }}-{{$element->courses->Description}}-{{$element->Te_Code}}:{{$element->schedules->name}} </strong>
+						  </p>
 		                    @if(!empty($element->classrooms->Te_Mon_Room))
 		                    <p>Monday Room: <strong>{{ $element->classrooms->roomsMon->Rl_Room }}</strong></p>
 		                    @endif
