@@ -147,15 +147,17 @@ class HomeController extends Controller
 
     public function history()
     {
+        $currentTerm = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        $currentTermCode = $currentTerm->Term_Code;
         $current_user = Auth::user()->indexno;
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $current_user)->get();
 
         if ($historical_data->isEmpty()) {
             $historical_data = null;
-            return view('form.history', compact('historical_data'));
+            return view('form.history', compact('historical_data', 'currentTermCode'));
         }
         // dd($historical_data);
-        return view('form.history', compact('historical_data'));
+        return view('form.history', compact('historical_data', 'currentTermCode'));
     }
 
     public function whatorg()
@@ -305,8 +307,8 @@ class HomeController extends Controller
     public function sendMailToStudent($display_language, $term, $type, $forms)
     {
         if ($type === 1) {
-            $display_language_en = $display_language->languages->name.' Placement Test';
-            $display_language_fr = 'Test de placement - '.$display_language->languages->name_fr;
+            $display_language_en = $display_language->languages->name . ' Placement Test';
+            $display_language_fr = 'Test de placement - ' . $display_language->languages->name_fr;
             $schedule = 'n/a';
         } else {
             $display_language_en = $display_language->courses->EDescription;
@@ -327,9 +329,9 @@ class HomeController extends Controller
         $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
         $term_year = new Carbon($term_date_time);
         $term_year = $term_year->year;
-        $seasonYear = $term_season_en.' '.$term_year;
+        $seasonYear = $term_season_en . ' ' . $term_year;
 
-        $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+        $subject = 'Cancellation: ' . $staff_name . ' - ' . $display_language_en . ' (' . $seasonYear . ')';
 
         Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
     }
@@ -360,7 +362,7 @@ class HomeController extends Controller
         if ($is_self_pay_form == 1) {
             $type = 1; // 1 = placement form
             $this->sendMailToStudent($display_language, $term, $type, $forms);
-            
+
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
