@@ -56,8 +56,23 @@
 								@if(empty( $class->schedule_id ))
 								null
 								@else 
-                                {{ $class->scheduler->begin_day }}
-                                <br>
+                                {{-- {{ $class->scheduler->begin_day }} --}}
+                                    @if ($class->scheduler->day_1 == 2)
+                                    Monday
+                                    @endif
+                                    @if ($class->scheduler->day_2 == 3)
+                                    Tuesday
+                                    @endif
+                                    @if ($class->scheduler->day_3 == 4)
+                                    Wednesday
+                                    @endif
+                                    @if ($class->scheduler->day_4 == 5)
+                                    Thursday
+                                    @endif
+                                    @if ($class->scheduler->day_5 == 6)
+                                    Friday
+                                    @endif  
+                                    <br>
                                     @if ($class->scheduler->day_1 == 2)
                                     {{__('days.Monday'  , [], 'fr')}}
                                     @endif

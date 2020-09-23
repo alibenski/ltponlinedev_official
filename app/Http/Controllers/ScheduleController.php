@@ -42,9 +42,9 @@ class ScheduleController extends Controller
     public function create()
     {
         $schedules = Schedule::all();
-        $days = Day::pluck("Week_Day_Name","Week_Day_Name")->all(); 
-        $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
-        $etimes = Time::pluck("End_Time","End_Time")->all(); 
+        $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->all();
+        $btimes = Time::pluck("Begin_Time", "Begin_Time")->all();
+        $etimes = Time::pluck("End_Time", "End_Time")->all();
         return view('schedules.create', compact('schedules', 'days', 'btimes', 'etimes'));
     }
 
@@ -57,45 +57,66 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $countDays = count($request->begin_day);
-        $implodeName = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $request->merge( [ 'name' => $implodeName ] );
+        $implodeBeginDay = implode(' & ', $request->begin_day);
+        $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+
+        $implodeName = $implodeBeginDay . '  : ' . $time_combination;
+        $request->merge(['name' => $implodeName]);
 
         $this->validate($request, array(
             'name' => 'unique:schedules,name|',
             'begin_day' => 'bail|required|',
             'begin_time' => 'required',
             'end_time' => 'required',
-        ));  
+        ));
 
-        
+        $arrayBeginDayFr = [];
+        foreach ($request->begin_day as $value) {
+            $arrayBeginDayFr[] = __('days.' . $value, [], 'fr');
+        }
+        $implodeBeginDayFr = implode(' & ', $arrayBeginDayFr);
+
         // Save the data to db
         $schedule = new Schedule;
-        $schedule->begin_day = implode(' ', $request->begin_day);
-        for ($i=0; $i < $countDays; $i++) { 
-            if ($request->begin_day[$i] == 'Monday') {$schedule->day_1 = 2;}
-            if ($request->begin_day[$i] == 'Tuesday') {$schedule->day_2 = 3;}
-            if ($request->begin_day[$i] == 'Wednesday') {$schedule->day_3 = 4;}
-            if ($request->begin_day[$i] == 'Thursday') {$schedule->day_4 = 5;}
-            if ($request->begin_day[$i] == 'Friday') {$schedule->day_5 = 6;}
+        $schedule->begin_day = $implodeBeginDay;
+        $schedule->begin_day_fr = $implodeBeginDayFr;
+
+        for ($i = 0; $i < $countDays; $i++) {
+            if ($request->begin_day[$i] == 'Monday') {
+                $schedule->day_1 = 2;
+            }
+            if ($request->begin_day[$i] == 'Tuesday') {
+                $schedule->day_2 = 3;
+            }
+            if ($request->begin_day[$i] == 'Wednesday') {
+                $schedule->day_3 = 4;
+            }
+            if ($request->begin_day[$i] == 'Thursday') {
+                $schedule->day_4 = 5;
+            }
+            if ($request->begin_day[$i] == 'Friday') {
+                $schedule->day_5 = 6;
+            }
         }
-        //$schedule->end_day = $request->end_day;
+
         $schedule->begin_time = $request->begin_time;
         $schedule->end_time = $request->end_time;
-        $schedule->name = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $schedule->save();         
+        $schedule->name = $implodeBeginDay . '  : ' . $time_combination;
+        $schedule->name_fr = $implodeBeginDayFr . '  : ' . $time_combination;
+        $schedule->time_combination = $time_combination;
+        $schedule->save();
+
         // Set flash data with message
         $request->session()->flash('success', 'New entry has been saved!');
-        // Redirect to flash data to posts.show
-        return redirect()->route('schedules.create'); 
-
+        // Redirect with flash data 
+        return redirect()->route('schedules.index');
     }
 
     public function storeNonStandardSchedule(Request $request)
     {
         $countDays = count($request->begin_day);
-        $implodeName = $request->sched_name. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $request->merge( [ 'name' => $implodeName ] );
+        $implodeName = $request->sched_name . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $request->merge(['name' => $implodeName]);
 
         $this->validate($request, array(
             'name' => 'unique:schedules,name|',
@@ -108,28 +129,38 @@ class ScheduleController extends Controller
         $schedule->begin_day = $request->sched_name;
 
         if ($countDays > 0) {
-            for ($i=0; $i < $countDays; $i++) { 
-                if ($request->begin_day[$i] == 'Monday') {$schedule->day_1 = 2;}
-                if ($request->begin_day[$i] == 'Tuesday') {$schedule->day_2 = 3;}
-                if ($request->begin_day[$i] == 'Wednesday') {$schedule->day_3 = 4;}
-                if ($request->begin_day[$i] == 'Thursday') {$schedule->day_4 = 5;}
-                if ($request->begin_day[$i] == 'Friday') {$schedule->day_5 = 6;}
+            for ($i = 0; $i < $countDays; $i++) {
+                if ($request->begin_day[$i] == 'Monday') {
+                    $schedule->day_1 = 2;
+                }
+                if ($request->begin_day[$i] == 'Tuesday') {
+                    $schedule->day_2 = 3;
+                }
+                if ($request->begin_day[$i] == 'Wednesday') {
+                    $schedule->day_3 = 4;
+                }
+                if ($request->begin_day[$i] == 'Thursday') {
+                    $schedule->day_4 = 5;
+                }
+                if ($request->begin_day[$i] == 'Friday') {
+                    $schedule->day_5 = 6;
+                }
             }
         } else {
             $schedule->day_1 = 2;
             $schedule->day_2 = 3;
             $schedule->day_3 = 4;
             $schedule->day_4 = 5;
-            $schedule->day_5 = 6;      
+            $schedule->day_5 = 6;
         }
 
 
         //$schedule->end_day = $request->end_day;
         $schedule->begin_time = $request->begin_time;
         $schedule->end_time = $request->end_time;
-        $schedule->name = $request->sched_name. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $schedule->save();         
+        $schedule->name = $request->sched_name . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $schedule->save();
         // Set flash data with message
         $request->session()->flash('success', 'New entry has been saved!');
         // Redirect to flash data to posts.show
@@ -156,9 +187,9 @@ class ScheduleController extends Controller
     public function edit($id)
     {
         $schedule = Schedule::find($id);
-        $days = Day::pluck("Week_Day_Name","Week_Day_Name")->all(); 
-        $btimes = Time::pluck("Begin_Time","Begin_Time")->all();
-        $etimes = Time::pluck("End_Time","End_Time")->all(); 
+        $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->all();
+        $btimes = Time::pluck("Begin_Time", "Begin_Time")->all();
+        $etimes = Time::pluck("End_Time", "End_Time")->all();
         //$exists = $course->schedule->contains($schedule_id);
         return view('schedules.edit', compact('schedule', 'days', 'btimes', 'etimes'));
     }
@@ -172,16 +203,16 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $implodeName = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $request->merge( [ 'name' => $implodeName ] );
+        $implodeName = implode(' ', $request->begin_day) . '  ' . $request->end_day . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $request->merge(['name' => $implodeName]);
         // Validate data
         $schedule = Schedule::find($id);
-            $this->validate($request, array(
-                'name' => 'unique:schedules,name|',
-                'begin_day' => 'required',
-                'begin_time' => 'required',
-                'end_time' => 'required',
-            )); 
+        $this->validate($request, array(
+            'name' => 'unique:schedules,name|',
+            'begin_day' => 'required',
+            'begin_time' => 'required',
+            'end_time' => 'required',
+        ));
         $countDays = count($request->begin_day);
         // Save the data to db
         $schedule = Schedule::find($id);
@@ -192,22 +223,32 @@ class ScheduleController extends Controller
         $schedule->day_3 = null;
         $schedule->day_4 = null;
         $schedule->day_5 = null;
-        for ($i=0; $i < $countDays; $i++) { 
-            if ($request->begin_day[$i] == 'Monday') {$schedule->day_1 = 2;}
-            if ($request->begin_day[$i] == 'Tuesday') {$schedule->day_2 = 3;}
-            if ($request->begin_day[$i] == 'Wednesday') {$schedule->day_3 = 4;}
-            if ($request->begin_day[$i] == 'Thursday') {$schedule->day_4 = 5;}
-            if ($request->begin_day[$i] == 'Friday') {$schedule->day_5 = 6;}
+        for ($i = 0; $i < $countDays; $i++) {
+            if ($request->begin_day[$i] == 'Monday') {
+                $schedule->day_1 = 2;
+            }
+            if ($request->begin_day[$i] == 'Tuesday') {
+                $schedule->day_2 = 3;
+            }
+            if ($request->begin_day[$i] == 'Wednesday') {
+                $schedule->day_3 = 4;
+            }
+            if ($request->begin_day[$i] == 'Thursday') {
+                $schedule->day_4 = 5;
+            }
+            if ($request->begin_day[$i] == 'Friday') {
+                $schedule->day_5 = 6;
+            }
         }
         $schedule->begin_time = $request->input('begin_time');
         $schedule->end_time = $request->input('end_time');
-        $schedule->name = implode(' ', $request->begin_day). '  ' .$request->end_day. ': ' .date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)). ' - ' .date('h:ia', strtotime($request->end_time));
-        $schedule->save();         
+        $schedule->name = implode(' ', $request->begin_day) . '  ' . $request->end_day . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $schedule->save();
         // Set flash data with message
         $request->session()->flash('success', 'Changes have been saved!');
         // Redirect to flash data to posts.show
-        return redirect()->route('schedules.index'); 
+        return redirect()->route('schedules.index');
     }
 
     /**
