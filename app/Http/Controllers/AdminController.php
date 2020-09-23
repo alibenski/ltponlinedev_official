@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classroom;
+use App\CourseSchedule;
 use App\NewUser;
 use App\PlacementForm;
 use App\Preenrolment;
@@ -24,6 +25,14 @@ use Session;
 
 class AdminController extends Controller
 {
+    public function adminExcelSchedule()
+    {
+        $term = Session::get('Term');
+        $course_schedule = CourseSchedule::orderBy('L', 'asc')->where('Te_Term', $term)->get();
+
+        return view('admin.admin-excel-schedule', compact('course_schedule', 'term'));
+    }
+
     public function adminStudentEmailView()
     {
         return view('admin.admin-student-email-view');
