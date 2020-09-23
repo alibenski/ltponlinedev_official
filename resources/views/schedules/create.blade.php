@@ -32,8 +32,13 @@
 
               <div class="form-group">
                 <label for="sched_name" class="control-label col-md-4">Non-standard Schedule:</label>
-                <input type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" placeholder="Enter the non-standard schedule format, e.g. 1 & 15 Feb, 1, 15 & 29 March, etc."></input>
+                <input type="text" class="col-md-6 form-control-static" id="sched_name" name="sched_name" rows="1" style="resize:none;" placeholder="Enter the non-standard schedule format, e.g. 1 & 15 Feb, 1, 15 & 29 March, etc.">
                 <strong><small class="col-md-6 col-md-offset-4 text-danger">Use only for non-standard schedule format, e.g. "1 & 15 Feb, 1, 15 & 29 March", "10 & 24 May, 7 & 21 June, 5 July",etc.</small></strong>
+                
+              </div>
+              <div class="form-group">
+                <label for="sched_name_fr" class="control-label col-md-4">French Translation:</label>
+                <input type="text" class="col-md-6 form-control-static" id="sched_name_fr" name="sched_name_fr" rows="1" style="resize:none;" placeholder="Enter French Translation">
               </div>
               
               <div class="form-group">

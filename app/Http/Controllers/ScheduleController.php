@@ -114,12 +114,13 @@ class ScheduleController extends Controller
 
     public function storeNonStandardSchedule(Request $request)
     {
-        $countDays = count($request->begin_day);
-        $implodeName = $request->sched_name . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $implodeName = $request->sched_name . ': ' . $time_combination;
         $request->merge(['name' => $implodeName]);
 
         $this->validate($request, array(
-            'name' => 'unique:schedules,name|',
+            'sched_name' => 'unique:schedules,name|',
+            'sched_name_fr' => 'required',
             'begin_time' => 'required',
             'end_time' => 'required',
         ));
@@ -127,8 +128,10 @@ class ScheduleController extends Controller
         // Save the data to db
         $schedule = new Schedule;
         $schedule->begin_day = $request->sched_name;
+        $schedule->begin_day_fr = $request->sched_name_fr;
 
-        if ($countDays > 0) {
+        if ($request->begin_day) {
+            $countDays = count($request->begin_day);
             for ($i = 0; $i < $countDays; $i++) {
                 if ($request->begin_day[$i] == 'Monday') {
                     $schedule->day_1 = 2;
@@ -154,17 +157,17 @@ class ScheduleController extends Controller
             $schedule->day_5 = 6;
         }
 
-
-        //$schedule->end_day = $request->end_day;
         $schedule->begin_time = $request->begin_time;
         $schedule->end_time = $request->end_time;
-        $schedule->name = $request->sched_name . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
-        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $schedule->name = $request->sched_name . ': ' . $time_combination;
+        $schedule->name_fr = $request->sched_name_fr . ': ' . $time_combination;
+        $schedule->time_combination = $time_combination;
         $schedule->save();
+
         // Set flash data with message
         $request->session()->flash('success', 'New entry has been saved!');
-        // Redirect to flash data to posts.show
-        return redirect()->route('schedules.create');
+        // Redirect with flash data
+        return redirect()->route('schedules.index');
     }
 
     /**
