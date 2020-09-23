@@ -57,7 +57,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $countDays = count($request->begin_day);
-        $implodeBeginDay = implode(' & ', $request->begin_day);
+        $implodeBeginDay = implode(' ', $request->begin_day);
         $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
 
         $implodeName = $implodeBeginDay . '  : ' . $time_combination;
@@ -74,7 +74,7 @@ class ScheduleController extends Controller
         foreach ($request->begin_day as $value) {
             $arrayBeginDayFr[] = __('days.' . $value, [], 'fr');
         }
-        $implodeBeginDayFr = implode(' & ', $arrayBeginDayFr);
+        $implodeBeginDayFr = implode(' ', $arrayBeginDayFr);
 
         // Save the data to db
         $schedule = new Schedule;
