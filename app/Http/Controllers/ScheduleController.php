@@ -57,7 +57,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $countDays = count($request->begin_day);
-        $implodeBeginDay = implode(' ', $request->begin_day);
+        $implodeBeginDay = implode(' & ', $request->begin_day);
         $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
 
         $implodeName = $implodeBeginDay . '  : ' . $time_combination;
@@ -68,13 +68,14 @@ class ScheduleController extends Controller
             'begin_day' => 'bail|required|',
             'begin_time' => 'required',
             'end_time' => 'required',
+            'standard_format' => 'required',
         ));
 
         $arrayBeginDayFr = [];
         foreach ($request->begin_day as $value) {
             $arrayBeginDayFr[] = __('days.' . $value, [], 'fr');
         }
-        $implodeBeginDayFr = implode(' ', $arrayBeginDayFr);
+        $implodeBeginDayFr = implode(' & ', $arrayBeginDayFr);
 
         // Save the data to db
         $schedule = new Schedule;
@@ -99,6 +100,7 @@ class ScheduleController extends Controller
             }
         }
 
+        $schedule->standard_format = $request->standard_format;
         $schedule->begin_time = $request->begin_time;
         $schedule->end_time = $request->end_time;
         $schedule->name = $implodeBeginDay . '  : ' . $time_combination;
@@ -123,6 +125,7 @@ class ScheduleController extends Controller
             'sched_name_fr' => 'required',
             'begin_time' => 'required',
             'end_time' => 'required',
+            'standard_format' => 'required',
         ));
 
         // Save the data to db
@@ -157,6 +160,7 @@ class ScheduleController extends Controller
             $schedule->day_5 = 6;
         }
 
+        $schedule->standard_format = $request->standard_format;
         $schedule->begin_time = $request->begin_time;
         $schedule->end_time = $request->end_time;
         $schedule->name = $request->sched_name . ': ' . $time_combination;

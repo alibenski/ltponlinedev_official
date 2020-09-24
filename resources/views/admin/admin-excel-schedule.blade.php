@@ -56,38 +56,9 @@
 								@if(empty( $class->schedule_id ))
 								null
 								@else 
-                                {{-- {{ $class->scheduler->begin_day }} --}}
-                                    @if ($class->scheduler->day_1 == 2)
-                                    Monday
-                                    @endif
-                                    @if ($class->scheduler->day_2 == 3)
-                                    Tuesday
-                                    @endif
-                                    @if ($class->scheduler->day_3 == 4)
-                                    Wednesday
-                                    @endif
-                                    @if ($class->scheduler->day_4 == 5)
-                                    Thursday
-                                    @endif
-                                    @if ($class->scheduler->day_5 == 6)
-                                    Friday
-                                    @endif  
+                                {{ $class->scheduler->begin_day }}
                                     <br>
-                                    @if ($class->scheduler->day_1 == 2)
-                                    {{__('days.Monday'  , [], 'fr')}}
-                                    @endif
-                                    @if ($class->scheduler->day_2 == 3)
-                                    {{__('days.Tuesday'  , [], 'fr')}}
-                                    @endif
-                                    @if ($class->scheduler->day_3 == 4)
-                                    {{__('days.Wednesday'  , [], 'fr')}}
-                                    @endif
-                                    @if ($class->scheduler->day_4 == 5)
-                                    {{__('days.Thursday'  , [], 'fr')}}
-                                    @endif
-                                    @if ($class->scheduler->day_5 == 6)
-                                    {{__('days.Friday'  , [], 'fr')}}
-                                    @endif  
+                                {{ $class->scheduler->begin_day_fr }} 
 								@endif
 							</td>
 							<td>
