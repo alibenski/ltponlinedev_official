@@ -32,7 +32,7 @@
 						
 						<tr>
 							<td>{{ $schedule->id }}</td>
-							<td>{{ $schedule->name }}</td>
+						<td>{{ $schedule->name }} / {{ $schedule->name_fr }}</td>
 							<td>
 								@if(empty($schedule->begin_time))
 					            <span class="label label-danger">none</span>

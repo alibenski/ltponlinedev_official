@@ -210,26 +210,39 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $implodeName = implode(' ', $request->begin_day) . '  ' . $request->end_day . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $implodeBeginDay = implode(' & ', $request->begin_day);
+        $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $implodeName = $implodeBeginDay . '  : ' . $time_combination;
         $request->merge(['name' => $implodeName]);
+
         // Validate data
-        $schedule = Schedule::find($id);
         $this->validate($request, array(
             'name' => 'unique:schedules,name|',
             'begin_day' => 'required',
             'begin_time' => 'required',
             'end_time' => 'required',
+            'standard_format' => 'required',
         ));
-        $countDays = count($request->begin_day);
+
+        $arrayBeginDayFr = [];
+        foreach ($request->begin_day as $value) {
+            $arrayBeginDayFr[] = __('days.' . $value, [], 'fr');
+        }
+        $implodeBeginDayFr = implode(' & ', $arrayBeginDayFr);
+
         // Save the data to db
         $schedule = Schedule::find($id);
-        $schedule->begin_day = implode(' ', $request->begin_day);
+        $schedule->begin_day = $implodeBeginDay;
+        $schedule->begin_day_fr = $implodeBeginDayFr;
+
         // set fields to null first
         $schedule->day_1 = null;
         $schedule->day_2 = null;
         $schedule->day_3 = null;
         $schedule->day_4 = null;
         $schedule->day_5 = null;
+
+        $countDays = count($request->begin_day);
         for ($i = 0; $i < $countDays; $i++) {
             if ($request->begin_day[$i] == 'Monday') {
                 $schedule->day_1 = 2;
@@ -247,15 +260,22 @@ class ScheduleController extends Controller
                 $schedule->day_5 = 6;
             }
         }
+
+        $schedule->standard_format = $request->standard_format;
         $schedule->begin_time = $request->input('begin_time');
         $schedule->end_time = $request->input('end_time');
-        $schedule->name = implode(' ', $request->begin_day) . '  ' . $request->end_day . ': ' . date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
-        $schedule->time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $schedule->name = $implodeBeginDay . '  : ' . $time_combination;
+        $schedule->name_fr = $implodeBeginDayFr . '  : ' . $time_combination;
         $schedule->save();
         // Set flash data with message
         $request->session()->flash('success', 'Changes have been saved!');
         // Redirect to flash data to posts.show
         return redirect()->route('schedules.index');
+    }
+
+    public function updateNonStandardSchedule(Request $request, $id)
+    {
+        dd($id, $request->all());
     }
 
     /**

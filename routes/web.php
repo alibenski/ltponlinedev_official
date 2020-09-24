@@ -255,6 +255,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::resource('schedules', 'ScheduleController');
 
     Route::post('store-non-standard-schedule', ['as' => 'store-non-standard-schedule', 'uses' => 'ScheduleController@storeNonStandardSchedule']);
+    Route::put('update-non-standard-schedule/{id}', ['as' => 'update-non-standard-schedule', 'uses' => 'ScheduleController@updateNonStandardSchedule']);
+
     Route::resource('terms', 'TermController');
     Route::resource('courses', 'CourseController');
     Route::get('check-existing-tecode', ['as' => 'check-existing-tecode', 'uses' => 'CourseController@checkExistingTeCode']);
