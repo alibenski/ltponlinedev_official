@@ -56,6 +56,13 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, array(
+            'begin_day' => 'bail|required|',
+            'begin_time' => 'required',
+            'end_time' => 'required',
+            'standard_format' => 'required',
+        ));
+
         $countDays = count($request->begin_day);
         $implodeBeginDay = implode(' & ', $request->begin_day);
         $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
@@ -65,10 +72,6 @@ class ScheduleController extends Controller
 
         $this->validate($request, array(
             'name' => 'unique:schedules,name|',
-            'begin_day' => 'bail|required|',
-            'begin_time' => 'required',
-            'end_time' => 'required',
-            'standard_format' => 'required',
         ));
 
         $arrayBeginDayFr = [];
@@ -116,6 +119,12 @@ class ScheduleController extends Controller
 
     public function storeNonStandardSchedule(Request $request)
     {
+        $this->validate($request, array(
+            'begin_time' => 'required',
+            'end_time' => 'required',
+            'standard_format' => 'required',
+        ));
+
         $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
         $implodeName = $request->sched_name . ': ' . $time_combination;
         $request->merge(['name' => $implodeName]);
@@ -123,9 +132,6 @@ class ScheduleController extends Controller
         $this->validate($request, array(
             'sched_name' => 'unique:schedules,name|',
             'sched_name_fr' => 'required',
-            'begin_time' => 'required',
-            'end_time' => 'required',
-            'standard_format' => 'required',
         ));
 
         // Save the data to db
@@ -210,6 +216,13 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, array(
+            'begin_day' => 'bail|required|',
+            'begin_time' => 'required',
+            'end_time' => 'required',
+            'standard_format' => 'required',
+        ));
+
         $implodeBeginDay = implode(' & ', $request->begin_day);
         $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
         $implodeName = $implodeBeginDay . '  : ' . $time_combination;
@@ -218,10 +231,6 @@ class ScheduleController extends Controller
         // Validate data
         $this->validate($request, array(
             'name' => 'unique:schedules,name|',
-            'begin_day' => 'required',
-            'begin_time' => 'required',
-            'end_time' => 'required',
-            'standard_format' => 'required',
         ));
 
         $arrayBeginDayFr = [];
@@ -267,15 +276,79 @@ class ScheduleController extends Controller
         $schedule->name = $implodeBeginDay . '  : ' . $time_combination;
         $schedule->name_fr = $implodeBeginDayFr . '  : ' . $time_combination;
         $schedule->save();
-        // Set flash data with message
+
         $request->session()->flash('success', 'Changes have been saved!');
-        // Redirect to flash data to posts.show
+
         return redirect()->route('schedules.index');
     }
 
     public function updateNonStandardSchedule(Request $request, $id)
     {
-        dd($id, $request->all());
+        $this->validate($request, array(
+            'sched_name_fr' => 'required',
+            'begin_time' => 'required',
+            'end_time' => 'required',
+            'standard_format' => 'required',
+        ));
+        $time_combination = date('h:ia', strtotime($request->begin_time)) . ' - ' . date('h:ia', strtotime($request->end_time));
+        $implodeName = $request->sched_name . ': ' . $time_combination;
+        $request->merge(['name' => $implodeName]);
+
+        $this->validate($request, array(
+            'sched_name' => 'unique:schedules,name|',
+        ));
+
+        // Save the data to db
+        $schedule = Schedule::find($id);
+        $schedule->begin_day = $request->sched_name;
+        $schedule->begin_day_fr = $request->sched_name_fr;
+
+        // set fields to null first
+        $schedule->day_1 = null;
+        $schedule->day_2 = null;
+        $schedule->day_3 = null;
+        $schedule->day_4 = null;
+        $schedule->day_5 = null;
+
+        if ($request->begin_day) {
+            $countDays = count($request->begin_day);
+            for ($i = 0; $i < $countDays; $i++) {
+                if ($request->begin_day[$i] == 'Monday') {
+                    $schedule->day_1 = 2;
+                }
+                if ($request->begin_day[$i] == 'Tuesday') {
+                    $schedule->day_2 = 3;
+                }
+                if ($request->begin_day[$i] == 'Wednesday') {
+                    $schedule->day_3 = 4;
+                }
+                if ($request->begin_day[$i] == 'Thursday') {
+                    $schedule->day_4 = 5;
+                }
+                if ($request->begin_day[$i] == 'Friday') {
+                    $schedule->day_5 = 6;
+                }
+            }
+        } else {
+            $schedule->day_1 = 2;
+            $schedule->day_2 = 3;
+            $schedule->day_3 = 4;
+            $schedule->day_4 = 5;
+            $schedule->day_5 = 6;
+        }
+
+        $schedule->standard_format = $request->standard_format;
+        $schedule->begin_time = $request->begin_time;
+        $schedule->end_time = $request->end_time;
+        $schedule->name = $request->sched_name . ': ' . $time_combination;
+        $schedule->name_fr = $request->sched_name_fr . ': ' . $time_combination;
+        $schedule->time_combination = $time_combination;
+        $schedule->save();
+
+        // Set flash data with message
+        $request->session()->flash('success', 'Changes have been saved! [Non-standard Schedule]');
+        // Redirect with flash data
+        return redirect()->route('schedules.index');
     }
 
     /**
