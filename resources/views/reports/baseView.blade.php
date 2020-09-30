@@ -138,6 +138,7 @@
 						<th>Language</th>
 						<th>Description</th>
 						<th>Description (< 2019)</th>
+						<th>Course Duration</th>
 						<th>Organization</th>
 						<th>Name</th>
 						<th>Cancelled</th>
@@ -149,6 +150,7 @@
 						<th>Language</th>
 						<th>Description</th>
 						<th>Description (< 2019)</th>
+						<th>Course Duration</th>
 						<th>Organization</th>
 						<th>Name</th>
 						<th>Cancelled</th>
@@ -308,6 +310,8 @@
 		        		{ "data": "courses.Description",
 		        			"defaultContent": "" }, 
 		        		{ "data": "courses_old.Description",
+		        			"defaultContent": "" }, 
+						{ "data": "classrooms.course_schedule.courseduration.duration_name_en",
 		        			"defaultContent": "" }, 
 		        		{ "data": "DEPT" },  
 		        		{ "data": "users.name",

@@ -31,7 +31,7 @@ class ReportsController extends Controller
             $obj[] = (object) [
                 'term' => $term,
                 'count' => $qryStudents,
-            ]; 
+            ];
         }
 
         return response()->json($obj);
@@ -230,7 +230,8 @@ class ReportsController extends Controller
                     ->with('languages')
                     ->with('courses')
                     ->with('coursesOld')
-                    ->with('users');
+                    ->with('users')
+                    ->with('classrooms.courseSchedule.courseduration');
             }
         }
 
@@ -248,7 +249,8 @@ class ReportsController extends Controller
                     ->with('languages')
                     ->with('courses')
                     ->with('coursesOld')
-                    ->with('users');
+                    ->with('users')
+                    ->with('classrooms.courseSchedule.courseduration');
             }
         }
 
