@@ -45,19 +45,19 @@ class TermController extends Controller
     {
         // validate the data 
         $this->validate($request, array(
-                'Term_Code' => 'required|unique:LTP_Terms',
-                'Term_Begin' => 'required|', 
-                'Term_End' => 'required|',
-                'Comments' => 'required|',
-                'Term_Prev' => 'required|',
-                'Term_Next' => 'required|',
-                'Enrol_Date_Begin' => 'required|',
-                'Enrol_Date_End' => 'required|',
-                'Cancel_Date_Limit' => 'required|',
-                'Approval_Date_Limit_HR' => 'required|',
-                // 'Remind_Mgr_After' => 'required|integer',
-                'Remind_HR_After' => 'required|integer',
-            ));
+            'Term_Code' => 'required|unique:LTP_Terms',
+            'Term_Begin' => 'required|',
+            'Term_End' => 'required|',
+            'Comments' => 'required|',
+            'Term_Prev' => 'required|',
+            'Term_Next' => 'required|',
+            'Enrol_Date_Begin' => 'required|',
+            'Enrol_Date_End' => 'required|',
+            'Cancel_Date_Limit' => 'required|',
+            'Approval_Date_Limit_HR' => 'required|',
+            // 'Remind_Mgr_After' => 'required|integer',
+            'Remind_HR_After' => 'required|integer',
+        ));
 
         // Term_Begin should not be less than Approval_Date_Limit of previous term
         $selectedTerm = $request->Term_Code; // No need of type casting
@@ -82,14 +82,14 @@ class TermController extends Controller
         $previous_term = Term::where('Term_Code', $prev_term)->first();
 
         if ($request->Enrol_Date_Begin < $previous_term->Approval_Date_Limit) {
-            $request->session()->flash('interdire-msg', 'Enrolment Begin Date ('.$request->Enrol_Date_Begin.') cannot be less than the Approval Date Limit ('.$previous_term->Approval_Date_Limit.') of the previous term: '.$prev_term);
+            $request->session()->flash('interdire-msg', 'Enrolment Begin Date (' . $request->Enrol_Date_Begin . ') cannot be less than the Approval Date Limit (' . $previous_term->Approval_Date_Limit . ') of the previous term: ' . $prev_term);
             return redirect()->back();
         }
 
         // manipulate strings before storing
         $termBeginStr = date('j F', strtotime($request->Term_Begin));
         $termEndStr = date('j F Y', strtotime($request->Term_End));
-        $termNameStr = $termBeginStr.' - '.$termEndStr;
+        $termNameStr = $termBeginStr . ' - ' . $termEndStr;
 
         // translate 
         $termBeginMonth = date('F', strtotime($request->Term_Begin));
@@ -98,18 +98,18 @@ class TermController extends Controller
         $termEndDate = date('j', strtotime($request->Term_End));
         $termBeginYear = date('Y', strtotime($request->Term_Begin));
         $termEndYear = date('Y', strtotime($request->Term_End));
-        
-        $termBeginMonthFr = __('months.'.$termBeginMonth, [], 'fr');
-        $termEndMonthFr = __('months.'.$termEndMonth, [], 'fr');
 
-        $termNameFr = $termBeginDate.' '.$termBeginMonthFr.' au '.$termEndDate.' '.$termEndMonthFr.' '.$termEndYear;
-        
+        $termBeginMonthFr = __('months.' . $termBeginMonth, [], 'fr');
+        $termEndMonthFr = __('months.' . $termEndMonth, [], 'fr');
+
+        $termNameFr = $termBeginDate . ' ' . $termBeginMonthFr . ' au ' . $termEndDate . ' ' . $termEndMonthFr . ' ' . $termEndYear;
+
 
         // store in database
         $term = new Term;
         $term->Term_Code = $request->Term_Code;
         $term->Term_Name = $termNameStr;
-        $term->Term_Name_Fr = $termNameFr; 
+        $term->Term_Name_Fr = $termNameFr;
         $term->Term_Begin = $request->Term_Begin;
         $term->Term_End = $request->Term_End;
         $term->Term_Prev = $request->Term_Prev;
@@ -169,11 +169,9 @@ class TermController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, array(
-                // validate if termCode is unique 
-                'Term_Code' => 'unique:LTP_Terms,Term_Code|',
-                'Term_Begin' => 'required_with:Term_End|',
-                'Term_End' => 'required_with:Term_Begin|',
-            ));
+            'Term_Begin' => 'required_with:Term_End|',
+            'Term_End' => 'required_with:Term_Begin|',
+        ));
 
         $noTokenMethod = $request->except(['_token', '_method']);
         $fliteredInput = (array_filter($noTokenMethod));
@@ -185,7 +183,7 @@ class TermController extends Controller
         if (!is_null($request->Term_Begin)) {
             $termBeginStr = date('d F', strtotime($request->Term_Begin));
             $termEndStr = date('d F Y', strtotime($request->Term_End));
-            $termNameStr = $termBeginStr.' - '.$termEndStr;
+            $termNameStr = $termBeginStr . ' - ' . $termEndStr;
             $term->Term_Name = $termNameStr;
 
             // translate 
@@ -195,14 +193,13 @@ class TermController extends Controller
             $termEndDate = date('d', strtotime($request->Term_End));
             $termBeginYear = date('Y', strtotime($request->Term_Begin));
             $termEndYear = date('Y', strtotime($request->Term_End));
-            
-            $termBeginMonthFr = __('months.'.$termBeginMonth, [], 'fr');
-            $termEndMonthFr = __('months.'.$termEndMonth, [], 'fr');
 
-            $termNameFr = $termBeginDate.' '.$termBeginMonthFr.' au '.$termEndDate.' '.$termEndMonthFr.' '.$termEndYear;
+            $termBeginMonthFr = __('months.' . $termBeginMonth, [], 'fr');
+            $termEndMonthFr = __('months.' . $termEndMonth, [], 'fr');
 
+            $termNameFr = $termBeginDate . ' ' . $termBeginMonthFr . ' au ' . $termEndDate . ' ' . $termEndMonthFr . ' ' . $termEndYear;
         }
-        $term->Term_Name_Fr = $termNameFr; 
+        $term->Term_Name_Fr = $termNameFr;
         $term->Comments_fr = $term->seasons->FSEASON;
         $term->updated_by = Auth::user()->id;
         $term->save();
