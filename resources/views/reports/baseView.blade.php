@@ -138,9 +138,12 @@
 						<th>Language</th>
 						<th>Description</th>
 						<th>Description (< 2019)</th>
+						<th>Teacher</th>
 						<th>Course Duration</th>
+						<th>Price</th>
 						<th>Organization</th>
 						<th>Name</th>
+						<th>Gender</th>
 						<th>Cancelled</th>
 					</tr>
 				</thead>
@@ -150,9 +153,12 @@
 						<th>Language</th>
 						<th>Description</th>
 						<th>Description (< 2019)</th>
+						<th>Teacher</th>
 						<th>Course Duration</th>
+						<th>Price</th>
 						<th>Organization</th>
 						<th>Name</th>
+						<th>Gender</th>
 						<th>Cancelled</th>
 					</tr>
 				</tfoot>
@@ -311,10 +317,16 @@
 		        			"defaultContent": "" }, 
 		        		{ "data": "courses_old.Description",
 		        			"defaultContent": "" }, 
+		        		{ "data": "classrooms.teachers.Tch_Name",
+		        			"defaultContent": "" }, 
 						{ "data": "classrooms.course_schedule.courseduration.duration_name_en",
+		        			"defaultContent": "" }, 
+						{ "data": "classrooms.course_schedule.prices.price",
 		        			"defaultContent": "" }, 
 		        		{ "data": "DEPT" },  
 		        		{ "data": "users.name",
+		        			"defaultContent": ""  }, 
+		        		{ "data": "users.sddextr.SEX",
 		        			"defaultContent": ""  }, 
 		        		{ "data": "deleted_at" },
 					        ],

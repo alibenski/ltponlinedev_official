@@ -231,7 +231,10 @@ class ReportsController extends Controller
                     ->with('courses')
                     ->with('coursesOld')
                     ->with('users')
-                    ->with('classrooms.courseSchedule.courseduration');
+                    ->with('users.sddextr')
+                    ->with('classrooms.teachers')
+                    ->with('classrooms.courseSchedule.courseduration')
+                    ->with('classrooms.courseSchedule.prices');
             }
         }
 
@@ -250,7 +253,10 @@ class ReportsController extends Controller
                     ->with('courses')
                     ->with('coursesOld')
                     ->with('users')
-                    ->with('classrooms.courseSchedule.courseduration');
+                    ->with('users.sddextr')
+                    ->with('classrooms.teachers')
+                    ->with('classrooms.courseSchedule.courseduration')
+                    ->with('classrooms.courseSchedule.prices');
             }
         }
 
