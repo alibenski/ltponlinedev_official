@@ -81,6 +81,10 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('get-ltp-stats-graph-view', ['as' => 'get-ltp-stats-graph-view', 'uses' => 'ReportsController@getLtpStatsGraphView']);
     Route::get('reports/ltp-stats-graph-view-by-language', 'ReportsController@ltpStatsGraphViewByLanguage')->name('reports/ltp-stats-graph-view-by-language');
     Route::get('get-ltp-stats-graph-view-by-language', ['as' => 'get-ltp-stats-graph-view-by-language', 'uses' => 'ReportsController@getLtpStatsGraphViewByLanguage']);
+
+    Route::get('cancelled-term-language', ['as' => 'cancelled-term-language', 'uses' => 'ReportsController@cancelledTermLanguage']);
+    Route::get('courses-term-language', ['as' => 'courses-term-language', 'uses' => 'ReportsController@coursesTermLanguage']);
+
     /**
      * Text Routes
      */

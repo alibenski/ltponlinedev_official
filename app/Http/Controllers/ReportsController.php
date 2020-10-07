@@ -298,4 +298,39 @@ class ReportsController extends Controller
 
         return $result;
     }
+
+    /**
+     * Number of cancellations term/language 
+     * Outside of cancellation deadline
+     */
+    public function cancelledTermLanguage()
+    {
+        $container = [];
+        $langArray = ['A', 'C', 'E', 'F', 'R', 'S'];
+        $terms = Term::where('Term_Code', '>=', '191')->get();
+        $termContainer = [];
+        $combineContainer = [];
+        foreach ($terms as $term) {
+            foreach ($langArray as $lang) {
+                $recordsCancelled = new Repo;
+                $termCancelDeadline = Term::where('Term_Code', $term->Term_Code)->first()->Cancel_Date_Limit;
+                $recordsCancelled = $recordsCancelled->withTrashed()
+                    ->where('deleted_at', '>', $termCancelDeadline)
+                    ->where('Term', $term->Term_Code)
+                    ->where('L', $lang);
+                $container[] = $recordsCancelled->count();
+            }
+            $combine = array_combine($langArray, $container);
+            $combineContainer[] = $combine;
+            $termContainer[] = [$term->Term_Code => $combine];
+            $container = [];
+        }
+
+        $data = $termContainer;
+        return response()->json(['data' => $data]);
+    }
+
+    public function coursesTermLanguage()
+    {
+    }
 }
