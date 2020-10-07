@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classroom;
 use App\Repo;
 use App\Term;
 use App\Torgan;
@@ -332,5 +333,21 @@ class ReportsController extends Controller
 
     public function coursesTermLanguage()
     {
+        $termsGte2019 = Term::select('Term_Code')->where('Term_Code', '>=', '191')->get()->unique();
+        $container = [];
+        foreach ($termsGte2019 as $key => $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID');
+            $counter = $class2019->count();
+            $container[] = [
+                $term->Term_Code => $counter
+
+            ];
+        }
+
+        $termsLt2019 = Term::select('Term_Code')->where('Term_Code', '<', '191')->get()->unique();
+
+
+        dd($termsLt2019, $container);
+        return 'courses';
     }
 }
