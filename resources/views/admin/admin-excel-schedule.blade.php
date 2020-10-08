@@ -1,7 +1,11 @@
 @extends('admin.admin')
+@section('tabtitle')
+Schedule
+@stop
 @section('customcss')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"/>
+	<link rel="stylesheet" type="text/css" href="https://nightly.datatables.net/buttons/css/buttons.dataTables.min.css" />
 @stop
 @section('content')
 <div class="row">
@@ -26,24 +30,18 @@
 		<div class="filtered-table table-responsive">
 			<table id="sampol" class="table table-bordered table-striped">
 				<thead>
-					<th>
-                        Level or Name of course 
-                        <br> 
-                        Niveau ou nom du cours
-                    </th>
-					<th>Time<br> Horaire</th>
-					<th>Days<br> Jours</th>
-					<th>Format<br> </th>
-					{{-- <th>Duration</th> --}}
-					<th>Price <br> Prix</th>
+					<th>Level or Name of course <br>Niveau ou nom du cours</th>
+					<th>Time <br>Horaire</th>
+					<th>Days <br>Jours</th>
+					<th>Format</th>
+					<th>Price <br>Prix</th>
 				</thead>
 
 				<tbody>
 					@foreach($course_schedule as $class)
 						<tr>
                             <td>
-                                {{ $class->course->Description }} <br>
-                                {{ $class->course->FDescription }}
+                                {{ $class->course->Description }} <br>{{ $class->course->FDescription }}
                             </td>
                             <td>
                                 @if(empty( $class->schedule_id ))
@@ -56,9 +54,7 @@
 								@if(empty( $class->schedule_id ))
 								null
 								@else 
-                                {{ $class->scheduler->begin_day }}
-                                    <br>
-                                {{ $class->scheduler->begin_day_fr }} 
+                                {{ $class->scheduler->begin_day }} <br>{{ $class->scheduler->begin_day_fr }} 
 								@endif
 							</td>
 							<td>
@@ -89,29 +85,85 @@
 @stop
 
 @section('java_script')
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://nightly.datatables.net/buttons/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://nightly.datatables.net/buttons/js/buttons.html5.min.js"></script>
 <script>
-$('#sampol').DataTable({
-	"fixedHeader": true,
-	"deferRender": true,
-	"dom": 'B<"clear">lfrtip',
-	"buttons": [
-			'copy', 'csv', 'excel', 'pdf'
-		],
-	"oLanguage": {
-		"sSearch": "Search Filter:"
-		}
-});
-$(".preloader2").fadeOut(600);
-</script>
-<script>
-$('input.delete-record').on('click', function(event) {
-	var r = confirm("You are about to delete a record. Are you sure?");
-	if (r == false) {
-		event.preventDefault();
-	}
-});
+$(document).ready(function() {
+	function remove_tags(html)
+	 {
+	   html = html.replace(/<br>/g,"$br$"); 
+	   html = html.replace(/(?:\r\n|\r|\n)/g, '$n$');
+	   var tmp = document.createElement("DIV");
+	   tmp.innerHTML = html;
+	   html = tmp.textContent||tmp.innerText;
+
+	   html = html.replace(/\$br\$/g,"<br>");  
+	   html = html.replace(/\$n\$/g,"<br>");
+	
+	   return html;
+	 }
+
+    var buttonCommon = {
+        exportOptions: {
+			stripHtml: false,
+            format: {
+				header: function ( data, row, column, node ) {
+                    return data.replace(/<br\s*\/?>/ig, "\n");
+                },
+                body: function ( data, row, column, node ) {
+                    data = data.replace(/&amp;/g, '&').replace(/<br\s*\/?>/ig, "\n");
+
+					// if (column === 0) {
+                    // 	data = data.replace( /"/g, "'" );
+					// 	data = remove_tags(data);
+					// 	//split at each new line
+					// 	splitData = data.split('<br>');
+						
+					// 	//remove empty string
+					// 	splitData = splitData.filter(function(v){return v!==''});
+						
+					// 	data = '';
+					// 	for (i=0; i < splitData.length; i++) {
+					// 				//add escaped double quotes around each line
+					// 				data += '\"' + splitData[i] + '\"';
+					// 				//if its not the last line add CHAR(13)
+					// 				if (i + 1 < splitData.length) {
+					// 					data += '& CHAR(10) &';
+					// 				}
+					// 	}
+					// 	//Add concat function
+               		// 	data = '=CONCAT(' + data + ')';
+					// }
+					return data;
+                },
+            }
+        }
+    };
+ 
+    $('#sampol').DataTable({
+		"fixedHeader": true,
+		"deferRender": true,
+		"dom": 'B<"clear">lfrtip',
+		"buttons": [
+				'copyHtml5', 'csvHtml5', 
+				$.extend( true, {}, buttonCommon, {
+					extend: 'pdfHtml5'
+				} ),
+				$.extend( true, {}, buttonCommon, {
+					extend: 'excelHtml5'
+				} ),
+			],
+		"oLanguage": {
+			"sSearch": "Search Filter:"
+			},
+		
+	});
+	$(".preloader2").fadeOut(600);
+} );
 </script>
 @stop
