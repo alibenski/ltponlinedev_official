@@ -12,6 +12,8 @@
 */
 
 // test routes for test queries
+Route::get('waitListOneListCount', 'WaitlistController@waitListOneListCount')->name('waitListOneListCount');
+Route::get('waitListOneList/{te_code}', ['as' => 'waitListOneList', 'uses' => 'WaitlistController@waitListOneList']);
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
 Route::get('update-overall-approval', 'WaitlistController@updateOverallApproval')->name('update-overall-approval');

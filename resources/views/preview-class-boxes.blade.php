@@ -35,6 +35,27 @@
     </div> 
   @endforeach
 </div>
+<div class="row">
+	<div class="col-lg-3 col-xs-6">
+		<input type="hidden" name="Te_Code" value="{{$element->first()->Te_Code_New}}" />
+		<div id="" class="small-box" data-teacher="0">
+        <div class="inner">
+        <h3 class="count-waitlist-{{$element->first()->Te_Code_New}}">--</h3>
+        <h4>{{ $element->first()->course->Description }}</h4>
+        <p>Total Waitlisted Students</p>
+                
+        </div>
+        <div class="icon">
+          <i class="ion ion-university"></i>
+        </div>
+        
+        <a href="{{ route('waitListOneList', ['Te_Code' => $element->first()->Te_Code_New]) }}" target="_blank" class="small-box-footer">
+              More info  <i class="fa fa-arrow-circle-right"></i>
+            </a>
+
+      </div>
+	</div>
+</div>
 @endforeach
 
 <script>
@@ -88,6 +109,38 @@
 					$("input[name='Code']").each(function() {
 						if ($(this).val() == x) {
 							$('h3.count-students-'+x).html(y+' Students')
+						}
+					});
+				});
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+		}
+
+		var arrTeCode = [];
+		$("input[name='Te_Code']").each(function() {
+			var Te_Code = $(this).val();
+			arrTeCode.push(Te_Code); //insert values to array per iteration
+		});
+		console.log(arrTeCode)
+
+		if (arrTeCode) {
+
+			$.ajax({
+				url: '{{ route('waitListOneListCount') }}',
+				type: 'GET',
+				data: {arrTeCode: arrTeCode, _token: token},
+			})
+			.done(function(data) {
+				console.log(data);
+				$.each(data, function(x, y) {
+					$("input[name='Te_Code']").each(function() {
+						if ($(this).val() == x) {
+							$('h3.count-waitlist-'+x).html(y+' Waitlisted')
 						}
 					});
 				});

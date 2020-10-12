@@ -39,6 +39,46 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function waitListOneListCount(Request $request)
+    {
+        if (Session::has('Term')) {
+            $term = Session::get('Term');
+            $waitListed = Repo::where('Term', $term)
+            ->whereIn('Te_Code', $request->arrTeCode)
+            ->whereHas('classrooms', function ($query) {
+                $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD')
+                ;
+            })
+            ->with('classrooms')
+            ->pluck('Te_Code')
+            ->toArray();
+            
+            $data = array_count_values($waitListed);
+            return response()->json($data);
+        }
+    }
+
+    public function waitListOneList($Te_Code)
+    {
+        dd($Te_Code);
+        if (Session::has('Term')) {
+            $term = Session::get('Term');
+            $waitListed = Repo::where('Term', $term)
+            ->whereIn('Te_Code', $Te_Code)
+            ->whereHas('classrooms', function ($query) {
+                $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD')
+                ;
+            })
+            ->with('classrooms')
+            ->get();
+            
+            $data = $waitListed;
+            return response()->json($data);
+        }
+    }
+
     public function sendEmailApprovalHR()
     {
         $staff = 'EXT2097';
