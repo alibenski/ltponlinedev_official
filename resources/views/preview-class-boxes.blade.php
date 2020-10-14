@@ -38,7 +38,7 @@
 <div class="row">
 	<div class="col-lg-3 col-xs-6">
 		<input type="hidden" name="Te_Code" value="{{$element->first()->Te_Code_New}}" />
-		<div id="" class="small-box" data-teacher="0">
+		<div id="" class="small-box bg-red" data-teacher="0">
         <div class="inner">
         <h3 class="count-waitlist-{{$element->first()->Te_Code_New}}">--</h3>
         <h4>{{ $element->first()->course->Description }}</h4>
@@ -46,7 +46,7 @@
                 
         </div>
         <div class="icon">
-          <i class="ion ion-university"></i>
+          <i class="ion ion-android-hand"></i>
         </div>
         
         <a href="{{ route('waitListOneList', ['Te_Code' => $element->first()->Te_Code_New]) }}" target="_blank" class="small-box-footer">
