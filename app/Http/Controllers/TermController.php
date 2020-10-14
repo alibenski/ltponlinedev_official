@@ -169,8 +169,8 @@ class TermController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, array(
-            'Term_Begin' => 'required_with:Term_End|',
-            'Term_End' => 'required_with:Term_Begin|',
+            'Term_Begin' => 'required|required_with:Term_End|',
+            'Term_End' => 'required|required_with:Term_Begin|',
         ));
 
         $noTokenMethod = $request->except(['_token', '_method']);
