@@ -61,22 +61,30 @@ class WaitlistController extends Controller
 
     public function waitListOneList($Te_Code)
     {
-        dd($Te_Code);
         if (Session::has('Term')) {
             $term = Session::get('Term');
             $waitListed = Repo::where('Term', $term)
-            ->whereIn('Te_Code', $Te_Code)
+            ->where('Te_Code', $Te_Code)
             ->whereHas('classrooms', function ($query) {
                 $query->whereNull('Tch_ID')
                 ->orWhere('Tch_ID', '=', 'TBD')
                 ;
             })
             ->with('classrooms')
+            ->with(['enrolments' => function ($q1) use($term){
+                    $q1->where('Term', $term);
+                }])
+            ->with(['placements' => function ($q2) use($term){
+                    $q2->where('Term', $term);
+                }])
             ->get();
             
-            $data = $waitListed;
-            return response()->json($data);
+            $form_info = $waitListed;
+            
+            $courseName = Course::where('Te_Code_New', $Te_Code)->whereNotNull('Te_Code_New')->first();
+            return view('waitlist.waitListOneList', compact('courseName', 'form_info'));
         }
+        
     }
 
     public function sendEmailApprovalHR()
