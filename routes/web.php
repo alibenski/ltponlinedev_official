@@ -12,8 +12,6 @@
 */
 
 // test routes for test queries
-Route::get('waitListOneListCount', 'WaitlistController@waitListOneListCount')->name('waitListOneListCount');
-Route::get('waitListOneList/{te_code}', ['as' => 'waitListOneList', 'uses' => 'WaitlistController@waitListOneList']);
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
 Route::get('update-overall-approval', 'WaitlistController@updateOverallApproval')->name('update-overall-approval');
@@ -243,6 +241,9 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('billing-admin-selfpaying-view', 'BillingController@billingAdminSelfpayingView')->name('billing-admin-selfpaying-view');
     Route::get('ajax-selfpaying-by-year-table', ['as' => 'ajax-selfpaying-by-year-table', 'uses' => 'BillingController@ajaxSelfpayingByYearTable']);
 
+    // Waitlist routes
+    Route::get('waitListOneListCount', 'WaitlistController@waitListOneListCount')->name('waitListOneListCount');
+    Route::get('waitListOneList/{te_code}', ['as' => 'waitListOneList', 'uses' => 'WaitlistController@waitListOneList']);
 
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');
