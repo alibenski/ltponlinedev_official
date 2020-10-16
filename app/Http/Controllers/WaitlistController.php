@@ -77,6 +77,8 @@ class WaitlistController extends Controller
             ->with(['placements' => function ($q2) use($term){
                     $q2->where('Term', $term);
                 }])
+            ->orderBy('PS', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
             
             $form_info = $waitListed;
