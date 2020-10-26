@@ -29,6 +29,10 @@ class Classroom extends Model
     return $this->belongsTo('App\Course', 'Te_Code_New', 'Te_Code_New'); 
     }
 
+    public function course_old() {
+    return $this->belongsTo('App\Course', 'Te_Code', 'Te_Code'); 
+    }
+
     public function scheduler() {
     return $this->belongsTo('App\Schedule', 'schedule_id'); 
     }

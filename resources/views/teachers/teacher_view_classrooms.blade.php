@@ -15,7 +15,11 @@
 		<div class="col-md-3">
 			<div class="box box-success">
 				<div class="box-header with-border">
+                    @if ($classroom->course)
 					<h3>{{ $classroom->course->Description }}</h3>
+                    @elseif ($classroom->course_old) 
+                    <h3>{{ $classroom->course_old->Description }}</h3>
+                    @endif
 					<small>{{ $classroom->terms->Comments }} {{ date('Y', strtotime($classroom->terms->Term_Begin)) }}</small>
 				</div>
 				<div class="box-body no-padding">
@@ -29,7 +33,15 @@
 
 						@if(!empty($classroom->Te_Mon_Room))
 
-						<p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
+                        <p>Monday Room: 
+                            <strong>
+                                @if ($classroom->roomsMon)
+                                {{ $classroom->roomsMon->Rl_Room }}
+                                @else
+                                {{ $classroom->Te_Mon_Room }}
+                                @endif
+                            </strong>
+                        </p>
 						<p>Monday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_BTime)) }}</strong></p>
 						<p>Monday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Mon_ETime ))}}</strong></p>
 
@@ -37,7 +49,15 @@
 
 						@if(!empty($classroom->Te_Tue_Room))
 
-						<p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
+						<p>Tuesday Room: 
+                            <strong>
+                                @if ($classroom->roomsTue)
+                                {{ $classroom->roomsTue->Rl_Room }}
+                                @else
+                                {{ $classroom->Te_Tue_Room }} 
+                                @endif
+                            </strong>
+                        </p>
 						<p>Tuesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_BTime)) }}</strong></p>
 						<p>Tuesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Tue_ETime)) }}</strong></p>
 
@@ -45,7 +65,15 @@
 
 						@if(!empty($classroom->Te_Wed_Room))
 
-						<p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
+						<p>Wednesday Room: 
+                            <strong>
+                                @if ($classroom->roomsWed)
+                                {{ $classroom->roomsWed->Rl_Room }}
+                                @else
+                                {{ $classroom->Te_Wed_Room }} 
+                                @endif
+                            </strong>
+                        </p>
 						<p>Wednesday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_BTime ))}}</strong></p>
 						<p>Wednesday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Wed_ETime)) }}</strong></p>
 
@@ -53,7 +81,15 @@
 
 						@if(!empty($classroom->Te_Thu_Room))
 
-						<p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
+						<p>Thursday Room: 
+                            <strong>
+                                @if ($classroom->roomsThu)
+                                {{ $classroom->roomsThu->Rl_Room }}
+                                @else
+                                {{ $classroom->Te_Thu_Room }} 
+                                @endif
+                            </strong>
+                        </p>
 						<p>Thursday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_BTime)) }}</strong></p>
 						<p>Thursday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Thu_ETime ))}}</strong></p>
 
@@ -61,7 +97,15 @@
 
 						@if(!empty($classroom->Te_Fri_Room))
 
-						<p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+						<p>Friday Room: 
+                            <strong>
+                                @if ($classroom->roomsFri)
+                                {{ $classroom->roomsFri->Rl_Room }}
+                                @else
+                                {{ $classroom->Te_Fri_Room }}
+                                @endif
+                            </strong>
+                        </p>
 						<p>Friday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_BTime ))}}</strong></p>
 						<p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
 
