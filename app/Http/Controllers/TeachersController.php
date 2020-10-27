@@ -518,13 +518,18 @@ class TeachersController extends Controller
         return response()->json($data);
     }
 
-    public function teacherViewClassrooms()
+    public function teacherViewClassrooms(Request $request)
     {
-        $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
-            ->where('Te_Term', Session::get('Term'))
-            ->get();
+        if ( Auth::user()->hasRole('Teacher')) {
+            $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
+                ->where('Te_Term', Session::get('Term'))
+                ->get();
+    
+            return view('teachers.teacher_view_classrooms', compact('assigned_classes'));    
+        }
 
-        return view('teachers.teacher_view_classrooms', compact('assigned_classes'));
+        $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');
+        return redirect()->route('home');
     }
 
     public function teacherViewAllClassrooms()
