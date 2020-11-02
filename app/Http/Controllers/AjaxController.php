@@ -494,8 +494,10 @@ class AjaxController extends Controller
     public function ajaxCheckPlacementCourse(Request $request)
     {
         if ($request->ajax()) {
-            // get the last enrolment from PASHQ table
-            $repos_lang = Repo::orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
+            
+            // first validation
+            // get the last enrolment from PASHQ table including cancelled ones
+            $repos_lang = Repo::withTrashed()->orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
 
             if (is_null($repos_lang)) {
                 $repos_value = 0;
@@ -513,12 +515,27 @@ class AjaxController extends Controller
             $lastDigit = substr($selectedTerm, -1);
 
             if ($lastDigit == 9) {
+                // if autumn term, set summer term code as previous term 
                 $prev_term = $selectedTerm - 1;
-                $placementData = PlacementForm::where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->first();
+                // query placement table with summer term code
+                $placementData = PlacementForm::where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                ->orWhere(function($query) use($prev_term, $request){
+                    $query->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                })->first();
             } else {
-                $placementData = null;
+                // $placementData = null;
+                $placementData = PlacementForm::where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                ->orWhere(function($q) use($prev_termCode, $request){
+                    $q->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                })->first();
             }
 
+            // Questions: 
+            // what is the threshold of a placement exam result? how long is it valid?
+            // is it correct to assume that once a course has been assigned to a placement form,
+            // that is the level that suits the student?
+            // what about students that are not assigned a course because it is not offered in the 
+            // next term?
 
             // if latest term for selected language is less than the 2 terms then true, take placement
             if (($repos_value < $prev_prev_TermCode) && empty($placementData)) {
