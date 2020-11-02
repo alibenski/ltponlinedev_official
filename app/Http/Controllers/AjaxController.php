@@ -518,13 +518,13 @@ class AjaxController extends Controller
                 // if autumn term, set summer term code as previous term 
                 $prev_term = $selectedTerm - 1;
                 // query placement table with summer term code
-                $placementData = PlacementForm::where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                $placementData = PlacementForm::withTrashed()->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
                 ->orWhere(function($query) use($prev_term, $request){
                     $query->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
                 })->first();
             } else {
                 // $placementData = null;
-                $placementData = PlacementForm::where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                $placementData = PlacementForm::withTrashed()->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
                 ->orWhere(function($q) use($prev_termCode, $request){
                     $q->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
                 })->first();
