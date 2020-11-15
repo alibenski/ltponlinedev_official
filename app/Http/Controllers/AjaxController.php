@@ -341,10 +341,12 @@ class AjaxController extends Controller
                 ->where('Te_Term', $request->term_id)
                 ->orderBy('Te_Price', 'asc')
                 ->orderBy('Te_Code_New', 'asc')
+                ->select('Te_Code_New','specialized', 'L', 'Te_Term', 'Te_Price')
                 ->with('course')
+                ->groupBy('Te_Code_New','specialized', 'L', 'Te_Term', 'Te_Price')
                 ->get()
-                ->pluck("course.Description", "Te_Code_New");
-
+                ->groupBy('specialized');
+                // ->pluck("course.Description", "Te_Code_New");
             $data = view('ajax-select', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
         }
@@ -361,9 +363,12 @@ class AjaxController extends Controller
                 // ->whereNull('Code')
                 // ->orderBy('id', 'asc')
                 ->orderBy('Te_Code_New', 'asc')
+                ->select('Te_Code_New','specialized', 'L', 'Te_Term')
                 ->with('course')
+                ->groupBy('Te_Code_New','specialized', 'L', 'Te_Term')
                 ->get()
-                ->pluck("course.Description", "Te_Code_New");
+                ->groupBy('specialized');
+                // ->pluck("course.Description", "Te_Code_New");
 
             $data = view('ajax-select', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
@@ -382,7 +387,7 @@ class AjaxController extends Controller
                 ->pluck("Description", "Te_Code_New")
                 ->all();
 
-            $data = view('ajax-select', compact('select_courses'))->render();
+            $data = view('ajax-select3', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
         }
     }

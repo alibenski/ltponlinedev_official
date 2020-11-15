@@ -68,6 +68,7 @@ class CourseSchedController extends Controller
             'schedule_id' => 'required|array',
             'Tch_ID' => 'required|array',
             'room_id' => 'required|array',
+            'specialized_course' => 'required',
         ));
         
         $course_id = $request->course_id;

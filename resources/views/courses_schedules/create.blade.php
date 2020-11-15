@@ -97,6 +97,20 @@
           </div>
 
           <div class="form-group">
+              <label for="specialized_course" class="col-md-12 control-label" style="margin: 5px 5px;">Is this a <em>Specialized</em> Course? </label>
+                <div class="radio">
+                  <label>
+                      <input type="radio" name="specialized_course" value=1 /> Yes
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                      <input type="radio" name="specialized_course" value=0 /> No
+                  </label>
+                </div>
+          </div>
+
+          <div class="form-group">
               <label for="course_id" class="col-md-3 control-label" style="margin: 5px 5px;">Course: </label>
                 <div class="dropdown">
                   <select class="col-md-8 form-control select2-one" name="course_id" autocomplete="off" required="required" style="width: 100%">
@@ -293,7 +307,7 @@
       </div>
     </form>
   </div>
-</div>﻿
+</div>
 
 @stop
 
