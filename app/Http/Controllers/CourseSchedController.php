@@ -68,6 +68,7 @@ class CourseSchedController extends Controller
             'schedule_id' => 'required|array',
             'Tch_ID' => 'required|array',
             'room_id' => 'required|array',
+            'specialized_course' => 'required',
         ));
         
         $course_id = $request->course_id;
@@ -101,6 +102,7 @@ class CourseSchedController extends Controller
         $ingredients = [];
         for ($i = 0; $i < count($schedule_id); $i++) {
             $ingredients[] = new  CourseSchedule([
+                'specialized' => $request->specialized_course,
                 'L' => $request->L,
                 'Te_Code_New' => $course_id,
                 'Te_Term' => $term_id,
