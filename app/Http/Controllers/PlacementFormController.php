@@ -770,6 +770,7 @@ class PlacementFormController extends Controller
 
         $placement_form = PlacementForm::find($id);
         $placement_form->convoked = $request->convoked;
+        $placement_form->flexibleBtn = $request->flexible;
         $placement_form->Result = $request->Result;
         $placement_form->assigned_to_course = 1;
 

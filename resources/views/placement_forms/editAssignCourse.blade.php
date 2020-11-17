@@ -175,6 +175,21 @@
 				        <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
 				        <label for="decision2" class="form-control-static">Click to assign course</label>
 				</div> --}}
+			</div>
+			
+			<div class="form-group">
+				<label for="flexibleQuestion">Is the student's schedule flexible? </label>
+				<div class="col-sm-12">
+			        <div class="col-md-4">
+                      <input id="flexibleYes" name="flexible" class="with-font" type="radio" value="1">
+                      <label for="flexibleYes" class="form-control-static">YES</label>
+                    </div>
+
+                    <div class="col-md-4">
+                      <input id="flexibleNo" name="flexible" class="with-font" type="radio" value="0">
+                      <label for="flexibleNo" class="form-control-static">NO</label>
+                    </div>
+				</div>
 		    </div>
 
 			{{-- start of hidden fields --}}
