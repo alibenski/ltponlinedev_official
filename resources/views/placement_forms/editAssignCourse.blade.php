@@ -196,7 +196,7 @@
 			<div class="regular-enrol"> 
 			
 				<div class="form-group placement-result">
-					<label for="inputResult">Placement Test Result: (optional)</label>
+					<label for="inputResult">Placement Test Result: </label>
 					<textarea name="Result" id="inputResult" class="form-control" maxlength="3500" placeholder="Enter result of the placement test and other relevant information in this field, i.e. appropriate level, course, etc. or reason why student does not need to take a placement test"></textarea>
 				</div>
 
