@@ -2252,7 +2252,7 @@ class PreviewController extends Controller
             //     ];
 
             // validate if form is already in PASH
-            $checker = Repo::where('INDEXID', $request->INDEXID)->where('Term', $request->Term)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->get();
+            $checker = Repo::withTrashed()->where('INDEXID', $request->INDEXID)->where('Term', $request->Term)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->get();
             if (count($checker) > 0) {
                 $data = 'already-inserted';
                 return response()->json($data);
@@ -2905,7 +2905,7 @@ class PreviewController extends Controller
                     ->first();
                 // then assign it to the student
 
-                $insertStudentRecord = Preview::where('INDEXID', $getIndividualStudent->INDEXID)->where('Code', $valueCode2->Code);
+                $insertStudentRecord = Preview::withTrashed()->where('INDEXID', $getIndividualStudent->INDEXID)->where('Code', $valueCode2->Code);
 
                 // validate if duplicate record
                 $codeindexidclass = $ingredients->Code . '-' . $getIndividualStudent->INDEXID;

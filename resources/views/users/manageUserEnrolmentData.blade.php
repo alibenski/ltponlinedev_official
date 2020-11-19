@@ -990,10 +990,10 @@ $(document).ready(function () {
         	alert('The form is not assigned to a course or not validated/confirmed by a language admin.')
         	location.reload(true);
         } else if(data == 'already-inserted'){
-        	alert('The form has already been inserted to a class. Please check convocation details on this page.')
+        	alert('The form has already been inserted to a class. Please check convocation details on this page. If the student cancelled while already in the class, go to the class list and click the "Undo Delete" button.')
         	location.reload(true);
         } else if(data == 'already-inserted-in-preview'){
-        	alert('The form has already been used to insert the student to a class. Please manually create another form to insert student to another class. Policy states 1 form = 1 class.')
+        	alert('The form has already been used to insert the student to a class. Please manually create another form to insert student to another class (and not the same class). If the student cancelled while already in the class, go to the class list and click the "Undo Delete" button. Policy states 1 form = 1 class.')
         	location.reload(true);
         } else {
         	location.reload(true);
