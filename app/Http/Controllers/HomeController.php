@@ -180,7 +180,6 @@ class HomeController extends Controller
 
     public function whatform(Request $request)
     {
-        dd($request->all());
         // if part of new organization, then save the new organization to sddextr     
         // save CAT to Auth User table   
         $id = Auth::id();
@@ -196,6 +195,22 @@ class HomeController extends Controller
         $org_status = Torgan::where('Org name', '=', $request->organization)
             ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
 
+        if ($request->late == 1) {
+            return 'late registration process';
+            if ($request->decision == 1) {
+                session()->flash('success', 'Please fill in the payment-based enrolment form');
+                return redirect(route('selfpayform.create'));
+            } elseif ($request->decision == 0 && $org_status == 1) {
+                session()->flash('success', 'Please fill in the payment-based enrolment form');
+                return redirect(route('selfpayform.create'));
+            } elseif ($request->decision == 0 && $org_status == 0) {
+                session()->flash('success', 'Please fill in the enrolment form');
+                return redirect(route('myform.create'));
+            }
+            else
+                return redirect(route('late-what-org'));
+        }
+
         if ($request->decision == 1) {
             session()->flash('success', 'Please fill in the payment-based enrolment form');
             return redirect(route('selfpayform.create'));
@@ -206,10 +221,6 @@ class HomeController extends Controller
             session()->flash('success', 'Please fill in the enrolment form');
             return redirect(route('myform.create'));
         }
-        // elseif ($request->decision == 0) {
-        //     session()->flash('success','Please fill in the enrolment form');
-        //     return redirect(route('myform.create'));
-        // } 
         else
             return redirect(route('whatorg'));
     }

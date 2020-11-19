@@ -22,17 +22,11 @@ class LateRegisterController extends Controller
 {
     public function lateWhatOrg()
     {
-        //get current year and date
         $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
-        // actual current term
         $terms = Term::orderBy('Term_Code', 'desc')->whereDate('Term_End', '>=', $now_date)->get()->min();
-        // actual enrolment term
         $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
-        // ->pluck('Org name','Org name', 'Org Full Name');
-
         $late = 1;
 
         return view('form.whatorg', compact('terms', 'next_term', 'org', 'late'));
