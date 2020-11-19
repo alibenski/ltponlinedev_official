@@ -3,6 +3,9 @@
 @section('content')
 
 <div>
+    <div class="alert alert-info col-md-12">
+        <h5><i class="fa fa-info-circle"></i> Use to let students create/register their accounts outside of registration period. Admin will still need to approve their request via <a href={{route('newuser.index')}}> New User Account Administration section</a></h5>
+    </div>
     <form class="text-left">
         <div class="form-group">
             <label for="email" class="col-md-12">Enter email:</label>
