@@ -173,11 +173,14 @@ class HomeController extends Controller
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         // ->pluck('Org name','Org name', 'Org Full Name');
 
-        return view('form.whatorg', compact('terms', 'next_term', 'org'));
+        $late = 0;
+
+        return view('form.whatorg', compact('terms', 'next_term', 'org', 'late'));
     }
 
     public function whatform(Request $request)
     {
+        dd($request->all());
         // if part of new organization, then save the new organization to sddextr     
         // save CAT to Auth User table   
         $id = Auth::id();

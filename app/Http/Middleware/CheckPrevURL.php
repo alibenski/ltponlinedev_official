@@ -19,6 +19,10 @@ class CheckPrevURL
      */
     public function handle($request, Closure $next)
     {
+        if ($request->late == 1) {
+            return $next($request);
+        }
+
         // $org_input = $request->organization;
         // $prev_url = URL::previous(); 
         $sess = $request->session()->get('_previous');
