@@ -12,6 +12,7 @@ use App\Day;
 use App\Repo;
 use App\Term;
 use App\Torgan;
+use App\User;
 
 class LateEnrolmentController extends Controller
 {
@@ -23,7 +24,7 @@ class LateEnrolmentController extends Controller
                 ['user_id' => Auth::id(), 'email' => $request->email]
             );
 
-            $url = URL::temporarySignedRoute('late-registration', now()->addDays(1), ['transaction' => $recordId]);
+            $url = URL::temporarySignedRoute('late-what-org', now()->addDays(1), ['transaction' => $recordId]);
 
             return response()->json($url);
         }
@@ -31,7 +32,9 @@ class LateEnrolmentController extends Controller
 
     public function lateWhatOrg(Request $request)
     {
-        
+        // if (!$request->hasValidSignature()) {
+        //     abort(401);
+        // }
 
         $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
@@ -39,11 +42,49 @@ class LateEnrolmentController extends Controller
         $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
 
+        return view('form.late.late-what-org', compact('terms', 'next_term', 'org'));
+    }
+
+    public function lateWhatForm(Request $request)
+    {
+        // if part of new organization, then save the new organization to sddextr     
+        // save CAT to Auth User table   
+        $id = Auth::id();
+        $student = User::findOrFail($id);
+        $student->profile = $request->profile;
+        $student->save();
+        // save organization to sddextr table
+        $student->sddextr->CAT = $request->profile;
+        $student->sddextr->DEPT = $request->input('organization');
+        $student->sddextr->save();
+
+        // query Torgan table if $request->organization is selfpaying or not
+        $org_status = Torgan::where('Org name', '=', $request->organization)
+            ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
+
+        if ($request->decision == 1) {
+            session()->flash('success', 'Please fill in the payment-based enrolment form');
+            return redirect(route('selfpayform.create'));
+        } elseif ($request->decision == 0 && $org_status == 1) {
+            session()->flash('success', 'Please fill in the payment-based enrolment form');
+            return redirect(route('selfpayform.create'));
+        } elseif ($request->decision == 0 && $org_status == 0) {
+            session()->flash('success', 'Please fill in the enrolment form');
+            return redirect(route('late-registration'));
+        }
+        else
+            return redirect()->back();
     }
 
     public function lateRegistration(Request $request)
     {
-        if ($request->hasValidSignature()) {
+        $sess = $request->session()->get('_previous');
+        $result = array();
+        foreach ($sess as $val) {
+            $result = $val;
+        }
+
+        if ($result == route('late-what-org') || $result == route('late-registration') ) {
             $courses = Course::all();
             $languages = DB::table('languages')->pluck("name", "code")->all();
             $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
@@ -79,14 +120,14 @@ class LateEnrolmentController extends Controller
             if ($student_last_term == null) {
                 $repos_lang = null;
                 $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name', 'Org name');
-                return view('form.late.lateform', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
+                return view('form.late.late-registration', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
             }
 
             $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
                 ->where('INDEXID', $current_user)->get();
             $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name', 'Org name');
 
-            return view('form.late.lateform', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
+            return view('form.late.late-registration', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {
             abort(401);
         }

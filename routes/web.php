@@ -376,6 +376,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/home-how-to-check-status', 'HomeController@homeHowToCheckStatus')->name('home-how-to-check-status');
         Route::get('/whatorg', ['as' => 'whatorg', 'uses' => 'HomeController@whatorg']);
 
+        Route::get('/late-what-org', ['as'=>'late-what-org','uses'=>'LateEnrolmentController@lateWhatOrg']);
+        Route::post('/late-what-form', ['as'=>'late-what-form','uses'=>'LateEnrolmentController@lateWhatForm']);
         Route::get('/late-registration', ['as'=>'late-registration','uses'=>'LateEnrolmentController@lateRegistration']);
         Route::post('/store-late-registration', ['as'=>'store-late-registration','uses'=>'LateEnrolmentController@storeLateRegistration']);
 
