@@ -13,25 +13,12 @@ use Illuminate\Support\Facades\URL;
 use App\Torgan;
 use App\FileNewUser;
 use App\NewUser;
-use App\Term;
 use App\Mail\EmailLateRegister;
-use Carbon\Carbon;
+
 
 
 class LateRegisterController extends Controller
 {
-    public function lateWhatOrg()
-    {
-        $now_date = Carbon::now()->toDateString();
-        $now_year = Carbon::now()->year;
-        $terms = Term::orderBy('Term_Code', 'desc')->whereDate('Term_End', '>=', $now_date)->get()->min();
-        $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
-        $late = 1;
-
-        return view('form.whatorg', compact('terms', 'next_term', 'org', 'late'));
-    }
-
     protected function generateRandomURL(Request $request)
     {
         if ($request->ajax()) {

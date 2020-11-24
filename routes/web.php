@@ -376,8 +376,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/home-how-to-check-status', 'HomeController@homeHowToCheckStatus')->name('home-how-to-check-status');
         Route::get('/whatorg', ['as' => 'whatorg', 'uses' => 'HomeController@whatorg']);
 
-        Route::get('/late-what-org', ['as'=>'late-what-org','uses'=>'Auth\LateRegisterController@lateWhatOrg']);
-        
+        Route::get('/late-registration', ['as'=>'late-registration','uses'=>'LateEnrolmentController@lateRegistration']);
+        Route::post('/store-late-registration', ['as'=>'store-late-registration','uses'=>'LateEnrolmentController@storeLateRegistration']);
+
         Route::post('/whatform', ['as' => 'whatform', 'uses' => 'HomeController@whatform'])->middleware('check-prev-url');
         Route::get('/submitted', ['as' => 'submitted', 'uses' => 'HomeController@previousSubmitted']);
         Route::get('/previous-submitted', ['as' => 'previous-submitted', 'uses' => 'HomeController@previousSubmitted']);
