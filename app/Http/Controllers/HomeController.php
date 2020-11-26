@@ -173,9 +173,7 @@ class HomeController extends Controller
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         // ->pluck('Org name','Org name', 'Org Full Name');
 
-        $late = 0;
-
-        return view('form.whatorg', compact('terms', 'next_term', 'org', 'late'));
+        return view('form.whatorg', compact('terms', 'next_term', 'org'));
     }
 
     public function whatform(Request $request)
@@ -194,22 +192,6 @@ class HomeController extends Controller
         // query Torgan table if $request->organization is selfpaying or not
         $org_status = Torgan::where('Org name', '=', $request->organization)
             ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
-
-        if ($request->late == 1) {
-            return 'late registration process';
-            if ($request->decision == 1) {
-                session()->flash('success', 'Please fill in the payment-based enrolment form');
-                return redirect(route('selfpayform.create'));
-            } elseif ($request->decision == 0 && $org_status == 1) {
-                session()->flash('success', 'Please fill in the payment-based enrolment form');
-                return redirect(route('selfpayform.create'));
-            } elseif ($request->decision == 0 && $org_status == 0) {
-                session()->flash('success', 'Please fill in the enrolment form');
-                return redirect(route('myform.create'));
-            }
-            else
-                return redirect(route('late-what-org'));
-        }
 
         if ($request->decision == 1) {
             session()->flash('success', 'Please fill in the payment-based enrolment form');

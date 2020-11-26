@@ -42,6 +42,10 @@ class AppServiceProvider extends ServiceProvider
             $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
             $view->with('term', $current_enrol_term);
         });
+        view()->composer('partials.late._nav2', function ($view) {
+            $current_enrol_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+            $view->with('term', $current_enrol_term);
+        });
 
         Validator::extend('not_equal_to_existing', function ($attribute, $value, $parameters, $validator) {
             // get array values from $validator param

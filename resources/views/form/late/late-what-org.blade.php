@@ -1,5 +1,5 @@
-@extends('main')
-@section('tabtitle', '| UN Enrolment Form')
+@extends('layouts.late.late-main')
+@section('tabtitle', '| Late Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
@@ -22,8 +22,9 @@
             </strong>
           </div>
           <div class="card-body">
-            <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" action="{{ route('late-what-form') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
+                <input type="hidden" name="url" value="{{ $url }}">
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
                   <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
@@ -121,7 +122,7 @@
               <h4 class="modal-title">Ooops! Just a moment...</h4>
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-            <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">{{ csrf_field() }}
+            <form method="POST" action="{{ route('late-what-form') }}" class="form-horizontal form-prevent-multi-submit">{{ csrf_field() }}
               <div class="modal-body">
                 <p>It looks like you are a new student or you have changed organizations since your last enrolment. Please confirm and click the Next button.</p>
                 <label for="organization">New Organization:</label> <input id="textOrg" type="text" value="" readonly="" style="width: 100%"> <input id="inputOrg" name="" type="hidden" value="" readonly="">
@@ -133,6 +134,7 @@
                     <input id="inputProfile" name="profile" type="hidden" value="">
                     <input id="inputDecision" name="decision" type="hidden" value="">
                     <input type="hidden" name="_token" value="{{ Session::token() }}">
+                    <input type="hidden" name="url" value="{{ $url }}">
               </div>
             </form>
         </div>

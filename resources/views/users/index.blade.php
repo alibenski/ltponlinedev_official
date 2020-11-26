@@ -62,6 +62,7 @@
                     <td>
                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin: 1px;">Edit</a>
                     <a href="{{ route('manage-user-enrolment-data', $user->id) }}" class="btn btn-warning pull-left" style="margin: 1px;">LTP Data</a>
+                    <button id="confirmBtn{{ $user->id }}" data-id="{{ $user->id }}" data-email="{{ $user->email }}" type="button" class="btn btn-space btn-danger  button-prevent-multi-submit confirm" title="Send Late Enrolment Form"><i class="fa fa-envelope"></i> Late</button>
 
 					{{-- <form method="POST" action="{{ route('users.destroy',  $user->id) }}">
                       <input type="submit" value="Delete" class="btn btn-danger" style="margin: 1px;" disabled="">
@@ -95,7 +96,42 @@
     </div>
 </div>
 
-
+<div id="showModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Send Late Registration Form</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form class="text-left">
+                        <div class="form-group col-md-12">
+                            <p>You are sending this late enrolment form to <strong><span class="modal-span-email"></span></strong></p>
+                            <p>
+                            You confirm that this late registration has already been approved by the CLM LTP chief and if necessary, the HR Focal Point of the student's organization/agency. 
+                            <br/>
+                            <strong>Note that LTP Secretariat still needs to approve late Selfpaying forms.</strong>  
+                            </p>
+                            <div class="col-md-12">
+                            <input type="hidden" id="email" name="email" class="col-md-6 modal-input-email" value="" autofocus required>
+                            </div>
+                            <button id="saveBtn" type="button" class="btn btn-space btn-success btn-block button-prevent-multi-submit send-late-btn" style="margin: 1px;">
+                            <i class="fa fa-envelope"></i> Send Email
+                            </button>
+                            <input type="hidden" name="_token" value="{{ Session::token() }}">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('java_script')
@@ -103,5 +139,51 @@
 $(document).ready(function(){
     $('input[name=search]').focus();
 });
+
+$('button.confirm').on('click', function(event) {
+    event.preventDefault();
+    let id = $(this).attr("data-id");
+    let email = $(this).attr("data-email");
+    
+    $('#showModal').modal('show');
+    $('span.modal-span-email').text(email);
+    $('input.modal-input-email').val(email);
+});
+
+$('button.send-late-btn').on('click', function(event) {
+    event.preventDefault();
+    $(this).attr('disabled', 'disabled');
+    let email = $('input.modal-input-email').val();
+    let token = $("input[name='_token']").val();
+    
+    if (email) {
+        $.ajax({
+            url: '{{ route('generate-URL-late-enrolment') }}',
+            type: 'POST',
+            data: {email:email, _token:token},
+        })
+        .done(function(data) {
+            $("input#email").val('');
+            $("input.url-link").val(data);
+            $("button#generateLink").removeAttr("disabled");
+        })
+        .fail(function() {
+            console.log("error");
+            $("button#generateLink").removeAttr("disabled");
+        })
+        .always(function() {
+            console.log("complete");
+            alert('email with link has been sent');
+        });  
+
+        return true;
+    }
+
+    return alert('email address missing'); 
+});
+
+$('#showModal').on('hidden.bs.modal', function (e) {
+    $('button.send-late-btn').removeAttr('disabled');
+  })
 </script>
 @stop
