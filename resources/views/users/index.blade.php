@@ -109,7 +109,9 @@
                         <div class="form-group col-md-12">
                             <p>You are sending this late enrolment form to <strong><span class="modal-span-email"></span></strong></p>
                             <p>
-                            You confirm that this has been approved by the CLM LTP chief and if necessary, the HR Focal Point of the student's organization/agency.  
+                            You confirm that this late registration has already been approved by the CLM LTP chief and if necessary, the HR Focal Point of the student's organization/agency. 
+                            <br/>
+                            <strong>Note that LTP Secretariat still needs to approve late Selfpaying forms.</strong>  
                             </p>
                             <div class="col-md-12">
                             <input type="hidden" id="email" name="email" class="col-md-6 modal-input-email" value="" autofocus required>

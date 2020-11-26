@@ -226,7 +226,7 @@ class LateEnrolmentController extends Controller
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
-            app('App\Http\Controllers\PlacementFormController')->postPlacementInfo($request);
+            $this->postPlacementInfo($request);
 
             if ($request->is_self_pay_form == 1) {
                 $request->session()->flash('success', 'Your Placement Test request has been submitted.');
@@ -321,7 +321,6 @@ class LateEnrolmentController extends Controller
         $agreementBtn = $request->input('agreementBtn');
 
         $this->validate($request, array(
-            // 'mgr_email' => 'required|email',
             'placementLang' => 'required|integer',
             'approval' => 'required',
             'agreementBtn' => 'required|',
@@ -346,40 +345,50 @@ class LateEnrolmentController extends Controller
         $placementForm->Term = $term_id;
         $placementForm->INDEXID = $index_id;
         $placementForm->DEPT = $org;
-        $placementForm->eform_submit_count = $eform_submit_count;
-        // $placementForm->mgr_email = $mgr_email;
-        // $placementForm->mgr_fname = $mgr_fname;
-        // $placementForm->mgr_lname = $mgr_lname;   
+        $placementForm->eform_submit_count = $eform_submit_count;   
         $placementForm->approval = $request->approval;
         $placementForm->placement_schedule_id = $request->placementLang;
         $placementForm->std_comments = $request->std_comment;
         $placementForm->agreementBtn = $request->agreementBtn;
-        // $placementForm->contractDate = $request->contractDate;
+        $placementForm->overall_approval = 1;
+        $placementForm->admin_plform_comment = 'late placement registration form [auto-generated]';
         $placementForm->save();
 
-        if (in_array($placementForm->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
-            $placementForm->update([
-                'overall_approval' => 1,
-            ]);
-        }
-        // execute mail class to send email to HR focal point if needed
-        $staff = $index_id;
-        $next_term_code = $term_id;
-        $lang = $language_id;
-        $formcount = $eform_submit_count;
-
-        $this->sendPlacementApprovalEmailToHR($staff, $next_term_code, $lang, $formcount);
-
-        // $staff = Auth::user();
-        // $current_user = Auth::user()->indexno;
-        // $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $term_id)->where('INDEXID', $current_user)->where('L', $language_id)->first();
-
-        // Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
+        // if (in_array($placementForm->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
+        //     $placementForm->update([
+        //         'overall_approval' => 1,
+        //     ]);
+        // }
 
         // get newly created placement form record
         $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->where('Term', $term_id)->where('L', $language_id)->first();
         $placement_form_id = $latest_placement_form->id;
         $this->postPlacementInfoAdditional($request, $placement_form_id);
+    }
+
+    public function postPlacementInfoAdditional($request, $placement_form_id)
+    {
+        $this->validate($request, array(
+            'dayInput' => 'required|',
+            'timeInput' => 'required|',
+            'course_preference_comment' => 'required|',
+        ));
+
+        $dayInput = $request->dayInput;
+        $timeInput = $request->timeInput;
+        $implodeDay = implode('-', $dayInput);
+        $implodeTime = implode('-', $timeInput);
+
+        $data = PlacementForm::findorFail($placement_form_id);
+        $data->dayInput = $implodeDay;
+        $data->timeInput = $implodeTime;
+        $data->course_preference_comment = $request->course_preference_comment;
+        $data->save();
+
+        if ($data->is_self_pay_form) {
+            $request->request->add(['is_self_pay_form' => 1]);
+            return $request;
+        }
     }
 
     public function lateSelfpayForm(Request $request)
@@ -542,7 +551,7 @@ class LateEnrolmentController extends Controller
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
-            app('App\Http\Controllers\PlacementFormController')->postSelfPayPlacementInfo($request, $attachment_pay_file, $attachment_identity_file);
+            $this->postSelfPayPlacementInfo($request, $attachment_pay_file, $attachment_identity_file);
 
             if ($request->is_self_pay_form == 1) {
                 $request->session()->flash('success', 'Your Placement Test request has been submitted.');
@@ -623,6 +632,59 @@ class LateEnrolmentController extends Controller
 
         return redirect()->route('thankyouSelfPay');
     
+    }
+
+    public function postSelfPayPlacementInfo(Request $request, $attachment_pay_file, $attachment_identity_file)
+    {
+        $index_id = $request->input('index_id');
+        $language_id = $request->input('L');
+        $course_id = $request->input('course_id');
+        $term_id = $request->input('term_id');
+        //$schedule_id is an array 
+        $schedule_id = $request->input('schedule_id');
+        $mgr_email = $request->input('mgr_email');
+        $mgr_fname = $request->input('mgr_fname');
+        $mgr_lname = $request->input('mgr_lname');
+        $uniquecode = $request->input('CodeIndexID');
+        $org = $request->input('org');
+        $agreementBtn = $request->input('agreementBtn');
+
+        $this->validate($request, array(
+            'placementLang' => 'required|integer',
+            'agreementBtn' => 'required|',
+            'course_preference_comment' => 'required|',
+        ));
+
+        $qryEformCount = PlacementForm::withTrashed()
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('eform_submit_count', 'desc')->first();
+
+        $eform_submit_count = 1;
+        if (isset($qryEformCount->eform_submit_count)) {
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;
+        }
+
+        $placementForm = new PlacementForm;
+        $placementForm->L = $language_id;
+        $placementForm->profile = $request->profile;
+        $placementForm->Term = $term_id;
+        $placementForm->INDEXID = $index_id;
+        $placementForm->DEPT = $org;
+        $placementForm->attachment_id = $attachment_identity_file->id;
+        $placementForm->attachment_pay = $attachment_pay_file->id;
+        $placementForm->is_self_pay_form = 1;
+        $placementForm->eform_submit_count = $eform_submit_count;
+        $placementForm->placement_schedule_id = $request->placementLang;
+        $placementForm->std_comments = $request->std_comment;
+        $placementForm->consentBtn = $request->consentBtn;
+        $placementForm->agreementBtn = $request->agreementBtn;
+        $placementForm->admin_plform_comment = 'late placement selfpay form [auto-generated]';
+        $placementForm->save();
+        // get newly created placement form record
+        $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->where('Term', $term_id)->where('L', $language_id)->first();
+        $placement_form_id = $latest_placement_form->id;
+        $this->postPlacementInfoAdditional($request, $placement_form_id);
     }
 
 }
