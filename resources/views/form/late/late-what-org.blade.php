@@ -24,6 +24,7 @@
           <div class="card-body">
             <form method="POST" action="{{ route('late-what-form') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
+                <input type="hidden" name="url" value="{{ $url }}">
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
                   <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
@@ -133,6 +134,7 @@
                     <input id="inputProfile" name="profile" type="hidden" value="">
                     <input id="inputDecision" name="decision" type="hidden" value="">
                     <input type="hidden" name="_token" value="{{ Session::token() }}">
+                    <input type="hidden" name="url" value="{{ $url }}">
               </div>
             </form>
         </div>

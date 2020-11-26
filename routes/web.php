@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      */
     Route::get('late-user-management', 'Auth\LateRegisterController@lateUserManagement')->name('late-user-management');
     Route::post('generate-URL', ['as' => 'generate-URL', 'uses' => 'Auth\LateRegisterController@generateRandomURL']);
+    Route::post('generate-URL-late-enrolment', ['as' => 'generate-URL-late-enrolment', 'uses' => 'LateEnrolmentController@generateRandomURL']);
 
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
@@ -380,6 +381,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/late-what-form', ['as'=>'late-what-form','uses'=>'LateEnrolmentController@lateWhatForm']);
         Route::get('/late-registration', ['as'=>'late-registration','uses'=>'LateEnrolmentController@lateRegistration']);
         Route::post('/store-late-registration', ['as'=>'store-late-registration','uses'=>'LateEnrolmentController@storeLateRegistration']);
+        Route::get('/late-selfpay-form', ['as'=>'late-selfpay-form','uses'=>'LateEnrolmentController@lateSelfpayForm']);
+        Route::post('/store-late-selfpay-form', ['as'=>'store-late-selfpay-form','uses'=>'LateEnrolmentController@storeLateSelfpayForm']);
 
         Route::post('/whatform', ['as' => 'whatform', 'uses' => 'HomeController@whatform'])->middleware('check-prev-url');
         Route::get('/submitted', ['as' => 'submitted', 'uses' => 'HomeController@previousSubmitted']);

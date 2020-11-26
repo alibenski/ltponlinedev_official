@@ -5,44 +5,54 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 use DB;
 use Carbon\Carbon;
 use App\Course;
 use App\Day;
+use App\File;
+use App\PlacementForm;
+use App\Preenrolment;
 use App\Repo;
+use App\SDDEXTR;
 use App\Term;
 use App\Torgan;
 use App\User;
+use App\Mail\EmailLateRegister;
 
 class LateEnrolmentController extends Controller
 {
     protected function generateRandomURL(Request $request)
     {
         if ($request->ajax()) {
-
             $recordId = DB::table('url_generator')->insertGetId(
-                ['user_id' => Auth::id(), 'email' => $request->email]
+                ['user_id' => Auth::id(), 'email' => $request->email, 'description' => 'late registration link']
             );
 
             $url = URL::temporarySignedRoute('late-what-org', now()->addDays(1), ['transaction' => $recordId]);
 
+            Mail::to($request->email)->send(new EmailLateRegister($url));
+            
             return response()->json($url);
         }
     }
 
     public function lateWhatOrg(Request $request)
     {
-        // if (!$request->hasValidSignature()) {
-        //     abort(401);
-        // }
+        $qryEmail = DB::table('url_generator')->where('id', $request->transaction)->first()->email;
+        if (!$request->hasValidSignature() || Auth::user()->email != $qryEmail) {
+            abort(401);
+        }
 
+        $url = $request->fullUrl();
         $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
-        $terms = Term::orderBy('Term_Code', 'desc')->whereDate('Term_End', '>=', $now_date)->get()->min();
-        $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+        $next_term = Term::orderBy('Term_Code', 'desc')->whereDate('Term_Begin', '>=', $now_date)->get()->min();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
 
-        return view('form.late.late-what-org', compact('terms', 'next_term', 'org'));
+        return view('form.late.late-what-org', compact('url', 'next_term', 'org'));
     }
 
     public function lateWhatForm(Request $request)
@@ -63,14 +73,17 @@ class LateEnrolmentController extends Controller
             ->value('is_self_paying'); // change to appropriate field name 'is_self_pay' or 'is_billed'
 
         if ($request->decision == 1) {
-            session()->flash('success', 'Please fill in the payment-based enrolment form');
-            return redirect(route('selfpayform.create'));
+            session()->flash('checkSelfPay', 1);
+            session()->put('url', $request->url);
+            return redirect(route('late-selfpay-form'));
         } elseif ($request->decision == 0 && $org_status == 1) {
-            session()->flash('success', 'Please fill in the payment-based enrolment form');
-            return redirect(route('selfpayform.create'));
+            session()->flash('checkSelfPay', 1);
+            session()->put('url', $request->url);
+            return redirect(route('late-selfpay-form'));
         } elseif ($request->decision == 0 && $org_status == 0) {
-            session()->flash('success', 'Please fill in the enrolment form');
-            return redirect(route('late-registration'));
+            session()->flash('check', 1);
+            session()->put('url', $request->url);
+            return redirect()->route('late-registration');
         }
         else
             return redirect()->back();
@@ -78,13 +91,9 @@ class LateEnrolmentController extends Controller
 
     public function lateRegistration(Request $request)
     {
-        $sess = $request->session()->get('_previous');
-        $result = array();
-        foreach ($sess as $val) {
-            $result = $val;
-        }
-
-        if ($result == route('late-what-org') || $result == route('late-registration') ) {
+        $url = session()->get('url');
+        $check = $request->session()->get('check');
+        if ($check == 1 ) {
             $courses = Course::all();
             $languages = DB::table('languages')->pluck("name", "code")->all();
             $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
@@ -129,14 +138,16 @@ class LateEnrolmentController extends Controller
 
             return view('form.late.late-registration', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {
-            abort(401);
+            if ($url) {
+                return redirect()->to($url);
+            } 
+            
+            return redirect('home')->with('interdire-msg', 'Access denied. Please refer to the link that the CLM Secretariat sent to your email.');
         }
-        
     }
 
     public function storeLateRegistration(Request $request)
     {
-        dd($request->all());
         $index_id = $request->input('index_id');
         $language_id = $request->input('L');
         $course_id = $request->input('course_id');
@@ -252,9 +263,6 @@ class LateEnrolmentController extends Controller
                 'INDEXID' => $index_id,
                 "created_at" =>  \Carbon\Carbon::now(),
                 "updated_at" =>  \Carbon\Carbon::now(),
-                // 'mgr_email' =>  $mgr_email,
-                // 'mgr_lname' => $mgr_lname,
-                // 'mgr_fname' => $mgr_fname,
                 'approval' => $request->approval,
                 'continue_bool' => 1,
                 'DEPT' => $org,
@@ -262,65 +270,359 @@ class LateEnrolmentController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
-                // 'contractDate' => $contractDate,
                 'std_comments' => $std_comments,
+                'overall_approval' => 1,
+                'admin_eform_comment' => 'late registration form [auto-generated]',
             ]);
             foreach ($ingredients as $data) {
                 $data->save();
-                if (in_array($data->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
-                    $data->update([
-                        'overall_approval' => 1,
-                    ]);
-                }
+                // if (in_array($data->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
+                //     $data->update([
+                //         'overall_approval' => 1,
+                //     ]);
+                // }
             }
         }
 
         //execute Mail class before redirect
 
-        // $mgr_email = $request->mgr_email;
-        // $staff = Auth::user();
         $current_user = Auth::user()->indexno;
-
-        // $now_date = Carbon::now()->toDateString();
-        // $terms = Term::orderBy('Term_Code', 'desc')
-        //         ->whereDate('Term_End', '>=', $now_date)
-        //         ->get()->min();
-        // $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-
-        // $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->value('Te_Code');
-        // //query from Preenrolment table the needed information data to include in email
-        // $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')->where('INDEXID', $current_user)->where('Term', $term_id)->first();
-        // $input_schedules = Preenrolment::orderBy('Term', 'desc')
-        //                         ->where('INDEXID', $current_user)
-        //                         ->where('Term', $term_id)
-        //                         ->where('Te_Code', $course)
-        //                         ->where('form_counter', $form_counter)
-        //                         ->get();
-
-        // Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
-
         $staff = $index_id;
         $next_term_code = $term_id;
         $tecode = $course_id;
         $formcount = $form_counter;
 
-        $this->sendApprovalEmailToHR($staff, $tecode, $formcount, $next_term_code);
+        // $this->sendApprovalEmailToHR($staff, $tecode, $formcount, $next_term_code);
 
         $sddextr_query = SDDEXTR::where('INDEXNO', $current_user)->firstOrFail();
         $sddextr_org = $sddextr_query->DEPT;
         if ($org == $sddextr_org) {
-
             // flash session success or errorBags 
             $request->session()->flash('success', 'Enrolment Form has been submitted.'); //laravel 5.4 version
-
             return redirect()->route('thankyou');
         } else {
-
             $this->update($request, $org, $current_user);
             $request->session()->flash('success', 'Enrolment Form has been submitted.'); //laravel 5.4 version
             $request->session()->flash('org_change_success', 'Organization has been updated');
             return redirect()->route('home');
         }
+    }
+
+    public function postPlacementInfo(Request $request)
+    {
+        $index_id = $request->input('index_id');
+        $language_id = $request->input('L');
+        $course_id = $request->input('course_id');
+        $term_id = $request->input('term_id');
+        //$schedule_id is an array 
+        $schedule_id = $request->input('schedule_id');
+        $uniquecode = $request->input('CodeIndexID');
+        $org = $request->input('org');
+        $agreementBtn = $request->input('agreementBtn');
+
+        $this->validate($request, array(
+            // 'mgr_email' => 'required|email',
+            'placementLang' => 'required|integer',
+            'approval' => 'required',
+            'agreementBtn' => 'required|',
+            'dayInput' => 'required|',
+            'timeInput' => 'required|',
+            'course_preference_comment' => 'required|',
+        ));
+
+        $qryEformCount = PlacementForm::withTrashed()
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('eform_submit_count', 'desc')->first();
+
+        $eform_submit_count = 1;
+        if (isset($qryEformCount->eform_submit_count)) {
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;
+        }
+
+        $placementForm = new PlacementForm;
+        $placementForm->L = $language_id;
+        $placementForm->profile = $request->profile;
+        $placementForm->Term = $term_id;
+        $placementForm->INDEXID = $index_id;
+        $placementForm->DEPT = $org;
+        $placementForm->eform_submit_count = $eform_submit_count;
+        // $placementForm->mgr_email = $mgr_email;
+        // $placementForm->mgr_fname = $mgr_fname;
+        // $placementForm->mgr_lname = $mgr_lname;   
+        $placementForm->approval = $request->approval;
+        $placementForm->placement_schedule_id = $request->placementLang;
+        $placementForm->std_comments = $request->std_comment;
+        $placementForm->agreementBtn = $request->agreementBtn;
+        // $placementForm->contractDate = $request->contractDate;
+        $placementForm->save();
+
+        if (in_array($placementForm->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
+            $placementForm->update([
+                'overall_approval' => 1,
+            ]);
+        }
+        // execute mail class to send email to HR focal point if needed
+        $staff = $index_id;
+        $next_term_code = $term_id;
+        $lang = $language_id;
+        $formcount = $eform_submit_count;
+
+        $this->sendPlacementApprovalEmailToHR($staff, $next_term_code, $lang, $formcount);
+
+        // $staff = Auth::user();
+        // $current_user = Auth::user()->indexno;
+        // $input_course = PlacementForm::orderBy('id', 'desc')->where('Term', $term_id)->where('INDEXID', $current_user)->where('L', $language_id)->first();
+
+        // Mail::to($mgr_email)->send(new MailPlacementTesttoApprover($input_course, $staff));
+
+        // get newly created placement form record
+        $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->where('Term', $term_id)->where('L', $language_id)->first();
+        $placement_form_id = $latest_placement_form->id;
+        $this->postPlacementInfoAdditional($request, $placement_form_id);
+    }
+
+    public function lateSelfpayForm(Request $request)
+    {
+        $url = session()->get('url');
+        $checkSelfPay = $request->session()->get('checkSelfPay');
+        if ($checkSelfPay == 1) {
+
+            $courses = Course::all();
+            $languages = DB::table('languages')->pluck("name", "code")->all();
+            $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
+            $now_date = Carbon::now()->toDateString();
+            $now_year = Carbon::now()->year;
+
+            // query the current term based on year and Term_End column is greater than today's date
+            // whereYear('Term_End', $now_year)  
+            // $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+            $terms = Term::orderBy('Term_Code', 'desc')
+                            ->whereDate('Term_Begin', '>=', $now_date)
+                            ->get()->min();
+
+            //query the next term based Term_Begin column is greater than today's date and then get min
+            $next_term = Term::orderBy('Term_Code', 'desc')
+                ->where('Term_Code', '=', $terms->Term_Next)->get();
+            // ->min();
+
+            $prev_term = Term::orderBy('Term_Code', 'desc')
+                ->where('Term_Code', $terms->Term_Prev)->get();
+
+            //define user variable as User collection
+            $user = Auth::user();
+            //define user index number for query 
+            $current_user = Auth::user()->indexno;
+            //using DB method to query latest CodeIndexID of current_user
+            $repos = Repo::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)->value('CodeIndexID');
+            //not using DB method to get latest language course of current_user
+            $student_last_term = Repo::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)->first(['Term']);
+            if ($student_last_term == null) {
+                $repos_lang = null;
+                $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name', 'Org name');
+                return view('form.late.late-selfpay-form', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
+            }
+
+            $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
+                ->where('INDEXID', $current_user)->get();
+            $org = Torgan::orderBy('Org name', 'asc')->get()->pluck('Org name', 'Org name');
+
+            return view('form.late.late-selfpay-form', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
+        } else {
+            if ($url) {
+                return redirect()->to($url);
+            } 
+            return redirect('home')->with('interdire-msg', 'Access denied. Please refer to the link that the CLM Secretariat sent to your email.');
+        }
+    }
+
+    public function storeLateSelfpayForm(Request $request)
+    {        
+        $index_id = $request->input('index_id');
+        $language_id = $request->input('L');
+        $course_id = $request->input('course_id');
+        $term_id = $request->input('term_id');
+        //$schedule_id is an array 
+        $schedule_id = $request->input('schedule_id');
+        $uniquecode = $request->input('CodeIndexID');
+        $decision = $request->input('decision');
+        $org = $request->input('org');
+        $agreementBtn = $request->input('agreementBtn');
+        $consentBtn = $request->input('consentBtn');
+        $flexibleBtn = $request->input('flexibleBtn');
+        $codex = [];
+        //concatenate (implode) Code input before validation   
+        if (!empty($schedule_id)) {
+            //check if $code has no input
+            if (empty($uniquecode)) {
+                //loop based on $room_id count and store in $codex array
+                for ($i = 0; $i < count($schedule_id); $i++) {
+                    $codex[] = array($course_id, $schedule_id[$i], $term_id, $index_id);
+                    //implode array elements and pass imploded string value to $codex array as element
+                    $codex[$i] = implode('-', $codex[$i]);
+                    //for each $codex array element stored, loop array merge method
+                    //and output each array element to a string via $request->Code
+
+                    foreach ($codex as $value) {
+                        $request->merge(['CodeIndexID' => $value]);
+                    }
+                    //var_dump($request->CodeIndexID);
+                    // the validation below fails when CodeIndexID is already taken AND 
+                    // deleted_at column is NULL which means it has not been cancelled AND
+                    // there is an existing self-pay form
+                    $this->validate($request, array(
+                        'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use ($request) {
+                            $uniqueCodex = $request->CodeIndexID;
+                            $query->where('CodeIndexID', $uniqueCodex)
+                                ->where('deleted_at', NULL)
+                                ->where('is_self_pay_form', 1);
+                        })
+                    ));
+                }
+            }
+        }
+        // 1st part of validate other input fields 
+        $this->validate($request, array(
+            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+        ));
+        // control the number of submitted enrolment forms
+        $qryEformCount = Preenrolment::withTrashed()
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('eform_submit_count', 'desc')->first();
+
+        $eform_submit_count = 1;
+        if (isset($qryEformCount->eform_submit_count)) {
+            $eform_submit_count = $qryEformCount->eform_submit_count + 1;
+        }
+
+        // set default value of $form_counter to 1 and then add succeeding
+        $lastValueCollection = Preenrolment::withTrashed()
+            ->where('Te_Code', $course_id)
+            ->where('INDEXID', $index_id)
+            ->where('Term', $term_id)
+            ->orderBy('form_counter', 'desc')->first();
+
+        $form_counter = 1;
+        if (isset($lastValueCollection->form_counter)) {
+            $form_counter = $lastValueCollection->form_counter + 1;
+        }
+
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('identityfile')) {
+            $request->file('identityfile');
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            //Create new record in db table
+            $attachment_identity_file = new File([
+                'filename' => $filename,
+                'size' => $request->identityfile->getClientSize(),
+                'path' => $filestore,
+            ]);
+            $attachment_identity_file->save();
+        }
+        if ($request->hasFile('payfile')) {
+            $request->file('payfile');
+            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            //Create new record in db table
+            $attachment_pay_file = new File([
+                'filename' => $filename,
+                'size' => $request->payfile->getClientSize(),
+                'path' => $filestore,
+            ]);
+            $attachment_pay_file->save();
+        }
+
+        // check if placement test form
+        // if so, call method from PlacementFormController
+        if ($request->placementDecisionB === '0') {
+            app('App\Http\Controllers\PlacementFormController')->postSelfPayPlacementInfo($request, $attachment_pay_file, $attachment_identity_file);
+
+            if ($request->is_self_pay_form == 1) {
+                $request->session()->flash('success', 'Your Placement Test request has been submitted.');
+                return redirect()->route('thankyouSelfPay');
+            }
+
+            $request->session()->flash('success', 'Your Placement Test request has been submitted.');
+            return redirect()->route('thankyouPlacement');
+        }
+
+        // 2nd part of validate other input fields 
+        $this->validate($request, array(
+            'term_id' => 'required|',
+            'schedule_id' => 'required|',
+            'course_id' => 'required|',
+            'L' => 'required|',
+        ));
+
+        //loop for storing Code value to database
+        $ingredients = [];
+        for ($i = 0; $i < count($schedule_id); $i++) {
+            $ingredients[] = new  Preenrolment([
+                'CodeIndexID' => $course_id . '-' . $schedule_id[$i] . '-' . $term_id . '-' . $index_id,
+                'Code' => $course_id . '-' . $schedule_id[$i] . '-' . $term_id,
+                'schedule_id' => $schedule_id[$i],
+                'L' => $language_id,
+                'profile' => $request->profile,
+                'Te_Code' => $course_id,
+                'Term' => $term_id,
+                'INDEXID' => $index_id,
+                "created_at" =>  \Carbon\Carbon::now(),
+                "updated_at" =>  \Carbon\Carbon::now(),
+                'continue_bool' => $decision,
+                'attachment_id' => $attachment_identity_file->id,
+                'attachment_pay' => $attachment_pay_file->id,
+                'is_self_pay_form' => 1,
+                'eform_submit_count' => $eform_submit_count,
+                'form_counter' => $form_counter,
+                'DEPT' => $org,
+                'agreementBtn' => $agreementBtn,
+                'consentBtn' => $consentBtn,
+                'flexibleBtn' => $flexibleBtn,
+                'admin_eform_comment' => 'selfpay late registration form [auto-generated]',
+            ]);
+
+            foreach ($ingredients as $data) {
+                $data->save();
+            }
+        }
+
+        //execute Mail class before redirect         
+        $mgr_email = $request->mgr_email;
+        $staff = Auth::user();
+        $current_user = Auth::user()->indexno;
+        $now_date = Carbon::now()->toDateString();
+        $terms = Term::orderBy('Term_Code', 'desc')
+            ->whereDate('Term_End', '>=', $now_date)
+            ->get()->min();
+        $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
+        $course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+            ->where('INDEXID', $current_user)
+            ->value('Te_Code');
+        //query from Preenrolment table the needed information data to include in email
+        $input_course = Preenrolment::orderBy('Term', 'desc')->orderBy('id', 'desc')
+            ->where('INDEXID', $current_user)
+            ->first();
+        $input_schedules = Preenrolment::orderBy('Term', 'desc')
+            ->where('INDEXID', $current_user)
+            ->where('Term', $next_term_code)
+            ->where('Te_Code', $course)
+            ->where('form_counter', $form_counter)
+            ->get();
+
+        // email confirmation message to student enrolment form has been received 
+        // Mail::to($mgr_email)->send(new MailtoApprover($input_course, $input_schedules, $staff));
+
+        $request->session()->flash('success', 'Thank you. The enrolment form has been submitted to the Language Secretariat for processing.');
+
+        return redirect()->route('thankyouSelfPay');
+    
     }
 
 }
