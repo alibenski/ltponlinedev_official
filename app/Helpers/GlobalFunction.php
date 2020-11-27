@@ -44,6 +44,16 @@ class GlobalFunction
         return $currentEnrolTermObject;                
       }
 
+      public function lateEnrolTermObject()
+      {
+        $now_date = Carbon::now()->toDateString();
+
+        $lateEnrolTermObject = Term::orderBy('Term_Code', 'desc')
+                            ->whereDate('Term_Begin', '>=', $now_date)
+                            ->get()->min();
+        return $lateEnrolTermObject;                
+      }
+
       public function nextTermCode()
       {
         //get current year and date
