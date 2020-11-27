@@ -377,12 +377,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/home-how-to-check-status', 'HomeController@homeHowToCheckStatus')->name('home-how-to-check-status');
         Route::get('/whatorg', ['as' => 'whatorg', 'uses' => 'HomeController@whatorg']);
 
+        // late registration routes
         Route::get('/late-what-org', ['as'=>'late-what-org','uses'=>'LateEnrolmentController@lateWhatOrg']);
         Route::post('/late-what-form', ['as'=>'late-what-form','uses'=>'LateEnrolmentController@lateWhatForm']);
         Route::get('/late-registration', ['as'=>'late-registration','uses'=>'LateEnrolmentController@lateRegistration']);
         Route::post('/store-late-registration', ['as'=>'store-late-registration','uses'=>'LateEnrolmentController@storeLateRegistration']);
         Route::get('/late-selfpay-form', ['as'=>'late-selfpay-form','uses'=>'LateEnrolmentController@lateSelfpayForm']);
         Route::post('/store-late-selfpay-form', ['as'=>'store-late-selfpay-form','uses'=>'LateEnrolmentController@storeLateSelfpayForm']);
+        Route::get('late-check-placement-form-ajax', ['as' => 'late-check-placement-form-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementFormAjax']);
+        Route::post('late-check-placement-course-ajax', ['as' => 'late-check-placement-course-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementCourseAjax']);
+        Route::get('late-check-enrolment-entries-ajax', ['as' => 'late-check-enrolment-entries-ajax', 'uses' => 'LateEnrolmentController@lateCheckEnrolmentEntriesAjax']);
+        Route::get('late-check-placement-entries-ajax', ['as' => 'late-check-placement-entries-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementEntriesAjax']);
+        Route::get('late-check-selfpay-entries-ajax', ['as' => 'late-check-selfpay-entries-ajax', 'uses' => 'LateEnrolmentController@lateCheckSelfpayEntriesAjax']);
+        Route::get('late-check-selfpay-placement-entries-ajax', ['as' => 'late-check-selfpay-placement-entries-ajax', 'uses' => 'LateEnrolmentController@lateCheckSelfpayPlacementEntriesAjax']);
 
         Route::post('/whatform', ['as' => 'whatform', 'uses' => 'HomeController@whatform'])->middleware('check-prev-url');
         Route::get('/submitted', ['as' => 'submitted', 'uses' => 'HomeController@previousSubmitted']);

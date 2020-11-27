@@ -687,4 +687,147 @@ class LateEnrolmentController extends Controller
         $this->postPlacementInfoAdditional($request, $placement_form_id);
     }
 
+    public function lateCheckPlacementFormAjax(Request $request)
+    {
+        if (Auth::check()) {
+            $current_user = Auth::user()->indexno;
+            $termCode = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+
+            $placementData = PlacementForm::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)
+                ->where('Term', $termCode)
+                ->get();
+            if (isset($placementData)) {
+                $data = true;
+            } else {
+                $data = false;
+            }
+            $data = $placementData;
+            return response()->json($data);
+        }
+    }
+
+    public function lateCheckPlacementCourseAjax(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            // first validation
+            // get the last enrolment from PASHQ table including cancelled ones
+            $repos_lang = Repo::withTrashed()->orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
+
+            if (is_null($repos_lang)) {
+                $repos_value = 0;
+            } else {
+                // get the Term value of the last enrolment from PASHQ table 
+                $repos_value = $repos_lang->Term;
+            }
+            // get the previous term code of the previous term of the current enrolment term
+            $current_enrol_term = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject();
+            $prev_termCode = $current_enrol_term->Term_Prev;
+            $prev_prev_TermCode = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $prev_termCode)->value('Term_Prev');
+
+            // query placement table if student placement enrolment data exists or not for the previous term
+            $selectedTerm = $current_enrol_term->Term_Code;
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                // if autumn term, set summer term code as previous term 
+                $prev_term = $selectedTerm - 1;
+                // query placement table with summer term code
+                $placementData = PlacementForm::withTrashed()->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                ->orWhere(function($query) use($prev_term, $request){
+                    $query->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                })->first();
+            } else {
+                // $placementData = null;
+                $placementData = PlacementForm::withTrashed()->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                ->orWhere(function($q) use($prev_termCode, $request){
+                    $q->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                })->first();
+            }
+
+            // Questions: 
+            // what is the threshold of a placement exam result? how long is it valid?
+            // is it correct to assume that once a course has been assigned to a placement form,
+            // that is the level that suits the student?
+            // what about students that are not assigned a course because it is not offered in the 
+            // next term?
+
+            // if latest term for selected language is less than the 2 terms then true, take placement
+            if (($repos_value < $prev_prev_TermCode) && empty($placementData)) {
+                $data = true;
+            } else {
+                $data = false;
+            }
+
+            return response()->json($data);
+        }
+    }
+
+    public function lateCheckEnrolmentEntriesAjax(Request $request)
+    {
+        if (Auth::check()) {
+            $current_user = Auth::user()->indexno;
+            $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
+                ->where(function ($q) {
+                    $latest_term = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+                    // do NOT count number of submitted forms disapproved by manager or HR learning partner  
+                    $q->where('Term', $latest_term)->where('deleted_at', NULL)
+                        ->where('is_self_pay_form', NULL);
+                })->count('eform_submit_count');
+
+            $data = $eformGrouped;
+            return response()->json($data);
+        }
+    }
+
+    public function lateCheckPlacementEntriesAjax(Request $request)
+    {
+        if (Auth::check()) {
+            $current_user = Auth::user()->indexno;
+            $termCode = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+
+            $placementFromCount = PlacementForm::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)
+                ->where('Term', $termCode)
+                ->get();
+
+            $data = $placementFromCount;
+            return response()->json($data);
+        }
+    }
+
+    public function lateCheckSelfpayEntriesAjax()
+    {
+        if (Auth::check()) {
+            $current_user = Auth::user()->indexno;
+            $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
+                ->where(function ($q) {
+                    $latest_term = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+                    // do NOT count number of submitted forms disapproved by manager or HR learning partner  
+                    $q->where('Term', $latest_term)->where('deleted_at', NULL)
+                        ->where('is_self_pay_form', 1);
+                })->count('eform_submit_count');
+
+            $data = $eformGrouped;
+            return response()->json($data);
+        }
+    }
+
+    public function lateCheckSelfpayPlacementEntriesAjax()
+    {
+        if (Auth::check()) {
+            $current_user = Auth::user()->indexno;
+            $termCode = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+            $placementFromCount = PlacementForm::orderBy('Term', 'desc')
+                ->where('INDEXID', $current_user)
+                ->where('Term', $termCode)
+                ->where('is_self_pay_form', 1)
+                ->get();
+
+            $data = $placementFromCount;
+            return response()->json($data);
+        }
+    }
+
 }

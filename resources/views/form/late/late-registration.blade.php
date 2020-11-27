@@ -368,7 +368,7 @@
         showMeridian: 1,
         minView: 2, 
     });
-    $.get("/check-placement-form-ajax", function(data) {
+    $.get("/late-check-placement-form-ajax", function(data) {
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
         $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form
@@ -459,7 +459,7 @@
       var token = $("input[name='_token']").val();
       console.log(L);
       $.ajax({
-          url: "{{ route('check-placement-course-ajax') }}", 
+          url: "{{ route('late-check-placement-course-ajax') }}", 
           method: 'POST',
           data: {L:L, index:index, term_id:term, _token:token},
           success: function(data) {
@@ -480,7 +480,7 @@
               $(".placementTestMsg").attr('style', 'display:none');
               $(".placement-enrol").attr('style', 'display:none');
               $(".placement-beginner-msg").attr('style', 'display:none');
-                $.get("{{ route('check-enrolment-entries-ajax') }}", function(data) {
+                $.get("{{ route('late-check-enrolment-entries-ajax') }}", function(data) {
                       console.log('regular enrol form count:' + data);
                       if (data >= 2) {
                         alert('You are not allowed to submit more than 2 enrolment forms. You will now be redirected to the submitted forms page.');
@@ -501,7 +501,7 @@
   });
   // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
-      $.get("{{ route('check-enrolment-entries-ajax') }}", function(data) {
+      $.get("{{ route('late-check-enrolment-entries-ajax') }}", function(data) {
             console.log('regular enrol form count:' + data);
             if (data >= 2) {
               alert('You are not allowed to submit more than 2 enrolment forms. However, if you are not a complete beginner, you could submit a placement test form. The page will now reload.');
@@ -555,7 +555,7 @@
   // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
     $("input[name='placementDecisionB']").val("0");
-      $.get("{{ route('check-placement-entries-ajax') }}", function(data) {
+      $.get("{{ route('late-check-placement-entries-ajax') }}", function(data) {
             console.log(data.length);
             if (data.length >= 2) {
               alert('You are not allowed to submit more than 2 placement test forms. The page will now reload.');
