@@ -256,8 +256,8 @@ class TeachersController extends Controller
             $newUser->gender = $request->gender;
             $newUser->title = $request->title;
             $newUser->profile = $request->profile;
-            $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
-            $newUser->nameLast = $request->nameLast;
+            $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+            $newUser->nameLast = strtoupper($request->nameLast);
             $newUser->nameFirst = $request->nameFirst;
             $newUser->email = $request->email;
             $newUser->org = $request->org;
@@ -325,8 +325,8 @@ class TeachersController extends Controller
                 'profile' => $request->profile,
                 'email' => $query_sddextr_record->EMAIL,
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
-                'nameLast' => $query_sddextr_record->LASTNAME,
-                'name' => $query_sddextr_record->FIRSTNAME . ' ' . $query_sddextr_record->LASTNAME,
+                'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
                 'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
@@ -343,8 +343,8 @@ class TeachersController extends Controller
             'profile' => $request->profile,
             'email' => $request->email,
             'nameFirst' => $request->nameFirst,
-            'nameLast' => $request->nameLast,
-            'name' => $request->nameFirst . ' ' . $request->nameLast,
+            'nameLast' => strtoupper($request->nameLast),
+            'name' => $request->nameFirst . ' ' . strtoupper($request->nameLast),
             'password' => Hash::make('Welcome2CLM'),
             'must_change_password' => 1,
             'approved_account' => 1,
@@ -366,7 +366,7 @@ class TeachersController extends Controller
             'INDEXNO_old' => $request->indexno,
             'TITLE' => $request->title,
             'FIRSTNAME' => $request->nameFirst,
-            'LASTNAME' => $request->nameLast,
+            'LASTNAME' => strtoupper($request->nameLast),
             'EMAIL' => $request->email,
             'SEX' => $request->gender,
             'DEPT' => $request->org,
@@ -409,8 +409,8 @@ class TeachersController extends Controller
         $newTeacher->In_Out = 1;
         $newTeacher->IndexNo = $request->indexno;
         $newTeacher->Tch_Title = $request->title;
-        $newTeacher->Tch_Name = $request->nameLast . ', ' . $request->nameFirst;
-        $newTeacher->Tch_Lastname = $request->nameLast;
+        $newTeacher->Tch_Name = strtoupper($request->nameLast) . ', ' . $request->nameFirst;
+        $newTeacher->Tch_Lastname = strtoupper($request->nameLast);
         $newTeacher->Tch_Firstname = $request->nameFirst;
         $newTeacher->User_Type = 'Teacher';
 
@@ -503,15 +503,15 @@ class TeachersController extends Controller
         }
         if ($request->Tch_Firstname) {
             $user->update(['nameFirst' => $request->Tch_Firstname]);
-            $user->update(['name' => $request->Tch_Firstname . ' ' . $user->nameLast]);
+            $user->update(['name' => $request->Tch_Firstname . ' ' . strtoupper($user->nameLast)]);
             $sddextr->update(['FIRSTNAME' => $request->Tch_Firstname]);
-            $teacher->update(['Tch_Name' => $teacher->Tch_Lastname . ', ' . $request->Tch_Firstname]);
+            $teacher->update(['Tch_Name' => strtoupper($teacher->Tch_Lastname) . ', ' . $request->Tch_Firstname]);
         }
         if ($request->Tch_Lastname) {
-            $user->update(['nameLast' => $request->Tch_Lastname]);
-            $user->update(['name' => $user->nameFirst . ' ' . $request->Tch_Lastname]);
-            $sddextr->update(['LASTNAME' => $request->Tch_Lastname]);
-            $teacher->update(['Tch_Name' => $request->Tch_Lastname . ', ' . $teacher->Tch_Firstname]);
+            $user->update(['nameLast' => strtoupper($request->Tch_Lastname)]);
+            $user->update(['name' => $user->nameFirst . ' ' . strtoupper($request->Tch_Lastname)]);
+            $sddextr->update(['LASTNAME' => strtoupper($request->Tch_Lastname)]);
+            $teacher->update(['Tch_Name' => strtoupper($request->Tch_Lastname) . ', ' . $teacher->Tch_Firstname]);
         }
 
         $data = $input;

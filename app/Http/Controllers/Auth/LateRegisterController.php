@@ -69,7 +69,7 @@ class LateRegisterController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('contractfile')) {
             $request->file('contractfile');
-            $filename = 'new_user_request_' . $request->nameLast . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
+            $filename = 'new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
             //Create new record in db table
@@ -87,8 +87,8 @@ class LateRegisterController extends Controller
         $newUser->gender = $request->gender;
         $newUser->title = $request->title;
         $newUser->profile = $request->profile;
-        $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
-        $newUser->nameLast = $request->nameLast;
+        $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+        $newUser->nameLast = strtoupper($request->nameLast);
         $newUser->nameFirst = $request->nameFirst;
         $newUser->email = $request->email;
         $newUser->org = $request->org;
@@ -98,7 +98,7 @@ class LateRegisterController extends Controller
         $newUser->save();
 
         // send email notification to Secretariat to approve his login credentials to the system and sddextr record
-        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . $request->nameLast, function ($message) {
+        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . strtoupper($request->nameLast), function ($message) {
             $message->from('clm_onlineregistration@unog.ch', 'CLM Online Administrator');
             $message->to('clm_language@un.org')->subject('Notification: New Late User Request');
         });

@@ -393,8 +393,8 @@ class UserController extends Controller
             $newUser->gender = $request->gender;
             $newUser->title = $request->title;
             $newUser->profile = $request->profile;
-            $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
-            $newUser->nameLast = $request->nameLast;
+            $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+            $newUser->nameLast = strtoupper($request->nameLast);
             $newUser->nameFirst = $request->nameFirst;
             $newUser->email = $request->email;
             $newUser->org = $request->org;
@@ -460,8 +460,8 @@ class UserController extends Controller
                 'profile' => $request->profile,
                 'email' => $query_sddextr_record->EMAIL,
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
-                'nameLast' => $query_sddextr_record->LASTNAME,
-                'name' => $query_sddextr_record->FIRSTNAME . ' ' . $query_sddextr_record->LASTNAME,
+                'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
                 'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
@@ -478,8 +478,8 @@ class UserController extends Controller
             'profile' => $request->profile,
             'email' => $request->email,
             'nameFirst' => $request->nameFirst,
-            'nameLast' => $request->nameLast,
-            'name' => $request->nameFirst . ' ' . $request->nameLast,
+            'nameLast' => strtoupper($request->nameLast),
+            'name' => $request->nameFirst . ' ' . strtoupper($request->nameLast),
             'password' => Hash::make('Welcome2CLM'),
             'must_change_password' => 1,
             'approved_account' => 1,
@@ -501,7 +501,7 @@ class UserController extends Controller
             'INDEXNO_old' => $request->indexno,
             'TITLE' => $request->title,
             'FIRSTNAME' => $request->nameFirst,
-            'LASTNAME' => $request->nameLast,
+            'LASTNAME' => strtoupper($request->nameLast),
             'EMAIL' => $request->email,
             'SEX' => $request->gender,
             'DEPT' => $request->org,

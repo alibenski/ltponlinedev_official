@@ -150,8 +150,8 @@ class StudentController extends Controller
             $student->sddextr->FIRSTNAME = $request->input('firstName');
         }
         if (!is_null($request->input('lastName'))) {
-            $student->nameLast = $request->input('lastName');
-            $student->sddextr->LASTNAME = $request->input('lastName');
+            $student->nameLast = strtoupper($request->input('lastName'));
+            $student->sddextr->LASTNAME = strtoupper($request->input('lastName'));
         }
         if (!is_null($request->input('organization'))) {
             $student->sddextr->DEPT = $request->input('organization');
@@ -169,7 +169,7 @@ class StudentController extends Controller
             $student->sddextr->LEVEL = $request->input('gradeLevel');
         }
 
-        $student->name = $student->nameFirst . ' ' . $student->nameLast;
+        $student->name = $student->nameFirst . ' ' . strtoupper($student->nameLast);
         $student->save();
         $student->sddextr->save();
     }

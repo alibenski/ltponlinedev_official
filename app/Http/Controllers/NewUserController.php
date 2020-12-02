@@ -119,8 +119,8 @@ class NewUserController extends Controller
                 'indexno' => $query_sddextr_record->INDEXNO,
                 'email' => $query_sddextr_record->EMAIL,
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
-                'nameLast' => $query_sddextr_record->LASTNAME,
-                'name' => $query_sddextr_record->FIRSTNAME . ' ' . $query_sddextr_record->LASTNAME,
+                'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
                 'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
@@ -175,8 +175,8 @@ class NewUserController extends Controller
         $newUser->gender = $request->gender;
         $newUser->title = $request->title;
         $newUser->profile = $request->profile;
-        $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
-        $newUser->nameLast = $request->nameLast;
+        $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+        $newUser->nameLast = strtoupper($request->nameLast);
         $newUser->nameFirst = $request->nameFirst;
         $newUser->email = $request->email;
         $newUser->org = $request->org;
@@ -186,7 +186,7 @@ class NewUserController extends Controller
         // $newUser->student_cat = $request->student_cat;
         $newUser->save();
         // send email notification to Secretariat to approve his login credentials to the system and sddextr record
-        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . $request->nameLast, function ($message) {
+        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . strtoupper($request->nameLast), function ($message) {
             $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
             $message->to('clm_language@un.org')->subject('Notification: New UN User Request');
         });
@@ -239,8 +239,8 @@ class NewUserController extends Controller
                 'indexno' => $query_sddextr_record->INDEXNO,
                 'email' => $query_sddextr_record->EMAIL,
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
-                'nameLast' => $query_sddextr_record->LASTNAME,
-                'name' => $query_sddextr_record->FIRSTNAME . ' ' . $query_sddextr_record->LASTNAME,
+                'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
                 'password' => Hash::make('Welcome2CLM'),
                 'must_change_password' => 1,
                 'approved_account' => 1,
@@ -306,7 +306,7 @@ class NewUserController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('contractfile')) {
             $request->file('contractfile');
-            $filename = 'new_user_request_' . $request->nameLast . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
+            $filename = 'new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
             //Create new record in db table
@@ -324,8 +324,8 @@ class NewUserController extends Controller
         $newUser->gender = $request->gender;
         $newUser->title = $request->title;
         $newUser->profile = $request->profile;
-        $newUser->name = $request->nameFirst . ' ' . $request->nameLast;
-        $newUser->nameLast = $request->nameLast;
+        $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+        $newUser->nameLast = strtoupper($request->nameLast);
         $newUser->nameFirst = $request->nameFirst;
         $newUser->email = $request->email;
         $newUser->org = $request->org;
@@ -336,7 +336,7 @@ class NewUserController extends Controller
         // $newUser->student_cat = $request->student_cat;
         $newUser->save();
         // send email notification to Secretariat to approve his login credentials to the system and sddextr record
-        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . $request->nameLast, function ($message) {
+        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . strtoupper($request->nameLast), function ($message) {
             $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
             $message->to('clm_language@un.org')->subject('Notification: New Non-UN User Request');
         });
@@ -423,8 +423,8 @@ class NewUserController extends Controller
             'email' => $request->email,
             'profile' => $request->profile,
             'nameFirst' => $request->nameFirst,
-            'nameLast' => $request->nameLast,
-            'name' => $request->nameFirst . ' ' . $request->nameLast,
+            'nameLast' => strtoupper($request->nameLast),
+            'name' => $request->nameFirst . ' ' . strtoupper($request->nameLast),
             'password' => Hash::make('Welcome2CLM'),
             'must_change_password' => 1,
             'approved_account' => 1,
@@ -439,7 +439,7 @@ class NewUserController extends Controller
             'INDEXNO' => $request->indexno,
             'TITLE' => $request->title,
             'FIRSTNAME' => $request->nameFirst,
-            'LASTNAME' => $request->nameLast,
+            'LASTNAME' => strtoupper($request->nameLast),
             'SEX' => $request->gender,
             'DEPT' => $request->org,
             'PHONE' => $request->contact_num,
