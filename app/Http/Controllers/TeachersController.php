@@ -552,7 +552,7 @@ class TeachersController extends Controller
         $form_info = Repo::withTrashed()
             ->where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
-            ->join('users', 'ltp_pashqtcur.INDEXID', '=', 'users.indexno')
+            ->join('users', 'LTP_PASHQTcur.INDEXID', '=', 'users.indexno')
             ->orderBy('users.nameLast', 'asc')
             ->get();
 
@@ -755,7 +755,7 @@ class TeachersController extends Controller
     {
         $form_info = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
-            ->join('users', 'ltp_pashqtcur.INDEXID', '=', 'users.indexno')
+            ->join('users', 'LTP_PASHQTcur.INDEXID', '=', 'users.indexno')
             ->orderBy('users.nameLast', 'asc')
             ->get();
 
@@ -1045,7 +1045,7 @@ class TeachersController extends Controller
     {
         $form_info = Repo::where('CodeClass', $request->Code)
             ->where('Term', Session::get('Term'))
-            ->join('users', 'ltp_pashqtcur.INDEXID', '=', 'users.indexno')
+            ->join('users', 'LTP_PASHQTcur.INDEXID', '=', 'users.indexno')
             ->orderBy('users.nameLast', 'asc')
             ->get();
 
