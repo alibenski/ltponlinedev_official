@@ -8,16 +8,18 @@
 @section('content')
 
 <div class="row">
-  <div class="col-md-1">
-    <a href="{{ route('teacher-view-classrooms') }}" class="btn btn-danger btn-space"><i class="fa fa-arrow-circle-left"></i> View Your Classes</a>
-    @hasrole('Teacher FP')
-    <a href="{{ route('teacher-view-all-classrooms') }}" class="btn btn-info btn-space"><i class="fa fa-arrow-circle-left"></i> View All Classes</a>
-    @endhasrole
-  </div>
-
-  <div class="col-md-11">
-    <h3 class="text-center" style="margin-top: 3px;"><strong>Manage Attendance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h3>
-    <input type="hidden" name="CodeClass" value="{{ $course->CodeClass }}">
+  <div class="row">
+    <div class="col-md-2">
+      <a href="{{ route('teacher-view-classrooms') }}" class="btn btn-danger btn-space"><i class="fa fa-arrow-circle-left"></i> View Your Classes</a>
+      @hasrole('Teacher FP')
+      <a href="{{ route('teacher-view-all-classrooms') }}" class="btn btn-info btn-space"><i class="fa fa-arrow-circle-left"></i> View All Classes</a>
+      @endhasrole
+    </div>
+  
+    <div class="col-md-10">
+      <h3 class="text-center" style="margin-top: 3px;"><strong>Manage Attendance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h3>
+      <input type="hidden" name="CodeClass" value="{{ $course->CodeClass }}">
+    </div>
   </div>
 
   <div class="row">
