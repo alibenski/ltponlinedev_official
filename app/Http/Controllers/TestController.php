@@ -18,6 +18,7 @@ class TestController extends Controller
             ->where('Term', $term)
             ->join('users', 'ltp_pashqtcur.INDEXID', '=', 'users.indexno')
             ->orderBy('users.nameLast', 'asc')
+            ->select('ltp_pashqtcur.*')
             ->get()
             ->take(10);
 
