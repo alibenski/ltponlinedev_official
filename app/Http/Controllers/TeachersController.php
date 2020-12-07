@@ -554,7 +554,7 @@ class TeachersController extends Controller
             ->where('Term', Session::get('Term'))
             ->join('users', 'LTP_PASHQTcur.INDEXID', '=', 'users.indexno')
             ->orderBy('users.nameLast', 'asc')
-            ->select('ltp_pashqtcur.*')
+            ->select('LTP_PASHQTcur.*')
             ->get();
 
         $course = Repo::where('CodeClass', $request->Code)
@@ -758,7 +758,7 @@ class TeachersController extends Controller
             ->where('Term', Session::get('Term'))
             ->join('users', 'LTP_PASHQTcur.INDEXID', '=', 'users.indexno')
             ->orderBy('users.nameLast', 'asc')
-            ->select('ltp_pashqtcur.*')
+            ->select('LTP_PASHQTcur.*')
             ->get();
 
         $course = Repo::where('CodeClass', $request->Code)
@@ -1049,7 +1049,7 @@ class TeachersController extends Controller
             ->where('Term', Session::get('Term'))
             ->join('users', 'LTP_PASHQTcur.INDEXID', '=', 'users.indexno')
             ->orderBy('users.nameLast', 'asc')
-            ->select('ltp_pashqtcur.*')
+            ->select('LTP_PASHQTcur.*')
             ->get();
 
         $course = Repo::where('CodeClass', $request->Code)
