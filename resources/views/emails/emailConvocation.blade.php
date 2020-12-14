@@ -248,8 +248,6 @@
                                             <b>Microsoft Teams</b> <br>
                                             We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the same time as your course, as indicated above. Further details about how to join your session will be sent by your teachers before the beginning of the term.
                                             </p>
-                                            <p style="text-align: justify"><u>For English courses initially advertised as online, we will use Webex</u>. The online courses are: Intermediate grammar workout UN II, Advanced grammar workout UN III, Writing for professional purposes OCHA UN II – III, Writing for professional purposes UN III – IV, Writing for professional purposes (WHO) UN III - IV and Report Writing Workshop OHCHR UN III – IV.
-                                            </p>
                                         </li>
 
                                         <li>
@@ -257,7 +255,7 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    Just before starting the course, you can find your learning material and autonomous activities on the CLM e-learning platform Moodle. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
+                                                    <u>A couple of days before the beginning of the term</u>, you can find your learning material and autonomous activities on the CLM e-learning platform Moodle. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
                                                 </li>
                                                 {{-- <li style="text-align: justify">
                                                     Update your profile by adding a picture in your profile.
@@ -301,7 +299,7 @@
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p style="text-align: justify">
-                                        If you are unable to attend the first week of the term, you must inform your teacher and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
+                                        <u>If you are unable to attend the first week of the term</u>, you must inform your teacher and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
                                     <p style="color: red;text-align: justify;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/PaymentReimbursementEn.pdf">here</a>.
@@ -388,9 +386,6 @@
                                             <b>Microsoft Teams</b> <br>
                                             Nous utiliserons Microsoft Teams comme outil de téléconférence pour remplacer vos sessions en face-à-face. Les sessions auront lieu au moment de votre cours, comme indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
                                             </p>
-
-                                            <p style="text-align: justify"><u>Pour les cours d'anglais annoncés comme étant en ligne, nous utiliseront Webex</u>. Les cours d’anglais annoncées comme étant en ligne sont : Musclez votre grammaire – niveau intermédiaire (ONU II) – en ligne, Musclez votre grammaire – niveau avancé (ONU III) – en ligne, Rédaction professionnelle- OMS (ONU III-IV) - en ligne, Rédaction professionnelle - OCHA (ONU II - III)- cours en ligne et Rédaction professionnelle (ONU III-IV) - en ligne et Rédaction de rapport en anglais - OHCHR (ONU III - IV)- en ligne.
-                                            </p>
                                         </li>
 
                                         <li>
@@ -398,7 +393,7 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    Quelques jours avant le début de votre cours, vous pouvez trouver votre matériel d'apprentissage et vos activités autonomes sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
+                                                    <u>Quelques jours avant le début de votre cours</u>, vous pouvez trouver votre matériel d'apprentissage et vos activités autonomes sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
                                                 </li>
                                                 <li style="text-align: justify">
                                                     Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
