@@ -96,7 +96,7 @@
 						    @foreach ($teacher->classrooms as $element)
 						    <div class="box-footer no-padding">
 						      <ul class="nav nav-stacked">
-						        <h5 style="margin-left: 1.5rem">LTP - {{$element->course->Description}} - {{$element->Te_Code_New}}: {{$element->scheduler->name}} [{{ $element->Te_Term}}] <a href="{{ route('view-classrooms-per-section', ['Code' => $element->Code]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h5>
+						        <h5 style="margin-left: 1.5rem">LTP-{{$element->Te_Term}}-{{$element->Tch_ID}}-{{$element->course->Description}}-{{$element->Te_Code_New}}:{{$element->scheduler->name}} <a href="{{ route('view-classrooms-per-section', ['Code' => $element->Code]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h5>
 						        {{-- <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
 						        <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
 						        <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}
