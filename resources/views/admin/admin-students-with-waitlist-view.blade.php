@@ -102,7 +102,9 @@
 						{ "data": "DEPT" }, 
 						{ "data": "languages.name" }, 
 						{ "data": "courses.Description" },  
-						{ "data": "classrooms.teachers.Tch_Name" }
+						{ "data": "classrooms.teachers.Tch_Name",
+						  "defaultContent": ''
+						}
 							],
 			})
 		}
