@@ -71,6 +71,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     Route::get('admin-student-email-view', 'AdminController@adminStudentEmailView')->name('admin-student-email-view');
     Route::get('get-admin-all-current-student-in-term', 'AdminController@getAdminAllCurrentStudentInTerm')->name('get-admin-all-current-student-in-term');
+    Route::get('admin-students-with-waitlist-view', 'AdminController@adminStudentsWithWaitlistView')->name('admin-students-with-waitlist-view');
+    Route::get('get-admin-all-current-student-with-waitlist-in-term', 'AdminController@getAdminAllCurrentStudentWithWaitlistInTerm')->name('get-admin-all-current-student-with-waitlist-in-term');
 
     Route::get('admin-excel-schedule', ['as' => 'admin-excel-schedule', 'uses' => 'AdminController@adminExcelSchedule']);
     /*

@@ -58,6 +58,30 @@ class AdminController extends Controller
         }
     }
 
+    public function adminStudentsWithWaitlistView()
+    {
+        return view('admin.admin-students-with-waitlist-view');
+    }
+    public function getAdminAllCurrentStudentWithWaitlistInTerm(Request $request)
+    {
+        if ($request->ajax()) {
+            $term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first();
+            // query all students enrolled to current term including waitlisted
+            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT')->where('Term', $term->Term_Code)
+                // ->whereHas('classrooms', function ($q) {
+                //     $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                // })
+                ->with('users.sddextr') // access sddextr model via user model relationship
+                ->with('languages')
+                ->with('courses')
+                ->with('classrooms.teachers')
+                ->get();
+
+            $data = $query_students_current_term;
+            return response()->json($data);
+        }
+    }
+
     /**
      * Copy Preview table to PASH table
      */
