@@ -20,6 +20,7 @@
   <div class="box box-primary">
     <div class="box-body">
     <a href="{{ route('admin-student-email-view') }}" class="btn btn-primary admin-student-email-view"><i class="fa fa-at"></i> View All Current Students</a>
+    <a href="{{ route('admin-students-with-waitlist-view') }}" class="btn btn-warning admin-student-email-view"><i class="fa fa-at"></i> View All Students (Includes Waitlisted) </a>
     </div>
   </div>
 </div>

@@ -16,7 +16,7 @@
 				<h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3>
 			</div>
 		</div>
-		<h3>Viewing All Current Students</h3>
+		<h3>Viewing All Students (Includes Waitlisted)</h3>
 		<br>
 		<table id="sampol" class="table table-striped no-wrap" width="100%">
 			<thead>
