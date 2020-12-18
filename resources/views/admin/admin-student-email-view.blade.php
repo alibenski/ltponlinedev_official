@@ -22,7 +22,8 @@
 			<thead>
 				<tr>
 					<th>Term</th>
-					<th>Name</th>
+					<th>Last Name</th>
+					<th>First Name</th>
 					<th>Profile</th>
 					<th>Email</th>
 					<th>Organization</th>
@@ -34,7 +35,8 @@
 			<tfoot>
 				<tr>
 					<th>Term</th>
-					<th>Name</th>
+					<th>Last Name</th>
+					<th>First Name</th>
 					<th>Profile</th>
 					<th>Email</th>
 					<th>Organization</th>
@@ -95,7 +97,8 @@
 				"aaData": data,
 				"columns": [
 						{ "data": "Term" }, 
-						{ "data": "users.name" }, 
+						{ "data": "users.nameLast" }, 
+						{ "data": "users.nameFirst" }, 
 						{ "data": "users.profile" }, 
 						{ "data": "users.email" }, 
 						// { "data": "users.sddextr.DEPT" }, 
