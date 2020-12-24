@@ -71,7 +71,7 @@
           </ul>
         </li>
 
-        <li class="treeview {{ Request::is('admin/preenrolment') ? "active" : ""}}">
+        {{-- <li class="treeview {{ Request::is('admin/preenrolment') ? "active" : ""}}">
           <a href="#"><i class="fa fa-file-o"></i> <span>Enrolment Forms</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -103,7 +103,7 @@
             <li><a href="{{ route('selfpayform.index') }}">Validate Enrolment Payment</a></li>
             <li><a href="{{ route('index-placement-selfpay') }}">Validate Placement Payment</a></li>
           </ul>
-        </li> 
+        </li>  --}}
 
         <li class="{{ Request::is('admin/terms*') ? "active" : ""}}"><a href="{{ route('terms.index') }}"><i class="fa fa-snowflake-o"></i> <span>Terms</span></a></li>
         <li class="{{ Request::is('admin/courses*') ? "active" : ""}}"><a href="{{ route('courses.index') }}"><i class="fa fa-book"></i> <span>Course Catalogue</span></a></li>

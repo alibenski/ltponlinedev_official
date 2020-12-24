@@ -1,6 +1,8 @@
 $(document).ready(function() { 
   // Set the date we're counting down to
-  var countDownDate = new Date("Oct 14, 2019 08:00:00").getTime();
+  var termCountDown = $("input[name='termForCounter']").val();
+  var termCodeCountDown = $("input[name='termCodeForCounter']").val();
+  var countDownDate = new Date(termCountDown).getTime();
 console.log(countDownDate);
   // Update the count down every 1 second
   var x = setInterval(function() {
@@ -19,12 +21,12 @@ console.log(countDownDate);
 
     // Display the result in the element with id="demo"
     document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-    + minutes + "m " + seconds + "s ";
+    + minutes + "m " + seconds + "s until next enrolment term " + termCodeCountDown;
 
     // If the count down is finished, write some text
     if (distance < 0) {
       clearInterval(x);
-      document.getElementById("demo").innerHTML = "EXPIRED";
+      document.getElementById("demo").innerHTML = " ";
     }
   }, 1000);
 });

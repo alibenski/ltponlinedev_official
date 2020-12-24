@@ -369,7 +369,9 @@ class AdminController extends Controller
             $merge = array_merge($diffPlacementPASH, $diffEnrolPASH);
         }
 
-        return view('admin.index', compact('all_unassigned_enrolment_form', 'countNonAssignedPlacement', 'arr3_count', 'terms', 'cancelled_convocations', 'new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting', 'merge'));
+        $term_for_timer = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+
+        return view('admin.index', compact('all_unassigned_enrolment_form', 'countNonAssignedPlacement', 'arr3_count', 'terms', 'cancelled_convocations', 'new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting', 'merge', 'term_for_timer'));
     }
 
 
