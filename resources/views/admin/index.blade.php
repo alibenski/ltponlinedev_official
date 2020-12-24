@@ -339,8 +339,13 @@
 </div>
 
 <input type="hidden" name="_token" value="{{ Session::token() }}">
-<input type="hidden" name="termForCounter" value="{{ date('M d, Y H:i:s', strtotime($term_for_timer->Enrol_Date_Begin )) }}">
-<input type="hidden" name="termCodeForCounter" value="{{ $term_for_timer->Term_Code }}">
+	@if ($term_for_timer)	
+		<input type="hidden" name="termForCounter" value="{{ date('M d, Y H:i:s', strtotime($term_for_timer->Enrol_Date_Begin )) }}">
+		<input type="hidden" name="termCodeForCounter" value="{{ $term_for_timer->Term_Code }}">
+	@else
+		<input type="hidden" name="termForCounter" value="Nov 4, 2020 08:00:00">
+		<input type="hidden" name="termCodeForCounter" value="">
+	@endif
 @endsection
 
 @section('java_script')
