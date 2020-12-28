@@ -19,10 +19,10 @@
 
 <!-- Display the countdown timer in an element -->
 <p id="demo"></p>
+<div class="row">
+	@include('admin.partials._termSessionMsg')
+</div>
 
-@include('admin.partials._termSessionMsg')
-
-<h1 class="text-success">Administrator Dashboard</h1>
 <div class="preloader hidden"></div>
 
 @include('admin.partials._dropdownSetSessionTerm')
