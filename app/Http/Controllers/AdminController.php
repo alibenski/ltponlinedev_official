@@ -109,37 +109,37 @@ class AdminController extends Controller
             $termSet = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
 
             $arrIndexEnrolment = [];
-            $approvedEnrolmentForms = Preenrolment::select('INDEXID')
+            $approvedEnrolmentForms = Preenrolment::select('INDEXID', 'L')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
                 ->whereNotNull('modified_by')
-                ->groupBy('INDEXID')
+                ->groupBy('INDEXID', 'L')
                 ->get();
 
             foreach ($approvedEnrolmentForms as $key => $value) {
-                $arrIndexEnrolment[] = $value->INDEXID;
+                $arrIndexEnrolment[] = $value->INDEXID.'-'.$value->L;
             }
 
             $arrIndexPlacement = [];
-            $approvedPlacementForms = PlacementForm::select('INDEXID')
+            $approvedPlacementForms = PlacementForm::select('INDEXID','L')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
                 ->whereNotNull('modified_by')
-                ->groupBy('INDEXID')
+                ->groupBy('INDEXID','L')
                 ->get();
 
             foreach ($approvedPlacementForms as $keyP => $valueP) {
-                $arrIndexPlacement[] = $valueP->INDEXID;
+                $arrIndexPlacement[] = $valueP->INDEXID.'-'.$valueP->L;
             }
 
             $arrIndexPASH = [];
-            $qryPASH = Repo::withTrashed()->select('INDEXID')
+            $qryPASH = Repo::withTrashed()->select('INDEXID','L')
                 ->where('Term', $request->session()->get('Term'))
-                ->groupBy('INDEXID')
+                ->groupBy('INDEXID','L')
                 ->get();
 
             foreach ($qryPASH as $key1 => $value1) {
-                $arrIndexPASH[] = $value1->INDEXID;
+                $arrIndexPASH[] = $value1->INDEXID.'-'.$value1->L;
             }
 
             $diffEnrolPASH = array_diff($arrIndexEnrolment, $arrIndexPASH);
@@ -147,22 +147,35 @@ class AdminController extends Controller
 
             $merge = array_merge($diffPlacementPASH, $diffEnrolPASH);
 
-            $studentIndexEnrol = User::whereIn('indexno', $merge)
-                ->with(['preenrolment' => function ($qry) use ($request) {
-                    $qry->where('Term', $request->session()->get('Term'));
+            $explodeArray = [];
+            $explodeIndex = [];
+            $explodeLang = [];
+            foreach ($merge as $keyM => $valueM) {
+                $explodeArray[] = explode('-', $valueM);
+            }
+            foreach ($explodeArray as $keyE => $valueE) {
+                $explodeIndex[] = $valueE[0];
+                $explodeLang[] = $valueE[1];
+            }
+
+            $studentIndexEnrol = User::whereIn('indexno', $explodeIndex)
+                ->with(['preenrolment' => function ($qry) use ($request, $explodeLang) {
+                    $qry->where('Term', $request->session()->get('Term'))->whereIn('L', $explodeLang);
                 }])
-                ->whereHas('preenrolment', function ($q1) use ($request) {
+                ->whereHas('preenrolment', function ($q1) use ($request, $explodeLang) {
                     $q1->where('Term', $request->session()->get('Term'))
+                        ->whereIn('L', $explodeLang)
                         ->whereNotNull('modified_by');
                 })
                 ->get();
 
-            $studentIndexPlacement = User::whereIn('indexno', $merge)
-                ->with(['placement' => function ($qry) use ($request) {
-                    $qry->where('Term', $request->session()->get('Term'));
+            $studentIndexPlacement = User::whereIn('indexno', $explodeIndex)
+                ->with(['placement' => function ($qry) use ($request, $explodeLang) {
+                    $qry->where('Term', $request->session()->get('Term'))->whereIn('L', $explodeLang);
                 }])
-                ->whereHas('placement', function ($q2) use ($request) {
+                ->whereHas('placement', function ($q2) use ($request, $explodeLang) {
                     $q2->where('Term', $request->session()->get('Term'))
+                        ->whereIn('L', $explodeLang)
                         ->whereNotNull('modified_by');
                 })
                 ->get();
