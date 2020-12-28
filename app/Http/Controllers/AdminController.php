@@ -343,37 +343,37 @@ class AdminController extends Controller
             $termSet = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
 
             $arrIndexEnrolment = [];
-            $approvedEnrolmentForms = Preenrolment::select('INDEXID')
+            $approvedEnrolmentForms = Preenrolment::select('INDEXID','L')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
                 ->whereNotNull('modified_by')
-                ->groupBy('INDEXID')
+                ->groupBy('INDEXID','L')
                 ->get();
 
             foreach ($approvedEnrolmentForms as $key => $value) {
-                $arrIndexEnrolment[] = $value->INDEXID;
+                $arrIndexEnrolment[] = $value->INDEXID.'-'.$value->L;
             }
 
             $arrIndexPlacement = [];
-            $approvedPlacementForms = PlacementForm::select('INDEXID')
+            $approvedPlacementForms = PlacementForm::select('INDEXID','L')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
                 ->whereNotNull('modified_by')
-                ->groupBy('INDEXID')
+                ->groupBy('INDEXID','L')
                 ->get();
 
             foreach ($approvedPlacementForms as $keyP => $valueP) {
-                $arrIndexPlacement[] = $valueP->INDEXID;
+                $arrIndexPlacement[] = $valueP->INDEXID.'-'.$valueP->L;
             }
 
             $arrIndexPASH = [];
-            $qryPASH = Repo::withTrashed()->select('INDEXID')
+            $qryPASH = Repo::withTrashed()->select('INDEXID','L')
                 ->where('Term', $request->session()->get('Term'))
-                ->groupBy('INDEXID')
+                ->groupBy('INDEXID','L')
                 ->get();
 
             foreach ($qryPASH as $key1 => $value1) {
-                $arrIndexPASH[] = $value1->INDEXID;
+                $arrIndexPASH[] = $value1->INDEXID.'-'.$value1->L;
             }
 
             $diffEnrolPASH = array_diff($arrIndexEnrolment, $arrIndexPASH);
