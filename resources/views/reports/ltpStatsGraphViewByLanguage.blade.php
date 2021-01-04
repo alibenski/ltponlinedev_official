@@ -12,6 +12,10 @@
   </div>
 </div>
 
+<div class="row">
+  <p><i class="fa fa-info-circle"></i> <small>Values above show all students enrolled to the classes in a specific year per language course excluding waitlisted and cancelled</small></p>
+</div>
+
 @stop
 
 @section('java_script')

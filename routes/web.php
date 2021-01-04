@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     Route::get('cancelled-term-language', ['as' => 'cancelled-term-language', 'uses' => 'ReportsController@cancelledTermLanguage']);
     Route::get('courses-term-language', ['as' => 'courses-term-language', 'uses' => 'ReportsController@coursesTermLanguage']);
+    Route::get('classes-term-language', ['as' => 'classes-term-language', 'uses' => 'ReportsController@classesTermLanguage']);
 
     /**
      * Text Routes

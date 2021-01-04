@@ -350,4 +350,76 @@ class ReportsController extends Controller
         dd($termsLt2019, $container);
         return 'courses';
     }
+
+    public function classesTermLanguage()
+    {
+        $termsGte2019 = Term::select('Term_Code')->where('Term_Code', '>=', '191')->get()->unique();
+        $termsLt2019 = Term::select('Term_Code')->where('Term_Code', '<', '191')->get()->unique();
+
+        $container = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+            $counter = $class2019->count();
+            $container[] = [
+                $term->Term_Code => $counter
+            ];
+        }
+        
+        $containerArab = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'A');
+            $counterArab = $class2019->count();
+            $containerArab[] = [
+                $term->Term_Code => $counterArab
+            ];
+        }
+
+        $containerChinese = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'C');
+            $counterChinese = $class2019->count();
+            $containerChinese[] = [
+                $term->Term_Code => $counterChinese
+            ];
+        }
+
+        $containerEnglish = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'E');
+            $counterEnglish = $class2019->count();
+            $containerEnglish[] = [
+                $term->Term_Code => $counterEnglish
+            ];
+        }
+
+        $containerFrench = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'F');
+            $counterFrench = $class2019->count();
+            $containerFrench[] = [
+                $term->Term_Code => $counterFrench
+            ];
+        }
+
+        $containerRussian = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'C');
+            $counterRussian = $class2019->count();
+            $containerRussian[] = [
+                $term->Term_Code => $counterRussian
+            ];
+        }
+
+        $containerSpanish = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'C');
+            $counterSpanish = $class2019->count();
+            $containerSpanish[] = [
+                $term->Term_Code => $counterSpanish
+            ];
+        }
+
+        dd($container, $containerArab, $containerChinese, $containerEnglish, $containerFrench, $containerRussian, $containerSpanish);
+        return 'classes';
+    }
 }
