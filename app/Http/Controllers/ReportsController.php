@@ -350,4 +350,112 @@ class ReportsController extends Controller
         dd($termsLt2019, $container);
         return 'courses';
     }
+
+    public function classesTermLanguage()
+    {
+        $termsGte2019 = Term::select('Term_Code')->where('Term_Code', '>=', '191')->get()->unique();
+        $termsLt2019 = Term::select('Term_Code')->where('Term_Code', '<', '191')->get()->unique();
+
+        $containerTerms = [];
+        foreach ($termsGte2019 as $valueTermCode) {
+            $containerTerms[] = $valueTermCode->Term_Code;
+        }
+        
+        $languagesCollection = DB::table('languages')->select('id', 'name', 'code')->orderBy('id', 'asc')->get();
+        $languages = $languagesCollection->pluck(['name']);
+
+        $container = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+            $counter = $class2019->count();
+            $container[] = [
+                $term->Term_Code => $counter
+            ];
+        }
+        
+        $containerArab = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'A');
+            $counterArab = $class2019->count();
+            $containerArab[] = $counterArab;
+        }
+
+        $containerChinese = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'C');
+            $counterChinese = $class2019->count();
+            $containerChinese[] = $counterChinese;
+        }
+
+        $containerEnglish = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'E');
+            $counterEnglish = $class2019->count();
+            $containerEnglish[] = $counterEnglish;
+        }
+
+        $containerFrench = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'F');
+            $counterFrench = $class2019->count();
+            $containerFrench[] = $counterFrench;
+        }
+
+        $containerRussian = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'R');
+            $counterRussian = $class2019->count();
+            $containerRussian[] = $counterRussian;
+        }
+
+        $containerSpanish = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'S');
+            $counterSpanish = $class2019->count();
+            $containerSpanish[] = $counterSpanish;
+        }
+        
+        $records = array_map(null, $containerArab, $containerChinese, $containerEnglish, $containerFrench, $containerRussian, $containerSpanish);
+
+        $obj = (object) [
+            'title' => 'Number of Classrooms Created/Generated per Language per Term',
+            'labelTerms' => $containerTerms,
+            'xAxis' => $languages,
+            'classesPerTerm' => $records,
+        ];
+
+        $data = $obj;
+        return response()->json(['data' => $data]);
+    }
+
+    public function totalClassesPerTerm()
+    {
+        $termsGte2019 = Term::select('Term_Code')->where('Term_Code', '>=', '191')->get()->unique();
+
+        $containerTerms = [];
+        foreach ($termsGte2019 as $valueTermCode) {
+            $containerTerms[] = $valueTermCode->Term_Code;
+        }
+        
+        $container = [];
+        foreach ($termsGte2019 as $term) {
+            $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+            $counter = $class2019->count();
+            $container[] = $counter;
+            
+        }
+
+        $mergedArrayRegistrations = $container;
+
+        $obj = (object) [
+            'title' => 'Total Number of Classrooms Created per Term',
+            'labelYears' => $containerTerms,
+            'regSum' => $mergedArrayRegistrations
+        ];
+
+
+        $data = $obj;
+
+        return response()->json(['data' => $data]);
+    }
 }
