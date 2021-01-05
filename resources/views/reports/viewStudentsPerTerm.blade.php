@@ -29,6 +29,11 @@
 		</tr>
 	</tfoot>
 </table>
+
+<div class="row">
+  <p><i class="fa fa-info-circle"></i> <small>Values above show the number of <strong>active students enrolled</strong> to their classes per term excluding waitlisted and cancelled</small></p>
+</div>
+
 @stop
 
 @section('java_script')

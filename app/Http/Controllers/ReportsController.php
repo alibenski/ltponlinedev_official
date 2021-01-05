@@ -25,14 +25,27 @@ class ReportsController extends Controller
             $termsArray[] = $value['Term'];
         }
 
-        $qryStudentsArray = [];
         $obj = [];
         foreach ($termsArray as $term) {
-            $qryStudents = Repo::where('Term', $term)->get()->count();
-            $obj[] = (object) [
-                'term' => $term,
-                'count' => $qryStudents,
-            ];
+            if ($term < 190) {
+                $qryStudentsBefore2019 = Repo::where('Term', $term)->get()->count();
+                $obj[] = (object) [
+                    'term' => $term,
+                    'count' => $qryStudentsBefore2019,
+                ];
+            } 
+            else {
+                $qryStudents = Repo::where('Term', $term)
+                ->whereHas('classrooms', function ($q) {
+                    // query all students enrolled to current term excluding waitlisted
+                    $q->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                })
+                ->get()->count();
+                $obj[] = (object) [
+                    'term' => $term,
+                    'count' => $qryStudents,
+                ];
+            }
         }
 
         return response()->json($obj);
