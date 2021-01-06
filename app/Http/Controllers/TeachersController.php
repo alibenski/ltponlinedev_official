@@ -1120,7 +1120,8 @@ class TeachersController extends Controller
         $week = $request->wk;
 
         $data_details = [];
-        $student_to_update = Repo::whereIn('id', explode(",", $ids))->get();
+        // $student_to_update = Repo::whereIn('id', explode(",", $ids))->get();
+        $student_to_update = explode(",", $ids);
 
         $attendance_status = explode(",", $request->attendanceStatus);
         $countAttendanceStatus = count($attendance_status);
@@ -1128,19 +1129,20 @@ class TeachersController extends Controller
         $remarks = explode(",", $request->remarks);
 
         for ($i = 0; $i < $countAttendanceStatus; $i++) {
-            $data_details[] = $student_to_update[$i]['id'];
+            // $data_details[] = $student_to_update[$i]['id'];
+            $data_details[] = $student_to_update[$i];
 
-            $data_update = Attendance::where('pash_id', $student_to_update[$i]['id'])->get();
+            $data_update = Attendance::where('pash_id', $student_to_update[$i])->get();
 
             if (count($data_update) > 0) {
 
                 // update record
-                $record_update = Attendance::where('pash_id', $student_to_update[$i]['id']);
+                $record_update = Attendance::where('pash_id', $student_to_update[$i]);
                 $record_update->update([
                     $request->wk => $attendance_status[$i],
                 ]);
 
-                $query = Attendance::where('pash_id', $student_to_update[$i]['id'])->first();
+                $query = Attendance::where('pash_id', $student_to_update[$i])->first();
                 if (!empty($remarks[$i])) {
 
                     $attendance_remark = new AttendanceRemarks;
@@ -1153,7 +1155,7 @@ class TeachersController extends Controller
 
                 // insert to attendance table
                 $record = new Attendance;
-                $record->pash_id = $student_to_update[$i]['id'];
+                $record->pash_id = $student_to_update[$i];
                 $record->$week = $attendance_status[$i];
                 $record->save();
 
