@@ -85,7 +85,7 @@ class RegisterController extends Controller
             'nameLast' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:SDDEXTR,EMAIL'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'g-recaptcha-response' => ['required', 'captcha'],
         ]);
     }
