@@ -29,7 +29,7 @@ class sendWritingTip extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.writingTip', compact('writingTip'))
+        return $this->view('emails.writingTip')
                     ->from('clm_language@unog.ch', 'CLM Language')
                     ->priority(1)
                     ->subject('Writing Tip - '.$this->writingTip->subject);
