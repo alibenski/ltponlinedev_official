@@ -226,6 +226,23 @@
   @endif
 @endhasrole
 
+@hasrole('Teacher FP')
+  <a href="{{ route('teacher-search-user') }}"> 
+    <div class="col-sm-4 col-xs-12">
+        <div class="info-box">
+          <!-- Apply any bg-* class to to the icon to color it -->
+          <span class="info-box-icon bg-red"><i class="fa fa-user"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text">User Search</strong></span></span>
+            <span class="info-box-number"></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+  </a>
+@endhasrole
+
 @endsection
 
 @section('java_script')
