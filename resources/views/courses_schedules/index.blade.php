@@ -35,9 +35,9 @@
 					<th>Operation</th>
 					<th>id</th>
 					<th>Term</th>
-					{{-- <th>CS Code</th> --}}
-					<th>Code - Course Name</th>
-					<th>MS Teams Name</th>
+					<th>Code</th>
+					<th>Course Name En</th>
+					<th>Course Name Fr</th>
 					<th>Day</th>
 					<th>Time</th>
 					<th>Format</th>
@@ -57,10 +57,10 @@
 							</td>
 							{{-- <td><a href="{{ route('course-schedule.edit', $class->id)}}" class="btn btn-default btn-sm">Edit</a></td> --}}
 							<th>{{ $class->id }}</th>
-							<th>{{ $class->Te_Term }}</th>
-							{{-- <th>{{ $class->cs_unique }}</th> --}}
-							<td>{{ $class->Te_Code_New }} - {{ $class->course->Description }}</td>
-							<td>{{ $class->name }}</td>
+							<td>{{ $class->Te_Term }}</td>
+							<td>{{ $class->Te_Code_New }}</td>
+							<td>{{ $class->course->Description }}</td>
+							<td>{{ $class->course->FDescription }}</td>
 							<td>
 								@if(empty( $class->schedule_id ))
 								null
@@ -108,6 +108,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script>
 $('#sampol').DataTable({
+	"order": [[ 1, "asc" ]],
 	"fixedHeader": true,
 	"deferRender": true,
 	"dom": 'B<"clear">lfrtip',
