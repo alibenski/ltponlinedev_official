@@ -132,7 +132,9 @@
                         </div>
                         {{-- insert org dropdown if decision is YES --}}
                         <div id="orgSelect"></div>
+                        <div id="countrySection"></div>
                         <input id="selectInput" type="hidden">
+
                         <div class="form-group">
                             <label for="contactNo" class="col-md-12 control-label">Contact Number:</label>
 
@@ -254,16 +256,37 @@ $(document).ready(function () {
                 $(document).find('.select2-basic-single').select2();
                 $('#selectInput').val('1');
                 console.log($('#selectInput').val());
+
+                $("select[name='organization']").on("change", function () {
+                    let choice = $("select[name='organization']").val();
+                    if (choice == "MSU") {
+                        getCountry();
+                    }
+                    
+                });
                 });        
         } else {
                 console.log('hide it');
                 $('#orgSelect').html("");
+                $("#countrySection").html("");
             }                
     });
     $('#email').one('click', function () {
             $('#modalshow').modal('show');
         });
 });
+
+function getCountry() {
+    $.ajax({
+        url: "{{ route('ajax-select-country') }}", 
+        method: 'GET',
+        success: function(data, status) {
+            console.log(data)
+        $("#countrySection").html("");
+        $("#countrySection").html(data.options);
+        }
+    });  
+}
 
 </script>
 

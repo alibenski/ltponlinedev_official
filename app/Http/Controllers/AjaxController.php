@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Language;
 use App\Course;
+use App\Country;
 use App\User;
 use App\Repo;
 use App\Term;
@@ -24,6 +25,16 @@ use DB;
 
 class AjaxController extends Controller
 {
+    function ajaxSelectCountry(Request $request)
+    {
+        if ($request->ajax()) {
+            $countries = Country::orderBy('ABBRV_NAME', 'asc')->whereNull('TERM_DATE')->get();
+
+            $data = view('ajax-select-country', compact('countries'))->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     public function ajaxExcludeFromBilling(Request $request)
     {
         if ($request->ajax()) {

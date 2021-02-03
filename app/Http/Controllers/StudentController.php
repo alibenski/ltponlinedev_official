@@ -120,6 +120,12 @@ class StudentController extends Controller
 
         ));
 
+        if ($request->organization === 'MSU') {
+            $this->validate($request, array(
+                'countrySelect' => 'required',
+            ));
+        }
+
         // Save the data to db
         $student = User::findOrFail($id);
 

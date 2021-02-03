@@ -495,6 +495,7 @@ Route::get('ajax-convert-to-selfpay', ['as' => 'ajax-convert-to-selfpay', 'uses'
 Route::get('ajax-convert-to-regular', ['as' => 'ajax-convert-to-regular', 'uses' => 'AjaxController@ajaxConvertToRegular']);
 Route::get('ajax-show-language-dropdown', ['as' => 'ajax-show-language-dropdown', 'uses' => 'AjaxController@ajaxShowLanguageDropdown']);
 Route::put('ajax-exclude-from-billing', ['as' => 'ajax-exclude-from-billing', 'uses' => 'AjaxController@ajaxExcludeFromBilling']);
+Route::get('ajax-select-country', ['as' => 'ajax-select-country', 'uses' => 'AjaxController@ajaxSelectCountry']);
 
 
 // ajax use to get section number of cs_unique
