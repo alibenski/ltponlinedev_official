@@ -182,6 +182,8 @@
                             </div>
                         </div>
 
+                        <div id="countrySection"></div>
+
                         <div class="form-group{{ $errors->has('contact_num') ? 'is-invalid' : '' }}">
                             <label for="contact_num" class="col-md-12 control-label">Contact number <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
@@ -255,6 +257,27 @@
     $('#datetimepicker4').datetimepicker({
         format: 'YYYY-MM-DD'
     });
+
+    $("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "MSU") {
+            getCountry();
+        } else {
+            $("#countrySection").html("");
+        }
+    });
+
+    function getCountry() {
+        $.ajax({
+            url: "{{ route('ajax-select-country') }}", 
+            method: 'GET',
+            success: function(data, status) {
+                console.log(data)
+            $("#countrySection").html("");
+            $("#countrySection").html(data.options);
+            }
+        });  
+    }
   });
 </script>
 @stop
