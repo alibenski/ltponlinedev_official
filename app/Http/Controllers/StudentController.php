@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\User\MsuUpdateField;
 use App\Course;
 use App\FocalPoints;
 use App\Language;
@@ -104,7 +105,7 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, MsuUpdateField $msuUpdateField)
     {
         // Validate data
         $this->validate($request, array(
@@ -122,7 +123,7 @@ class StudentController extends Controller
 
         if ($request->organization === 'MSU') {
             $this->validate($request, array(
-                'countrySelect' => 'required',
+                'countryMission' => 'required',
             ));
         }
 
@@ -130,7 +131,7 @@ class StudentController extends Controller
         $student = User::findOrFail($id);
 
         if (is_null($request->input('email'))) {
-            $this->updateNoEmail($student, $request);
+            $this->updateNoEmail($student, $request, $msuUpdateField);
             $request->session()->flash('success', 'Update successful.');
             return redirect()->route('home');
         } else {
@@ -142,7 +143,7 @@ class StudentController extends Controller
         }
     }
 
-    public function updateNoEmail($student, $request)
+    public function updateNoEmail($student, $request, $msuUpdateField)
     {
         if (!is_null($request->input('profile'))) {
             $student->profile = $request->input('profile');
@@ -161,6 +162,7 @@ class StudentController extends Controller
         }
         if (!is_null($request->input('organization'))) {
             $student->sddextr->DEPT = $request->input('organization');
+            $msuUpdateField->checkMsuValue($student, $request);   
         }
         if (!is_null($request->input('contactNo'))) {
             $student->sddextr->PHONE = $request->input('contactNo');
