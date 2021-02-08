@@ -121,6 +121,7 @@ class SystemController extends Controller
         // query students who have logged in
         $query_email_addresses = User::where('must_change_password', 0)
             ->where('mailing_list', 1)
+            ->where('email', '>' ,'gbueermann@iom.int')
             ->select('email')
             ->groupBy('email')
             ->get()
