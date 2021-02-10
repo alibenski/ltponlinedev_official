@@ -29,19 +29,24 @@ use Spatie\Permission\Models\Role;
 
 class TeachersController extends Controller
 {
-    public function teacherDashboard()
+    public function teacherDashboard(Request $request)
     {
+        if ( Auth::user()->hasRole('Teacher')) {
+            $terms = Term::orderBy('Term_Code', 'desc')->get();
+            $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
+                ->where('Te_Term', Session::get('Term'))
+                ->get();
+            $all_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
+                ->where('Tch_ID', '!=', 'TBD')
+                ->where('Te_Term', Session::get('Term'))
+                ->get();
 
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
-            ->where('Te_Term', Session::get('Term'))
-            ->get();
-        $all_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
-            ->where('Tch_ID', '!=', 'TBD')
-            ->where('Te_Term', Session::get('Term'))
-            ->get();
+            return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
+        }
 
-        return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
+        $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');
+        return redirect()->route('home');
+
     }
 
     public function teacherSearchUser()
