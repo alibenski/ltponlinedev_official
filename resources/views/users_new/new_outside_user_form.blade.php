@@ -1,6 +1,58 @@
 @extends('layouts.app')
 @section('customcss')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+    <style>
+    html {
+    font-family: "Helvetica Neue", sans-serif;
+    width: 100%;
+    color: #666666;
+    text-align: center;
+    }
+
+    .popup-overlay {
+    /*Hides pop-up when there is no "active" class*/
+    visibility: hidden;
+    position: absolute;
+    background: #ffffff;
+    border: 3px solid #666666;
+    width: 50%;
+    height: 50%;
+    left: 25%;
+    }
+
+    .popup-overlay.active {
+    /*displays pop-up when "active" class is present*/
+    visibility: visible;
+    text-align: center;
+    }
+
+    .popup-content {
+    /*Hides pop-up content when there is no "active" class */
+    visibility: hidden;
+    }
+
+    .popup-content.active {
+    /*Shows pop-up content when "active" class is present */
+    visibility: visible;
+    }
+
+    button {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 30px;
+    margin: .20rem;
+    font-size: 1rem;
+    color: #666666;
+    background: #ffffff;
+    border: 1px solid #666666;
+    }
+
+    button:hover {
+    border: 1px solid #666666;
+    background: #666666;
+    color: #ffffff;
+    }
+    </style>
 @stop
 @section('content')
 @if (Session::has('warning')) 
@@ -145,10 +197,10 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? 'is-invalid' : '' }}">
-                            <label for="email" class="col-md-12 control-label">Professional email address <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="email" class="col-md-12 control-label">Email address <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-12">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                <input id="email" type="email" class="form-control email-input" name="email" value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -246,6 +298,25 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="showModalTitle"><strong> Stop! Before you continue... </strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>If you do not have a <em>@un.org</em> professional/work email address, please enter a personal email address i.e. yahoo, gmail, outlook, etc.</p>
+        <p>Thank you for understanding and complying.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">Yes, I understand</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('java_script')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
@@ -255,6 +326,14 @@
     $('#datetimepicker4').datetimepicker({
         format: 'YYYY-MM-DD'
     });
+
+    $('.email-input').on('click', function () {
+        $('#showModal').modal('show');
+    });
+    
+    $('#showModal').on('hidden.bs.modal', function (e) {
+        $('input.email-input').focus();
+    })
   });
 </script>
 @stop
