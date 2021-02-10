@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classroom;
 use App\Course;
+use App\Jobs\SendBroadcastJob;
 use App\Mail\sendBroadcastEnrolmentIsOpen;
 use App\Mail\sendConvocation;
 use App\Mail\sendGeneralEmail;
@@ -20,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Session;
+use Illuminate\Support\Facades\Validator;
 
 class SystemController extends Controller
 {
@@ -121,7 +123,6 @@ class SystemController extends Controller
         // query students who have logged in
         $query_email_addresses = User::where('must_change_password', 0)
             ->where('mailing_list', 1)
-            ->where('email', '>' ,'gbueermann@iom.int')
             ->select('email')
             ->groupBy('email')
             ->get()
@@ -154,13 +155,24 @@ class SystemController extends Controller
 
         // $emailArrayIterator = new \ArrayIterator($unique_email_address);
         $emailError = [];
+        $validEmails = [];
         // foreach (new \LimitIterator($emailArrayIterator, 252) as $sddextr_email_address) {
         foreach ($unique_email_address as $sddextr_email_address) {
-            $dataResult = $this->sendBroadcastEmail($sddextr_email_address);
-            
-            if ($dataResult) {
-                $emailError[] = $dataResult;
-            }
+            $my_data = [ 'email' => $sddextr_email_address,];
+            $validator = Validator::make($my_data, [
+                'email' => 'email',
+            ]);
+            if ($validator->fails()) {
+                $emailError[] = $sddextr_email_address;
+            } 
+            $validEmails[] = $sddextr_email_address;
+        }
+        $unique_email_address_valid = $validEmails;
+        $unique_email_address_valid = collect($unique_email_address_valid);
+
+        $unique_email_address_chunked = $unique_email_address_valid->chunk(500);
+        foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
+            $this->sendBroadcastEmail($unique_email_address_chunk);
         }
 
         $request->session()->flash('success', 'Broadcast email sent! Error sending to: ' . json_encode($emailError) );
@@ -231,12 +243,23 @@ class SystemController extends Controller
 
         // $sddextr_email_address = 'allyson.frias@gmail.com';
         $emailError = [];
+        $validEmails = [];
         foreach ($unique_email_address as $sddextr_email_address) {
-            $dataResult = $this->sendBroadcastEmail($sddextr_email_address);
-            
-            if ($dataResult) {
-                $emailError[] = $dataResult;
-            }
+            $my_data = [ 'email' => $sddextr_email_address,];
+            $validator = Validator::make($my_data, [
+                'email' => 'email',
+            ]);
+            if ($validator->fails()) {
+                $emailError[] = $sddextr_email_address;
+            } 
+            $validEmails[] = $sddextr_email_address;
+        }
+        $unique_email_address_valid = $validEmails;
+        $unique_email_address_valid = collect($unique_email_address_valid);
+
+        $unique_email_address_chunked = $unique_email_address_valid->chunk(500);
+        foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
+            $this->sendBroadcastEmail($unique_email_address_chunk);
         }
 
         $request->session()->flash('success', 'Broadcast reminder email sent! Error sending to: ' . json_encode($emailError) );
@@ -288,37 +311,52 @@ class SystemController extends Controller
         $difftest = array_diff($arr1, $arr3);
         $difftest = array_unique($difftest);
 
-        $arr2 = [];
         $emailError = [];
-        foreach ($diff as $key3 => $value3) {
-
+        $validEmails = [];
+        foreach ($diff as $value3) {
             $query_email_addresses = User::where('indexno', $value3)->get(['email']);
-            foreach ($query_email_addresses as $key4 => $value4) {
+            foreach ($query_email_addresses as $value4) {
                 $sddextr_email_address = $value4->email;
-                $arr2[] = $sddextr_email_address;
-                // Mail::to($sddextr_email_address)->send(new sendReminderToCurrentStudents($sddextr_email_address));
-                
-                $dataResult = $this->sendBroadcastEmail($sddextr_email_address);
 
-                if ($dataResult) {
-                    $emailError[] = $dataResult;
-                }
+                $my_data = [ 'email' => $sddextr_email_address,];
+                $validator = Validator::make($my_data, [
+                    'email' => 'email',
+                ]);
+                if ($validator->fails()) {
+                    $emailError[] = $sddextr_email_address;
+                } 
+                $validEmails[] = $sddextr_email_address;
             }
         }
 
-        $request->session()->flash('success', 'Reminder email sent to ' . count($arr2) . ' students! Error sending to: ' . json_encode($emailError) );
+        $unique_email_address_valid = $validEmails;
+        $unique_email_address_valid = collect($unique_email_address_valid);
+
+        $unique_email_address_chunked = $unique_email_address_valid->chunk(500);
+        foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
+            $this->sendBroadcastEmail($unique_email_address_chunk);
+        }
+        
+        $request->session()->flash('success', 'Reminder email sent to ' . count($validEmails) . ' students! Error sending to: ' . json_encode($emailError) );
         return redirect()->back();
     }
 
-    public function sendBroadcastEmail($sddextr_email_address)
+    public function sendBroadcastEmail($unique_email_address)
     {
-        $emailError = [];
-        try {
-            Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
-        }  catch ( \Exception $e) {
-            $emailError = $sddextr_email_address;
-        }
+        $baseDelay = Carbon::now();
 
-        return $emailError;
+        $getDelay = cache('_jobs.' . SendBroadcastJob::class, $baseDelay);
+
+        $setDelay = Carbon::parse(
+            $getDelay
+        )->addSeconds(60);
+
+        // insert data to cache table
+        cache([
+            '_jobs.' . SendBroadcastJob::class => $setDelay
+        ], 5);
+
+        $job = (new SendBroadcastJob($unique_email_address))->delay($setDelay);
+        dispatch($job);
     }
 }
