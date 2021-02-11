@@ -327,7 +327,7 @@
         format: 'YYYY-MM-DD'
     });
 
-    $('.email-input').on('click', function () {
+    $('.email-input').one('click', function () {
         $('#showModal').modal('show');
     });
     

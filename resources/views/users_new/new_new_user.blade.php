@@ -319,7 +319,7 @@
         minView: 2
     });
     
-    $('.email-input').on('click', function () {
+    $('.email-input').one('click', function () {
         $('#showModal').modal('show');
     });
 
