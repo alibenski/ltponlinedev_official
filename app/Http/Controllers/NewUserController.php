@@ -117,7 +117,7 @@ class NewUserController extends Controller
         if ($query_sddextr_record) {
             $user = User::create([
                 'indexno' => $query_sddextr_record->INDEXNO,
-                'email' => $query_sddextr_record->EMAIL,
+                'email' => trim($query_sddextr_record->EMAIL),
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
                 'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
                 'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
@@ -125,9 +125,9 @@ class NewUserController extends Controller
                 'must_change_password' => 1,
                 'approved_account' => 1,
             ]);
-            $sddextr_email_address = $query_sddextr_record->EMAIL;
+            $sddextr_email_address = trim($query_sddextr_record->EMAIL);
             // send credential email to user using email from sddextr 
-            Mail::to($query_sddextr_record->EMAIL)->send(new SendAuthMail($sddextr_email_address));
+            Mail::to(trim($query_sddextr_record->EMAIL))->send(new SendAuthMail($sddextr_email_address));
             // Mail::raw("username: ".$query_sddextr_record->EMAIL." password: Welcome2CLM", function($message) use($query_sddextr_record){
             //     $message->from('clm_language@unog.ch', 'CLM Language');
             //     $message->to($query_sddextr_record->EMAIL)->subject('MGR - This is a test automated message');
