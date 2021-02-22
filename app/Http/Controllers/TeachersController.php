@@ -60,7 +60,7 @@ class TeachersController extends Controller
             $users = User::search($query)->paginate(20);
             $users->appends($queries);
             if ($users->getCollection()->count() == 0) {
-                return redirect()->route('teachers.teacher_search_user')->with('users', $users)->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
+                return redirect()->route('teacher-search-user')->with('users', $users)->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
             }
 
             return view('teachers.teacher_search_user')->with('users', $users);
