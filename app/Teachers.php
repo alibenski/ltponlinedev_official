@@ -8,6 +8,7 @@ class Teachers extends Model
 {
     protected $table = 'LTP_TEACHERS';
     protected $primaryKey = 'Tch_ID';
+    protected $keyType = 'string';
     protected $fillable = [
         'Tch_L', 'IndexNo', 'In_Out', 'Tch_Lastname', 'Tch_Firstname', 'email', 'sex', 'Tch_Name',
     ];

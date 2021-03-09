@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Term extends Model
 {
     protected $table = 'LTP_Terms';
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.

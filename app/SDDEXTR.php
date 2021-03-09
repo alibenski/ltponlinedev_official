@@ -32,6 +32,7 @@ class SDDEXTR extends Model
      * @access protected
      */
     protected $primaryKey = 'INDEXNO';
+    protected $keyType = 'string';
 
     /**
      * Indicates if the IDs are auto-incrementing.
