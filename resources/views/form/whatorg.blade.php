@@ -139,6 +139,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="showModal2" tabindex="-1" role="dialog" aria-labelledby="showModal2Title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="showModal2Title"><strong> Stop! Before you continue... </strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>If you are not using a <em>@un.org</em> professional/work email address, please change it to a personal email address i.e. yahoo, gmail, outlook, etc.</p>
+        <p>Please disregard if you already have done so. Thank you for understanding and complying.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close </button>
+        <a href="{{ route('students.edit', Auth::user()->id) }}" class="btn btn-primary">Edit my email address</a>
+      </div>
+    </div>
+  </div>
+</div>
 @stop   
 
 @section('scripts_code')
@@ -148,6 +168,7 @@
 
 <script>
   $(document).ready(function(){
+    $('#showModal2').modal('show');
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
 
     //  select2 dropdown init

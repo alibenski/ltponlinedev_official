@@ -174,7 +174,7 @@ class PreviewController extends Controller
     {
         if ($request->ajax()) {
             $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
-
+            $language = $request->L;
             $getEnrolmentForms = Preenrolment::where('Term', $request->term)
                 ->where('overall_approval', 1)
                 ->where('L', $request->L)
@@ -186,6 +186,16 @@ class PreviewController extends Controller
                 ->with('pash.courses')
                 ->with(['pash' => function ($q1) use ($prev_term) {
                     $q1->where('Term', $prev_term)
+                        ->whereHas('classrooms', function ($q2) {
+                            $q2->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        });
+                }])
+                ->with('pashMany.classrooms.teachers')
+                ->with('pashMany.courses')
+                ->with(['pashMany' => function ($q1) use ($prev_term, $language) {
+                    $q1->where('Term', $prev_term)
+                        ->where('L', $language)
                         ->whereHas('classrooms', function ($q2) {
                             $q2->whereNotNull('Tch_ID')
                                 ->where('Tch_ID', '!=', 'TBD');

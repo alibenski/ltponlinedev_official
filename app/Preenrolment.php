@@ -87,4 +87,8 @@ class Preenrolment extends Model
     {
         return $this->belongsTo('App\Repo', 'INDEXID', 'INDEXID');
     }
+    public function pashMany()
+    {
+        return $this->hasMany('App\Repo', 'INDEXID', 'INDEXID');
+    }
 }
