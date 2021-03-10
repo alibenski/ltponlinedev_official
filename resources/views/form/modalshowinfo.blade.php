@@ -8,60 +8,60 @@
                 {{-- <p>Supervisor's email: @if($value->is_self_pay_form == 1) N/A - Self-Payment @else {{$value->mgr_email}} @endif</p> --}}
                 {{-- <p>Supervisor's Approval: 
 					@if($value->is_self_pay_form == 1)
-					<span id="status" class="label label-success margin-label">
+					<span id="status" class="badge badge-success margin-label">
 					N/A - Self-Payment</span>
 					@elseif(is_null($value->approval))
-					<span id="status" class="label label-warning margin-label">
+					<span id="status" class="badge badge-warning margin-label">
 					Pending Approval</span>
 					@elseif($value->approval == 1)
-					<span id="status" class="label label-success margin-label">
+					<span id="status" class="badge badge-success margin-label">
 					Approved</span>
 					@elseif($value->approval == 0)
-					<span id="status" class="label label-danger margin-label">
+					<span id="status" class="badge badge-danger margin-label">
 					Disapproved</span>
 					@endif
                 </p> --}}
                 <p>HR Staff and Development Section Approval:
 					@if(is_null($value->is_self_pay_form))
 						@if(in_array($value->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
-							<span id="status" class="label label-info margin-label">
+							<span id="status" class="badge badge-info margin-label">
 							N/A - Non-paying organization</span>
 						@else
 							@if(is_null($value->approval) && is_null($value->approval_hr))
-							<span id="status" class="label label-warning margin-label">
+							<span id="status" class="badge badge-warning margin-label">
 							Pending Approval</span>
 							@elseif($value->approval == 0 && (is_null($value->approval_hr) || isset($value->approval_hr)))
-							<span id="status" class="label label-danger margin-label">
+							<span id="status" class="badge badge-danger margin-label">
 							N/A - Disapproved by Manager</span>
 							@elseif($value->approval == 1 && is_null($value->approval_hr))
-							<span id="status" class="label label-warning margin-label">
+							<span id="status" class="badge badge-warning margin-label">
 							Pending Approval</span>
 							@elseif($value->approval == 1 && $value->approval_hr == 1)
-							<span id="status" class="label label-success margin-label">
+							<span id="status" class="badge badge-success margin-label">
 							Approved</span>
 							@elseif($value->approval == 1 && $value->approval_hr == 0)
-							<span id="status" class="label label-danger margin-label">
+							<span id="status" class="badge badge-danger margin-label">
 							Disapproved</span>
 							@endif
 						@endif
 					@else
-					<span id="status" class="label label-info margin-label">
+					<span id="status" class="badge badge-info margin-label">
 					N/A - Self-Payment</span>
 					@endif
                 </p>
                 <p>
                 	Language Secretariat Payment Validation: 
 					@if(is_null($value->is_self_pay_form))
-					<span id="status" class="label label-info margin-label">N/A</span>
+					<span id="status" class="badge badge-info margin-label">N/A</span>
 					@else
 						@if($value->selfpay_approval === 1)
-						<span id="status" class="label label-success margin-label">Approved</span>
+						<span id="status" class="badge badge-success margin-label">Approved</span>
 						@elseif($value->selfpay_approval === 2)
-						<span id="status" class="label label-warning margin-label">Pending Valid Document</span>
+						<span id="status" class="badge badge-warning margin-label">Pending Valid Document</span>
 						@elseif($value->selfpay_approval === 0)
-						<span id="status" class="label label-danger margin-label">Disapproved</span>
+						<span id="status" class="badge badge-danger margin-label">Disapproved</span>
 						@else 
-						<span id="status" class="label label-info margin-label">Waiting</span>
+						<span id="status" class="badge badge-info margin-label">Waiting</span>
 						@endif
 					@endif
                 </p>

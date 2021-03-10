@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         // insert name and signature of you command and define the time of execution
         // run command to send reminder emails to managers in class \App\Console\Commands\ApprovalReminder
         $schedule->command('ApprovalReminder:approvalreminder')
-            // ->dailyAt('07:00')
+            ->dailyAt('07:00')
             ->withoutOverlapping();
 
         $schedule->command('queue:restart');
