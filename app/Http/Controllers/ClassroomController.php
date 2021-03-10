@@ -277,7 +277,7 @@ class ClassroomController extends Controller
             }
         }
 
-        $validator = Validator::make(Input::all(), $this->rules);
+        $validator = Validator::make($request->input(), $this->rules);
         if ($validator->fails()) {
             return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
         } else {
