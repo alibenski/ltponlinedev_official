@@ -26,7 +26,7 @@
           <i class="ion ion-university"></i>
         </div>
         
-        <a href="{{ route('view-classrooms-per-section', ['Code' => $data->Code]) }}" target="_blank" class="small-box-footer">
+        <a href="{{ route('view-classrooms-per-section', $data->Code) }}" target="_blank" class="small-box-footer">
               More info  <i class="fa fa-arrow-circle-right"></i>
             </a>
 
@@ -49,7 +49,7 @@
           <i class="ion ion-android-hand"></i>
         </div>
         
-        <a href="{{ route('waitListOneList', ['Te_Code' => $element->first()->Te_Code_New]) }}" target="_blank" class="small-box-footer">
+        <a href="{{ route('waitListOneList', $element->first()->Te_Code_New) }}" target="_blank" class="small-box-footer">
               More info  <i class="fa fa-arrow-circle-right"></i>
             </a>
 

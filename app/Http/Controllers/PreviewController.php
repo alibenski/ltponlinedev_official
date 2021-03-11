@@ -398,7 +398,7 @@ class PreviewController extends Controller
 
             $cancelled = Repo::where('Term', Session::get('Term'))->onlyTrashed()->get();
 
-            return view('preview-class-status', compact('classrooms', 'languages', 'cancelled', 'cancelled_count'));
+            return view('preview-class-status', compact('classrooms', 'languages', 'cancelled'));
 
             // $currentQueries = \Request::query();
 
