@@ -117,7 +117,7 @@
 						
 						<button id="showStudentsBtn" value="{{ $classroom->Code}}" class="btn btn-default btn-space">Show Students</button>
 						{{-- <button id="manageAttendanceBtn" value="{{ $classroom->Code}}" class="btn btn-default">Manage Attendance</button> --}}
-						<a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-default btn-space">Manage Attendance</a>
+						<a href="{{ route('teacher-select-week', $classroom->Code) }}" class="btn btn-default btn-space">Manage Attendance</a>
 						<button id="enterResultsBtn" value="{{ $classroom->Code}}" class="btn btn-default btn-space">Enter Results</button>
 						{{-- <form action="{{ route('teacher-manage-attendance') }}" method="GET">
 							<button type="submit" class="btn btn-default btn-space">Manage Attendance</button>

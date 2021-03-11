@@ -64,7 +64,7 @@
 		              <div class="panel-body">
 		                <p>
 		                  @foreach ($student_convoked as $element)
-		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong> <a href="{{ route('view-classrooms-per-section', ['Code' => $element->CodeClass]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h3>
+		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong> <a href="{{ route('view-classrooms-per-section', [$element->CodeClass]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h3>
 		                  
 		                  <p>Schedule: <strong>@if(!empty($element->schedules->name)){{$element->schedules->name}}@endif</strong></p>  
 						  <p>

@@ -53,7 +53,7 @@
           <i class="ion ion-person-add"></i>
         </div>
         
-        <a href="{{ route('preview-classrooms', ['Code' => $data->Code]) }}" target="_blank" class="small-box-footer">
+        <a href="{{ route('preview-classrooms', $data->Code) }}" target="_blank" class="small-box-footer">
               More info on {{$data->Code}} <i class="fa fa-arrow-circle-right"></i>
             </a>
 

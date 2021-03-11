@@ -41,7 +41,7 @@
 </div>
 <div class="row">
   <div class="col-md-6">
-    {{-- <a href="{{ route('teacher-select-week', ['Code'=> $classroom->Code]) }}" class="btn btn-danger"><i class="fa fa-arrow-circle-left"></i> Back</a> --}}
+    {{-- <a href="{{ route('teacher-select-week', [$classroom->Code]) }}" class="btn btn-danger"><i class="fa fa-arrow-circle-left"></i> Back</a> --}}
 
     <button class="btn btn-success btn-save">Save Attendance</button>
     <input type="hidden" name="_token" value="{{ Session::token() }}">
