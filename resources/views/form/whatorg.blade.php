@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| UN Enrolment Form')
+@section('tabtitle', 'UN Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">

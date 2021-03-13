@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| All Forms')
+@section('tabtitle', 'All Forms')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @stop

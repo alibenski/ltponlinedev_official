@@ -9,7 +9,7 @@
         
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Laravel') }} @yield('tabtitle')</title>
+        <title>@yield('tabtitle') | {{ config('app.name', 'Laravel') }} </title>
 
         <!-- Bootstrap -->
         <!-- Latest compiled and minified CSS -->

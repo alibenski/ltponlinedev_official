@@ -1,5 +1,5 @@
 @extends('public')
-@section('tabtitle', '| Learning Partner Approval Page')
+@section('tabtitle', 'Learning Partner Approval Page')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">

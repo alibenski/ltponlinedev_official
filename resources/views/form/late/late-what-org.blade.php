@@ -1,5 +1,5 @@
 @extends('layouts.late.late-main')
-@section('tabtitle', '| Late Enrolment Form')
+@section('tabtitle', 'Late Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
