@@ -29,7 +29,10 @@
 </head>
 <body class="bg-img">
     <div id="app">
-            @include('partials._nav')
+          @if (URL::current()==  url('/login'))
+          @else
+            @include('partials._nav')  
+          @endif
     
             @yield('content')
     </div>
