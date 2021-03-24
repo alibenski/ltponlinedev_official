@@ -19,13 +19,15 @@
 <div class="container d-flex align-items-center" style="min-height: 75vh;">
     <div class="row">
         <div class="col-sm-6">
-            <img src="{{ asset('img/Logo2016_transparent.png') }}" style="height: 120px; width:auto;">
-            <h1 class="text-white">The Language Training Programme at the United Nations Office Geneva</h1>
-            <p class="text-white text-justify">We believe in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('img/Logo2016_transparent.png') }}" style="height: 120px; width:auto;">
+            </a>
+            <h1 class="text-white">UNOG-CLM LTP Online Enrolment Platform</h1>
+            <p class="text-white text-justify">The Language Training Programme at the United Nations Office at Geneva believes in multilingualism and multiculturalism as key elements of mutual understanding in a global context. Toward this aim, we offer language courses in the six official languages of the United Nations (Arabic, Chinese, English, French, Russian and Spanish).</p>
         </div>
         <div class="col-sm-5 offset-sm-1">
             <div class="card">
-                <div class="card-header">UNOG-CLM LTP Online Enrolment Platform</div>
+                {{-- <div class="card-header">UNOG-CLM LTP Online Enrolment Platform</div> --}}
                 <div class="card-body">
                     <form class="form-prevent-multi-submit" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
