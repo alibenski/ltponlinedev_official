@@ -13,12 +13,14 @@
             <label class="control-label">Name: </label>
             {{-- <input name="name" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $user->name) }}"> --}}
             <input name="name" type="text" class="form-control" readonly value="{{ old('name', $user->name) }}">
+            <p class="small text-danger text-justify">This field cannot be modified. Please ask the users to modify it themselves via the profile page. </p>
         </div>
 
         <div class="form-group">
             <label class="control-label">Email: </label>
             <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email', $user->email) }}"> 
             {{-- <input name="email" type="email" class="form-control" readonly value="{{ old('email', $user->email) }}">  --}}
+            <p class="small text-danger text-justify"><strong>IMPORTANT NOTE:</strong> Once the email address has been changed, this will become <strong>the user's login and official email address</strong> to which we will be sending notifications and other future correspondences. <strong>There will be no email notification sent to the user for this change.</strong> Please communicate this accordingly.</p>
         </div>
 
         <div class="form-group">
