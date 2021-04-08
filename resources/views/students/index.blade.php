@@ -61,6 +61,20 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="gender" class="col-md-4 col-form-label">Gender:</label>
+
+                            <div class="col-md-8 font-weight-bold">
+                                <p>@if(empty ( Auth::user()->sddextr )) Update Needed 
+                                    @else 
+                                        @if (Auth::user()->sddextr->SEX == "M") Male @endif
+                                        @if (Auth::user()->sddextr->SEX == "F") Female @endif
+                                        @if (Auth::user()->sddextr->SEX == "O") Other @endif
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="fullName" class="col-md-4 col-form-label">Full Name:</label>
 
                             <div class="col-md-8 font-weight-bold">
