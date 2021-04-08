@@ -47,8 +47,14 @@
             <div class="checkbox">
                 <label>
                     @foreach ($roles as $role)
-                      <input type="checkbox" name="roles[]" value="{{ $role->id }}" /> {{ ucfirst($role->name) }}
-                      <br>
+                    <input type="checkbox" name="roles[]" value="{{ $role->id }}" 
+                        @foreach ($user->roles as $item)
+                            @if ($item->id == $role->id)
+                                checked="true"
+                            @endif
+                        @endforeach
+                    /> {{ ucfirst($role->name) }}
+                    <br>
                     @endforeach
                 </label>
             </div>
