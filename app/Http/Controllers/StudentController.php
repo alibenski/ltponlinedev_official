@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Session;
+use Spatie\Permission\Models\Role;
 
 class StudentController extends Controller
 {
@@ -91,10 +92,9 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = User::find($id);
-        $gender = DB::table('SEX')->limit(4)->pluck('Title', 'Title');
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
 
-        return view('students.edit', compact('student', 'gender', 'org'));
+        return view('students.edit', compact('student', 'org'));
     }
 
     /**
@@ -112,7 +112,7 @@ class StudentController extends Controller
             // 'lastName' => 'required|string',
             // 'firstName' => 'required|string',
             // validate if email is unique 
-            'email' => 'required_without_all:profile,TITLE,lastName,firstName,org,contactNo,dob,jobAppointment,gradeLevel,organization|unique:users,email',
+            'email' => 'required_without_all:gender,profile,TITLE,lastName,firstName,org,contactNo,dob,jobAppointment,gradeLevel,organization|unique:users,email',
             // 'org' => 'required|',
             'contactNo' => 'regex:/^[0-9\-+]+$/|nullable',
             // 'jobAppointment' => 'required|string',
@@ -122,7 +122,10 @@ class StudentController extends Controller
 
         // Save the data to db
         $student = User::findOrFail($id);
-
+        if ($student->hasRole('Teacher')) {
+            $indexno = $student->indexno;
+            $this->updateTeacher($indexno, $request);
+        }
         if (is_null($request->input('email'))) {
             $this->updateNoEmail($student, $request);
             $request->session()->flash('success', 'Update successful.');
@@ -134,6 +137,26 @@ class StudentController extends Controller
             $this->updateWithEmail($student, $request);
             return redirect('login');
         }
+    }
+
+    public function updateTeacher($indexno, $request)
+    {
+        $teacher = Teachers::where('IndexNo', $indexno)->first();
+
+        if (!is_null($request->input('TITLE'))) {
+            $teacher->Tch_Title = $request->input('TITLE');
+        }
+        if (!is_null($request->input('firstName'))) {
+            $teacher->Tch_Firstname = $request->input('firstName');
+        }
+        if (!is_null($request->input('lastName'))) {
+            $teacher->Tch_Lastname = strtoupper($request->input('lastName'));
+        }
+        if (!is_null($request->input('gender'))) {
+            $teacher->sex = $request->input('gender');
+        }
+        $teacher->Tch_Name = $teacher->Tch_Firstname . ' ' . strtoupper($teacher->Tch_Lastname);
+        $teacher->save();
     }
 
     public function updateNoEmail($student, $request)
@@ -167,6 +190,9 @@ class StudentController extends Controller
         }
         if (!is_null($request->input('gradeLevel'))) {
             $student->sddextr->LEVEL = $request->input('gradeLevel');
+        }
+        if (!is_null($request->input('gender'))) {
+            $student->sddextr->SEX = $request->input('gender');
         }
 
         $student->name = $student->nameFirst . ' ' . strtoupper($student->nameLast);

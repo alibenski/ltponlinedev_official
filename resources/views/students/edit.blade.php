@@ -74,6 +74,26 @@
                             </div>
                         </div>
 
+                        <div class="form-group {{ $errors->has('gender') ? 'is-invalid' : '' }}">
+                            <label for="gender" class="col-md-12 control-label">Gender:</label>
+                            <div class="col-md-12">
+                            <div class="dropdown">
+                                <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" id="gender" name="gender" autocomplete="off">
+                                    <option value="">--- Please Select ---</option>
+                                    <option value="F">Female</option>
+                                    <option value="M">Male</option>
+                                    <option value="O">Other</option>
+                                </select>
+                            </div>
+
+                                @if ($errors->has('gender'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('gender') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="lastName" class="col-md-12 control-label">Last Name:</label>
 
@@ -218,7 +238,7 @@
 <script>
     $(document).ready(function() {
         $('.select2-basic-single').select2({
-          placeholder: "Select Profile",
+          placeholder: "Select from dropdown",
           });
     });
 </script>
@@ -228,7 +248,7 @@
     $(function(){
         $("#updateProfileForm").submit(function(){
             var valid=0;
-            $(this).find('input[type=text], input.datetimepicker-input, #selectInput, select#profile').each(function(){
+            $(this).find('input[type=text], input.datetimepicker-input, #selectInput, select#profile, select#gender').each(function(){
                 if($(this).val() != "") valid+=1;
             });
                         
