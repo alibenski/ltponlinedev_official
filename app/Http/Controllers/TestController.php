@@ -27,11 +27,12 @@ class TestController extends Controller
             {
                 $q2->where('level', '1');
             })
-            ->with('users')->select('INDEXID','Te_Code')->groupBy('INDEXID','Te_Code')->get()->sortBy('Te_Code');
+            ->with('users')->select('INDEXID','Te_Code')->groupBy('INDEXID','Te_Code')->get()->sortBy('INDEXID');
+
         $array = [];
         $arr_exists = [];
         // dd($pash_records);
-        foreach ($pash_records as $key => $value) {
+        foreach ($pash_records as $value) {
             $existing = Repo::where('Term', '<', $term)->where('INDEXID', $value->INDEXID)->exists();
             // $array[] = $existing;
             if($existing === false){
@@ -55,22 +56,37 @@ class TestController extends Controller
                 $q3->whereNotNull('Tch_ID')
                     ->where('Tch_ID', '!=', 'TBD');
             })
+            ->whereHas('courses', function($q4)
+            {
+                $q4->where('level', '!=', '1');
+            })
             ->whereHas('placements', function($query) use ($term){
                 $query->where('Term', $term)->whereIn('L', ['A','C','R','S'])->whereNotNull('CodeIndexID');
             })
             // ->whereRaw('SUBSTRING(Te_Code, 2, 2) = "1R"')
             ->whereIn('L', ['A','C','R','S'])
-            ->with('users')->select('INDEXID','Te_Code')->groupBy('INDEXID','Te_Code')->get()->sortBy('Te_Code');
-        $array2 = [];
+            ->with('users')->select('INDEXID','Te_Code')->groupBy('INDEXID','Te_Code')->get()->sortBy('INDEXID');
         
-        foreach ($fromPlacements as $key => $value2) {
-            $array2[] = [
-                'email' => $value2->users->email,
-                'Te_Code' => $value2->Te_Code,
-            ];
+        $array2 = [];
+        $arr2_exists = [];
+        foreach ($fromPlacements as $value2) {
+            $existing2 = Repo::where('Term', '<', $term)->where('INDEXID', $value2->INDEXID)->exists();
+            if($existing2 === false){
+                $array2[] = [
+                    'INDEXID' => $value2->INDEXID,
+                    'email' => $value2->users->email,
+                    'Te_Code' => $value2->Te_Code,
+                ];
+            } else {
+                $arr2_exists[] = [
+                        'INDEXID' => $value2->INDEXID,
+                        'email' => $value2->users->email,
+                        'Te_Code' => $value2->Te_Code,
+                    ];
+            }
         }
 
-        dd($array, $arr_exists);
-        return $term;
+        dd($array2, $arr2_exists, $array, $arr_exists);
+        
     }
 }

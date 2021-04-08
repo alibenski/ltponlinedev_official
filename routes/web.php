@@ -42,6 +42,10 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /**
      * Admin Routes
      */
+    Route::get('admin-export-moodle', 'AdminController@adminExportMoodle')->name('admin-export-moodle');
+    Route::get('admin-query-export-moodle', 'AdminController@adminQueryExportMoodle')->name('admin-query-export-moodle');
+    Route::get('admin-placement-export-moodle', 'AdminController@adminPlacementExportMoodle')->name('admin-placement-export-moodle');
+
     Route::get('late-user-management', 'Auth\LateRegisterController@lateUserManagement')->name('late-user-management');
     Route::post('generate-URL', ['as' => 'generate-URL', 'uses' => 'Auth\LateRegisterController@generateRandomURL']);
     Route::post('generate-URL-late-enrolment', ['as' => 'generate-URL-late-enrolment', 'uses' => 'LateEnrolmentController@generateRandomURL']);
