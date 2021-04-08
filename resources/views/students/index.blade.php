@@ -66,9 +66,9 @@
                             <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty ( Auth::user()->sddextr )) Update Needed 
                                     @else 
-                                        @if (Auth::user()->sddextr->SEX == "M") Male @endif
-                                        @if (Auth::user()->sddextr->SEX == "F") Female @endif
-                                        @if (Auth::user()->sddextr->SEX == "O") Other @endif
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "M") Male @endif
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "F") Female @endif
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "O") Other @endif
                                     @endif
                                 </p>
                             </div>
