@@ -15,7 +15,7 @@
 @section('content')
 
 <h2 class="text-center"> Export New Students To Moodle </h2>
-{{-- <div class="row">
+<div class="row">
 	<div class="form-group">
 	<label for="Term" class="col-md-12 control-label">Select Term:</label>
 	<div class="form-group col-sm-12">
@@ -29,7 +29,7 @@
 	    </div>
 	  </div>
 	</div>
-</div> --}}
+</div>
 
 <div class="billing-section hidden">
 	<div class="preloader2 hidden"><p><strong>Please wait... Fetching data from the database...</strong></p></div>
@@ -102,7 +102,7 @@ $(document).ready(function() {
     	placeholder: "Select Filter",
     });
 
-	// $('select#Term').change(function() {
+	$('select#Term').change(function() {
 		$(".preloader2").fadeIn(400);
 		$('div.preloader2').removeClass('hidden');
 		$('div.billing-section').removeClass('hidden');
@@ -116,7 +116,7 @@ $(document).ready(function() {
 				url: '{{ route('admin-query-export-moodle') }}',
 				type: 'GET',
 				dataType: 'json',
-				data: {_token:token},
+				data: {term:term, _token:token},
 			})
 			.then(function(data) {
 				console.log(data)
@@ -131,7 +131,7 @@ $(document).ready(function() {
 				url: '{{ route('admin-placement-export-moodle') }}',
 				type: 'GET',
 				dataType: 'json',
-				data: {_token:token},
+				data: {term:term, _token:token},
 			})
 			.then(function(data) {
 				console.log(data)
@@ -198,8 +198,7 @@ $(document).ready(function() {
 		$.when.apply($.ajax(), promises).then(function() {
 	        $(".preloader2").fadeOut(800);
 	    }); 
-	// }
-    // );
+	});
 
 });
 </script>
