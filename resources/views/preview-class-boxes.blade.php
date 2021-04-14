@@ -96,7 +96,7 @@
 		});
 		console.log(arr)
 
-		if (arr) {
+		if (arr.length > 0) {
 
 			$.ajax({
 				url: '{{ route('ajax-get-student-count-per-class') }}',
@@ -105,6 +105,9 @@
 			})
 			.done(function(data) {
 				console.log(data);
+				if (data.status == "fail") {
+					alert(data.message);
+				}
 				$.each(data, function(x, y) {
 					$("input[name='Code']").each(function() {
 						if ($(this).val() == x) {
@@ -128,7 +131,7 @@
 		});
 		console.log(arrTeCode)
 
-		if (arrTeCode) {
+		if (arrTeCode.length > 0) {
 
 			$.ajax({
 				url: '{{ route('waitListOneListCount') }}',
@@ -137,6 +140,9 @@
 			})
 			.done(function(data) {
 				console.log(data);
+				if (data.status == "fail") {
+					alert(data.message);
+				}
 				$.each(data, function(x, y) {
 					$("input[name='Te_Code']").each(function() {
 						if ($(this).val() == x) {

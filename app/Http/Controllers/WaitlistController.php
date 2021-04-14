@@ -42,19 +42,27 @@ class WaitlistController extends Controller
     public function waitListOneListCount(Request $request)
     {
         if (Session::has('Term')) {
-            $term = Session::get('Term');
-            $waitListed = Repo::where('Term', $term)
-            ->whereIn('Te_Code', $request->arrTeCode)
-            ->whereHas('classrooms', function ($query) {
-                $query->whereNull('Tch_ID')
-                ->orWhere('Tch_ID', '=', 'TBD')
-                ;
-            })
-            ->with('classrooms')
-            ->pluck('Te_Code')
-            ->toArray();
-            
-            $data = array_count_values($waitListed);
+            if ( !is_null($request->arrTeCode) ) {
+                $term = Session::get('Term');
+                $waitListed = Repo::where('Term', $term)
+                ->whereIn('Te_Code', $request->arrTeCode)
+                ->whereHas('classrooms', function ($query) {
+                    $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD')
+                    ;
+                })
+                ->with('classrooms')
+                ->pluck('Te_Code')
+                ->toArray();
+                
+                $data = array_count_values($waitListed);
+                return response()->json($data);
+            }
+
+            $data = [
+                "status" => "fail", 
+                "message" => "Error getting total waitlisted student count."
+            ];
             return response()->json($data);
         }
     }

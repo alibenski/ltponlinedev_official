@@ -243,19 +243,26 @@ class PreviewController extends Controller
      */
     public function ajaxGetStudentCountPerClass(Request $request)
     {
+        if (!is_null($request->arr)) {
+            $count = Repo::whereIn('CodeClass', $request->arr)
+                // ->unique(function ($item) {
+                //     return $item['INDEXID'].$item['CodeClass'];
+                // })
+                // ->pluck('CodeClass')
+                // ->toArray();
+                ->pluck('CodeClass')
+                ->toArray();
+    
+    
+            // $data = $count;
+            $data = array_count_values($count);
+            return response()->json($data);
+        }
 
-        $count = Repo::whereIn('CodeClass', $request->arr)
-            // ->unique(function ($item) {
-            //     return $item['INDEXID'].$item['CodeClass'];
-            // })
-            // ->pluck('CodeClass')
-            // ->toArray();
-            ->pluck('CodeClass')
-            ->toArray();
-
-
-        // $data = $count;
-        $data = array_count_values($count);
+        $data = [
+            "status" => "fail", 
+            "message" => "Error getting student count per class."
+        ];
         return response()->json($data);
     }
 
