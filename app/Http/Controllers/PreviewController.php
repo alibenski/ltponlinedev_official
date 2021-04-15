@@ -2816,7 +2816,7 @@ class PreviewController extends Controller
                 }
             }
 
-            $getCode = Preview::select('Code')->where('INDEXID', $request->INDEXID)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->orderBy('id')->get();
+            $getCode = Preview::select('Code')->where('Term', $request->Term)->where('INDEXID', $request->INDEXID)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->orderBy('id')->get();
 
             $arrGetClassRoomDetails = [];
 
