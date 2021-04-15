@@ -1091,6 +1091,9 @@ class PlacementFormController extends Controller
     public function changeSelectedField($enrolment_to_be_copied, $input)
     {
         foreach ($enrolment_to_be_copied as $new_data) {
+            if ($input['radioChangeHRApproval']) {
+                $new_data->overall_approval = $input['approval_hr'];
+            }
             $new_data->fill($input)->save();
         }
     }
