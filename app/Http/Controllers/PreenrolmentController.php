@@ -27,6 +27,13 @@ use Session;
 
 class PreenrolmentController extends Controller
 {
+    public function studentEditEnrolmentFormView()
+    {
+        // get id(s) of form
+        
+        return view('preenrolment.student-edit-enrolment-form-view');
+    }
+
     public function queryOrphanFormsToAssign(Request $request)
     {
         if (Session::has('Term')) {
