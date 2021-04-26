@@ -123,7 +123,9 @@
                                 @endif 
                                 <h4><strong>Enrolment Form # {{ $form->eform_submit_count }}</strong> @if($form->is_self_pay_form == 1)<span class="badge badge-secondary margin-label">Self-Payment-based Form</span> @endif </h4>
                                 <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
-                                
+                                    <div class="col-sm-6">
+                                      <a href={{ route('student-edit-enrolment-form-view', [ $form->Term, $form->INDEXID, $form->Te_Code ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
+                                    </div>
                                     <div class="col-sm-6">
                                         <a id="modbtn" class="btn btn-sm btn-outline-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><i class="fa fa-eye"></i> View Status</a>
                                     </div> 
