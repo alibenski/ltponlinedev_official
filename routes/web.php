@@ -437,6 +437,7 @@ Route::middleware(['auth'])->group(function () {
 
     // route for student printing certificates
     Route::get('pdfAttestation', ['as' => 'pdfAttestation', 'uses' => 'PrinterController@pdfAttestation']);
+    Route::get('pdfAttestationBefore2019', ['as' => 'pdfAttestationBefore2019', 'uses' => 'PrinterController@pdfAttestationBefore2019']);
 
     Route::get('thankyou', function () {
         return view('thankyou');
