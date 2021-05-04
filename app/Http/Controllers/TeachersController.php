@@ -254,6 +254,43 @@ class TeachersController extends Controller
         return view('teachers.teacher_show_classrooms_per_teacher', compact('terms'));
     }
 
+    public function teacherEmailClassroomsToTeachersView(Request $request)
+    {
+        if ($request->session()->has('Term')) {
+            $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
+            $languages = Language::all();
+
+            // get all teachers with a class of the selected term
+            $queryTeachers = Teachers::whereHas('classrooms', function ($query) use ($request) {
+                $query->where('Te_Term', $request->session()->get('Term'))
+                    ->whereNotNull('Tch_ID')
+                    ->where('Tch_ID', '!=', 'TBD');
+            })
+                ->with(['classrooms' => function ($q) use ($request) {
+                    $q->where('Te_Term', $request->session()->get('Term'))
+                        ->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD')
+                        ->with('course')
+                        ->with('scheduler');
+                }])
+                ->orderBy('Tch_L', 'asc')
+                ->get();
+
+            $recipients = [];
+            foreach ($queryTeachers as $teacher) {
+                $recipients[] = $teacher->email;
+            }
+
+            if ($selectedTerm->Comments === 'SUMMER') {
+                return view('emails.emailSummerClassroomsToTeachers', compact('languages', 'queryTeachers', 'selectedTerm'));
+            } else {
+                return view('emails.emailClassroomsToTeachers', compact('languages', 'queryTeachers', 'selectedTerm'));
+            }
+        }
+
+        return 'Please set the term first.';
+    }
+
     public function teacherShowClassroomsPerTeacher(Request $request)
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();

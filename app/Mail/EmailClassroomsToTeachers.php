@@ -36,7 +36,7 @@ class EmailClassroomsToTeachers extends Mailable
     {
         return $this->view('emails.emailClassroomsToTeachers')
                     ->from('clm_language@unog.ch', 'CLM Language')
-                    ->cc(['clm_language@un.org', 'virginie.ferre@un.org'])
+                    ->cc(['clm_language@un.org', 'fabienne.pairon@un.org'])
                     ->priority(1)
                     ->subject($this->selectedTerm->Comments.' Courses Information');
     }

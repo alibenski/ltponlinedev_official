@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('teacher-email-classrooms-to-teachers', ['as' => 'teacher-email-classrooms-to-teachers', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachers']);
 
     Route::get('teacher-show-classrooms-per-teacher', ['as' => 'teacher-show-classrooms-per-teacher', 'uses' => 'TeachersController@teacherShowClassroomsPerTeacher']);
+    Route::get('teacher-email-classrooms-to-teachers-view', ['as' => 'teacher-email-classrooms-to-teachers-view', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachersView']);
 
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard')->middleware('first-time-login');
 
@@ -436,6 +437,7 @@ Route::middleware(['auth'])->group(function () {
 
     // route for student printing certificates
     Route::get('pdfAttestation', ['as' => 'pdfAttestation', 'uses' => 'PrinterController@pdfAttestation']);
+    Route::get('pdfAttestationBefore2019', ['as' => 'pdfAttestationBefore2019', 'uses' => 'PrinterController@pdfAttestationBefore2019']);
 
     Route::get('thankyou', function () {
         return view('thankyou');
