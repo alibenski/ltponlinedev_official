@@ -124,9 +124,69 @@
     </div>
     <div class="col-sm-8 mt-3 clearfix">
         <div class="card">
-            <div class="card-header bg-info"><h5>Modification Options</h5></div>
+            <div class="card-header bg-warning"><h5>Modification Options</h5></div>
             <div class="card-body">
+                <form method="POST" action="{{ route('student-update-enrolment-form') }}" class="form-horizontal form-prevent-multi-submit">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <label class="col-md-12 control-label">Select language:</label>
+                        <div class="col-md-12">
+                            @foreach ($languages as $id => $name)
+                            <div class="input-group col-md-9">
+                                <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
+                                <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
 
+                    
+                        <div class="form-group">
+                            <label for="course_id" class="col-md-12 control-label">Select Course: </label>
+                            <div class="col-md-12">
+                              <div class="dropdown">
+                                <select class="col-md-12 form-control course_select_no wx" style="width: 100%" name="course_id" autocomplete="off">
+                                    <option value="">--- Select Course ---</option>
+                                </select>
+                              </div>
+                            </div>
+                        </div>
+    
+                        <div id="schedule_section" class="form-group d-none">
+                            <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
+                            <div class="col-md-12">
+                              <div class="dropdown">
+                                <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%;" name="schedule_id[]" autocomplete="off">
+                                  <option value="">Fill Out Language and Course Options</option>
+                                </select>
+                              </div>
+                              <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
+                            </div>
+                        </div>
+                    
+
+                    <div class="form-group col-md-12">
+                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
+                        <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
+                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another schedule (days/times) if the selected class is full.
+                        </label>
+                      </div>
+                    </div> 
+
+                    <div class="form-group">
+                        <label class="col-md-12 control-label">Comments: </label>
+                        <div class="col-md-12">
+                          <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder=""></textarea>
+                          <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 offset-md-5">
+                      <button type="submit" class="btn btn-success button-prevent-multi-submit">Confirm Modification</button>
+                      <input type="hidden" name="_token" value="{{ Session::token() }}">
+                      <input type="hidden" name="term_id" value="{{ $enrolment_details->first()->Terms->Term_Code }}">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -135,8 +195,46 @@
 @section('scripts_code')
 
 <script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/customSelect2.js') }}"></script>
+<script src="{{ asset('js/submit.js') }}"></script>
 {{-- <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
 <script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script> --}}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script type="text/javascript">
+  $("input[name='L']").click(function(){
+      $("#schedule_section").addClass('d-none');
+      var L = $(this).val();
+      var term = $("input[name='term_id']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax') }}", 
+          method: 'POST',
+          data: {L:L, term_id:term, _token:token},
+          success: function(data, status) {
+            $("select[name='course_id']").html('');
+            $("select[name='course_id']").html(data.options);
+          }
+      });
+  }); 
+</script>
+<script type="text/javascript">
+  $("select[name='course_id']").on('change',function(){
+      var course_id = $(this).val();
+      var term = $("input[name='term_id']").val();
+      var token = $("input[name='_token']").val();
+
+      $.ajax({
+          url: "{{ route('select-ajax2') }}", 
+          method: 'POST',
+          data: {course_id:course_id, term_id:term, _token:token},
+          success: function(data) {
+              $("select[name='schedule_id[]']").html('');
+              $("select[name='schedule_id[]']").html(data.options);
+              $("#schedule_section").removeClass('d-none');
+          }
+      });
+  }); 
+</script>
 @stop

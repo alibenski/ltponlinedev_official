@@ -32,7 +32,15 @@ class PreenrolmentController extends Controller
         // get id(s) of form
         $enrolment_details = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->get();
         
-        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details'));
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+
+        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages'));
+    }
+
+    public function studentUpdateEnrolmentForm(Request $request)
+    {
+        dd($request->all());
+        return 'saved';
     }
 
     public function queryOrphanFormsToAssign(Request $request)
