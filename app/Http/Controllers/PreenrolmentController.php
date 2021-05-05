@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Session;
 
 class PreenrolmentController extends Controller
@@ -30,17 +31,81 @@ class PreenrolmentController extends Controller
     public function studentEditEnrolmentFormView($term, $indexid, $tecode)
     {
         // get id(s) of form
-        $enrolment_details = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->get();
+        $enrolment = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc');
+        $enrolment_details = $enrolment->get();
+        $enrolment_id = $enrolment->select('id')->get();
         
+        $enrolment_id_array = [];
+        foreach ($enrolment_id as $value) {
+            $enrolment_id_array[] = $value->id;
+        }
         $languages = DB::table('languages')->pluck("name", "code")->all();
 
-        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages'));
+        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array'));
     }
 
     public function studentUpdateEnrolmentForm(Request $request)
     {
-        dd($request->all());
-        return 'saved';
+        $this->validate($request, [
+            'term_id' => 'required',
+            'L' => 'required',
+            'course_id' => 'required',
+            'schedule_id' => 'required',
+            'indexno' => 'required',
+            'enrolment_id' => 'required',
+        ]);
+        
+        $codeIndexId = [];
+        $implode = [];
+        foreach ($request->schedule_id as $key => $sched) {
+            $codeIndexId[] = array($request->course_id, $sched, $request->term_id, $request->indexno);
+            $implode[] = implode('-', $codeIndexId[$key]);
+            foreach ($implode as $value) {
+                $request->merge(['CodeIndexID' => $value]);
+                $this->validate($request, array(
+                    'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use ($request) {
+                        $uniqueCodex = $request->CodeIndexID;
+                        $query->where('CodeIndexID', $uniqueCodex)
+                            ->where('deleted_at', NULL);
+                    })
+                ));
+            }
+        }
+        
+        $flexibleBtn = 1;
+        if(!isset($request->flexibleBtn)) {
+            $flexibleBtn = NULL;
+        }
+
+        $enrolment_forms_to_be_modified = Preenrolment::whereIn('id', $request->enrolment_id)->orderBy('id', 'asc')->get();
+
+        if (count($request->schedule_id) > 1) {
+            foreach ($enrolment_forms_to_be_modified as $i => $data) {
+                $arr = $data->attributesToArray();
+                $record = ModifiedForms::create($arr);
+                $mod = ModifiedForms::where('auto_id', $record->id)->update(['modified_by' => Auth::id()]); ;
+                
+
+                $data->update([
+                    'L' => $request->L,
+                    'Te_Code' => $request->course_id,
+                    'Term' => $request->term_id,
+                    'schedule_id' => $request->schedule_id[$i],
+                    'CodeIndexID' => $request->course_id . '-' . $request->schedule_id[$i] . '-' . $request->term_id . '-' . $request->indexno,
+                    'Code' => $request->course_id . '-' . $request->schedule_id[$i] . '-' . $request->term_id,
+                    'flexibleBtn' => $flexibleBtn,
+                ]);
+
+                if ($request->regular_enrol_comment != NULL) {
+                    $data->update(['std_comments' => $request->regular_enrol_comment]);
+                }
+            }
+        } else {
+            
+            
+        }
+
+        return redirect()->route('previous-submitted');
     }
 
     public function queryOrphanFormsToAssign(Request $request)

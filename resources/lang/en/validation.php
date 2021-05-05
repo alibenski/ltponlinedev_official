@@ -130,6 +130,12 @@ return [
     */
 
     'custom' => [
+        'L' => [
+            'required' => 'The language field is required.',
+        ],
+        'course_id' => [
+            'required' => 'The course field is required.',
+        ],
         'schedule_id' => [
             'required' => 'Schedule is required. Please make sure that you have chosen from the available options.',
         ],

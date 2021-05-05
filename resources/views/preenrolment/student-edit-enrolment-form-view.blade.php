@@ -9,8 +9,8 @@
     </style>
 @stop
 @section('content')
-<div class="d-flex">
-    <div class="col-sm-4 mt-3 clearfix">
+<div class="d-flex flex-wrap">
+    <div class="col-sm-4 mt-3">
         <div class="card">
             <div class="card-header bg-info"><h5>Current Form</h5></div>
             <div class="card-body">
@@ -114,7 +114,17 @@
                             </div>
                         @endforeach
                 </div>
+
+                <div class="form-group">
+                    <label>Student schedule is flexible:</label>
+                    <h6 class="form-control-static">@if($enrolment_details->first()->flexibleBtn == 1) <span id="status" class="badge badge-success">Yes</span> @else <span id="status" class="badge badge-danger">No</span> @endif</h6>
+                </div>
                 
+                <div class="form-group">
+                    <label>Student Comment:</label>
+                    <h6 class="form-control-static">@if($enrolment_details->first()->std_comments){{ $enrolment_details->first()->std_comments }}@else <span id="status" class="badge badge-primary">None</span> @endif</h6>
+                </div>
+
                 <div class="form-group">
                     <label>Submission Date:</label>
                     <h6 class="form-control-static">{{ $enrolment_details->first()->created_at }}</h6>
@@ -122,7 +132,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-8 mt-3 clearfix">
+    <div class="col-sm-8 mt-3">
         <div class="card">
             <div class="card-header bg-warning"><h5>Modification Options</h5></div>
             <div class="card-body">
@@ -141,28 +151,28 @@
                     </div>
 
                     
-                        <div class="form-group">
-                            <label for="course_id" class="col-md-12 control-label">Select Course: </label>
-                            <div class="col-md-12">
-                              <div class="dropdown">
-                                <select class="col-md-12 form-control course_select_no wx" style="width: 100%" name="course_id" autocomplete="off">
-                                    <option value="">--- Select Course ---</option>
-                                </select>
-                              </div>
+                    <div class="form-group">
+                        <label for="course_id" class="col-md-12 control-label">Select Course: </label>
+                        <div class="col-md-12">
+                            <div class="dropdown">
+                            <select class="col-md-12 form-control course_select_no wx" style="width: 100%" name="course_id" autocomplete="off">
+                                <option value="">--- Select Course ---</option>
+                            </select>
                             </div>
                         </div>
-    
-                        <div id="schedule_section" class="form-group d-none">
-                            <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
-                            <div class="col-md-12">
-                              <div class="dropdown">
-                                <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%;" name="schedule_id[]" autocomplete="off">
-                                  <option value="">Fill Out Language and Course Options</option>
-                                </select>
-                              </div>
-                              <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
+                    </div>
+
+                    <div id="schedule_section" class="form-group d-none">
+                        <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
+                        <div class="col-md-12">
+                            <div class="dropdown">
+                            <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%;" name="schedule_id[]" autocomplete="off">
+                                <option value="">Fill Out Language and Course Options</option>
+                            </select>
                             </div>
+                            <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
                         </div>
+                    </div>
                     
 
                     <div class="form-group col-md-12">
@@ -184,7 +194,11 @@
                     <div class="col-md-3 offset-md-5">
                       <button type="submit" class="btn btn-success button-prevent-multi-submit">Confirm Modification</button>
                       <input type="hidden" name="_token" value="{{ Session::token() }}">
+                      <input type="hidden" name="indexno" value="{{ $enrolment_details->first()->users->indexno }}">
                       <input type="hidden" name="term_id" value="{{ $enrolment_details->first()->Terms->Term_Code }}">
+                      @foreach ($enrolment_id_array as $id)
+                        <input type="hidden" name="enrolment_id[]" value="{{ $id }}">
+                      @endforeach
                     </div>
                 </form>
             </div>
