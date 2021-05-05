@@ -55,23 +55,16 @@ class PreenrolmentController extends Controller
             'enrolment_id' => 'required',
         ]);
         
-        $codeIndexId = [];
-        $implode = [];
-        foreach ($request->schedule_id as $key => $sched) {
-            $codeIndexId[] = array($request->course_id, $sched, $request->term_id, $request->indexno);
-            $implode[] = implode('-', $codeIndexId[$key]);
-            foreach ($implode as $value) {
-                $request->merge(['CodeIndexID' => $value]);
-                $this->validate($request, array(
-                    'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use ($request) {
-                        $uniqueCodex = $request->CodeIndexID;
-                        $query->where('CodeIndexID', $uniqueCodex)
-                            ->where('deleted_at', NULL);
-                    })
-                ));
-            }
-        }
-        
+        $codeIndexId = $request->course_id.'-'.$request->schedule_id.'-'.$request->term_id.'-'.$request->indexno;
+        $request->merge(['CodeIndexID' => $codeIndexId]);
+        $this->validate($request, array(
+            'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use ($request) {
+                $uniqueCodex = $request->CodeIndexID;
+                $query->where('CodeIndexID', $uniqueCodex)
+                    ->where('deleted_at', NULL);
+            })
+        ));
+       
         $flexibleBtn = 1;
         if(!isset($request->flexibleBtn)) {
             $flexibleBtn = NULL;
@@ -79,33 +72,42 @@ class PreenrolmentController extends Controller
 
         $enrolment_forms_to_be_modified = Preenrolment::whereIn('id', $request->enrolment_id)->orderBy('id', 'asc')->get();
 
-        if (count($request->schedule_id) > 1) {
-            foreach ($enrolment_forms_to_be_modified as $i => $data) {
-                $arr = $data->attributesToArray();
-                $record = ModifiedForms::create($arr);
-                $mod = ModifiedForms::where('auto_id', $record->id)->update(['modified_by' => Auth::id()]); ;
-                
+        foreach ($enrolment_forms_to_be_modified as $data) {   
+            $arr = $data->attributesToArray();
+            $record = ModifiedForms::create($arr);
+            ModifiedForms::where('auto_id', $record->id)->update(['modified_by' => Auth::id()]);
 
-                $data->update([
-                    'L' => $request->L,
-                    'Te_Code' => $request->course_id,
-                    'Term' => $request->term_id,
-                    'schedule_id' => $request->schedule_id[$i],
-                    'CodeIndexID' => $request->course_id . '-' . $request->schedule_id[$i] . '-' . $request->term_id . '-' . $request->indexno,
-                    'Code' => $request->course_id . '-' . $request->schedule_id[$i] . '-' . $request->term_id,
-                    'flexibleBtn' => $flexibleBtn,
-                ]);
+            $data->update([
+                'L' => $request->L,
+                'Te_Code' => $request->course_id,
+                'Term' => $request->term_id,
+                'schedule_id' => $request->schedule_id,
+                'CodeIndexID' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno,
+                'Code' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id,
+                'flexibleBtn' => $flexibleBtn,
+            ]);
 
-                if ($request->regular_enrol_comment != NULL) {
-                    $data->update(['std_comments' => $request->regular_enrol_comment]);
-                }
+            if ($request->regular_enrol_comment != NULL) {
+                $data->update(['std_comments' => $request->regular_enrol_comment]);
             }
-        } else {
-            
-            
         }
 
-        return redirect()->route('previous-submitted');
+        if (count($request->enrolment_id) > 1) {
+            $delform = Preenrolment::withTrashed()
+                ->whereIn('id', $request->enrolment_id)
+                ->orderBy('id', 'desc')
+                ->first();
+            $delform->Code = null;
+            $delform->CodeIndexID = null;
+            $delform->Te_Code = null;
+            $delform->INDEXID = null;
+            $delform->Term = null;
+            $delform->schedule_id = null;
+            $delform->save();
+            $delform->delete();
+        } 
+
+        return redirect()->route('previous-submitted')->with('success', 'Form successfully modified.');
     }
 
     public function queryOrphanFormsToAssign(Request $request)

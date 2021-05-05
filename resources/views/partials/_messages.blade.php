@@ -1,5 +1,5 @@
 @if (Session::has('success')) 
-	<div class="mt-4 alert alert-success alert-block" role="alert">
+	<div class="mt-4 alert alert-success alert-block text-center" role="alert">
 		<strong>Message: </strong> {{ Session::get('success') }}
 	</div>
 

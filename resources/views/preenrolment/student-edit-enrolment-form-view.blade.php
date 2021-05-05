@@ -163,14 +163,14 @@
                     </div>
 
                     <div id="schedule_section" class="form-group d-none">
-                        <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
+                        <label for="schedule_id" class="col-md-12 control-label">Select a schedule: (limited to only 1)</label>
                         <div class="col-md-12">
                             <div class="dropdown">
-                            <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%;" name="schedule_id[]" autocomplete="off">
+                            <select class="col-md-12 form-control schedule_select_no select2-basic-single" style="width: 100%;" name="schedule_id" autocomplete="off">
                                 <option value="">Fill Out Language and Course Options</option>
                             </select>
                             </div>
-                            <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
+                            {{-- <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button> --}}
                         </div>
                     </div>
                     
@@ -216,6 +216,11 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
 <script type="text/javascript">
+  $('.select2-basic-single').select2({
+      minimumResultsForSearch: -1,
+      placeholder: "Select Schedule",
+  });
+
   $("input[name='L']").click(function(){
       $("#schedule_section").addClass('d-none');
       var L = $(this).val();
@@ -244,8 +249,8 @@
           method: 'POST',
           data: {course_id:course_id, term_id:term, _token:token},
           success: function(data) {
-              $("select[name='schedule_id[]']").html('');
-              $("select[name='schedule_id[]']").html(data.options);
+              $("select[name='schedule_id']").html('');
+              $("select[name='schedule_id']").html(data.options);
               $("#schedule_section").removeClass('d-none');
           }
       });

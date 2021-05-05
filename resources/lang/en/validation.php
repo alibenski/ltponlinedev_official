@@ -139,6 +139,9 @@ return [
         'schedule_id' => [
             'required' => 'Schedule is required. Please make sure that you have chosen from the available options.',
         ],
+        'schedule_id.*' => [
+            'required' => 'Schedule is required. Please make sure that you have chosen from the available options.',
+        ],
         'Tch_ID' => [
             'required' => 'The teacher field is required.',
         ],
