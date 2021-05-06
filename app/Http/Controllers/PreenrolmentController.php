@@ -75,7 +75,7 @@ class PreenrolmentController extends Controller
         foreach ($enrolment_forms_to_be_modified as $data) {   
             $arr = $data->attributesToArray();
             $record = ModifiedForms::create($arr);
-            ModifiedForms::where('auto_id', $record->id)->update(['modified_by' => Auth::id()]);
+            // ModifiedForms::where('auto_id', $record->id)->update(['modified_by' => Auth::id()]);
 
             $data->update([
                 'L' => $request->L,
@@ -85,6 +85,7 @@ class PreenrolmentController extends Controller
                 'CodeIndexID' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno,
                 'Code' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id,
                 'flexibleBtn' => $flexibleBtn,
+                'modified_by' => Auth::id(),
             ]);
 
             if ($request->regular_enrol_comment != NULL) {

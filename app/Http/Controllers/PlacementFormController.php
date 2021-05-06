@@ -57,6 +57,16 @@ class PlacementFormController extends Controller
         // $this->middleware('checkcontinue');
     }
 
+    public function studentEditPlacementFormView($id)
+    {
+        # code...
+    }
+
+    public function studentUpdatePlacementForm(Request $request)
+    {
+        # code...
+    }
+
     /**
      * Send reminder emails to manager and HR focalpoints.
      *

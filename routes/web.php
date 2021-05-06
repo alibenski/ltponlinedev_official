@@ -414,6 +414,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('student-edit-enrolment-form-view/{term}/{indexid}/{tecode}', ['as' => 'student-edit-enrolment-form-view', 'uses' => 'PreenrolmentController@studentEditEnrolmentFormView']);
         Route::post('student-update-enrolment-form', ['as' => 'student-update-enrolment-form', 'uses' => 'PreenrolmentController@studentUpdateEnrolmentForm']);
+        Route::get('student-edit-placement-form-view/{id}', ['as' => 'student-edit-placement-form-view', 'uses' => 'PlacementFormController@studentEditPlacementFormView']);
+        Route::post('student-update-placement-form', ['as' => 'student-update-placement-form', 'uses' => 'PlacementFormController@studentUpdatePlacementForm']);
 
         // cancellation routes with date limit middleware
         Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['middleware' => 'limit-cancel', 'as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
