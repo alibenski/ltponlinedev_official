@@ -269,12 +269,12 @@
                     </div>
                     @endif
                     <div class="col-sm-12">
-                    <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}" class="form-prevent-multi-submit">
+                    <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}" class="delete-form prevent-submit-form">
                         <input type="submit" @if (is_null($plform->deleted_at))
                           value="Cancel Placement Test"
                         @else
                           value="Cancelled"
-                        @endif  class="btn btn-danger btn-space button-prevent-multi-submit" @if (is_null($plform->deleted_at))
+                        @endif  class="btn btn-danger btn-space prevent-submit-button" @if (is_null($plform->deleted_at))
                           
                         @else
                           disabled="" 
@@ -345,7 +345,15 @@
           effect: "explode",
           duration: 1000
         }
-      });   
+      }); 
+
+      $('form.delete-form').on('submit', function() {
+        var c = confirm("You are about to cancel a form. Are you sure?");
+        if (c == true) {
+          $('.prevent-submit-button').attr('disabled', 'true');
+        }
+        return c; //you can just return c because it will be true or false
+      });  
   });
 </script>
 

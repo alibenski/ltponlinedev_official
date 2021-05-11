@@ -59,7 +59,9 @@ class PlacementFormController extends Controller
 
     public function studentEditPlacementFormView($id)
     {
-        # code...
+        $enrolment_details = PlacementForm::find($id);
+        
+        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details'));
     }
 
     public function studentUpdatePlacementForm(Request $request)
