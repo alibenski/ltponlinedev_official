@@ -15,6 +15,7 @@ use App\Mail\MailtoApprover;
 use App\Mail\cancelConvocation;
 use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailPlacementHR;
+use App\ModifiedForms;
 use App\PlacementForm;
 use App\PlacementSchedule;
 use App\Preenrolment;
@@ -60,13 +61,38 @@ class PlacementFormController extends Controller
     public function studentEditPlacementFormView($id)
     {
         $enrolment_details = PlacementForm::find($id);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
         
-        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details'));
+        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details', 'languages', 'days'));
     }
 
     public function studentUpdatePlacementForm(Request $request)
     {
-        # code...
+        // validate fields
+        $this->validate($request, [
+            'L' => 'required|unique:tblLTP_Placement_Forms,L,NULL,NULL,INDEXID,'.$request->indexno.',Term,'.$request->term_id,
+            'placementLang' => 'required',
+            'timeInput' => 'required',
+            'dayInput' => 'required',
+            'course_preference_comment' => 'required',
+            'indexno' => 'required',
+            'term_id' => 'required',
+            'enrolment_id' => 'required',
+        ]);
+        $placement_form_data = PlacementForm::find($request->enrolment_id);
+        dd($placement_form_data);
+        // save history
+        $this->saveModifiedPlacementForm($placement_form_data);
+        // save modifications
+        
+
+    }
+
+    function saveModifiedPlacementForm($placement_form_data)
+    {
+        $arr = $placement_form_data->attributesToArray();
+        ModifiedForms::create($arr);
     }
 
     /**

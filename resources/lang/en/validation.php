@@ -132,6 +132,7 @@ return [
     'custom' => [
         'L' => [
             'required' => 'The language field is required.',
+            'unique' => 'You have already submitted a form for the same language.',
         ],
         'course_id' => [
             'required' => 'The course field is required.',
@@ -156,6 +157,9 @@ return [
         ],
         'email' => [
             'required_without_all' => 'Nothing to update. Fill up at least one field to update.',
+        ],
+        'placementLang' => [
+            'required' => 'Please choose a placement test date from the given options.',
         ],
         // Validation message on manager's approval page
         'decision-*' => [
