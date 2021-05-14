@@ -71,7 +71,7 @@ class PlacementFormController extends Controller
     {
         // validate fields
         $this->validate($request, [
-            'L' => 'required|unique:tblLTP_Placement_Forms,L,NULL,NULL,INDEXID,'.$request->indexno.',Term,'.$request->term_id,
+            'L' => 'required|',
             'placementLang' => 'required',
             'timeInput' => 'required',
             'dayInput' => 'required',
@@ -80,13 +80,41 @@ class PlacementFormController extends Controller
             'term_id' => 'required',
             'enrolment_id' => 'required',
         ]);
+        
+        $this->validate($request, [
+            'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
+                        $query->where('L', $request->L)
+                            ->where('INDEXID', $request->indexno)
+                            ->where('Term', $request->term_id)
+                            ->where('deleted_at', NULL);
+                    })
+                ]
+        );
+
         $placement_form_data = PlacementForm::find($request->enrolment_id);
-        dd($placement_form_data);
         // save history
         $this->saveModifiedPlacementForm($placement_form_data);
         // save modifications
-        
+        $placement_form_data->update([
+                'L' => $request->L,
+                'placement_schedule_id' => $request->placementLang,
+                'timeInput' => implode('-', $request->timeInput),
+                'dayInput' => implode('-', $request->dayInput),
+                'course_preference_comment' => $request->course_preference_comment,
+                'modified_by' => Auth::id(),
+            ]);
 
+        if ($request->std_comments != NULL) {
+            $placement_form_data->update(['std_comments' => $request->std_comments]);
+        }
+
+        if ($request->flexibleBtn == 'on') {
+            $placement_form_data->update(['flexibleBtn' => 1]);
+        } else {
+            $placement_form_data->update(['flexibleBtn' => 0]);
+        }
+
+        return redirect()->route('previous-submitted')->with('success', 'Form # '.$placement_form_data->eform_submit_count.' successfully modified.');
     }
 
     function saveModifiedPlacementForm($placement_form_data)
