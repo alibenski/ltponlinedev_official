@@ -123,11 +123,12 @@
                                 @endif 
                                 <h4><strong>Enrolment Form # {{ $form->eform_submit_count }}</strong> @if($form->is_self_pay_form == 1)<span class="badge badge-secondary margin-label">Self-Payment-based Form</span> @endif </h4>
                                 <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
-
-                                    @if(is_null($form->deleted_at))
-                                    <div class="col-sm-6">
-                                      <a href={{ route('student-edit-enrolment-form-view', [ $form->Term, $form->INDEXID, $form->Te_Code ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
-                                    </div>
+                                    @if (\Carbon\Carbon::now() < $next_term->Enrol_Date_End)
+                                      @if(is_null($form->deleted_at))
+                                      <div class="col-sm-6">
+                                        <a href={{ route('student-edit-enrolment-form-view', [ $form->Term, $form->INDEXID, $form->Te_Code ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
+                                      </div>
+                                      @endif    
                                     @endif
                                     
                                     <div class="col-sm-6">
@@ -263,10 +264,12 @@
                       @endif
                     @endif
                     </p>
-                    @if (is_null($plform->deleted_at))
-                    <div class="col-sm-12">
-                      <a href={{ route('student-edit-placement-form-view', [ $plform->id ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
-                    </div>
+                    @if (\Carbon\Carbon::now() < $next_term->Enrol_Date_End)
+                      @if (is_null($plform->deleted_at))
+                      <div class="col-sm-12">
+                        <a href={{ route('student-edit-placement-form-view', [ $plform->id ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
+                      </div>
+                      @endif
                     @endif
                     <div class="col-sm-12">
                     <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}" class="delete-form prevent-submit-form">
