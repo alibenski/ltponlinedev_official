@@ -134,7 +134,7 @@
     </div>
     <div class="col-sm-8 mt-3">
         <div class="card">
-            <div class="card-header bg-warning"><h5>Resubmit your form with the changes below</h5></div>
+            <div class="card-header bg-warning"><h5>Refill your form below including the desired changes</h5></div>
             <div class="card-body">
                 <form method="POST" action="{{ route('student-update-enrolment-form') }}" class="form-horizontal form-prevent-multi-submit">
                     {{ csrf_field() }}
