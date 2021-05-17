@@ -11,7 +11,7 @@
 <div class="d-flex flex-wrap">
     <div class="col-sm-4 mt-3">
         <div class="card">
-            <div class="card-header bg-info"><h5>Current Form</h5></div>
+            <div class="card-header bg-info text-white"><h5>Current Form</h5></div>
             <div class="card-body">
                 
                 <div class="form-group">
@@ -147,7 +147,7 @@
 
     <div class="col-sm-8 mt-3">
         <div class="card">
-            <div class="card-header bg-warning"><h5>Modification Options</h5></div>
+            <div class="card-header bg-warning"><h5>Resubmit your form with the changes below</h5></div>
             <div class="card-body">
                 <form method="POST" action="{{ route('student-update-placement-form') }}" class="form-horizontal form-prevent-multi-submit">
                     {{ csrf_field() }}
@@ -275,7 +275,7 @@
                      </div>
                     
                      <div class="col-sm-3 offset-sm-5 mt-3">
-                       <button type="submit" class="btn btn-success button-prevent-multi-submit">Confirm Modification</button>
+                       <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Changes</button>
                        <input type="hidden" name="_token" value="{{ Session::token() }}">
                        <input type="hidden" name="indexno" value="{{ $enrolment_details->users->indexno }}">
                        <input type="hidden" name="term_id" value="{{ $enrolment_details->Terms->Term_Code }}">

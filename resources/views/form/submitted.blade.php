@@ -131,9 +131,11 @@
                                       @endif    
                                     @endif
                                     
+                                    @if(is_null($form->deleted_at))
                                     <div class="col-sm-6">
                                         <a id="modbtn" class="btn btn-sm btn-outline-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><i class="fa fa-eye"></i> View Status</a>
                                     </div> 
+                                    @endif
                                     
                                     <div class="col-sm-6">
                                       @component('form.modaldelete')

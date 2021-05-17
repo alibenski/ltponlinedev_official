@@ -118,8 +118,7 @@ class HomeController extends Controller
         $current_user = Auth::user()->indexno;
         $term_code = $request->term;
         // query submitted forms based from tblLTP_Enrolment table
-        $schedules = Preenrolment::withTrashed()
-            ->where('Te_Code', $request->tecode)
+        $schedules = Preenrolment::where('Te_Code', $request->tecode)
             ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)
