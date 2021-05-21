@@ -25,6 +25,11 @@ use Session;
 
 class AdminController extends Controller
 {
+    public function adminExportOcha()
+    {
+        return view('admin.admin-export-ocha');
+    }
+
     public function adminExportMoodle()
     {
         $terms = Term::where('Term_Code', '>', '190')->orderBy('Term_Code', 'desc')->get();
