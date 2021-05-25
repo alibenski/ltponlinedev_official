@@ -245,7 +245,7 @@
       var token = $("input[name='_token']").val();
 
       $.ajax({
-          url: "{{ route('select-ajax2') }}", 
+          url: "{{ route('select-ajax-student-edit') }}", 
           method: 'POST',
           data: {course_id:course_id, term_id:term, _token:token},
           success: function(data) {
