@@ -45,7 +45,6 @@ class AdminController extends Controller
 
             if (Session::has('Term')) {
                 $records = $records->where('Term', Session::get('Term'));
-                $queries['Term'] = Session::get('Term');
             }
 
 
@@ -78,7 +77,6 @@ class AdminController extends Controller
             $pashFromPlacement = new Repo;
             if (Session::has('Term')) {
                 $pashFromPlacement = $pashFromPlacement->where('Term', Session::get('Term'));
-                $queries['Term'] = Session::get('Term');
             }
 
             $records_0 = $pashFromPlacement->with('users')
@@ -106,7 +104,6 @@ class AdminController extends Controller
             $cancelledEnrolmentRecords = new Repo;
             if (Session::has('Term')) {
                 $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', Session::get('Term'));
-                $queries['Term'] = Session::get('Term');
             }
 
             $records_2 = $cancelledEnrolmentRecords->onlyTrashed()->with('users')
@@ -134,7 +131,6 @@ class AdminController extends Controller
             $cancelledPlacementRecords = new Repo;
             if (Session::has('Term')) {
                 $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', Session::get('Term'));
-                $queries['Term'] = Session::get('Term');
             }
 
             $records_3 = $cancelledPlacementRecords->onlyTrashed()->with('users')
