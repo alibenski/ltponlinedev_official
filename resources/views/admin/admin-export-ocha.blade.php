@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.no_sidebar_admin')
 @section('tabtitle')
     OCHA Data Extract
 @stop
@@ -15,48 +15,92 @@
 @stop
 
 @section('content')
-    <h2 class="text-center"> OCHA Export </h2>
+    <div class="row">
+        <h2 class="text-center"> OCHA Export </h2>
+        <div class="billing-section">
+            <div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
+            <input type="hidden" name="_token" value="{{ Session::token() }}">
+            <table id="sampol" class="table table-striped no-wrap" width="100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Index Number</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Email</th>
+                        <th>Term</th>
+                        <th>Language</th>
+                        <th>Description</th>
+                        <th>Price USD</th>
+                        <th>Duration</th>
+                        <th>Organization</th>
+                        <th>RESULT</th>
+                        <th>Cancel Date</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Index Number</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Email</th>
+                        <th>Term</th>
+                        <th>Language</th>
+                        <th>Description</th>
+                        <th>Price USD</th>
+                        <th>Duration</th>
+                        <th>Organization</th>
+                        <th>RESULT</th>
+                        <th>Cancel Date</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 
-    @include('admin.partials._termSessionMsg')
-
-    <div class="billing-section">
-        <div class="preloader2"><h3 class="text-center"><strong>Please wait... Fetching data from the database...</strong></h3></div>
-        <input type="hidden" name="_token" value="{{ Session::token() }}">
-        <table id="sampol" class="table table-striped no-wrap" width="100%">
-            <thead>
-                <tr>
-                    <th>Index Number</th>
-                    <th>Last Name</th>
-                    <th>First Name</th>
-                    <th>Email</th>
-                    <th>Term</th>
-                    <th>Language</th>
-                    <th>Description</th>
-                    <th>Price USD</th>
-                    <th>Duration</th>
-                    <th>Organization</th>
-                    <th>RESULT</th>
-                    <th>Cancel Date</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>Index Number</th>
-                    <th>Last Name</th>
-                    <th>First Name</th>
-                    <th>Email</th>
-                    <th>Term</th>
-                    <th>Language</th>
-                    <th>Description</th>
-                    <th>Price USD</th>
-                    <th>Duration</th>
-                    <th>Organization</th>
-                    <th>RESULT</th>
-                    <th>Cancel Date</th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>	
+    <div class="row">
+        <h2 class="text-center"> OCHA Export 2018</h2>
+        <div class="billing-section-2">
+            <input type="hidden" name="_token" value="{{ Session::token() }}">
+            <table id="sampol-2" class="table table-striped no-wrap" width="100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Index Number</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Email</th>
+                        <th>Term</th>
+                        <th>Language</th>
+                        <th>Description</th>
+                        <th>Price USD</th>
+                        <th>Duration</th>
+                        <th>Organization</th>
+                        <th>RESULT</th>
+                        <th>Cancel Date</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Index Number</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Email</th>
+                        <th>Term</th>
+                        <th>Language</th>
+                        <th>Description</th>
+                        <th>Price USD</th>
+                        <th>Duration</th>
+                        <th>Organization</th>
+                        <th>RESULT</th>
+                        <th>Cancel Date</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 @stop
 
 @section('java_script')
@@ -70,7 +114,7 @@
 
             promises.push(
             $.ajax({
-                url: '{{ route('admin-extract-data') }}',
+                url: "{{ route('admin-extract-data') }}",
                 type: 'GET',
                 dataType: 'json',
                 data: {_token:token},
@@ -85,23 +129,8 @@
             .fail(function() {
                 console.log(data);
             }));
-            
-            function assignToEventsColumns(data) {
-                // $('#sampol thead tr').clone(true).appendTo( '#sampol thead' );
-                // $('#sampol thead tr:eq(1) th').each( function (i) {
-                //     var title = $(this).text();
-                //         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-                
-                //         $( 'input', this ).on( 'keyup change', function () {
-                //             if ( table.column(i).search() !== this.value ) {
-                //                 table
-                //                     .column(i)
-                //                     .search( this.value )
-                //                     .draw();
-                //             }
-                //         } );
-                //     } );
 
+            function assignToEventsColumns(data) {
                 var table = $('#sampol').DataTable({
                     // "deferRender": true,
                     "dom": 'B<"clear">lfrtip',
@@ -115,8 +144,9 @@
                     "pagingType": "full_numbers",
                     "bAutoWidth": false,
                     "aaData": data.data,
-                    "order": [[ 1, "asc" ]],
+                    "order": [[ 0, "asc" ]],
                     "columns": [
+                            { "data": "id"},
                             { "data": "users.indexno"},
                             { "data": "users.nameLast"},
                             { "data": "users.nameFirst"},
@@ -163,6 +193,89 @@
             $.when.apply($.ajax(), promises).then(function() {
                 $(".preloader2").fadeOut(600);
             });
+
+            $.ajax({
+                url: "{{ route('admin-extract-data-2018') }}",
+                type: 'GET',
+                dataType: 'json',
+                data: {_token:token},
+            })
+            .then(function(data) {
+                console.log(data)
+                assignToEventsColumns2(data);
+                // console.log(data.data)
+                // var data = jQuery.parseJSON(data.data);
+                // console.log(data)
+            })
+            
+            function assignToEventsColumns2(data) {
+                var table = $('#sampol-2').DataTable({
+                    // "deferRender": true,
+                    "dom": 'B<"clear">lfrtip',
+                    "buttons": [
+                            'copy', 'csv', 'excel', 'pdf'
+                        ],
+                    "scrollX": true,
+                    "responsive": false,
+                    "orderCellsTop": true,
+                    "fixedHeader": true,
+                    "pagingType": "full_numbers",
+                    "bAutoWidth": false,
+                    "aaData": data.data,
+                    "order": [[ 0, "asc" ]],
+                    "columns": [
+                            { "data": "id"},
+                            { "data": "INDEXID"},
+                            { "data": "LASTNAME"},
+                            { "data": "FIRSTNAME"},
+                            { "data": "EMAIL"},
+                            { "data": null,
+                            render: function(data, type, row, meta) {
+                                return data.terms.Term_Name + ' (' + data.Term + ')';
+                            }},
+                            { "data": "languages.name" }, 
+                            { "data": "courses_old.Description" }, 
+                            { "data": null,
+                            render: function(data, type, row, meta) {
+                                return 'N/A';
+                            } }, 
+                            { "data": null,
+                            render: function(data, type, row, meta) {
+                                return 'N/A';
+                            } }, 
+                            { "data": "DEPT" },  
+                            { "data": "Result", "className": "result" },
+                            { "data": null,
+                            render: function(data, type, row, meta) {
+                                return 'N/A';
+                            } }
+                                ],
+                    "createdRow": function( row, data, dataIndex ) {
+                                $(row).find("td.record_id").attr('id', data['id']);
+
+                                if ( data['Result'] == 'P') {
+                                $(row).addClass( 'pass' );
+                                $(row).find("td.result").text('PASS');
+                                }
+
+                                if ( data['Result'] == 'F') {
+                                $(row).addClass( 'label-danger' );
+                                $(row).find("td.result").text('Fail');
+                                }
+
+                                if ( data['Result'] == 'I') {
+                                $(row).addClass( 'label-warning' );
+                                $(row).find("td.result").text('Incomplete');
+                                }
+
+                                if ( data['deleted_at'] !== null) {
+                                $(row).addClass( 'bg-navy' );
+                                $(row).find("td.result").text('Late Cancellation');
+                                }
+
+                            }
+                })
+            }
         });
     </script>
 @stop

@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      */
     Route::get('admin-export-ocha', 'AdminController@adminExportOcha')->name('admin-export-ocha');
     Route::get('admin-extract-data', 'AdminController@adminExtractData')->name('admin-extract-data');
+    Route::get('admin-extract-data-2018', 'AdminController@adminExtractData2018')->name('admin-extract-data-2018');
 
     Route::get('admin-export-moodle', 'AdminController@adminExportMoodle')->name('admin-export-moodle');
     Route::get('admin-query-export-moodle', 'AdminController@adminQueryExportMoodle')->name('admin-query-export-moodle');
