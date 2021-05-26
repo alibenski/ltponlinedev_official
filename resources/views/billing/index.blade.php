@@ -73,7 +73,9 @@
 				<th>Price USD</th>
 				<th>Duration</th>
 				<th>Organization</th>
-				<th>Name</th>
+				<th>Last Name</th>
+				<th>First Name</th>
+				<th>Email</th>
 				<th>RESULT</th>
 				<th>Cancel Date</th>
 			</tr>
@@ -87,7 +89,9 @@
 				<th>Price USD</th>
 				<th>Duration</th>
 				<th>Organization</th>
-				<th>Name</th>
+				<th>Last Name</th>
+				<th>First Name</th>
+				<th>Email</th>
 				<th>RESULT</th>
 				<th>Cancel Date</th>
 			</tr>
@@ -175,7 +179,9 @@ $(document).ready(function() {
 	        		{ "data": "courseschedules.prices.price_usd" }, 
 	        		{ "data": "courseschedules.courseduration.duration_name_en" }, 
 	        		{ "data": "DEPT" },  
-	        		{ "data": "users.name" }, 
+	        		{ "data": "users.nameLast" }, 
+	        		{ "data": "users.nameFirst" }, 
+	        		{ "data": "users.email" }, 
 	        		{ "data": "Result", "className": "result" },
 	        		{ "data": "deleted_at" }
 				        ],
