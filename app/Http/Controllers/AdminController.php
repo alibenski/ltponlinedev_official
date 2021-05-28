@@ -48,7 +48,7 @@ class AdminController extends Controller
                 $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
                 
                 $records = new Repo;
-                $records = $records->where('Term', $value->Term_Code);
+                $records = $records->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
                     
                 $records_1 = $records->with('users')
                     ->where('DEPT', 'OCHA')
@@ -71,7 +71,7 @@ class AdminController extends Controller
                     ->get();
 
                 $pashFromPlacement = new Repo;
-                $pashFromPlacement = $pashFromPlacement->where('Term', $value->Term_Code);
+                $pashFromPlacement = $pashFromPlacement->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
                 
                 $records_0 = $pashFromPlacement->with('users')
                     ->where('DEPT', 'OCHA')
@@ -96,7 +96,7 @@ class AdminController extends Controller
                 
                 // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
                 $cancelledEnrolmentRecords = new Repo;
-                $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', $value->Term_Code);
+                $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
     
                 $records_2 = $cancelledEnrolmentRecords->onlyTrashed()->with('users')
                     ->where('DEPT', 'OCHA')
@@ -122,7 +122,7 @@ class AdminController extends Controller
 
 
                 $cancelledPlacementRecords = new Repo;
-                $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', $value->Term_Code);
+                $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
     
                 $records_3 = $cancelledPlacementRecords->onlyTrashed()->with('users')
                     ->where('DEPT', 'OCHA')
