@@ -114,6 +114,9 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      * Teachers Routes
      */
     Route::resource('teachers', 'TeachersController');
+    Route::post('mark-no-show', ['as' => 'mark-no-show', 'uses' => 'TeachersController@markNoShow']);
+    Route::post('undo-no-show', ['as' => 'undo-no-show', 'uses' => 'TeachersController@undoNoShow']);
+
     Route::get('teacher-search-user', ['as' => 'teacher-search-user', 'uses' => 'TeachersController@teacherSearchUser']);
     Route::get('teacher-ltpdata-view/{id}', ['as' => 'teacher-ltpdata-view', 'uses' => 'TeachersController@teacherLtpdataView']);
     

@@ -1322,4 +1322,26 @@ class TeachersController extends Controller
             return response()->json($data);
         }
     }
+
+    public function markNoShow(Request $request)
+    {
+        $pash_record = Repo::find($request->pash_id);
+        $pash_record->update([
+            'no_show' => 1
+        ]);
+        $data = $pash_record;
+
+        return response()->json($data);
+    }
+
+    public function undoNoShow(Request $request)
+    {
+        $pash_record = Repo::find($request->pash_id);
+        $pash_record->update([
+            'no_show' => 0
+        ]);
+        $data = $pash_record;
+
+        return response()->json($data);
+    }
 }
