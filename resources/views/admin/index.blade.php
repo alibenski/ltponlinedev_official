@@ -338,6 +338,21 @@
 			<!-- /.info-box -->
 		</a>
 	</div>
+	<div class="admin-index-items-2">
+		<a href="{{ route('no-show-list') }}">
+			<div class="info-box">
+			<!-- Apply any bg-* class to to the icon to color it -->
+			<span class="info-box-icon bg-red"><i class="ion ion-android-hand"></i></span>
+			<div class="info-box-content">
+				<span class="info-box-text">No-Show List</span>
+				<span class="info-box-number">@if(Session::has('Term')) @else Set the Term @endif</span>
+				<span class="info-box-text" style="font-size: 11px;">Shows students marked as no-show.</span>
+			</div>
+			<!-- /.info-box-content -->
+			</div>
+			<!-- /.info-box -->
+		</a>
+	</div>
 </div>
 
 <input type="hidden" name="_token" value="{{ Session::token() }}">

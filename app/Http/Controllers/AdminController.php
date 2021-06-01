@@ -25,6 +25,17 @@ use Session;
 
 class AdminController extends Controller
 {
+    public function noShowList(Request $request)
+    {
+        if (Session::has('Term')) {
+            $term = Session::get('Term');
+            $no_show_records = Repo::where('Term', $term)->where('no_show', 1)->get();
+            return view('admin.admin-no-show-list', compact('no_show_records'));
+        }
+
+        return 'No Term selected.';
+    }
+
     public function adminExportOcha()
     {
         return view('admin.admin-export-ocha');

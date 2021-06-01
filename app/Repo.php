@@ -86,4 +86,8 @@ class Repo extends Model
     public function placements() {
     return $this->hasMany('App\PlacementForm', 'INDEXID', 'INDEXID'); 
     }
+
+    public function noShowBy() {
+    return $this->belongsTo('App\User', 'no_show_by'); 
+    }
 }
