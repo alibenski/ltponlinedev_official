@@ -1327,7 +1327,9 @@ class TeachersController extends Controller
     {
         $pash_record = Repo::find($request->pash_id);
         $pash_record->update([
-            'no_show' => 1
+            'no_show' => 1,
+            'no_show_by' => Auth::user()->id,
+
         ]);
         $data = $pash_record;
 
