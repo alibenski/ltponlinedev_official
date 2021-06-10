@@ -593,7 +593,7 @@ class PlacementFormController extends Controller
     {
         if (!Session::has('Term')) {
             $request->session()->flash('error', 'Term is not set.');
-            return view('admin_dashboard');
+            return redirect()->route('admin_dashboard');
         }
 
         $placement_forms = new PlacementForm;
