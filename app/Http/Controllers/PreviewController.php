@@ -266,6 +266,22 @@ class PreviewController extends Controller
         return response()->json($data);
     }
 
+    public function ajaxGetNoShowCountPerClass(Request $request)
+    {
+        if (!is_null($request->arr)) {
+            $count = Repo::whereIn('CodeClass', $request->arr)->where('no_show', 1)->pluck('CodeClass')->toArray();
+            $data = array_count_values($count);
+            return response()->json($data);
+        }
+
+        $data = [
+            "status" => "fail", 
+            "message" => "Error getting student count per class."
+        ];
+        return response()->json($data);
+
+    }
+
     public function viewClassroomsPerSection($code)
     {
         $classrooms = Classroom::where('Code', $code)->get();

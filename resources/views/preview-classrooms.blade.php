@@ -177,7 +177,10 @@
                     @endforeach
                   </p>
                   @endif
-                
+                  
+                  @if ($form->no_show)
+                      <p><span class="label label-warning">No Show</span></p>
+                  @endif
                 </td>
                 <td>
                   @if(empty($form->users->email)) None @else {{ $form->users->email }} @endif </td>
