@@ -87,6 +87,25 @@ class PreviewController extends Controller
     }
 
     /**
+     * 
+     * Ajax call to get all pending Placement forms for the selected Term
+     * 
+    **/
+    public function ajaxPreviewGetPendingPlacementCount(Request $request)
+    {
+        $term = Session::get('Term');
+
+        $placement_forms = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+        ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+        ->where('L', $request->languageSelected)
+        ->where('Term', $term)
+        ->get()->count();
+
+        $data = $placement_forms;
+        return response()->json($data);
+    }
+
+    /**
      * Ajax call to GetStudentPriorityStatus
      */
     public function ajaxPreviewGetStudentPriorityStatus(Request $request)
