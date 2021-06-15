@@ -527,8 +527,8 @@ class AjaxController extends Controller
         if ($request->ajax()) {
             
             // first validation
-            // get the last enrolment from PASHQ table including cancelled ones
-            $repos_lang = Repo::withTrashed()->orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
+            // get the last enrolment from PASHQ table (does NOT include cancelled ones)
+            $repos_lang = Repo::orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
 
             if (is_null($repos_lang)) {
                 $repos_value = 0;
