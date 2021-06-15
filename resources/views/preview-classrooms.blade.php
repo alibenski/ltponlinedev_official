@@ -315,7 +315,7 @@
                   <button type="button" class="btn btn-danger btn-space pash-delete" data-toggle="modal" @if($form->deleted_at) disabled="" @endif> @if($form->deleted_at)<i class="fa fa-remove"></i> Cancelled @else <i class="fa fa-trash"></i> Delete @endif</button>
 
                   @if ($form->deleted_at)
-                    <form method="POST" action="{{ route('undelete-pash', [$form->id]) }}" class="undelete-form form-prevent-multi-submit">
+                    <form method="POST" action="{{ route('undelete-pash', $form->id) }}" class="undelete-form form-prevent-multi-submit">
                         <input id="unDeleteInput" type="submit" value="Undo Delete" class="undelete-form btn btn-success btn-space button-prevent-multi-submit">
 
                         <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -334,7 +334,7 @@
                               <div class="modal-body-pash-delete">
                                 <div class="col-sm-12">
 
-                                  <form method="POST" action="{{ route('cancel-convocation', [$form->CodeIndexIDClass]) }}" class="delete-form form-prevent-multi-submit">
+                                  <form method="POST" action="{{ route('cancel-convocation', $form->CodeIndexIDClass) }}" class="delete-form form-prevent-multi-submit">
 
                                       <h4>Index # {{ $form->INDEXID }} : <strong> {{ $form->users->name }}</strong></h4>
                                       <h4>Cancelling participation from <strong> {{ $form->courses->Description }}</strong></h4>

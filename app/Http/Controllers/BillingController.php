@@ -36,7 +36,7 @@ class BillingController extends Controller
             ];
 
             if (Session::has('Term')) {
-                $records = $records->where('Term', Session::get('Term'));
+                $records = $records->where('Term', Session::get('Term'))->whereNull('is_self_pay_form');
                 $queries['Term'] = Session::get('Term');
             }
 
@@ -68,7 +68,7 @@ class BillingController extends Controller
 
             $pashFromPlacement = new Repo;
             if (Session::has('Term')) {
-                $pashFromPlacement = $pashFromPlacement->where('Term', Session::get('Term'));
+                $pashFromPlacement = $pashFromPlacement->where('Term', Session::get('Term'))->whereNull('is_self_pay_form');
                 $queries['Term'] = Session::get('Term');
             }
 
@@ -95,7 +95,7 @@ class BillingController extends Controller
             // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
             $cancelledEnrolmentRecords = new Repo;
             if (Session::has('Term')) {
-                $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', Session::get('Term'));
+                $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', Session::get('Term'))->whereNull('is_self_pay_form');
                 $queries['Term'] = Session::get('Term');
             }
 
@@ -122,7 +122,7 @@ class BillingController extends Controller
 
             $cancelledPlacementRecords = new Repo;
             if (Session::has('Term')) {
-                $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', Session::get('Term'));
+                $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', Session::get('Term'))->whereNull('is_self_pay_form');
                 $queries['Term'] = Session::get('Term');
             }
 

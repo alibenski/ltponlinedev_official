@@ -87,6 +87,25 @@ class PreviewController extends Controller
     }
 
     /**
+     * 
+     * Ajax call to get all pending Placement forms for the selected Term
+     * 
+    **/
+    public function ajaxPreviewGetPendingPlacementCount(Request $request)
+    {
+        $term = Session::get('Term');
+
+        $placement_forms = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+        ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+        ->where('L', $request->languageSelected)
+        ->where('Term', $term)
+        ->get()->count();
+
+        $data = $placement_forms;
+        return response()->json($data);
+    }
+
+    /**
      * Ajax call to GetStudentPriorityStatus
      */
     public function ajaxPreviewGetStudentPriorityStatus(Request $request)
@@ -174,7 +193,7 @@ class PreviewController extends Controller
     {
         if ($request->ajax()) {
             $prev_term = Term::where('Term_Code', $request->term)->first()->Term_Prev;
-
+            $language = $request->L;
             $getEnrolmentForms = Preenrolment::where('Term', $request->term)
                 ->where('overall_approval', 1)
                 ->where('L', $request->L)
@@ -186,6 +205,16 @@ class PreviewController extends Controller
                 ->with('pash.courses')
                 ->with(['pash' => function ($q1) use ($prev_term) {
                     $q1->where('Term', $prev_term)
+                        ->whereHas('classrooms', function ($q2) {
+                            $q2->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        });
+                }])
+                ->with('pashMany.classrooms.teachers')
+                ->with('pashMany.courses')
+                ->with(['pashMany' => function ($q1) use ($prev_term, $language) {
+                    $q1->where('Term', $prev_term)
+                        ->where('L', $language)
                         ->whereHas('classrooms', function ($q2) {
                             $q2->whereNotNull('Tch_ID')
                                 ->where('Tch_ID', '!=', 'TBD');
@@ -233,19 +262,26 @@ class PreviewController extends Controller
      */
     public function ajaxGetStudentCountPerClass(Request $request)
     {
+        if (!is_null($request->arr)) {
+            $count = Repo::whereIn('CodeClass', $request->arr)
+                // ->unique(function ($item) {
+                //     return $item['INDEXID'].$item['CodeClass'];
+                // })
+                // ->pluck('CodeClass')
+                // ->toArray();
+                ->pluck('CodeClass')
+                ->toArray();
+    
+    
+            // $data = $count;
+            $data = array_count_values($count);
+            return response()->json($data);
+        }
 
-        $count = Repo::whereIn('CodeClass', $request->arr)
-            // ->unique(function ($item) {
-            //     return $item['INDEXID'].$item['CodeClass'];
-            // })
-            // ->pluck('CodeClass')
-            // ->toArray();
-            ->pluck('CodeClass')
-            ->toArray();
-
-
-        // $data = $count;
-        $data = array_count_values($count);
+        $data = [
+            "status" => "fail", 
+            "message" => "Error getting student count per class."
+        ];
         return response()->json($data);
     }
 
@@ -388,7 +424,7 @@ class PreviewController extends Controller
 
             $cancelled = Repo::where('Term', Session::get('Term'))->onlyTrashed()->get();
 
-            return view('preview-class-status', compact('classrooms', 'languages', 'cancelled', 'cancelled_count'));
+            return view('preview-class-status', compact('classrooms', 'languages', 'cancelled'));
 
             // $currentQueries = \Request::query();
 
@@ -2799,7 +2835,7 @@ class PreviewController extends Controller
                 }
             }
 
-            $getCode = Preview::select('Code')->where('INDEXID', $request->INDEXID)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->orderBy('id')->get();
+            $getCode = Preview::select('Code')->where('Term', $request->Term)->where('INDEXID', $request->INDEXID)->where('L', $request->L)->where('Te_Code', $request->Te_Code)->orderBy('id')->get();
 
             $arrGetClassRoomDetails = [];
 

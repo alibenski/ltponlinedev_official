@@ -29,7 +29,7 @@
 					</div>
 					<div class="panel-body">
 						<h4>You are currently viewing teachers and their respective classes for <strong> [{{ $selectedTerm->Term_Code }}] - {{ $selectedTerm->Comments }}: {{ $selectedTerm->Term_Name }} </strong> </h4>
-						
+						<a href="{{ route('teacher-email-classrooms-to-teachers-view') }}" class="btn btn-info"><i class="fa fa-eye"></i> view email</a>
 						<a href="{{ route('teacher-email-classrooms-to-teachers') }}" class="btn btn-primary"><i class="fa fa-envelope"></i> send email</a><span class="text-danger"> <i class="fa fa-info-circle"></i> send classroom info to teachers via email</span>
 					</div>
 				</div>
@@ -96,7 +96,7 @@
 						    @foreach ($teacher->classrooms as $element)
 						    <div class="box-footer no-padding">
 						      <ul class="nav nav-stacked">
-						        <h5 style="margin-left: 1.5rem">LTP-{{$element->Te_Term}}-{{$element->Tch_ID}}-{{$element->course->Description}}-{{$element->Te_Code_New}}:{{$element->scheduler->name}} <a href="{{ route('view-classrooms-per-section', ['Code' => $element->Code]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h5>
+						        <h5 style="margin-left: 1.5rem">LTP-{{$element->Te_Term}}-{{$element->Tch_ID}}-{{$element->course->Description}}-{{$element->Te_Code_New}}:{{$element->scheduler->name}} <a href="{{ route('view-classrooms-per-section', $element->Code) }}" target="_blank"><i class="fa fa-external-link"></i></a></h5>
 						        {{-- <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
 						        <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
 						        <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}

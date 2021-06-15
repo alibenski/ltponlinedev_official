@@ -25,6 +25,292 @@ use Session;
 
 class AdminController extends Controller
 {
+    public function adminExportOcha()
+    {
+        return view('admin.admin-export-ocha');
+    }
+
+    public function adminExtractData(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $terms = Repo::where('Term', '>', '190')->select('Term')->groupBy('Term')->get()->toArray();
+            $array = [];
+            foreach ($terms as $v) {
+                $array[] = $v['Term'];
+            }
+            $collect_term = Term::whereIn('Term_Code', $array)->get();
+
+            $records_merged = [];
+
+            foreach ($collect_term as $value) {
+                $term = $value->Term_Code;
+                $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+                
+                $records = new Repo;
+                $records = $records->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
+                    
+                $records_1 = $records->with('users')
+                    ->where('DEPT', 'OCHA')
+                    ->with('terms')
+                    ->with('courses')
+                    ->with('languages')
+                    ->whereNull('exclude_from_billing')
+                    ->with(['courseschedules' => function ($q1) {
+                        $q1->with('prices')->with('courseduration');
+                    }])
+                    ->with('classrooms')
+                    ->whereHas('classrooms', function ($query1) {
+                        $query1->whereNotNull('Tch_ID')
+                            ->where('Tch_ID', '!=', 'TBD');
+                    })
+                    ->with('enrolments')
+                    ->whereHas('enrolments', function ($query11) use ($term) {
+                        $query11->where('Term', $term)->whereNull('is_self_pay_form');
+                    })
+                    ->get();
+
+                $pashFromPlacement = new Repo;
+                $pashFromPlacement = $pashFromPlacement->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
+                
+                $records_0 = $pashFromPlacement->with('users')
+                    ->where('DEPT', 'OCHA')
+                    ->with('terms')
+                    ->with('courses')
+                    ->with('languages')
+                    ->whereNull('exclude_from_billing')
+                    ->with(['courseschedules' => function ($q0) {
+                        $q0->with('prices')->with('courseduration');
+                    }])
+                    ->with('classrooms')
+                    ->whereHas('classrooms', function ($query0) {
+                        $query0->whereNotNull('Tch_ID')
+                            ->where('Tch_ID', '!=', 'TBD');
+                    })
+                    ->with('placements')
+                    ->whereHas('placements', function ($query00) use ($term) {
+                        $query00->where('Term', $term)->whereNull('is_self_pay_form');
+                    })
+                    ->get();
+
+                
+                // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
+                $cancelledEnrolmentRecords = new Repo;
+                $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
+    
+                $records_2 = $cancelledEnrolmentRecords->onlyTrashed()->with('users')
+                    ->where('DEPT', 'OCHA')
+                    ->with('terms')
+                    ->where('deleted_at', '>', $termCancelDeadline)
+                    ->whereNull('cancelled_but_not_billed')
+                    ->with('courses')
+                    ->with('languages')
+                    ->whereNull('exclude_from_billing')
+                    ->with(['courseschedules' => function ($q2) {
+                        $q2->with('prices')->with('courseduration');
+                    }])
+                    ->with('classrooms')
+                    ->whereHas('classrooms', function ($query2) {
+                        $query2->whereNotNull('Tch_ID')
+                            ->where('Tch_ID', '!=', 'TBD');
+                    })
+                    ->with('enrolments')
+                    ->whereHas('enrolments', function ($query22) use ($term) {
+                        $query22->where('Term', $term)->whereNull('is_self_pay_form');
+                    })
+                    ->get();
+
+
+                $cancelledPlacementRecords = new Repo;
+                $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
+    
+                $records_3 = $cancelledPlacementRecords->onlyTrashed()->with('users')
+                    ->where('DEPT', 'OCHA')
+                    ->with('terms')
+                    ->where('deleted_at', '>', $termCancelDeadline)
+                    ->whereNull('cancelled_but_not_billed')
+                    ->with('courses')
+                    ->with('languages')
+                    ->whereNull('exclude_from_billing')
+                    ->with(['courseschedules' => function ($q3) {
+                        $q3->with('prices')->with('courseduration');
+                    }])
+                    ->with('classrooms')
+                    ->whereHas('classrooms', function ($query3) {
+                        $query3->whereNotNull('Tch_ID')
+                            ->where('Tch_ID', '!=', 'TBD');
+                    })
+                    ->with('placements')
+                    ->whereHas('placements', function ($query33) use ($term) {
+                        $query33->where('Term', $term)->whereNull('is_self_pay_form');
+                    })
+                    ->get();
+                
+                
+                $records_merged[] = $records_1->merge($records_0)->merge($records_2)->merge($records_3);
+            }
+            
+            $arr = [];
+            foreach ($records_merged as $val) {
+                foreach ($val as $balyu) {
+                    $arr[] = $balyu;
+                }
+            }
+            
+            $data = $arr;
+            
+            return response()->json(['data' => $data]);
+        }
+    }
+
+    public function adminExtractData2018(Request $request)
+    {
+        $terms = Repo::whereBetween('Term', ['180' , '190'])->select('Term')->groupBy('Term')->get()->toArray();
+        $array = [];
+        foreach ($terms as $v) {
+            $array[] = $v['Term'];
+        }
+
+        $collect_term = Term::whereIn('Term_Code', $array)->get();
+
+        $records_merged = [];
+
+        foreach ($collect_term as $value) {
+            $term = $value->Term_Code;
+            
+            $records = new Repo;
+            $records = $records->where('Term', $term);
+        
+            $records_1 = $records
+                ->where('DEPT', 'OCHA')
+                ->with('terms')
+                ->with('coursesOld')
+                ->with('languages')
+                ->get();
+
+            $records_merged[] = $records_1;
+        }
+
+        $arr = [];
+        foreach ($records_merged as $val) {
+            foreach ($val as $balyu) {
+                $arr[] = $balyu;
+            }
+        }
+        
+        $data = $arr;
+
+        return response()->json(['data' => $data]);
+    }
+
+
+    public function adminExportMoodle()
+    {
+        $terms = Term::where('Term_Code', '>', '190')->orderBy('Term_Code', 'desc')->get();
+        return view('admin.admin-export-moodle', compact('terms'));
+    }
+
+    public function adminPlacementExportMoodle(Request $request)
+    {
+        if ($request->term) {
+            $term = $request->term;
+            $fromPlacements = Repo::where('Term', $term)
+                ->whereHas('classrooms', function($q3)
+                {
+                    $q3->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                ->whereHas('courses', function($q4)
+                {
+                    $q4->where('level', '!=', '1');
+                })
+                ->whereHas('placements', function($query) use ($term){
+                    $query->where('Term', $term)->whereIn('L', ['A','C','R','S'])->whereNotNull('CodeIndexID');
+                })
+                // ->whereRaw('SUBSTRING(Te_Code, 2, 2) = "1R"')
+                ->whereIn('L', ['A','C','R','S'])
+                ->with('users')->select('INDEXID')->groupBy('INDEXID')->get()->sortBy('INDEXID');
+            
+            $array2 = [];
+            $arr2_exists = [];
+            foreach ($fromPlacements as $value2) {
+                $existing2 = Repo::where('Term', '>', '190')->where('Term', '<', $term)->where('INDEXID', $value2->INDEXID)->exists();
+                if($existing2 === false){
+                    $array2[] = [
+                        'INDEXID' => $value2->INDEXID,
+                        'lastname' => $value2->users->nameLast,
+                        'firstname' => $value2->users->nameFirst,
+                        'email' => $value2->users->email,
+                        // 'Te_Code' => $value2->Te_Code,
+                    ];
+                } else {
+                    $arr2_exists[] = [
+                        'INDEXID' => $value2->INDEXID,
+                        'lastname' => $value2->users->nameLast,
+                        'firstname' => $value2->users->nameFirst,
+                        'email' => $value2->users->email,
+                        // 'Te_Code' => $value2->Te_Code,
+                    ];
+                }
+            }
+    
+            $data = $array2;
+            
+            return response()->json($data);
+        }
+
+    }
+
+    public function adminQueryExportMoodle(Request $request)
+    {
+        if ($request->term) {
+            $term = $request->term;
+            $pash_records = Repo::where('Term', $term)
+                ->whereHas('classrooms', function($q)
+                {
+                    $q->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                // ->where('Te_Code', 'like', "%1R%")
+                // ->where(\DB::raw('substr(Te_Code, 2, 2)'), '=' , '1R')
+                // ->whereRaw('SUBSTRING(Te_Code, 2, 2) = "1R"')
+                // ->whereIn('L', ['A','C','R','S'])
+                ->whereHas('courses', function($q2)
+                {
+                    $q2->where('level', '1');
+                })
+                ->with('users')->select('INDEXID')->groupBy('INDEXID')->get()->sortBy('Te_Code');
+            $array = [];
+            $arr_exists = [];
+            // dd($pash_records);
+            foreach ($pash_records as $key => $value) {
+                $existing = Repo::where('Term', '>', '190')->where('Term', '<', $term)->where('INDEXID', $value->INDEXID)->exists();
+                // $array[] = $existing;
+                if($existing === false){
+                    $array[] = [
+                        'INDEXID' => $value->INDEXID,
+                        'lastname' => $value->users->nameLast,
+                        'firstname' => $value->users->nameFirst,
+                        'email' => $value->users->email,
+                        // 'Te_Code' => $value->Te_Code,
+                    ];
+                } else {
+                    $arr_exists[] = [
+                        'INDEXID' => $value->INDEXID,
+                        'lastname' => $value->users->nameLast,
+                        'firstname' => $value->users->nameFirst,
+                        'email' => $value->users->email,
+                        // 'Te_Code' => $value->Te_Code,
+                    ];
+                }
+            }
+    
+            $data = $array;
+            
+            return response()->json($data);
+        }
+    }
+
     public function adminExcelSchedule()
     {
         $term = Session::get('Term');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Spatie\Permission\Traits\HasRoles;
@@ -30,6 +31,7 @@ class LoginController extends Controller
      * @var string
      */
     // protected $redirectTo = '/home';
+    // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Custom redirect based on Spatie roles

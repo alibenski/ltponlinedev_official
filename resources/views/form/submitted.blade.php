@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| Submitted Forms')
+@section('tabtitle', 'Submitted Forms')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -123,10 +123,19 @@
                                 @endif 
                                 <h4><strong>Enrolment Form # {{ $form->eform_submit_count }}</strong> @if($form->is_self_pay_form == 1)<span class="badge badge-secondary margin-label">Self-Payment-based Form</span> @endif </h4>
                                 <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
-                                
+                                    @if (\Carbon\Carbon::now() < $next_term->Enrol_Date_End)
+                                      @if(is_null($form->deleted_at))
+                                      <div class="col-sm-6">
+                                        <a href={{ route('student-edit-enrolment-form-view', [ $form->Term, $form->INDEXID, $form->Te_Code ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
+                                      </div>
+                                      @endif    
+                                    @endif
+                                    
+                                    @if(is_null($form->deleted_at))
                                     <div class="col-sm-6">
                                         <a id="modbtn" class="btn btn-sm btn-outline-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><i class="fa fa-eye"></i> View Status</a>
                                     </div> 
+                                    @endif
                                     
                                     <div class="col-sm-6">
                                       @component('form.modaldelete')
@@ -257,13 +266,20 @@
                       @endif
                     @endif
                     </p>
-
-                    <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}" class="form-prevent-multi-submit">
+                    @if (\Carbon\Carbon::now() < $next_term->Enrol_Date_End)
+                      @if (is_null($plform->deleted_at))
+                      <div class="col-sm-12">
+                        <a href={{ route('student-edit-placement-form-view', [ $plform->id ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
+                      </div>
+                      @endif
+                    @endif
+                    <div class="col-sm-12">
+                    <form method="POST" action="{{ route('submittedPlacement.destroy', [$plform->INDEXID, $plform->L, $plform->Term, $plform->eform_submit_count]) }}" class="delete-form prevent-submit-form">
                         <input type="submit" @if (is_null($plform->deleted_at))
                           value="Cancel Placement Test"
                         @else
                           value="Cancelled"
-                        @endif  class="btn btn-danger btn-space button-prevent-multi-submit" @if (is_null($plform->deleted_at))
+                        @endif  class="btn btn-danger btn-space prevent-submit-button" @if (is_null($plform->deleted_at))
                           
                         @else
                           disabled="" 
@@ -272,6 +288,7 @@
                         <input type="hidden" name="_token" value="{{ Session::token() }}">
                        {{ method_field('DELETE') }}
                     </form>
+                    </div>
                 </div>
                 </div>
                 <hr>
@@ -333,7 +350,15 @@
           effect: "explode",
           duration: 1000
         }
-      });   
+      }); 
+
+      $('form.delete-form').on('submit', function() {
+        var c = confirm("You are about to cancel a form. Are you sure?");
+        if (c == true) {
+          $('.prevent-submit-button').attr('disabled', 'true');
+        }
+        return c; //you can just return c because it will be true or false
+      });  
   });
 </script>
 

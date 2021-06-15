@@ -96,8 +96,8 @@
                 <th>Action</th>
 			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
-                <th>Current Class</th>
-                <th>Current Teacher</th>
+                <th>Current Class(es)</th>
+                <th>Current Teacher(s)</th>
 		            <th>Enrolled to Course</th>
 		            <th>Language</th>
 		            <th>Email</th>
@@ -110,8 +110,8 @@
                 <th>Action</th>
 			        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
-                <th>Current Class</th>
-                <th>Current Teacher</th>
+                <th>Current Class(es)</th>
+                <th>Current Teacher(s)</th>
 		            <th>Enrolled to Course</th>
 		            <th>Language</th>
 		            <th>Email</th>
@@ -224,11 +224,37 @@
                   "className": "self-paying record_id",
                   render: function (dataField) { return '<h4 class="user-name"><strong>'+dataField+'</strong></h4>'; }
                 }, 
-                { "data": "pash.courses.Description",
-                  "defaultContent": ''
+                // { "data": "pash.courses.Description",
+                //   "defaultContent": ''
+                // }, 
+                { "data": "pash_many",
+                  "defaultContent": '',
+                  "render": function (data) {
+                    var val = [];
+                    $.each(data, function (i,v) {
+                      let css = "bg-success";
+                      if (i % 2 == 0) {
+                        css = "text-primary";
+                      }
+                      val.push('<div class='+css+' style="padding:5px"><strong>'+v['courses']['Description']+'</strong></div><br>');
+                    })
+                    return val.join("");
+                  }
                 }, 
-                { "data": "pash.classrooms.teachers.Tch_Name",
-                  "defaultContent": ''
+                { "data": "pash_many",
+                  "defaultContent": '',
+                  "render": function (data) {
+                    var val = [];
+                    $.each(data, function (i,v) {
+                      let css = "bg-success";
+                      if (i % 2 == 0) {
+                        css = "text-primary";
+                      }
+                      val.push('<div class='+css+' style="padding:5px">'+v['classrooms']['teachers']['Tch_Name']+'</div><br>');
+                      
+                    })
+                    return val.join("");
+                  }
                 }, 
                 { "data": "courses.Description" }, 
                 { "data": "languages.name" }, 

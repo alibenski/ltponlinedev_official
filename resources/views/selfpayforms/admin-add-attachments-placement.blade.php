@@ -1,6 +1,6 @@
 @extends('main_no_nav2')
 
-@section('tabtitle', '| Self-Pay Enrolment Form - Add Attachment')
+@section('tabtitle', 'Self-Pay Enrolment Form - Add Attachment')
 
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

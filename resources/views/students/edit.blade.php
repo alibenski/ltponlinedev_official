@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| Profile')
+@section('tabtitle', 'Profile')
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen"> --}}
@@ -71,6 +71,26 @@
                                     <span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
                                 </div>
                                 <input  name="TITLE" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->TITLE }} @endif" class="form-control"  type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group {{ $errors->has('gender') ? 'is-invalid' : '' }}">
+                            <label for="gender" class="col-md-12 control-label">Gender:</label>
+                            <div class="col-md-12">
+                            <div class="dropdown">
+                                <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" id="gender" name="gender" autocomplete="off">
+                                    <option value="">--- Please Select ---</option>
+                                    <option value="F">Female</option>
+                                    <option value="M">Male</option>
+                                    <option value="O">Other</option>
+                                </select>
+                            </div>
+
+                                @if ($errors->has('gender'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('gender') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
@@ -220,7 +240,7 @@
 <script>
     $(document).ready(function() {
         $('.select2-basic-single').select2({
-          placeholder: "Select Profile",
+          placeholder: "Select from dropdown",
           });
     });
 </script>
@@ -230,7 +250,7 @@
     $(function(){
         $("#updateProfileForm").submit(function(){
             var valid=0;
-            $(this).find('input[type=text], input.datetimepicker-input, #selectInput, select#profile').each(function(){
+            $(this).find('input[type=text], input.datetimepicker-input, #selectInput, select#profile, select#gender').each(function(){
                 if($(this).val() != "") valid+=1;
             });
                         

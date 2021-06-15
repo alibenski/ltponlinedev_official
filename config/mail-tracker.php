@@ -4,7 +4,7 @@ return [
     /**
      * To disable the pixel injection, set this to false.
      */
-    'inject-pixel'=>true,
+    'inject-pixel'=>false,
 
     /**
      * To disable injecting tracking links, set this to false.

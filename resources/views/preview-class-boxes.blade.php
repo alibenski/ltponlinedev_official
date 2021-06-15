@@ -26,7 +26,7 @@
           <i class="ion ion-university"></i>
         </div>
         
-        <a href="{{ route('view-classrooms-per-section', ['Code' => $data->Code]) }}" target="_blank" class="small-box-footer">
+        <a href="{{ route('view-classrooms-per-section', $data->Code) }}" target="_blank" class="small-box-footer">
               More info  <i class="fa fa-arrow-circle-right"></i>
             </a>
 
@@ -49,7 +49,7 @@
           <i class="ion ion-android-hand"></i>
         </div>
         
-        <a href="{{ route('waitListOneList', ['Te_Code' => $element->first()->Te_Code_New]) }}" target="_blank" class="small-box-footer">
+        <a href="{{ route('waitListOneList', $element->first()->Te_Code_New) }}" target="_blank" class="small-box-footer">
               More info  <i class="fa fa-arrow-circle-right"></i>
             </a>
 
@@ -96,7 +96,7 @@
 		});
 		console.log(arr)
 
-		if (arr) {
+		if (arr.length > 0) {
 
 			$.ajax({
 				url: '{{ route('ajax-get-student-count-per-class') }}',
@@ -105,6 +105,9 @@
 			})
 			.done(function(data) {
 				console.log(data);
+				if (data.status == "fail") {
+					alert(data.message);
+				}
 				$.each(data, function(x, y) {
 					$("input[name='Code']").each(function() {
 						if ($(this).val() == x) {
@@ -128,7 +131,7 @@
 		});
 		console.log(arrTeCode)
 
-		if (arrTeCode) {
+		if (arrTeCode.length > 0) {
 
 			$.ajax({
 				url: '{{ route('waitListOneListCount') }}',
@@ -137,6 +140,9 @@
 			})
 			.done(function(data) {
 				console.log(data);
+				if (data.status == "fail") {
+					alert(data.message);
+				}
 				$.each(data, function(x, y) {
 					$("input[name='Te_Code']").each(function() {
 						if ($(this).val() == x) {

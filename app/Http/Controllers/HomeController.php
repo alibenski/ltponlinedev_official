@@ -86,14 +86,6 @@ class HomeController extends Controller
         $current_user = Auth::user()->indexno;
         $term_select = Term::orderBy('Term_Code', 'desc')->get();
 
-        // query the current term based on year and Term_End column is greater than today's date
-        // whereYear('Term_End', $now_year)->first();
-        // $now_date = Carbon::now()->toDateString();
-        // $terms = Term::orderBy('Term_Code', 'desc')
-        //         ->whereDate('Term_End', '>=', $now_date)
-        //         ->get()->min();
-        // $next_term_code = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $terms->Term_Next)->get()->min('Term_Code');
-
         // get the term from the select dropdown 
         $termValue = $request->termValue;
 
@@ -107,18 +99,12 @@ class HomeController extends Controller
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $termValue)
             ->get(['Te_Code', 'Term', 'INDEXID', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter', 'deleted_at', 'eform_submit_count', 'cancelled_by_student']);
-        // ->get(['Te_Code', 'schedule_id' , 'INDEXID' ,'approval','approval_hr', 'DEPT', 'is_self_pay_form', 'continue_bool', 'form_counter','deleted_at', 'eform_submit_count']);
+
         $plforms_submitted = PlacementForm::withTrashed()
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $termValue)
             ->get();
 
-        //$str = $forms_submitted->pluck('Te_Code');
-        //$str_codes = str_replace(['\/','"','[',"]","'" ], '', $str);
-        //$array_codes = explode(',', $str_codes);
-        //var_dump($str);
-        //var_dump($str_codes);
-        //svar_dump($array_codes); 
         $next_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', '=', $termValue)->get()->min();
 
         $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $current_user)->where('Term', $termValue)->get();
@@ -132,8 +118,7 @@ class HomeController extends Controller
         $current_user = Auth::user()->indexno;
         $term_code = $request->term;
         // query submitted forms based from tblLTP_Enrolment table
-        $schedules = Preenrolment::withTrashed()
-            ->where('Te_Code', $request->tecode)
+        $schedules = Preenrolment::where('Te_Code', $request->tecode)
             ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
             ->where('form_counter', $request->form_counter)

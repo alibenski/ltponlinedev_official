@@ -42,6 +42,14 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /**
      * Admin Routes
      */
+    Route::get('admin-export-ocha', 'AdminController@adminExportOcha')->name('admin-export-ocha');
+    Route::get('admin-extract-data', 'AdminController@adminExtractData')->name('admin-extract-data');
+    Route::get('admin-extract-data-2018', 'AdminController@adminExtractData2018')->name('admin-extract-data-2018');
+
+    Route::get('admin-export-moodle', 'AdminController@adminExportMoodle')->name('admin-export-moodle');
+    Route::get('admin-query-export-moodle', 'AdminController@adminQueryExportMoodle')->name('admin-query-export-moodle');
+    Route::get('admin-placement-export-moodle', 'AdminController@adminPlacementExportMoodle')->name('admin-placement-export-moodle');
+
     Route::get('late-user-management', 'Auth\LateRegisterController@lateUserManagement')->name('late-user-management');
     Route::post('generate-URL', ['as' => 'generate-URL', 'uses' => 'Auth\LateRegisterController@generateRandomURL']);
     Route::post('generate-URL-late-enrolment', ['as' => 'generate-URL-late-enrolment', 'uses' => 'LateEnrolmentController@generateRandomURL']);
@@ -112,6 +120,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('teacher-email-classrooms-to-teachers', ['as' => 'teacher-email-classrooms-to-teachers', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachers']);
 
     Route::get('teacher-show-classrooms-per-teacher', ['as' => 'teacher-show-classrooms-per-teacher', 'uses' => 'TeachersController@teacherShowClassroomsPerTeacher']);
+    Route::get('teacher-email-classrooms-to-teachers-view', ['as' => 'teacher-email-classrooms-to-teachers-view', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachersView']);
 
     Route::get('teacher-dashboard', 'TeachersController@teacherDashboard')->name('teacher-dashboard')->middleware('first-time-login');
 
@@ -196,6 +205,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('preview-merged-forms', 'PreviewController@previewMergedForms')->name('preview-merged-forms');
     Route::post('ajax-preview-course-boxes', ['as' => 'ajax-preview-course-boxes', 'uses' => 'PreviewController@ajaxPreviewCourseBoxes']);
     Route::post('ajax-preview-get-student-count', ['as' => 'ajax-preview-get-student-count', 'uses' => 'PreviewController@ajaxPreviewGetStudentCount']);
+    Route::post('ajax-preview-get-pending-placement-count', ['as' => 'ajax-preview-get-pending-placement-count', 'uses' => 'PreviewController@ajaxPreviewGetPendingPlacementCount']);
     Route::post('ajax-preview-get-student-priority-status', ['as' => 'ajax-preview-get-student-priority-status', 'uses' => 'PreviewController@ajaxPreviewGetStudentPriorityStatus']);
     Route::post('ajax-preview-get-student-current-class', ['as' => 'ajax-preview-get-student-current-class', 'uses' => 'PreviewController@ajaxPreviewGetStudentCurrentClass']);
 
@@ -407,6 +417,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/showform', ['as' => 'submitted.show', 'uses' => 'HomeController@showMod']);
         //Route::delete('/delete/user/{staff}/course/{tecode}', ['as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
 
+        Route::get('student-edit-enrolment-form-view/{term}/{indexid}/{tecode}', ['as' => 'student-edit-enrolment-form-view', 'uses' => 'PreenrolmentController@studentEditEnrolmentFormView']);
+        Route::post('student-update-enrolment-form', ['as' => 'student-update-enrolment-form', 'uses' => 'PreenrolmentController@studentUpdateEnrolmentForm']);
+        Route::get('student-edit-placement-form-view/{id}', ['as' => 'student-edit-placement-form-view', 'uses' => 'PlacementFormController@studentEditPlacementFormView']);
+        Route::post('student-update-placement-form', ['as' => 'student-update-placement-form', 'uses' => 'PlacementFormController@studentUpdatePlacementForm']);
+        Route::post('select-ajax-student-edit', ['as' => 'select-ajax-student-edit', 'uses' => 'AjaxController@selectAjaxStudentEdit']);
+
         // cancellation routes with date limit middleware
         Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['middleware' => 'limit-cancel', 'as' => 'submitted.destroy', 'uses' => 'HomeController@destroy'])->where('tecode', '(.*)');
         Route::delete('/delete/user/{staff}/lang/{lang}/term/{term}/{eform}', ['middleware' => 'limit-cancel', 'as' => 'submittedPlacement.destroy', 'uses' => 'HomeController@destroyPlacement'])->where('tecode', '(.*)');
@@ -430,6 +446,7 @@ Route::middleware(['auth'])->group(function () {
 
     // route for student printing certificates
     Route::get('pdfAttestation', ['as' => 'pdfAttestation', 'uses' => 'PrinterController@pdfAttestation']);
+    Route::get('pdfAttestationBefore2019', ['as' => 'pdfAttestationBefore2019', 'uses' => 'PrinterController@pdfAttestationBefore2019']);
 
     Route::get('thankyou', function () {
         return view('thankyou');

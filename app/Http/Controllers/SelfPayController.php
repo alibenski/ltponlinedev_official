@@ -822,6 +822,16 @@ class SelfPayController extends Controller
             'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
             'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
         ));
+
+        if ($request->placementDecisionB === '0') {
+            $this->validate($request, array(
+                'placementLang' => 'required|integer',
+                'agreementBtn' => 'required|',
+                'dayInput' => 'required|',
+                'timeInput' => 'required|',
+                'course_preference_comment' => 'required|',
+            ));
+        }
         // control the number of submitted enrolment forms
         $qryEformCount = Preenrolment::withTrashed()
             ->where('INDEXID', $index_id)
@@ -919,6 +929,7 @@ class SelfPayController extends Controller
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
                 'flexibleBtn' => $flexibleBtn,
+                'std_comments' => $request->regular_enrol_comment,
             ]);
 
             foreach ($ingredients as $data) {

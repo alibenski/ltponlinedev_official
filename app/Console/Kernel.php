@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('queue:restart');
         // run command to execute queued jobs in the jobs table 
         // Log::info("Start queue:work");
-        $work = $schedule->command('queue:work');
+        $work = $schedule->command('queue:work --tries=3');
         // ->cron('* * * * * *')
         // ->withoutOverlapping();
         // Log::info("End queue:work");

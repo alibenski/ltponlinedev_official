@@ -34,7 +34,7 @@
     </div>
     
 
-    <form method="POST" action="{{ route('writing-tips.update', ['id' => $writingTip->id]) }}">
+    <form method="POST" action="{{ route('writing-tips.update', [$writingTip->id]) }}">
 
         <div class="form-group">
             <label for="subject">Subject: </label>

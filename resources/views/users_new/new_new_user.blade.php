@@ -136,10 +136,10 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? 'is-invalid' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Email Address <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            <label for="email" class="col-md-4 control-label">Email address <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                <input id="email" type="email" class="form-control email-input" name="email" value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -282,6 +282,25 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="showModalTitle"><strong> Stop! Before you continue... </strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>If you do not have a <em>@un.org</em> professional/work email address, please enter a personal email address i.e. yahoo, gmail, outlook, etc.</p>
+        <p>Thank you for understanding and complying.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">Yes, I understand</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('java_script')
 <script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
@@ -299,6 +318,14 @@
         showMeridian: 1,
         minView: 2
     });
+    
+    $('.email-input').one('click', function () {
+        $('#showModal').modal('show');
+    });
+
+    $('#showModal').on('hidden.bs.modal', function (e) {
+        $('input.email-input').focus();
+    })
   });
 </script>
 @stop

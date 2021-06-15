@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| Self-Pay Enrolment Form')
+@section('tabtitle', 'Self-Pay Enrolment Form')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -197,12 +197,13 @@
                           <div class="row">
                             <div class="col-md-12 alert alert-danger">
                             <p>Please indicate the time and the days you are available to attend the course. Check/tick all that apply.</p>
+                            <p>For summer term, all days are checked/ticked.</p>
                             </div>
                           </div>
                           <div class="row col-md-12">
                             <div class="otherQuestions col-md-12">
                               <div class="form-group">
-                                <label for="" class="control-label">Time:</label>
+                                <label for="" class="control-label">Time: <span class="text-danger"><em>(required)</em></span></label>
                                 <div class="col-md-12">
                                       <div class="input-group col-md-12">                             
                                         <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
@@ -219,11 +220,15 @@
 
                             <div class="otherQuestions3 col-md-12">
                               <div class="form-group">
-                                <label for="" class="control-label">Day:</label>
+                                <label for="" class="control-label">Day: <span class="text-danger"><em>(required)</em></span></label>
                                 <div class="col-md-12">
                                   @foreach ($days as $id => $name)
                                       <div class="input-group col-md-12">                             
-                                        <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}">
+                                        <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}"
+                                        @if (substr($terms->Term_Code, -1) == '8')
+                                        checked                                            
+                                        @endif
+                                        >
                                         <label for="{{ $name }}" class="form-control-static">{{ $name }}</label>
                                       </div>
                                   @endforeach
@@ -423,7 +428,7 @@
         $(".place-here").hide().append('<label for="scheduleChoices">If you are in Geneva, please select one of the dates shown. If you are outside Geneva, please select the <em>online</em> option.</label>').fadeIn('fast');
       } else {
         $(".alert-placement-instruction").removeClass('hidden');
-        $(".place-here").hide().append('<label for="scheduleChoices">Placement test date(s):</label>').fadeIn('fast');
+        $(".place-here").hide().append('<label for="scheduleChoices">Placement test date(s): <span class="text-danger"><em>(required)</em></span></label>').fadeIn('fast');
       }
 
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');

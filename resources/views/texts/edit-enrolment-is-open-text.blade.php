@@ -8,7 +8,7 @@
 
 <div class='col-md-12'>
 
-    <form method="POST" action="{{ route('store-enrolment-is-open-text', ['id' => $text->id]) }}">
+    <form method="POST" action="{{ route('store-enrolment-is-open-text', [$text->id]) }}">
         <div class="form-group">
             <label for="subject">Subject: </label>
             <input type="text" name="subject" placeholder="@if (is_null($text->subject))

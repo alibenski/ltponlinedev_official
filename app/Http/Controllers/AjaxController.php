@@ -418,6 +418,21 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     * ajax select returns available schedules associated to the course selected in student can edit form
+     */
+    public function selectAjaxStudentEdit(Request $request)
+    {
+        if ($request->ajax()) {
+            $select_schedules = CourseSchedule::where('Te_Code_New', $request->course_id)->where('Te_Term', $request->term_id)
+                //Eager Load scheduler function and pluck using "dot" 
+                ->with('scheduler')->get()->pluck('scheduler.name', 'schedule_id');
+
+            $data = view('ajax-select-student-edit', compact('select_schedules'))->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     public function ajaxCheckEnrolmentEntries()
     {
         if (Auth::check()) {

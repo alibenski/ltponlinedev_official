@@ -162,7 +162,8 @@ body {
     font-size: 80%;
 }
 .bg-img{
-    background-image: url("/img/bg-enrolment.jpg");
+    /* background-image: url("/img/bg-enrolment.jpg"); */
+    background-color: #2a68af;
     background-size: cover;
 }
 /*.btn-bg-img{

@@ -15,7 +15,7 @@
             <div class="col-md-12">
                 <h4><i class="fa fa-arrow-right"></i> {{ $text->name }} Preview</h4> 
                 <a href="{{ route('system-index') }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
-                <a href="{{ route('edit-enrolment-is-open-text', ['id' => $text->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
+                <a href="{{ route('edit-enrolment-is-open-text', [$text->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
             </div>                      
         </div>
     </form> 

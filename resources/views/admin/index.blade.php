@@ -261,6 +261,7 @@
 			<div class="info-box-content">
 				<span class="info-box-text">Preview </span>
 				<span class="info-box-number"></span>
+				<span class="info-box-text" style="font-size: 11px;">Shows total number of enrolments to a course before batch run.</span>
 			</div>
 			<!-- /.info-box-content -->
 			</div>
@@ -330,6 +331,7 @@
 			<div class="info-box-content">
 				<span class="info-box-text">Class Table </span>
 				<span class="info-box-number">@if(Session::has('Term')) @else Set the Term @endif</span>
+				<span class="info-box-text" style="font-size: 11px;">Shows number of students and cancellations per class.</span>
 			</div>
 			<!-- /.info-box-content -->
 			</div>

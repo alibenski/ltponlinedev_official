@@ -15,6 +15,7 @@ use App\Mail\MailtoApprover;
 use App\Mail\cancelConvocation;
 use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailPlacementHR;
+use App\ModifiedForms;
 use App\PlacementForm;
 use App\PlacementSchedule;
 use App\Preenrolment;
@@ -55,6 +56,71 @@ class PlacementFormController extends Controller
         // $this->middleware('opencloseenrolment');
         // $this->middleware('checksubmissioncount');
         // $this->middleware('checkcontinue');
+    }
+
+    public function studentEditPlacementFormView($id)
+    {
+        $enrolment_details = PlacementForm::find($id);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+        $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
+        
+        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details', 'languages', 'days'));
+    }
+
+    public function studentUpdatePlacementForm(Request $request)
+    {
+        // validate fields
+        $this->validate($request, [
+            'L' => 'required|',
+            'placementLang' => 'required',
+            'timeInput' => 'required',
+            'dayInput' => 'required',
+            'course_preference_comment' => 'required',
+            'indexno' => 'required',
+            'term_id' => 'required',
+            'enrolment_id' => 'required',
+        ]);
+        
+        $this->validate($request, [
+            'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
+                        $query->where('L', $request->L)
+                            ->where('INDEXID', $request->indexno)
+                            ->where('Term', $request->term_id)
+                            ->where('deleted_at', NULL);
+                    })
+                ]
+        );
+
+        $placement_form_data = PlacementForm::find($request->enrolment_id);
+        // save history
+        $this->saveModifiedPlacementForm($placement_form_data);
+        // save modifications
+        $placement_form_data->update([
+                'L' => $request->L,
+                'placement_schedule_id' => $request->placementLang,
+                'timeInput' => implode('-', $request->timeInput),
+                'dayInput' => implode('-', $request->dayInput),
+                'course_preference_comment' => $request->course_preference_comment,
+                'modified_by' => Auth::id(),
+            ]);
+
+        if ($request->std_comments != NULL) {
+            $placement_form_data->update(['std_comments' => $request->std_comments]);
+        }
+
+        if ($request->flexibleBtn == 'on') {
+            $placement_form_data->update(['flexibleBtn' => 1]);
+        } else {
+            $placement_form_data->update(['flexibleBtn' => 0]);
+        }
+
+        return redirect()->route('previous-submitted')->with('success', 'Form # '.$placement_form_data->eform_submit_count.' successfully modified.');
+    }
+
+    function saveModifiedPlacementForm($placement_form_data)
+    {
+        $arr = $placement_form_data->attributesToArray();
+        ModifiedForms::create($arr);
     }
 
     /**
@@ -527,7 +593,7 @@ class PlacementFormController extends Controller
     {
         if (!Session::has('Term')) {
             $request->session()->flash('error', 'Term is not set.');
-            return view('admin_dashboard');
+            return redirect()->route('admin_dashboard');
         }
 
         $placement_forms = new PlacementForm;
@@ -1091,6 +1157,9 @@ class PlacementFormController extends Controller
     public function changeSelectedField($enrolment_to_be_copied, $input)
     {
         foreach ($enrolment_to_be_copied as $new_data) {
+            if ($input['radioChangeHRApproval']) {
+                $new_data->overall_approval = $input['approval_hr'];
+            }
             $new_data->fill($input)->save();
         }
     }

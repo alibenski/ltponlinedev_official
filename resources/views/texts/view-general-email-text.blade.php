@@ -17,7 +17,7 @@
             <div class="col-md-12">
                 <h4 class="eczar"><i class="fa fa-arrow-right"></i> Viewing: {{ $text->name }} </h4> 
                 <a href="{{ route('system-index') }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
-                <a href="{{ route('edit-enrolment-is-open-text', ['id' => $text->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
+                <a href="{{ route('edit-enrolment-is-open-text', [$text->id]) }}" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
             </div>                      
         </div>
     </form>

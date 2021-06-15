@@ -10,6 +10,7 @@ use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
 use App\SDDEXTR;
+use App\Teachers;
 use App\Torgan;
 use App\Term;
 use App\Time;
@@ -615,6 +616,11 @@ class UserController extends Controller
             $record->update(['EMAIL' => $request->email]);
         }
 
+        // change e-mail address in the teachers table if profile is a teacher
+        $teacher = Teachers::where('IndexNo', $user->indexno)->first();
+        if ($teacher) {
+            $teacher->update(['email' => $request->email]);
+        }
 
         if (isset($roles)) {
             $user->roles()->sync($roles);  //If one or more role is selected associate user to roles          
@@ -767,7 +773,7 @@ class UserController extends Controller
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => 1,
-                'flexibleBtn' => 1,
+                'flexibleBtn' => null,
                 'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
@@ -973,7 +979,7 @@ class UserController extends Controller
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => 1,
-                'flexibleBtn' => 1,
+                'flexibleBtn' => null,
                 'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,

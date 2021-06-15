@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| Profile')
+@section('tabtitle', 'Profile')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 @stop
@@ -57,6 +57,20 @@
 
                             <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty ( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->TITLE }} @endif</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="gender" class="col-md-4 col-form-label">Gender:</label>
+
+                            <div class="col-md-8 font-weight-bold">
+                                <p>@if(empty ( Auth::user()->sddextr )) Update Needed 
+                                    @else 
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "M") Male @endif
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "F") Female @endif
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "O") Other @endif
+                                    @endif
+                                </p>
                             </div>
                         </div>
 

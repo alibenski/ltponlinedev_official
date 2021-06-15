@@ -36,7 +36,7 @@
 							{{ $element->DEPT }}
 						</td>
 						<td>
-							<a href="{{ route('preview-classrooms', ['Code' => $element->Code]) }}" target="_blank" class="small-box-footer" title="Go to the class list">{{$element->courses->Description }} <i class="fa fa-external-link-square"></i></a>
+							<a href="{{ route('preview-classrooms', $element->Code) }}" target="_blank" class="small-box-footer" title="Go to the class list">{{$element->courses->Description }} <i class="fa fa-external-link-square"></i></a>
 						</td>
 						<td>
 							@if(empty($element->deleted_at)) None @else {{$element->deleted_at }} @endif

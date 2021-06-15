@@ -1,5 +1,5 @@
 @extends('main')
-@section('tabtitle', '| Placement Test Form')
+@section('tabtitle', 'Placement Test Form')
 @section('customcss')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">

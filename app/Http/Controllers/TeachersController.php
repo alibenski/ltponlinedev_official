@@ -29,19 +29,24 @@ use Spatie\Permission\Models\Role;
 
 class TeachersController extends Controller
 {
-    public function teacherDashboard()
+    public function teacherDashboard(Request $request)
     {
+        if ( Auth::user()->hasRole('Teacher')) {
+            $terms = Term::orderBy('Term_Code', 'desc')->get();
+            $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
+                ->where('Te_Term', Session::get('Term'))
+                ->get();
+            $all_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
+                ->where('Tch_ID', '!=', 'TBD')
+                ->where('Te_Term', Session::get('Term'))
+                ->get();
 
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
-        $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
-            ->where('Te_Term', Session::get('Term'))
-            ->get();
-        $all_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
-            ->where('Tch_ID', '!=', 'TBD')
-            ->where('Te_Term', Session::get('Term'))
-            ->get();
+            return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
+        }
 
-        return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
+        $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');
+        return redirect()->route('home');
+
     }
 
     public function teacherSearchUser()
@@ -55,7 +60,7 @@ class TeachersController extends Controller
             $users = User::search($query)->paginate(20);
             $users->appends($queries);
             if ($users->getCollection()->count() == 0) {
-                return redirect()->route('teachers.teacher_search_user')->with('users', $users)->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
+                return redirect()->route('teacher-search-user')->with('users', $users)->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
             }
 
             return view('teachers.teacher_search_user')->with('users', $users);
@@ -247,6 +252,43 @@ class TeachersController extends Controller
         }
 
         return view('teachers.teacher_show_classrooms_per_teacher', compact('terms'));
+    }
+
+    public function teacherEmailClassroomsToTeachersView(Request $request)
+    {
+        if ($request->session()->has('Term')) {
+            $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
+            $languages = Language::all();
+
+            // get all teachers with a class of the selected term
+            $queryTeachers = Teachers::whereHas('classrooms', function ($query) use ($request) {
+                $query->where('Te_Term', $request->session()->get('Term'))
+                    ->whereNotNull('Tch_ID')
+                    ->where('Tch_ID', '!=', 'TBD');
+            })
+                ->with(['classrooms' => function ($q) use ($request) {
+                    $q->where('Te_Term', $request->session()->get('Term'))
+                        ->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD')
+                        ->with('course')
+                        ->with('scheduler');
+                }])
+                ->orderBy('Tch_L', 'asc')
+                ->get();
+
+            $recipients = [];
+            foreach ($queryTeachers as $teacher) {
+                $recipients[] = $teacher->email;
+            }
+
+            if ($selectedTerm->Comments === 'SUMMER') {
+                return view('emails.emailSummerClassroomsToTeachers', compact('languages', 'queryTeachers', 'selectedTerm'));
+            } else {
+                return view('emails.emailClassroomsToTeachers', compact('languages', 'queryTeachers', 'selectedTerm'));
+            }
+        }
+
+        return 'Please set the term first.';
     }
 
     public function teacherShowClassroomsPerTeacher(Request $request)

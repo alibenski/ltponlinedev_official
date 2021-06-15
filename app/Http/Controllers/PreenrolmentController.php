@@ -23,10 +23,94 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Session;
 
 class PreenrolmentController extends Controller
 {
+    public function studentEditEnrolmentFormView($term, $indexid, $tecode)
+    {
+        // get id(s) of form
+        $enrolment = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc');
+        $enrolment_details = $enrolment->get();
+        $enrolment_id = $enrolment->select('id')->get();
+        
+        $enrolment_id_array = [];
+        foreach ($enrolment_id as $value) {
+            $enrolment_id_array[] = $value->id;
+        }
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+
+        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array'));
+    }
+
+    public function studentUpdateEnrolmentForm(Request $request)
+    {
+        $this->validate($request, [
+            'term_id' => 'required',
+            'L' => 'required',
+            'course_id' => 'required',
+            'schedule_id' => 'required',
+            'indexno' => 'required',
+            'enrolment_id' => 'required',
+        ]);
+        
+        $codeIndexId = $request->course_id.'-'.$request->schedule_id.'-'.$request->term_id.'-'.$request->indexno;
+        $request->merge(['CodeIndexID' => $codeIndexId]);
+        $this->validate($request, array(
+            'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use ($request) {
+                $uniqueCodex = $request->CodeIndexID;
+                $query->where('CodeIndexID', $uniqueCodex)
+                    ->where('deleted_at', NULL);
+            })
+        ));
+       
+        $flexibleBtn = 1;
+        if(!isset($request->flexibleBtn)) {
+            $flexibleBtn = NULL;
+        }
+
+        $enrolment_forms_to_be_modified = Preenrolment::whereIn('id', $request->enrolment_id)->orderBy('id', 'asc')->get();
+
+        foreach ($enrolment_forms_to_be_modified as $data) {   
+            $arr = $data->attributesToArray();
+            $record = ModifiedForms::create($arr);
+            // ModifiedForms::where('auto_id', $record->id)->update(['modified_by' => Auth::id()]);
+
+            $data->update([
+                'L' => $request->L,
+                'Te_Code' => $request->course_id,
+                'Term' => $request->term_id,
+                'schedule_id' => $request->schedule_id,
+                'CodeIndexID' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno,
+                'Code' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id,
+                'flexibleBtn' => $flexibleBtn,
+                'modified_by' => Auth::id(),
+            ]);
+
+            if ($request->regular_enrol_comment != NULL) {
+                $data->update(['std_comments' => $request->regular_enrol_comment]);
+            }
+        }
+
+        if (count($request->enrolment_id) > 1) {
+            $delform = Preenrolment::withTrashed()
+                ->whereIn('id', $request->enrolment_id)
+                ->orderBy('id', 'desc')
+                ->first();
+            $delform->Code = null;
+            $delform->CodeIndexID = null;
+            $delform->Te_Code = null;
+            $delform->INDEXID = null;
+            $delform->Term = null;
+            $delform->schedule_id = null;
+            $delform->save();
+            $delform->delete();
+        } 
+
+        return redirect()->route('previous-submitted')->with('success', 'Form successfully modified.');
+    }
+
     public function queryOrphanFormsToAssign(Request $request)
     {
         if (Session::has('Term')) {
