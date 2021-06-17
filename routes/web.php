@@ -513,6 +513,7 @@ Route::get('ajax-convert-to-regular', ['as' => 'ajax-convert-to-regular', 'uses'
 Route::get('ajax-show-language-dropdown', ['as' => 'ajax-show-language-dropdown', 'uses' => 'AjaxController@ajaxShowLanguageDropdown']);
 Route::put('ajax-exclude-from-billing', ['as' => 'ajax-exclude-from-billing', 'uses' => 'AjaxController@ajaxExcludeFromBilling']);
 Route::get('ajax-select-country', ['as' => 'ajax-select-country', 'uses' => 'AjaxController@ajaxSelectCountry']);
+Route::get('ajax-file-attach-badge-cdl', ['as' => 'ajax-file-attach-badge-cdl', 'uses' => 'AjaxController@ajaxFileAttachBadgeCdl']);
 
 
 // ajax use to get section number of cs_unique

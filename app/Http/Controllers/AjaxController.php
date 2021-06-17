@@ -35,6 +35,15 @@ class AjaxController extends Controller
         }
     }
 
+    public function ajaxFileAttachBadgeCdl(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('ajax-file-attach-badge-cdl')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     public function ajaxExcludeFromBilling(Request $request)
     {
         if ($request->ajax()) {
