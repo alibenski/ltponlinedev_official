@@ -516,6 +516,8 @@ Route::get('ajax-select-country', ['as' => 'ajax-select-country', 'uses' => 'Aja
 Route::get('ajax-file-attach-badge-cdl', ['as' => 'ajax-file-attach-badge-cdl', 'uses' => 'AjaxController@ajaxFileAttachBadgeCdl']);
 Route::get('ajax-file-attach-msu', ['as' => 'ajax-file-attach-msu', 'uses' => 'AjaxController@ajaxFileAttachMSU']);
 Route::get('ajax-file-attach-spouse', ['as' => 'ajax-file-attach-spouse', 'uses' => 'AjaxController@ajaxFileAttachSpouse']);
+Route::get('ajax-file-attach-spouse-1', ['as' => 'ajax-file-attach-spouse-1', 'uses' => 'AjaxController@ajaxFileAttachSpouse1']);
+Route::get('ajax-file-attach-spouse-2', ['as' => 'ajax-file-attach-spouse-2', 'uses' => 'AjaxController@ajaxFileAttachSpouse2']);
 Route::get('ajax-file-attach-retired', ['as' => 'ajax-file-attach-retired', 'uses' => 'AjaxController@ajaxFileAttachRetired']);
 Route::get('ajax-file-attach-serv', ['as' => 'ajax-file-attach-serv', 'uses' => 'AjaxController@ajaxFileAttachServ']);
 Route::get('ajax-file-attach-press', ['as' => 'ajax-file-attach-press', 'uses' => 'AjaxController@ajaxFileAttachPress']);

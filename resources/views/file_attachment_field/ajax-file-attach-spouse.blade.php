@@ -1,12 +1,58 @@
 <div class="form-group{{ $errors->has('contractfile') ? 'is-invalid' : '' }}">
-    <label for="contractfile" class="col-md-12 control-label"><strong>For spouses, please provide either of the following:</strong> <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span> <br />Copy of spouse badge or <br/> Copy of spouse carte de légitimation or <br/>Copies of proof of marriage + spouse badge or spouse carte de légitimation </label>
+    <label for="contractfile" class="col-md-12 control-label"><strong>For spouses, please tick the box of the document(s) you will be providing:</strong> <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span> </label>
+
     <div class="col-md-12">
-    <input name="contractfile" type="file" class="col-md-12 form-control-static" required="required">
-        @if ($errors->has('contractfile'))
-            <span class="alert alert-danger help-block">
-                <strong>{{ $errors->first('contractfile') }}</strong>
-            </span>
-        @endif
-        <p class="small text-danger"><strong>File size must be less than 8MB <br/>Only accepts files with pdf, doc, docx extensions</strong></p>
+        <div class="form-check col-md-12">
+            <input class="form-check-input" type="radio" name="spouseRadio" id="spouseRadio1" value=1>
+            <label class="form-check-label" for="spouseRadio1">
+                Copy of spouse badge or copy of spouse carte de légitimation
+            </label>
+        </div>
+        <div class="form-check col-md-12">
+            <input class="form-check-input" type="radio" name="spouseRadio" id="spouseRadio2" value=2>
+            <label class="form-check-label" for="spouseRadio2">
+                Copies of proof of marriage + UN staff badge or UN staff carte de légitimation 
+            </label>
+        </div>
     </div>
+
+    <div class="spouse-file-section"></div>
 </div>
+
+<script>
+    $("input[name='spouseRadio']").on("click", function () {
+        var spouseChoice = $(this).val();
+        console.log(spouseChoice);
+        if (spouseChoice == 1) {
+            showFileAttachSpouse1();
+        }
+        else if (spouseChoice == 2) {
+            showFileAttachSpouse2();
+        }         
+        else {
+            $("div.spouse-file-section").html("");
+        }
+    });
+
+    function showFileAttachSpouse1() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-spouse-1') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("div.spouse-file-section").html("");
+            $("div.spouse-file-section").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachSpouse2() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-spouse-2') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("div.spouse-file-section").html("");
+            $("div.spouse-file-section").html(data.options);
+            }
+        }); 
+    }
+</script>

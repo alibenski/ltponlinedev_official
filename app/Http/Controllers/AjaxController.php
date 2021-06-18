@@ -62,6 +62,24 @@ class AjaxController extends Controller
         }
     }
 
+    public function ajaxFileAttachSpouse1(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-spouse-1')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachSpouse2(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-spouse-2')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     public function ajaxFileAttachRetired(Request $request)
     {
         if ($request->ajax()) {
