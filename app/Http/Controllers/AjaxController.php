@@ -39,7 +39,52 @@ class AjaxController extends Controller
     {
         if ($request->ajax()) {
             
-            $data = view('ajax-file-attach-badge-cdl')->render();
+            $data = view('file_attachment_field.ajax-file-attach-badge-cdl')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachMSU(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-msu')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachSpouse(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-spouse')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachRetired(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-retired')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachServ(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-serv')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachPress(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-press')->render();
             return response()->json(['options' => $data]);
         }
     }

@@ -514,6 +514,11 @@ Route::get('ajax-show-language-dropdown', ['as' => 'ajax-show-language-dropdown'
 Route::put('ajax-exclude-from-billing', ['as' => 'ajax-exclude-from-billing', 'uses' => 'AjaxController@ajaxExcludeFromBilling']);
 Route::get('ajax-select-country', ['as' => 'ajax-select-country', 'uses' => 'AjaxController@ajaxSelectCountry']);
 Route::get('ajax-file-attach-badge-cdl', ['as' => 'ajax-file-attach-badge-cdl', 'uses' => 'AjaxController@ajaxFileAttachBadgeCdl']);
+Route::get('ajax-file-attach-msu', ['as' => 'ajax-file-attach-msu', 'uses' => 'AjaxController@ajaxFileAttachMSU']);
+Route::get('ajax-file-attach-spouse', ['as' => 'ajax-file-attach-spouse', 'uses' => 'AjaxController@ajaxFileAttachSpouse']);
+Route::get('ajax-file-attach-retired', ['as' => 'ajax-file-attach-retired', 'uses' => 'AjaxController@ajaxFileAttachRetired']);
+Route::get('ajax-file-attach-serv', ['as' => 'ajax-file-attach-serv', 'uses' => 'AjaxController@ajaxFileAttachServ']);
+Route::get('ajax-file-attach-press', ['as' => 'ajax-file-attach-press', 'uses' => 'AjaxController@ajaxFileAttachPress']);
 
 
 // ajax use to get section number of cs_unique

@@ -322,10 +322,27 @@
 
     $("select[name='profile']").on("change", function () {
         let profileChoice = $("select[name='profile']").val();
+        const profileArray1 = ["STF", "INT", "CON", "WAE", "JPO"];
         console.log(profileChoice);
-        if (profileChoice == "STF") {
+        if ($.inArray(profileChoice, profileArray1) >= 0) {
             showFileAttach();
-        } else {
+        }
+        else if (profileChoice == "MSU") {
+            showFileAttachMSU();
+        } 
+        else if (profileChoice == "SPOUSE") {
+            showFileAttachSpouse();
+        } 
+        else if (profileChoice == "RET") {
+            showFileAttachRetired();
+        } 
+        else if (profileChoice == "SERV") {
+            showFileAttachServ();
+        } 
+        else if (profileChoice == "PRESS") {
+            showFileAttachPress();
+        } 
+        else {
             $("#attachSection").html("");
         }
     });
@@ -333,6 +350,61 @@
     function showFileAttach() {
         $.ajax({
             url: "{{ route('ajax-file-attach-badge-cdl') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachMSU() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-msu') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachSpouse() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-spouse') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachRetired() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-retired') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachServ() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-serv') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachPress() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-press') }}", 
             method: 'GET',
             success: function(data, status) {
             $("#attachSection").html("");
