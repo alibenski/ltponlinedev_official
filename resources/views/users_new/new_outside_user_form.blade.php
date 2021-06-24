@@ -145,6 +145,7 @@
                         </div>
 
                         <div id="countrySection"></div>
+                        <div id="ngoSection"></div>
                         
                         <div class="form-group{{ $errors->has('title') ? 'is-invalid' : '' }}">
                             <label for="title" class="col-md-12 control-label">Title <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span></label>
@@ -433,7 +434,16 @@
             }
         });  
     }
-    
+
+    $("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "NGO") {
+            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoInput' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoInput' type='text' class='form-control' name='ngoInput' placeholder='Enter NGO agency name' required></div></div></div>");
+        } else {
+            $("#ngoSection").html("");
+        }
+    });
+
     // $('.email-input').one('click', function () {
     //     $('#showModal').modal('show');
     // });

@@ -300,9 +300,12 @@ class NewUserController extends Controller
             // 'student_cat' => 'required|',
             'dob' => 'required',
             'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'g-recaptcha-response' => 'required|captcha',
+            // 'g-recaptcha-response' => 'required|captcha',
         ));
 
+        if ($request->contractfile2) {
+            dd($request->all());
+        }
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('contractfile')) {
             $request->file('contractfile');
