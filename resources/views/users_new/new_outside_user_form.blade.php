@@ -55,6 +55,7 @@
     </style>
 @stop
 @section('content')
+@include('partials._messages')
 @if (Session::has('warning')) 
     <div class="alert alert-warning alert-block text-center" role="alert">
         <strong>Note: </strong> {{ Session::get('warning') }}
@@ -93,29 +94,9 @@
                         
                         <div class="form-group{{ $errors->has('profile') ? 'is-invalid' : '' }}">
                             <label for="profile" class="col-md-12 control-label">Profile <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span></label>
-                            <div class="col-md-12">
-                            <div class="dropdown">
-                                <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" name="profile" autocomplete="off" required="">
-                                    <option value="">--- Please Select ---</option>
-                                    <option value="STF">Staff Member</option>
-                                    <option value="INT">Intern</option>
-                                    <option value="CON">Consultant</option>
-                                    <option value="WAE">When Actually Employed</option>
-                                    <option value="JPO">JPO</option>
-                                    <option value="MSU">Staff of Permanent Mission</option>
-                                    <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
-                                    <option value="RET">Retired UN Staff Member</option>
-                                    <option value="SERV">Staff of Service Organizations in the Palais</option>
-                                    <option value="PRESS">Staff of UN-accredited NGO's and Press Corps</option>
-                                </select>
-                            </div>
 
-                                @if ($errors->has('profile'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('profile') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+                            @include('ajax-profile-select')
+                        
                         </div>
 
                         <div id="attachSection"></div>
@@ -340,6 +321,9 @@
         else if (profileChoice == "SERV") {
             showFileAttachServ();
         } 
+        else if (profileChoice == "NGO") {
+            showFileAttachNgo();
+        } 
         else if (profileChoice == "PRESS") {
             showFileAttachPress();
         } 
@@ -403,6 +387,17 @@
         }); 
     }
 
+    function showFileAttachNgo() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-ngo') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
     function showFileAttachPress() {
         $.ajax({
             url: "{{ route('ajax-file-attach-press') }}", 
@@ -438,7 +433,7 @@
     $("select[name='org']").on("change", function () {
         let choice = $("select[name='org']").val();
         if (choice == "NGO") {
-            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoInput' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoInput' type='text' class='form-control' name='ngoInput' placeholder='Enter NGO agency name' required></div></div></div>");
+            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
         } else {
             $("#ngoSection").html("");
         }

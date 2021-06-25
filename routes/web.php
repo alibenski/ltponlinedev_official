@@ -520,6 +520,7 @@ Route::get('ajax-file-attach-spouse-1', ['as' => 'ajax-file-attach-spouse-1', 'u
 Route::get('ajax-file-attach-spouse-2', ['as' => 'ajax-file-attach-spouse-2', 'uses' => 'AjaxController@ajaxFileAttachSpouse2']);
 Route::get('ajax-file-attach-retired', ['as' => 'ajax-file-attach-retired', 'uses' => 'AjaxController@ajaxFileAttachRetired']);
 Route::get('ajax-file-attach-serv', ['as' => 'ajax-file-attach-serv', 'uses' => 'AjaxController@ajaxFileAttachServ']);
+Route::get('ajax-file-attach-ngo', ['as' => 'ajax-file-attach-ngo', 'uses' => 'AjaxController@ajaxFileAttachNgo']);
 Route::get('ajax-file-attach-press', ['as' => 'ajax-file-attach-press', 'uses' => 'AjaxController@ajaxFileAttachPress']);
 
 

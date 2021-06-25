@@ -98,6 +98,15 @@ class AjaxController extends Controller
         }
     }
 
+    public function ajaxFileAttachNgo(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-ngo')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     public function ajaxFileAttachPress(Request $request)
     {
         if ($request->ajax()) {
