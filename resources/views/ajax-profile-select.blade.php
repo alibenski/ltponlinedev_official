@@ -1,6 +1,6 @@
 <div class="col-md-12">
   <div class="dropdown">
-      <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" name="profile" autocomplete="off" required="">
+      <select id="profile" class="col-md-12 form-control select-profile-single" style="width: 100%;" name="profile" autocomplete="off" required="required">
           <option value="">--- Please Select ---</option>
           <option value="STF">Staff Member</option>
           <option value="INT">Intern</option>

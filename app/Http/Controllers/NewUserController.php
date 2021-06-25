@@ -143,6 +143,10 @@ class NewUserController extends Controller
         }
     }
 
+    /**
+     * getNewNewUser method not used 
+     * automation to check index to Umoja not ready
+     */
     public function getNewNewUser()
     {
         $cat = DB::table('LTP_Cat')->pluck("Description", "Cat")->all();
@@ -151,6 +155,10 @@ class NewUserController extends Controller
         return view('users_new.new_new_user', compact('cat', 'student_status', 'org'));
     }
 
+    /**
+     * postNewNewUser method not used 
+     * automation to check index to Umoja not ready
+     */
     public function postNewNewUser(Request $request)
     {
         //validate the data

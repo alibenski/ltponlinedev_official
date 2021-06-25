@@ -53,28 +53,7 @@
 
           <div class="form-group{{ $errors->has('profile') ? 'is-invalid' : '' }}">
               <label for="profile">Profile:</label>
-              <select name="profile" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
-                  <option></option>
-                  <option value="STF">Staff Member</option>
-                  <option value="INT">Intern</option>
-                  <option value="CON">Consultant</option>
-                  <option value="WAE">When Actually Employed</option>
-                  <option value="JPO">JPO</option>
-                  <option value="MSU">Staff of Permanent Mission</option>
-                  <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
-                  <option value="RET">Retired UN Staff Member</option>
-                  <option value="SERV">Staff of Service Organizations in the Palais</option>
-                  <option value="NGO">Staff of UN-accredited NGO's</option>
-                  <option value="PRESS">Staff of UN Press Corps</option>
-              </select>
-
-              <div class="col-md-6">
-                  @if ($errors->has('profile'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('profile') }}</strong>
-                      </span>
-                  @endif
-              </div>
+              @include('ajax-profile-select')
           </div>
 
           <div class="form-group{{ $errors->has('title') ? 'is-invalid' : '' }}">

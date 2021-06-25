@@ -227,6 +227,9 @@
         $('.select2-basic-single').select2({
           placeholder: "Select from dropdown",
           });
+        $('.select-profile-single').select2({
+          placeholder: "Select Profile",
+          });
     });
 </script>
 

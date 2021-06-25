@@ -13,149 +13,144 @@
     <hr>
 	    <form method="POST" action="{{ route('teachers.store') }}">
         {{ csrf_field() }}
+        <div class="col-md-12">
           <!-- MAKE A DECISION SECTION -->
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Does the teacher have a valid Index from Umoja?</h3>
-          </div>
-          <div class="panel-body">
-          <div class="form-group">
-
-                  <div class="col-sm-12">
-                            <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required" autocomplete="off">
-                            <label for="decision1" class="form-control-static">Yes</label>
-                  </div>
-
-                  <div class="col-sm-12">
-                            <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required" autocomplete="off">
-                            <label for="decision2" class="form-control-static">No</label>
-                  </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Does the teacher have a valid Index from Umoja?</h3>
             </div>
+            <div class="panel-body">
+            <div class="form-group">
 
-            <div class="indexno-section hidden"> {{-- start of hidden fields --}}
+                    <div class="col-sm-12">
+                              <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required" autocomplete="off">
+                              <label for="decision1" class="form-control-static">Yes</label>
+                    </div>
 
-              <div class="form-group">
-                <label class="control-label">Index: </label>
-                <input name="indexno" type="text" class="form-control" value="">
+                    <div class="col-sm-12">
+                              <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required" autocomplete="off">
+                              <label for="decision2" class="form-control-static">No</label>
+                    </div>
               </div>
 
-            </div> {{-- end of hidden fields --}}
+              <div class="indexno-section hidden"> {{-- start of hidden fields --}}
 
-            <div class="message-section hidden"> {{-- start of hidden fields --}}
+                <div class="form-group">
+                  <label class="control-label">Index: </label>
+                  <input name="indexno" type="text" class="form-control" value="">
+                </div>
 
-              <div class="form-group">
-                <h4><span class="label label-info">EXT Index will be generated automatically</span></h4>
-              </div>
+              </div> {{-- end of hidden fields --}}
 
-            </div> {{-- end of hidden fields --}}
-          </div>
-        </div> {{-- end of panel --}}
+              <div class="message-section hidden"> {{-- start of hidden fields --}}
 
+                <div class="form-group">
+                  <h4><span class="label label-info">EXT Index will be generated automatically</span></h4>
+                </div>
+
+              </div> {{-- end of hidden fields --}}
+            </div>
+          </div> {{-- end of panel --}}
+        </div>
           <div class="form-group{{ $errors->has('profile') ? 'is-invalid' : '' }}">
               <label for="profile">Profile:</label>
-              <select name="profile" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
-                  <option></option>
-                  <option value="STF">Staff Member</option>
-                  <option value="INT">Intern</option>
-                  <option value="CON">Consultant</option>
-                  <option value="WAE">When Actually Employed</option>
-                  <option value="JPO">JPO</option>
-                  <option value="MSU">Staff of Permanent Mission</option>
-                  <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
-                  <option value="RET">Retired UN Staff Member</option>
-                  <option value="SERV">Staff of Service Organizations in the Palais</option>
-                  <option value="NGO">Staff of UN-accredited NGO's</option>
-                  <option value="PRESS">Staff of UN Press Corps</option>
-              </select>
-
-              <div class="col-md-6">
-                  @if ($errors->has('profile'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('profile') }}</strong>
-                      </span>
-                  @endif
-              </div>
+              @include('ajax-profile-select')
           </div>
 
           <div class="form-group{{ $errors->has('title') ? 'is-invalid' : '' }}">
               <label for="title">Title:</label>
-              <select name="title" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
-                  <option></option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Ms.">Ms.</option>
-              </select>
+              <div class="col-md-12">
+                <select name="title" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
+                    <option></option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Ms.">Ms.</option>
+                </select>
 
-              <div class="col-md-6">
-                  @if ($errors->has('title'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('title') }}</strong>
-                      </span>
-                  @endif
+                <div class="col-md-6">
+                    @if ($errors->has('title'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('title') }}</strong>
+                        </span>
+                    @endif
+                </div>
               </div>
           </div>
 
           <div class="form-group">
             <label class="control-label">First Name: </label>
+            <div class="col-md-12">
   				  <input name="nameFirst" type="text" class="form-control" value="{{ old('nameFirst') }}">
+            </div>
           </div>
 
           <div class="form-group">
             <label class="control-label">Last Name: </label>
+            <div class="col-md-12">
             <input name="nameLast" type="text" class="form-control" value="{{ old('nameLast') }}">
+            </div>
           </div>
 
           <div class="form-group">
             <label class="control-label">Email: </label>
+            <div class="col-md-12">
   				  <input name="email" type="email" class="form-control" value="{{ old('email') }}" readonly onfocus="this.removeAttribute('readonly');">
+            </div>
           </div>
 
 			    <div class='form-group'>
 			    		<label class="control-label">Role: </label>
-              <div class="checkbox">
-                  <label>
-                    @foreach ($roles as $role)
-                      <input type="checkbox" name="roles[]" value="{{ $role->id }}" /><strong>{{ ucfirst($role->name) }}</strong>
-                      <br>
-                    @endforeach
-                  </label>
-						  </div>
+              <div class="col-md-12">
+                <div class="checkbox">
+                    <label>
+                      @foreach ($roles as $role)
+                        <input type="checkbox" name="roles[]" value="{{ $role->id }}" /><strong>{{ ucfirst($role->name) }}</strong>
+                        <br>
+                      @endforeach
+                    </label>
+                </div>
+              </div>
 			    </div>
 
           <div class='form-group'>
               <label class="control-label">Language: </label>
               <div class="checkbox">
+                <div class="col-md-12">
                   <label>
                     @foreach ($languages as $language)
                       <input type="checkbox" name="L" value="{{ $language->code }}" /><strong>{{ ucfirst($language->name) }}</strong>
                       <br>
                     @endforeach
                   </label>
+                </div>
               </div>
           </div>
 
           <div class="form-group{{ $errors->has('gender') ? 'is-invalid' : '' }}">
               <label for="gender" class=" control-label">Gender</label>
-              <div class="dropdown">
-                  <select class="form-control select2-basic-single" style="width: 50%;" name="gender" autocomplete="off" >
-                      <option value="">--- Please Select ---</option>
-                      <option value="F">Female</option>
-                      <option value="M">Male</option>
-                  </select>
-              </div>
+              <div class="col-md-12">
+                <div class="dropdown">
+                    <select class="form-control select2-basic-single" style="width: 50%;" name="gender" autocomplete="off" >
+                        <option value="">--- Please Select ---</option>
+                        <option value="F">Female</option>
+                        <option value="M">Male</option>
+                    </select>
+                </div>
 
-              <div class="col-md-6">
-                  {{-- <input id="gender" type="text" class="form-control" name="gender" value="{{ old('gender') }}" required autofocus> --}}
+                <div class="col-md-6">
+                    {{-- <input id="gender" type="text" class="form-control" name="gender" value="{{ old('gender') }}" required autofocus> --}}
 
-                  @if ($errors->has('gender'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('gender') }}</strong>
-                      </span>
-                  @endif
+                    @if ($errors->has('gender'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('gender') }}</strong>
+                        </span>
+                    @endif
+                </div>
               </div>
           </div>
 
           <div class="form-group{{ $errors->has('org') ? 'is-invalid' : '' }}">
               <label for="org" class=" control-label">Organization</label>
+              <div class="col-md-12">
 
                   {{-- <input id="org" type="text" class="form-control" name="org" value="{{ old('org') }}" required autofocus> --}}
 
@@ -175,11 +170,12 @@
                           <strong>{{ $errors->first('org') }}</strong>
                       </span>
                   @endif
+              </div>
           </div>
           
           <div class="form-group{{ $errors->has('dob') ? 'is-invalid' : '' }}">
               <label for="dob" class="control-label">Date of Birth <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
-
+              <div class="col-md-12">
 
                   <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="dob">
                   <input class="form-control" size="16" type="text" value="" readonly>
@@ -193,12 +189,12 @@
                           <strong>{{ $errors->first('dob') }}</strong>
                       </span>
                   @endif
-
+              </div>
           </div>
 
           <div class="form-group{{ $errors->has('contact_num') ? 'is-invalid' : '' }}">
               <label for="contact_num" class=" control-label">Contact Number</label>
-
+                <div class="col-md-12">
                   <input id="contact_num" type="text" class="form-control" name="contact_num" value="{{ old('contact_num') }}" required autofocus>
 
                   @if ($errors->has('contact_num'))
@@ -206,6 +202,7 @@
                           <strong>{{ $errors->first('contact_num') }}</strong>
                       </span>
                   @endif
+                </div>
           </div>
 
           <div class="form-group">
