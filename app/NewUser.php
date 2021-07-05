@@ -18,7 +18,11 @@ class NewUser extends Model
     ];
 
 	public function filesId() {
-    return $this->belongsTo('App\FileNewUser', 'attachment_id'); 
-    }      
+        return $this->belongsTo('App\FileNewUser', 'attachment_id'); 
+    }
+    
+    public function filesId2() {
+        return $this->belongsTo('App\FileNewUser', 'attachment_id_2'); 
+    } 
 
 }

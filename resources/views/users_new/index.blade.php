@@ -73,7 +73,7 @@
                 <input type="hidden" class="form-control" id="id_show" disabled>
                 <div class="form-group class-list"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

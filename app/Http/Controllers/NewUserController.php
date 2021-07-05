@@ -449,56 +449,83 @@ class NewUserController extends Controller
             $newUser->updated_by = Auth::user()->id;
             $newUser->save();
 
+            $request->session()->flash('warning', 'Applicant has been rejected.');
             return redirect()->route('newuser.index');
         }
 
-        // check if there is a duplicate in Auth users table
-        $this->validate($request, array(
-            'indexno' => 'required|unique:users,indexno',
-            'email' => 'unique:users,email',
-        ));
-        $this->validate($request, array(
-            'indexno' => 'unique:SDDEXTR,INDEXNO_old',
-            'email' => 'unique:SDDEXTR,EMAIL',
-        ));
+        if ($request->submit == 3) {
+            // get emailText and send email
+            dd($request->all());
 
-        $newUser = NewUser::findOrFail($id);
-        $newUser->approved_account = 1;
-        $newUser->updated_by = Auth::user()->id;
-        $newUser->save();
+            // save pending status
+            $newUser = NewUser::findOrFail($id);
+            $newUser->approved_account = 3;
+            $newUser->updated_by = Auth::user()->id;
+            $newUser->save();
 
-        // save entry to Auth table
-        $user = User::create([
-            'indexno_old' => $request->indexno,
-            'indexno' => $request->indexno,
-            'email' => $request->email,
-            'profile' => $request->profile,
-            'nameFirst' => $request->nameFirst,
-            'nameLast' => strtoupper($request->nameLast),
-            'name' => $request->nameFirst . ' ' . strtoupper($request->nameLast),
-            'password' => Hash::make('Welcome2CLM'),
-            'must_change_password' => 1,
-            'approved_account' => 1,
-        ]);
-        // send email with credentials
-        $sddextr_email_address = $request->email;
-        Mail::to($request->email)->send(new SendAuthMail($sddextr_email_address));
+            $request->session()->flash('warning', 'Applicant account has been set to pending.');
+            return redirect()->route('newuser.index');
+        }
 
-        // save entry to SDDEXTR table
-        $sddextr = SDDEXTR::create([
-            'INDEXNO_old' => $request->indexno,
-            'INDEXNO' => $request->indexno,
-            'TITLE' => $request->title,
-            'FIRSTNAME' => $request->nameFirst,
-            'LASTNAME' => strtoupper($request->nameLast),
-            'SEX' => $request->gender,
-            'DEPT' => $request->org,
-            'PHONE' => $request->contact_num,
-            'BIRTH' => $request->dob,
-            'EMAIL' => $request->email,
-        ]);
+        if ($request->submit == 1) {
+            dd($request->all());
+            // check if there is a duplicate in Auth users table
+            $this->validate($request, array(
+                'indexno' => 'required|unique:users,indexno',
+                'email' => 'unique:users,email',
+            ));
+            $this->validate($request, array(
+                'indexno' => 'unique:SDDEXTR,INDEXNO_old',
+                'email' => 'unique:SDDEXTR,EMAIL',
+            ));
+    
+            $newUser = NewUser::findOrFail($id);
+            $newUser->approved_account = 1;
+            $newUser->updated_by = Auth::user()->id;
+            $newUser->save();
+    
+            // save entry to Auth table
+            $user = User::create([
+                'indexno_old' => $request->indexno,
+                'indexno' => $request->indexno,
+                'email' => $request->email,
+                'profile' => $request->profile,
+                'nameFirst' => $request->nameFirst,
+                'nameLast' => strtoupper($request->nameLast),
+                'name' => $request->nameFirst . ' ' . strtoupper($request->nameLast),
+                'password' => Hash::make('Welcome2CLM'),
+                'must_change_password' => 1,
+                'approved_account' => 1,
+            ]);
+            // send email with credentials
+            $sddextr_email_address = $request->email;
+            Mail::to($request->email)->send(new SendAuthMail($sddextr_email_address));
+    
+            // save entry to SDDEXTR table
+            $sddextr = SDDEXTR::create([
+                'INDEXNO_old' => $request->indexno,
+                'INDEXNO' => $request->indexno,
+                'TITLE' => $request->title,
+                'FIRSTNAME' => $request->nameFirst,
+                'LASTNAME' => strtoupper($request->nameLast),
+                'SEX' => $request->gender,
+                'DEPT' => $request->org,
+                'PHONE' => $request->contact_num,
+                'BIRTH' => $request->dob,
+                'EMAIL' => $request->email,
+            ]);
 
+            $request->session()->flash('success', 'User account approved.');
+            return redirect()->route('newuser.index');
+        }
+
+        $request->session()->flash('error', 'Nothing happened.');
         return redirect()->route('newuser.index');
+    }
+
+    public function emailNewUser($email, $emailText)
+    {
+        // send email if new user application is pending or rejected
     }
 
     /**

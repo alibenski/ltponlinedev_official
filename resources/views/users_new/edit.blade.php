@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-sm-12">
-		<form method="POST" action="{{ route('newuser.update', $new_user_info->id) }}" class="form-prevent-multi-submit">
+		<form method="POST" action="{{ route('newuser.update', $new_user_info->id) }}" class="form-prevent-multi-submit" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="{{$new_user_info->id}}">
 	        {{ csrf_field() }}
 	        <div class="form-group">
@@ -18,10 +18,42 @@
 	            <button type="button" id="generateExtIndex" class="btn btn-info">Generate EXT index number</button>
 	            <input id="ExtIndex" type="hidden" value="{{ $ext_index }}">
 	        </div>
+
+			<div class="form-group">
+	            <label class="control-label">Profile: {{ old('profile', $new_user_info->profile) }}</label>
+	            {{-- <input type="text" class="form-control" disabled value="{{ old('profile', $new_user_info->profile) }}"> --}}
+	        </div>
 			
 			<div class="form-group">
-	            <label class="control-label">Title: </label>
-	            <input name="title" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('title', $new_user_info->title) }}">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
+					@include('ajax-profile-select')
+				</div>
+			</div>
+
+			<div class="form-group">
+	            <label class="control-label">Title: {{ old('title', $new_user_info->title) }}</label>
+			</div>
+
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
+					<div class="col-md-12">
+						<div class="dropdown">
+							<select class="col-md-12 form-control select2" style="width: 100%;" name="title" autocomplete="off" >
+								<option value=""> Change Title Here If Needed </option>
+								<option value="Ms.">Ms.</option>
+								<option value="Mr.">Mr.</option>
+							</select>
+						</div>
+
+						@if ($errors->has('title'))
+							<span class="help-block">
+								<strong>{{ $errors->first('title') }}</strong>
+							</span>
+						@endif
+					</div>
+				</div>
 	        </div>
 
 	        <div class="form-group">
@@ -56,16 +88,41 @@
                     </div> 
 	        </div>	
 
+			<div id="countrySection"></div>
+            <div id="ngoSection"></div>
+
 	        <div class="form-group">
-	            <label class="control-label">DOB: </label>
+	            <label class="control-label">DOB: <span class="text-danger">field cannot be changed</span></label>
 	            <input name="dobstring" class="form-control" readonly value="@if(empty($new_user_info->dob)) @else {{ $new_user_info->dob->format('F d, Y') }} @endif"> 
 	            <input name="dob" type="hidden" class="form-control" readonly value="@if(empty($new_user_info->dob)) @else {{ $new_user_info->dob }} @endif"> 
 	        </div>	
 			
 			<div class="form-group">
-	            <label class="control-label">Gender: </label>
-	            <input name="gender" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('gender', $new_user_info->gender) }}">
+	            <label class="control-label">Gender: @if ($new_user_info->gender == 'M') Male @elseif($new_user_info->gender == 'F') Female @elseif($new_user_info->gender == 'O') Other @else NULL @endif </label>
+	            {{-- <input name="gender" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value=""> --}}
 	        </div>
+
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
+					<div class="col-md-12">
+						<div class="dropdown">
+							<select class="col-md-12 form-control select2" style="width: 100%;" name="gender" autocomplete="off">
+								<option value="">--- Please Select ---</option>
+								<option value="F">Female</option>
+								<option value="M">Male</option>
+								<option value="O">Other</option>
+							</select>
+						</div>
+						
+						@if ($errors->has('gender'))
+						<span class="help-block">
+							<strong>{{ $errors->first('gender') }}</strong>
+						</span>
+						@endif
+					</div>
+				</div>
+			</div>
 
 	        <div class="form-group">
 	            <label class="control-label">Contact #: </label>
@@ -73,15 +130,46 @@
 	        </div>
 			
 			<div class="form-group">
-	            <label class="control-label">Attachment: </label>
-	            @if(empty($new_user_info->filesId->path)) <strong>None</strong> @else <a href="{{ Storage::url($new_user_info->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<label class="control-label">Attachment 1: </label>
+						@if(empty($new_user_info->filesId->path)) <strong>None</strong> @else <a href="{{ Storage::url($new_user_info->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+		
+						<div class="form-group">
+							<label class="control-label col-sm-12">Attach another file to replace attachment 1: </label>
+							<input name="contractfile" type="file" class="col-md-12 form-control-static mb-1">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group ">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<label class="control-label">Attachment 2: </label>
+						@if(empty($new_user_info->filesId2->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($new_user_info->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+						
+						<div class="form-group">
+							<label class="control-label col-sm-12">Attach another file to replace attachment 2: </label>
+							<input name="contractfile2" type="file" class="col-md-12 form-control-static mb-1">
+						</div>
+					</div>
+				</div>
 	        </div>
-			<div class="alert alert-danger">
-				<span><i class="fa fa-info-circle"></i> Please reject if duplicate</span>
+
+			<div class="form-group">
+				<label class="control-label">Email Text: </label>
+				<textarea class="form-control" name="emailText" cols="40" rows="3" placeholder="Email text here"></textarea>
+			</div>
+
+			<div class="form-group">
+				<div class="alert alert-danger">
+					<span><i class="fa fa-info-circle"></i> Please reject if applicant is a duplicate</span>
+				</div>
 			</div>
 
 	        <button type="submit" name="submit" value="2" class="btn btn-danger btn-space "><span class="glyphicon glyphicon-remove"></span>  Reject</button>
-
+	        <button type="submit" name="submit" value="3" class="btn btn-warning btn-space "><span class="glyphicon glyphicon-time"></span>  Send Email and Set to Pending</button>
 			<button type="submit" name="submit" value="1" class="btn btn-success btn-space "><span class="glyphicon glyphicon-check"></span>  Save and Approve</button>
 
 	        <input type="hidden" name="_token" value="{{ Session::token() }}">
@@ -91,11 +179,48 @@
 </div>
 
 <script>
+	$('.select2').select2({
+		placeholder: "Change Here If Needed",
+	});
+
 	$('.select2-basic-single').select2({
-	dropdownParent: $('#showModal')
+		dropdownParent: $('#showModal'),
 	});
 	$("#generateExtIndex").on('click', function(event) {
 		var ExtIndex = $("#ExtIndex").val(); 
 		$('input[name="indexno"]').val(ExtIndex);
 	});
+	$('.select-profile-single').select2({
+		placeholder: "Change Here If Needed",
+	});
+	$('.select-profile-single').removeAttr('required');
+	$("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "MSU") {
+            getCountry();
+        } else {
+            $("#countrySection").html("");
+        }
+    });
+
+    function getCountry() {
+        $.ajax({
+            url: "{{ route('ajax-select-country') }}", 
+            method: 'GET',
+            success: function(data, status) {
+                console.log(data)
+            $("#countrySection").html("");
+            $("#countrySection").html(data.options);
+            }
+        });  
+    }
+
+    $("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "NGO") {
+            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name:  </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+        } else {
+            $("#ngoSection").html("");
+        }
+    });
 </script>
