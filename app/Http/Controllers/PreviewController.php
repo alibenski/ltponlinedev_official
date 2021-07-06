@@ -97,6 +97,8 @@ class PreviewController extends Controller
 
         $placement_forms = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
         ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+        ->whereNull('CodeIndexID')
+        ->where('overall_approval', 1)
         ->where('L', $request->languageSelected)
         ->where('Term', $term)
         ->get()->count();
