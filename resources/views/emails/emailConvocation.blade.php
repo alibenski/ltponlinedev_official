@@ -231,12 +231,12 @@
                                         @endforeach
                                     </p>
                                     <br>
-                                    <p style="text-align: justify">
+                                    <!--<p style="text-align: justify">
                                         * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.</span>
-                                    </p>
+                                    </p>-->
                                         
                                     <p style="text-align: justify">
-                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions. This is not applicable to courses initially advertised as online.
+                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -292,14 +292,15 @@
                                         The mode of communication to use with your teacher outside of your class time is email. The teachers are working very hard, but they also need time for themselves and/or their families; therefore, please be aware that they are not available 24/7. Thank you for your understanding. 
                                     </p>
 
-                                    <p style="text-align: justify">
+                                    <!--<p style="text-align: justify">
                                         Please read carefully the <strong>information before start of term</strong> on our website (<a href="https://learning.unog.ch/node/1472">click here</a>).
-                                    </p>
+                                    </p>-->
+                                    
                                     <p style="text-align: justify">
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p style="text-align: justify">
-                                        <u>If you are unable to attend the first week of the term</u>, you must inform your teacher and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
+                                        <u>If you are unable to attend the first two days of the term</u>, you must inform your teacher and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first two days of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
                                     <p style="color: red;text-align: justify;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/node/1301#position5">here</a>.
@@ -369,12 +370,12 @@
                                         @endforeach
                                     </p>
                                     <br>
-                                    <p style="text-align: justify">
+                                    <!--<p style="text-align: justify">
                                         * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.</span>
-                                    </p>
+                                    </p>-->
                                         
                                     <p style="text-align: justify">
-                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage. Sauf pour les cours annoncés comme étant en ligne.
+                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -427,14 +428,14 @@
                                         Le mode de communication avec votre professeur en dehors de vos heures de cours est le courrier électronique. Les enseignants travaillent très dur, mais ils ont également besoin de se reposer et de prendre du temps pour eux ou leur famille ; vous comprendrez donc qu'ils ne sont pas disponibles 24 heures sur 24, 7 jours sur 7. Nous vous remercions de votre compréhension. 
                                     </p>
 
-                                    <p style="text-align: justify">
+                                    <!--<p style="text-align: justify">
                                         Veuillez lire attentivement <strong>les informations avant le début du trimestre</strong> disponibles sur notre site web en cliquant <a href="https://learning.unog.ch/fr/node/1472">ici</a>.
-                                    </p>
+                                    </p>-->
                                     <p style="text-align: justify">
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p>
                                     <p style="text-align: justify">
-                                        Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
+                                        Si vous ne pouvez pas être présent(e)s les deux premiers jours du trimestre, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s les deux premiers jours du trimestre peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
                                     </p>    
                                     <p style="color: red;text-align: justify;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit(e) à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/fr/node/1301#position5">ici</a>.
