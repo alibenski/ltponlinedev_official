@@ -59,7 +59,7 @@ class sendConvocation extends Mailable
         return $this->view('emails.emailConvocation')
                 ->subject('Your Language Training Course : '.$this->term_season_en.' '.$this->term_year.' - '.$this->course_name_en.' / Votre cours de langue : '.$this->term_season_fr.' '.$this->term_year.' - '.$this->course_name_fr )
                 ->from('do_not_reply_ltp_online@unog.ch', 'CLM Language')
-                ->replyTo('clm_language@un.org')
+                ->replyTo('do_not_reply_ltp_online@unog.ch')
                 ->priority(1);
     }
 }
