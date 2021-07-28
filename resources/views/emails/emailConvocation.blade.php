@@ -296,9 +296,9 @@
                                     {{-- <p style="text-align: justify">
                                         The mode of communication to use with your teacher outside of your class time is email. The teachers are working very hard, but they also need time for themselves and/or their families; therefore, please be aware that they are not available 24/7. Thank you for your understanding. 
                                     </p> --}}
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         If you encounter any issue with your registration in the above mentioned course, please fill the <a href="https://learning.unog.ch/contact-us">contact form</a>. 
-                                    </p>
+                                    </p> --}}
 
                                     <!--<p style="text-align: justify">
                                         Please read carefully the <strong>information before start of term</strong> on our website (<a href="https://learning.unog.ch/node/1472">click here</a>).
@@ -323,7 +323,7 @@
                                         If you have any question please contact us at: <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
                                     </p>    --}}
                                     <p style="margin: 0;text-align: justify;">
-                                        If you have any question, please visit our <a href="https://learning.unog.ch/node/1301">FAQ’s</a>. If you don’t find the answer, please fill out a <a href="https://learning.unog.ch/contact-us">contact form</a>. 
+                                        If you have any question, please visit our <a href="https://learning.unog.ch/node/1301#position8">FAQs</a>. 
                                     </p>   
                                     <br> 
                                     <p>
@@ -349,7 +349,7 @@
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
                                     <p>Cher / Chère {{ $staff_name }},</p>
                                     <p style="text-align: justify">
-                                        Nous avons le plaisir de vous informer que vous êtes inscrit·e avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
+                                        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
                                     </p>
                                     
                                     <p>
@@ -446,9 +446,9 @@
                                     {{-- <p style="text-align: justify">
                                         Le mode de communication avec votre professeur en dehors de vos heures de cours est le courrier électronique. Les enseignants travaillent très dur, mais ils ont également besoin de se reposer et de prendre du temps pour eux ou leur famille ; vous comprendrez donc qu'ils ne sont pas disponibles 24 heures sur 24, 7 jours sur 7. Nous vous remercions de votre compréhension. 
                                     </p> --}}
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez nous contacter via le <a href="https://learning.unog.ch/fr/node/25">formulaire de contact</a>. 
-                                    </p>
+                                    </p> --}}
 
                                     <!--<p style="text-align: justify">
                                         Veuillez lire attentivement <strong>les informations avant le début du trimestre</strong> disponibles sur notre site web en cliquant <a href="https://learning.unog.ch/fr/node/1472">ici</a>.
@@ -472,7 +472,7 @@
                                         Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
                                     </p> --}}
                                     <p style="margin: 0;text-align: justify;">
-                                        Si vous avez des questions, merci de consulter nos <a href="https://learning.unog.ch/fr/node/1301">FAQ</a> et si vous ne trouvez pas la réponse, nous contacter via le <a href="https://learning.unog.ch/fr/node/25">formulaire de contact</a>.
+                                        Si vous avez des questions, merci de consulter nos <a href="https://learning.unog.ch/fr/node/1301#position8">FAQ</a>.
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
