@@ -231,12 +231,12 @@
                                         @endforeach
                                     </p>
                                     <br>
-                                    <!--<p style="text-align: justify">
+                                    <p style="text-align: justify">
                                         * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.</span>
-                                    </p>-->
+                                    </p>
                                         
                                     <p style="text-align: justify">
-                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions.
+                                        Please note that the group size will be exceptionally reduced from 15 to 12 or 13 participants in most courses to offer you better learning conditions. This is not applicable to courses initially advertised as online.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -246,7 +246,7 @@
                                         <li>
                                             <p style="text-align: justify">
                                             <b>Microsoft Teams</b> <br>
-                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the same time as your course, as indicated above. Further details about how to join your session will be sent by your teachers before the beginning of the term.
+                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the time indicated above. Further details about how to join your session will be sent by your teacher before the beginning of the term.
                                             </p>
                                         </li>
 
@@ -255,13 +255,18 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    <u>A couple of days before the beginning of the term</u>, you can find your learning material and autonomous activities on the CLM e-learning platform Moodle. Before you start your class, go to the platform: <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, make sure to log in to your course to familiarize yourself with the content and access the materials that we are going to use during the class.
+                                                    <u>Once notified by your teacher</u>, you will find your learning material and autonomous activities on the CLM e-learning Moodle platform at <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Before you start your class, make sure to log in to your course to familiarize yourself with the content and access the training materials.
                                                 </li>
                                                 {{-- <li style="text-align: justify">
                                                     Update your profile by adding a picture in your profile.
                                                 </li> --}}
-                                                <li style="text-align: justify">
+                                                {{-- <li style="text-align: justify">
                                                     If you are new to the Language Training Programme and don’t have your Moodle access yet, you will receive your credentials and the log-in instructions by email before your first class. 
+                                                </li> --}}
+                                                <li style="text-align: justify">
+                                                    If you don’t have a Moodle access yet, please use the following credentials to log in:
+                                                    <br />- Username: first part before the @  of your email address (ex. “psmith” is the username for psmith@un.org) 
+                                                    <br />- Default password: Welcome2U_2021# (you will be asked to change it when you log in)
                                                 </li>
                                             </ul>
                                             </p>
@@ -288,19 +293,22 @@
                                         </li>
                                     </ol>
 
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         The mode of communication to use with your teacher outside of your class time is email. The teachers are working very hard, but they also need time for themselves and/or their families; therefore, please be aware that they are not available 24/7. Thank you for your understanding. 
+                                    </p> --}}
+                                    <p style="text-align: justify">
+                                        If you encounter any issue with your registration in the above mentioned course, please fill the <a href="https://learning.unog.ch/contact-us">contact form</a>. 
                                     </p>
 
                                     <!--<p style="text-align: justify">
                                         Please read carefully the <strong>information before start of term</strong> on our website (<a href="https://learning.unog.ch/node/1472">click here</a>).
                                     </p>-->
                                     
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
-                                    </p>
+                                    </p> --}}
                                     <p style="text-align: justify">
-                                        <u>If you are unable to attend the first two days of the term</u>, you must inform your teacher and the Language Training secretariat in advance by email at clm_language@un.org. Participants who do not attend class during the first two days of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
+                                        <u>If you are unable to attend the first week of the term</u>, you must inform your teacher by email before the term starts. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
                                     <p style="color: red;text-align: justify;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/node/1301#position5">here</a>.
@@ -311,21 +319,27 @@
                                     <p style="text-align: justify">
                                         A technical reason for not having been able to cancel on time will not be considered as a valid reason for re-imbursement nor a reason for not charging your organization. Thank you for your understanding.
                                     </p>
-                                    <p style="margin: 0;text-align: justify;">
+                                    {{-- <p style="margin: 0;text-align: justify;">
                                         If you have any question please contact us at: <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
+                                    </p>    --}}
+                                    <p style="margin: 0;text-align: justify;">
+                                        If you have any question, please visit our <a href="https://learning.unog.ch/node/1301">FAQ’s</a>. If you don’t find the answer, please fill out a <a href="https://learning.unog.ch/contact-us">contact form</a>. 
                                     </p>   
                                     <br> 
                                     <p>
                                         The Language Training Programme wishes you a rich learning experience next term.
                                     </p>
                                     <br><br>
-                                    <p>
+                                    {{-- <p>
                                         <h4><strong>Language Training Secretariat</strong></h4>
                                         Annex Bocage 2 - Room 5 (ground floor) - we are available via email or on the phone<br>
                                         <br>
                                         Opening hours : 9:00-12:30 from Monday to Friday.<br>
                                         Telephone: 00 41 22 917 44 09<br><br>
                                         <a href="https://learning.unog.ch/">https://learning.unog.ch/</a>
+                                    </p> --}}
+                                    <p>
+                                        To know more, visit our website at <a href="https://learning.unog.ch/language-index">https://learning.unog.ch/language-index</a>
                                     </p>
                                     <hr>
                                 </td>
@@ -370,12 +384,12 @@
                                         @endforeach
                                     </p>
                                     <br>
-                                    <!--<p style="text-align: justify">
+                                    <p style="text-align: justify">
                                         * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.</span>
-                                    </p>-->
+                                    </p>
                                         
                                     <p style="text-align: justify">
-                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage.
+                                        Veuillez noter que la taille des groupes sera exceptionnellement réduite de 15 à 12 -13 participants dans la plupart des cours afin de vous offrir de meilleures conditions d'apprentissage, sauf pour les cours annoncés comme étant en ligne.
                                     </p>
 
                                     <p style="text-align: justify">
@@ -394,10 +408,15 @@
                                             <b>Moodle</b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
-                                                    <u>Quelques jours avant le début de votre cours</u>, vous pouvez trouver votre matériel d'apprentissage et vos activités autonomes sur la plateforme d'apprentissage en ligne Moodle du CFM. Avant de commencer votre cours, rendez-vous sur la plateforme : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel que nous allons utiliser pendant le cours.
+                                                    <u>Lorsque vous en serez informé(e) par votre professeur(e)</u>, vous trouverez votre matériel d'apprentissage et vos activités en autonomie sur la plateforme d'apprentissage Moodle du CFM : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Avant de commencer votre cours, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel de formation.
                                                 </li>
-                                                <li style="text-align: justify">
+                                                {{-- <li style="text-align: justify">
                                                     Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
+                                                </li> --}}
+                                                <li style="text-align: justify">
+                                                    Si vous n'avez pas encore votre accès à Moodle, veuillez vous connecter avec les identifiants suivants :
+                                                    <br />- Nom d’utilisateur : la première partie avant le @ de votre adresse email (ex. “psmith” pour psmith@un.org) 
+                                                    <br />- Mot de passe par défaut : Welcome2U_2021# (vous devrez le modifier lors de la première connexion)
                                                 </li>
                                             </ul>
                                             </p>
@@ -424,18 +443,21 @@
                                         </li>
                                     </ol>
 
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         Le mode de communication avec votre professeur en dehors de vos heures de cours est le courrier électronique. Les enseignants travaillent très dur, mais ils ont également besoin de se reposer et de prendre du temps pour eux ou leur famille ; vous comprendrez donc qu'ils ne sont pas disponibles 24 heures sur 24, 7 jours sur 7. Nous vous remercions de votre compréhension. 
+                                    </p> --}}
+                                    <p style="text-align: justify">
+                                        Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez nous contacter via le <a href="https://learning.unog.ch/fr/node/25">formulaire de contact</a>. 
                                     </p>
 
                                     <!--<p style="text-align: justify">
                                         Veuillez lire attentivement <strong>les informations avant le début du trimestre</strong> disponibles sur notre site web en cliquant <a href="https://learning.unog.ch/fr/node/1472">ici</a>.
                                     </p>-->
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
-                                    </p>
+                                    </p> --}}
                                     <p style="text-align: justify">
-                                        Si vous ne pouvez pas être présent(e)s les deux premiers jours du trimestre, vous devez en informer à l’avance votre professeur et le secrétariat du Programme de formation linguistique à clm_language@un.org. Les participant(e)s absent(e)s les deux premiers jours du trimestre peuvent se voir désinscrit(e)s du cours et leur place peut être donnée aux participant(e)s de la liste d’attente.
+                                        Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.
                                     </p>    
                                     <p style="color: red;text-align: justify;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit(e) à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/fr/node/1301#position5">ici</a>.
@@ -446,21 +468,27 @@
                                     <p style="text-align: justify">
                                         En cas de retard dans l’annulation, la raison technique ne sera pas considérée comme valable pour le remboursement, ni pour une non-facturation de votre organisation. Merci de votre compréhension.
                                     </p>
-                                    <p style="margin: 0;text-align: justify;">
+                                    {{-- <p style="margin: 0;text-align: justify;">
                                         Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto: clm_language@un.org">clm_language@un.org</a>.
+                                    </p> --}}
+                                    <p style="margin: 0;text-align: justify;">
+                                        Si vous avez des questions, merci de consulter nos <a href="https://learning.unog.ch/fr/node/1301">FAQ</a> et si vous ne trouvez pas la réponse, nous contacter via le <a href="https://learning.unog.ch/fr/node/25">formulaire de contact</a>.
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
                                         Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage pour le prochain trimestre.
                                     </p>
                                     <br><br>
-                                    <p>
+                                    {{-- <p>
                                         <h4><strong>Secrétariat du Programme de formation linguistique</strong></h4>
                                         Annexe Bocage II - bureau 5 (Rez-de-chaussée) – vous pouvez nous joindre par email ou par téléphone<br>
                                         <br>
                                         Heures d’ouverture: 9:00-12:30 du lundi au vendredi.<br>
                                         Téléphone: + 41 22 917 44 09<br><br>
                                         <a href="https://learning.unog.ch/">https://learning.unog.ch/</a>
+                                    </p> --}}
+                                    <p>
+                                        Pour en savoir plus, rendez-vous sur notre site web : <a href="https://learning.unog.ch/fr/language-index">https://learning.unog.ch/fr/language-index</a>
                                     </p>
                                 </td>
                             </tr>
