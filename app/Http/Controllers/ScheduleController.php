@@ -44,7 +44,7 @@ class ScheduleController extends Controller
         $schedules = Schedule::all();
         $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->all();
         $btimes = Time::pluck("Begin_Time", "Begin_Time")->all();
-        $etimes = Time::pluck("End_Time", "End_Time")->all();
+        $etimes = Time::orderBy("End_Time")->pluck("End_Time", "End_Time")->all();
         return view('schedules.create', compact('schedules', 'days', 'btimes', 'etimes'));
     }
 
