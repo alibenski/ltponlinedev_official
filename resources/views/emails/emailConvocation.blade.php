@@ -252,7 +252,7 @@
 
                                         <li>
                                             <p style="text-align: justify">
-                                            <b>Moodle</b> <br>
+                                            <b><a href="https://moodle.unog.ch/unog/login/index.php">Moodle</a></b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
                                                     <u>Once notified by your teacher</u>, you will find your learning material and autonomous activities on the CLM e-learning Moodle platform at <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Before you start your class, make sure to log in to your course to familiarize yourself with the content and access the training materials.
@@ -289,6 +289,12 @@
                                                     When attending the course, close all other applications and files. This will ensure that you focus on the content of the course as if you were attending a face-to-face course and will not overload the bandwidth.
                                                 </li>
                                             </ul>
+                                            </p>
+                                        </li>
+
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>Books and training materials:</b> please find <a href="https://learning.unog.ch/node/1443">here the list of books and materials</a> that you need to acquire before your class starts
                                             </p>
                                         </li>
                                     </ol>
@@ -405,7 +411,7 @@
 
                                         <li>
                                             <p style="text-align: justify">
-                                            <b>Moodle</b> <br>
+                                            <b><a href="https://moodle.unog.ch/unog/login/index.php">Moodle</a></b> <br>
                                             <ul>
                                                 <li style="text-align: justify">
                                                     <u>Lorsque vous en serez informé(e) par votre professeur(e)</u>, vous trouverez votre matériel d'apprentissage et vos activités en autonomie sur la plateforme d'apprentissage Moodle du CFM : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Avant de commencer votre cours, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel de formation.
@@ -439,6 +445,12 @@
                                                     Lorsque vous assistez au cours, fermez toutes les autres applications et tous les autres dossiers. Cela vous permettra de vous concentrer sur le contenu du cours comme si vous suiviez un cours en face à face et de ne pas surcharger la bande passante.
                                                 </li>
                                             </ul>
+                                            </p>
+                                        </li>
+
+                                        <li>
+                                            <p style="text-align: justify">
+                                            <b>Livres et matériel :</b> veuillez trouver <a href="https://learning.unog.ch/fr/node/1443">ici la liste des livres</a> à se procurer avant le premier cours.
                                             </p>
                                         </li>
                                     </ol>
