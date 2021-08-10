@@ -35,7 +35,7 @@ class sendBroadcastEnrolmentIsOpen extends Mailable
         $text = Text::find(1);
         
         return $this->view('emails.sendBroadcastEnrolmentIsOpen', compact('text'))
-                    ->from('do_not_reply_clm_language@unog.ch', 'CLM Language')
+                    ->from('do_not_reply_ltp_online@unog.ch', 'CLM Language')
                     ->priority(1)
                     ->subject($text->subject);
     }

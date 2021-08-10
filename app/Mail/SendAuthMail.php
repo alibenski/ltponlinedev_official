@@ -30,7 +30,7 @@ class SendAuthMail extends Mailable
     public function build()
     {
         return $this->view('emails.sendAuthMail')
-            ->from('clm_language@unog.ch', 'CLM Language')
+            ->from('do_not_reply_ltp_online@unog.ch', 'CLM Language')
             ->bcc('clm_language@un.org')
             ->priority(1)
             ->subject("Welcome to the UNOG-CLM LTP Online Enrolment Platform - Bienvenue sur la plateforme d'inscription en ligne de ONUG-CFM");

@@ -42,9 +42,9 @@ class cancelConvocation extends Mailable
     {
         return $this->view('emails.cancelConvocation')
                 ->subject($this->subject)
-                ->from('clm_language@unog.ch', 'CLM Language')
+                ->from('do_not_reply_ltp_online@unog.ch', 'CLM Language')
                 ->bcc('clm_language@unog.ch')
-                ->replyTo('clm_language@un.org')
+                ->replyTo('do_not_reply_ltp_online@unog.ch')
                 ->priority(1);
     }
 }
