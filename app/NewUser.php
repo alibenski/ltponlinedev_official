@@ -25,4 +25,12 @@ class NewUser extends Model
         return $this->belongsTo('App\FileNewUser', 'attachment_id_2'); 
     } 
 
+    public function countryMission() {
+        return $this->belongsTo('App\Country', 'country_mission'); 
+    } 
+
+    public function newUserComments() {
+        return $this->hasMany('App\NewUserComments', 'new_user_id', 'id'); 
+    } 
+
 }

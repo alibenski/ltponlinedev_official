@@ -58,23 +58,32 @@
 
 	        <div class="form-group">
 	            <label class="control-label">First Name: </label>
-	            <input name="nameFirst" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('nameFirst', $new_user_info->nameFirst) }}">
+	            <input name="nameFirst" type="text" class="form-control" value="{{ old('nameFirst', $new_user_info->nameFirst) }}">
 	        </div>
 	
 			<div class="form-group">
 	            <label class="control-label">Last Name: </label>
-	            <input name="nameLast" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('nameLast', $new_user_info->nameLast) }}">
+	            <input name="nameLast" type="text" class="form-control" value="{{ old('nameLast', $new_user_info->nameLast) }}">
 	        </div>
 
 	        <div class="form-group">
 	            <label class="control-label">Email: </label>
-	            <input name="email" type="email" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email', $new_user_info->email) }}"> 
+	            <input name="email" type="email" class="form-control" value="{{ old('email', $new_user_info->email) }}"> 
 	        </div>		        
 	        
 	        <div class="form-group">
 	            <label class="control-label">Organization: </label>
+				<br />
+				<strong>
+				@if ($new_user_info->org == "MSU")
+					{{ $new_user_info->org }} - {{ $new_user_info->countryMission->ABBRV_NAME }}
+				@endif
+				@if ($new_user_info->org == "NGO")
+					{{ $new_user_info->org }} - {{ $new_user_info->ngo_name }}
+				@endif
+				</strong>
 	            <div class="dropdown">
-                      <select id="org" name="org" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+                      <select id="org" name="org" class="col-md-8 form-control select2-org-single" style="width: 100%;" required="required">
                         @if(!empty($org))
                           @foreach($org as $value)
                           	@if (old('org', $new_user_info->org) == $value['Org name'])
@@ -157,6 +166,15 @@
 				</div>
 	        </div>
 
+			@if (count($new_user_info->newUserComments))
+			<div class="form-group">
+				<label class="control-label">Lastest admin correspondence: </label>
+				<br />
+				"{{ $new_user_info->newUserComments->last()->comments }}" 
+				{{-- from User: {{ $new_user_info->newUserComments->last()->user_id }} --}}
+			</div>
+			@endif
+
 			<div class="form-group">
 				<label class="control-label">Email Text: </label>
 				<textarea class="form-control" name="emailText" cols="40" rows="3" placeholder="Email text here"></textarea>
@@ -183,8 +201,8 @@
 		placeholder: "Change Here If Needed",
 	});
 
-	$('.select2-basic-single').select2({
-		dropdownParent: $('#showModal'),
+	$('.select2-org-single').select2({
+		// dropdownParent: $('#showModal'), // attach the dropdown to the modal itself 
 	});
 	$("#generateExtIndex").on('click', function(event) {
 		var ExtIndex = $("#ExtIndex").val(); 

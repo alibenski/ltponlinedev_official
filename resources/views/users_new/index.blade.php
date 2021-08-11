@@ -85,13 +85,14 @@
 <script src="{{ asset('js/submit.js') }}"></script>
 <script>
 $(document).on('click', '.show-modal', function() {
+	$(".class-list").html('Loading...');
     $('.modal-title').text('Show Details');
     $('#id_show').val($(this).data('id'));
     $('#fullName').val($(this).data('fullname'));
     var id = $(this).data('id');
     $('#showModal').modal('show');
 	    $.ajax({
-	        url: '{{ route('edit-new-user') }}',
+	        url: "{{ route('edit-new-user') }}",
 	        type: 'GET',
 	        data: {'id' : id, 
 	        },

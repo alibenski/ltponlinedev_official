@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\FileNewUser;
 use App\Mail\SendAuthMail;
 use App\NewUser;
+use App\NewUserComments;
 use App\SDDEXTR;
 use App\Torgan;
 use App\User;
@@ -455,6 +456,19 @@ class NewUserController extends Controller
 
         if ($request->submit == 3) {
             // get emailText and send email
+            $newUser = NewUser::findOrFail($id);
+            $newUserComment = new NewUserComments;
+            $newUserComment->comments = $request->emailText;
+            $newUserComment->new_user_id = $request->id;
+            $newUserComment->user_id = Auth::user()->id;
+            $newUserComment->save();
+            
+            $html = "Your user account request has been set to PENDING status. <br/>Please see comment from the secretariat: <br/><b>" . $request->emailText . "</b>";
+            Mail::send([],[], function ($message) use($newUser, $html) {
+                $message->from('clm_language@unog.ch', 'CLM LTP Secretariat');
+                $message->to($newUser->email)->subject('Pending: LTP Online User Account Request');
+                $message->setBody($html, 'text/html');
+            });
             dd($request->all());
 
             // save pending status
