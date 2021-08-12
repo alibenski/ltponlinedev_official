@@ -34,6 +34,7 @@ class NewUserController extends Controller
         // our users name or email fields. Paginates them so we can break up lots of search results.
         $users = NewUser::orderBy('id', 'desc')
             ->where('approved_account', 0)
+            ->orWhere('approved_account', 3)
             ->where('name', 'LIKE', '%' . $query . '%')
             ->paginate(20);
 
@@ -455,21 +456,22 @@ class NewUserController extends Controller
         }
 
         if ($request->submit == 3) {
-            // get emailText and send email
-            $newUser = NewUser::findOrFail($id);
-            $newUserComment = new NewUserComments;
-            $newUserComment->comments = $request->emailText;
-            $newUserComment->new_user_id = $request->id;
-            $newUserComment->user_id = Auth::user()->id;
-            $newUserComment->save();
-            
-            $html = "Your user account request has been set to PENDING status. <br/>Please see comment from the secretariat: <br/><b>" . $request->emailText . "</b>";
-            Mail::send([],[], function ($message) use($newUser, $html) {
-                $message->from('clm_language@unog.ch', 'CLM LTP Secretariat');
-                $message->to($newUser->email)->subject('Pending: LTP Online User Account Request');
-                $message->setBody($html, 'text/html');
-            });
-            dd($request->all());
+            if ($request->emailText != null) {
+                // get emailText and send email
+                $newUser = NewUser::findOrFail($id);
+                $newUserComment = new NewUserComments;
+                $newUserComment->comments = $request->emailText;
+                $newUserComment->new_user_id = $request->id;
+                $newUserComment->user_id = Auth::user()->id;
+                $newUserComment->save();
+    
+                $html = "Your user account request has been set to PENDING status. <br/>Please see comment from the secretariat: <br/><b>" . $request->emailText . "</b>";
+                Mail::send([],[], function ($message) use($newUser, $html) {
+                    $message->from('clm_language@unog.ch', 'CLM LTP Secretariat');
+                    $message->to($newUser->email)->subject('Pending: LTP Online User Account Request');
+                    $message->setBody($html, 'text/html');
+                });
+            }
 
             // save pending status
             $newUser = NewUser::findOrFail($id);

@@ -47,6 +47,9 @@
 					@if ($user->approved_account == 0)
 						<span class="label label-info">Waiting for Admin</span>
 					@endif
+					@if ($user->approved_account == 3)
+						<span class="label label-warning">Pending</span>
+					@endif
 	            </td>
 	            <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
 	            <td>
