@@ -41,7 +41,7 @@ class MailaboutCancel extends Mailable
     public function build()
     {
         return $this->view('emails.cancellation')
-                    ->from('clm_language@unog.ch', 'CLM Language')
+                    ->from('do_not_reply_ltp_online', 'CLM Language')
                     ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Cancellation: '.$this->staff_member_name.' Cancelled Language Course Enrolment '.$this->display_language->courses->EDescription.' ('.$this->term_season_en.' '.$this->term_year.')');

@@ -63,7 +63,7 @@ class SendEmailJob implements ShouldQueue
     public function failed()
     {
         Mail::raw("Mail Delivery Job Failure. Something is wrong with the code in App\Jobs\sendEmailJob. Stop cron/queue:work, fix the code, do queue:restart, then do queue:work", function($message) {
-            $message->from('clm_language@unog.ch', 'CLM Language');
+            $message->from('do_not_reply_ltp_online@unog.ch', 'CLM Language');
             $message->to('allyson.frias@un.org')->subject('Alert: Mail Delivery Failure Writing Tips');
             // $message->text($exception);
         });

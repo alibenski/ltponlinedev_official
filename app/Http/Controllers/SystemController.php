@@ -112,6 +112,45 @@ class SystemController extends Controller
         return redirect()->back();
     }
 
+    public function sendGeneralEmailToConvokedStudentsOfSelectedTerm(Request $request)
+    {
+        $term = Session::get('Term');
+        if (!$term) {
+            $request->session()->flash('warning', 'No emails sent! Select a valid term.');
+            return redirect()->back();
+        }
+        $convocation_all = Repo::where('Term', Session::get('Term'))->get();
+        // with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
+
+        // query students who will be put in waitlist
+        $convocation_waitlist = Repo::where('Term', Session::get('Term'))->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD');
+        })
+            ->get();
+
+        // query students who will receive convocation
+        $convocation = Repo::where('Term', Session::get('Term'))->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            // ->where('Te_Code','!=','F3R2')
+            ->get();
+
+        $convocation_diff = $convocation_all->diff($convocation);
+        $convocation_diff2 = $convocation_waitlist->diff($convocation_diff);
+        $convocation_diff3 = $convocation->diff($convocation_waitlist); // send email convocation to this collection
+
+        $countOfEmails = $convocation_diff3->count();
+        // $sddextr_email_address = 'allyson.frias@gmail.com';
+        foreach ($convocation_diff3 as $value) {
+            Mail::to($value->users->email)->send(new sendGeneralEmail($value->users->email));
+        }
+        
+        $request->session()->flash('success', 'Email sent to ' . $countOfEmails . ' students!');
+        return redirect()->back();
+    }
+
     /**
      * Send broadcast reminder email to all students who have logged in
      * Use during START of enrolment 

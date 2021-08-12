@@ -50,7 +50,7 @@ return [
     |
     */
 
-    'url' => 'http://ltponlinedev.unog.ch',
+    'url' => env('APP_URL', 'http://ltponlinedev.unog.ch'),
 
     'asset_url' => env('ASSET_URL', null),
 

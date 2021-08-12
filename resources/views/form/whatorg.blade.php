@@ -168,7 +168,7 @@
 
 <script>
   $(document).ready(function(){
-    $('#showModal2').modal('show');
+    // $('#showModal2').modal('show');
     $.ajaxSetup({ cache: false }); // or iPhones don't get fresh data
 
     //  select2 dropdown init

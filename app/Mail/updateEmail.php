@@ -31,7 +31,7 @@ class updateEmail extends Mailable
     public function build()
     {
         return $this->view('emails.notifyProfileUpdate')
-                    ->from('clm_language@unog.ch', 'CLM Language')
+                    ->from('do_not_reply_ltp_online@unog.ch', 'CLM Language')
                     // ->bcc('clm_language@un.org')
                     ->priority(1)
                     ->subject('Confirmation Needed: CLM Online Profile Update for '.$this->student['name']);

@@ -1,4 +1,5 @@
 <div class="total"></div>
+<div class="pending-placement"></div>
 @foreach ($select_courses->chunk(4) as $element)
 <div class="row">
   @foreach($element as $data)
@@ -78,7 +79,7 @@
 
 					sum+=parseFloat(y) || 0;
 				});
-				$("div.total").html("<h3>Total Number of Students: <span class='label label-default'>"+sum+"</span></h3>");
+				$("div.total").html("<h3>Total Number of Students (Approved Enrolment Forms + Approved and Assigned Placement Forms): <span class='label label-default'>"+sum+"</span></h3>");
 			})
 			.fail(function() {
 				console.log("error");
@@ -87,6 +88,24 @@
 				console.log("complete");
 			});
 			
+		
+		let languageSelected = $("input[name='box-L']").val();
+			$.ajax({
+				url: '{{ route('ajax-preview-get-pending-placement-count') }}',
+				type: 'POST',
+				data: {languageSelected:languageSelected,_token:token},
+			})
+			.done(function(countPendingPlacement) {
+				console.log(countPendingPlacement);
+				$("div.pending-placement").html("<h3>Pending Placement Tests (Not Included in Total): <span class='label label-default'>"+countPendingPlacement+"</span></h3>");
+			})
+			.fail(function() {
+				console.log("error getting pending placement count.");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+
 
 		$("input[name='cs_unique']").on('click', function(event) {
 			event.preventDefault();

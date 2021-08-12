@@ -17,6 +17,7 @@
 @section('content')
 
 <h2 class="text-center"><i class="fa fa-money"></i> Billing Section <i class="fa fa-money"></i></h2>
+<h4 class="text-center">Management of Billing Information for Organizations</h4>
 
 @include('admin.partials._termSessionMsg')
 

@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
     Route::get('send-email-to-enrolled-students-of-selected-term', 'SystemController@sendEmailToEnrolledStudentsOfSelectedTerm')->name('send-email-to-enrolled-students-of-selected-term');
+    Route::get('send-general-email-to-convoked-students-of-selected-term', 'SystemController@sendGeneralEmailToConvokedStudentsOfSelectedTerm')->name('send-general-email-to-convoked-students-of-selected-term');
     Route::get('send-broadcast-reminder', 'SystemController@sendBroadcastReminder')->name('send-broadcast-reminder');
     Route::get('send-reminder-to-current-students', 'SystemController@sendReminderToCurrentStudents')->name('send-reminder-to-current-students');
     Route::get('system-index', 'SystemController@systemIndex')->name('system-index');
@@ -210,6 +211,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('preview-merged-forms', 'PreviewController@previewMergedForms')->name('preview-merged-forms');
     Route::post('ajax-preview-course-boxes', ['as' => 'ajax-preview-course-boxes', 'uses' => 'PreviewController@ajaxPreviewCourseBoxes']);
     Route::post('ajax-preview-get-student-count', ['as' => 'ajax-preview-get-student-count', 'uses' => 'PreviewController@ajaxPreviewGetStudentCount']);
+    Route::post('ajax-preview-get-pending-placement-count', ['as' => 'ajax-preview-get-pending-placement-count', 'uses' => 'PreviewController@ajaxPreviewGetPendingPlacementCount']);
     Route::post('ajax-preview-get-student-priority-status', ['as' => 'ajax-preview-get-student-priority-status', 'uses' => 'PreviewController@ajaxPreviewGetStudentPriorityStatus']);
     Route::post('ajax-preview-get-student-current-class', ['as' => 'ajax-preview-get-student-current-class', 'uses' => 'PreviewController@ajaxPreviewGetStudentCurrentClass']);
 
