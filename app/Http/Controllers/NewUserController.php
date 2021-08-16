@@ -479,7 +479,7 @@ class NewUserController extends Controller
             $newUser->updated_by = Auth::user()->id;
             $newUser->save();
 
-            $request->session()->flash('warning', 'Applicant account has been set to pending.');
+            $request->session()->flash('warning', 'Email sent. Applicant account has been set to pending.');
             return redirect()->route('newuser.index');
         }
 

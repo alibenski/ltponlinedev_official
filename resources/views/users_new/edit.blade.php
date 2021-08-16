@@ -197,6 +197,14 @@
 </div>
 
 <script>
+	$("button[type='submit']").click(function () {
+		setTimeout(function () { disableButton(); }, 0);
+	});
+
+	function disableButton() {
+		$("button[type='submit']").prop('disabled', true);
+	}
+	
 	$('.select2').select2({
 		placeholder: "Change Here If Needed",
 	});
