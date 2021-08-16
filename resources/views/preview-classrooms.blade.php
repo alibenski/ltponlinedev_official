@@ -303,7 +303,7 @@
                 </td>
                 <td>
                   @if ($form->deleted_at)
-                    {{$form->deleted_at}} <br />by {{$form->users->name}}                
+                    {{$form->deleted_at}} <br />by {{$form->cancelledBy->name}}                
                   @endif
                 </td>
                 <td>
