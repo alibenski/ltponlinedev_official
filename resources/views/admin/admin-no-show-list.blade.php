@@ -31,6 +31,8 @@
                 <tr>
                     <th>Last Name</th>
                     <th>First Name</th>
+                    <th>Email</th>
+                    <th>Contact No.</th>
                     <th>Marked No-Show By</th>
                     <th>Class</th>
                 </tr>
@@ -43,6 +45,12 @@
                     </td>
                     <td>
                         {{ $record->users->nameFirst }}
+                    </td>
+                    <td>
+                        {{ $record->users->email }}
+                    </td>
+                    <td>
+                        {{ $record->users->sddextr->PHONE }}
                     </td>
                     <td>
                         @if ($record->noShowBy)
