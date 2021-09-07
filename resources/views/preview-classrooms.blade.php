@@ -305,7 +305,9 @@
                   @endif
                 </td>
                 <td>
-                  {{$form->deleted_at}}
+                  @if ($form->deleted_at)
+                    {{$form->deleted_at}} <br />by {{$form->cancelledBy->name}}                
+                  @endif
                 </td>
                 <td>
                   @if(is_null($form->convocation_email_sent))

@@ -47,6 +47,10 @@ class Repo extends Model
     return $this->belongsTo('App\User', 'INDEXID','indexno'); 
     }
 
+    public function cancelledBy() {
+    return $this->belongsTo('App\User', 'cancelled_by','id'); 
+    }
+
 	public function terms() {
     return $this->belongsTo('App\Term', 'Term', 'Term_Code'); 
     }
