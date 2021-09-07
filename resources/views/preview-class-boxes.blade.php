@@ -15,6 +15,7 @@
         <p>{{ $data->Code }}</p>
         <p>{{ $data->scheduler->name }}</p>
         <p>@if(empty($data->teachers)) <span class="text-danger">No Teacher: Waitlist/Class Cancelled</span> @elseif($data->Tch_ID == 'TBD') <span class="text-danger">No Teacher: Waitlist/Class Cancelled</span> @else {{ $data->teachers->Tch_Name }} @endif</p>
+		<p class="count-no-show-{{$data->Code}}"></p>
                 
 		<input type="hidden" name="Code" value="{{$data->Code}}">
 		<input type="hidden" name="Te_Code_New" value="{{$data->Te_Code_New}}">
@@ -121,6 +122,31 @@
 			})
 			.always(function() {
 				console.log("complete");
+			});
+
+			$.ajax({
+				url: '{{ route('ajax-get-no-show-count-per-class') }}',
+				type: 'POST',
+				data: {arr:arr,_token:token},
+			})
+			.done(function(data) {
+				console.log(data);
+				if (data.status == "fail") {
+					alert(data.message);
+				}
+				$.each(data, function(x, y) {
+					$("input[name='Code']").each(function() {
+						if ($(this).val() == x) {
+							$('p.count-no-show-'+x).html('<h4><strong><span class="label label-warning">'+y+'</span> No-Show!</strong></h4>')
+						}
+					});
+				});
+			})
+			.fail(function() {
+				console.log("error no-show function");
+			})
+			.always(function() {
+				console.log("end of no-show function");
 			});
 		}
 
