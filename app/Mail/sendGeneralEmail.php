@@ -35,7 +35,7 @@ class sendGeneralEmail extends Mailable
         $text = Text::find(2);
 
         return $this->view('emails.generalEmail', compact('text'))
-            ->from('do_not_reply_ltp_online@unog.ch', 'CLM Language')
+            ->from('do_not_reply_ltp_online@unog.ch', 'CLM Language DO NOT REPLY')
             ->priority(1)
             ->subject($text->subject);
     }
