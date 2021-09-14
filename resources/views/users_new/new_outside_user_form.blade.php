@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('customcss')
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
     <style>
     html {
@@ -101,7 +102,7 @@
 
                         <div id="attachSection"></div>
 
-                        <div class="form-group{{ $errors->has('org') ? 'is-invalid' : '' }}">
+                        <div id="orgSection" class="form-group{{ $errors->has('org') ? 'is-invalid' : '' }} d-none">
                             <label for="org" class="col-md-12 control-label">Organization <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span></label>
 
                             <div class="col-md-12">
@@ -296,6 +297,8 @@
 @section('java_script')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/profileOrgAssoc.js') }}"></script>
 <script>
   $(document).ready(function() {
     $('#datetimepicker4').datetimepicker({

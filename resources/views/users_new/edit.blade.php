@@ -4,13 +4,18 @@
 			<input type="hidden" name="id" value="{{$new_user_info->id}}">
 	        {{ csrf_field() }}
 	        <div class="form-group">
-	            <label class="control-label text-danger">Possible duplicates (Please review before approving): {{ count($possible_dupes) }}</label>
+				<div class="panel panel-danger">
+					<div class="panel-heading"><strong>Possible duplicates ({{ count($possible_dupes) }})</strong></div>
+					<div class="panel-body">
+	            <label class="control-label text-danger">Please review before approving</label>
 		        @foreach($possible_dupes as $dupe)
 		        <ul>
 					<li>{{ $dupe->name }} : <strong> {{ $dupe->email }} </strong></li>
 		        </ul>
 		        @endforeach
-	        </div>
+	        		</div>
+				</div>
+			</div>
 	        <div class="form-group">
 	            <label class="control-label">Index #: </label>
 	            <input name="indexno" type="text" class="form-control"  value="{{ old('indexno', $auto_index) }}">
