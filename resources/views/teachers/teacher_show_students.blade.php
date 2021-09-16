@@ -209,6 +209,7 @@ $("button.no-show-btn").on("click", function () {
   let c = confirm("You are about to mark this student (" +name+ ") as NO-SHOW. Are you sure?");
   if (c == true) {
     $("button.operation-btn").attr('disabled', true);
+    $(".preloader2").fadeIn(600);
     // ajax to update pash record
     $.ajax({
         url: "{{ route('mark-no-show') }}", 

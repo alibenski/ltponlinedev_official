@@ -1326,21 +1326,25 @@ class TeachersController extends Controller
     public function markNoShow(Request $request)
     {
         $pash_record = Repo::find($request->pash_id);
-        $pash_record->update([
-            'no_show' => 1,
-            'no_show_by' => Auth::user()->id,
+        if ($pash_record) {
+            $pash_record->update([
+                'no_show' => 1,
+                'no_show_by' => Auth::user()->id,
+    
+            ]);
+            $classroom = $pash_record->classrooms->course->Description;
+            $schedule = $pash_record->classrooms->scheduler->name;
+    
+            Mail::raw("Student (".$pash_record->users->name.") marked as NO-SHOW in ". $classroom ." - ". $schedule ." by ".Auth::user()->name, function ($message) use($pash_record) {
+                    $message->from('clm_language@unog.ch', 'CLM Online [Do Not Reply]');
+                    $message->to(['clm_language@un.org'])->subject('Student ('.$pash_record->users->name.') marked as NO-SHOW');
+                });
+            $data = $pash_record;
+    
+            return response()->json($data);
+        }
 
-        ]);
-        $classroom = $pash_record->classrooms->course->Description;
-        $schedule = $pash_record->classrooms->scheduler->name;
-
-        Mail::raw("Student (".$pash_record->users->name.") marked as NO-SHOW in ". $classroom ." - ". $schedule ." by ".Auth::user()->name, function ($message) use($pash_record) {
-                $message->from('clm_language@unog.ch', 'CLM Online [Do Not Reply]');
-                $message->to(['clm_language@un.org'])->subject('Student ('.$pash_record->users->name.') marked as NO-SHOW');
-            });
-        $data = $pash_record;
-
-        return response()->json($data);
+        return response()->json("no id selected");
     }
 
     public function undoNoShow(Request $request)
