@@ -35,29 +35,7 @@
                             @endif
 
                             <p>
-                                If you are a self-paying student, you can request the reimbursement of your fee or you can carry over the fee to the next term. 
-                            </p>
-                            <p>
-                                <b>If you would like to be reimbursed, please send the following documents to clm_language@un.org: </b>
-                                <ol>
-                                    <li>the document attached (<a href="{{ url('/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC') }}">UNOG-TR-BIRD-GNL.DOC</a>)), completed using word and sent back signed                                        
-                                    </li>
-                                    <li>a copy of an official bank information slip / bank statement with your IBAN and Bic information – see example: <a href="{{ url('/storage/pdf/reimbursement/RIBExample.pdf') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/RIBExample.pdf</a>
-                                    </li> 
-                                    <li>a copy of the pay slip if paid through the post office or the bank account debit advice slip if paid through e-banking – see example: <a href="{{ url('/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC</a>
-                                    </li>
-                                    <li>a copy of the bank account holder’s passport to create your profile in our system
-                                    </li>
-                                </ol> 
-                            </p>
-                            <p>
-                                You have the facility of keeping <b>your fee paid for a course until the next term.</b> Should you wish not to re-enrol for the next term, or should we not be in a position to offer you your desired course, we will return the funds at that time.  
-                            </p>
-                            <p>
-                                Please confirm whether you wish to take this option; otherwise, please send us the documents requested for us to reimburse your fee. 
-                            </p>
-                            <p>
-                                Please also note that the time to process reimbursements can take from four to six weeks. 
+                                If you are a self-paying student, please refer to <a href="https://learning.unog.ch/node/1301#position5">this link</a> to check if you are eligible for reimbursement and its modalities. 
                             </p>
                         </td>
                     </tr>
@@ -79,29 +57,7 @@
                              @endif
 
                              <p>
-                                Si n’êtes pas exempté(e) des frais de cours, vous pouvez en demander le remboursement ou vous pouvez les reporter au trimestre suivant.  
-                            </p>
-                            <p>
-                                <b>Si vous souhaitez être remboursé(e), veuillez envoyer les documents ci-dessous à clm_language@un.org :</b> 
-                                <ol>
-                                    <li>Le document ci-joint dûment complété en format Word et signé : <a href="{{ url('/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/UNOG-TR-BIRD-GNL.DOC </a>                            
-                                    </li>
-                                    <li>Une copie d'un relevé d'identité bancaire officiel avec votre IBAN et les informations BIC (voir exemple :  <a href="{{ url('/storage/pdf/reimbursement/RIBExample.pdf') }}">https://ltponlinedev.unog.ch/storage/pdf/reimbursement/RIBExample.pdf</a>)
-                                    </li> 
-                                    <li>Une copie de la fiche de paie (si vous avez payé par la poste) ou de l'avis de débit du compte bancaire (si vous avez payé par e-banking).
-                                    </li>
-                                    <li>Nous avons également besoin d'une copie du passeport du titulaire du compte bancaire pour créer votre profil dans notre système.
-                                    </li>
-                                </ol> 
-                            </p>
-                            <p>
-                                <b>Vous avez également la possibilité de conserver les frais de cours</b> jusqu'au trimestre suivant. Si, au moment des inscriptions au trimestre suivant, vous ne souhaitez pas vous réinscrire ou si nous ne sommes pas en mesure de vous offrir le cours souhaité, nous vous restituerons les fonds à ce moment-là.  
-                            </p>
-                            <p>
-                                Veuillez nous contacter si vous souhaitez choisir cette seconde option. Sinon veuillez nous faire parvenir les documents demandés ci-dessus afin que nous puissions procéder au remboursement.  
-                            </p>
-                            <p>
-                                Merci de noter que le délai de traitement des remboursements peut prendre de 4 à 6 semaines.
+                                Si vous avez payé des frais de cours, vous pouvez consulter <a href="https://learning.unog.ch/fr/node/1301#position5">le lien suivant</a> pour savoir si vous remplissez les conditions de remboursement et quelles en sont les modalités. 
                             </p>
                         </td>
                     </tr>
