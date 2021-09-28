@@ -30,6 +30,7 @@
 					<th>Language</th>
 					<th>Description</th>
 					<th>Teacher</th>
+					<th>Result</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -43,6 +44,7 @@
 					<th>Language</th>
 					<th>Description</th>
 					<th>Teacher</th>
+					<th>Result</th>
 				</tr>
 			</tfoot>
 		</table>
@@ -105,7 +107,8 @@
 						{ "data": "DEPT" }, 
 						{ "data": "languages.name" }, 
 						{ "data": "courses.Description" },  
-						{ "data": "classrooms.teachers.Tch_Name" }
+						{ "data": "classrooms.teachers.Tch_Name" },
+						{ "data": "Result" }
 							],
 			})
 		}
