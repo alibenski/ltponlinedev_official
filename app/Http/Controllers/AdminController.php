@@ -25,6 +25,17 @@ use Session;
 
 class AdminController extends Controller
 {
+    public function noShowList(Request $request)
+    {
+        if (Session::has('Term')) {
+            $term = Session::get('Term');
+            $no_show_records = Repo::where('Term', $term)->where('no_show', 1)->get();
+            return view('admin.admin-no-show-list', compact('no_show_records'));
+        }
+
+        return 'No Term selected.';
+    }
+
     public function adminExportOcha()
     {
         return view('admin.admin-export-ocha');
@@ -329,7 +340,7 @@ class AdminController extends Controller
         if ($request->ajax()) {
             $term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first();
             // query all students enrolled to current term excluding waitlisted
-            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT')->where('Term', $term->Term_Code)
+            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT', 'Result')->where('Term', $term->Term_Code)
                 ->whereHas('classrooms', function ($q) {
                     $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
                 })

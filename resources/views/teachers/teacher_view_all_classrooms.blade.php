@@ -81,6 +81,24 @@
 		      </td>
 		    </tr>
 		    @endforeach
+			<tr>
+				<td>
+				<div class="col-md-8">
+					<input type="hidden" name="Te_Code" value="{{$element->first()->Te_Code_New}}" />
+					<div id="" class="small-box bg-red" data-teacher="0">
+						<div class="inner">
+						<h3 class="count-waitlist-{{$element->first()->Te_Code_New}}">--</h3>
+						<h4>{{ $element->first()->course->Description }}</h4>
+						<p>Total Waitlisted Students</p>
+								
+						</div>
+						<div class="icon">
+						<i class="ion ion-android-hand"></i>
+						</div>
+					</div>
+				</div>
+				</td>
+			</tr>
 		    @endforeach
 		  {{-- @endforeach --}}
 		  </tbody>
@@ -103,6 +121,44 @@
 <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
 
 <script type="text/javascript">
+$(document).ready(function() {
+    var token = $("input[name='_token']").val();
+    var arrTeCode = [];
+    $("input[name='Te_Code']").each(function() {
+        var Te_Code = $(this).val();
+        arrTeCode.push(Te_Code); //insert values to array per iteration
+    });
+    console.log(arrTeCode)
+
+    if (arrTeCode.length > 0) {
+
+        $.ajax({
+            url: '{{ route('waitListOneListCount') }}',
+            type: 'GET',
+            data: {arrTeCode: arrTeCode, _token: token},
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.status == "fail") {
+                alert(data.message);
+            }
+            $.each(data, function(x, y) {
+                $("input[name='Te_Code']").each(function() {
+                    if ($(this).val() == x) {
+                        $('h3.count-waitlist-'+x).html(y+' Waitlisted')
+                    }
+                });
+            });
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+    }
+});
+
 $("button[id='manageAttendanceBtn']").click(function(){
   var Code = $(this).val();
   var token = $("input[name='_token']").val();

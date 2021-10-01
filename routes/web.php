@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /**
      * Admin Routes
      */
+    Route::get('no-show-list', 'AdminController@noShowList')->name('no-show-list');
+
     Route::get('admin-export-ocha', 'AdminController@adminExportOcha')->name('admin-export-ocha');
     Route::get('admin-extract-data', 'AdminController@adminExtractData')->name('admin-extract-data');
     Route::get('admin-extract-data-2018', 'AdminController@adminExtractData2018')->name('admin-extract-data-2018');
@@ -115,6 +117,9 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
      * Teachers Routes
      */
     Route::resource('teachers', 'TeachersController');
+    Route::post('mark-no-show', ['as' => 'mark-no-show', 'uses' => 'TeachersController@markNoShow']);
+    Route::post('undo-no-show', ['as' => 'undo-no-show', 'uses' => 'TeachersController@undoNoShow']);
+
     Route::get('teacher-search-user', ['as' => 'teacher-search-user', 'uses' => 'TeachersController@teacherSearchUser']);
     Route::get('teacher-ltpdata-view/{id}', ['as' => 'teacher-ltpdata-view', 'uses' => 'TeachersController@teacherLtpdataView']);
     
@@ -218,6 +223,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     Route::post('ajax-class-boxes', ['as' => 'ajax-class-boxes', 'uses' => 'PreviewController@ajaxClassBoxes']);
     Route::post('ajax-get-student-count-per-class', ['as' => 'ajax-get-student-count-per-class', 'uses' => 'PreviewController@ajaxGetStudentCountPerClass']);
+    Route::post('ajax-get-no-show-count-per-class', ['as' => 'ajax-get-no-show-count-per-class', 'uses' => 'PreviewController@ajaxGetNoShowCountPerClass']);
     Route::get('view-classrooms-per-section/{code}', ['as' => 'view-classrooms-per-section', 'uses' => 'PreviewController@viewClassroomsPerSection']);
 
     Route::post('insert-record-to-preview', ['as' => 'insert-record-to-preview', 'uses' => 'PreviewController@insertRecordToPreview']);

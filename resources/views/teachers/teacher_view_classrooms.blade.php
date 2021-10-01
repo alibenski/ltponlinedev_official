@@ -10,9 +10,9 @@
 @section('content')
 
 <div class="row">
-	<div class="col-md-12">
-@foreach($assigned_classes as $classroom)
-		<div class="col-md-3">
+	<div class="col-md-9">
+        @foreach($assigned_classes as $classroom)
+		<div class="col-md-4">
 			<div class="box box-success">
 				<div class="box-header with-border">
                     @if ($classroom->course)
@@ -126,12 +126,44 @@
 						</form> --}}
 				</div>
 			</div>
-		</div>
-	
-@endforeach
-	</div>
+		</div>	
+        @endforeach
+    </div>
+    
+    <div class="col-md-3 col-xs-6">
+        <div id="" class="small-box bg-red" data-teacher="0">
+            @foreach ($assigned_classes->groupBy('Te_Code_New') as $element)
+            <div class="inner">
+                <input type="hidden" name="Te_Code" value="{{$element->first()->Te_Code_New}}" />
+                <h3 class="count-waitlist-{{$element->first()->Te_Code_New}}">--</h3>
+                <h4>{{ $element->first()->course->Description }}</h4>                    
+            </div>
+            @endforeach
+            <div class="icon">
+            <i class="ion ion-android-hand"></i>
+            </div>
+        </div>
+    </div>
 </div>
-
+{{-- <div class="row">
+    <div class="col-md-12">
+        <div id="" class="box box-danger" data-teacher="0">
+            <div class="box-header with-border">
+                    Waitlist Information
+				</div>
+				<div class="box-body no-padding">
+        @foreach ($assigned_classes->groupBy('Te_Code_New') as $element)
+        <div class="col-md-3">
+            <div class="inner">
+            <input type="hidden" name="Te_Code" value="{{$element->first()->Te_Code_New}}" />
+            <h3 class="count-waitlist-{{$element->first()->Te_Code_New}}">--</h3>
+            <h4>{{ $element->first()->course->Description }}</h4>        
+            </div>
+        </div>
+        @endforeach
+                </div>
+        </div>
+</div> --}}
 <div class="row">
 	<div class="col-md-12">
 		<div class="students-here">
@@ -146,6 +178,44 @@
 {{-- <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script> --}}
 
 <script type="text/javascript">
+$(document).ready(function() {
+    var token = $("input[name='_token']").val();
+    var arrTeCode = [];
+    $("input[name='Te_Code']").each(function() {
+        var Te_Code = $(this).val();
+        arrTeCode.push(Te_Code); //insert values to array per iteration
+    });
+    console.log(arrTeCode)
+
+    if (arrTeCode.length > 0) {
+
+        $.ajax({
+            url: '{{ route('waitListOneListCount') }}',
+            type: 'GET',
+            data: {arrTeCode: arrTeCode, _token: token},
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.status == "fail") {
+                alert(data.message);
+            }
+            $.each(data, function(x, y) {
+                $("input[name='Te_Code']").each(function() {
+                    if ($(this).val() == x) {
+                        $('h3.count-waitlist-'+x).html(y+' Waitlisted')
+                    }
+                });
+            });
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+    }
+});
+
 $("button[id='manageAttendanceBtn']").click(function(){
   var Code = $(this).val();
   var token = $("input[name='_token']").val();

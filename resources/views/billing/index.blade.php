@@ -74,6 +74,7 @@
 				<th>Price USD</th>
 				<th>Duration</th>
 				<th>Organization</th>
+				<th>Index No.</th>
 				<th>Last Name</th>
 				<th>First Name</th>
 				<th>Email</th>
@@ -90,6 +91,7 @@
 				<th>Price USD</th>
 				<th>Duration</th>
 				<th>Organization</th>
+				<th>Index No.</th>
 				<th>Last Name</th>
 				<th>First Name</th>
 				<th>Email</th>
@@ -180,6 +182,7 @@ $(document).ready(function() {
 	        		{ "data": "courseschedules.prices.price_usd" }, 
 	        		{ "data": "courseschedules.courseduration.duration_name_en" }, 
 	        		{ "data": "DEPT" },  
+	        		{ "data": "users.indexno" }, 
 	        		{ "data": "users.nameLast" }, 
 	        		{ "data": "users.nameFirst" }, 
 	        		{ "data": "users.email" }, 
