@@ -1,17 +1,17 @@
 <div class="form-group{{ $errors->has('contractfile') ? 'is-invalid' : '' }}">
-    <label for="contractfile" class="col-md-12 control-label"><strong>For spouses, please tick the box of the document(s) you will be providing:</strong> <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span> </label>
+    <label for="contractfile" class="col-md-12 control-label"><strong>Please tick the box of the document(s) you are providing a copy of:</strong> <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span> </label>
 
     <div class="col-md-12">
         <div class="form-check col-md-12">
             <input class="form-check-input" type="radio" name="spouseRadio" id="spouseRadio1" value=1>
             <label class="form-check-label" for="spouseRadio1">
-                Copy of spouse badge or copy of spouse carte de légitimation
+                Applicant's UN badge ID or carte de légitimation
             </label>
         </div>
         <div class="form-check col-md-12">
             <input class="form-check-input" type="radio" name="spouseRadio" id="spouseRadio2" value=2>
             <label class="form-check-label" for="spouseRadio2">
-                Copies of proof of marriage + UN staff badge or UN staff carte de légitimation 
+                Proof of marriage between the applicant and the staff (UN or permanent mission) AND staff (UN or permanent mission) UN badge ID or carte de légitimation
             </label>
         </div>
     </div>

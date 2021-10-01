@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="col-md-12 mt-3 border">
-        <p>Proof of marriage</p>
+        <p>Proof of marriage between the applicant and the staff (UN or permanent mission)</p>
         <input name="contractfile" type="file" class="col-md-12 form-control-static mb-1" required="required">
         @if ($errors->has('contractfile'))
             <span class="alert alert-danger help-block">
@@ -9,7 +9,7 @@
         @endif
     </div>
     <div class="col-md-12 my-3 border">
-        <p>UN staff badge or UN staff carte de légitimation</p>
+        <p>Staff (UN or permanent mission) UN badge ID or carte de légitimation</p>
         <input name="contractfile2" type="file" class="col-md-12 form-control-static mb-1" required="required">
         @if ($errors->has('contractfile2'))
             <span class="alert alert-danger help-block">
