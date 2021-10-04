@@ -494,10 +494,24 @@ class NewUserController extends Controller
                 'indexno' => 'unique:SDDEXTR,INDEXNO_old',
                 'email' => 'unique:SDDEXTR,EMAIL',
             ));
+
+            if ($request->emailText != null) {
+                // get emailText and save
+                $newUser = NewUser::findOrFail($id);
+                $newUserComment = new NewUserComments;
+                $newUserComment->comments = $request->emailText;
+                $newUserComment->new_user_id = $request->id;
+                $newUserComment->user_id = Auth::user()->id;
+                $newUserComment->save();
+            }    
     
             $newUser = NewUser::findOrFail($id);
             $newUser->approved_account = 1;
             $newUser->updated_by = Auth::user()->id;
+
+            $filteredRequest = array_filter($request->all());
+            $newUser->update($filteredRequest);
+
             $newUser->save();
     
             // save entry to Auth table

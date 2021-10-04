@@ -4,7 +4,7 @@
     
     <div class="col-md-12">
       <div class="dropdown">
-        <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" name="countryMission" autocomplete="off" >
+        <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" name="countryMission" autocomplete="off" required>
             <option value="">--- Select Country ---</option>
             @if(!empty($countries))
             @foreach($countries as $value)

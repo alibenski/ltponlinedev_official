@@ -78,24 +78,25 @@
 	        
 	        <div class="form-group">
 	            <label class="control-label">Organization: </label>
-				<br />
 				<strong>
 				@if ($new_user_info->org == "MSU")
-					{{ $new_user_info->org }} - {{ $new_user_info->countryMission->ABBRV_NAME }}
-				@endif
-				@if ($new_user_info->org == "NGO")
-					{{ $new_user_info->org }} - {{ $new_user_info->ngo_name }}
+					{{ $new_user_info->org }} - @if($new_user_info->countryMission) {{ $new_user_info->countryMission->ABBRV_NAME }} @else No country indicated in database @endif
+				@elseif ($new_user_info->org == "NGO")
+					{{ $new_user_info->org }} - @if ($new_user_info->ngo_name) {{ $new_user_info->ngo_name }} @else No NGO name indicated in database @endif
+				@else
+					{{ $new_user_info->org }}
 				@endif
 				</strong>
 	            <div class="dropdown">
-                      <select id="org" name="org" class="col-md-8 form-control select2-org-single" style="width: 100%;" required="required">
+                      <select id="org" name="org" class="col-md-8 form-control select2-org-single" style="width: 100%;">
                         @if(!empty($org))
                           @foreach($org as $value)
-                          	@if (old('org', $new_user_info->org) == $value['Org name'])
+                          	{{-- @if (old('org', $new_user_info->org) == $value['Org name'])
 						    	<option value="{{ $value['Org name'] }}" selected>{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
-							@else
+							@else --}}
+						    	<option value="">Change Here If Needed</option>
 						    	<option value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
-							@endif
+							{{-- @endif --}}
                           @endforeach
                         @endif
                       </select>
@@ -215,6 +216,7 @@
 	});
 
 	$('.select2-org-single').select2({
+		placeholder: "Change Here If Needed",
 		// dropdownParent: $('#showModal'), // attach the dropdown to the modal itself 
 	});
 	$("#generateExtIndex").on('click', function(event) {
