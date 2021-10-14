@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class NewUser extends Model
 {
     protected $table = 'tblLTP_New_Users';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'indexno_new', 'title', 'profile', 'name', 'nameFirst', 'nameLast', 'email', 'dob', 'attachment_id', 'attachment_id_2', 'approved_account', 'updated_by', 'gender', 'org', 'country_mission', 'ngo_name', 'contact_num', 
+    ];
 
     /**
      * The attributes that should be mutated to dates.

@@ -182,7 +182,8 @@
 			@endif
 
 			<div class="form-group">
-				<label class="control-label">Email Text: </label>
+				<label class="control-label">Email Text: </label><br />
+				<small class="text-danger">no email will be sent if field is empty</small>
 				<textarea class="form-control" name="emailText" cols="40" rows="3" placeholder="Email text here"></textarea>
 			</div>
 
@@ -193,7 +194,7 @@
 			</div>
 
 	        <button type="submit" name="submit" value="2" class="btn btn-danger btn-space "><span class="glyphicon glyphicon-remove"></span>  Reject</button>
-	        <button type="submit" name="submit" value="3" class="btn btn-warning btn-space "><span class="glyphicon glyphicon-time"></span>  Send Email and Set to Pending</button>
+	        <button type="submit" name="submit" value="3" class="btn btn-warning btn-space "><span class="glyphicon glyphicon-time"></span> Set to Pending</button>
 			<button type="submit" name="submit" value="1" class="btn btn-success btn-space "><span class="glyphicon glyphicon-check"></span>  Save and Approve</button>
 
 	        <input type="hidden" name="_token" value="{{ Session::token() }}">

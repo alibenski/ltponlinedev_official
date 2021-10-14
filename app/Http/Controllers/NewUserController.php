@@ -310,7 +310,7 @@ class NewUserController extends Controller
             // 'student_cat' => 'required|',
             'dob' => 'required',
             'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            // 'g-recaptcha-response' => 'required|captcha',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         //validate 2nd attachment for Spouse profile
@@ -451,11 +451,31 @@ class NewUserController extends Controller
             $newUser->updated_by = Auth::user()->id;
             $newUser->save();
 
+            
+            if ($request->emailText != null) {
+                // get emailText and save but no email send
+                $newUser = NewUser::findOrFail($id);
+                $newUserComment = new NewUserComments;
+                $newUserComment->comments = $request->emailText;
+                $newUserComment->new_user_id = $request->id;
+                $newUserComment->user_id = Auth::user()->id;
+                $newUserComment->save();
+            }
+
             $request->session()->flash('warning', 'Applicant has been rejected.');
             return redirect()->route('newuser.index');
         }
 
         if ($request->submit == 3) {
+            // save pending status
+            $newUser = NewUser::findOrFail($id);
+            $newUser->approved_account = 3;
+            $newUser->updated_by = Auth::user()->id;
+            
+            $this->updateAttachments($request, $newUser);
+            
+            $this->updateNewUser($newUser, $request);
+
             if ($request->emailText != null) {
                 // get emailText and send email
                 $newUser = NewUser::findOrFail($id);
@@ -471,20 +491,16 @@ class NewUserController extends Controller
                     $message->to($newUser->email)->subject('Pending: LTP Online User Account Request');
                     $message->setBody($html, 'text/html');
                 });
+
+                $request->session()->flash('warning', 'Email sent. Applicant has been set to pending.');
+                return redirect()->route('newuser.index');
             }
 
-            // save pending status
-            $newUser = NewUser::findOrFail($id);
-            $newUser->approved_account = 3;
-            $newUser->updated_by = Auth::user()->id;
-            $newUser->save();
-
-            $request->session()->flash('warning', 'Email sent. Applicant account has been set to pending.');
+            $request->session()->flash('warning', 'Applicant has been set to pending.');
             return redirect()->route('newuser.index');
         }
 
         if ($request->submit == 1) {
-            dd($request->all());
             // check if there is a duplicate in Auth users table
             $this->validate($request, array(
                 'indexno' => 'required|unique:users,indexno',
@@ -508,12 +524,9 @@ class NewUserController extends Controller
             $newUser = NewUser::findOrFail($id);
             $newUser->approved_account = 1;
             $newUser->updated_by = Auth::user()->id;
-
-            $filteredRequest = array_filter($request->all());
-            $newUser->update($filteredRequest);
-
-            $newUser->save();
-    
+            
+            $this->updateNewUser($newUser, $request);
+            dd($newUser);
             // save entry to Auth table
             $user = User::create([
                 'indexno_old' => $request->indexno,
@@ -556,6 +569,80 @@ class NewUserController extends Controller
     public function emailNewUser($email, $emailText)
     {
         // send email if new user application is pending or rejected
+    }
+
+    public function updateAttachments($request, $newUser)
+    {
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('contractfile')) {
+            $request->file('contractfile');
+
+            $fileId = $newUser->attachment_id;
+            $attachment_contract_file = FileNewUser::findOrFail($fileId);
+            // use same filename to overwrite
+            $filename = $attachment_contract_file->filename;
+            //Store attachment
+            $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
+            //UPDATE record in db table
+            $attachment_contract_file->update([
+                'filename' => $filename,
+                'size' => $request->contractfile->getClientSize(),
+                'path' => $filestore,
+            ]);
+            $attachment_contract_file->save();
+        }
+
+        if ($request->hasFile('contractfile2')) {
+            $request->file('contractfile2');
+
+            $fileId2 = $newUser->attachment_id_2;
+            if ($fileId2) {
+                $attachment_contract_file2 = FileNewUser::findOrFail($fileId2);
+                $filename2 = $attachment_contract_file2->filename;
+                //Store attachment
+                $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
+                //UPDATE record in db table
+                $attachment_contract_file2->update([
+                    'filename' => $filename2,
+                    'size' => $request->contractfile2->getClientSize(),
+                    'path' => $filestore2,
+                ]);
+                $attachment_contract_file2->save();
+            } else {
+                $filename2 = 'new_user_request_spouse_2_' . strtoupper($newUser->nameLast) . '_' . $newUser->nameFirst . '.' . $request->contractfile2->extension();
+                //Store attachment
+                $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
+                //Create record in db table
+                $attachment_contract_file2 = new FileNewUser([
+                    'filename' => $filename2,
+                    'size' => $request->contractfile2->getClientSize(),
+                    'path' => $filestore2,
+                ]);
+                $attachment_contract_file2->save();
+
+                $newUser->attachment_id_2 = $attachment_contract_file2->id;
+            }
+            
+        }
+    }
+
+    public function updateNewUser($newUser, $request)
+    {
+        $filtered = array_filter($request->all());
+        $newUser->update($filtered);
+
+        $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+        $newUser->nameLast = strtoupper($request->nameLast);
+
+        if ($request->org == 'MSU') {
+            $newUser->country_mission = $request->countryMission;
+        }
+
+        if ($request->org == 'NGO') {
+            $newUser->ngo_name = $request->ngoName;
+        }
+
+        $newUser->save();
     }
 
     /**
