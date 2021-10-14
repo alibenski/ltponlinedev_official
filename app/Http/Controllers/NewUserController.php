@@ -525,8 +525,10 @@ class NewUserController extends Controller
             $newUser->approved_account = 1;
             $newUser->updated_by = Auth::user()->id;
             
+            $this->updateAttachments($request, $newUser);
+
             $this->updateNewUser($newUser, $request);
-            dd($newUser);
+            
             // save entry to Auth table
             $user = User::create([
                 'indexno_old' => $request->indexno,
