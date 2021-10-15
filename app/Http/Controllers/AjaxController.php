@@ -390,16 +390,18 @@ class AjaxController extends Controller
      */
     public function ajaxOrgCompare(Request $request)
     {
-        $ajaxOrg = $request->organization;
-        $id = Auth::user()->id;
-        $studentOrg = User::findOrFail($id)->sddextr->DEPT;
-        $torgan = Torgan::where('Org name', $ajaxOrg)->first();
-        if ($ajaxOrg != $studentOrg) {
-            $data = false;
-        } else {
-            $data = true;
+        if (Auth::check()) {
+            $ajaxOrg = $request->organization;
+            $id = Auth::user()->id;
+            $studentOrg = User::findOrFail($id)->sddextr->DEPT;
+            $torgan = Torgan::where('Org name', $ajaxOrg)->first();
+            if ($ajaxOrg != $studentOrg) {
+                $data = false;
+            } else {
+                $data = true;
+            }
+            return response()->json([$data, $torgan]);
         }
-        return response()->json([$data, $torgan]);
     }
 
     /**

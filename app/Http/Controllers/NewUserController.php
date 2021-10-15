@@ -534,7 +534,7 @@ class NewUserController extends Controller
                 'indexno_old' => $request->indexno,
                 'indexno' => $request->indexno,
                 'email' => $request->email,
-                'profile' => $request->profile,
+                'profile' => $newUser->profile,
                 'nameFirst' => $request->nameFirst,
                 'nameLast' => strtoupper($request->nameLast),
                 'name' => $request->nameFirst . ' ' . strtoupper($request->nameLast),
@@ -550,17 +550,27 @@ class NewUserController extends Controller
             $sddextr = SDDEXTR::create([
                 'INDEXNO_old' => $request->indexno,
                 'INDEXNO' => $request->indexno,
-                'TITLE' => $request->title,
+                'TITLE' => $newUser->title,
                 'FIRSTNAME' => $request->nameFirst,
                 'LASTNAME' => strtoupper($request->nameLast),
-                'SEX' => $request->gender,
-                'DEPT' => $request->org,
-                'PHONE' => $request->contact_num,
-                'BIRTH' => $request->dob,
+                'SEX' => $newUser->gender,
+                'DEPT' => $newUser->org,
+                'PHONE' => $newUser->contact_num,
+                'BIRTH' => $newUser->dob,
                 'EMAIL' => $request->email,
             ]);
 
-            $request->session()->flash('success', 'User account approved.');
+            if ($newUser->org == 'MSU') {
+                $sddextr->country_mission = $newUser->country_mission;
+            }
+
+            if ($newUser->org == 'NGO') {
+                $sddextr->ngo_name = $newUser->ngo_name;
+            }
+
+            $sddextr->save();
+
+            $request->session()->flash('success', 'User account approved. User account credentials have been sent.');
             return redirect()->route('newuser.index');
         }
 
