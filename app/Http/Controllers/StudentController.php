@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\User\MsuUpdateField;
 use App\Course;
 use App\FocalPoints;
 use App\Language;
@@ -104,7 +105,7 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, MsuUpdateField $msuUpdateField)
     {
         // Validate data
         $this->validate($request, array(
@@ -120,6 +121,12 @@ class StudentController extends Controller
 
         ));
 
+        if ($request->organization === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required',
+            ));
+        }
+
         // Save the data to db
         $student = User::findOrFail($id);
         if ($student->hasRole('Teacher')) {
@@ -127,39 +134,19 @@ class StudentController extends Controller
             $this->updateTeacher($indexno, $request);
         }
         if (is_null($request->input('email'))) {
-            $this->updateNoEmail($student, $request);
+            $this->updateNoEmail($student, $request, $msuUpdateField);
             $request->session()->flash('success', 'Update successful.');
             return redirect()->route('home');
         } else {
             $this->validate($request, array(
                 'email' => 'email',
             ));
-            $this->updateWithEmail($student, $request);
+            $this->updateWithEmail($student, $request, $msuUpdateField);
             return redirect('login');
         }
     }
 
-    public function updateTeacher($indexno, $request)
-    {
-        $teacher = Teachers::where('IndexNo', $indexno)->first();
-
-        if (!is_null($request->input('TITLE'))) {
-            $teacher->Tch_Title = $request->input('TITLE');
-        }
-        if (!is_null($request->input('firstName'))) {
-            $teacher->Tch_Firstname = $request->input('firstName');
-        }
-        if (!is_null($request->input('lastName'))) {
-            $teacher->Tch_Lastname = strtoupper($request->input('lastName'));
-        }
-        if (!is_null($request->input('gender'))) {
-            $teacher->sex = $request->input('gender');
-        }
-        $teacher->Tch_Name = $teacher->Tch_Firstname . ' ' . strtoupper($teacher->Tch_Lastname);
-        $teacher->save();
-    }
-
-    public function updateNoEmail($student, $request)
+    public function updateNoEmail($student, $request, $msuUpdateField)
     {
         if (!is_null($request->input('profile'))) {
             $student->profile = $request->input('profile');
@@ -178,6 +165,7 @@ class StudentController extends Controller
         }
         if (!is_null($request->input('organization'))) {
             $student->sddextr->DEPT = $request->input('organization');
+            $msuUpdateField->checkMsuValue($student, $request);   
         }
         if (!is_null($request->input('contactNo'))) {
             $student->sddextr->PHONE = $request->input('contactNo');
@@ -200,9 +188,9 @@ class StudentController extends Controller
         $student->sddextr->save();
     }
 
-    public function updateWithEmail($student, $request)
+    public function updateWithEmail($student, $request, $msuUpdateField)
     {
-        $this->updateNoEmail($student, $request);
+        $this->updateNoEmail($student, $request, $msuUpdateField);
 
         $student->temp_email = $request->input('email');
         $student->approved_update = '0';

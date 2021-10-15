@@ -47,6 +47,9 @@
 					@if ($user->approved_account == 0)
 						<span class="label label-info">Waiting for Admin</span>
 					@endif
+					@if ($user->approved_account == 3)
+						<span class="label label-warning">Pending</span>
+					@endif
 	            </td>
 	            <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
 	            <td>
@@ -73,7 +76,7 @@
                 <input type="hidden" class="form-control" id="id_show" disabled>
                 <div class="form-group class-list"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -85,13 +88,14 @@
 <script src="{{ asset('js/submit.js') }}"></script>
 <script>
 $(document).on('click', '.show-modal', function() {
+	$(".class-list").html('Loading...');
     $('.modal-title').text('Show Details');
     $('#id_show').val($(this).data('id'));
     $('#fullName').val($(this).data('fullname'));
     var id = $(this).data('id');
     $('#showModal').modal('show');
 	    $.ajax({
-	        url: '{{ route('edit-new-user') }}',
+	        url: "{{ route('edit-new-user') }}",
 	        type: 'GET',
 	        data: {'id' : id, 
 	        },

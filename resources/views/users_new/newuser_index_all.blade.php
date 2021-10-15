@@ -48,6 +48,8 @@
 						<span class="label label-success">Approved</span>
 					@elseif ($user->approved_account == 2)
 						<span class="label label-danger">Disapproved</span>
+					@elseif ($user->approved_account == 3)
+						<span class="label label-warning">Pending</span>
 					@else
 						<span class="label label-info">Waiting for Admin</span>
 					@endif

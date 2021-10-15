@@ -43,24 +43,9 @@
                         {{ csrf_field() }}
                         <div id="profileSelect" class="form-group">
                           <label for="profile" class="col-md-12 control-label">Profile:</label>
-                          <div class="col-md-12">
-                            <div class="dropdown">
-                              <select id="profile" name="profile" class="col-md-8 form-control select2-basic-single" style="width: 100%;">
-                                    <option></option>
-                                    <option value="STF">Staff Member</option>
-                                    <option value="INT">Intern</option>
-                                    <option value="CON">Consultant</option>
-                                    <option value="WAE">When Actually Employed</option>
-                                    <option value="JPO">JPO</option>
-                                    <option value="MSU">Staff of Permanent Mission</option>
-                                    <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
-                                    <option value="RET">Retired UN Staff Member</option>
-                                    <option value="SERV">Staff of Service Organizations in the Palais</option>
-                                    <option value="NGO">Staff of UN-accredited NGO's</option>
-                                    <option value="PRESS">Staff of UN Press Corps</option>
-                              </select>
-                            </div>
-                          </div>
+                        
+                          @include('ajax-profile-select')
+                          
                         </div>
 
                         <div class="form-group">
@@ -152,7 +137,9 @@
                         </div>
                         {{-- insert org dropdown if decision is YES --}}
                         <div id="orgSelect"></div>
+                        <div id="countrySection"></div>
                         <input id="selectInput" type="hidden">
+
                         <div class="form-group">
                             <label for="contactNo" class="col-md-12 control-label">Contact Number:</label>
 
@@ -240,6 +227,9 @@
         $('.select2-basic-single').select2({
           placeholder: "Select from dropdown",
           });
+        $('.select-profile-single').select2({
+          placeholder: "Select Profile",
+          });
     });
 </script>
 
@@ -274,16 +264,37 @@ $(document).ready(function () {
                 $(document).find('.select2-basic-single').select2();
                 $('#selectInput').val('1');
                 console.log($('#selectInput').val());
+
+                $("select[name='organization']").on("change", function () {
+                    let choice = $("select[name='organization']").val();
+                    if (choice == "MSU") {
+                        getCountry();
+                    }
+                    
+                });
                 });        
         } else {
                 console.log('hide it');
                 $('#orgSelect').html("");
+                $("#countrySection").html("");
             }                
     });
     $('#email').one('click', function () {
             $('#modalshow').modal('show');
         });
 });
+
+function getCountry() {
+    $.ajax({
+        url: "{{ route('ajax-select-country') }}", 
+        method: 'GET',
+        success: function(data, status) {
+            console.log(data)
+        $("#countrySection").html("");
+        $("#countrySection").html(data.options);
+        }
+    });  
+}
 
 </script>
 

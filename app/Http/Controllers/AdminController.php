@@ -496,7 +496,7 @@ class AdminController extends Controller
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
-        $new_user_count = NewUser::where('approved_account', 0)->count();
+        $new_user_count = NewUser::where('approved_account', 0)->orWhere('approved_account', 3)->count();
         $cancelled_convocations = Repo::onlyTrashed()->where('Term', Session::get('Term'))->count();
         $enrolment_forms = Preenrolment::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
             ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')

@@ -39,20 +39,7 @@
 
 			<div class="form-group col-sm-12">
 				<label for="profile">Profile:</label>
-				<select name="profile" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
-				    <option></option>
-				    <option value="STF">Staff Member</option>
-				    <option value="INT">Intern</option>
-				    <option value="CON">Consultant</option>
-				    <option value="WAE">When Actually Employed</option>
-				    <option value="JPO">JPO</option>
-				    <option value="MSU">Staff of Permanent Mission</option>
-				    <option value="SPOUSE">Spouse of Staff from UN or Mission</option>
-				    <option value="RET">Retired UN Staff Member</option>
-				    <option value="SERV">Staff of Service Organizations in the Palais</option>
-				    <option value="NGO">Staff of UN-accredited NGO's</option>
-				    <option value="PRESS">Staff of UN Press Corps</option>
-				</select>
+				@include('ajax-profile-select')
 			</div>
 			
 			<div class="form-group col-sm-12">
@@ -196,6 +183,9 @@
 $(document).ready(function() {
     $('.select2').select2({
     placeholder: "--- Select Here ---",
+    });
+	$('.select-profile-single').select2({
+    placeholder: "--- Select Profile Here ---",
     });
     $("input[name='decision']").prop('checked', false);
 });

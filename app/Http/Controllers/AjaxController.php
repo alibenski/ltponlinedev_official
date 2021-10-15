@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Language;
 use App\Course;
+use App\Country;
 use App\User;
 use App\Repo;
 use App\Term;
@@ -24,6 +25,97 @@ use DB;
 
 class AjaxController extends Controller
 {
+    function ajaxSelectCountry(Request $request)
+    {
+        if ($request->ajax()) {
+            $countries = Country::orderBy('ABBRV_NAME', 'asc')->whereNull('TERM_DATE')->get();
+
+            $data = view('ajax-select-country', compact('countries'))->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachBadgeCdl(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-badge-cdl')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachMSU(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-msu')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachSpouse(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-spouse')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachSpouse1(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-spouse-1')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachSpouse2(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-spouse-2')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachRetired(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-retired')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachServ(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-serv')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachNgo(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-ngo')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function ajaxFileAttachPress(Request $request)
+    {
+        if ($request->ajax()) {
+            
+            $data = view('file_attachment_field.ajax-file-attach-press')->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     public function ajaxExcludeFromBilling(Request $request)
     {
         if ($request->ajax()) {
@@ -298,16 +390,18 @@ class AjaxController extends Controller
      */
     public function ajaxOrgCompare(Request $request)
     {
-        $ajaxOrg = $request->organization;
-        $id = Auth::user()->id;
-        $studentOrg = User::findOrFail($id)->sddextr->DEPT;
-        $torgan = Torgan::where('Org name', $ajaxOrg)->first();
-        if ($ajaxOrg != $studentOrg) {
-            $data = false;
-        } else {
-            $data = true;
+        if (Auth::check()) {
+            $ajaxOrg = $request->organization;
+            $id = Auth::user()->id;
+            $studentOrg = User::findOrFail($id)->sddextr->DEPT;
+            $torgan = Torgan::where('Org name', $ajaxOrg)->first();
+            if ($ajaxOrg != $studentOrg) {
+                $data = false;
+            } else {
+                $data = true;
+            }
+            return response()->json([$data, $torgan]);
         }
-        return response()->json([$data, $torgan]);
     }
 
     /**

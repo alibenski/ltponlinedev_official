@@ -22,7 +22,7 @@ class SDDEXTR extends Model
      * @var array
      */
     protected $fillable = [
-        'INDEXNO', 'INDEXNO_old', 'TITLE', 'FIRSTNAME', 'LASTNAME', 'CAT', 'CATEGORY', 'SEX', 'LEVEL', 'DEPT', 'PHONE', 'BIRTH', 'EMAIL', 'created_at',
+        'INDEXNO', 'INDEXNO_old', 'TITLE', 'FIRSTNAME', 'LASTNAME', 'CAT', 'CATEGORY', 'SEX', 'LEVEL', 'DEPT', 'country_mission', 'ngo_name', 'PHONE', 'BIRTH', 'EMAIL', 'created_at',
     ];
 
     /**
@@ -55,5 +55,8 @@ class SDDEXTR extends Model
     public function torgan()
     {
         return $this->hasOne('App\Torgan', 'Org name', 'DEPT');
+    }
+    public function countryMission() {
+        return $this->belongsTo('App\Country', 'country_mission'); 
     }
 }

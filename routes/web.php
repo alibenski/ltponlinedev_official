@@ -519,6 +519,16 @@ Route::get('ajax-convert-to-selfpay', ['as' => 'ajax-convert-to-selfpay', 'uses'
 Route::get('ajax-convert-to-regular', ['as' => 'ajax-convert-to-regular', 'uses' => 'AjaxController@ajaxConvertToRegular']);
 Route::get('ajax-show-language-dropdown', ['as' => 'ajax-show-language-dropdown', 'uses' => 'AjaxController@ajaxShowLanguageDropdown']);
 Route::put('ajax-exclude-from-billing', ['as' => 'ajax-exclude-from-billing', 'uses' => 'AjaxController@ajaxExcludeFromBilling']);
+Route::get('ajax-select-country', ['as' => 'ajax-select-country', 'uses' => 'AjaxController@ajaxSelectCountry']);
+Route::get('ajax-file-attach-badge-cdl', ['as' => 'ajax-file-attach-badge-cdl', 'uses' => 'AjaxController@ajaxFileAttachBadgeCdl']);
+Route::get('ajax-file-attach-msu', ['as' => 'ajax-file-attach-msu', 'uses' => 'AjaxController@ajaxFileAttachMSU']);
+Route::get('ajax-file-attach-spouse', ['as' => 'ajax-file-attach-spouse', 'uses' => 'AjaxController@ajaxFileAttachSpouse']);
+Route::get('ajax-file-attach-spouse-1', ['as' => 'ajax-file-attach-spouse-1', 'uses' => 'AjaxController@ajaxFileAttachSpouse1']);
+Route::get('ajax-file-attach-spouse-2', ['as' => 'ajax-file-attach-spouse-2', 'uses' => 'AjaxController@ajaxFileAttachSpouse2']);
+Route::get('ajax-file-attach-retired', ['as' => 'ajax-file-attach-retired', 'uses' => 'AjaxController@ajaxFileAttachRetired']);
+Route::get('ajax-file-attach-serv', ['as' => 'ajax-file-attach-serv', 'uses' => 'AjaxController@ajaxFileAttachServ']);
+Route::get('ajax-file-attach-ngo', ['as' => 'ajax-file-attach-ngo', 'uses' => 'AjaxController@ajaxFileAttachNgo']);
+Route::get('ajax-file-attach-press', ['as' => 'ajax-file-attach-press', 'uses' => 'AjaxController@ajaxFileAttachPress']);
 
 
 // ajax use to get section number of cs_unique
