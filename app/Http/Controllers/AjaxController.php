@@ -480,6 +480,74 @@ class AjaxController extends Controller
                 ->orderBy('id', 'asc')
                 ->pluck("Description", "Te_Code_New")
                 ->all();
+            if ($request->L == 'A') {
+                $my_array = $select_courses;
+                $allowed  = ['AB1GE0'];
+                $filtered = array_filter(
+                    $my_array,
+                    function ($key) use ($allowed) {
+                        return in_array($key, $allowed);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+            }
+            if ($request->L == 'C') {
+                $my_array = $select_courses;
+                $allowed  = ['CB1GE0'];
+                $filtered = array_filter(
+                    $my_array,
+                    function ($key) use ($allowed) {
+                        return in_array($key, $allowed);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+            }
+            if ($request->L == 'E') {
+                $my_array = $select_courses;
+                $allowed  = ['EB1GE0'];
+                $filtered = array_filter(
+                    $my_array,
+                    function ($key) use ($allowed) {
+                        return in_array($key, $allowed);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+            }
+            if ($request->L == 'F') {
+                $my_array = $select_courses;
+                $allowed  = ['FB1GE0'];
+                $filtered = array_filter(
+                    $my_array,
+                    function ($key) use ($allowed) {
+                        return in_array($key, $allowed);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+            }
+            if ($request->L == 'R') {
+                $my_array = $select_courses;
+                $allowed  = ['RB1GE0'];
+                $filtered = array_filter(
+                    $my_array,
+                    function ($key) use ($allowed) {
+                        return in_array($key, $allowed);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+            }
+            if ($request->L == 'S') {
+                $my_array = $select_courses;
+                $allowed  = ['SB1GE0'];
+                $filtered = array_filter(
+                    $my_array,
+                    function ($key) use ($allowed) {
+                        return in_array($key, $allowed);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+            }
+
+            $select_courses = $filtered;
 
             $data = view('ajax-select3', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
