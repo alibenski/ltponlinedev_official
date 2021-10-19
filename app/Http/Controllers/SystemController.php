@@ -1230,7 +1230,7 @@ class SystemController extends Controller
             $this->sendBroadcastEmail($unique_email_address_chunk);
         }
         $time_elapsed_secs = microtime(true) - $start;
-        dd($time_elapsed_secs, $unique_email_address_chunked);
+        // dd($time_elapsed_secs, $unique_email_address_chunked);
         $request->session()->flash('success', 'Broadcast email sent! Error sending to: ' . json_encode($emailError) );
         return redirect()->back();
     }
