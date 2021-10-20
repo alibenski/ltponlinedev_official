@@ -469,6 +469,20 @@ class AjaxController extends Controller
         }
     }
 
+    public function selectAjaxAllCourses(Request $request)
+    {
+        if ($request->ajax()) {
+            $select_courses = Course::where('L', $request->L)
+                ->whereNotNull('Te_Code_New')
+                ->orderBy('id', 'asc')
+                ->pluck("Description", "Te_Code_New")
+                ->all();
+
+            $data = view('ajax-select3', compact('select_courses'))->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     /**
      * ajax select if student level one of any language in enrolment form
      */

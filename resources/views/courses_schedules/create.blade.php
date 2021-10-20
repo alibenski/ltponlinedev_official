@@ -413,7 +413,7 @@
       var token = $("input[name='_token']").val();
 
       $.ajax({
-          url: "{{ route('select-ajax-level-one') }}", 
+          url: "{{ route('select-ajax-all-courses') }}", 
           method: 'POST',
           data: {L:L, _token:token},
           success: function(data, status) {
