@@ -7,9 +7,9 @@ class MsuUpdateField
     public function checkMsuValue($student, $request)
     {
         if ($request->organization === 'MSU') {
-                $student->sddextr->msu_country_id = $request->input('countryMission');
+                $student->sddextr->country_mission = $request->input('countryMission');
             } else {
-                $student->sddextr->msu_country_id = NULL;
+                $student->sddextr->country_mission = NULL;
             }
     }
 }
