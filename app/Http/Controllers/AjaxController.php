@@ -726,6 +726,26 @@ class AjaxController extends Controller
                 })->first();
             }
 
+            // query placement table if student placement enrolment data exists or not for the previous previous term
+            $selectedTerm2 = $current_enrol_term->Term_Code;
+            $lastDigit2 = substr($selectedTerm2, -1);
+
+            if ($lastDigit2 == 9) {
+                // if autumn term, set summer term code as previous term 
+                $prev_term2 = $selectedTerm2 - 1;
+                // query placement table with summer term code
+                $placementData = PlacementForm::withTrashed()->where('Term', $prev_term2)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                ->orWhere(function($query) use($prev_term2, $request){
+                    $query->where('Term', $prev_term2)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                })->first();
+            } else {
+                // $placementData = null;
+                $placementData = PlacementForm::withTrashed()->where('Term', $prev_prev_TermCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
+                ->orWhere(function($q) use($prev_prev_TermCode, $request){
+                    $q->where('Term', $prev_prev_TermCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                })->first();
+            }
+
             // Questions: 
             // what is the threshold of a placement exam result? how long is it valid?
             // is it correct to assume that once a course has been assigned to a placement form,
