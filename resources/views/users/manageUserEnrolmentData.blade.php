@@ -428,7 +428,8 @@
 											@if (Carbon\Carbon::now() > $form->terms->Enrol_Date_End)
 												<a href="{{ route('edit-placement-fields', ['id' => $form->id]) }}" target="_blank" class="btn btn-default btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
 											@else 
-												<a href="#" class="btn btn-info btn-edit-form" disabled><i class="fa fa-pencil-square-o"></i> Edit Form</a>
+												{{-- <a href="#" class="btn btn-info btn-edit-form" disabled><i class="fa fa-pencil-square-o"></i> Edit Form</a> --}}
+												<a href="{{ route('edit-placement-fields', ['id' => $form->id]) }}" target="_blank" class="btn btn-default btn-edit-form"><i class="fa fa-pencil-square-o"></i> Edit Form</a>
 											@endif
 
 											@if($form->deleted_at)
