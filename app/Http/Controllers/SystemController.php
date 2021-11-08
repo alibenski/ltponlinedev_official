@@ -303,7 +303,7 @@ class SystemController extends Controller
         $unique_email_address_valid = $validEmails;
         $unique_email_address_valid = collect($unique_email_address_valid);
 
-        $unique_email_address_chunked = $unique_email_address_valid->chunk(200);
+        $unique_email_address_chunked = $unique_email_address_valid->chunk(50);
         foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
             $this->sendBroadcastEmail($unique_email_address_chunk);
         }
@@ -378,7 +378,7 @@ class SystemController extends Controller
         $unique_email_address_valid = $validEmails;
         $unique_email_address_valid = collect($unique_email_address_valid);
 
-        $unique_email_address_chunked = $unique_email_address_valid->chunk(200);
+        $unique_email_address_chunked = $unique_email_address_valid->chunk(50);
         foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
             $this->sendBroadcastEmail($unique_email_address_chunk);
         }
