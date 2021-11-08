@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classroom;
 use App\Course;
 use App\Jobs\SendBroadcastJob;
+use App\Jobs\SendGeneralEmailJob;
 use App\Mail\sendBroadcastEnrolmentIsOpen;
 use App\Mail\sendConvocation;
 use App\Mail\sendGeneralEmail;
@@ -36,6 +37,25 @@ class SystemController extends Controller
         return view('system.system-index', compact('terms', 'term', 'texts', 'onGoingTerm'));
     }
 
+    public function sendGeneralEmailJob($unique_email_address)
+    {   
+        $baseDelay = Carbon::now();
+
+        $getDelay = cache('_jobs.' . SendGeneralEmailJob::class, $baseDelay);
+
+        $setDelay = Carbon::parse(
+            $getDelay
+        )->addSeconds(60);
+
+        // insert data to cache table
+        cache([
+            '_jobs.' . SendGeneralEmailJob::class => $setDelay
+        ], 5);
+
+        $job = (new SendGeneralEmailJob($unique_email_address))->delay($setDelay);
+        dispatch($job);
+    }
+
     public function sendGeneralEmail(Request $request)
     {
         // query students who have logged in
@@ -65,8 +85,10 @@ class SystemController extends Controller
         // dd($merge->unique());
 
         // $sddextr_email_address = 'allyson.frias@gmail.com';
-        foreach ($unique_email_address as $sddextr_email_address) {
-            Mail::to($sddextr_email_address)->send(new sendGeneralEmail($sddextr_email_address));
+        $unique_email_address_chunked = $unique_email_address->chunk(50);
+        foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
+            $this->sendGeneralEmailJob($unique_email_address_chunk);
+            // Mail::to($sddextr_email_address)->send(new sendGeneralEmail($sddextr_email_address));
         }
 
         $request->session()->flash('success', 'Email sent!');
@@ -104,8 +126,9 @@ class SystemController extends Controller
         // dd($term, $query_students_regular_enrolment, $query_students_regular_placement, $unique_email_address);
 
         // $sddextr_email_address = 'allyson.frias@gmail.com';
-        foreach ($unique_email_address as $sddextr_email_address) {
-            Mail::to($sddextr_email_address)->send(new sendGeneralEmail($sddextr_email_address));
+        $unique_email_address_chunked = $unique_email_address->chunk(50);
+        foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
+            $this->sendGeneralEmailJob($unique_email_address_chunk);
         }
 
         $request->session()->flash('success', 'Email sent to ' . $countOfEmails . ' students!');
@@ -143,8 +166,14 @@ class SystemController extends Controller
 
         $countOfEmails = $convocation_diff3->count();
         // $sddextr_email_address = 'allyson.frias@gmail.com';
+        $email_container = [];
         foreach ($convocation_diff3 as $value) {
-            Mail::to($value->users->email)->send(new sendGeneralEmail($value->users->email));
+            // Mail::to($value->users->email)->send(new sendGeneralEmail($value->users->email));
+            $email_container[] = $value->users->email;
+        }
+        $unique_email_address_chunked = array_chunk($email_container, 50, true);
+        foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
+            $this->sendGeneralEmailJob($unique_email_address_chunk);
         }
         
         $request->session()->flash('success', 'Email sent to ' . $countOfEmails . ' students!');
