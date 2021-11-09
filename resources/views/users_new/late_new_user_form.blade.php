@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('customcss')
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 @stop
 @section('content')
@@ -8,13 +9,13 @@
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
-                <div class="card-header">Student Account Registration Form</div>
+                <div class="card-header">Late Account Registration Form</div>
 
                 <div class="card-body">
                     <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('late-register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <h5 class="panel-title">Do you have a valid Index from Umoja?</h5>
                             <div class="col-md-12">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required" autocomplete="off">
@@ -25,9 +26,9 @@
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required" autocomplete="off">
                                 <label for="decision2" class="form-control-static">No</label>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="indexno-section" hidden> {{-- start of hidden fields --}}
+                        {{-- <div class="indexno-section" hidden> 
 
                             <div class="form-group {{ $errors->has('indexno') ? 'is-invalid' : '' }}">
                                 <label for="indexno" class="col-md-12 control-label">Index # <span class="small text-danger"></span></label>
@@ -44,9 +45,9 @@
                                 </div>
                             </div>
 
-                        </div> {{-- end of hidden fields --}}
+                        </div> 
 
-                        <div class="message-section" hidden> {{-- start of hidden fields --}}
+                        <div class="message-section" hidden> 
 
                             <div class="form-group">
                                 <div class="col-md-12">
@@ -56,23 +57,46 @@
                                 </div>
                             </div>
 
-                        </div> {{-- end of hidden fields --}}
+                        </div> 
                         
-                        <hr>
+                        <hr> --}}
                                                 
-                        <div class="form-group {{ $errors->has('contractfile') ? 'is-invalid' : '' }}">
-                            <label for="contractfile" class="col-md-12 control-label">Copy of badge ID / Carte de légitimation <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                        <div class="form-group {{ $errors->has('profile') ? 'is-invalid' : '' }}">
+                            <label for="profile" class="col-md-12 control-label">Profile <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                            
+                            @include('ajax-profile-select')
+                            
+                        </div>
+
+                        <div id="attachSection"></div>
+
+                        <div id="orgSection" class="form-group{{ $errors->has('org') ? 'is-invalid' : '' }} d-none">
+                            <label for="org" class="col-md-12 control-label">Organization <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+
                             <div class="col-md-12">
-                            <input name="contractfile" type="file" class="col-md-12 form-control-static" required="required">
-                                @if ($errors->has('contractfile'))
-                                    <span class="alert alert-danger help-block">
-                                        <strong>{{ $errors->first('contractfile') }}</strong>
+
+                                <div class="dropdown">
+                                <select class="form-control select2-basic-single" style="width: 100%;" name="org" autocomplete="off" required>
+                                    <option value="">--- Please Select Organization ---</option>
+                                        @if(!empty($org))
+                                            @foreach($org as $value)
+                                            <option class="wx" value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{$value['Org Full Name']}}</option>
+                                            @endforeach
+                                        @endif
+                                </select>
+                                </div>
+
+                                @if ($errors->has('org'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('org') }}</strong>
                                     </span>
                                 @endif
-                                <p class="small text-danger"><strong>File size must be less than 8MB</strong></p>
                             </div>
                         </div>
-                        
+
+                        <div id="countrySection"></div>
+                        <div id="ngoSection"></div>
+                       
                         <div class="form-group {{ $errors->has('title') ? 'is-invalid' : '' }}">
                             <label for="title" class="col-md-12 control-label">Title <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
                             <div class="col-md-12">
@@ -90,13 +114,6 @@
                                     </span>
                                 @endif
                             </div>
-                        </div>
-
-                        <div class="form-group {{ $errors->has('profile') ? 'is-invalid' : '' }}">
-                            <label for="profile" class="col-md-12 control-label">Profile <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
-                            
-                            @include('ajax-profile-select')
-                            
                         </div>
 
                         <div class="form-group {{ $errors->has('nameLast') ? 'is-invalid' : '' }}">
@@ -161,25 +178,15 @@
                             </div>
                         </div>
 
-                        <div class="form-group {{ $errors->has('org') ? 'is-invalid' : '' }}">
-                            <label for="org" class="col-md-12 control-label">Organization <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
+                        <div class="form-group {{ $errors->has('contact_num') ? 'is-invalid' : '' }}">
+                            <label for="contact_num" class="col-md-12 control-label">Contact number <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
 
                             <div class="col-md-12">
+                                <input id="contact_num" type="text" class="form-control" name="contact_num" value="{{ old('contact_num') }}" required >
 
-                                <div class="dropdown">
-                                <select class="form-control select2-basic-single" style="width: 100%;" name="org" autocomplete="off" required>
-                                    <option value="">--- Please Select Organization ---</option>
-                                        @if(!empty($org))
-                                            @foreach($org as $value)
-                                            <option class="wx" value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{$value['Org Full Name']}}</option>
-                                            @endforeach
-                                        @endif
-                                </select>
-                                </div>
-
-                                @if ($errors->has('org'))
+                                @if ($errors->has('contact_num'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('org') }}</strong>
+                                        <strong>{{ $errors->first('contact_num') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -207,20 +214,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group {{ $errors->has('contact_num') ? 'is-invalid' : '' }}">
-                            <label for="contact_num" class="col-md-12 control-label">Contact number <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
-
-                            <div class="col-md-12">
-                                <input id="contact_num" type="text" class="form-control" name="contact_num" value="{{ old('contact_num') }}" required >
-
-                                @if ($errors->has('contact_num'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('contact_num') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
                         <div class="form-group {{ $errors->has('g-recaptcha-response') ? 'is-invalid' : '' }}">
                             <label class="col-md-12 control-label">Captcha</label>
                             <div class="col-md-12">
@@ -233,10 +226,6 @@
                                     </span>
                                 @endif
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="gender" class="col-md-12 control-label"><span style="color: red" class="form-control-static"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span></label>
                         </div>
 
                         <div class="form-group">
@@ -276,31 +265,154 @@
 @section('java_script')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/profileOrgAssoc.js') }}"></script>
 <script>
   $(document).ready(function() {
     $('#datetimepicker4').datetimepicker({
         format: 'YYYY-MM-DD'
     });
-  });
 
-  $("input[name='decision']").click(function(){
-      if($('#decision1').is(':checked')) {
-        $('input#indexno').val('');
-        $('.indexno-section').removeAttr('hidden');
-        $('.message-section').attr('hidden', true);
-      } else if ($('#decision2').is(':checked')) {
-        $('input#indexno').val('');
-        $('.indexno-section').attr('hidden', true);
-        $('.message-section').removeAttr('hidden');
-      }  
+    $("select[name='profile']").on("change", function () {
+        let profileChoice = $("select[name='profile']").val();
+        const profileArray1 = ["STF", "INT", "CON", "WAE", "JPO"];
+        console.log(profileChoice);
+        if ($.inArray(profileChoice, profileArray1) >= 0) {
+            showFileAttach();
+        }
+        else if (profileChoice == "MSU") {
+            showFileAttachMSU();
+        } 
+        else if (profileChoice == "SPOUSE") {
+            showFileAttachSpouse();
+        } 
+        else if (profileChoice == "RET") {
+            showFileAttachRetired();
+        } 
+        else if (profileChoice == "SERV") {
+            showFileAttachServ();
+        } 
+        else if (profileChoice == "NGO") {
+            showFileAttachNgo();
+        } 
+        else if (profileChoice == "PRESS") {
+            showFileAttachPress();
+        } 
+        else {
+            $("#attachSection").html("");
+        }
     });
-    
-  $('.email-input').one('click', function () {
-        $('#showModal').modal('show');
+
+    function showFileAttach() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-badge-cdl') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachMSU() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-msu') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachSpouse() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-spouse') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachRetired() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-retired') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachServ() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-serv') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachNgo() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-ngo') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachPress() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-press') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    $("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "MSU") {
+            getCountry();
+        } else {
+            $("#countrySection").html("");
+        }
     });
-    
-  $('#showModal').on('hidden.bs.modal', function (e) {
+
+    function getCountry() {
+        $.ajax({
+            url: "{{ route('ajax-select-country') }}", 
+            method: 'GET',
+            success: function(data, status) {
+                console.log(data)
+            $("#countrySection").html("");
+            $("#countrySection").html(data.options);
+            }
+        });  
+    }
+
+    $("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "NGO") {
+            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+        } else {
+            $("#ngoSection").html("");
+        }
+    });
+
+    $('#showModal').on('hidden.bs.modal', function (e) {
         $('input.email-input').focus();
     })
+  });    
 </script>
 @stop

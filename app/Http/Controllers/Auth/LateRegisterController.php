@@ -63,8 +63,27 @@ class LateRegisterController extends Controller
             'contact_num' => 'required|max:255',
             'dob' => 'required',
             'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'g-recaptcha-response' => 'required|captcha',
+            // 'g-recaptcha-response' => 'required|captcha',
         ));
+
+        //validate 2nd attachment for Spouse profile
+        if ($request->contractfile2) {
+            $this->validate($request, array(
+                'contractfile2' => 'required|mimes:pdf,doc,docx|max:8000',
+            ));
+        }
+
+        //validate further if org is MSU or MGO
+        if ($request->org == 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required',
+            ));
+        }
+        if ($request->org == 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|string|max:255',
+            ));
+        }
 
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('contractfile')) {
@@ -81,6 +100,20 @@ class LateRegisterController extends Controller
             $attachment_contract_file->save();
         }
 
+        if ($request->hasFile('contractfile2')) {
+            $request->file('contractfile2');
+            $filename2 = 'new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
+            //Store attachment
+            $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
+            //Create new record in db table
+            $attachment_contract_file2 = new FileNewUser([
+                'filename' => $filename2,
+                'size' => $request->contractfile2->getClientSize(),
+                'path' => $filestore2,
+            ]);
+            $attachment_contract_file2->save();
+        }
+
         //store in database
         $newUser = new NewUser;
         $newUser->indexno_new = $request->indexno;
@@ -95,8 +128,19 @@ class LateRegisterController extends Controller
         $newUser->contact_num = $request->contact_num;
         $newUser->dob = $request->dob;
         $newUser->attachment_id = $attachment_contract_file->id;
-        $newUser->save();
 
+        if ($request->contractfile2) {
+            $newUser->attachment_id_2 = $attachment_contract_file2->id;
+        }
+
+        if ($request->org == 'MSU') {
+            $newUser->country_mission = $request->countryMission;
+        }
+
+        if ($request->org == 'NGO') {
+            $newUser->ngo_name = $request->ngoName;
+        }
+        $newUser->save();
         // send email notification to Secretariat to approve his login credentials to the system and sddextr record
         Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . strtoupper($request->nameLast), function ($message) {
             $message->from('clm_onlineregistration@unog.ch', 'CLM Online Administrator');
