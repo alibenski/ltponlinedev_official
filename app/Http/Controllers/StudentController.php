@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\User\MsuUpdateField;
+use App\Services\User\NgoUpdateField;
 use App\Course;
 use App\FocalPoints;
 use App\Language;
@@ -105,7 +106,7 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, MsuUpdateField $msuUpdateField)
+    public function update(Request $request, $id, MsuUpdateField $msuUpdateField, NgoUpdateField $ngoUpdateField)
     {
         // Validate data
         $this->validate($request, array(
@@ -127,6 +128,12 @@ class StudentController extends Controller
             ));
         }
 
+        if ($request->organization === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required',
+            ));
+        }
+
         // Save the data to db
         $student = User::findOrFail($id);
         if ($student->hasRole('Teacher')) {
@@ -134,19 +141,19 @@ class StudentController extends Controller
             $this->updateTeacher($indexno, $request);
         }
         if (is_null($request->input('email'))) {
-            $this->updateNoEmail($student, $request, $msuUpdateField);
+            $this->updateNoEmail($student, $request, $msuUpdateField, $ngoUpdateField);
             $request->session()->flash('success', 'Update successful.');
             return redirect()->route('home');
         } else {
             $this->validate($request, array(
                 'email' => 'email',
             ));
-            $this->updateWithEmail($student, $request, $msuUpdateField);
+            $this->updateWithEmail($student, $request, $msuUpdateField, $ngoUpdateField);
             return redirect('login');
         }
     }
 
-    public function updateNoEmail($student, $request, $msuUpdateField)
+    public function updateNoEmail($student, $request, $msuUpdateField, $ngoUpdateField)
     {
         if (!is_null($request->input('profile'))) {
             $student->profile = $request->input('profile');
@@ -166,6 +173,7 @@ class StudentController extends Controller
         if (!is_null($request->input('organization'))) {
             $student->sddextr->DEPT = $request->input('organization');
             $msuUpdateField->checkMsuValue($student, $request);   
+            $ngoUpdateField->checkNgoValue($student, $request);   
         }
         if (!is_null($request->input('contactNo'))) {
             $student->sddextr->PHONE = $request->input('contactNo');
@@ -188,9 +196,9 @@ class StudentController extends Controller
         $student->sddextr->save();
     }
 
-    public function updateWithEmail($student, $request, $msuUpdateField)
+    public function updateWithEmail($student, $request, $msuUpdateField, $ngoUpdateField)
     {
-        $this->updateNoEmail($student, $request, $msuUpdateField);
+        $this->updateNoEmail($student, $request, $msuUpdateField, $ngoUpdateField);
 
         $student->temp_email = $request->input('email');
         $student->approved_update = '0';

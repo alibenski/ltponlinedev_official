@@ -138,6 +138,7 @@
                         {{-- insert org dropdown if decision is YES --}}
                         <div id="orgSelect"></div>
                         <div id="countrySection"></div>
+                        <div id="ngoSection"></div>
                         <input id="selectInput" type="hidden">
 
                         <div class="form-group">
@@ -269,6 +270,14 @@ $(document).ready(function () {
                     let choice = $("select[name='organization']").val();
                     if (choice == "MSU") {
                         getCountry();
+                    } else {
+                        $("#countrySection").html("");
+                    }
+
+                    if (choice == "NGO") {
+                        $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+                    } else {
+                        $("#ngoSection").html("");
                     }
                     
                 });
@@ -277,6 +286,7 @@ $(document).ready(function () {
                 console.log('hide it');
                 $('#orgSelect').html("");
                 $("#countrySection").html("");
+                $("#ngoSection").html("");
             }                
     });
     $('#email').one('click', function () {
