@@ -60,7 +60,14 @@
                         </div>
 
                         <div class="form-group {{ $errors->has('gender') ? 'is-invalid' : '' }}">
-                            <label for="gender" class="col-md-12 control-label">Gender:</label>
+                            <label for="gender" class="col-md-12 control-label">Gender:
+                                @if(empty ( Auth::user()->sddextr )) Update Needed 
+                                @else 
+                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "M") Male @endif
+                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "F") Female @endif
+                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "O") Other @endif
+                                @endif
+                            </label>
                             <div class="col-md-12">
                             <div class="dropdown">
                                 <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" id="gender" name="gender" autocomplete="off">
@@ -121,7 +128,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-globe"></i></span>
                                 </div>
-                                <input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif" class="form-control"  type="text" readonly="">
+                                <input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed 
+                                @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @if (Auth::user()->sddextr->DEPT === 'MSU') - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @endif @if (Auth::user()->sddextr->DEPT === 'NGO') - {{ Auth::user()->sddextr->ngo_name }} @endif
+                                @endif 
+                                " class="form-control"  type="text" readonly="">
                             </div>
                         </div>
 

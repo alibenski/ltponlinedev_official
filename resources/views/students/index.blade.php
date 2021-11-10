@@ -94,7 +94,17 @@
                             <label for="org" class="col-md-4 col-form-label">Organization:</label>
 
                             <div class="col-md-8 font-weight-bold">
-                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }} @endif</p>
+                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }} @endif
+
+                                @if (Auth::user()->sddextr->DEPT === 'MSU')
+                                    - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} 
+                                @endif
+
+                                @if (Auth::user()->sddextr->DEPT === 'NGO')
+                                    - {{ Auth::user()->sddextr->ngo_name }} 
+                                @endif
+
+                                </p>
                             </div>
                         </div>
 
