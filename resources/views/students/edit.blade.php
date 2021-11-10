@@ -42,7 +42,7 @@
                     <form id="updateProfileForm" method="POST" action="{{ route('students.update', $student->id) }}" class="form-horizontal">
                         {{ csrf_field() }}
                         <div id="profileSelect" class="form-group">
-                          <label for="profile" class="col-md-12 control-label">Profile:</label>
+                          <label for="profile" class="col-md-12 control-label">Profile: <span class="text-danger"> * required field </span></label>
                         
                           @include('ajax-profile-select')
                           
@@ -226,12 +226,13 @@
 <script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script> --}}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+{{-- <script src="{{ asset('js/profileOrgValidator.js') }}"></script> --}}
 <script>
-  $(document).ready(function() {
-    $('#datetimepicker4').datetimepicker({
-        format: 'YYYY-MM-DD'
+    $(document).ready(function() {
+        $('#datetimepicker4').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
     });
-  });
 </script>
 <script>
     $(document).ready(function() {
@@ -239,7 +240,7 @@
           placeholder: "Select from dropdown",
           });
         $('.select-profile-single').select2({
-          placeholder: "Select Profile",
+          placeholder: "Select Profile Required",
           });
     });
 </script>
@@ -276,21 +277,54 @@ $(document).ready(function () {
                 $('#selectInput').val('1');
                 console.log($('#selectInput').val());
 
-                $("select[name='organization']").on("change", function () {
-                    let choice = $("select[name='organization']").val();
-                    if (choice == "MSU") {
-                        getCountry();
-                    } else {
-                        $("#countrySection").html("");
-                    }
+                    $("select[name='organization']").on("change", function () {
+                        let choice = $("select[name='organization']").val();
 
-                    if (choice == "NGO") {
-                        $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
-                    } else {
-                        $("#ngoSection").html("");
-                    }
-                    
-                });
+                        if (choice == "MSU") {
+                            getCountry();
+
+                            $("select[name='profile'] option[value='MSU']").prop('selected', true);
+                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            $('select[name="profile"]').val('MSU').trigger('change');
+                        } else {
+                            $("#countrySection").html("");
+                        }
+
+                        if (choice == "NGO") {
+                            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+
+                            $("select[name='profile'] option[value='NGO']").prop('selected', true);
+                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            $('select[name="profile"]').val('NGO').trigger('change');
+                        } else {
+                            $("#ngoSection").html("");
+                        }
+                        
+                        if (choice == "999") {
+                            $("select[name='profile'] option[value='SPOUSE']").prop('selected', true);
+                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            $('select[name="profile"]').val('SPOUSE').trigger('change');
+                        } 
+
+                        if (choice == "RET") {
+                            $("select[name='profile'] option[value='RET']").prop('selected', true);
+                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            $('select[name="profile"]').val('RET').trigger('change');
+                        } 
+
+                        if (choice == "SERV") {
+                            $("select[name='profile'] option[value='SERV']").prop('selected', true);
+                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            $('select[name="profile"]').val('SERV').trigger('change');
+                        } 
+
+                        if (choice == "PRESS") {
+                            $("select[name='profile'] option[value='PRESS']").prop('selected', true);
+                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            $('select[name="profile"]').val('PRESS').trigger('change');
+                        } 
+
+                    });
                 });        
         } else {
                 console.log('hide it');
