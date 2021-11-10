@@ -49,6 +49,36 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="currentOrg" class="col-md-12 control-label">Organization:</label>
+
+                            <div class="input-group col-md-12 inputGroupContainer">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-globe"></i></span>
+                                </div>
+                                <input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed 
+                                @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @if (Auth::user()->sddextr->DEPT === 'MSU') - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @endif @if (Auth::user()->sddextr->DEPT === 'NGO') - {{ Auth::user()->sddextr->ngo_name }} @endif
+                                @endif 
+                                " class="form-control"  type="text" readonly="">
+                            </div>
+                        </div>
+
+                        <!-- MAKE A DECISION SECTION -->
+                
+                        <div class="form-group">
+                            <label class="col-md-12 control-label">Change Organization?</label>
+
+                              <div class="col-md-12">
+                                        <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
+                                        <label for="decision1" class="form-control-static">YES</label> 
+                              </div>
+                        </div>
+                        {{-- insert org dropdown if decision is YES --}}
+                        <div id="orgSelect"></div>
+                        <div id="countrySection"></div>
+                        <div id="ngoSection"></div>
+                        <input id="selectInput" type="hidden">
+
+                        <div class="form-group">
                             <label for="TITLE" class="col-md-12 control-label">Title:</label>
 
                             <div class="input-group col-md-12 inputGroupContainer">
@@ -56,33 +86,6 @@
                                     <span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
                                 </div>
                                 <input  name="TITLE" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->TITLE }} @endif" class="form-control"  type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group {{ $errors->has('gender') ? 'is-invalid' : '' }}">
-                            <label for="gender" class="col-md-12 control-label">Gender:
-                                @if(empty ( Auth::user()->sddextr )) Update Needed 
-                                @else 
-                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "M") Male @endif
-                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "F") Female @endif
-                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "O") Other @endif
-                                @endif
-                            </label>
-                            <div class="col-md-12">
-                            <div class="dropdown">
-                                <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" id="gender" name="gender" autocomplete="off">
-                                    <option value="">--- Please Select ---</option>
-                                    <option value="F">Female</option>
-                                    <option value="M">Male</option>
-                                    <option value="O">Other</option>
-                                </select>
-                            </div>
-
-                                @if ($errors->has('gender'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('gender') }}</strong>
-                                    </span>
-                                @endif
                             </div>
                         </div>
 
@@ -121,35 +124,32 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="currentOrg" class="col-md-12 control-label">Organization:</label>
+                        <div class="form-group {{ $errors->has('gender') ? 'is-invalid' : '' }}">
+                            <label for="gender" class="col-md-12 control-label">Gender:
+                                @if(empty ( Auth::user()->sddextr )) Update Needed 
+                                @else 
+                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "M") Male @endif
+                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "F") Female @endif
+                                    @if (strtoupper(Auth::user()->sddextr->SEX) == "O") Other @endif
+                                @endif
+                            </label>
+                            <div class="col-md-12">
+                            <div class="dropdown">
+                                <select class="col-md-12 form-control select2-basic-single" style="width: 100%;" id="gender" name="gender" autocomplete="off">
+                                    <option value="">--- Please Select ---</option>
+                                    <option value="F">Female</option>
+                                    <option value="M">Male</option>
+                                    <option value="O">Other</option>
+                                </select>
+                            </div>
 
-                            <div class="input-group col-md-12 inputGroupContainer">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-globe"></i></span>
-                                </div>
-                                <input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed 
-                                @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @if (Auth::user()->sddextr->DEPT === 'MSU') - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @endif @if (Auth::user()->sddextr->DEPT === 'NGO') - {{ Auth::user()->sddextr->ngo_name }} @endif
-                                @endif 
-                                " class="form-control"  type="text" readonly="">
+                                @if ($errors->has('gender'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('gender') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
-
-                        <!-- MAKE A DECISION SECTION -->
-                
-                        <div class="form-group">
-                            <label class="col-md-12 control-label">Change Organization?</label>
-
-                              <div class="col-md-12">
-                                        <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
-                                        <label for="decision1" class="form-control-static">YES</label> 
-                              </div>
-                        </div>
-                        {{-- insert org dropdown if decision is YES --}}
-                        <div id="orgSelect"></div>
-                        <div id="countrySection"></div>
-                        <div id="ngoSection"></div>
-                        <input id="selectInput" type="hidden">
 
                         <div class="form-group">
                             <label for="contactNo" class="col-md-12 control-label">Contact Number:</label>

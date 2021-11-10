@@ -51,26 +51,30 @@
                                 </p>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label for="org" class="col-md-4 col-form-label">Organization:</label>
+
+                            <div class="col-md-8 font-weight-bold">
+                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }} @endif
+
+                                @if (Auth::user()->sddextr->DEPT === 'MSU')
+                                    - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} 
+                                @endif
+
+                                @if (Auth::user()->sddextr->DEPT === 'NGO')
+                                    - {{ Auth::user()->sddextr->ngo_name }} 
+                                @endif
+
+                                </p>
+                            </div>
+                        </div>
                         
                         <div class="form-group row">
                             <label for="title" class="col-md-4 col-form-label">Title:</label>
 
                             <div class="col-md-8 font-weight-bold">
                                 <p>@if(empty ( Auth::user()->sddextr )) Update Needed @else {{ Auth::user()->sddextr->TITLE }} @endif</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="gender" class="col-md-4 col-form-label">Gender:</label>
-
-                            <div class="col-md-8 font-weight-bold">
-                                <p>@if(empty ( Auth::user()->sddextr )) Update Needed 
-                                    @else 
-                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "M") Male @endif
-                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "F") Female @endif
-                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "O") Other @endif
-                                    @endif
-                                </p>
                             </div>
                         </div>
 
@@ -91,23 +95,19 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="org" class="col-md-4 col-form-label">Organization:</label>
+                            <label for="gender" class="col-md-4 col-form-label">Gender:</label>
 
                             <div class="col-md-8 font-weight-bold">
-                                <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }} @endif
-
-                                @if (Auth::user()->sddextr->DEPT === 'MSU')
-                                    - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} 
-                                @endif
-
-                                @if (Auth::user()->sddextr->DEPT === 'NGO')
-                                    - {{ Auth::user()->sddextr->ngo_name }} 
-                                @endif
-
+                                <p>@if(empty ( Auth::user()->sddextr )) Update Needed 
+                                    @else 
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "M") Male @endif
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "F") Female @endif
+                                        @if (strtoupper(Auth::user()->sddextr->SEX) == "O") Other @endif
+                                    @endif
                                 </p>
                             </div>
                         </div>
-
+                        
                         <div class="form-group row">
                             <label for="contactNo" class="col-md-4 col-form-label">Contact Number:</label>
 
