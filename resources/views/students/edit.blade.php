@@ -56,8 +56,7 @@
                                     <span class="input-group-text"><i class="fa fa-globe"></i></span>
                                 </div>
                                 <input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed 
-                                @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @if (Auth::user()->sddextr->DEPT === 'MSU') - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @endif @if (Auth::user()->sddextr->DEPT === 'NGO') - {{ Auth::user()->sddextr->ngo_name }} @endif
-                                @endif 
+                                @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @if (Auth::user()->sddextr->DEPT === 'MSU') @if (Auth::user()->sddextr->countryMission) - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @else - (country update needed) @endif @endif @if (Auth::user()->sddextr->DEPT === 'NGO') @if (Auth::user()->sddextr->ngo_name)- {{ Auth::user()->sddextr->ngo_name }} @else - (NGO name update needed) @endif @endif @endif
                                 " class="form-control"  type="text" readonly="">
                             </div>
                         </div>

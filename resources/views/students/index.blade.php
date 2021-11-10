@@ -59,11 +59,19 @@
                                 <p>@if(empty(Auth::user()->sddextr)) Update Needed @else {{ Auth::user()->sddextr->torgan['Org name'] }} - {{ Auth::user()->sddextr->torgan['Org Full Name'] }} @endif
 
                                 @if (Auth::user()->sddextr->DEPT === 'MSU')
+                                    @if (Auth::user()->sddextr->countryMission)
                                     - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} 
+                                    @else 
+                                    - (country update needed)
+                                    @endif
                                 @endif
 
                                 @if (Auth::user()->sddextr->DEPT === 'NGO')
+                                    @if (Auth::user()->sddextr->ngo_name)
                                     - {{ Auth::user()->sddextr->ngo_name }} 
+                                    @else
+                                    - (NGO name update needed)
+                                    @endif
                                 @endif
 
                                 </p>
