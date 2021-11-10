@@ -12,4 +12,13 @@ class MsuUpdateField
                 $student->sddextr->country_mission = NULL;
             }
     }
+
+    public function checkMsuValueNewUser($newUser, $request)
+    {
+        if ($request->org === 'MSU') {
+                $newUser->country_mission = $request->countryMission;
+            } else {
+                $newUser->country_mission = NULL;
+            }
+    }
 }

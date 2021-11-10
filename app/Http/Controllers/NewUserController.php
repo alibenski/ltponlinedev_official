@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\User\MsuUpdateField;
+use App\Services\User\NgoUpdateField;
 use App\FileNewUser;
 use App\Mail\SendAuthMail;
 use App\NewUser;
@@ -443,7 +445,7 @@ class NewUserController extends Controller
      * @param  \App\NewUser  $newUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, MsuUpdateField $msuUpdateField, NgoUpdateField $ngoUpdateField)
     {
         if ($request->submit == 2) {
             $newUser = NewUser::findOrFail($id);
@@ -474,7 +476,7 @@ class NewUserController extends Controller
             
             $this->updateAttachments($request, $newUser);
             
-            $this->updateNewUser($newUser, $request);
+            $this->updateNewUser($newUser, $request, $msuUpdateField, $ngoUpdateField);
 
             if ($request->emailText != null) {
                 // get emailText and send email
@@ -527,7 +529,7 @@ class NewUserController extends Controller
             
             $this->updateAttachments($request, $newUser);
 
-            $this->updateNewUser($newUser, $request);
+            $this->updateNewUser($newUser, $request, $msuUpdateField, $ngoUpdateField);
             
             // save entry to Auth table
             $user = User::create([
@@ -638,7 +640,7 @@ class NewUserController extends Controller
         }
     }
 
-    public function updateNewUser($newUser, $request)
+    public function updateNewUser($newUser, $request, $msuUpdateField, $ngoUpdateField)
     {
         $filtered = array_filter($request->all());
         $newUser->update($filtered);
@@ -646,13 +648,8 @@ class NewUserController extends Controller
         $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
         $newUser->nameLast = strtoupper($request->nameLast);
 
-        if ($request->org == 'MSU') {
-            $newUser->country_mission = $request->countryMission;
-        }
-
-        if ($request->org == 'NGO') {
-            $newUser->ngo_name = $request->ngoName;
-        }
+        $msuUpdateField->checkMsuValueNewUser($newUser, $request);
+        $ngoUpdateField->checkNgoValueNewUser($newUser, $request);
 
         $newUser->save();
     }
