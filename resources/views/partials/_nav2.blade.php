@@ -2,7 +2,9 @@
     <div class="row">
         <div class="col-md-12 alert">
         	@if(is_null($term)) @else
-        		@if($term->Enrol_Date_Begin <= \Carbon\Carbon::now() && \Carbon\Carbon::now() <= $term->Enrol_Date_End) <h4>Current Enrolment for: <strong> {{ $term->Term_Name }} {{ $term->Comments }} Term</strong></h4>  @else <h5><strong><span class="text-danger"><i class="icon fa fa-bullhorn fa-2x mr-2"></i> Enrolment period is currently closed until {{ date("d F Y", strtotime($term->Enrol_Date_Begin)) }}.</span></strong></h5> @endif
+        		@if($term->Enrol_Date_Begin <= \Carbon\Carbon::now() && \Carbon\Carbon::now() <= $term->Enrol_Date_End) <h4>Current Enrolment for: <strong> {{ $term->Term_Name }} {{ $term->Comments }} Term</strong></h4>  @else <h5><strong><span class="text-danger"><i class="icon fa fa-bullhorn fa-2x mr-2"></i> Enrolment period is currently closed. 
+					{{-- until {{ date("d F Y", strtotime($term->Enrol_Date_Begin)) }} --}}
+					</span></strong></h5> @endif
         	@endif
         </div>
 	</div>
