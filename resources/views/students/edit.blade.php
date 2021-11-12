@@ -4,6 +4,22 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+    <style>
+        .overlay {  
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            z-index: 2;
+            opacity: 0;
+            background: rgba(39, 42, 43, 0.8);
+            transition: opacity 200ms ease-in-out;
+            border-radius: 4px;
+            margin: -15px 0 0 -15px;
+
+        }
+
+    </style>
 @stop
 @section('content')
     {{-- Modal Dialog Box --}}
@@ -42,12 +58,13 @@
                     <form id="updateProfileForm" method="POST" action="{{ route('students.update', $student->id) }}" class="form-horizontal">
                         {{ csrf_field() }}
                         <div id="profileSelect" class="form-group">
-                          <label for="profile" class="col-md-12 control-label">Profile: <span class="text-danger"> * required field </span></label>
+                          <label for="profile" class="col-md-12 control-label">Profile: <span class="text-danger"> * required field start here </span></label>
                         
                           @include('ajax-profile-select')
                           
                         </div>
-
+                        
+                      <div id="step2" class="d-none">
                         <div class="form-group">
                             <label for="currentOrg" class="col-md-12 control-label">Organization:</label>
 
@@ -55,26 +72,34 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-globe"></i></span>
                                 </div>
-                                <input  name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed 
+                                <input name="currentOrg" placeholder="@if(empty($student->sddextr)) Update Needed 
                                 @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @if (Auth::user()->sddextr->DEPT === 'MSU') @if (Auth::user()->sddextr->countryMission) - {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @else - (country update needed) @endif @endif @if (Auth::user()->sddextr->DEPT === 'NGO') @if (Auth::user()->sddextr->ngo_name)- {{ Auth::user()->sddextr->ngo_name }} @else - (NGO name update needed) @endif @endif @endif
                                 " class="form-control"  type="text" readonly="">
+                                <input name="currentOrganization" type="hidden" value="@if(empty($student->sddextr)) [] @else{{Auth::user()->sddextr->DEPT}}@endif" />
+                        
                             </div>
                         </div>
 
-                        <!-- MAKE A DECISION SECTION -->
-                
-                        <div class="form-group">
-                            <label class="col-md-12 control-label">Change Organization?</label>
+                        <div id="hiddenSection" class="form-group d-none">
+                            
+                            <div id="hiddenDecision" class="form-group d-none">
+                                <!-- MAKE A DECISION SECTION -->
+                                <label class="col-md-12 control-label">Change Organization?</label>
 
-                              <div class="col-md-12">
-                                        <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
-                                        <label for="decision1" class="form-control-static">YES</label> 
-                              </div>
+                                <div class="col-md-12">
+                                    <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
+                                    <label for="decision1" class="form-control-static">YES</label> 
+                                </div>
+                            </div>
+
+                            {{-- insert org dropdown if decision is YES --}}
+                            
+                                    <div id="orgSelect" class="col-md-12 mt-2"></div>
+                                    <div id="countrySection"></div>
+                                    <div id="ngoSection"></div>
+                              
                         </div>
-                        {{-- insert org dropdown if decision is YES --}}
-                        <div id="orgSelect"></div>
-                        <div id="countrySection"></div>
-                        <div id="ngoSection"></div>
+
                         <input id="selectInput" type="hidden">
 
                         <div class="form-group">
@@ -210,6 +235,7 @@
                               <input type="hidden" name="_token" value="{{ Session::token() }}">
                               {{ method_field('PUT') }}
                         </div>
+                      </div>
                     </form>
                 </div>
             </div>
@@ -225,7 +251,7 @@
 <script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script> --}}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-{{-- <script src="{{ asset('js/profileOrgValidator.js') }}"></script> --}}
+<script src="{{ asset('js/profileOrgValidator.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('#datetimepicker4').datetimepicker({
@@ -275,6 +301,15 @@ $(document).ready(function () {
                 $(document).find('.select2-basic-single').select2();
                 $('#selectInput').val('1');
                 console.log($('#selectInput').val());
+
+                // disable MSU, NGO, etc options from Org select dropdown
+                $("select[name='organization'] option[value='MSU']").prop('disabled', true);
+                $("select[name='organization'] option[value='999']").prop('disabled', true);
+                $("select[name='organization'] option[value='RET']").prop('disabled', true);
+                $("select[name='organization'] option[value='SERV']").prop('disabled', true);
+                $("select[name='organization'] option[value='NGO']").prop('disabled', true);
+                $("select[name='organization'] option[value='PRESS']").prop('disabled', true);
+                $("select[name='organization']").attr("required", true);
 
                     $("select[name='organization']").on("change", function () {
                         let choice = $("select[name='organization']").val();
