@@ -22,6 +22,7 @@
 					<th>Short Name</th>
                     <th>Full Name</th>
                     <th>Focal Points</th>
+                    <th>Focal Point Emails</th>
                     <th>Has Learning Partner</th>
                     <th>Self Paying Students</th>
                     <th>Not Billed</th>
@@ -38,7 +39,14 @@
                             <td>
                                 <ul>
                                 @foreach ($organization->focalpoints as $focalpoint)
-                                    <li> {{ $focalpoint->name }} - {{ $focalpoint->email }} </li>
+                                    <li> {{ $focalpoint->name }} </li>
+                                @endforeach
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                @foreach ($organization->focalpoints as $focalpoint)
+                                    {{ $focalpoint->email }}; <br />
                                 @endforeach
                                 </ul>
                             </td>
