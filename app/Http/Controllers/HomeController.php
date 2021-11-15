@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\User\MsuUpdateField;
+use App\Services\User\NgoUpdateField;
 use App\Course;
 use App\FocalPoints;
 use App\Language;
@@ -161,7 +163,7 @@ class HomeController extends Controller
         return view('form.whatorg', compact('terms', 'next_term', 'org'));
     }
 
-    public function whatform(Request $request)
+    public function whatform(Request $request, MsuUpdateField $msuUpdateField, NgoUpdateField $ngoUpdateField)
     {
         // if part of new organization, then save the new organization to sddextr     
         // save CAT to Auth User table   
@@ -172,6 +174,10 @@ class HomeController extends Controller
         // save organization to sddextr table
         $student->sddextr->CAT = $request->profile;
         $student->sddextr->DEPT = $request->input('organization');
+
+        $msuUpdateField->checkMsuValue($student, $request);
+        $ngoUpdateField->checkNgoValue($student, $request); 
+
         $student->sddextr->save();
 
         // query Torgan table if $request->organization is selfpaying or not
