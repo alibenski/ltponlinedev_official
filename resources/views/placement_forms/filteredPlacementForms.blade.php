@@ -2,6 +2,19 @@
 
 @section('customcss')
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+	<style>
+	div.resizable {
+		resize: both;
+		overflow: auto;
+		width: 180px;
+		height: 180px;
+		margin: 0px;
+		padding: 2px;
+		border: 1px solid black;
+		display:block;
+
+		}
+	</style>
 @stop
 
 @section('content')
@@ -96,6 +109,12 @@
 	            <th>Name</th>
 	            {{-- <th>Convoked?</th> --}}
 	            <th>Language</th>
+	            <th>Preferred Days</th>
+	            <th>Preferred Time</th>
+	            <th>Preferred Course Comment</th>
+	            <th>Student Comment</th>
+	            <th>Flexbile?</th>
+	            <th>Waitlisted</th>
 	            <th>HR Approval</th>
 	            <th>Payment Status</th>
 	            <th>Organization</th>
@@ -111,6 +130,7 @@
 			@foreach($placement_forms as $form)
 			<tr>
 				<td>
+					<input name="formID" class="form-id" type="hidden" value="{{ $form->id }}">
 					{{-- <button class="show-modal btn btn-warning" data-index="{{$form->INDEXID}}" data-tecode="{{$form->Te_Code}}" data-term="{{$form->Term}}"><span class="glyphicon glyphicon-eye-open"></span> Show</button> --}}
                     {{-- <a href="{{ route('placement-form.edit', [$form->id]) }}" target="_blank" class="btn btn-warning" style="margin: 1px;"><span class="glyphicon glyphicon-envelope"></span> Convoke</a>  --}}
                     <a href="{{ route('placement-form-assign', [$form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><span class="glyphicon glyphicon-edit"></span> Assign Course</a> 
@@ -143,6 +163,12 @@
 				@endif
 				</td> --}}
 				<td>{{ $form->L }}</td>
+				<td>{{ $form->dayInput }}</td>
+				<td>{{ $form->timeInput }}</td>
+				<td><div class="resizable">{{ $form->course_preference_comment }}</div></td>
+				<td>{{ $form->std_comments }}</td>
+				<td>@if($form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</td>
+				<td><div class="waitlist-cell"></div></td>
 				<td>
 					@if(is_null($form->is_self_pay_form))
 						@if(in_array($form->DEPT, ['UNOG', 'JIU','DDA','OIOS','DPKO']))
@@ -239,6 +265,32 @@ $(document).ready(function() {
     $('.select2-basic-single').select2({
     placeholder: "Select Here",
     });
+
+	var indexArray = [];
+    
+    /* look for all checkboxes that have name of 'schedule_id' attached to it and check if it was checked */
+    $('input[name="formID"]').each(function() {
+      indexArray.push($(this).val());
+    });
+
+	$.ajax({
+        url: "{{ route('ajax-check-if-waitlisted') }}", 
+        method: 'GET',
+		data: {indexArray:indexArray},
+        success: function(data, status) {
+            console.log(data)
+			$.each(data, function(x, y) {
+					$("input[name='formID']").each(function() {
+						if ($(this).val() == y.id) {
+							if (y.waitlist == 1) {
+								$(this).closest('tr').find('.waitlist-cell').html("Yes in Term "+y.details[0].terms.Term_Code+" for "+y.details[0].courses.Description);
+							}
+						}
+					});
+				});
+        
+        }
+    }); 
 });
 </script>
 <script language="javascript">

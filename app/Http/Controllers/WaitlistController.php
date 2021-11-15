@@ -39,6 +39,37 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function ajaxCheckIfWaitlisted(Request $request)
+    {
+        if ($request->ajax()) {
+            $waitlistArray = [];
+            
+            $placement_forms = PlacementForm::whereIn('id', $request->indexArray)->get();
+            foreach ($placement_forms as $placement_form) {
+                $prev_termCode = Term::where('Term_Code', $placement_form->Term)->first()->Term_Prev;
+                $waitlists = Repo::where('INDEXID', $placement_form->INDEXID)
+                    ->where('Term', $prev_termCode)
+                    ->with('terms')
+                    ->with('languages')
+                    ->with('courses')
+                    ->with('classrooms')
+                    ->whereHas('classrooms', function ($query) {
+                        $query->whereNull('Tch_ID')
+                            ->orWhere('Tch_ID', '=', 'TBD');
+                    })
+                    ;
+                $waitlistArray[] =  (object) [
+                    'id' => $placement_form->id,
+                    'waitlist' => $waitlists->get()->count(),
+                    'details' => $waitlists->get(),
+                ];
+
+            }
+            $data = $waitlistArray;
+            return response()->json($data);
+        }
+    }
+
     public function waitListOneListCount(Request $request)
     {
         if (Session::has('Term')) {
