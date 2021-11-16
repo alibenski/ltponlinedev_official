@@ -66,7 +66,7 @@
                         
                       <div id="step2" class="d-none">
                         <div class="form-group">
-                            <label for="currentOrg" class="col-md-12 control-label">Organization:</label>
+                            <label for="currentOrg" class="col-md-12 control-label">Current Organization:</label>
 
                             <div class="input-group col-md-12 inputGroupContainer">
                                 <div class="input-group-prepend">
@@ -84,7 +84,7 @@
                             
                             <div id="hiddenDecision" class="form-group d-none">
                                 <!-- MAKE A DECISION SECTION -->
-                                <label class="col-md-12 control-label">Change Organization?</label>
+                                <label class="col-md-12 control-label">Change current organization?</label>
 
                                 <div class="col-md-12">
                                     <input id="decision1" name="decision" class="with-font dyes" type="checkbox" value="1">
