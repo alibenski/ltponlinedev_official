@@ -101,7 +101,15 @@
 						{ "data": "Term" }, 
 						{ "data": "users.nameLast" }, 
 						{ "data": "users.nameFirst" }, 
-						{ "data": "users.profile" }, 
+						{"data": function ( row, type, val, meta ) {
+								if (row.enrolments.length > 0) {
+									return row.enrolments[0].profile;
+								} else if (row.placements.length > 0) {
+									return row.placements[0].profile;
+								}
+							return 'No Profile Set';
+							}
+						},
 						{ "data": "users.email" }, 
 						// { "data": "users.sddextr.DEPT" }, 
 						{ "data": "DEPT" }, 

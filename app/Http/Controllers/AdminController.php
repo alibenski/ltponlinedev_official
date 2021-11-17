@@ -343,7 +343,13 @@ class AdminController extends Controller
             $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT', 'Result')->where('Term', $term->Term_Code)
                 ->whereHas('classrooms', function ($q) {
                     $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
-                })
+                    })
+                ->with(['enrolments' => function ($q1) use($term) {
+                    $q1->where('Term', $term->Term_Code);
+                    }])
+                ->with(['placements' => function ($q2) use($term) {
+                    $q2->where('Term', $term->Term_Code);
+                    }])
                 ->with('users.sddextr') // access sddextr model via user model relationship
                 ->with('languages')
                 ->with('courses')
@@ -365,9 +371,12 @@ class AdminController extends Controller
             $term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first();
             // query all students enrolled to current term including waitlisted
             $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT')->where('Term', $term->Term_Code)
-                // ->whereHas('classrooms', function ($q) {
-                //     $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
-                // })
+                ->with(['enrolments' => function ($q1) use($term) {
+                    $q1->where('Term', $term->Term_Code);
+                    }])
+                ->with(['placements' => function ($q2) use($term) {
+                    $q2->where('Term', $term->Term_Code);
+                    }])
                 ->with('users.sddextr') // access sddextr model via user model relationship
                 ->with('languages')
                 ->with('courses')
