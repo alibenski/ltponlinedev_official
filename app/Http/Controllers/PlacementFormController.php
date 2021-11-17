@@ -820,6 +820,23 @@ class PlacementFormController extends Controller
      */
     public function assignCourseToPlacement(Request $request, $id)
     {
+        if ($request->submit_approval == 0 ) {
+            $placement_form = PlacementForm::find($id);
+            $placement_form->convoked = $request->convoked;
+            $placement_form->flexibleBtn = $request->flexible;
+            $placement_form->Result = $request->Result;
+            if (!is_null($request->admin_plform_comment)) {
+                $placement_form->admin_plform_comment = $request->admin_plform_comment;
+            }
+            $placement_form->assigned_to_course = 0;
+            $placement_form->updated_by_admin = 1;
+            $placement_form->modified_by = Auth::user()->id;
+            $placement_form->save();
+            
+            $request->session()->flash('warning', 'Placement form record has been updated. You can now close this window/tab.'); 
+            return redirect()->back();
+        }
+
         $code_index_id = $request->course_id . '-' . $request->schedule_id . '-' . $request->Term . '-' . $request->INDEXID;
         $request->request->add(['CodeIndexID' => $code_index_id]);
 

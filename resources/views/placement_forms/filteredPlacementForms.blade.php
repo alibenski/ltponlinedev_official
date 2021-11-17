@@ -139,7 +139,11 @@
                 	@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 					@else
 					  @if ($form->modified_by)
-					    <span class="label label-success margin-label">Yes by @if($form->modifyUser->name) {{$form->modifyUser->name }}  @else   User ID {{ $form->modified_by }} @endif </span>
+					  	@if ($form->assigned_to_course === 1)
+							<span class="label label-success margin-label">Verified and assigned by @if($form->modifyUser->name) {{$form->modifyUser->name }}  @else   User ID {{ $form->modified_by }} @endif </span>
+						@elseif($form->assigned_to_course === 0)
+							<span class="label label-warning margin-label">Verified and not assigned by @if($form->modifyUser->name) {{$form->modifyUser->name }}  @else   User ID {{ $form->modified_by }} @endif </span>
+						@endif
 					  @endif
 					@endif
                 </td>
@@ -147,7 +151,11 @@
                 	@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 					@else
 					  @if ($form->modified_by)
+					  	@if ($form->assigned_to_course === 1)
 					    <span> {{$form->courses->Description}} </span>
+						@elseif($form->assigned_to_course === 0)
+						<span>  </span>
+						@endif
 					  @endif
 					@endif
 					
