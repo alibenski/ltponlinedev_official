@@ -203,7 +203,7 @@
               "sSearch": "Search Student:"
               },
             "bAutoWidth": false,
-            "order": [[ 4, "asc" ]],
+            "order": [[ 2, "asc" ], [ 4, "asc" ]],
             "aaData": data,
             "columns": [
                 {
