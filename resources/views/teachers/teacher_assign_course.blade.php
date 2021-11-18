@@ -126,7 +126,7 @@
 					@if(empty($element->updated_by_admin)) 
                 	@else
 						@if ($element->modifyUser)
-			            <div class="callout callout-warning">
+			            <div class="callout callout-info">
 							Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
 						</div>
 						

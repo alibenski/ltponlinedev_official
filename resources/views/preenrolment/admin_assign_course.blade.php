@@ -189,10 +189,10 @@
 						<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-not-assign-btn btn btn-warning btn-space"><span><i class="fa fa-thumbs-down"></i></span> Verify and Not Assign </button>	                	 	
 	                </span>
 	                
-					@if(empty($element->updated_by_admin)) 
+					@if(is_null($element->updated_by_admin)) 
                 	@else
 						@if ($element->modifyUser)
-			            <div class="callout callout-warning">
+			            <div class="callout callout-info">
 							Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
 						</div>
 						

@@ -89,10 +89,12 @@
             		<input type="hidden" name="_token" value="{{ Session::token() }}">
             	</td>
               <td>
-                @if(empty($element->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+                @if(is_null($element->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
                 @else
-                  @if ($element->modified_by)
+                  @if ($element->updated_by_admin === 1)
                     <span class="label label-success margin-label">Yes by {{$element->modifyUser->name }} </span>
+                  @elseif($element->updated_by_admin === 0)
+                    <span class="label label-warning margin-label">Verified and Not Assigned by {{$element->modifyUser->name }} </span>
                   @endif
                 @endif
               </td>
@@ -202,6 +204,47 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
 
   $.ajax({
     url: '{{ route('admin-nothing-to-modify') }}',
+    type: 'PUT',
+    data: {admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+  })
+  .done(function(data) {
+    console.log(data);
+    if (data == 0) {
+      alert('Hmm... Nothing to change, nothing to update...');
+    }
+
+    var L = $("input[name='L'].modal-input").val();
+
+      $.ajax({
+          url: '{{ route('admin-assign-course-view') }}',
+          type: 'GET',
+          data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, _token: token},
+        })
+        .done(function(data) {
+          console.log("no change assign view : success");
+          $('.modal-body-content').html(data);
+        })
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+    
+  });
+    
+});
+
+$('#modalshow').on('click', '.modal-not-assign-btn',function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-no-change").val();
+
+  $.ajax({
+    url: '{{ route('admin-verify-and-not-assign') }}',
     type: 'PUT',
     data: {admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
   })
