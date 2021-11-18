@@ -18,13 +18,13 @@
 </div>
 @elseif($placement_form->assigned_to_course === 0)
 <div class="row">
-	<div class="callout callout-danger col-sm-12">
+	<div class="callout callout-warning col-sm-12">
 		<h4>Verified and not assigned by  {{ $placement_form->modifyUser->name }}</h4>
 	</div>
 </div>
 @else
 <div class="row">
-	<div class="callout callout-warning col-sm-12">
+	<div class="callout callout-danger col-sm-12">
 		<h4>No language course assigned </h4>
 	</div>
 </div>
@@ -256,8 +256,8 @@
 			<div class="form-group col-sm-12">
 				{{-- <a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a> --}}
 				<div class="col-sm-5 col-sm-offset-4">
-					<button type="submit" class="btn btn-danger button-prevent-multi-submit" style="margin: 2px 2px" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Verified and Not Assigned </button>
-					<button type="submit" class="btn btn-success button-prevent-multi-submit" style="margin: 2px 2px" name="submit-approval" value="1" disabled=""><span class="glyphicon glyphicon-check"></span> Verified and Assigned </button>	
+					<button type="submit" class="btn btn-success button-prevent-multi-submit" style="margin: 2px 2px" name="submit-approval" value="1" disabled=""><span class="glyphicon glyphicon-check"></span> Assign </button>	
+					<button type="submit" class="btn btn-warning button-prevent-multi-submit" style="margin: 2px 2px" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Verify and Not Assign </button>
 				</div>
 				{{-- <button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button> --}}
 			</div>
