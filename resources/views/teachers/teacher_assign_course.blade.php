@@ -157,7 +157,7 @@
 		                <input name="Term" type="hidden" value="{{ $element->Term }}">
 
 						<div class="form-group">
-		                	<p class="alert alert-warning">					
+		                	<p class="alert alert-success">					
 		                	To change course and/or schedule, fill in the fields below and click Modify
 							</p>
 		                	<label>Course:</label>
@@ -188,7 +188,7 @@
 
 		                <div class="form-group">
 
-		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-warning btn-space pull-right"><span><i class="fa fa-exchange"></i></span> Modify </button>
+		                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-save-btn btn btn-success btn-space pull-right"><span><i class="fa fa-exchange"></i></span> Modify </button>
 			                
 			                <input type="hidden" name="_token" value="{{ Session::token() }}">
 			                {{ method_field('PUT') }}
