@@ -120,7 +120,7 @@ class PreenrolmentController extends Controller
 
             if (\Request::filled('L')) {
 
-                // query regular enrolment forms which are unassigned to a course
+                // query total regular enrolment forms (assigned + not assigned)
                 $arr3 = Preenrolment::where('Term', Session::get('Term'))
                     ->where('overall_approval', 1)
                     // ->whereNull('updated_by_admin')
@@ -129,6 +129,7 @@ class PreenrolmentController extends Controller
                     // ->get()
                 ;
 
+                // query regular enrolment forms which are unassigned to a course
                 $assigned_forms_count = Preenrolment::where('Term', Session::get('Term'))
                     ->where('L', \Request::get('L'))
                     ->where('overall_approval', 1)

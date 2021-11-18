@@ -160,6 +160,7 @@ $(document).ready(function () {
     $('#myTable').DataTable({
       "deferRender": true,
     	"paging":   false,
+      "order": [[ 2, "asc" ]],
     }); 
 
     $('.assign-course').click( function() {
