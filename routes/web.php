@@ -319,6 +319,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('admin-check-schedule-count', ['as' => 'admin-check-schedule-count', 'uses' => 'PreenrolmentController@adminCheckScheduleCount']);
     Route::put('admin-save-assigned-course', ['as' => 'admin-save-assigned-course', 'uses' => 'PreenrolmentController@adminSaveAssignedCourse']);
     Route::put('admin-nothing-to-modify', ['as' => 'admin-nothing-to-modify', 'uses' => 'PreenrolmentController@adminNothingToModify']);
+    Route::put('admin-verify-and-not-assign', ['as' => 'admin-verify-and-not-assign', 'uses' => 'PreenrolmentController@adminVerifyAndNotAssign']);
     Route::get('admin-manage-user-assign-course-view', ['as' => 'admin-manage-user-assign-course-view', 'uses' => 'PreenrolmentController@adminManageUserAssignCourseView']);
 
     /**

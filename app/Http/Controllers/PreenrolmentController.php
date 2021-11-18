@@ -485,6 +485,35 @@ class PreenrolmentController extends Controller
         }
     }
 
+    public function adminVerifyAndNotAssign(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexno = $request->qry_indexid;
+            $term = $request->qry_term;
+            $tecode = $request->qry_tecode;
+            $eform_submit_count = $request->eform_submit_count;
+            $admin_eform_comment = $request->admin_eform_comment;
+
+            $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+
+            $input_1 = ['admin_eform_comment' => $admin_eform_comment, 'updated_by_admin' => 0, 'modified_by' => Auth::user()->id];
+            $input_1 = array_filter($input_1, 'strlen');
+
+            foreach ($enrolment_to_be_copied as $data) {
+                $data->fill($input_1)->save();
+            }
+
+            $data = $request->all();
+
+            return response()->json($data);
+        }
+    }
+
     public function adminSaveAssignedCourse(Request $request)
     {
         if ($request->ajax()) {
