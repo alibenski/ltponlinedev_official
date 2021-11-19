@@ -1,6 +1,12 @@
 @extends('teachers.teacher_template')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <style>
+    .close {
+        color: #fff; 
+        opacity: 1;
+    }
+    </style>
 @stop
 @section('content')
 <div class="row">

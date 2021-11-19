@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\VerifyAndNotAssignTwoRecords;
 use App\File;
 use App\FocalPoints;
 use App\Mail\MailaboutCancel;
@@ -28,6 +29,8 @@ use Session;
 
 class PreenrolmentController extends Controller
 {
+    use VerifyAndNotAssignTwoRecords;
+
     public function studentEditEnrolmentFormView($term, $indexid, $tecode)
     {
         // get id(s) of form
@@ -493,6 +496,7 @@ class PreenrolmentController extends Controller
             $tecode = $request->qry_tecode;
             $eform_submit_count = $request->eform_submit_count;
             $admin_eform_comment = $request->admin_eform_comment;
+            $assign_modal = 1;
 
             $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
                 ->where('Te_Code', $tecode)
@@ -502,7 +506,7 @@ class PreenrolmentController extends Controller
                 ->get();
 
             if ($enrolment_to_be_copied->count() > 1) {
-                $updated_enrolment_record = $this->adminVerifyAndNotAssign2Records($enrolment_to_be_copied, $admin_eform_comment);
+                $updated_enrolment_record = $this->verifyAndNotAssignRecords($assign_modal, $enrolment_to_be_copied, $admin_eform_comment);
                 $data = $updated_enrolment_record;
                 return response()->json($data);
             }
@@ -518,18 +522,6 @@ class PreenrolmentController extends Controller
 
             return response()->json($data);
         }
-    }
-
-    public function adminVerifyAndNotAssign2Records($enrolment_to_be_copied, $admin_eform_comment)
-    {
-        $inputFor2 = ['admin_eform_comment' => $admin_eform_comment, 'updated_by_admin' => 0, 'modified_by' => Auth::user()->id];
-        $inputFor2 = array_filter($inputFor2, 'strlen');
-
-        foreach ($enrolment_to_be_copied as $enrolment_info) {
-            $enrolment_info->fill($inputFor2)->save();
-        }
-
-        return $enrolment_to_be_copied;
     }
 
     public function adminSaveAssignedCourse(Request $request)

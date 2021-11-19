@@ -410,6 +410,49 @@ $('#modalshow').on('click', '.modal-accept-btn',function() {
     
 });
 
+$('#modalshow').on('click', '.modal-not-assign-btn',function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var teacher_comments = $("textarea#textarea-"+eform_submit_count+"[name='teacher_comments'].course-no-change").val();
+
+
+  $.ajax({
+    url: "{{ route('teacher-verify-and-not-assign') }}",
+    type: 'PUT',
+    data: {teacher_comments:teacher_comments, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+  })
+  .done(function(data) {
+    console.log(data);
+    if (data == 0) {
+      alert('Hmm... Nothing to change, nothing to update...');
+    }
+
+    var L = $("input[name='L']").val();
+
+      $.ajax({
+          url: "{{ route('teacher-assign-course-view') }}",
+          type: 'GET',
+          data: {indexid:qry_indexid, L:L,_token: token},
+        })
+        .done(function(data) {
+          console.log("no change assign view : success");
+          $('.modal-body-content').html(data);
+        })
+  })
+  .fail(function() {
+    alert("An error occured. Click OK to reload.");
+    window.location.reload();
+  })
+  .always(function() {
+    console.log("complete");
+    
+  });
+    
+});
+
 $('#modalshow').on('click', '.modal-save-btn',function() {
   var eform_submit_count = $(this).attr('id');
   var qry_tecode = $(this).attr('data-tecode');

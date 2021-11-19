@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\VerifyAndNotAssignTwoRecords;
 use App\Attendance;
 use App\AttendanceRemarks;
 use App\Classroom;
@@ -29,6 +30,8 @@ use Spatie\Permission\Models\Role;
 
 class TeachersController extends Controller
 {
+    use VerifyAndNotAssignTwoRecords;
+
     public function teacherDashboard(Request $request)
     {
         if ( Auth::user()->hasRole('Teacher')) {
@@ -1023,6 +1026,42 @@ class TeachersController extends Controller
                 ->get();
 
             $input_1 = ['teacher_comments' => $teacher_comments, 'updated_by_admin' => 1, 'modified_by' => Auth::user()->id];
+            $input_1 = array_filter($input_1, 'strlen');
+
+            foreach ($enrolment_to_be_copied as $data) {
+                $data->fill($input_1)->save();
+            }
+
+            $data = $request->all();
+
+            return response()->json($data);
+        }
+    }
+
+    public function teacherVerifyAndNotAssign(Request $request)
+    {
+        if ($request->ajax()) {
+            $indexno = $request->qry_indexid;
+            $term = $request->qry_term;
+            $tecode = $request->qry_tecode;
+            $eform_submit_count = $request->eform_submit_count;
+            $teacher_comments = $request->teacher_comments;
+            $assign_modal = 0;
+
+            $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
+                ->where('Te_Code', $tecode)
+                ->where('INDEXID', $indexno)
+                ->where('eform_submit_count', $eform_submit_count)
+                ->where('Term', $term)
+                ->get();
+            
+            if ($enrolment_to_be_copied->count() > 1) {
+                $updated_enrolment_record = $this->verifyAndNotAssignRecords($assign_modal, $enrolment_to_be_copied, $teacher_comments);
+                $data = $updated_enrolment_record;
+                return response()->json($data);
+            }
+
+            $input_1 = ['teacher_comments' => $teacher_comments, 'updated_by_admin' => 0, 'modified_by' => Auth::user()->id];
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_copied as $data) {
