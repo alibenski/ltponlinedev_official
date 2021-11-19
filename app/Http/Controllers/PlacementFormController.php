@@ -825,12 +825,17 @@ class PlacementFormController extends Controller
             $placement_form->convoked = $request->convoked;
             $placement_form->flexibleBtn = $request->flexible;
             $placement_form->Result = $request->Result;
+
             if (!is_null($request->admin_plform_comment)) {
                 $placement_form->admin_plform_comment = $request->admin_plform_comment;
             }
             $placement_form->assigned_to_course = 0;
             $placement_form->updated_by_admin = 0;
             $placement_form->modified_by = Auth::user()->id;
+            $placement_form->schedule_id = null;
+            $placement_form->Te_Code = null;
+            $placement_form->Code = null;
+            $placement_form->CodeIndexID = null;
             $placement_form->save();
             
             $request->session()->flash('warning', 'Placement form record has been updated. You can now close this window/tab.'); 
