@@ -169,7 +169,8 @@
 				
 				@if(is_null($placement_form->assigned_to_course))
 					<strong class="text-danger">Not assigned to any course</strong>
-				@else
+				@elseif($placement_form->assigned_to_course === 1)
+				
 				<div class="form-group">
 				    <label class="control-label" for="">Assigned Course:</label>
 				    <div class="form-control">
@@ -183,6 +184,8 @@
 				        <p>{{ $placement_form->schedule->name }}</p>
 				    </div>
 				</div>
+				@elseif($placement_form->assigned_to_course === 0)
+					<strong class="text-danger">Verified and not assigned to any course</strong>
 				@endif
 				<a href="{{ route('placement-form-assign', [$placement_form->id]) }}" target="_blank" class="btn btn-success assign-course-link" style="margin: 1px;"><i class="fa fa-pencil"></i> Assign Course</a> 
 			</div> {{-- EOF 2nd column --}}
