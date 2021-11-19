@@ -226,6 +226,7 @@ $(document).ready(function() {
               });
 
               checkIfAssigned();
+              checkIfNotAssigned();
             })
             .fail(function(data) {
               console.log("error on showing enrol next term placement: " + data);
@@ -253,6 +254,7 @@ $(document).ready(function() {
             data: {indexid:indexid, L:L, _token:token},
           })
           .then(function(data) {
+            console.log(data)
             $.each(data, function (indexInArray, valueOfElement) {
                 $("td#"+valueOfElement.INDEXID+".enrolled-next-term").find("li.appended-value-1[data-name='"+valueOfElement['Te_Code']+"']").append("<span><i class='fa fa-star text-success' data-toggle='tooltip' title='This form has been assigned to a course by "+valueOfElement['modify_user']['name']+"'></i> </span>");
             });
@@ -264,6 +266,37 @@ $(document).ready(function() {
           })
           .always(function() {
             console.log("complete check if assigned");
+          })
+    ); 
+
+    $.when.apply($('tr.table-row'), promises).then(function() {
+        $('[data-toggle="tooltip"]').tooltip(); 
+        $(".preloader2").fadeOut(600);
+    }); 
+    return this;
+  }
+  function checkIfNotAssigned() {
+    var promises = [];    
+    promises.push(
+          $.ajax({
+            url: '{{ route('ajax-check-if-not-assigned') }}',
+            type: 'GET',
+            dateType:"json",
+            data: {indexid:indexid, L:L, _token:token},
+          })
+          .then(function(data) {
+            console.log(data)
+            $.each(data, function (indexInArray, valueOfElement) {
+                $("td#"+valueOfElement.INDEXID+".enrolled-next-term").find("li.appended-value-1[data-name='"+valueOfElement['Te_Code']+"']").append("<span><i class='fa fa-circle text-warning' data-toggle='tooltip' title='This form has been verified and not assigned to a course by "+valueOfElement['modify_user']['name']+"'></i> </span>");
+            });
+          })
+          .fail(function(data) {
+            console.log("error on showing enrol next term: " + data);
+            alert("An error occured while fetching data. Click OK to reload.");
+            window.location.reload();
+          })
+          .always(function() {
+            console.log("complete check if not assigned");
           })
     ); 
 

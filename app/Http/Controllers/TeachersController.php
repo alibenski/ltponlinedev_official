@@ -859,6 +859,46 @@ class TeachersController extends Controller
         }
     }
 
+    public function ajaxCheckIfNotAssigned(Request $request)
+    {
+        
+        if ($request->ajax()) {
+            $indexid = $request->indexid;
+            $language = $request->L;
+
+            $selectedTerm = Session::get('Term'); // No need of type casting
+            $lastDigit = substr($selectedTerm, -1);
+
+            if ($lastDigit == 9) {
+                $next_term = $selectedTerm + 2;
+            }
+
+            if ($lastDigit == 1) {
+                $next_term = $selectedTerm + 3;
+            }
+
+            if ($lastDigit == 4) {
+                $next_term = $selectedTerm + 5;
+            }
+            if ($lastDigit == 8) {
+                $next_term = $selectedTerm + 1;
+            }
+
+            $check_if_assigned_regular = Preenrolment::whereIn('INDEXID', $indexid)
+                ->where('L', $language)
+                ->where('Term', $next_term)
+                ->where('updated_by_admin', 0)
+                ->select('Te_Code', 'modified_by', 'INDEXID')
+                ->groupBy('Te_Code', 'modified_by', 'INDEXID')
+                ->with('modifyUser')
+                ->get();
+
+            $data = $check_if_assigned_regular;
+
+            return response()->json($data);
+        }
+    }
+
     /**
      * View to enter end of term results per student
      * @param  Request $request [description]
