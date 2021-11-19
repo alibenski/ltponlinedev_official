@@ -501,6 +501,12 @@ class PreenrolmentController extends Controller
                 ->where('Term', $term)
                 ->get();
 
+            if ($enrolment_to_be_copied->count() > 1) {
+                $updated_enrolment_record = $this->adminVerifyAndNotAssign2Records($enrolment_to_be_copied, $admin_eform_comment);
+                $data = $updated_enrolment_record;
+                return response()->json($data);
+            }
+
             $input_1 = ['admin_eform_comment' => $admin_eform_comment, 'updated_by_admin' => 0, 'modified_by' => Auth::user()->id];
             $input_1 = array_filter($input_1, 'strlen');
 
@@ -512,6 +518,18 @@ class PreenrolmentController extends Controller
 
             return response()->json($data);
         }
+    }
+
+    public function adminVerifyAndNotAssign2Records($enrolment_to_be_copied, $admin_eform_comment)
+    {
+        $inputFor2 = ['admin_eform_comment' => $admin_eform_comment, 'updated_by_admin' => 0, 'modified_by' => Auth::user()->id];
+        $inputFor2 = array_filter($inputFor2, 'strlen');
+
+        foreach ($enrolment_to_be_copied as $enrolment_info) {
+            $enrolment_info->fill($inputFor2)->save();
+        }
+
+        return $enrolment_to_be_copied;
     }
 
     public function adminSaveAssignedCourse(Request $request)

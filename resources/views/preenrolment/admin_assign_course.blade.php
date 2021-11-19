@@ -186,8 +186,9 @@
 
 					<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
 	                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-success btn-space"><span><i class="fa fa-thumbs-up"></i></span> Accept  </button>	
-						<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-not-assign-btn btn btn-warning btn-space"><span><i class="fa fa-thumbs-down"></i></span> Verify and Not Assign </button>	                	 	
 	                </span>
+					
+					<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-not-assign-btn btn btn-warning btn-space"><span><i class="fa fa-thumbs-down"></i></span> Verify and Not Assign </button>	                	 	
 	                
 					@if(is_null($element->updated_by_admin)) 
                 	@else
