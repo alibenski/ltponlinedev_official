@@ -13,7 +13,7 @@ trait FullTextSearch
     protected function fullTextWildcards($term)
     {
         // removing symbols used by MySQL
-        $reservedSymbols = ['-', '+', '<', '>', '@', '(', ')', '~'];
+        $reservedSymbols = ['-', '+', '<', '>', '(', ')', '~'];
         $term = str_replace($reservedSymbols, '', $term);
 
         $words = explode(' ', $term);
@@ -30,7 +30,9 @@ trait FullTextSearch
 
         $searchTerm = implode(' ', $words);
 
-        return $searchTerm;
+        $single = "'";
+        $double = '"';
+        return  $single.$double.$searchTerm.$double.$single;
     }
 
     /**
@@ -44,14 +46,14 @@ trait FullTextSearch
     {
         $columns = implode(',', $this->searchable);
 
-        // $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+        $query->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $this->fullTextWildcards($term));
+        
+        return $query;
 
-        // return $query;
+        // $searchableTerm = $this->fullTextWildcards($term);
 
-        $searchableTerm = $this->fullTextWildcards($term);
-
-        return $query->selectRaw("*,MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE) AS relevance_score", [$searchableTerm])
-            ->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $searchableTerm)
-            ->orderByDesc('relevance_score');
+        // return $query->selectRaw("*,MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE) AS relevance_score", [$searchableTerm])
+        //     ->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $searchableTerm)
+        //     ->orderByDesc('relevance_score');
     }
 }
