@@ -5,6 +5,10 @@
     body.modal-open {
         overflow: hidden;
     }
+    .close {
+        color: #fff; 
+        opacity: 1;
+    }
     </style>
 @stop
 @section('content')
