@@ -116,7 +116,8 @@
 						<label class="control-label">Comments: </label>
 
 						<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control course-no-change" maxlength="3500" @if(is_null($element->teacher_comments)) placeholder="2nd prefered course to take and any important information that the Language Secretariat needs to know..." @else placeholder="{{$element->teacher_comments}}" @endif></textarea>
-						
+						<br />
+						<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control course-no-change" maxlength="3500" readonly @if(is_null($element->admin_eform_comment)) placeholder="This is a read-only field. No comments from focal point/secretariat." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
 					</div>
 						
 					<span id="{{$element->eform_submit_count}}" class="schedule-count btn-accept hidden">
