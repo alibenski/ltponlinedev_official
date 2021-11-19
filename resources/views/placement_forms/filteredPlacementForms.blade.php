@@ -136,7 +136,7 @@
                     <a href="{{ route('placement-form-assign', [$form->id]) }}" target="_blank" class="btn btn-success" style="margin: 1px;"><span class="glyphicon glyphicon-edit"></span> Assign Course</a> 
                 </td>
                 <td>
-                	@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+                	@if(is_null($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 					@else
 					  @if ($form->modified_by)
 					  	@if ($form->assigned_to_course === 1)
@@ -148,7 +148,7 @@
 					@endif
                 </td>
                 <td>
-                	@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+                	@if(is_null($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 					@else
 					  @if ($form->modified_by)
 					  	@if ($form->assigned_to_course === 1)

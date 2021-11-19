@@ -820,7 +820,7 @@ class PlacementFormController extends Controller
      */
     public function assignCourseToPlacement(Request $request, $id)
     {
-        if ($request->submit_approval == 0 ) {
+        if ($request->input("submit-approval") == 0 ) {
             $placement_form = PlacementForm::find($id);
             $placement_form->convoked = $request->convoked;
             $placement_form->flexibleBtn = $request->flexible;
@@ -829,7 +829,7 @@ class PlacementFormController extends Controller
                 $placement_form->admin_plform_comment = $request->admin_plform_comment;
             }
             $placement_form->assigned_to_course = 0;
-            $placement_form->updated_by_admin = 1;
+            $placement_form->updated_by_admin = 0;
             $placement_form->modified_by = Auth::user()->id;
             $placement_form->save();
             

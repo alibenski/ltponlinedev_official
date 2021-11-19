@@ -4,6 +4,12 @@
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+	<style>
+    .close {
+			color: #fff; 
+			opacity: 1;
+		}
+	</style>
 @stop
 
 
@@ -296,9 +302,11 @@
 											
 										</td>
 										<td>
-											@if($form->updated_by_admin == 1)
+											@if($form->updated_by_admin === 1)
 			                                	<span class="label label-success margin-label">Yes by {{ $form->modifyUser->name}}</span>
-			                                @else
+			                                @elseif($form->updated_by_admin === 0)
+												<span class="label label-warning margin-label">Verified and Not assigned by {{ $form->modifyUser->name}}</span>
+											@else
 												<span class="label label-danger margin-label">Not Assigned </span>
 			                                @endif
 										</td>
@@ -499,10 +507,12 @@
 											</div>
 										</td>
 										<td>
-											@if($form->assigned_to_course == 1)
-												@if($form->updated_by_admin == 1)
+											@if($form->assigned_to_course === 1)
+												@if($form->updated_by_admin === 1)
 				                                	<span class="label label-success margin-label">Yes by {{ $form->modifyUser->name}}</span>
 				                                @endif
+											@elseif($form->assigned_to_course === 0)
+												<span class="label label-warning margin-label">Verified and Not assigned by {{ $form->modifyUser->name}}</span>
 			                                @else
 												<span class="label label-danger margin-label">Not Assigned </span>
 			                                @endif
@@ -1054,6 +1064,48 @@ $('#modalAssignCourse').on('click', '.modal-accept-btn',function() {
 
   $.ajax({
     url: '{{ route('admin-nothing-to-modify') }}',
+    type: 'PUT',
+    data: {admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
+  })
+  .done(function(data) {
+    console.log(data);
+    if (data == 0) {
+      alert('Hmm... Nothing to change, nothing to update...');
+    }
+
+    var L = $("input[name='L'].modal-input").val();
+
+      $.ajax({
+          url: '{{ route('admin-manage-user-assign-course-view') }}',
+          type: 'GET',
+          data: {indexid:qry_indexid, L:L, Te_Code:qry_tecode, Term:qry_term,_token: token},
+        })
+        .done(function(data) {
+          console.log("no change assign view : success");
+          $('.modal-body-content').html(data);
+        })
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+    
+  });
+    
+});
+
+$('#modalAssignCourse').on('click', '.modal-not-assign-btn',function() {
+  var eform_submit_count = $(this).attr('id');
+  var qry_tecode = $(this).attr('data-tecode');
+  var qry_indexid = $(this).attr('data-indexid');
+  var qry_term = $(this).attr('data-term');
+  var token = $("input[name='_token']").val();
+  var admin_eform_comment = $("textarea#textarea-"+eform_submit_count+"[name='admin_eform_comment'].course-no-change").val();
+
+
+  $.ajax({
+    url: '{{ route('admin-verify-and-not-assign') }}',
     type: 'PUT',
     data: {admin_eform_comment:admin_eform_comment, eform_submit_count:eform_submit_count, qry_tecode:qry_tecode, qry_indexid:qry_indexid, qry_term:qry_term, _token:token},
   })
