@@ -1,39 +1,40 @@
 <div class="total"></div>
 <div class="pending-placement"></div>
-@foreach ($select_courses->chunk(4) as $element)
-<div class="row">
-  @foreach($element as $data)
-    <div class="col-lg-3 col-xs-6">
-      <!-- small box -->
-      <div class="row">
-      	
-      <div class="small-box">
-        <div class="inner">
-        <h3 class="count-students-{{$data->Te_Code_New}}">--</h3>
-        <h4>{{$data->course->Description}}</h4>
-        {{-- <p>{{ $data->scheduler->name }}</p> --}}
-                
-		{{-- <input type="hidden" name="cs_unique" value="{{$data->cs_unique}}"> --}}
-		<input type="hidden" name="Te_Code_New" value="{{$data->Te_Code_New}}">
-		<input type="hidden" name="box-L" value="{{$data->L}}">
-        <input type="hidden" name="_token" value="{{ Session::token() }}">             
-          
-        </div>
-        <div class="icon">
-          <i class="ion ion-person-stalker"></i>
-        </div>
-        
-        <a href="{{ route('teacher-enrolment-preview',['Te_Code' => $data->Te_Code_New, 'Term' => Session::get('Term')]) }}" target="_blank" class="small-box-footer">
-              Click here for more info <i class="fa fa-arrow-circle-right"></i>
-            </a>
+@foreach ($select_courses->groupBy('specialized') as $item_select_courses)
+	@foreach ($item_select_courses->sortBy('course.id')->chunk(4) as $element)
+	<div class="row">
+		@foreach($element  as $data)	
+		
+			<div class="col-lg-3 col-xs-6">
+			<!-- small box -->
+			<div class="row">
+				
+			<div class="small-box">{{$data->course->id}}
+				<div class="inner">
+				<h3 class="count-students-{{$data->Te_Code_New}}">--</h3>
+				<h4>{{$data->course->Description}}</h4>
+				
+				<input type="hidden" name="Te_Code_New" value="{{$data->Te_Code_New}}">
+				<input type="hidden" name="box-L" value="{{$data->L}}">
+				<input type="hidden" name="_token" value="{{ Session::token() }}">             
+				
+				</div>
+				<div class="icon">
+				<i class="ion ion-person-stalker"></i>
+				</div>
+				
+				<a href="{{ route('teacher-enrolment-preview',['Te_Code' => $data->Te_Code_New, 'Term' => Session::get('Term')]) }}" target="_blank" class="small-box-footer">
+					Click here for more info <i class="fa fa-arrow-circle-right"></i>
+					</a>
 
-      </div>
-      </div>
-    </div> 
-  @endforeach
-</div>
+			</div>
+			</div>
+			</div> 
+			
+		@endforeach
+	</div>
+	@endforeach
 @endforeach
-
 <script>
 	$(document).ready(function() {
 		if ($("input[name='box-L']").val() == 'A') {

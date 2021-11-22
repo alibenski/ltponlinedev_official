@@ -55,10 +55,11 @@ class PreviewController extends Controller
                 ->where('Te_Term', $request->term_id)
                 // ->whereNull('Code')
                 ->with('course')
-                ->select('Te_Code_New', 'L')
-                ->groupBy('Te_Code_New', 'L')
-                ->get();
-
+                ->select( 'specialized', 'Te_Code_New', 'L')
+                ->groupBy( 'specialized', 'Te_Code_New', 'L')
+                ->get()
+                // ->sortBy('course.id')
+                ;
 
             $data = view('preview-course-boxes', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
