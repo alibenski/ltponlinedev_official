@@ -1,7 +1,7 @@
 <div class="total"></div>
 <div class="pending-placement"></div>
 @foreach ($select_courses->groupBy('specialized') as $item_select_courses)
-	@foreach ($item_select_courses->sortBy('course.id')->chunk(4) as $element)
+	@foreach ($item_select_courses->sortBy('course.level')->chunk(4) as $element)
 	<div class="row">
 		@foreach($element  as $data)	
 		
@@ -9,7 +9,7 @@
 			<!-- small box -->
 			<div class="row">
 				
-			<div class="small-box">{{$data->course->id}}
+			<div class="small-box">
 				<div class="inner">
 				<h3 class="count-students-{{$data->Te_Code_New}}">--</h3>
 				<h4>{{$data->course->Description}}</h4>
