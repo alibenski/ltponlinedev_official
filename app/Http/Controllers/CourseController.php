@@ -62,9 +62,10 @@ class CourseController extends Controller
      */
     public function create()
     {
+        $invalid = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','E'];
         // $course_type = DB::table('tblLTP_Course_Type_Param')->pluck("DescriptionEn","CourseType")->all();
         $course_type = DB::table('tblLTP_Course_Type_Param')->get();
-        $course_level_type = DB::table('tblLTP_Course_Level_Type_Param')->pluck("LevelEn", "LevelType")->all();
+        $course_level_type = DB::table('tblLTP_Course_Level_Type_Param')->whereNotIn('LevelType', $invalid)->pluck("LevelEn", "LevelType")->all();
         $course_order = DB::table('tblLTP_Course_Order_Param')->pluck("Order", "Order")->all();
         //$courses = Course::all(['id', 'name']); // selected $key => $value
         $languages = DB::table('languages')->pluck("name", "code")->all();
@@ -116,6 +117,19 @@ class CourseController extends Controller
         $course->EDescription = $request->Description;
         $course->FDescription = $request->FDescription;
         $course->created_by = Auth::user()->id;
+
+        if ($request->LevelType === 'B'){
+            $course->level = 1;
+        } elseif ($request->LevelType === 'E') {
+            $course->level = 1;
+        } elseif ($request->LevelType === 'I') {
+            $course->level = 2;
+        } elseif ($request->LevelType === 'A') {
+            $course->level = 3;
+        } else {
+            $course->level = null;
+        }
+
         $course->save();
         // variable course refers to schedule function in Course.php model
         // then syncs the data to schedules MySQL table

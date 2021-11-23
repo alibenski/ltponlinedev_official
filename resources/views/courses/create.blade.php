@@ -68,8 +68,12 @@
 				<select class="form-control select2-basic-single" style="width: 100%" name="LevelType" autocomplete="off" required="required">
                     @if(!empty($course_level_type))
 					@foreach($course_level_type as $keyLevel => $valueLevel)
-                    <option></option>
-                    <option value="{{$keyLevel}}">{{$valueLevel}}</option>
+                    	<option></option>
+						@if (in_array($keyLevel, ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','E']))
+						<option value="{{$keyLevel}}" disabled>{{$valueLevel}} [invalid]</option>
+						@else
+						<option value="{{$keyLevel}}">{{$valueLevel}}</option>	
+						@endif
                     @endforeach
                     @endif
                 </select>
