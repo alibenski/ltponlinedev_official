@@ -250,12 +250,12 @@ class PreviewController extends Controller
     {
         if ($request->ajax()) {
             $classrooms = Classroom::where('L', $request->L)
-                ->with(['course' => function ($qry) {
-                    $qry->orderBy('level', 'asc');
-                }])
                 ->where('Te_Term', $request->term_id)
-                // ->orderBy('Code', 'asc')
-                ->get();
+                ->get()
+                ->sortBy('Te_Code_New')
+                ->sortBy('course.level')
+                ->groupBy('courseSchedule.specialized')
+                ;
 
             $data = view('preview-class-boxes', compact('classrooms'))->render();
             return response()->json(['options' => $data]);

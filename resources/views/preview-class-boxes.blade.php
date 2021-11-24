@@ -1,9 +1,11 @@
 {{-- @foreach ($classrooms->chunk(4) as $element) --}}
 {{-- Group by Course Name per row --}}
-@foreach ($classrooms->groupBy('Te_Code_New') as $element)
+@foreach ($classrooms as $element)
+@foreach ($element->groupBy('Te_Code_New') as $x)
 <div class="row">
-  <h3><strong>{{ $element->first()->course->Description }}</strong></h3>
-  @foreach($element as $data)
+	<h3><strong>{{ $x->first()->course->Description }}</strong></h3>
+	@foreach ($x->chunk(4) as $items)
+	@foreach($items as $data)
     <div class="col-lg-3 col-xs-6">
       <!-- small box -->
       <div class="row">
@@ -34,15 +36,16 @@
       </div>
       </div>
     </div> 
-  @endforeach
+  	@endforeach
 </div>
+	@endforeach
 <div class="row">
 	<div class="col-lg-3 col-xs-6">
-		<input type="hidden" name="Te_Code" value="{{$element->first()->Te_Code_New}}" />
+		<input type="hidden" name="Te_Code" value="{{$x->first()->Te_Code_New}}" />
 		<div id="" class="small-box bg-red" data-teacher="0">
         <div class="inner">
-        <h3 class="count-waitlist-{{$element->first()->Te_Code_New}}">--</h3>
-        <h4>{{ $element->first()->course->Description }}</h4>
+        <h3 class="count-waitlist-{{$x->first()->Te_Code_New}}">--</h3>
+        <h4>{{ $x->first()->course->Description }}</h4>
         <p>Total Waitlisted Students</p>
                 
         </div>
@@ -56,9 +59,10 @@
 
       </div>
 	</div>
+	
 </div>
 @endforeach
-
+@endforeach
 <script>
 	$(document).ready(function() {
 		if ($("input[name='box-L']").val() == 'A') {

@@ -119,13 +119,13 @@ class CourseController extends Controller
         $course->created_by = Auth::user()->id;
 
         if ($request->LevelType === 'B'){
-            $course->level = 1;
+            $course->level = 61;
         } elseif ($request->LevelType === 'E') {
-            $course->level = 1;
+            $course->level = 61;
         } elseif ($request->LevelType === 'I') {
-            $course->level = 2;
+            $course->level = 62;
         } elseif ($request->LevelType === 'A') {
-            $course->level = 3;
+            $course->level = 63;
         } else {
             $course->level = null;
         }
