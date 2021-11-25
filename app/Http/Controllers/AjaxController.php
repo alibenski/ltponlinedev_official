@@ -435,10 +435,11 @@ class AjaxController extends Controller
                 ->where('Te_Term', $request->term_id)
                 ->orderBy('Te_Price', 'asc')
                 ->orderBy('Te_Code_New', 'asc')
-                ->select('Te_Code_New','specialized', 'L', 'Te_Term', 'Te_Price')
+                ->select('specialized', 'Te_Code_New', 'L', 'Te_Term', 'Te_Price')
                 ->with('course')
-                ->groupBy('Te_Code_New','specialized', 'L', 'Te_Term', 'Te_Price')
+                ->groupBy('specialized', 'Te_Code_New', 'L', 'Te_Term', 'Te_Price')
                 ->get()
+                ->sortBy('course.level')
                 ->groupBy('specialized');
                 // ->pluck("course.Description", "Te_Code_New");
             $data = view('ajax-select', compact('select_courses'))->render();
@@ -457,10 +458,11 @@ class AjaxController extends Controller
                 // ->whereNull('Code')
                 // ->orderBy('id', 'asc')
                 ->orderBy('Te_Code_New', 'asc')
-                ->select('Te_Code_New','specialized', 'L', 'Te_Term')
+                ->select('specialized', 'Te_Code_New', 'L', 'Te_Term')
                 ->with('course')
-                ->groupBy('Te_Code_New','specialized', 'L', 'Te_Term')
+                ->groupBy('specialized', 'Te_Code_New', 'L', 'Te_Term')
                 ->get()
+                ->sortBy('course.level')
                 ->groupBy('specialized');
                 // ->pluck("course.Description", "Te_Code_New");
 
