@@ -265,7 +265,7 @@
 											            </div>
 											            <div class="modal-body-course-delete-main">
 											            	<div class="col-sm-12">	
-												            	<form method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
+												            	<form id="cancelEnrolForm" method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
 
 																	<p>Index # {{ $form->INDEXID }} : {{ $form->users->name }}</p>
 																	<p>Language: {{ $form->languages->name }}</p>
@@ -277,11 +277,11 @@
 																		
 																	</div>
 
-												                    <input type="submit" @if (is_null($form->deleted_at))
+												                    <input id="cancelEnrolBtn" type="submit" @if (is_null($form->deleted_at))
 												                      value="Reject/Cancel Enrolment"
 												                    @else
 												                      value="Cancelled"
-												                    @endif  class="btn btn-danger btn-space" 
+												                    @endif  class="btn btn-danger btn-space cancelEnrolBtn" 
 												                    @if (is_null($form->deleted_at))
 												                    @else
 												                      disabled="" 
@@ -472,7 +472,7 @@
 											            </div>
 											            <div class="modal-body-placement-delete">
 											            	<div class="col-sm-12">	
-												            	<form method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
+												            	<form id="cancelPlacementForm" method="POST" action="{{ route('placement.destroy', [$form->INDEXID, $form->L, $form->Term, $form->eform_submit_count]) }}">
 																	
 																	<p>Index # {{ $form->INDEXID }} : {{ $form->users->name }}</p>
 																	<p>Placement Form : {{ $form->languages->name }}</p>
@@ -483,7 +483,7 @@
 																		
 																	</div>
 
-												                    <input type="submit" @if (is_null($form->deleted_at))
+												                    <input id="cancelPlacementBtn" type="submit" @if (is_null($form->deleted_at))
 												                      value="Reject/Cancel Placement Form"
 												                    @else
 												                      value="Cancelled"
@@ -1284,6 +1284,13 @@ $(document).on('click', '.course-delete-main', function() {
 	var Te_Code = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
 	var Term = $(this).closest("tr").find("input[name='term']").val();
     $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
+});
+
+$("form#cancelEnrolForm").submit(function disableSubmit() {
+  	$("input[type=submit]", this).prop("disabled", true);
+});
+$("form#cancelPlacementForm").submit(function disableSubmit() {
+  	$("input[type=submit]", this).prop("disabled", true);
 });
 
 $(document).on('click', '.placement-delete', function() {
