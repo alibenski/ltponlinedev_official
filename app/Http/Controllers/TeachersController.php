@@ -649,7 +649,9 @@ class TeachersController extends Controller
         $assigned_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
             // ->where('Tch_ID', '!=', 'TBD')
             ->where('Te_Term', Session::get('Term'))
-            ->get();
+            ->get()
+            ->sortBy('course.level')
+            ;
 
         return view('teachers.teacher_view_all_classrooms', compact('assigned_classes'));
     }
