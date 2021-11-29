@@ -96,7 +96,8 @@
 						    @foreach ($teacher->classrooms as $element)
 						    <div class="box-footer no-padding">
 						      <ul class="nav nav-stacked">
-						        <h5 style="margin-left: 1.5rem">LTP-{{$element->Te_Term}}-{{$element->Tch_ID}}-{{$element->course->Description}}-{{$element->Te_Code_New}}:{{$element->scheduler->name}} <a href="{{ route('view-classrooms-per-section', $element->Code) }}" target="_blank"><i class="fa fa-external-link"></i></a></h5>
+						        <h5 style="margin-left: 1.5rem">{{$element->Te_Term}}-{{substr($element->course->Description, 0, 2)}} {{substr($element->course->Description, strpos($element->course->Description, ": ") + 1)}}-{{substr($element->teachers->Tch_Firstname, 0, 1)}}. {{$element->teachers->Tch_Lastname}}-{{substr($element->scheduler->name, 0, 3)}}@if (($pos = strrpos($element->scheduler->name, "&")) !== FALSE)&{{str_replace(' ','',substr($element->scheduler->name, $pos + 1, 4))}} @endif
+									@if(\Carbon\Carbon::parse($element->scheduler->begin_time) < \Carbon\Carbon::parse('1899-12-30 12:00:00'))Morning @else Lunch @endif // {{$element->Code}} <a href="{{ route('view-classrooms-per-section', $element->Code) }}" target="_blank"><i class="fa fa-external-link"></i></a></h5>
 						        {{-- <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
 						        <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
 						        <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li> --}}
