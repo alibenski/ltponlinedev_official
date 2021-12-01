@@ -652,6 +652,54 @@ class UserController extends Controller
             );
     }
 
+    public function manageUserEnrolmentDataByHistory(Request $request, $id)
+    {
+        $id = $id;
+        $student = User::where('id', $id)->first();
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+
+        $student_enrolments = Preenrolment::withTrashed()->where('INDEXID', $student->indexno)
+            ->where('Term', $request->Term)
+            ->groupBy(['Te_Code', 'Term', 'INDEXID', 'DEPT', 'is_self_pay_form', 'selfpay_approval', 'continue_bool', 'form_counter', 'deleted_at', 'eform_submit_count', 'cancelled_by_student', 'cancelled_by_admin', 'created_at', 'L', 'approval', 'approval_hr', 'attachment_id', 'attachment_pay', 'modified_by', 'updated_by_admin', 'std_comments', 'admin_eform_cancel_comment'])
+            ->get(['Te_Code', 'Term', 'INDEXID', 'DEPT', 'is_self_pay_form', 'selfpay_approval', 'continue_bool', 'form_counter', 'deleted_at', 'eform_submit_count', 'cancelled_by_student', 'cancelled_by_admin', 'created_at', 'L', 'approval', 'approval_hr', 'attachment_id', 'attachment_pay', 'modified_by', 'updated_by_admin', 'std_comments', 'admin_eform_cancel_comment']);
+
+        $student_placements = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('INDEXID', $student->indexno)
+            ->where('Term', $request->Term)->get();
+
+        $student_convoked = Repo::withTrashed()->whereNotNull('CodeIndexIDClass')->where('INDEXID', $student->indexno)->where('Term', $request->Term)->get();
+
+        $batch_implemented = Repo::where('Term', $request->Term)->count(); // flag to indicate if batch has been ran or not
+
+        $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
+        $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();
+        $historical_data_list = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->paginate(5);
+        $placement_records = PlacementForm::withTrashed()
+            ->where('INDEXID', $student->indexno)
+            ->get();
+
+        $term_info = Term::where('Term_Code', $request->Term)->first();
+
+        if ($student_last_term == null) {
+            $repos_lang = null;
+            return view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+        }
+
+        $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
+            ->where('INDEXID', $student->indexno)->first();
+
+        if (is_null($request->Term)) {
+            $student_enrolments = null;
+            $student_placements = null;
+
+            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+        }
+
+
+        return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+    }
+
     public function manageUserEnrolmentData(Request $request, $id)
     {
         $id = $id;

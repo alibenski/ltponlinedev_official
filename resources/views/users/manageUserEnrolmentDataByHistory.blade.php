@@ -26,38 +26,51 @@
 	<h3>Viewing: <strong>{{ $student->name }}</strong> [{{ $student->indexno }}]</h3>
 
 	@include('admin.partials._userAdminNav')
+	
+	<div class="panel-body panel-info">
+		@if($historical_data->isEmpty())
+		<div class="alert alert-warning">
+			<p>There were no historical records found.</p>
+		</div>
+		@else
+		<ul  class="list-group">
+			@foreach($historical_data_list as $history_value)
+				<li class="list-group-item"><strong class="text-success">
+				@if(empty($history_value))
+				<div class="alert alert-warning">
+					<p>There were no historical records found.</p>
+				</div>
+				@else
+					@if(empty($history_value->Te_Code)) {{ $history_value->coursesOld->Description }} 
+					@else {{ $history_value->courses->Description }} 
+					@endif</strong> : {{ $history_value->terms->Term_Name }} 
 
-	<h3>@if(Request::input('Term'))Term: {{ Request::input('Term') }} - {{ $term_info->Comments }} {{ date('Y', strtotime($term_info->Term_Begin )) }}@else Please Choose Term @endif</h3>
-   	<div class="row">
-   		<div class="col-sm-12">
-   			<form method="GET" action="{{ route('manage-user-enrolment-data', $id) }}">
-			
-				<div class="form-group input-group col-sm-12">
-					<h4><strong>Filters:</strong></h4>
+					<em>
+					@if (empty($history_value->classrooms))
+					@else
+						@if (is_null($history_value->classrooms->Tch_ID))
+							Waitlisted
+						@elseif($history_value->classrooms->Tch_ID == 'TBD')
+							Waitlisted
+						@else
+							* {{ $history_value->classrooms->Tch_ID }} *
+						@endif
+					@endif
+					</em>
 
-					<div class="form-group">
-			          <label for="Term" class="col-md-12 control-label">Term Select:</label>
-			          <div class="form-group col-sm-12">
-			            <div class="dropdown">
-			              <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
-			                @foreach($terms as $value)
-			                    <option></option>
-			                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
-			                @endforeach
-			              </select>
-			            </div>
-			          </div>
-			        </div>
+					(@if($history_value->Result == 'P') Passed @elseif($history_value->Result == 'F') Failed @elseif($history_value->Result == 'I') Incomplete @else -- @endif)
+					
+						@if ($history_value->Result == 'P' || $history_value->Result == 'F')
+							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'En', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print EN</a>
+							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'Fr', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print FR</a>
+						@endif
+				</li>
 
-				</div> {{-- end filter div --}}
-
-
-			    <div class="form-group">           
-			        <button type="submit" class="btn btn-success">View Forms</button>
-			    	<a href="{{ route('manage-user-enrolment-data', $id) }}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
-			    </div>
-			</form>
-   		</div>
+				@endif
+			@endforeach
+			{{$historical_data_list->links()}}
+		</ul>
+		@endif
 	</div>
 
 	@if(!Request::filled('Term'))
