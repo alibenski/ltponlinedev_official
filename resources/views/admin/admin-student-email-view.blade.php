@@ -27,6 +27,7 @@
 					<th>Profile</th>
 					<th>Email</th>
 					<th>Organization</th>
+					<th>Self-payment</th>
 					<th>Language</th>
 					<th>Description</th>
 					<th>Teacher</th>
@@ -41,6 +42,7 @@
 					<th>Profile</th>
 					<th>Email</th>
 					<th>Organization</th>
+					<th>Self-payment</th>
 					<th>Language</th>
 					<th>Description</th>
 					<th>Teacher</th>
@@ -113,6 +115,7 @@
 						{ "data": "users.email" }, 
 						// { "data": "users.sddextr.DEPT" }, 
 						{ "data": "DEPT" }, 
+						{ "data": "is_self_pay_form" }, 
 						{ "data": "languages.name" }, 
 						{ "data": "courses.Description" },  
 						{ "data": "classrooms.teachers.Tch_Name" },
