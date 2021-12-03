@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
+    public function reportAllStudentsPerYearOrTermView()
+    {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        return view('reports.reportAllStudentsPerYearOrTermView', compact('terms'));
+    }
+
     public function reportAllStudentsPerYearOrTerm(Request $request)
     {
         if ($request->ajax()) {

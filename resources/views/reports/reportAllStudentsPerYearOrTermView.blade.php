@@ -16,7 +16,7 @@
 
 @section('content')
 
-<h2 class="text-center"><i class="fa fa-usd"></i> Self-Paying Students <i class="fa fa-usd"></i></h2>
+<h2 class="text-center"><i class="fa fa-person"></i> ALL Students <i class="fa fa-person"></i></h2>
 <div class="row">
 	<div class="form-group">
 	<label for="Term" class="col-md-12 control-label">Select Term:</label>
@@ -108,7 +108,7 @@ $(document).ready(function() {
 
 		promises.push(
 			$.ajax({
-				url: '{{ route('ajax-selfpaying-student-table') }}',
+				url: "{{ route('reports-all-students-per-year-or-term') }}",
 				type: 'GET',
 				dataType: 'json',
 				data: {term:term, _token:token},

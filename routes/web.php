@@ -89,7 +89,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /*
      * Reporting Routes
      */
-    Route::get('reports/all-students-per-year-or-term', 'ReportsController@reportAllStudentsPerYearOrTerm')->name('reports/all-students-per-year-or-term');
+    Route::get('reports/all-students-per-year-or-term-view', 'ReportsController@reportAllStudentsPerYearOrTermView')->name('reports/all-students-per-year-or-term-view');
+    Route::get('reports-all-students-per-year-or-term', 'ReportsController@reportAllStudentsPerYearOrTerm')->name('reports-all-students-per-year-or-term');
     Route::get('reports/ltp-stats-view-students-per-term', 'ReportsController@viewStudentsPerTerm')->name('reports/ltp-stats-view-students-per-term');
     Route::get('reports/stats-students-per-term', 'ReportsController@statsStudentsPerTerm')->name('reports/stats-students-per-term');
     Route::get('reports', 'ReportsController@baseView')->name('reports');
