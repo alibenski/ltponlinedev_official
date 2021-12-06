@@ -165,7 +165,10 @@ class BillingController extends Controller
     public function ajaxSelfpayingStudentTable(Request $request)
     {
         if ($request->ajax()) {
-
+            if ($request->term < 191) {
+                $data = [];
+                return response()->json(['data' => $data]);
+            }
 
             if (!$request->term) {
                 $data = null;
