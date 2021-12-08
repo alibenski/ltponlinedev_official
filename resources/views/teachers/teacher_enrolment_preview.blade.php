@@ -88,7 +88,7 @@
 					<td>
 						@if(is_null($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 		                @else
-		                  @if ($form->updated_by_admin === 1))
+		                  @if ($form->updated_by_admin === 1)
 		                    <p><span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span></p>
 		                    <p><span class="label label-success margin-label">{{ $form->courses->Description }}  </span></p>
 		                    <p><span class="label label-success margin-label">{{$form->schedule->name }} </span></p>
