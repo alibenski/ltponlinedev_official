@@ -23,6 +23,38 @@ class ReportsController extends Controller
         return view('reports.reportAllStudentsPerYearOrTermView', compact('languages', 'terms', 'years'));
     }
 
+    public function queryAllStudentsByYear($request, $columns)
+    {
+         $terms = Term::orderBy('Term_Code', 'asc')
+            ->select('Term_Code', 'Term_Begin')
+            ->get();
+
+        $termCode = [];
+        foreach ($terms as $key => $value) {
+            $parseYear = Carbon::parse($value->Term_Begin)->year;
+            if ($parseYear == $request->year) {
+                $termCode[] = $value->Term_Code;
+            }
+        }
+        
+        $arrayCollection = [];
+        foreach ($termCode as $term) {
+            // 
+            $recordsMerged = $this->queryAllStudentsMerged($term, $columns, $request);
+            // 
+            $arrayCollection[] = $recordsMerged;
+        }
+
+        $result = [];
+        foreach ($arrayCollection as $k => $v) {
+            foreach ($v as $a => $b) {
+                $result[] = $b;
+            }
+        }
+
+        return $result;
+    }
+
     public function queryAllStudentsMerged($term, $columns, $request)
     {
             
@@ -173,9 +205,9 @@ class ReportsController extends Controller
             
         $cancelledPlacementRecords = $cancelledPlacementRecords->get();
 
-        $recordsMerged = $records->merge($pashFromPlacement)->merge($cancelledEnrolmentRecords)->merge($cancelledPlacementRecords);
+        $recordsMerged = $records->merge($pashFromPlacement)->merge($pashFromPlacement)->merge($cancelledEnrolmentRecords)->merge($cancelledPlacementRecords);
 
-        return $recordsMerged;
+        yield $recordsMerged;
     }
 
     public function reportAllStudentsPerYearOrTerm(Request $request)

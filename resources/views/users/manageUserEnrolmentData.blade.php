@@ -255,7 +255,7 @@
 													@endif
 												@endif
 												
-											<div id="modalDeleteEnrolmentMain-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
+											<div id="modalDeleteEnrolmentMain-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}-{{ $form->eform_submit_count }}" class="modal fade" role="dialog">
 											    <div class="modal-dialog">
 											        <div class="modal-content">
 
@@ -265,8 +265,8 @@
 											            </div>
 											            <div class="modal-body-course-delete-main">
 											            	<div class="col-sm-12">	
-												            	<form id="cancelEnrolForm" method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
-
+												            	<form id="cancelEnrolForm" method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->eform_submit_count]) }}">
+																	<p>Form # {{ $form->eform_submit_count }}</p>
 																	<p>Index # {{ $form->INDEXID }} : {{ $form->users->name }}</p>
 																	<p>Language: {{ $form->languages->name }}</p>
 																	<p>Course : {{ $form->courses->Description }}</p>
@@ -1283,7 +1283,8 @@ $(document).on('click', '.course-delete-main', function() {
 	var INDEXID = $(this).closest("tr").find("input[name='indexid']").val();
 	var Te_Code = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
 	var Term = $(this).closest("tr").find("input[name='term']").val();
-    $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
+	var eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
+    $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term+'-'+eform_submit_count).modal('show'); 
 });
 
 $("form#cancelEnrolForm").submit(function disableSubmit() {
