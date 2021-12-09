@@ -956,7 +956,7 @@ $(document).ready(function() {
     	if (!jQuery.isEmptyObject( data )) {
     		$(".course-delete-main").addClass('hidden');
     		$(".placement-delete").addClass('hidden');
-    		$(".btn-edit-form").addClass('hidden');
+    		// $(".btn-edit-form").addClass('hidden');
     	}
 
     })
