@@ -956,7 +956,7 @@ class PreviewController extends Controller
                 $schedules = PlacementForm::withTrashed()
                     ->where('Te_Code', $request->tecode)
                     ->where('INDEXID', $current_user)
-                    ->where('form_counter', $request->form_counter)
+                    ->where('eform_submit_count', $request->form_counter)
                     ->where('Term', $term_code)
                     ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval', 'assigned_to_course']);
 
@@ -964,9 +964,9 @@ class PreviewController extends Controller
                     ->where('INDEXID', $current_user)
                     ->where('Term', $term_code)
                     ->where('Te_Code', $request->tecode)
-                    ->where('form_counter', $request->form_counter)
-                    ->groupBy(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at'])
-                    ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
+                    ->where('eform_submit_count', $request->form_counter)
+                    ->groupBy(['Te_Code', 'Term', 'INDEXID', 'eform_submit_count', 'deleted_at'])
+                    ->get(['Te_Code', 'Term', 'INDEXID', 'eform_submit_count', 'deleted_at']);
 
                 // render and return data values via AJAX
                 $data = view('ajax-preview-modal', compact('schedules', 'query', 'user'))->render();
@@ -981,7 +981,7 @@ class PreviewController extends Controller
                 $schedules = ModifiedForms::withTrashed()
                     // ->where('Te_Code', $request->tecode)
                     ->where('INDEXID', $current_user)
-                    ->where('form_counter', $request->form_counter)
+                    ->where('eform_submit_count', $request->form_counter)
                     ->where('Term', $term_code)
                     ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval']);
 
@@ -989,9 +989,9 @@ class PreviewController extends Controller
                     ->where('INDEXID', $current_user)
                     ->where('Term', $term_code)
                     // ->where('Te_Code', $request->tecode)
-                    ->where('form_counter', $request->form_counter)
-                    ->groupBy(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at'])
-                    ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
+                    ->where('eform_submit_count', $request->form_counter)
+                    ->groupBy(['Te_Code', 'Term', 'INDEXID', 'eform_submit_count', 'deleted_at'])
+                    ->get(['Te_Code', 'Term', 'INDEXID', 'eform_submit_count', 'deleted_at']);
 
                 // render and return data values via AJAX
                 $data = view('ajax-preview-modal', compact('schedules', 'query', 'user'))->render();
@@ -1002,16 +1002,16 @@ class PreviewController extends Controller
             $schedules = Preenrolment::withTrashed()
                 ->where('Te_Code', $request->tecode)
                 ->where('INDEXID', $current_user)
-                ->where('form_counter', $request->form_counter)
+                ->where('eform_submit_count', $request->form_counter)
                 ->where('Term', $term_code)
                 ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval']);
 
             $query = Preenrolment::withTrashed()->where('INDEXID', $current_user)
                 ->where('Term', $term_code)
                 ->where('Te_Code', $request->tecode)
-                ->where('form_counter', $request->form_counter)
-                ->groupBy(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at'])
-                ->get(['Te_Code', 'Term', 'INDEXID', 'form_counter', 'deleted_at']);
+                ->where('eform_submit_count', $request->form_counter)
+                ->groupBy(['Te_Code', 'Term', 'INDEXID', 'eform_submit_count', 'deleted_at'])
+                ->get(['Te_Code', 'Term', 'INDEXID', 'eform_submit_count', 'deleted_at']);
 
             // render and return data values via AJAX
             $data = view('ajax-preview-modal', compact('schedules', 'query', 'user'))->render();

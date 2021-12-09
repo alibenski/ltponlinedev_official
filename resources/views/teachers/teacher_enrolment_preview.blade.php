@@ -117,7 +117,7 @@
 					<td>{{ $form->courses->Description }}</td>
 					<td>
 						{{-- <a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a> --}}
-						<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->form_counter }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
+						<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
 						<div class="student-count-schedule-{{ $form->INDEXID }}"></div>
 					</td>
 					<td>
@@ -432,26 +432,6 @@ $(document).ready(function() {
     $('.select2-basic-single').select2({
     placeholder: "Select Filter",
     });
-
-    // $('#modalshow').on('show.bs.modal', function (event) {
-    //   var link = $(event.relatedTarget); // Link that triggered the modal
-    //   var dtitle = link.data('mtitle');
-    //   var dindexno = link.data('indexno');
-    //   var dtecode = link.data('tecode');
-    //   var dterm = link.data('term');
-    //   var dapproval = link.data('approval');
-    //   var dFormCounter = link.data('formx');
-    //   var token = $("input[name='_token']").val();
-    //   var modal = $(this);
-    //   modal.find('.modal-title').text(dtitle);
-
-    //   var token = $("input[name='_token']").val();      
-
-    //   $.post('{{ route('ajax-show-modal') }}', {'indexno':dindexno, 'tecode':dtecode, 'term':dterm, 'approval':dapproval, 'form_counter':dFormCounter, '_token':token}, function(data) {
-    //       console.log(data);
-    //       $('.modal-body-schedule').html(data)
-    //   });
-    // });
 
     $('#modalshow').on('show.bs.modal', function (event) {
       var link = $(event.relatedTarget); // Link that triggered the modal
