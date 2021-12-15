@@ -590,6 +590,8 @@ class UserController extends Controller
         //Validate name, email and password fields  
         $this->validate($request, [
             'name' => 'required|max:120',
+            'nameLast' => 'required|max:120',
+            'nameFirst' => 'required|max:120',
             'email' => 'required|email|unique:users,email,' . $id,
             // 'password'=>'required|min:6|confirmed'
         ]);
@@ -599,9 +601,13 @@ class UserController extends Controller
         }
 
         //Retreive the name, email and password fields
+        $nameLast = strtoupper($request->nameLast);
+        $name = $request->nameFirst . ' ' . $nameLast;
         $input = ([
+            'name' => $name,
+            'nameLast' => $nameLast,
+            'nameFirst' => $request->nameFirst,
             'email' => $request->email,
-            'name' => $request->name,
             'mailing_list' => $mailingList,
         ]); 
         $filteredInput = array_filter($input, function ($v){return ! is_null($v);});
@@ -613,13 +619,23 @@ class UserController extends Controller
         // update SDDEXTR table with new email
         $sddextr = SDDEXTR::where('INDEXNO', $user->indexno)->get();
         foreach ($sddextr as $record) {
-            $record->update(['EMAIL' => $request->email]);
+            $record->update([
+                'LASTNAME' => $nameLast,
+                'FIRSTNAME' => $request->nameFirst,
+                'EMAIL' => $request->email,
+            ]);
         }
 
         // change e-mail address in the teachers table if profile is a teacher
         $teacher = Teachers::where('IndexNo', $user->indexno)->first();
+        $Tch_Name = $nameLast . ', ' . $request->nameFirst;
         if ($teacher) {
-            $teacher->update(['email' => $request->email]);
+            $teacher->update([
+                'Tch_Name' => $Tch_Name,
+                'Tch_Lastname' => $nameLast,
+                'Tch_Firstname' => $request->nameFirst,
+                'email' => $request->email
+            ]);
         }
 
         if (isset($roles)) {
