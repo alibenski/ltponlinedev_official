@@ -524,6 +524,11 @@ class UserController extends Controller
         return $user;
     }
 
+    public function storeInTeachersTable($request)
+    {
+        
+    }
+
     /**
      * Display the specified resource.
      *

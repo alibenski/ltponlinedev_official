@@ -153,6 +153,32 @@ class StudentController extends Controller
         }
     }
 
+    public function updateTeacher($indexno, $request)
+    {
+        $teacher = Teachers::where('IndexNo', $indexno)->first();
+        if (!is_null($request->input('TITLE'))) {
+            $teacher->Tch_Title = $request->input('TITLE');
+        }
+        if (!is_null($request->input('firstName'))) {
+            $teacher->Tch_Firstname = $request->input('firstName');
+        }
+        if (!is_null($request->input('lastName'))) {
+            $teacher->Tch_Lastname = strtoupper($request->input('lastName'));
+        }
+        if (!is_null($request->input('gender'))) {
+            $teacher->sex = $request->input('gender');
+        }
+        if (!is_null($request->input('contactNo'))) {
+            $teacher->Phone = $request->input('contactNo');
+        }
+        if (!is_null($request->input('dob'))) {
+            $teacher->DoB = $request->input('dob');
+        }
+
+        $teacher->Tch_Name = strtoupper($teacher->Tch_Lastname) . ', ' . $teacher->Tch_Firstname;
+        $teacher->save();
+    }
+
     public function updateNoEmail($student, $request, $msuUpdateField, $ngoUpdateField)
     {
         if (!is_null($request->input('profile'))) {
