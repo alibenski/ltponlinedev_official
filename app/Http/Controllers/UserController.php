@@ -6,6 +6,7 @@ use App\File;
 use App\Language;
 use App\ModifiedForms;
 use App\NewUser;
+use App\FileNewUser;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -375,55 +376,100 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->decision == 0) {
-            //validate the data
+        //validate the data
+        $this->validate($request, array(
+            'gender' => 'required|string|',
+            'title' => 'required|',
+            'profile' => 'required|',
+            'nameLast' => 'required|string|max:255',
+            'nameFirst' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+            'org' => 'required|string|max:255',
+            'contact_num' => 'required|max:255',
+            // 'cat' => 'required|',
+            // 'student_cat' => 'required|',
+            'dob' => 'required',
+            'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'g-recaptcha-response' => 'required|captcha',
+        ));
+
+        //validate 2nd attachment for Spouse profile
+        if ($request->contractfile2) {
             $this->validate($request, array(
-                'gender' => 'required|string|',
-                'title' => 'required|',
-                'profile' => 'required|',
-                'nameLast' => 'required|string|max:255',
-                'nameFirst' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
-                'org' => 'required|string|max:255',
-                'contact_num' => 'required|max:255',
-                'dob' => 'required',
+                'contractfile2' => 'required|mimes:pdf,doc,docx|max:8000',
             ));
-
-            //store in database
-            $newUser = new NewUser;
-            $newUser->gender = $request->gender;
-            $newUser->title = $request->title;
-            $newUser->profile = $request->profile;
-            $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
-            $newUser->nameLast = strtoupper($request->nameLast);
-            $newUser->nameFirst = $request->nameFirst;
-            $newUser->email = $request->email;
-            $newUser->org = $request->org;
-            $newUser->contact_num = $request->contact_num;
-            $newUser->dob = $request->dob;
-            $newUser->approved_account = 1;
-            $newUser->save();
-
-            $ext_index = 'EXT' . $newUser->id;
-            $request->merge(['indexno' => $ext_index]);
-
-            $user = $this->storeValidatedStudent($request);
-
-            return redirect()->route('manage-user-enrolment-data', $user->id)
-                ->with(
-                    'flash_message',
-                    'User successfully added.'
-                );
         }
 
-        // else if decision == 1, then create with index no. 
-        $user = $this->storeValidatedStudent($request);
+        //validate further if org is MSU or MGO
+        if ($request->org == 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required',
+            ));
+        }
+        if ($request->org == 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|string|max:255',
+            ));
+        }
 
-        return redirect()->route('manage-user-enrolment-data', $user->id)
-            ->with(
-                'flash_message',
-                'User successfully added.'
-            );
+        //Store the attachments to storage path and save in db table
+        if ($request->hasFile('contractfile')) {
+            $request->file('contractfile');
+            $filename = 'new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
+            //Create new record in db table
+            $attachment_contract_file = new FileNewUser([
+                'filename' => $filename,
+                'size' => $request->contractfile->getClientSize(),
+                'path' => $filestore,
+            ]);
+            $attachment_contract_file->save();
+        }
+
+        if ($request->hasFile('contractfile2')) {
+            $request->file('contractfile2');
+            $filename2 = 'new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
+            //Store attachment
+            $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
+            //Create new record in db table
+            $attachment_contract_file2 = new FileNewUser([
+                'filename' => $filename2,
+                'size' => $request->contractfile2->getClientSize(),
+                'path' => $filestore2,
+            ]);
+            $attachment_contract_file2->save();
+        }
+
+        //store in database
+        $newUser = new NewUser;
+        $newUser->indexno_new = $request->indexno;
+        $newUser->gender = $request->gender;
+        $newUser->title = $request->title;
+        $newUser->profile = $request->profile;
+        $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+        $newUser->nameLast = strtoupper($request->nameLast);
+        $newUser->nameFirst = $request->nameFirst;
+        $newUser->email = $request->email;
+        $newUser->org = $request->org;
+        $newUser->contact_num = $request->contact_num;
+        $newUser->dob = $request->dob;
+        $newUser->attachment_id = $attachment_contract_file->id;
+
+        if ($request->contractfile2) {
+            $newUser->attachment_id_2 = $attachment_contract_file2->id;
+        }
+
+        if ($request->org == 'MSU') {
+            $newUser->country_mission = $request->countryMission;
+        }
+
+        if ($request->org == 'NGO') {
+            $newUser->ngo_name = $request->ngoName;
+        }
+        $newUser->save();
+
+        return redirect()->route('newuser.index');
     }
 
     public function storeValidatedStudent($request)

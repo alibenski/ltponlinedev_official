@@ -5,6 +5,7 @@
     
 @stop
 @section('content')
+  @include('partials._messages')
   <div class="card">
     <div class="card-header border-0">
       <div class="d-flex justify-content-between">
@@ -12,7 +13,7 @@
       </div>
     </div>
     <div class="card-body">
-      <form method="POST" action="{{ route('users.store') }}">
+      <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('users.store') }}">
         {{ csrf_field() }}
 
         @include('users_new.registration_form_fields')
