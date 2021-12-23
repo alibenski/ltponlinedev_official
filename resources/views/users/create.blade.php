@@ -13,6 +13,9 @@
       </div>
     </div>
     <div class="card-body">
+      <div class="form-group">
+            <label class="control-label">To create a teacher's user account, click here: <span class="text-danger"><a href="admin/teachers/create">Create New Teacher</a></span></label>
+        </div>
       <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('users.store') }}">
         {{ csrf_field() }}
 
