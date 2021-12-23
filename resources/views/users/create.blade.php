@@ -1,8 +1,61 @@
 @extends('admin.admin')
 
 @section('customcss')
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+    <style>
+      html {
+      font-family: "Helvetica Neue", sans-serif;
+      width: 100%;
+      color: #666666;
+      text-align: left;
+      }
+
+      .popup-overlay {
+      /*Hides pop-up when there is no "active" class*/
+      visibility: hidden;
+      position: absolute;
+      background: #ffffff;
+      border: 3px solid #666666;
+      width: 50%;
+      height: 50%;
+      left: 25%;
+      }
+
+      .popup-overlay.active {
+      /*displays pop-up when "active" class is present*/
+      visibility: visible;
+      text-align: center;
+      }
+
+      .popup-content {
+      /*Hides pop-up content when there is no "active" class */
+      visibility: hidden;
+      }
+
+      .popup-content.active {
+      /*Shows pop-up content when "active" class is present */
+      visibility: visible;
+      }
+
+      button {
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 30px;
+      margin: .20rem;
+      font-size: 1rem;
+      color: #666666;
+      background: #ffffff;
+      border: 1px solid #666666;
+      }
+
+      button:hover {
+      border: 1px solid #666666;
+      background: #666666;
+      color: #ffffff;
+      }
+    </style>
 @stop
 
 @section('content')
@@ -16,7 +69,7 @@
           <!-- MAKE A DECISION SECTION -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Does the student have a valid Index from Umoja?</h3>
+            <h3 class="panel-title">Does the user have a valid Index from Umoja?</h3>
           </div>
           <div class="panel-body">
           <div class="form-group">
@@ -51,129 +104,7 @@
           </div>
         </div> {{-- end of panel --}}
 
-          <div class="form-group{{ $errors->has('profile') ? 'is-invalid' : '' }}">
-              <label for="profile">Profile:</label>
-              @include('ajax-profile-select')
-          </div>
-
-          <div class="form-group{{ $errors->has('title') ? 'is-invalid' : '' }}">
-              <label for="title">Title:</label>
-              <select name="title" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" required="required" autocomplete="off">
-                  <option></option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Ms.">Ms.</option>
-              </select>
-
-              <div class="col-md-6">
-                  @if ($errors->has('title'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('title') }}</strong>
-                      </span>
-                  @endif
-              </div>
-          </div>
-
-          <div class="form-group">
-            <label class="control-label">First Name: </label>
-  				  <input name="nameFirst" type="text" class="form-control" value="{{ old('nameFirst') }}">
-          </div>
-
-          <div class="form-group">
-            <label class="control-label">Last Name: </label>
-            <input name="nameLast" type="text" class="form-control" value="{{ old('nameLast') }}">
-          </div>
-
-          <div class="form-group">
-            <label class="control-label">Email: </label>
-  				  <input name="email" type="email" class="form-control" value="{{ old('email') }}" readonly onfocus="this.removeAttribute('readonly');">
-          </div>
-
-			    <div class='form-group'>
-			    		<label class="control-label">Role: </label>
-              <div class="checkbox">
-                  <label>
-                    @foreach ($roles as $role)
-                      <input type="checkbox" name="roles[]" value="{{ $role->id }}" /> {{ ucfirst($role->name) }}
-                      <br>
-                    @endforeach
-                  </label>
-						  </div>
-			    </div>
-
-          <div class="form-group{{ $errors->has('gender') ? 'is-invalid' : '' }}">
-              <label for="gender" class=" control-label">Gender</label>
-              <div class="dropdown">
-                  <select class="form-control select2-basic-single" style="width: 50%;" name="gender" autocomplete="off" >
-                      <option value="">--- Please Select ---</option>
-                      <option value="F">Female</option>
-                      <option value="M">Male</option>
-                  </select>
-              </div>
-
-              <div class="col-md-6">
-                  {{-- <input id="gender" type="text" class="form-control" name="gender" value="{{ old('gender') }}" required autofocus> --}}
-
-                  @if ($errors->has('gender'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('gender') }}</strong>
-                      </span>
-                  @endif
-              </div>
-          </div>
-
-          <div class="form-group{{ $errors->has('org') ? 'is-invalid' : '' }}">
-              <label for="org" class=" control-label">Organization</label>
-
-                  {{-- <input id="org" type="text" class="form-control" name="org" value="{{ old('org') }}" required autofocus> --}}
-
-                  <div class="dropdown">
-                      <select class="form-control select2-basic-single" style="width: 100%;" name="org" autocomplete="off" >
-                          <option value="">--- Please Select Organization ---</option>
-                              @if(!empty($org))
-                                @foreach($org as $value)
-                                  <option class="wx" value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{$value['Org Full Name']}}</option>
-                                @endforeach
-                              @endif
-                      </select>
-                  </div>
-
-                  @if ($errors->has('org'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('org') }}</strong>
-                      </span>
-                  @endif
-          </div>
-          
-          <div class="form-group{{ $errors->has('dob') ? 'is-invalid' : '' }}">
-              <label for="dob" class="control-label">Date of Birth <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
-
-
-                  <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy" data-link-field="dob">
-                  <input class="form-control" size="16" type="text" value="" readonly>
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                  </div>
-                  <input type="hidden" name="dob" id="dob" value="" required=""/>
-
-                  @if ($errors->has('dob'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('dob') }}</strong>
-                      </span>
-                  @endif
-
-          </div>
-
-          <div class="form-group{{ $errors->has('contact_num') ? 'is-invalid' : '' }}">
-              <label for="contact_num" class=" control-label">Contact Number</label>
-
-                  <input id="contact_num" type="text" class="form-control" name="contact_num" value="{{ old('contact_num') }}" required autofocus>
-
-                  @if ($errors->has('contact_num'))
-                      <span class="help-block">
-                          <strong>{{ $errors->first('contact_num') }}</strong>
-                      </span>
-                  @endif
-          </div>
+          @include('users_new.registration_form_fields')
 
           <div class="form-group">
             <label class="control-label">Password is automatically set to <span class="text-danger">"Welcome2CLM"</span></label>
@@ -200,33 +131,161 @@
 @stop
 
 @section('java_script')
-<script src="{{ asset('js/submit.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
-<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+<script src="{{ asset('js/app.js') }}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<script src="{{ asset('js/profileOrgAssoc.js') }}"></script>
 <script>
   $(document).ready(function() {
-    $('.form_datetime').datetimepicker({
-        //language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 4,
-        forceParse: 0,
-        showMeridian: 1,
-        minView: 2
+    $('#datetimepicker4').datetimepicker({
+        format: 'YYYY-MM-DD'
     });
+
+    $("select[name='profile']").on("change", function () {
+        let profileChoice = $("select[name='profile']").val();
+        const profileArray1 = ["STF", "INT", "CON", "WAE", "JPO"];
+        console.log(profileChoice);
+        if ($.inArray(profileChoice, profileArray1) >= 0) {
+            showFileAttach();
+        }
+        else if (profileChoice == "MSU") {
+            showFileAttachMSU();
+        } 
+        else if (profileChoice == "SPOUSE") {
+            showFileAttachSpouse();
+        } 
+        else if (profileChoice == "RET") {
+            showFileAttachRetired();
+        } 
+        else if (profileChoice == "SERV") {
+            showFileAttachServ();
+        } 
+        else if (profileChoice == "NGO") {
+            showFileAttachNgo();
+        } 
+        else if (profileChoice == "PRESS") {
+            showFileAttachPress();
+        } 
+        else {
+            $("#attachSection").html("");
+        }
+    });
+
+    function showFileAttach() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-badge-cdl') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachMSU() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-msu') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachSpouse() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-spouse') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachRetired() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-retired') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachServ() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-serv') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachNgo() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-ngo') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    function showFileAttachPress() {
+        $.ajax({
+            url: "{{ route('ajax-file-attach-press') }}", 
+            method: 'GET',
+            success: function(data, status) {
+            $("#attachSection").html("");
+            $("#attachSection").html(data.options);
+            }
+        }); 
+    }
+
+    $("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "MSU") {
+            getCountry();
+        } else {
+            $("#countrySection").html("");
+        }
+    });
+
+    function getCountry() {
+        $.ajax({
+            url: "{{ route('ajax-select-country') }}", 
+            method: 'GET',
+            success: function(data, status) {
+                console.log(data)
+            $("#countrySection").html("");
+            $("#countrySection").html(data.options);
+            }
+        });  
+    }
+
+    $("select[name='org']").on("change", function () {
+        let choice = $("select[name='org']").val();
+        if (choice == "NGO") {
+            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+        } else {
+            $("#ngoSection").html("");
+        }
+    });
+
+    // $('.email-input').one('click', function () {
+    //     $('#showModal').modal('show');
+    // });
+    
+    $('#showModal').on('hidden.bs.modal', function (e) {
+        $('input.email-input').focus();
+    })
   });
 </script>
-<script>
-  $("input[name='decision']").click(function(){
-      if($('#decision1').is(':checked')) {
-        $('.indexno-section').removeClass('hidden');
-        $('.message-section').addClass('hidden');
-      } else if ($('#decision2').is(':checked')) {
-        $('.indexno-section').addClass('hidden');
-        $('.message-section').removeClass('hidden');
-      }  
-    });
-</script> 
 @stop
