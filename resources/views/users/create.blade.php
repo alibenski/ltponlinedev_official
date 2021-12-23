@@ -1,137 +1,43 @@
-@extends('admin.admin')
-
+@extends('layouts.adminLTE3.index')
 @section('customcss')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
-    <style>
-      html {
-      font-family: "Helvetica Neue", sans-serif;
-      width: 100%;
-      color: #666666;
-      text-align: left;
-      }
-
-      .popup-overlay {
-      /*Hides pop-up when there is no "active" class*/
-      visibility: hidden;
-      position: absolute;
-      background: #ffffff;
-      border: 3px solid #666666;
-      width: 50%;
-      height: 50%;
-      left: 25%;
-      }
-
-      .popup-overlay.active {
-      /*displays pop-up when "active" class is present*/
-      visibility: visible;
-      text-align: center;
-      }
-
-      .popup-content {
-      /*Hides pop-up content when there is no "active" class */
-      visibility: hidden;
-      }
-
-      .popup-content.active {
-      /*Shows pop-up content when "active" class is present */
-      visibility: visible;
-      }
-
-      button {
-      display: inline-block;
-      vertical-align: middle;
-      border-radius: 30px;
-      margin: .20rem;
-      font-size: 1rem;
-      color: #666666;
-      background: #ffffff;
-      border: 1px solid #666666;
-      }
-
-      button:hover {
-      border: 1px solid #666666;
-      background: #666666;
-      color: #ffffff;
-      }
-    </style>
+    
 @stop
-
 @section('content')
-
-<div class='col-sm-10 col-md-offset-1'>
-
-    <h1><i class='fa fa-user-plus'></i> Add User (Auth & SDDEXTR)</h1>
-    <hr>
-	    <form method="POST" action="{{ route('users.store') }}">
+  <div class="card">
+    <div class="card-header border-0">
+      <div class="d-flex justify-content-between">
+        <h2>Add User (Auth & SDDEXTR)</h2>
+      </div>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{{ route('users.store') }}">
         {{ csrf_field() }}
-          <!-- MAKE A DECISION SECTION -->
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Does the user have a valid Index from Umoja?</h3>
-          </div>
-          <div class="panel-body">
-          <div class="form-group">
 
-                  <div class="col-sm-12">
-                            <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required" autocomplete="off">
-                            <label for="decision1" class="form-control-static">Yes</label>
-                  </div>
-
-                  <div class="col-sm-12">
-                            <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required" autocomplete="off">
-                            <label for="decision2" class="form-control-static">No</label>
-                  </div>
-            </div>
-
-            <div class="indexno-section hidden"> {{-- start of hidden fields --}}
-
-              <div class="form-group">
-                <label class="control-label">Index: </label>
-                <input name="indexno" type="text" class="form-control" value="">
-              </div>
-
-            </div> {{-- end of hidden fields --}}
-
-            <div class="message-section hidden"> {{-- start of hidden fields --}}
-
-              <div class="form-group">
-                <h4><span class="label label-info">EXT Index will be generated automatically</span></h4>
-              </div>
-
-            </div> {{-- end of hidden fields --}}
-          </div>
-        </div> {{-- end of panel --}}
-
-          @include('users_new.registration_form_fields')
-
-          <div class="form-group">
-            <label class="control-label">Password is automatically set to <span class="text-danger">"Welcome2CLM"</span></label>
-    				{{-- <input name="password" type="password" class="form-control" value=""> --}}
-          </div>
-
-          {{-- <div class="form-group">
-            <label class="control-label">Confirm Password: </label>
-    				<input name="password_confirmation" type="password" class="form-control" value="">
-          </div> --}}
+        @include('users_new.registration_form_fields')
           
-          <div class="row">
-            <div class="col-sm-4 col-md-offset-2">
-              <a href="{{ route('users.index') }}" class="btn btn-danger btn-block">Back</a>
-            </div>
-            <div class="col-sm-4">
-              <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Add User</button>
-              <input type="hidden" name="_token" value="{{ Session::token() }}">
-            </div>
+        <div class="row">
+          <div class="col-sm-4 col-md-offset-2">
+            <a href="{{ route('users.index') }}" class="btn btn-danger btn-block">Back</a>
           </div>
-      </form>
-</div>
+          <div class="col-sm-4">
+            <button type="submit" class="btn btn-success btn-block button-prevent-multi-submit">Add User</button>
+            <input type="hidden" name="_token" value="{{ Session::token() }}">
+          </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <label class="control-label">User will be added to the <span class="text-danger"><a href="/admin/newuser">New User Administration page</a></span></label>
+        </div>
 
-@stop
+      </form>
+    </div>
+  </div>
+  <!-- /.card -->
+@endsection
 
 @section('java_script')
-<script src="{{ asset('js/app.js') }}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
