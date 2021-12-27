@@ -59,11 +59,6 @@
 					</em>
 
 					(@if($history_value->Result == 'P') Passed @elseif($history_value->Result == 'F') Failed @elseif($history_value->Result == 'I') Incomplete @else -- @endif)
-					
-						{{-- @if ($history_value->Result == 'P' || $history_value->Result == 'F')
-							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'En', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print EN</a>
-							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'Fr', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print FR</a>
-						@endif --}}
 
 						<form method="GET" action="{{ route('manage-user-enrolment-data-by-history', $id) }}" style="display:inline;">
 								<input name="Term" type="hidden" value="{{  $history_value->Term }}">
@@ -83,7 +78,11 @@
 	@else
 
 		@if (count($student_convoked) > 0)
-		      
+		  <div class="row">
+			<div class="col-sm-12">
+				<h3>Viewing LTP Data for <strong> Term: {{ Request::get('Term') }}</strong></h3>
+			</div>
+		  </div>    
 		  <div class="row">
 		      <div class="col-sm-12">
 		          <div class="panel panel-success">
@@ -123,6 +122,18 @@
 		                    Teacher: <strong>{{ $element->classrooms->teachers->Tch_Name }} </strong>
 		                    @endif
 		                  </p>
+						  <p>
+							Result: <strong>@if($element->Result == 'P') Passed @elseif($element->Result == 'F') Failed @elseif($element->Result == 'I') Incomplete @else -- @endif</strong>
+						  </p>
+						  <p>
+							Written Grade: <strong>@if (!is_null($element->Written)) $element->Written @endif</strong>
+						  </p>
+						  <p>
+							Oral Grade: <strong>@if (!is_null($element->Oral)) $element->Oral @endif</strong>
+						  </p>
+						  <p>
+							Overall Grade: <strong>@if (!is_null($element->Overall_Grade)) $element->Overall_Grade @endif</strong>
+						  </p>
 		                  <br> 
 		                  	@if($element->classrooms->Tch_ID == 'TBD')
 		                  	@elseif(empty($element->classrooms->Tch_ID))

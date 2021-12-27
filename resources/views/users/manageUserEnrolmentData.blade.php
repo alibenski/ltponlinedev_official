@@ -105,6 +105,18 @@
 		                    Teacher: <strong>{{ $element->classrooms->teachers->Tch_Name }} </strong>
 		                    @endif
 		                  </p>
+						  <p>
+							Result: <strong>@if($element->Result == 'P') Passed @elseif($element->Result == 'F') Failed @elseif($element->Result == 'I') Incomplete @else -- @endif</strong>
+						  </p>
+						  <p>
+							Written Grade: <strong>@if (!is_null($element->Written)) $element->Written @endif</strong>
+						  </p>
+						  <p>
+							Oral Grade: <strong>@if (!is_null($element->Oral)) $element->Oral @endif</strong>
+						  </p>
+						  <p>
+							Overall Grade: <strong>@if (!is_null($element->Overall_Grade)) $element->Overall_Grade @endif</strong>
+						  </p>
 		                  <br> 
 		                  	@if($element->classrooms->Tch_ID == 'TBD')
 		                  	@elseif(empty($element->classrooms->Tch_ID))
