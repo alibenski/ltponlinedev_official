@@ -32,7 +32,7 @@
         </div>
         <br />
         <div class="form-group">
-            <label class="control-label">User will be added to the <span class="text-danger"><a href="/admin/newuser">New User Administration page</a></span></label>
+            <label class="control-label">User will be added to the <span class="text-danger"><a href="admin/newuser">New User Administration page</a></span></label>
         </div>
 
       </form>
