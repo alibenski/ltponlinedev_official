@@ -60,10 +60,15 @@
 
 					(@if($history_value->Result == 'P') Passed @elseif($history_value->Result == 'F') Failed @elseif($history_value->Result == 'I') Incomplete @else -- @endif)
 					
-						@if ($history_value->Result == 'P' || $history_value->Result == 'F')
+						{{-- @if ($history_value->Result == 'P' || $history_value->Result == 'F')
 							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'En', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print EN</a>
 							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'Fr', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print FR</a>
-						@endif
+						@endif --}}
+
+						<form method="GET" action="{{ route('manage-user-enrolment-data-by-history', $id) }}" style="display:inline;">
+								<input name="Term" type="hidden" value="{{  $history_value->Term }}">
+								<button type="submit" class="btn btn-default">View LTP Data</button>
+						</form>
 				</li>
 
 				@endif
