@@ -106,12 +106,19 @@ $(document).ready(function() {
 				data: {term:term, _token:token},
 			})
 			.then(function(data) {
-				console.log(data)
-				getSumOfPrices(data);
-				assignToEventsColumns(data);
-				// console.log(data.data)
-				// var data = jQuery.parseJSON(data.data);
-				// console.log(data)
+				console.log(data, 'length: '+data.data.length)
+				if (data.data.length === 0) {
+					alert("Selected term is not valid. Data is not available at the moment.");
+					$('div.enter-sum').html("");
+					var table = $('#sampol').DataTable();
+					return table.clear().draw();
+				} else {
+					getSumOfPrices(data);
+					assignToEventsColumns(data);
+					// console.log(data.data)
+					// var data = jQuery.parseJSON(data.data);
+					// console.log(data)
+				}
 			})
 			.fail(function() {
 				console.log(data);
@@ -120,34 +127,38 @@ $(document).ready(function() {
 		);
 
 		function getSumOfPrices(data) {
-			// console.log(data.data); //array
-			$('p.show-sum').remove();
-			var prices = [];
+			if (data.data.length > 1) {
+				// console.log(data.data); //array
+				$('p.show-sum').remove();
+				var prices = [];
 
-			$.each(data.data, function(index, val) {
-				prices.push(val.courseschedules.prices.price_usd);
-			});
-			var basketItems = prices.sort(),
-			    counts = {};
+				$.each(data.data, function(index, val) {
+					prices.push(val.courseschedules.prices.price_usd);
+				});
+				var basketItems = prices.sort(),
+					counts = {};
 
-			// get number of duplicate values in array
-			$.each(basketItems, function(key,value) {
-			  if (!counts.hasOwnProperty(value)) {
-			    counts[value] = 1;
-			  } else {
-			    counts[value]++;
-			  }
-			});
+				// get number of duplicate values in array
+				$.each(basketItems, function(key,value) {
+				if (!counts.hasOwnProperty(value)) {
+					counts[value] = 1;
+				} else {
+					counts[value]++;
+				}
+				});
 
-			console.log(counts)
-			var output = [];
-			$.each(counts, function(i, v) {
-				output.push(i * v);
-				var product = i * v;
-				$('div.enter-sum').append('<p class="show-sum">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
-			});
+				console.log(counts)
+				var output = [];
+				$.each(counts, function(i, v) {
+					output.push(i * v);
+					var product = i * v;
+					$('div.enter-sum').append('<p class="show-sum">'+i+' USD x '+v+ ' = ' +product+ ' USD</p>');
+				});
 
-			console.log(output)
+				console.log(output)	
+			} else {
+				$('div.enter-sum').html("");
+			}
 		}
 
 		function assignToEventsColumns(data) {

@@ -13,7 +13,16 @@
             <label class="control-label">Name: </label>
             {{-- <input name="name" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $user->name) }}"> --}}
             <input name="name" type="text" class="form-control" readonly value="{{ old('name', $user->name) }}">
-            <p class="small text-danger text-justify">This field cannot be modified. Please ask the users to modify it themselves via the profile page. </p>
+            <p class="small text-danger text-justify">The Name field cannot be modified. Please use the fields below instead or ask the users to modify it themselves via the profile page. </p>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Last Name: </label>
+            <input name="nameLast" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $user->nameLast) }}">
+        </div>
+        <div class="form-group">
+            <label class="control-label">First Name: </label>
+            <input name="nameFirst" type="text" class="form-control" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('name', $user->nameFirst) }}">
         </div>
 
         <div class="form-group">

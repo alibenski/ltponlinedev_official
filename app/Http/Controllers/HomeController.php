@@ -123,7 +123,7 @@ class HomeController extends Controller
         $schedules = Preenrolment::where('Te_Code', $request->tecode)
             ->where('INDEXID', $current_user)
             // ->where('approval', '=', $request->approval)
-            ->where('form_counter', $request->form_counter)
+            ->where('eform_submit_count', $request->form_counter)
             ->where('Term', $term_code)->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'selfpay_approval']);
         // ->pluck('schedule.name', 'approval');
 
@@ -207,13 +207,13 @@ class HomeController extends Controller
             ->where('Te_Code', $tecode)
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $term)
-            ->where('form_counter', $form)
+            ->where('eform_submit_count', $form)
             ->get();
         $display_language = Preenrolment::orderBy('Term', 'desc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $term)
-            ->where('form_counter', $form)
+            ->where('eform_submit_count', $form)
             ->first();
 
         //get email address of the Manager

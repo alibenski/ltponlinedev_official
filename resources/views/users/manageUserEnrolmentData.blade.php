@@ -257,7 +257,7 @@
 													@endif
 												@endif
 												
-											<div id="modalDeleteEnrolmentMain-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
+											<div id="modalDeleteEnrolmentMain-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}-{{ $form->eform_submit_count }}" class="modal fade" role="dialog">
 											    <div class="modal-dialog">
 											        <div class="modal-content">
 
@@ -267,8 +267,8 @@
 											            </div>
 											            <div class="modal-body-course-delete-main">
 											            	<div class="col-sm-12">	
-												            	<form id="cancelEnrolForm" method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
-
+												            	<form id="cancelEnrolForm" method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->eform_submit_count]) }}">
+																	<p>Form # {{ $form->eform_submit_count }}</p>
 																	<p>Index # {{ $form->INDEXID }} : {{ $form->users->name }}</p>
 																	<p>Language: {{ $form->languages->name }}</p>
 																	<p>Course : {{ $form->courses->Description }}</p>
@@ -320,7 +320,7 @@
 										</td>
 										<td>{{ $form->courses->Description }}</td>
 										<td>
-											<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class=""></i></span> View </a>
+											<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class=""></i></span> View </a>
 										</td>
 										<td>{{ $form->DEPT }}</td>
 										<td>
@@ -958,7 +958,7 @@ $(document).ready(function() {
     	if (!jQuery.isEmptyObject( data )) {
     		$(".course-delete-main").addClass('hidden');
     		$(".placement-delete").addClass('hidden');
-    		$(".btn-edit-form").addClass('hidden');
+    		// $(".btn-edit-form").addClass('hidden');
     	}
 
     })
@@ -1285,7 +1285,8 @@ $(document).on('click', '.course-delete-main', function() {
 	var INDEXID = $(this).closest("tr").find("input[name='indexid']").val();
 	var Te_Code = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
 	var Term = $(this).closest("tr").find("input[name='term']").val();
-    $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
+	var eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
+    $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term+'-'+eform_submit_count).modal('show'); 
 });
 
 $("form#cancelEnrolForm").submit(function disableSubmit() {

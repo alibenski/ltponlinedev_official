@@ -196,7 +196,7 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;"></h1>
                                     <p>Dear {{ $staff_name }}, </p>
                                     <p style="text-align: justify">
-                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>.  Please see below the information about your course:
+                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>. (Monday 3 January is a United Nations holiday, no courses will take place that day). Please see below the information about your course:
                                     </p>
                                     
                                     <p>
@@ -232,7 +232,7 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change.</span>
+                                        * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change taking into account local health and safety conditions, except for courses advertised as online that will remain online.</span>
                                     </p>
                                         
                                     <p style="text-align: justify">
@@ -266,7 +266,7 @@
                                                 <li style="text-align: justify">
                                                     If you don’t have a Moodle access yet, please use the following credentials to log in:
                                                     <br />- Username: first part before the @  of your email address (ex. “psmith” is the username for psmith@un.org) 
-                                                    <br />- Default password: Welcome2U_2021# (you will be asked to change it when you log in)
+                                                    <br />- Default password: Welcome2U_2022# (you will be asked to change it when you log in)
                                                 </li>
                                             </ul>
                                             </p>
@@ -280,7 +280,7 @@
                                                     Ensure that you have a camera, headphones and a microphone.
                                                 </li>
                                                 <li style="text-align: justify">
-                                                    Test the connection before the course. Ensure that your internet connection is stable and that there are not too many appliances connected. 
+                                                    Test the connection before the course. 
                                                 </li>
                                                 <li style="text-align: justify">
                                                     Contact your Organization’s IT department if you have any problems.
@@ -355,7 +355,7 @@
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
                                     <p>Cher / Chère {{ $staff_name }},</p>
                                     <p style="text-align: justify">
-                                        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
+                                        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong> (le lundi 3 janvier étant un jour férié aux Nations Unies, aucun cours n’aura lieu ce jour-là). Voici ci-dessous les informations relatives à votre cours :
                                     </p>
                                     
                                     <p>
@@ -391,7 +391,7 @@
                                     </p>
                                     <br>
                                     <p style="text-align: justify">
-                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer.</span>
+                                        * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer suivant les règles locales de santé et de sécurité, sauf pour les cours annoncés comme étant dispensés en ligne qui resteront en ligne.</span>
                                     </p>
                                         
                                     <p style="text-align: justify">
@@ -422,7 +422,7 @@
                                                 <li style="text-align: justify">
                                                     Si vous n'avez pas encore votre accès à Moodle, veuillez vous connecter avec les identifiants suivants :
                                                     <br />- Nom d’utilisateur : la première partie avant le @ de votre adresse email (ex. “psmith” pour psmith@un.org) 
-                                                    <br />- Mot de passe par défaut : Welcome2U_2021# (vous devrez le modifier lors de la première connexion)
+                                                    <br />- Mot de passe par défaut : Welcome2U_2022# (vous devrez le modifier lors de la première connexion)
                                                 </li>
                                             </ul>
                                             </p>
@@ -436,7 +436,7 @@
                                                     Assurez-vous que vous avez une caméra, des écouteurs et un microphone.
                                                 </li>
                                                 <li style="text-align: justify">
-                                                    Testez la connexion avant le cours. Assurez-vous que votre connexion internet est stable et qu'il n'y a pas trop d'appareils connectés. 
+                                                    Testez la connexion avant le cours. 
                                                 </li>
                                                 <li style="text-align: justify">
                                                     Contactez le département informatique de votre organisation si vous avez un problème.

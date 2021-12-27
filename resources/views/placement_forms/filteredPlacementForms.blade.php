@@ -287,6 +287,10 @@ $(document).ready(function() {
 		data: {indexArray:indexArray},
         success: function(data, status) {
             console.log(data)
+			if (data.length < 1) {
+				alert("Selected term is before 2019. Data is not available at the moment.");
+				return false;
+			}
 			$.each(data, function(x, y) {
 					$("input[name='formID']").each(function() {
 						if ($(this).val() == y.id) {

@@ -1264,13 +1264,13 @@ class PreenrolmentController extends Controller
             ->where('Te_Code', $tecode)
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $term)
-            ->where('form_counter', $form)
+            ->where('eform_submit_count', $form)
             ->get();
         $display_language = Preenrolment::orderBy('Term', 'desc')
             ->where('Te_Code', $tecode)
             ->where('INDEXID', '=', $current_user)
             ->where('Term', $term)
-            ->where('form_counter', $form)
+            ->where('eform_submit_count', $form)
             ->first();
 
         //get email address of the Manager

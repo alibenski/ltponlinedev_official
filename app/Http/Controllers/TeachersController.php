@@ -36,15 +36,27 @@ class TeachersController extends Controller
     {
         if ( Auth::user()->hasRole('Teacher')) {
             $terms = Term::orderBy('Term_Code', 'desc')->get();
-            $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
-                ->where('Te_Term', Session::get('Term'))
-                ->get();
-            $all_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
-                ->where('Tch_ID', '!=', 'TBD')
-                ->where('Te_Term', Session::get('Term'))
-                ->get();
 
-            return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
+            if (is_object(Auth::user()->teachers)) {
+                $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
+                    ->where('Te_Term', Session::get('Term'))
+                    ->get();
+                $all_classes = Classroom::where('L', Auth::user()->teachers->Tch_L)
+                    ->where('Tch_ID', '!=', 'TBD')
+                    ->where('Te_Term', Session::get('Term'))
+                    ->get();
+    
+                return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
+            }
+
+            // notify admin by email
+                Mail::raw("User->Teacher is a non-object id ".Auth::id(), function($message) {
+                $message->from('ltp_web_admin@unog.ch', 'CLM Language Web Admin');
+                $message->to('allyson.frias@un.org')->subject("User->Teacher is a non-object".Auth::id());
+                });
+
+            $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');
+            return redirect()->route('home');
         }
 
         $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');

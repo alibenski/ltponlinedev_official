@@ -12,6 +12,226 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
+    public function reportAllStudentsPerYearOrTermView()
+    {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+
+        $years = array_unique($this->getYears($queryTerm));
+
+        return view('reports.reportAllStudentsPerYearOrTermView', compact('languages', 'terms', 'years'));
+    }
+
+    public function queryAllStudentsByYear($request, $columns)
+    {
+         $terms = Term::orderBy('Term_Code', 'asc')
+            ->select('Term_Code', 'Term_Begin')
+            ->get();
+
+        $termCode = [];
+        foreach ($terms as $key => $value) {
+            $parseYear = Carbon::parse($value->Term_Begin)->year;
+            if ($parseYear == $request->year) {
+                $termCode[] = $value->Term_Code;
+            }
+        }
+        
+        $arrayCollection = [];
+        foreach ($termCode as $term) {
+            // 
+            $recordsMerged = $this->queryAllStudentsMerged($term, $columns, $request);
+            // 
+            $arrayCollection[] = $recordsMerged;
+        }
+
+        $result = [];
+        foreach ($arrayCollection as $k => $v) {
+            foreach ($v as $a => $b) {
+                $result[] = $b;
+            }
+        }
+
+        return $result;
+    }
+
+    public function queryAllStudentsMerged($term, $columns, $request)
+    {
+            
+        $records = new Repo;
+            foreach ($columns as $column) {
+                if ($request->filled($column)) {
+                    $records = $records->where($column, $request->input($column));
+                }
+                    $records = $records
+                        ->where('Term', $term)
+                        ->with('users')
+                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                        ->with('courses')
+                        ->with('languages')
+                        ->with(['courseschedules' => function ($q1) {
+                            $q1->with('prices')->with('courseduration');
+                        }])
+                        ->with('classrooms')
+                        ->whereHas('classrooms', function ($query1) {
+                            $query1->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        })
+                        ->with(['enrolments' => function ($q11) use($term) {
+                            $q11->where('Term', $term)->whereNotNull('CodeIndexID');;
+                            }])
+                        // ->with('enrolments')
+                        ->whereHas('enrolments', function ($query11) use ($term) {
+                            $query11->where('Term', $term)
+                            // ->where('is_self_pay_form', '1')
+                                ->whereNotNull('CodeIndexID');
+                        })
+                        ->with('classrooms.teachers')
+                        ->with('classrooms.courseSchedule.courseduration')
+                        ->with('classrooms.courseSchedule.prices');
+            }
+
+        $records = $records->get();
+
+        $pashFromPlacement = new Repo;
+            foreach ($columns as $column) {
+                if ($request->filled($column)) {
+                    $pashFromPlacement = $pashFromPlacement->where($column, $request->input($column));
+                }
+                    $pashFromPlacement = $pashFromPlacement
+                        ->where('Term', $term)
+                        ->with('users')
+                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                        ->with('courses')
+                        ->with('languages')
+                        ->with(['courseschedules' => function ($q0) {
+                            $q0->with('prices')->with('courseduration');
+                        }])
+                        ->with('classrooms')
+                        ->whereHas('classrooms', function ($query0) {
+                            $query0->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        })
+                        // ->with('placements')
+                        ->with(['placements' => function ($q00) use($term) {
+                            $q00->where('Term', $term)->whereNotNull('CodeIndexID');;
+                            }])
+                        ->whereHas('placements', function ($query00) use ($term) {
+                            $query00->where('Term', $term)
+                            // ->where('is_self_pay_form', '1')
+                                ->whereNotNull('CodeIndexID');
+                        })
+                        ->with('classrooms.teachers')
+                        ->with('classrooms.courseSchedule.courseduration')
+                        ->with('classrooms.courseSchedule.prices');
+            }
+                
+        $pashFromPlacement = $pashFromPlacement->get();
+
+
+        // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
+        $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+        $cancelledEnrolmentRecords = new Repo;
+            foreach ($columns as $column) {
+                if ($request->filled($column)) {
+                    $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where($column, $request->input($column));
+                }
+                    $cancelledEnrolmentRecords = $cancelledEnrolmentRecords
+                        ->onlyTrashed()->with('users')
+                        ->where('Term', $term)
+                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                        ->where('deleted_at', '>', $termCancelDeadline)
+                        // ->whereNull('cancelled_but_not_billed')
+                        ->with('courses')
+                        ->with('languages')
+                        ->with(['courseschedules' => function ($q2) {
+                            $q2->with('prices')->with('courseduration');
+                        }])
+                        ->with('classrooms')
+                        ->whereHas('classrooms', function ($query2) {
+                            $query2->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        })
+                        // ->with('enrolments')
+                        ->with(['enrolments' => function ($q22) use($term) {
+                            $q22->where('Term', $term)->whereNotNull('CodeIndexID');;
+                            }])
+                        ->whereHas('enrolments', function ($query22) use ($term) {
+                            $query22->where('Term', $term)
+                            // ->where('is_self_pay_form', '1')
+                                ->whereNotNull('CodeIndexID');
+                        })
+                        ->with('classrooms.teachers')
+                        ->with('classrooms.courseSchedule.courseduration')
+                        ->with('classrooms.courseSchedule.prices');
+            }
+        
+        $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->get();
+
+        $cancelledPlacementRecords = new Repo;
+            foreach ($columns as $column) {
+                if ($request->filled($column)) {
+                    $cancelledPlacementRecords = $cancelledPlacementRecords->where($column, $request->input($column));
+                }
+                    $cancelledPlacementRecords = $cancelledPlacementRecords
+                        ->onlyTrashed()->with('users')
+                        ->where('Term', $term)
+                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                        ->where('deleted_at', '>', $termCancelDeadline)
+                        // ->whereNull('cancelled_but_not_billed')
+                        ->with('courses')
+                        ->with('languages')
+                        ->with(['courseschedules' => function ($q3) {
+                            $q3->with('prices')->with('courseduration');
+                        }])
+                        ->with('classrooms')
+                        ->whereHas('classrooms', function ($query3) {
+                            $query3->whereNotNull('Tch_ID')
+                                ->where('Tch_ID', '!=', 'TBD');
+                        })
+                        // ->with('placements')
+                        ->with(['placements' => function ($query33) use($term) {
+                            $query33->where('Term', $term)->whereNotNull('CodeIndexID');;
+                            }])
+                        ->whereHas('placements', function ($query33) use ($term) {
+                            $query33->where('Term', $term)
+                            // ->where('is_self_pay_form', '1')
+                                ->whereNotNull('CodeIndexID');
+                        })
+                        ->with('classrooms.teachers')
+                        ->with('classrooms.courseSchedule.courseduration')
+                        ->with('classrooms.courseSchedule.prices');
+            }
+            
+        $cancelledPlacementRecords = $cancelledPlacementRecords->get();
+
+        $recordsMerged = $records->merge($pashFromPlacement)->merge($pashFromPlacement)->merge($cancelledEnrolmentRecords)->merge($cancelledPlacementRecords);
+
+        yield $recordsMerged;
+    }
+
+    public function reportAllStudentsPerYearOrTerm(Request $request)
+    {
+        if ($request->ajax()) {
+            $columns = [
+                'L'
+            ];
+        
+            if ($request->Term) {
+                $term = $request->Term;
+                $recordsMerged = $this->queryAllStudentsMerged($term, $columns, $request);
+                $data = $recordsMerged;
+            }
+
+            if ($request->year) {
+                $arrayCollection = $this->queryAllStudentsByYear($request, $columns);
+                $data = $arrayCollection;
+            }
+
+            return response()->json(['data' => $data]);
+        }
+    }
+
     public function viewStudentsPerTerm()
     {
         return view('reports.viewStudentsPerTerm');
@@ -51,6 +271,16 @@ class ReportsController extends Controller
         return response()->json($obj);
     }
 
+    public function getYears($queryTerm)
+    {
+        $years = [];
+        foreach ($queryTerm as $key => $value) {
+            $years[] = Carbon::parse($value->Term_Begin)->year;
+        }
+
+        return $years;
+    }
+
     public function baseView()
     {
         $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name', 'OrgCode']);
@@ -58,12 +288,7 @@ class ReportsController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Name', 'Comments']);
         $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
 
-        $years = [];
-        foreach ($queryTerm as $key => $value) {
-            $years[] = Carbon::parse($value->Term_Begin)->year;
-        }
-
-        $years = array_unique($years);
+        $years = array_unique($this->getYears($queryTerm));
 
         return view('reports.baseView',  compact('orgs', 'languages', 'terms', 'years'));
     }

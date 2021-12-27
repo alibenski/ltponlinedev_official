@@ -42,6 +42,11 @@ class WaitlistController extends Controller
     public function ajaxCheckIfWaitlisted(Request $request)
     {
         if ($request->ajax()) {
+            if ($request->indexArray == null) {
+                $data = [];
+                return response()->json($data);
+            }
+
             $waitlistArray = [];
             
             $placement_forms = PlacementForm::whereIn('id', $request->indexArray)->get();

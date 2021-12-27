@@ -53,7 +53,7 @@
           <i class="ion ion-android-hand"></i>
         </div>
         
-        <a href="{{ route('waitListOneList', $element->first()->Te_Code_New) }}" target="_blank" class="small-box-footer">
+        <a href="{{ route('waitListOneList', $x->first()->Te_Code_New) }}" target="_blank" class="small-box-footer">
               More info  <i class="fa fa-arrow-circle-right"></i>
             </a>
 

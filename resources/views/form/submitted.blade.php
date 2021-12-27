@@ -133,7 +133,7 @@
                                     
                                     @if(is_null($form->deleted_at))
                                     <div class="col-sm-6">
-                                        <a id="modbtn" class="btn btn-sm btn-outline-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><i class="fa fa-eye"></i> View Status</a>
+                                        <a id="modbtn" class="btn btn-sm btn-outline-info btn-block btn-space" data-toggle="modal" href="#modalshow" data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle="{{ $form->courses->EDescription }}"><i class="fa fa-eye"></i> View Status</a>
                                     </div> 
                                     @endif
                                     
@@ -143,7 +143,7 @@
                                           {{ $form->courses->Te_Code_New }}
                                         @endslot
                                         @slot('formCount')
-                                          {{ $form->form_counter }}
+                                          {{ $form->eform_submit_count }}
                                         @endslot
                                         @slot('buttonclass')
                                           btn-sm btn-danger btn-block btn-space
@@ -172,7 +172,7 @@
                                         @endslot
                                         @slot('buttonoperation')
                                           <button type="button" class="btn btn-default btn-space" data-dismiss="modal">Back</button>
-                                          <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}" class="form-prevent-multi-submit">
+                                          <form method="POST" action="{{ route('submitted.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->eform_submit_count]) }}" class="form-prevent-multi-submit">
                                               <input type="submit" value="Cancel Enrolment" class="btn btn-danger btn-space button-prevent-multi-submit">
                                               <input type="hidden" name="deleteTerm" value="{{ $form->Term }}">
                                               <input type="hidden" name="_token" value="{{ Session::token() }}">
