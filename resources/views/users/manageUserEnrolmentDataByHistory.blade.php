@@ -26,38 +26,56 @@
 	<h3>Viewing: <strong>{{ $student->name }}</strong> [{{ $student->indexno }}]</h3>
 
 	@include('admin.partials._userAdminNav')
+	
+	<div class="panel-body panel-info">
+		@if($historical_data->isEmpty())
+		<div class="alert alert-warning">
+			<p>There were no historical records found.</p>
+		</div>
+		@else
+		<ul  class="list-group">
+			@foreach($historical_data_list as $history_value)
+				<li class="list-group-item"><strong class="text-success">
+				@if(empty($history_value))
+				<div class="alert alert-warning">
+					<p>There were no historical records found.</p>
+				</div>
+				@else
+					@if(empty($history_value->Te_Code)) {{ $history_value->coursesOld->Description }} 
+					@else {{ $history_value->courses->Description }} 
+					@endif</strong> : {{ $history_value->terms->Term_Name }} 
 
-	<h3>@if(Request::input('Term'))Term: {{ Request::input('Term') }} - {{ $term_info->Comments }} {{ date('Y', strtotime($term_info->Term_Begin )) }}@else Please Choose Term @endif</h3>
-   	<div class="row">
-   		<div class="col-sm-12">
-   			<form method="GET" action="{{ route('manage-user-enrolment-data', $id) }}">
-			
-				<div class="form-group input-group col-sm-12">
-					<h4><strong>Filters:</strong></h4>
+					<em>
+					@if (empty($history_value->classrooms))
+					@else
+						@if (is_null($history_value->classrooms->Tch_ID))
+							Waitlisted
+						@elseif($history_value->classrooms->Tch_ID == 'TBD')
+							Waitlisted
+						@else
+							* {{ $history_value->classrooms->Tch_ID }} *
+						@endif
+					@endif
+					</em>
 
-					<div class="form-group">
-			          <label for="Term" class="col-md-12 control-label">Term Select:</label>
-			          <div class="form-group col-sm-12">
-			            <div class="dropdown">
-			              <select id="Term" name="Term" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
-			                @foreach($terms as $value)
-			                    <option></option>
-			                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
-			                @endforeach
-			              </select>
-			            </div>
-			          </div>
-			        </div>
+					(@if($history_value->Result == 'P') Passed @elseif($history_value->Result == 'F') Failed @elseif($history_value->Result == 'I') Incomplete @else -- @endif)
+					
+						{{-- @if ($history_value->Result == 'P' || $history_value->Result == 'F')
+							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'En', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print EN</a>
+							<a class="btn btn-default" href="{{ route('pdfAttestation',['language' =>'Fr', 'download'=>'pdf', 'id'=> $history_value->id]) }}" target="_blank"><i class="fa fa-print"></i> Print FR</a>
+						@endif --}}
 
-				</div> {{-- end filter div --}}
+						<form method="GET" action="{{ route('manage-user-enrolment-data-by-history', $id) }}" style="display:inline;">
+								<input name="Term" type="hidden" value="{{  $history_value->Term }}">
+								<button type="submit" class="btn btn-default">View LTP Data</button>
+						</form>
+				</li>
 
-
-			    <div class="form-group">           
-			        <button type="submit" class="btn btn-success">View Forms</button>
-			    	<a href="{{ route('manage-user-enrolment-data', $id) }}" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
-			    </div>
-			</form>
-   		</div>
+				@endif
+			@endforeach
+			{{$historical_data_list->links()}}
+		</ul>
+		@endif
 	</div>
 
 	@if(!Request::filled('Term'))
@@ -257,7 +275,7 @@
 													@endif
 												@endif
 												
-											<div id="modalDeleteEnrolmentMain-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}-{{ $form->eform_submit_count }}" class="modal fade" role="dialog">
+											<div id="modalDeleteEnrolmentMain-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
 											    <div class="modal-dialog">
 											        <div class="modal-content">
 
@@ -267,8 +285,8 @@
 											            </div>
 											            <div class="modal-body-course-delete-main">
 											            	<div class="col-sm-12">	
-												            	<form id="cancelEnrolForm" method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->eform_submit_count]) }}">
-																	<p>Form # {{ $form->eform_submit_count }}</p>
+												            	<form id="cancelEnrolForm" method="POST" action="{{ route('enrolment.destroy', [$form->INDEXID, $form->Te_Code, $form->Term, $form->form_counter]) }}">
+
 																	<p>Index # {{ $form->INDEXID }} : {{ $form->users->name }}</p>
 																	<p>Language: {{ $form->languages->name }}</p>
 																	<p>Course : {{ $form->courses->Description }}</p>
@@ -320,7 +338,7 @@
 										</td>
 										<td>{{ $form->courses->Description }}</td>
 										<td>
-											<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class=""></i></span> View </a>
+											<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class=""></i></span> View </a>
 										</td>
 										<td>{{ $form->DEPT }}</td>
 										<td>
@@ -958,7 +976,7 @@ $(document).ready(function() {
     	if (!jQuery.isEmptyObject( data )) {
     		$(".course-delete-main").addClass('hidden');
     		$(".placement-delete").addClass('hidden');
-    		// $(".btn-edit-form").addClass('hidden');
+    		$(".btn-edit-form").addClass('hidden');
     	}
 
     })
@@ -1285,8 +1303,7 @@ $(document).on('click', '.course-delete-main', function() {
 	var INDEXID = $(this).closest("tr").find("input[name='indexid']").val();
 	var Te_Code = $(this).closest("tr").find("input[name='Te_Code_Input']").val();
 	var Term = $(this).closest("tr").find("input[name='term']").val();
-	var eform_submit_count = $(this).closest("tr").find("input[name='eform_submit_count']").val();
-    $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term+'-'+eform_submit_count).modal('show'); 
+    $('#modalDeleteEnrolmentMain-'+INDEXID+'-'+Te_Code+'-'+Term).modal('show'); 
 });
 
 $("form#cancelEnrolForm").submit(function disableSubmit() {

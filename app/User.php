@@ -108,6 +108,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Teachers', 'IndexNo', 'indexno');
     }
 
+    public function teachersById()
+    {
+        return $this->hasOne('App\Teachers', 'id', 'teacher_id');
+    }
+
     /**
      * Send the password reset notification.
      *

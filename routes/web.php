@@ -241,6 +241,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::put('/user/{id}/resetpassword', ['as' => 'users.resetpassword', 'uses' => 'UserController@resetPassword']);
     // management of enrolment data per user
     Route::get('user/{id}/manage-user-enrolment-data', ['as' => 'manage-user-enrolment-data', 'uses' => 'UserController@manageUserEnrolmentData']);
+    Route::get('user/{id}/manage-user-enrolment-data-by-history', ['as' => 'manage-user-enrolment-data-by-history', 'uses' => 'UserController@manageUserEnrolmentDataByHistory']);
     Route::get('user/{id}/enrol-student-to-course-form', ['as' => 'enrol-student-to-course-form', 'uses' => 'UserController@enrolStudentToCourseForm']);
     Route::post('user/enrol-student-to-course-insert', ['as' => 'enrol-student-to-course-insert', 'uses' => 'UserController@enrolStudentToCourseInsert']);
     Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm']);
