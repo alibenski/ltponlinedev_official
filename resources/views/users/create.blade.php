@@ -14,7 +14,7 @@
     </div>
     <div class="card-body">
       <div class="form-group">
-            <label class="control-label">To create a teacher's user account, click here: <span class="text-danger"><a href="admin/teachers/create">Create New Teacher</a></span></label>
+            <label class="control-label">To create a teacher's user account, click here: <span class="text-danger"><a href="/admin/teachers/create">Create New Teacher</a></span></label>
         </div>
       <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('users.store') }}">
         {{ csrf_field() }}
@@ -32,7 +32,7 @@
         </div>
         <br />
         <div class="form-group">
-            <label class="control-label">User will be added to the <span class="text-danger"><a href="admin/newuser">New User Administration page</a></span></label>
+            <label class="control-label">User will be added to the <span class="text-danger"><a href="{{ route('newuser.index') }}">New User Administration page</a></span></label>
         </div>
 
       </form>
