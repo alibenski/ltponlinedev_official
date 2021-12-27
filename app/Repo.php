@@ -67,6 +67,10 @@ class Repo extends Model
     return $this->belongsTo('App\Classroom', 'CodeClass', 'Code'); 
     }
 
+    public function classroomsOld() {
+    return $this->belongsTo('App\Classroom', 'Code', 'Code'); 
+    }
+
     public function previewTempSort() {
     return $this->belongsTo('App\PreviewTempSort', 'CodeIndexID', 'CodeIndexID'); 
     }

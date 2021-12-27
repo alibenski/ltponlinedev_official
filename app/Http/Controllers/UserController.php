@@ -714,6 +714,13 @@ class UserController extends Controller
             );
     }
 
+    public function getLTPDataBefore2018($request, $student_last_term, $student)
+    {
+        $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $request->Term)
+            ->where('INDEXID', $student->indexno)->first();
+        return $repos_lang;
+    }
+
     public function manageUserEnrolmentDataByHistory(Request $request, $id)
     {
         $id = $id;
@@ -758,6 +765,10 @@ class UserController extends Controller
             return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
         }
 
+        if ($request->Term < 191) {
+            $repos_lang = $this->getLTPDataBefore2018($request, $student_last_term, $student);
+            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+        }
 
         return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
     }
@@ -805,6 +816,10 @@ class UserController extends Controller
             return view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented'));
         }
 
+        if ($request->Term < 191) {
+            $repos_lang = $this->getLTPDataBefore2018($request, $student_last_term, $student);
+            view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented'));
+        }
 
         return view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented'));
     }

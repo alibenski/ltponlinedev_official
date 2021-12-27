@@ -77,6 +77,74 @@
 
 	@else
 
+		@if (!is_null($repos_lang))
+			{{-- start of 2018 and below data --}}
+			@if (Request::get('Term') < 191)
+				<div class="row">
+					<div class="col-sm-12">
+						<h3>Viewing LTP Data for <strong> Term: {{ Request::get('Term') }}</strong></h3>
+					</div>
+				</div> 
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="panel panel-success">
+							<div class="panel-heading"><strong>Convocation Details</strong></div>
+
+							<div class="panel-body">
+								<p>
+								<h3><strong>@if(!empty($repos_lang->coursesOld->Description)){{ $repos_lang->coursesOld->Description }} ({{$repos_lang->Code}})@endif</strong></h3>
+								
+								<p>Schedule: 
+									<br />
+									@if(!empty($repos_lang->classroomsOld->Te_Mon_Room))
+									<strong>Monday {{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Mon_BTime))}}-{{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Mon_ETime)) }}</strong><br />
+									@endif
+									@if(!empty($repos_lang->classroomsOld->Te_Tue_Room))
+									<strong>Tuesday {{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Tue_BTime))}}-{{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Tue_ETime)) }}</strong><br />
+									@endif
+									@if(!empty($repos_lang->classroomsOld->Te_Wed_Room))
+									<strong>Wednesday {{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Wed_BTime))}}-{{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Wed_ETime)) }}</strong><br />
+									@endif
+									@if(!empty($repos_lang->classroomsOld->Te_Thu_Room))
+									<strong>Thursday {{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Thu_BTime))}}-{{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Thu_ETime)) }}</strong><br />
+									@endif
+									@if(!empty($repos_lang->classroomsOld->Te_Fri_Room))
+									<strong>Friday {{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Fri_BTime))}}-{{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Fri_ETime)) }}</strong><br />
+									@endif
+								</strong>					
+								</p>  
+								<p>
+									@if ($repos_lang->classroomsOld)
+										@if($repos_lang->classroomsOld->Tch_ID == 'TBD')
+										<h4><span class="label label-danger"> -- </span></h4> 
+										@elseif(empty($repos_lang->classroomsOld->Tch_ID))
+										<h4><span class="label label-danger"> -- </span></h4> 
+										@else 
+										Teacher: <strong>{{ $repos_lang->classroomsOld->teachers->Tch_Name }} </strong>
+										@endif
+									@endif
+								</p>
+								<p>
+									Result: <strong>@if($repos_lang->Result == 'P') Passed @elseif($repos_lang->Result == 'F') Failed @elseif($repos_lang->Result == 'I') Incomplete @else -- @endif</strong>
+								</p>
+								<p>
+									Written Grade: <strong>@if (!is_null($repos_lang->Written)) $repos_lang->Written @endif</strong>
+								</p>
+								<p>
+									Oral Grade: <strong>@if (!is_null($repos_lang->Oral)) $repos_lang->Oral @endif</strong>
+								</p>
+								<p>
+									Overall Grade: <strong>@if (!is_null($repos_lang->Overall_Grade)) $repos_lang->Overall_Grade @endif</strong>
+								</p>
+								<br> 
+								</p>
+							</div>
+					</div>
+				</div>	
+			@endif
+			{{-- end of 2018 and below data --}}
+		@endif
+
 		@if (count($student_convoked) > 0)
 		  <div class="row">
 			<div class="col-sm-12">
