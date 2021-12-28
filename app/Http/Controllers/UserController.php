@@ -752,7 +752,7 @@ class UserController extends Controller
 
         if ($student_last_term == null) {
             $repos_lang = null;
-            return view('users.manageUserEnrolmentData', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
         }
 
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
