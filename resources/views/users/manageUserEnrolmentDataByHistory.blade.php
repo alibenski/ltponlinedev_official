@@ -41,6 +41,7 @@
 					<p>There were no historical records found.</p>
 				</div>
 				@else
+					{{ $history_value->Term }} - 
 					@if(empty($history_value->Te_Code)) {{ $history_value->coursesOld->Description }} 
 					@else {{ $history_value->courses->Description }} 
 					@endif</strong> : {{ $history_value->terms->Term_Name }} 
@@ -68,7 +69,7 @@
 
 				@endif
 			@endforeach
-			{{$historical_data_list->links()}}
+			{{-- {{$historical_data_list->links()}} --}}
 		</ul>
 		@endif
 	</div>

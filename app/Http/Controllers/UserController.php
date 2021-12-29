@@ -743,7 +743,7 @@ class UserController extends Controller
 
         $student_last_term = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->first(['Term']);
         $historical_data = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();
-        $historical_data_list = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->paginate(5);
+        $historical_data_list = Repo::orderBy('Term', 'desc')->where('INDEXID', $student->indexno)->get();
         $placement_records = PlacementForm::withTrashed()
             ->where('INDEXID', $student->indexno)
             ->get();
