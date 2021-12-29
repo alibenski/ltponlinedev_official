@@ -39,7 +39,7 @@ trait TracksHistoryTrait
         $origAttribute = $model->getOriginal($field);
 
         if ($field == 'email') {
-            Mail::raw("Email field changed for user id # " . $model->id . ". Check histories table for more details.", function ($message) use ($model) {
+            Mail::raw("Email field changed for user id # " . $model->id . " Frist name: " . $model->nameFirst . " Lastname: " . $model->nameLast . " New email: " . $value . " Check histories table for more details.", function ($message) use ($model) {
                 $message->from('clm_language@unog.ch', 'CLM Online [Do Not Reply]');
                 $message->to(['allyson.frias@un.org', 'jeanpierre.gaviano@un.org'])->subject('Email field changed for user id # ' . $model->id);
             });
