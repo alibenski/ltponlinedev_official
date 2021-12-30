@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Spatie\Permission\Traits\HasRoles;
 use Session;
 use URL;
@@ -50,6 +51,22 @@ class LoginController extends Controller
         }
 
         return view('auth.login');
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $email_add = $request->email;
+        strtolower($email_add);
+        if (str_contains($email_add, '@ohchr.org') ) {
+            Session::flash('ohchr', 'Email address with @ohchr.org detected. For OHCHR staff, please use your @un.org email address.');
+            return redirect('/');
+        }
+        
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
+        
     }
 
     protected function authenticated($request, $user)
