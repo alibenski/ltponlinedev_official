@@ -14,6 +14,7 @@ use App\Torgan;
 use App\FileNewUser;
 use App\NewUser;
 use App\Mail\EmailLateRegister;
+use App\Services\User\OhchrEmailChecker;
 
 
 
@@ -49,8 +50,15 @@ class LateRegisterController extends Controller
         return view('users_new.late_new_user_form', compact('org'));
     }
 
-    public function lateRegister(Request $request)
+    public function lateRegister(Request $request, OhchrEmailChecker $ohchrEmailChecker)
     {
+        $email_add = $request->email;
+        $ohchrBoolean = $ohchrEmailChecker->ohchrEmailChecker($email_add);
+        if ($ohchrBoolean) {
+            \Session::flash('warning', 'Email address with @ohchr.org detected. For OHCHR staff, please use your @un.org email address.');
+            return redirect()->back();
+        }
+
         //validate the data
         $this->validate($request, array(
             'gender' => 'required|string|',
