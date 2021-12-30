@@ -269,14 +269,15 @@ $(document).ready(function() {
 				})
 				.then(function(data) {
 					console.log(data)
+					// console.log(data.data['0'])
 					// getSumOfPrices(data);
-					assignToEventsColumns(data);
+					// assignToEventsColumns(data);
 					// console.log(data.data)
 					// var data = jQuery.parseJSON(data.data);
 					// console.log(data)
 					$(".overlay").removeAttr('style');
 				})
-				.fail(function() {
+				.fail(function(data) {
 					console.log(data);
 				})
 
@@ -314,7 +315,7 @@ $(document).ready(function() {
 					"fixedHeader": true,
 					"pagingType": "full_numbers",
 					"bAutoWidth": false,
-					"aaData": data.data,
+					"aaData": data.data["0"],
 					"columns": [
 							{ "data": "Term" }, 
 							{ "data": "languages.name" }, 

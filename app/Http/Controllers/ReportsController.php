@@ -9,6 +9,7 @@ use App\Torgan;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use League\CommonMark\Util\ArrayCollection;
 
 class ReportsController extends Controller
 {
@@ -37,22 +38,24 @@ class ReportsController extends Controller
             }
         }
         
-        $arrayCollection = [];
+        $arrayCollection = new \AppendIterator();
         foreach ($termCode as $term) {
             // 
             $recordsMerged = $this->queryAllStudentsMerged($term, $columns, $request);
             // 
-            $arrayCollection[] = $recordsMerged;
+            $arrayCollection->append($recordsMerged);
         }
 
         $result = [];
-        foreach ($arrayCollection as $k => $v) {
-            foreach ($v as $a => $b) {
-                $result[] = $b;
-            }
+        foreach ($arrayCollection as $v) {
+            // foreach ($v as $a) {
+                // foreach ($b as $a) {
+                    $result[] = $v;
+                // }
+            // }
         }
 
-        return $result;
+        yield $result;
     }
 
     public function queryAllStudentsMerged($term, $columns, $request)
@@ -216,16 +219,26 @@ class ReportsController extends Controller
             $columns = [
                 'L'
             ];
-        
+            $arr = [];
             if ($request->Term) {
                 $term = $request->Term;
                 $recordsMerged = $this->queryAllStudentsMerged($term, $columns, $request);
-                $data = $recordsMerged;
+                foreach ($recordsMerged as $value) {
+                    $arr[] = $value;
+                }
+                $data = $arr;
             }
 
             if ($request->year) {
                 $arrayCollection = $this->queryAllStudentsByYear($request, $columns);
-                $data = $arrayCollection;
+                foreach ($arrayCollection as $dataValue) {
+                    foreach ($dataValue as $value) {
+                        // foreach ($v as $value) {
+                            $arr[] = $value;
+                        // }
+                    }
+                }
+                $data = $arr;
             }
 
             return response()->json(['data' => $data]);
