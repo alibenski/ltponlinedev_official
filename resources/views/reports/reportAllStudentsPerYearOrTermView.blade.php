@@ -269,6 +269,7 @@ $(document).ready(function() {
 				})
 				.then(function(data) {
 					console.log(data)
+					// console.log(data.data['0'])
 					// getSumOfPrices(data);
 					assignToEventsColumns(data);
 					// console.log(data.data)
@@ -276,7 +277,7 @@ $(document).ready(function() {
 					// console.log(data)
 					$(".overlay").removeAttr('style');
 				})
-				.fail(function() {
+				.fail(function(data) {
 					console.log(data);
 				})
 
