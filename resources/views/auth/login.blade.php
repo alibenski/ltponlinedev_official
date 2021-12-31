@@ -16,6 +16,11 @@
         <strong>Note: </strong> {{ Session::get('warning') }}
     </div>
 @endif
+@if (Session::has('ohchr')) 
+    <div class="alert alert-danger alert-block text-center" role="alert">
+        <strong>Note: </strong> {{ Session::get('ohchr') }}
+    </div>
+@endif
 <div class="container d-flex align-items-center" style="min-height: 75vh;">
     <div class="row">
         <div class="col-sm-6">

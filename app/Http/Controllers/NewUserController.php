@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\User\MsuUpdateField;
 use App\Services\User\NgoUpdateField;
+use App\Services\User\OhchrEmailChecker;
 use App\FileNewUser;
 use App\Mail\SendAuthMail;
 use App\NewUser;
@@ -296,8 +297,15 @@ class NewUserController extends Controller
         return view('page_not_available');
     }
 
-    public function postNewOutsideUserForm(Request $request)
+    public function postNewOutsideUserForm(Request $request, OhchrEmailChecker $ohchrEmailChecker)
     {
+        $email_add = $request->email;
+        $ohchrBoolean = $ohchrEmailChecker->ohchrEmailChecker($email_add);
+        if ($ohchrBoolean) {
+            \Session::flash('warning', 'Email address with @ohchr.org detected. For OHCHR staff, please use your @un.org email address.');
+            return redirect()->back();
+        }
+
         //validate the data
         $this->validate($request, array(
             'gender' => 'required|string|',
