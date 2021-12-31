@@ -40,7 +40,18 @@
         @endhasrole
         
         @hasrole('Admin')
-        <li class="{{ Request::is(route('reports')) ? "active" : ""}}"><a href="{{ route('reports') }}"><i class="fa fa-line-chart"></i> <span>Reports</span></a></li>
+        <li class="treeview {{ Request::is('admin/reports*') ? "active" : ""}}">
+          <a href="#"><i class="fa fa-line-chart"></i> <span>Reports</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{ route('reports') }}">View Students by Organization</a></li>
+            <li><a href="{{ route('reports/ltp-stats-view-students-per-term') }}" {{ Request::is('admin/reports/ltp-stats-view-students-per-term') ? "style=color:white" : ""}}>Count Students per Term</a></li>
+            <li><a href="{{ route('reports/all-students-per-year-or-term-view') }}">All Students LTP Data/Info</a></li>
+          </ul>
+        </li> 
         @endhasrole
 
         @hasrole('Admin')
@@ -58,7 +69,7 @@
         </li> 
         @endhasrole
 
-        <li class="treeview {{ Request::is('admin/reports/ltp-stats-*') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/reports/ltp-stats-graph*') ? "active" : ""}}">
           <a href="#"><i class="fa fa-bar-chart"></i> <span>Statistics</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -67,7 +78,6 @@
           <ul class="treeview-menu">
             <li><a href="{{ route('reports/ltp-stats-graph-view') }}" {{ Request::is('admin/reports/ltp-stats-graph-view') ? "style=color:white" : ""}}>Evolution per Year</a></li>
             <li><a href="{{ route('reports/ltp-stats-graph-view-by-language') }}" {{ Request::is('admin/reports/ltp-stats-graph-view-by-language') ? "style=color:white" : ""}}>Evolution per Language</a></li>
-            <li><a href="{{ route('reports/ltp-stats-view-students-per-term') }}" {{ Request::is('admin/reports/ltp-stats-view-students-per-term') ? "style=color:white" : ""}}>Students per Term</a></li>
           </ul>
         </li>
 
