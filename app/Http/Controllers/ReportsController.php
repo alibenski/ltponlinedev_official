@@ -46,21 +46,11 @@ class ReportsController extends Controller
             $arrayCollection->append($recordsMerged);
         }
 
-        $result = [];
-        foreach ($arrayCollection as $v) {
-            // foreach ($v as $a) {
-                // foreach ($b as $a) {
-                    $result[] = $v;
-                // }
-            // }
-        }
-
-        yield $result;
+        yield $arrayCollection;
     }
 
     public function queryAllStudentsMerged($term, $columns, $request)
     {
-            
         $records = new Repo;
             foreach ($columns as $column) {
                 if ($request->filled($column)) {
@@ -209,7 +199,7 @@ class ReportsController extends Controller
         $cancelledPlacementRecords = $cancelledPlacementRecords->get();
 
         $recordsMerged = $records->merge($pashFromPlacement)->merge($pashFromPlacement)->merge($cancelledEnrolmentRecords)->merge($cancelledPlacementRecords);
-
+        
         yield $recordsMerged;
     }
 
@@ -223,8 +213,10 @@ class ReportsController extends Controller
             if ($request->Term) {
                 $term = $request->Term;
                 $recordsMerged = $this->queryAllStudentsMerged($term, $columns, $request);
-                foreach ($recordsMerged as $value) {
-                    $arr[] = $value;
+                foreach ($recordsMerged as $v) {
+                    foreach ($v as $value) {
+                        $arr[] = $value;
+                    }
                 }
                 $data = $arr;
             }
@@ -232,10 +224,10 @@ class ReportsController extends Controller
             if ($request->year) {
                 $arrayCollection = $this->queryAllStudentsByYear($request, $columns);
                 foreach ($arrayCollection as $dataValue) {
-                    foreach ($dataValue as $value) {
-                        // foreach ($v as $value) {
-                            $arr[] = $value;
-                        // }
+                    foreach ($dataValue as $v) {
+                        foreach ($v as $value) {
+                                $arr[] = $value;
+                        }
                     }
                 }
                 $data = $arr;
