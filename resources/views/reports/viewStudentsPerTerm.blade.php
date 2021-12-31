@@ -31,7 +31,7 @@
 </table>
 
 <div class="row">
-  <p><i class="fa fa-info-circle"></i> <small>Values above show the number of <strong>active students enrolled</strong> to their classes per term excluding waitlisted and cancelled</small></p>
+  <p><i class="fa fa-info-circle"></i> <small>Values above show the number of <strong>active students enrolled</strong> to their classes per term <strong>excluding waitlisted and cancelled</strong></small></p>
 </div>
 
 @stop
@@ -72,6 +72,7 @@
 		    	"buttons": [
 				        'copy', 'csv', 'excel', 'pdf'
 				    ],
+				"order": [[ 0, "desc" ]],
 		    	"scrollX": true,
 		    	"destroy": true, // destroy the existing table to apply the new options
 		    	"responsive": false,
