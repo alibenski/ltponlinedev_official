@@ -31,7 +31,7 @@
 </table>
 
 <div class="row">
-  <p><i class="fa fa-info-circle"></i> <small>Values above show the number of <strong>active students enrolled</strong> to their classes per term <strong>excluding waitlisted and cancelled</strong></small></p>
+  <p><i class="fa fa-info-circle"></i> <small>Values above show the number of <strong>students enrolled</strong> to their classes per term <strong>excluding waitlisted and cancelled</strong></small></p>
 </div>
 
 @stop
