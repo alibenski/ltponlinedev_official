@@ -129,13 +129,13 @@
 									Result: <strong>@if($repos_lang->Result == 'P') Passed @elseif($repos_lang->Result == 'F') Failed @elseif($repos_lang->Result == 'I') Incomplete @else -- @endif</strong>
 								</p>
 								<p>
-									Written Grade: <strong>@if (!is_null($repos_lang->Written)) $repos_lang->Written @endif</strong>
+									Written Grade: <strong>@if (!is_null($repos_lang->Written)) {{ $repos_lang->Written}} @endif</strong>
 								</p>
 								<p>
-									Oral Grade: <strong>@if (!is_null($repos_lang->Oral)) $repos_lang->Oral @endif</strong>
+									Oral Grade: <strong>@if (!is_null($repos_lang->Oral)) {{ $repos_lang->Oral}} @endif</strong>
 								</p>
 								<p>
-									Overall Grade: <strong>@if (!is_null($repos_lang->Overall_Grade)) $repos_lang->Overall_Grade @endif</strong>
+									Overall Grade: <strong>@if (!is_null($repos_lang->Overall_Grade)) {{ $repos_lang->Overall_Grade}} @endif</strong>
 								</p>
 								<br> 
 								</p>
@@ -195,13 +195,13 @@
 							Result: <strong>@if($element->Result == 'P') Passed @elseif($element->Result == 'F') Failed @elseif($element->Result == 'I') Incomplete @else -- @endif</strong>
 						  </p>
 						  <p>
-							Written Grade: <strong>@if (!is_null($element->Written)) $element->Written @endif</strong>
+							Written Grade: <strong>@if (!is_null($element->Written)) {{ $element->Written }} @endif</strong>
 						  </p>
 						  <p>
-							Oral Grade: <strong>@if (!is_null($element->Oral)) $element->Oral @endif</strong>
+							Oral Grade: <strong>@if (!is_null($element->Oral)) {{ $element->Oral }} @endif</strong>
 						  </p>
 						  <p>
-							Overall Grade: <strong>@if (!is_null($element->Overall_Grade)) $element->Overall_Grade @endif</strong>
+							Overall Grade: <strong>@if (!is_null($element->Overall_Grade)) {{ $element->Overall_Grade }} @endif</strong>
 						  </p>
 		                  <br> 
 		                  	@if($element->classrooms->Tch_ID == 'TBD')
