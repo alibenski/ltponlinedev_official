@@ -314,7 +314,9 @@ class TeachersController extends Controller
         $queryTeachers = Classroom::where('Te_Term', $request->session()->get('Term'))->select('Tch_ID')->groupBy('Tch_ID')
             ->whereNotNull('Tch_ID')
             ->where('Tch_ID', '!=', 'TBD')
-            ->get();
+            ->with('teachers')
+            ->get()
+            ->sortBy('teachers.Tch_Lastname');
         $teachers = [];
         if ($request->session()->has('Term')) {
             $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
@@ -331,7 +333,7 @@ class TeachersController extends Controller
                 ;
             }
 
-            // dd($teachers);
+            // dd($queryTeachers);
             return view('teachers.teacher_show_classrooms_per_teacher', compact('terms', 'selectedTerm', 'teachers'));
         }
 
