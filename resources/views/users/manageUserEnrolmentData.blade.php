@@ -144,7 +144,9 @@
 		                  
 		                  <p>Schedule: <strong>@if(!empty($element->schedules->name)){{$element->schedules->name}}@endif</strong></p>  
 						  <p>
-							MS Teams Class Name: <strong>LTP-{{ $element->Term }}-{{ $element->classrooms->Tch_ID }}-{{$element->courses->Description}}-{{$element->Te_Code}}:{{$element->schedules->name}} </strong>
+							MS Teams Class Name: <strong>{{ $element->Term }}-{{substr($element->courses->Description, 0, 2)}} {{substr($element->courses->Description, strpos($element->courses->Description, ": ") + 1)}}@if ( !is_null($element->classrooms->Tch_ID))-{{substr($element->classrooms->teachers->Tch_Firstname, 0, 1)}}. {{$element->classrooms->teachers->Tch_Lastname}}-@elseif ( $element->classrooms->Tch_ID == 'TBD')-TBD-@else-N/A-@endif{{substr($element->schedules->name, 0, 3)}}@if (($pos = strrpos($element->schedules->name, "&")) !== FALSE)&{{str_replace(' ','',substr($element->schedules->name, $pos + 1, 4))}} @endif 
+								@if(\Carbon\Carbon::parse($element->schedules->begin_time) < \Carbon\Carbon::parse('1899-12-30 12:00:00'))Morning @else Lunch @endif //
+								{{$element->CodeClass}} </strong>
 						  </p>
 		                    @if(!empty($element->classrooms->Te_Mon_Room))
 		                    <p>Monday Room: <strong>{{ $element->classrooms->roomsMon->Rl_Room }}</strong></p>
