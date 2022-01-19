@@ -139,6 +139,7 @@
 						<th>SelfPayment</th>
 						<th>Profile</th>
 						<th>Name</th>
+						<th>Gender</th>
 						<th>RESULT</th>
 						<th>Cancelled Not Billed</th>
 						<th>Excluded From Billing</th>
@@ -157,6 +158,7 @@
 						<th>SelfPayment</th>
 						<th>Profile</th>
 						<th>Name</th>
+						<th>Gender</th>
 						<th>RESULT</th>
 						<th>Cancelled Not Billed</th>
 						<th>Excluded From Billing</th>
@@ -340,6 +342,18 @@ $(document).ready(function() {
 								}
 							},
 							{ "data": "users.name" }, 
+							{ "data": function ( row, type, val, meta ) {
+									if (row.users.sddextr.SEX == 'M' || row.users.sddextr.SEX == 'm') {
+											return "Male";
+									} else if (row.users.sddextr.SEX == 'F' || row.users.sddextr.SEX == 'f') {
+											return "Female";
+									} else if (row.users.sddextr.SEX == 'O' || row.users.sddextr.SEX == 'o') {
+											return "Other";
+										}
+									return row.users.sddextr.SEX;
+								}
+							
+							}, 
 							{ "data": "Result", "className": "result" },
 							{ "data": "cancelled_but_not_billed" },
 							{ "data": "exclude_from_billing" },
