@@ -39,6 +39,23 @@ use Session;
 
 class WaitlistController extends Controller
 {
+    public function waitlistModalForm(Request $request)
+    {
+        if ($request->ajax()) {
+            $ids = $request->ids;
+            $student_to_move = Repo::whereIn('id', explode(",", $ids))->get();
+            $languages = DB::table('languages')->pluck("name", "code")->all();
+
+            $comments = [];
+            foreach ($student_to_move as $key => $value) {
+                $comments[] = $value->comments;
+            }
+
+            $data = view('waitlist.waitListModalForm', compact('student_to_move', 'languages', 'comments'))->render();
+            return response()->json([$data]);
+        }
+    }
+
     public function ajaxCheckIfWaitlisted(Request $request)
     {
         if ($request->ajax()) {
