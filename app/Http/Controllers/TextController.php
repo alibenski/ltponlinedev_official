@@ -14,6 +14,19 @@ use Session;
 
 class TextController extends Controller
 {
+    public function viewDefaultEmailWaitlistText(Request $request)
+    {
+        if (Session::has('Term')) {
+            $term = Term::where('Term_Code', Session::get('Term'))->first();
+            $firstDayMonth = date('d F', strtotime($term->Term_Begin));
+            $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
+            
+            return view('texts.view-default-email-waitlist-text', compact('firstDayMonth', 'lastDayMonth'));
+        }
+
+        return "Nothing to show. No term selected.";
+    }
+
     public function viewGeneralEmailText($id)
     {
         $text = Text::find($id);

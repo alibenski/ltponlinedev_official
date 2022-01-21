@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('view-general-email-text/{id}', ['as' => 'view-general-email-text', 'uses' => 'TextController@viewGeneralEmailText']);
     Route::resource('text', 'TextController');
     Route::get('view-convocation-email-text', ['as' => 'view-convocation-email-text', 'uses' => 'TextController@viewConvocationEmailText']);
+    Route::get('view-default-email-waitlist-text', ['as' => 'view-default-email-waitlist-text', 'uses' => 'TextController@viewDefaultEmailWaitlistText']);
 
     /**
      * Teachers Routes

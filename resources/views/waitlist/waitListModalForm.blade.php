@@ -3,7 +3,7 @@
     <div class="col-sm-12">
         <div id="my-box" class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">Expand to Review Selected Students</h3>
+            <h3 class="box-title">Expand to Review SELECTED Waitlisted Students</h3>
             <div class="box-tools pull-right">
             <!-- Collapse Button -->
             {{-- <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#toggle-pane-88"><i class="fa fa-plus"></i></button> --}}
@@ -25,57 +25,31 @@
         </div>
         <!-- /.box -->
     </div>
-	
+
   <form name="move-student-form">
 		<div class="form-group col-sm-12">
-	      <label for="L" class="control-label"> Language:</label>
-	      <div class="col-sm-12">
-	        @foreach ($languages as $id => $name)
-	        <div class="col-sm-4">
-	            <div class="input-group"> 
-	              <span class="input-group-addon">       
-	                <input type="radio" name="L" value="{{ $id }}" required="required">                 
-	              </span>
-	                <label type="text" class="form-control">{{ $name }}</label>
-	            </div>
-	        </div>
-	        @endforeach 
-	      </div>
+            <a href="{{ route('view-default-email-waitlist-text') }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;" class="btn btn-info"><span class='fa fa-eye'></span> Show default email text for waitlisted students</a>
 	    </div>
 
 		<div class="form-group col-sm-12">
-	        <label for="Te_Code" class="control-label"> Course: </label>
-	        <div class="form-group col-sm-12">
-	          <div class="dropdown">
-	            <select class="col-md-10 form-control select2-basic-single" style="width: 100%;" name="Te_Code" autocomplete="off" required="required">
-	                <option value="">--- Select ---</option>
-	            </select>
-	          </div>
-	        </div>
+	        <button class="btn btn-success"><span class='fa fa-envelope-o'></span> Send default email text to all SELECTED waitlisted students</button>
 	    </div>
 
 		<div class="form-group col-sm-12">
-	        <label for="CodeClass" class="control-label"> Classes: </label>
-	        <div class="form-group col-sm-12">
-	          <div class="dropdown">
-	            <select class="col-md-10 form-control select2-basic-single" style="width: 100%;" name="CodeClass" autocomplete="off" required="required">
-	                <option value="">--- Select ---</option>
-	            </select>
-	          </div>
-	        </div>
+            <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+	        <textarea id="editor-email-waitlist" class="form-control" cols="40" rows="5" placeholder="Custom Text Here"></textarea>
+            <script>
+                // Replace the <textarea id="editor1"> with a CKEditor
+                // instance, using default configuration.
+                CKEDITOR.replace( "editor-email-waitlist" );
+            </script>
 	    </div>
-
-    <div class="form-group">
-      <div class="col-sm-12"><button type="button" class="show-modal btn btn-info pull-right" data-toggle="modal"><span class="fa fa-comment"></span>  View All Admin Notes</button></div>
-      <label class="control-label" for="admin_comment">Admin Comment/Notes Tracker:</label>
-      <div class="">
-          <textarea class="form-control" name="admin_comment" cols="40" rows="5" placeholder="Reason for moving the student (required)" required="required"></textarea>
-      </div>
-    </div>
-
-		<button id="moveStudent" type="button" class="btn btn-success btn-move-student" disabled=""><span class='fa fa-arrow-right'></span> 
-			Move
-		</button>
+        
+        <div class="form-group col-sm-12">
+            <button id="moveStudent" type="button" class="btn btn-success btn-move-student" disabled=""><span class='fa fa-arrow-right'></span> 
+            Send customized email text</button>
+        </div>
+		
 		<input type="hidden" name="_token" value="{{ Session::token() }}">
 		<input type="hidden" name="term_id" value="{{ Session::get('Term') }}">
 		{{ method_field('PUT') }}
