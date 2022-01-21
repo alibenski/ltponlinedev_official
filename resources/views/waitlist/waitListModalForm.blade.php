@@ -1,12 +1,31 @@
 <div class="modal-body">
 	@include('admin.partials._termSessionMsg')
-	<div class="row">
-        @foreach ($student_to_move as $student)
-            <div class="col-sm-4">
-                <p style="margin-left: 10px">	{{ $student->users->name}} </p>
+    <div class="col-sm-12">
+        <div id="my-box" class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Expand to Review Selected Students</h3>
+            <div class="box-tools pull-right">
+            <!-- Collapse Button -->
+            {{-- <button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#toggle-pane-88"><i class="fa fa-plus"></i></button> --}}
+            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="collapse" data-target="#toggle-box-body" title="Expand/Collapse"><i class="fa fa-caret-down"></i></button>
             </div>
-        @endforeach
+            <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div id="toggle-box-body" class="collapse">
+            <div class="row">
+                @foreach ($student_to_move as $student)
+                    <div class="col-sm-4">
+                        <p style="margin-left: 10px">	{{ $student->users->name}} </p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
     </div>
+	
   <form name="move-student-form">
 		<div class="form-group col-sm-12">
 	      <label for="L" class="control-label"> Language:</label>
