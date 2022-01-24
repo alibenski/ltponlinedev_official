@@ -72,6 +72,7 @@ $('.send-default-waitlist-email').on('click', function(e) {
           data: {ids:join_selected_values, term_id:term, _token:token},
           success: function(data) {
           	console.log(data)
+            alert("Default Wailist Email Sent");
           }
       });
     

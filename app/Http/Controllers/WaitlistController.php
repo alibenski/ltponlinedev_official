@@ -15,6 +15,7 @@ use App\Mail\SendMailableReminderPlacement;
 use App\Mail\SendReminderEmailHR;
 use App\Mail\SendReminderEmailPlacementHR;
 use App\Mail\MailPlacementTesttoApproverHR;
+use App\Mail\SendDefaultWaitlistEmail;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Preview;
@@ -53,11 +54,11 @@ class WaitlistController extends Controller
     public function sendDefaultWaitlistEmail(Request $request)
     {   
         $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term')->with(['users' => function($qusers){$qusers->select('indexno', 'email');}])->get();
+        $term = Term::where('Term_Code', $request->term_id)->first();
+        $firstDayMonth = date('d F', strtotime($term->Term_Begin));
+        $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
         foreach ($students_to_email as $value) {
-            Mail::raw("waitlist text default", function($message) use ($value){
-                $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
-                $message->to($value->users->email)->subject("waitlist Notification");
-                });
+            Mail::to($value->users->email)->send(new SendDefaultWaitlistEmail($term, $firstDayMonth, $lastDayMonth));
         }
         $data = $students_to_email;
         return response()->json([$data]);
