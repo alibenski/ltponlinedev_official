@@ -14,6 +14,11 @@ use Session;
 
 class TextController extends Controller
 {
+    public function viewCustomEmailWaitlistText(Request $request)
+    {
+        # code...
+    }
+
     public function viewDefaultEmailWaitlistText(Request $request)
     {
         if (Session::has('Term')) {
@@ -48,7 +53,7 @@ class TextController extends Controller
     public function storeEnrolmentIsOpenText(Request $request, $id)
     {
         $text = Text::find($id);
-
+dd($request->all());
         if (!is_null($request->subject)) {
             $text->subject = $request->subject;
         }

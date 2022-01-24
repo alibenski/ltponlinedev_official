@@ -24,6 +24,7 @@ use App\Repo;
 use App\SDDEXTR;
 use App\Schedule;
 use App\Term;
+use App\Text;
 use App\Torgan;
 use App\User;
 use App\Waitlist;
@@ -45,8 +46,8 @@ class WaitlistController extends Controller
         if ($request->ajax()) {
             $ids = $request->ids;
             $student_to_move = Repo::whereIn('id', explode(",", $ids))->get();
-
-            $data = view('waitlist.waitListModalForm', compact('student_to_move', 'ids'))->render();
+            $text = Text::find(3);
+            $data = view('waitlist.waitListModalForm', compact('student_to_move', 'ids', 'text'))->render();
             return response()->json([$data]);
         }
     }
