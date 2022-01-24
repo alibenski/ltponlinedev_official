@@ -34,7 +34,7 @@
             <a href="{{ route('view-default-email-waitlist-text') }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;" class="btn btn-info btn-block"><span class='fa fa-eye'></span> Show default email text for waitlisted students</a>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6 send-default-section">
                 <button class="btn btn-success btn-block send-default-waitlist-email"><span class='fa fa-envelope-o'></span> Send default email text to all SELECTED waitlisted students</button>
             </div>
 	    </div>
@@ -62,17 +62,22 @@ $('.send-default-waitlist-email').on('click', function(e) {
     let token = $("input[name='_token']").val();
     let allIds = [];  
       $(".repo-id").each(function() {  
-          allIds.push($(this).attr('data-id'));
+          allIds.push($(this).attr("data-id"));
       });  
     let join_selected_values = allIds.join(",");
-
+    
+    $("div.send-default-section").html("");
+    $("div.send-default-section").html("<button class='btn btn-warning btn-block send-default-waitlist-email' disabled><span class='fa fa-refresh fa-spin'></span> Sending... Please wait </button>");
+    
     $.ajax({
           url: "{{ route('send-default-waitlist-email') }}", 
           method: 'POST',
           data: {ids:join_selected_values, term_id:term, _token:token},
           success: function(data) {
           	console.log(data)
-            alert("Default Wailist Email Sent");
+            alert("Default Waitlist Email Sent");
+            $("div.send-default-section").html("");
+            $("div.send-default-section").html("<button class='btn btn-danger btn-block send-default-waitlist-email' disabled> Email Sent </button>");
           }
       });
     

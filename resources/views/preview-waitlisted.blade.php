@@ -153,7 +153,9 @@ $(document).ready(function () {
           }
     });
 
-	
+	$('#modalshowform').on('hide.bs.modal', function () {
+		window.location.reload();
+	});	
 
 });
 </script>
