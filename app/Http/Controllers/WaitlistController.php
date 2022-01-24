@@ -44,16 +44,23 @@ class WaitlistController extends Controller
         if ($request->ajax()) {
             $ids = $request->ids;
             $student_to_move = Repo::whereIn('id', explode(",", $ids))->get();
-            $languages = DB::table('languages')->pluck("name", "code")->all();
 
-            $comments = [];
-            foreach ($student_to_move as $key => $value) {
-                $comments[] = $value->comments;
-            }
-
-            $data = view('waitlist.waitListModalForm', compact('student_to_move', 'languages', 'comments'))->render();
+            $data = view('waitlist.waitListModalForm', compact('student_to_move', 'ids'))->render();
             return response()->json([$data]);
         }
+    }
+
+    public function sendDefaultWaitlistEmail(Request $request)
+    {   
+        $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term')->with(['users' => function($qusers){$qusers->select('indexno', 'email');}])->get();
+        foreach ($students_to_email as $value) {
+            Mail::raw("waitlist text default", function($message) use ($value){
+                $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
+                $message->to($value->users->email)->subject("waitlist Notification");
+                });
+        }
+        $data = $students_to_email;
+        return response()->json([$data]);
     }
 
     public function ajaxCheckIfWaitlisted(Request $request)
