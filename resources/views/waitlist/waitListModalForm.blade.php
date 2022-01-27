@@ -54,6 +54,11 @@
             <div class="col-sm-12">
                 <hr />
             </div>
+            <div class="form-group col-sm-12">
+                <label for="subject">Subject: </label>
+                <input type="text" name="subject" placeholder="@if (is_null($text->subject))
+                    -- no subject -- @else {{$text->subject}} @endif" value="" style="width: 100%;">
+            </div>
 
             <div class="form-group col-sm-12">
                 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
@@ -117,15 +122,16 @@ $('.send-default-waitlist-email').on('click', function(e) {
 $("#saveCustomEmail").on("click", function () {
     let term = $("input[name='term_id']").val();
     let token = $("input[name='_token']").val();
+    let subject = $("input[name='subject']").val();
     let textValue =  CKEDITOR.instances['editorEmailWaitlist'].getData();
 
     $.ajax({
         url: "{{ route('store-enrolment-is-open-text', 3) }}", 
         method: 'PUT',
-        data: { textValue:textValue, term_id:term, _token:token},
+        data: { subject:subject, textValue:textValue, term_id:term, _token:token},
         success: function(data) {
             console.log(data)
-            alert("Custom Waitlist Text Saved");
+            alert(data);
             // $("div.send-default-section").html("");
             // $("div.send-default-section").html("<button class='btn btn-danger btn-block send-default-waitlist-email' disabled> Email Sent </button>");
         }

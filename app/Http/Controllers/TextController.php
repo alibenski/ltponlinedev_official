@@ -53,7 +53,7 @@ class TextController extends Controller
     public function storeEnrolmentIsOpenText(Request $request, $id)
     {
         $text = Text::find($id);
-dd($request->all());
+
         if (!is_null($request->subject)) {
             $text->subject = $request->subject;
         }
@@ -65,6 +65,11 @@ dd($request->all());
 
         if ($id == 1) {
             return redirect(route('view-enrolment-is-open-text', ['id' => $id]));
+        }
+
+        if ($id == 3) {
+            $data = "Custom Waitlist Text Saved";
+            return response()->json($data);
         }
 
         return redirect(route('view-general-email-text', ['id' => $id]));
