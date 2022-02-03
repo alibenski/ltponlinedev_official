@@ -280,6 +280,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('waitListOneList/{te_code}', ['as' => 'waitListOneList', 'uses' => 'WaitlistController@waitListOneList']);
     Route::get('ajax-check-if-waitlisted', ['as' => 'ajax-check-if-waitlisted', 'uses' => 'WaitlistController@ajaxCheckIfWaitlisted']);
     Route::get('waitlist-modal-form', ['as' => 'waitlist-modal-form', 'uses' => 'WaitlistController@waitlistModalForm']);
+    Route::get('default-email-waitlist', ['as' => 'default-email-waitlist', 'uses' => 'WaitlistController@defaultEmailWaitlist']);
     Route::post('send-default-waitlist-email', ['as' => 'send-default-waitlist-email', 'uses' => 'WaitlistController@sendDefaultWaitlistEmail']);
 
     // Excel download table from view

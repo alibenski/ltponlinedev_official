@@ -52,6 +52,19 @@ class WaitlistController extends Controller
         }
     }
 
+    public function defaultEmailWaitlist(Request $request)
+    {
+        if (Session::has('Term')) {
+            $term = Term::where('Term_Code', Session::get('Term'))->first();
+            $firstDayMonth = date('d F', strtotime($term->Term_Begin));
+            $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
+            
+            return view('emails.defaultEmailWaitlist', compact('firstDayMonth', 'lastDayMonth'));
+        }
+
+        return "Nothing to show. No term selected.";
+    }
+
     public function sendDefaultWaitlistEmail(Request $request)
     {   
         $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term')->with(['users' => function($qusers){$qusers->select('indexno', 'email');}])->get();
