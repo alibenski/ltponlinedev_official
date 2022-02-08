@@ -25,8 +25,9 @@ class TextController extends Controller
             $term = Term::where('Term_Code', Session::get('Term'))->first();
             $firstDayMonth = date('d F', strtotime($term->Term_Begin));
             $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
+            $year = date('Y', strtotime($term->Term_Begin));
 
-            return view('texts.view-default-email-waitlist-text', compact('term', 'firstDayMonth', 'lastDayMonth'));
+            return view('texts.view-default-email-waitlist-text', compact('term', 'firstDayMonth', 'lastDayMonth', 'year'));
         }
 
         return "Nothing to show. No term selected.";
