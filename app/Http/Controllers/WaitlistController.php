@@ -16,6 +16,7 @@ use App\Mail\SendReminderEmailHR;
 use App\Mail\SendReminderEmailPlacementHR;
 use App\Mail\MailPlacementTesttoApproverHR;
 use App\Mail\SendDefaultWaitlistEmail;
+use App\Mail\SendCustomWaitlistEmail;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Preview;
@@ -61,6 +62,20 @@ class WaitlistController extends Controller
         }
 
         return "Nothing to show. No term selected.";
+    }
+
+    public function sendCustomWaitlistEmail(Request $request)
+    {
+        $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term')->with(['users' => function ($qusers) {
+            $qusers->select('indexno', 'email');
+        }])->get();
+        $text = Text::find(3);
+
+        foreach ($students_to_email as $value) {
+            Mail::to($value->users->email)->send(new SendCustomWaitlistEmail($text));
+        }
+        $data = $students_to_email;
+        return response()->json([$data]);
     }
 
     public function defaultEmailWaitlist(Request $request)

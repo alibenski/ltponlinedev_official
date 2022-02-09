@@ -101,7 +101,7 @@
             <div class="modal-email-waitlist-student">
             </div>
             <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close Window</button>
             </div>
         </div>
     </div>

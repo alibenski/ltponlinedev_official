@@ -283,6 +283,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('default-email-waitlist', ['as' => 'default-email-waitlist', 'uses' => 'WaitlistController@defaultEmailWaitlist']);
     Route::post('send-default-waitlist-email', ['as' => 'send-default-waitlist-email', 'uses' => 'WaitlistController@sendDefaultWaitlistEmail']);
     Route::get('custom-email-waitlist', ['as' => 'custom-email-waitlist', 'uses' => 'WaitlistController@customEmailWaitlist']);
+    Route::post('send-custom-waitlist-email', ['as' => 'send-custom-waitlist-email', 'uses' => 'WaitlistController@sendCustomWaitlistEmail']);
 
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');

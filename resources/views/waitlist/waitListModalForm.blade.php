@@ -76,7 +76,7 @@
                 Save text</button>
                 </div>
                 <div class="col-sm-4 send-custom-section">
-                <button id="sendCustomEmail" type="button" class="btn btn-success btn-send-custom-email"><span class='fa fa-paper-plane'></span> 
+                <button id="sendCustomEmail" type="button" class="btn btn-success send-custom-waitlist-email"><span class='fa fa-paper-plane'></span> 
                 Send customized email text</button>
                 </div>
             </div>
@@ -120,8 +120,7 @@ $('.send-default-waitlist-email').on('click', function(e) {
             $("div.send-default-section").html("");
             $("div.send-default-section").html("<button class='btn btn-danger btn-block send-default-waitlist-email' disabled> Email Sent </button>");
           }
-      });
-    
+      }); 
 });
 
 $(document).on("click", "#saveCustomEmail", function () {
@@ -142,12 +141,32 @@ $(document).on("click", "#saveCustomEmail", function () {
             alert(data);
             $("div.save-custom-section").html("");
             $("div.save-custom-section").html("<button id='saveCustomEmail' class='btn btn-default btn-save-custom-email'><span class='fa fa-save'></span> Save text </button>");
-
-            $("div.save-custom-section").on("change", "#saveCustomEmail",function () {
-                alert("some");
-            })
         }
     });
+});
 
-})
+$('.send-custom-waitlist-email').on('click', function(e) {
+    let term = $("input[name='term_id']").val();
+    let token = $("input[name='_token']").val();
+    let allIds = [];  
+      $(".repo-id").each(function() {  
+          allIds.push($(this).attr("data-id"));
+      });  
+    let join_selected_values = allIds.join(",");
+    
+    $("div.send-custom-section").html("");
+    $("div.send-custom-section").html("<button class='btn btn-warning btn-block send-custom-waitlist-email' disabled><span class='fa fa-refresh fa-spin'></span> Sending... Please wait </button>");
+    
+    $.ajax({
+          url: "{{ route('send-custom-waitlist-email') }}", 
+          method: 'POST',
+          data: {ids:join_selected_values, term_id:term, _token:token},
+          success: function(data) {
+          	console.log(data)
+            alert("Customized Waitlist Email Sent");
+            $("div.send-custom-section").html("");
+            $("div.send-custom-section").html("<button class='btn btn-danger btn-block send-custom-waitlist-email' disabled> Email Sent </button>");
+          }
+      }); 
+});
 </script>
