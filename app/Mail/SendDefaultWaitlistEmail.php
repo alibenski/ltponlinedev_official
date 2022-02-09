@@ -24,7 +24,7 @@ class SendDefaultWaitlistEmail extends Mailable
     public function __construct($term, $firstDayMonth, $lastDayMonth)
     {
         $this->term = $term;
-        $this->firstDayMonth = $firstDayMonth; 
+        $this->firstDayMonth = $firstDayMonth;
         $this->lastDayMonth = $lastDayMonth;
     }
 
@@ -35,9 +35,9 @@ class SendDefaultWaitlistEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('texts.view-default-email-waitlist-text')
-                    ->from('clm_language@unog.ch', 'CLM Language')
-                    ->priority(1)
-                    ->subject('Waiting List Notification '. $this->term->Comments.' '. date('Y', strtotime($this->term->Term_Begin)) );
+        return $this->view('emails.defaultEMailWaitlist')
+            ->from('clm_language@unog.ch', 'CLM Language')
+            ->priority(1)
+            ->subject('Waiting List Notification ' . $this->term->Comments . ' ' . date('Y', strtotime($this->term->Term_Begin)));
     }
 }

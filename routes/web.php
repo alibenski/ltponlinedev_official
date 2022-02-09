@@ -126,7 +126,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     Route::get('teacher-search-user', ['as' => 'teacher-search-user', 'uses' => 'TeachersController@teacherSearchUser']);
     Route::get('teacher-ltpdata-view/{id}', ['as' => 'teacher-ltpdata-view', 'uses' => 'TeachersController@teacherLtpdataView']);
-    
+
     Route::get('teacher-email-classrooms-to-teachers', ['as' => 'teacher-email-classrooms-to-teachers', 'uses' => 'TeachersController@teacherEmailClassroomsToTeachers']);
 
     Route::get('teacher-show-classrooms-per-teacher', ['as' => 'teacher-show-classrooms-per-teacher', 'uses' => 'TeachersController@teacherShowClassroomsPerTeacher']);
@@ -282,6 +282,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('waitlist-modal-form', ['as' => 'waitlist-modal-form', 'uses' => 'WaitlistController@waitlistModalForm']);
     Route::get('default-email-waitlist', ['as' => 'default-email-waitlist', 'uses' => 'WaitlistController@defaultEmailWaitlist']);
     Route::post('send-default-waitlist-email', ['as' => 'send-default-waitlist-email', 'uses' => 'WaitlistController@sendDefaultWaitlistEmail']);
+    Route::get('custom-email-waitlist', ['as' => 'custom-email-waitlist', 'uses' => 'WaitlistController@customEmailWaitlist']);
 
     // Excel download table from view
     Route::get('excel', 'ExcelController@getBladeExcel');
@@ -416,12 +417,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/whatorg', ['as' => 'whatorg', 'uses' => 'HomeController@whatorg']);
 
         // late registration routes
-        Route::get('/late-what-org', ['as'=>'late-what-org','uses'=>'LateEnrolmentController@lateWhatOrg']);
-        Route::post('/late-what-form', ['as'=>'late-what-form','uses'=>'LateEnrolmentController@lateWhatForm']);
-        Route::get('/late-registration', ['as'=>'late-registration','uses'=>'LateEnrolmentController@lateRegistration']);
-        Route::post('/store-late-registration', ['as'=>'store-late-registration','uses'=>'LateEnrolmentController@storeLateRegistration']);
-        Route::get('/late-selfpay-form', ['as'=>'late-selfpay-form','uses'=>'LateEnrolmentController@lateSelfpayForm']);
-        Route::post('/store-late-selfpay-form', ['as'=>'store-late-selfpay-form','uses'=>'LateEnrolmentController@storeLateSelfpayForm']);
+        Route::get('/late-what-org', ['as' => 'late-what-org', 'uses' => 'LateEnrolmentController@lateWhatOrg']);
+        Route::post('/late-what-form', ['as' => 'late-what-form', 'uses' => 'LateEnrolmentController@lateWhatForm']);
+        Route::get('/late-registration', ['as' => 'late-registration', 'uses' => 'LateEnrolmentController@lateRegistration']);
+        Route::post('/store-late-registration', ['as' => 'store-late-registration', 'uses' => 'LateEnrolmentController@storeLateRegistration']);
+        Route::get('/late-selfpay-form', ['as' => 'late-selfpay-form', 'uses' => 'LateEnrolmentController@lateSelfpayForm']);
+        Route::post('/store-late-selfpay-form', ['as' => 'store-late-selfpay-form', 'uses' => 'LateEnrolmentController@storeLateSelfpayForm']);
         Route::get('late-check-placement-form-ajax', ['as' => 'late-check-placement-form-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementFormAjax']);
         Route::post('late-check-placement-course-ajax', ['as' => 'late-check-placement-course-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementCourseAjax']);
         Route::get('late-check-enrolment-entries-ajax', ['as' => 'late-check-enrolment-entries-ajax', 'uses' => 'LateEnrolmentController@lateCheckEnrolmentEntriesAjax']);

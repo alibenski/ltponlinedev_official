@@ -68,12 +68,18 @@
             </div>
             
             <div class="form-group col-sm-12">
+                <div class="col-sm-4 view-custom-section">
                 <button id="viewCustomEmail" type="button" class="btn btn-default btn-view-custom-email"><span class='fa fa-eye'></span> 
                 View text</button>
+                </div>
+                <div class="col-sm-4 save-custom-section">
                 <button id="saveCustomEmail" type="button" class="btn btn-default btn-save-custom-email"><span class='fa fa-save'></span> 
                 Save text</button>
+                </div>
+                <div class="col-sm-4 send-custom-section">
                 <button id="sendCustomEmail" type="button" class="btn btn-success btn-send-custom-email"><span class='fa fa-paper-plane'></span> 
                 Send customized email text</button>
+                </div>
             </div>
         </div>
 
@@ -119,12 +125,15 @@ $('.send-default-waitlist-email').on('click', function(e) {
     
 });
 
-$("#saveCustomEmail").on("click", function () {
+$(document).on("click", "#saveCustomEmail", function () {
     let term = $("input[name='term_id']").val();
     let token = $("input[name='_token']").val();
     let subject = $("input[name='subject']").val();
     let textValue =  CKEDITOR.instances['editorEmailWaitlist'].getData();
 
+    $("div.save-custom-section").html("");
+    $("div.save-custom-section").html("<button id='saveCustomEmail' class='btn btn-default btn-save-custom-email'><span class='fa fa-refresh fa-spin'></span> Saving... Please wait </button>");
+    
     $.ajax({
         url: "{{ route('store-enrolment-is-open-text', 3) }}", 
         method: 'PUT',
@@ -132,9 +141,14 @@ $("#saveCustomEmail").on("click", function () {
         success: function(data) {
             console.log(data)
             alert(data);
-            // $("div.send-default-section").html("");
-            // $("div.send-default-section").html("<button class='btn btn-danger btn-block send-default-waitlist-email' disabled> Email Sent </button>");
+            $("div.save-custom-section").html("");
+            $("div.save-custom-section").html("<button id='saveCustomEmail' class='btn btn-default btn-save-custom-email'><span class='fa fa-save'></span> Save text </button>");
+
+            $("div.save-custom-section").on("change", "#saveCustomEmail",function () {
+                alert("some");
+            })
         }
     });
+
 })
 </script>
