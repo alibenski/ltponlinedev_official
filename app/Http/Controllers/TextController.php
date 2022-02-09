@@ -14,6 +14,33 @@ use Session;
 
 class TextController extends Controller
 {
+    public function viewCustomEmailWaitlistText(Request $request)
+    {
+        if (Session::has('Term')) {
+            $term = Term::where('Term_Code', Session::get('Term'))->first();
+            $year = date('Y', strtotime($term->Term_Begin));
+            $text = Text::find(3);
+
+            return view('texts.view-custom-email-waitlist-text', compact('term', 'year', 'text'));
+        }
+
+        return "Nothing to show. No term selected.";
+    }
+
+    public function viewDefaultEmailWaitlistText(Request $request)
+    {
+        if (Session::has('Term')) {
+            $term = Term::where('Term_Code', Session::get('Term'))->first();
+            $firstDayMonth = date('d F', strtotime($term->Term_Begin));
+            $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
+            $year = date('Y', strtotime($term->Term_Begin));
+
+            return view('texts.view-default-email-waitlist-text', compact('term', 'firstDayMonth', 'lastDayMonth', 'year'));
+        }
+
+        return "Nothing to show. No term selected.";
+    }
+
     public function viewGeneralEmailText($id)
     {
         $text = Text::find($id);
@@ -47,6 +74,11 @@ class TextController extends Controller
 
         if ($id == 1) {
             return redirect(route('view-enrolment-is-open-text', ['id' => $id]));
+        }
+
+        if ($id == 3) {
+            $data = "Custom Waitlist Text Saved";
+            return response()->json($data);
         }
 
         return redirect(route('view-general-email-text', ['id' => $id]));
@@ -182,7 +214,7 @@ class TextController extends Controller
 
             return view('texts.view-convocation-email-text', compact('staff_name', 'course_name_en', 'course_name_fr', 'classrooms', 'teacher', 'teacher_email', 'term_en', 'term_fr', 'schedule', 'term_season_en', 'term_season_fr', 'term_year', 'cancel_date_limit_string', 'cancel_date_limit_string_fr'));
         }
-        
+
         return redirect()->route('admin_dashboard');
     }
 }

@@ -47,6 +47,7 @@
 <div class="row">
 	<div class="col-sm-12">
 		<h3>Total Number of Waitlisted Students: <span class="label label-primary">{{ count($convocation_waitlist) }}</span></h3>
+		<button style="margin-bottom: 10px" class="btn btn-info delete_all"><i class="fa fa-envelope"></i> Email Waitlist</button>
 	</div>
 </div>
 
@@ -56,9 +57,10 @@
 			<table class="table table-bordered table-striped">
 			    <thead>
 			        <tr>
-			        	<th>#</th>
+						<th>#</th>
+						<th><input type="checkbox" id="master"></th>
 			            <th>Name</th>
-			            <th>Course</th>
+			            <th>Course Waitlisted</th>
 			            <th>Email</th>
 			            <th>Contact #</th>
 			        </tr>
@@ -67,8 +69,12 @@
 					@foreach($convocation_waitlist as $element)
 					<tr id="tr_{{$element->id}}">
 						<td>
-                        	<div class="counter"></div>
-                      	</td>
+							<div class="counter"></div>
+						</td>
+						<td>
+							<input type="checkbox" class="sub_chk" data-id="{{ $element->id }}">
+                  			<input type="hidden" name="_token" value="{{ Session::token() }}">
+						</td>
 						<td>
 						@if(empty($element->users->name)) None @else {{$element->users->name }} @endif	
 						</td>
@@ -85,6 +91,22 @@
 @else
 @endif
 
+<div id="modalshowform" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Email Waitlisted Students</h4>
+            </div>
+            <div class="modal-email-waitlist-student">
+            </div>
+            <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close Window</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @stop
 
 @section('java_script')
@@ -96,7 +118,45 @@ $(document).ready(function () {
         $(this).attr('id', counter);
         $('#'+counter).html(counter);
         // console.log(counter)
-    });    
+    });
+
+	$('#master').on('click', function(e) {
+       if($(this).is(':checked',true))  
+       {
+          $(".sub_chk").prop('checked', true);  
+       } else {  
+          $(".sub_chk").prop('checked',false);  
+       }  
+    });
+
+	$('.delete_all').on('click', function(e) {
+
+          let allVals = [];  
+          $(".sub_chk:checked").each(function() {  
+              allVals.push($(this).attr('data-id'));
+          });  
+
+          let join_selected_values = allVals.join(",");
+
+          let token = $("input[name='_token']").val();
+          
+          if(allVals.length <=0)  
+          {  
+              alert("Please select at least 1 student.");  
+			  
+          }  else {  
+              $('#modalshowform').modal({backdrop: 'static', keyboard: false});
+              $.get("{{ route('waitlist-modal-form') }}", {'ids':join_selected_values,  '_token':token}, function(data) {
+				$(".modal-email-waitlist-student").html("");
+                $(".modal-email-waitlist-student").html(data);
+              });
+          }
+    });
+
+	$('#modalshowform').on('hide.bs.modal', function () {
+		window.location.reload();
+	});	
+
 });
 </script>
 @stop
