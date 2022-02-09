@@ -69,8 +69,7 @@
             
             <div class="form-group col-sm-12">
                 <div class="col-sm-4 view-custom-section">
-                <button id="viewCustomEmail" type="button" class="btn btn-default btn-view-custom-email"><span class='fa fa-eye'></span> 
-                View text</button>
+                <a href="{{ route('view-custom-email-waitlist-text') }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;" id="viewCustomEmail" class="btn btn-default btn-view-custom-email"><span class='fa fa-eye'></span> View customized text </a>
                 </div>
                 <div class="col-sm-4 save-custom-section">
                 <button id="saveCustomEmail" type="button" class="btn btn-default btn-save-custom-email"><span class='fa fa-save'></span> 

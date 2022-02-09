@@ -55,7 +55,7 @@ class WaitlistController extends Controller
     public function customEmailWaitlist(Request $request)
     {
         if (Session::has('Term')) {
-            $text = Text::id(3);
+            $text = Text::find(3);
 
             return view('emails.customEmailWaitlist', compact('text'));
         }

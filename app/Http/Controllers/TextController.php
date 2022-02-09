@@ -16,7 +16,15 @@ class TextController extends Controller
 {
     public function viewCustomEmailWaitlistText(Request $request)
     {
-        # code...
+        if (Session::has('Term')) {
+            $term = Term::where('Term_Code', Session::get('Term'))->first();
+            $year = date('Y', strtotime($term->Term_Begin));
+            $text = Text::find(3);
+
+            return view('texts.view-custom-email-waitlist-text', compact('term', 'year', 'text'));
+        }
+
+        return "Nothing to show. No term selected.";
     }
 
     public function viewDefaultEmailWaitlistText(Request $request)
@@ -206,7 +214,7 @@ class TextController extends Controller
 
             return view('texts.view-convocation-email-text', compact('staff_name', 'course_name_en', 'course_name_fr', 'classrooms', 'teacher', 'teacher_email', 'term_en', 'term_fr', 'schedule', 'term_season_en', 'term_season_fr', 'term_year', 'cancel_date_limit_string', 'cancel_date_limit_string_fr'));
         }
-        
+
         return redirect()->route('admin_dashboard');
     }
 }

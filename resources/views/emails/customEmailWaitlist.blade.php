@@ -11,24 +11,13 @@
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
                         <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555; text-align: left;">
-                            {{ $text->text }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                            <!-- Button : BEGIN -->
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
-                                <tr>
-                                    <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                                        <a href="{{ $url }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                                            <span style="color:#ffffff;" class="button-link">&nbsp;&nbsp;&nbsp;&nbsp;Click Here&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <!-- Button : END -->
+                            {!! $text->text !!}
                         </td>
                     </tr>
                     <br>
-                    @include('layouts.email.partials._emailFooterEn')
+                </table>   
+            </td>
+        </tr>
+    </table>
+    @include('layouts.email.partials._emailFooterEn')
 @stop
