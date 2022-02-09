@@ -21,7 +21,7 @@
 <div class='container'>
         <div class="form-group">
             <div class="col-md-12">
-                <h4 class="text-center eczar"><label for="subject">Subject:</label> Waiting List Notification {{ $term->Comments }} {{ $year }}</h4> 
+                <h4 class="text-center eczar"><label for="subject">Subject:</label> {{ $text->subject }} </h4> 
             </div>                      
         </div>
 </div>
