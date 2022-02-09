@@ -1,7 +1,12 @@
 
 	<ul class="nav nav-tabs">
+		@if (Auth::user()->id == 3292)
+		<li role="presentation" class="{{ Request::is('*manage-user-enrolment-data-by-history') ? "active" : ""}}"><a href="/admin/user/{{$student->id}}/manage-user-enrolment-data-by-history">LTP Data by History</a></li>
+		<li role="presentation" class="{{ Request::is('*manage-user-enrolment-data') ? "active" : ""}}"><a href="/admin/user/{{$student->id}}/manage-user-enrolment-data">LTP Data by Term</a></li>
+		@else	
 		<li role="presentation" class="{{ Request::is('*manage-user-enrolment-data') ? "active" : ""}}"><a href="/admin/user/{{$student->id}}/manage-user-enrolment-data">LTP Data by Term</a></li>
 		<li role="presentation" class="{{ Request::is('*manage-user-enrolment-data-by-history') ? "active" : ""}}"><a href="/admin/user/{{$student->id}}/manage-user-enrolment-data-by-history">LTP Data by History</a></li>
+		@endif
 		{{-- <li role="presentation" class="{{ Request::is('submitted') ? "active" : ""}}"><a href="/submitted">Current Submitted Forms</a></li> --}}
 		{{-- <li role="presentation" class="{{ Request::is('previous-submitted') ? "active" : ""}}"><a href="/previous-submitted">Submitted Forms</a></li>
 		<li role="presentation" class="{{ Request::is('history') ? "active" : ""}}"><a href="/history">History</a></li> --}}

@@ -61,7 +61,13 @@
                 <tr>
                     <td>
                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin: 1px;">Edit</a>
+
+                    @if (Auth::user()->id == 3292)
+                    <a href="{{ route('manage-user-enrolment-data-by-history', $user->id) }}" class="btn btn-warning pull-left" style="margin: 1px;">LTP Data</a>
+                    @else 
                     <a href="{{ route('manage-user-enrolment-data', $user->id) }}" class="btn btn-warning pull-left" style="margin: 1px;">LTP Data</a>
+                    @endif
+
                     <button id="confirmBtn{{ $user->id }}" data-id="{{ $user->id }}" data-email="{{ $user->email }}" type="button" class="btn btn-space btn-danger  button-prevent-multi-submit confirm" title="Send Late Enrolment Form"><i class="fa fa-envelope"></i> Late</button>
 
 					{{-- <form method="POST" action="{{ route('users.destroy',  $user->id) }}">
