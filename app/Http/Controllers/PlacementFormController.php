@@ -63,7 +63,7 @@ class PlacementFormController extends Controller
         $enrolment_details = PlacementForm::find($id);
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
-        
+
         return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details', 'languages', 'days'));
     }
 
@@ -80,15 +80,17 @@ class PlacementFormController extends Controller
             'term_id' => 'required',
             'enrolment_id' => 'required',
         ]);
-        
-        $this->validate($request, [
-            'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
-                        $query->where('L', $request->L)
-                            ->where('INDEXID', $request->indexno)
-                            ->where('Term', $request->term_id)
-                            ->where('deleted_at', NULL);
-                    })
-                ]
+
+        $this->validate(
+            $request,
+            [
+                'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
+                    $query->where('L', $request->L)
+                        ->where('INDEXID', $request->indexno)
+                        ->where('Term', $request->term_id)
+                        ->where('deleted_at', NULL);
+                })
+            ]
         );
 
         $placement_form_data = PlacementForm::find($request->enrolment_id);
@@ -96,13 +98,13 @@ class PlacementFormController extends Controller
         $this->saveModifiedPlacementForm($placement_form_data);
         // save modifications
         $placement_form_data->update([
-                'L' => $request->L,
-                'placement_schedule_id' => $request->placementLang,
-                'timeInput' => implode('-', $request->timeInput),
-                'dayInput' => implode('-', $request->dayInput),
-                'course_preference_comment' => $request->course_preference_comment,
-                'modified_by' => Auth::id(),
-            ]);
+            'L' => $request->L,
+            'placement_schedule_id' => $request->placementLang,
+            'timeInput' => implode('-', $request->timeInput),
+            'dayInput' => implode('-', $request->dayInput),
+            'course_preference_comment' => $request->course_preference_comment,
+            'modified_by' => Auth::id(),
+        ]);
 
         if ($request->std_comments != NULL) {
             $placement_form_data->update(['std_comments' => $request->std_comments]);
@@ -114,7 +116,7 @@ class PlacementFormController extends Controller
             $placement_form_data->update(['flexibleBtn' => 0]);
         }
 
-        return redirect()->route('previous-submitted')->with('success', 'Form # '.$placement_form_data->eform_submit_count.' successfully modified.');
+        return redirect()->route('previous-submitted')->with('success', 'Form # ' . $placement_form_data->eform_submit_count . ' successfully modified.');
     }
 
     function saveModifiedPlacementForm($placement_form_data)
@@ -820,7 +822,7 @@ class PlacementFormController extends Controller
      */
     public function assignCourseToPlacement(Request $request, $id)
     {
-        if ($request->input("submit-approval") == 0 ) {
+        if ($request->input("submit-approval") == 0) {
             $placement_form = PlacementForm::find($id);
             $placement_form->convoked = $request->convoked;
             $placement_form->flexibleBtn = $request->flexible;
@@ -837,8 +839,8 @@ class PlacementFormController extends Controller
             $placement_form->Code = null;
             $placement_form->CodeIndexID = null;
             $placement_form->save();
-            
-            $request->session()->flash('warning', 'Placement form record has been updated. You can now close this window/tab.'); 
+
+            $request->session()->flash('warning', 'Placement form record has been updated. You can now close this window/tab.');
             return redirect()->back();
         }
 
@@ -912,8 +914,8 @@ class PlacementFormController extends Controller
         //if self-paying placement form
         if ($is_self_pay_form == 1) {
             $type = 1; // 1 = placement form
-            $display_language_en = $display_language->languages->name.' Placement Test';
-            $display_language_fr = 'Test de placement - '.$display_language->languages->name_fr;
+            $display_language_en = $display_language->languages->name . ' Placement Test';
+            $display_language_fr = 'Test de placement - ' . $display_language->languages->name_fr;
             $schedule = 'n/a';
             $staff_name = $display_language->users->name;
             $std_email = $display_language->users->email;
@@ -924,12 +926,12 @@ class PlacementFormController extends Controller
             $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
             $term_year = new Carbon($term_date_time);
             $term_year = $term_year->year;
-            $seasonYear = $term_season_en.' '.$term_year;
+            $seasonYear = $term_season_en . ' ' . $term_year;
 
-            $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+            $subject = 'Cancellation: ' . $staff_name . ' - ' . $display_language_en . ' (' . $seasonYear . ')';
 
             Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
-            
+
             $enrol_form = [];
             for ($i = 0; $i < count($forms); $i++) {
                 $enrol_form = $forms[$i]->id;
@@ -1179,7 +1181,7 @@ class PlacementFormController extends Controller
     public function changeSelectedField($enrolment_to_be_copied, $input)
     {
         foreach ($enrolment_to_be_copied as $new_data) {
-            if ($input['radioChangeHRApproval']) {
+            if (!empty($input['radioChangeHRApproval'])) {
                 $new_data->overall_approval = $input['approval_hr'];
             }
             $new_data->fill($input)->save();
