@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('send-reminder-to-current-students', 'SystemController@sendReminderToCurrentStudents')->name('send-reminder-to-current-students');
     Route::get('system-index', 'SystemController@systemIndex')->name('system-index');
     Route::get('send-to-focal-points', 'SystemController@sendToFocalPoints')->name('send-to-focal-points');
+    Route::get('send-to-mission-offices', 'SystemController@sendToMissionOffices')->name('send-to-mission-offices');
 
     Route::resource('newuser', 'NewUserController', ['only' => ['index', 'show', 'update']]);
     Route::get('edit-new-user', ['as' => 'edit-new-user', 'uses' => 'NewUserController@editNewUser']);

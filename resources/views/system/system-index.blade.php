@@ -93,6 +93,7 @@
 									<ul class="dropdown-menu" aria-labelledby="dLabel">
 										<li><a href="{{route('send-general-email')}}" class="send-send-general-email send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to All Current and Past Students</a></li>
 										<li><a href="{{route('send-to-focal-points')}}" class="send-to-focal-points send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to All Focal Points</a></li>
+										<li><a href="{{route('send-to-mission-offices')}}" class="send-to-mission-offices send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to Mission Offices</a></li>
 										@if (Session::has('Term'))
 										<li><a href="{{route('send-email-to-enrolled-students-of-selected-term')}}" class="send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to Students Who Have Enrolled [ {{Session::get('Term')}} ]</a></li>
 										<li><a href="{{route('send-general-email-to-convoked-students-of-selected-term')}}" class="send-emails btn-space"><i class="fa fa-envelope"></i> Send Email to Convoked Students Excluding Waitlisted [ {{Session::get('Term')}} ]</a></li>

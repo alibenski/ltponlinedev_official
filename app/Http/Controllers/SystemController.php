@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SystemController extends Controller
 {
-    public function systemIndex()
+    public function systemIndex(Request $request)
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $term = Term::where('Term_Code', Session::get('Term'))->first();
@@ -51,8 +51,25 @@ class SystemController extends Controller
             $this->sendGeneralEmailJob($emailFocalPoints);
         }
 
-        $request->session()->flash('success', 'Email sent to focal points.');
-        return redirect()->back();
+        $request->session()->flash('success', 'Email sent to ' . $focalPoints->count() . ' focal points.');
+        return back();
+    }
+
+    public function sendToMissionOffices(Request $request)
+    {
+        // query mission office emails
+        $missionOffices = DB::table('tblLTP_Mission_Offices')->select('email')
+            ->groupBy('email')
+            ->get()
+            ->pluck('email');
+
+        $chunkedMissionOffices = $missionOffices->chunk(40);
+        foreach ($chunkedMissionOffices as $emailchunkedMissionOffices) {
+            $this->sendGeneralEmailJob($emailchunkedMissionOffices);
+        }
+
+        $request->session()->flash('success', 'Email sent to mission offices.');
+        return back();
     }
 
     public function sendGeneralEmailJob($unique_email_address)
@@ -110,7 +127,7 @@ class SystemController extends Controller
         }
 
         $request->session()->flash('success', 'Email sent!');
-        return redirect()->back();
+        return back();
     }
 
     public function sendEmailToEnrolledStudentsOfSelectedTerm(Request $request)
@@ -118,7 +135,7 @@ class SystemController extends Controller
         $term = Session::get('Term');
         if (!$term) {
             $request->session()->flash('warning', 'No emails sent! Select a valid term.');
-            return redirect()->back();
+            return back();
         }
 
         $query_students_regular_enrolment = Preenrolment::where('Term', $term)
@@ -150,7 +167,7 @@ class SystemController extends Controller
         }
 
         $request->session()->flash('success', 'Email sent to ' . $countOfEmails . ' students!');
-        return redirect()->back();
+        return back();
     }
 
     public function sendGeneralEmailToConvokedStudentsOfSelectedTerm(Request $request)
@@ -158,7 +175,7 @@ class SystemController extends Controller
         $term = Session::get('Term');
         if (!$term) {
             $request->session()->flash('warning', 'No emails sent! Select a valid term.');
-            return redirect()->back();
+            return back();
         }
         $convocation_all = Repo::where('Term', Session::get('Term'))->get();
         // with('classrooms')->get()->pluck('classrooms.Code', 'CodeIndexIDClass');
@@ -195,7 +212,7 @@ class SystemController extends Controller
         }
 
         $request->session()->flash('success', 'Email sent to ' . $countOfEmails . ' students!');
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -217,7 +234,7 @@ class SystemController extends Controller
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
         if (!$term) {
             $request->session()->flash('warning', 'No emails sent! Create a valid term.');
-            return redirect()->back();
+            return back();
         }
 
         $query_students_current_year = Repo::where('Term', $term->Term_Code)
@@ -269,7 +286,7 @@ class SystemController extends Controller
         $time_elapsed_secs = microtime(true) - $start;
         // dd($time_elapsed_secs, $unique_email_address_chunked);
         $request->session()->flash('success', 'Broadcast email sent! Error sending to: ' . json_encode($emailError));
-        return redirect()->back();
+        return back();
     }
 
     /**
@@ -290,7 +307,7 @@ class SystemController extends Controller
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
         if (!$term) {
             $request->session()->flash('warning', 'No emails sent! Create a valid term.');
-            return redirect()->back();
+            return back();
         }
 
         $selectedTerm = $request->session()->get('Term');
@@ -356,7 +373,7 @@ class SystemController extends Controller
         }
 
         $request->session()->flash('success', 'Broadcast reminder email sent! Error sending to: ' . json_encode($emailError));
-        return redirect()->back();
+        return back();
     }
 
 
@@ -431,7 +448,7 @@ class SystemController extends Controller
         }
 
         $request->session()->flash('success', 'Reminder email sent to ' . count($validEmails) . ' students! Error sending to: ' . json_encode($emailError));
-        return redirect()->back();
+        return back();
     }
 
     public function sendBroadcastEmail($unique_email_address)
