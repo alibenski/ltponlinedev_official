@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classroom;
 use App\Course;
+use App\FocalPoints;
 use App\Jobs\SendBroadcastJob;
 use App\Jobs\SendGeneralEmailJob;
 use App\Mail\sendBroadcastEnrolmentIsOpen;
@@ -37,8 +38,26 @@ class SystemController extends Controller
         return view('system.system-index', compact('terms', 'term', 'texts', 'onGoingTerm'));
     }
 
+    public function sendToFocalPoints(Request $request)
+    {
+        // query focal points
+        $focalPoints = FocalPoints::select('email')
+            ->groupBy('email')
+            ->get()
+            ->take(3)
+            ->pluck('email');
+
+        $chunkedFocalPoints = $focalPoints->chunk(40);
+        foreach ($chunkedFocalPoints as $emailFocalPoints) {
+            $this->sendGeneralEmailJob($emailFocalPoints);
+        }
+
+        $request->session()->flash('success', 'Email sent to focal points.');
+        return redirect()->back();
+    }
+
     public function sendGeneralEmailJob($unique_email_address)
-    {   
+    {
         $baseDelay = Carbon::now();
 
         $getDelay = cache('_jobs.' . SendGeneralEmailJob::class, $baseDelay);
@@ -175,7 +194,7 @@ class SystemController extends Controller
         foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
             $this->sendGeneralEmailJob($unique_email_address_chunk);
         }
-        
+
         $request->session()->flash('success', 'Email sent to ' . $countOfEmails . ' students!');
         return redirect()->back();
     }
@@ -227,18 +246,18 @@ class SystemController extends Controller
         // foreach (new \LimitIterator($emailArrayIterator, 252) as $sddextr_email_address) {
         $start = microtime(true);
         foreach ($unique_email_address as $sddextr_email_address) {
-            $my_data = [ 'email' => $sddextr_email_address,];
+            $my_data = ['email' => $sddextr_email_address,];
             $validator = Validator::make($my_data, [
                 'email' => 'email',
             ]);
             if ($validator->fails()) {
                 $emailError[] = $sddextr_email_address;
-            } 
+            }
             $validEmails[] = $sddextr_email_address;
         }
         $unique_email_address_valid = $validEmails;
 
-        $sent = [ ];  
+        $sent = [];
 
         $filt = array_diff($unique_email_address_valid, $sent);
         // dd($unique_email_address_valid, $filt);
@@ -250,7 +269,7 @@ class SystemController extends Controller
         }
         $time_elapsed_secs = microtime(true) - $start;
         // dd($time_elapsed_secs, $unique_email_address_chunked);
-        $request->session()->flash('success', 'Broadcast email sent! Error sending to: ' . json_encode($emailError) );
+        $request->session()->flash('success', 'Broadcast email sent! Error sending to: ' . json_encode($emailError));
         return redirect()->back();
     }
 
@@ -320,13 +339,13 @@ class SystemController extends Controller
         $emailError = [];
         $validEmails = [];
         foreach ($unique_email_address as $sddextr_email_address) {
-            $my_data = [ 'email' => $sddextr_email_address,];
+            $my_data = ['email' => $sddextr_email_address,];
             $validator = Validator::make($my_data, [
                 'email' => 'email',
             ]);
             if ($validator->fails()) {
                 $emailError[] = $sddextr_email_address;
-            } 
+            }
             $validEmails[] = $sddextr_email_address;
         }
         $unique_email_address_valid = $validEmails;
@@ -337,7 +356,7 @@ class SystemController extends Controller
             $this->sendBroadcastEmail($unique_email_address_chunk);
         }
 
-        $request->session()->flash('success', 'Broadcast reminder email sent! Error sending to: ' . json_encode($emailError) );
+        $request->session()->flash('success', 'Broadcast reminder email sent! Error sending to: ' . json_encode($emailError));
         return redirect()->back();
     }
 
@@ -350,7 +369,7 @@ class SystemController extends Controller
     public function sendReminderToCurrentStudents(Request $request)
     {
         $term = \App\Helpers\GlobalFunction::instance()->currentTermObject();
-        $selectedTerm = $request->session()->get('Term'); 
+        $selectedTerm = $request->session()->get('Term');
         // query all students enrolled to current term
         $query_students_current_term = Repo::where('Term', $term->Term_Code)->get();
 
@@ -393,13 +412,13 @@ class SystemController extends Controller
             foreach ($query_email_addresses as $value4) {
                 $sddextr_email_address = $value4->email;
 
-                $my_data = [ 'email' => $sddextr_email_address,];
+                $my_data = ['email' => $sddextr_email_address,];
                 $validator = Validator::make($my_data, [
                     'email' => 'email',
                 ]);
                 if ($validator->fails()) {
                     $emailError[] = $sddextr_email_address;
-                } 
+                }
                 $validEmails[] = $sddextr_email_address;
             }
         }
@@ -411,8 +430,8 @@ class SystemController extends Controller
         foreach ($unique_email_address_chunked as $unique_email_address_chunk) {
             $this->sendBroadcastEmail($unique_email_address_chunk);
         }
-        
-        $request->session()->flash('success', 'Reminder email sent to ' . count($validEmails) . ' students! Error sending to: ' . json_encode($emailError) );
+
+        $request->session()->flash('success', 'Reminder email sent to ' . count($validEmails) . ' students! Error sending to: ' . json_encode($emailError));
         return redirect()->back();
     }
 
