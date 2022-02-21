@@ -44,7 +44,6 @@ class SystemController extends Controller
         $focalPoints = FocalPoints::select('email')
             ->groupBy('email')
             ->get()
-            ->take(3)
             ->pluck('email');
 
         $chunkedFocalPoints = $focalPoints->chunk(40);
