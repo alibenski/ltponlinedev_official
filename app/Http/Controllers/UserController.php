@@ -655,8 +655,10 @@ class UserController extends Controller
             'nameFirst' => $request->nameFirst,
             'email' => $request->email,
             'mailing_list' => $mailingList,
-        ]); 
-        $filteredInput = array_filter($input, function ($v){return ! is_null($v);});
+        ]);
+        $filteredInput = array_filter($input, function ($v) {
+            return !is_null($v);
+        });
         $roles = $request['roles']; //Retreive all roles
 
         // update users table with new email
@@ -749,10 +751,14 @@ class UserController extends Controller
             ->get();
 
         $term_info = Term::where('Term_Code', $request->Term)->first();
+        $current_enrolment_term_code = null;
+        if (\App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()) {
+            $current_enrolment_term_code = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject()->Term_Code;
+        }
 
         if ($student_last_term == null) {
             $repos_lang = null;
-            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list', 'current_enrolment_term_code'));
         }
 
         $repos_lang = Repo::orderBy('Term', 'desc')->where('Term', $student_last_term->Term)
@@ -762,15 +768,15 @@ class UserController extends Controller
             $student_enrolments = null;
             $student_placements = null;
 
-            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list', 'current_enrolment_term_code'));
         }
 
         if ($request->Term < 191) {
             $repos_lang = $this->getLTPDataBefore2018($request, $student_last_term, $student);
-            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+            return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list', 'current_enrolment_term_code'));
         }
 
-        return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list'));
+        return view('users.manageUserEnrolmentDataByHistory', compact('terms', 'id', 'student', 'student_enrolments', 'student_placements', 'repos_lang', 'historical_data', 'placement_records', 'student_convoked', 'term_info', 'batch_implemented', 'historical_data_list', 'current_enrolment_term_code'));
     }
 
     public function manageUserEnrolmentData(Request $request, $id)

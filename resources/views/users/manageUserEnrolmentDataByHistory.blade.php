@@ -25,6 +25,19 @@
 	
 	<h3>Viewing: <strong>{{ $student->name }}</strong> [{{ $student->indexno }}]</h3>
 
+	@if (is_null($current_enrolment_term_code))
+	@else
+	<div class="row">
+		<div class="col-sm-12">
+			<form method="GET" action="{{ route('manage-user-enrolment-data-by-history', $id) }}" style="display:inline;">
+				<input name="Term" type="hidden" value="{{ $current_enrolment_term_code }}">
+				<h3><span>Current Enrolment Term: <strong>{{ $current_enrolment_term_code }}</strong> <button type="submit" class="btn btn-default">View LTP Data for {{ $current_enrolment_term_code }}</button></span></h3>
+			</form>
+		</div>
+	</div>
+	@endif
+
+
 	@include('admin.partials._userAdminNav')
 	
 	<div class="panel-body panel-info">
