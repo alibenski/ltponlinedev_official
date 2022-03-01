@@ -787,7 +787,24 @@
 						            <label for="org" class="col-md-4 control-label">Organization:</label>
 
 						            <div class="col-md-8 form-control-static">
-						                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif</p>
+						                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif
+
+										@if ($student->sddextr->DEPT === 'MSU')
+											@if ($student->sddextr->countryMission)
+											- {{ $student->sddextr->countryMission->ABBRV_NAME }} 
+											@else 
+											- (country update needed)
+											@endif
+										@endif
+
+										@if ($student->sddextr->DEPT === 'NGO')
+											@if ($student->sddextr->ngo_name)
+											- {{ $student->sddextr->ngo_name }} 
+											@else
+											- (NGO name update needed)
+											@endif
+										@endif
+										</p>
 						            </div>
 						        </div>
 

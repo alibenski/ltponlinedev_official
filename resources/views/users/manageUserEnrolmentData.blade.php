@@ -402,7 +402,23 @@
 										<td>
 											<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle="{{ $form->courses->EDescription }}"><span><i class=""></i></span> View </a>
 										</td>
-										<td>{{ $form->DEPT }}</td>
+										<td>{{ $form->DEPT }}
+											@if ($form->users->sddextr->DEPT === 'MSU')
+												@if ($form->users->sddextr->countryMission)
+												- {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 
+												@else 
+												- (country update needed)
+												@endif
+											@endif
+
+											@if ($form->DEPT === 'NGO')
+												@if ($form->users->sddextr->ngo_name)
+												- {{ $form->users->sddextr->ngo_name }} 
+												@else
+												- (NGO name update needed)
+												@endif
+											@endif
+										</td>
 										<td>
 											@if( is_null($form->cancelled_by_student))
 											@else <span id="status" class="label label-danger margin-label">YES</span>
@@ -650,7 +666,23 @@
 											@else <span id="status" class="label label-danger margin-label">YES</span>
 											@endif
 										</td>
-										<td>{{ $form->DEPT }}</td>
+										<td>{{ $form->DEPT }}
+											@if ($form->users->sddextr->DEPT === 'MSU')
+												@if ($form->users->sddextr->countryMission)
+												- {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 
+												@else 
+												- (country update needed)
+												@endif
+											@endif
+
+											@if ($form->DEPT === 'NGO')
+												@if ($form->users->sddextr->ngo_name)
+												- {{ $form->users->sddextr->ngo_name }} 
+												@else
+												- (NGO name update needed)
+												@endif
+											@endif
+										</td>
 										<td>
 											@if ($form->placementSchedule->is_online == 1) Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} 
 											@else {{ $form->placementSchedule->date_of_plexam }} 
@@ -754,7 +786,24 @@
 						            <label for="org" class="col-md-4 control-label">Organization:</label>
 
 						            <div class="col-md-8 form-control-static">
-						                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif</p>
+						                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif
+
+										@if ($student->sddextr->DEPT === 'MSU')
+											@if ($student->sddextr->countryMission)
+											- {{ $student->sddextr->countryMission->ABBRV_NAME }} 
+											@else 
+											- (country update needed)
+											@endif
+										@endif
+
+										@if ($student->sddextr->DEPT === 'NGO')
+											@if ($student->sddextr->ngo_name)
+											- {{ $student->sddextr->ngo_name }} 
+											@else
+											- (NGO name update needed)
+											@endif
+										@endif
+										</p>
 						            </div>
 						        </div>
 
