@@ -165,6 +165,17 @@ class HomeController extends Controller
 
     public function whatform(Request $request, MsuUpdateField $msuUpdateField, NgoUpdateField $ngoUpdateField)
     {
+        if ($request->organization === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required',
+            ));
+        }
+
+        if ($request->organization === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required',
+            ));
+        }
         // if part of new organization, then save the new organization to sddextr     
         // save CAT to Auth User table   
         $id = Auth::id();
@@ -176,7 +187,7 @@ class HomeController extends Controller
         $student->sddextr->DEPT = $request->input('organization');
 
         $msuUpdateField->checkMsuValue($student, $request);
-        $ngoUpdateField->checkNgoValue($student, $request); 
+        $ngoUpdateField->checkNgoValue($student, $request);
 
         $student->sddextr->save();
 
@@ -193,8 +204,7 @@ class HomeController extends Controller
         } elseif ($request->decision == 0 && $org_status == 0) {
             session()->flash('success', 'Please fill in the enrolment form');
             return redirect(route('myform.create'));
-        }
-        else
+        } else
             return redirect(route('whatorg'));
     }
 
