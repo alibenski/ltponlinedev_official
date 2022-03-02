@@ -80,7 +80,25 @@
 				<td>
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
-				<td>@if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif</td>
+				<td>
+                    @if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif
+                    @if ($form->DEPT === 'MSU')
+                        @if ($form->users->sddextr->countryMission)
+                        - {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 
+                        @else 
+                        - (country update needed)
+                        @endif
+                    @endif
+
+                    @if ($form->DEPT === 'NGO')
+                        @if ($form->users->sddextr->ngo_name)
+                        - {{ $form->users->sddextr->ngo_name }} 
+                        @else
+                        - (NGO name update needed)
+                        @endif
+                    @endif
+                
+                </td>
                 <td>{{ $form->Term }}</td>
                 <td>{{ $form->L }}</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>
