@@ -93,7 +93,24 @@
 					<td>
 						<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a>
 					</td>
-					<td>{{ $form->DEPT }}</td>
+					<td>{{ $form->DEPT }}
+						@if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif
+						@if ($form->DEPT === 'MSU')
+							@if ($form->users->sddextr->countryMission)
+							- {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 
+							@else 
+							- (country update needed)
+							@endif
+						@endif
+
+						@if ($form->DEPT === 'NGO')
+							@if ($form->users->sddextr->ngo_name)
+							- {{ $form->users->sddextr->ngo_name }} 
+							@else
+							- (NGO name update needed)
+							@endif
+						@endif
+					</td>
 					<td>
 						@if( is_null($form->cancelled_by_student))
 						@else <span id="status" class="label label-danger margin-label">YES</span>

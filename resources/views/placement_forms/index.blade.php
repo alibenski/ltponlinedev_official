@@ -217,6 +217,22 @@
 				</td>
 				<td>
 				@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
+				@if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif
+				@if ($form->DEPT === 'MSU')
+					@if ($form->users->sddextr->countryMission)
+					- {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 
+					@else 
+					- (country update needed)
+					@endif
+				@endif
+
+				@if ($form->DEPT === 'NGO')
+					@if ($form->users->sddextr->ngo_name)
+					- {{ $form->users->sddextr->ngo_name }} 
+					@else
+					- (NGO name update needed)
+					@endif
+				@endif
 				</td>
 				<td>
 					@if ($form->placementSchedule->is_online == 1) Online from {{ $form->placementSchedule->date_of_plexam }} to {{ $form->placementSchedule->date_of_plexam_end }} 
