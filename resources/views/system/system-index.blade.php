@@ -132,7 +132,10 @@
 												</div>
 
 												<div class="modal-footer">
-													<button type="button" class="send-to-manual-email-adds btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to Email Addresses Above </button>
+													<div class="send-manual-emails-section">
+														<button type="button" class="send-to-manual-email-adds btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to Email Addresses Above </button>
+													</div>
+
 													<input type="hidden" name="_token" value="{{ Session::token() }}">
 													<button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
 												</div>
@@ -185,11 +188,13 @@
     });
 
 	function sendToManualEmails() {
-
 		let text = $("textarea[name='manual-email-addresses']").val();
 		let token = $("input[name='_token']").val();
 		
 		if (text.length > 1) {
+			$("div.send-manual-emails-section").html("");
+    		$("div.send-manual-emails-section").html("<button class='send-to-manual-email-adds btn btn-success btn-space' disabled><span class='fa fa-refresh fa-spin'></span> Sending... Please wait </button>");
+
 			const emails = text.split(";");
 			
 			$.ajax({
@@ -199,15 +204,17 @@
 				})
 				.done(function(data) {
 					console.log(data);
-					alert(data);
-					window.location.reload();
+					alert("Email sent to: " + data);
+					
 				})
 				.fail(function() {
 					console.log("error");
-					alert("The given data is invalid. Check if the format is valid.")
+					alert("The given data is invalid. Check if the format is valid.");
+					
 				})
 				.always(function() {
 					console.log("complete");
+					window.location.reload();
 			});
 		} else {
 			alert("The field cannot be empty.")
