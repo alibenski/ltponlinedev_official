@@ -106,6 +106,48 @@
 							</h4>
 						</div>
 				</form>
+
+				<form class="admin-index-container">
+					<div class="admin-index-column-1">
+						<h4><i class="fa fa-paper-plane" aria-hidden="true"></i> Send to Manual Email Address</h4>
+						<p class="text-danger">Separate email addresses with semi-colon (;)</p>
+						<h4>
+							<div>
+								<button id="enterEmail" type="button" data-toggle="modal" data-target="#enterEmailModal" aria-haspopup="true" aria-expanded="false" class="btn btn-lg btn-default btn-space btn-enter-email"><i class="fa fa-list"></i> Enter Email </button>
+
+								<div id="enterEmailModal" class="modal fade">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+												<h3 class="modal-title">Enter Email Address Manually & Send</h3>
+												<p class="text-danger">Separate email addresses with semi-colon (;)</p>
+											</div>
+											<form class="send-to-manual-email-adds-form">
+
+												<div class="row modal-body-enter-send-email">
+													<div class="col-sm-12">
+														<textarea class="form-control" name="manual-email-addresses" cols="40" rows="5" placeholder="Enter email address separated by ; (semi-colon)" required="required"></textarea>
+													</div>
+												</div>
+
+												<div class="modal-footer">
+													<button type="button" class="send-to-manual-email-adds btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to Email Addresses Above </button>
+													<input type="hidden" name="_token" value="{{ Session::token() }}">
+													<button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+												</div>
+
+											</form>
+										</div>
+									</div>
+								</div>
+
+								<a href="{{ route('view-general-email-text', ['id' => 2]) }}" class="btn btn-info btn-space"><i class="fa fa-eye"></i> View</a>
+								<a href="{{ route('edit-enrolment-is-open-text', ['id' => 2]) }}" class="btn btn-warning btn-space"><i class="fa fa-pencil"></i> Edit</a>
+							</div>
+						</h4>
+					</div>
+				</form>
 			</div>
 			@if (!Session::has('Term'))
 				<div class="overlay"></div>
@@ -130,6 +172,48 @@
 		placeholder: "select here",
 		});
 	});
+
+	$('#enterEmailModal').on('shown.bs.modal');
+	$('.send-to-manual-email-adds').on('click', function(e) {
+        var c = confirm("This is a mass email function. Are you sure?");
+        if (c === true) {
+			sendToManualEmails();
+			return c; //you can just return c because it will be true or false  
+		} else {
+			e.preventDefault();
+		}
+    });
+
+	function sendToManualEmails() {
+
+		let text = $("textarea[name='manual-email-addresses']").val();
+		let token = $("input[name='_token']").val();
+		
+		if (text.length > 1) {
+			const emails = text.split(";");
+			
+			$.ajax({
+				url: "{{ route('send-to-manual-email-adds') }}", 
+				method: 'POST',
+				data: {emails:emails, _token:token},
+				})
+				.done(function(data) {
+					console.log(data);
+					alert(data);
+					window.location.reload();
+				})
+				.fail(function() {
+					console.log("error");
+					alert("The given data is invalid. Check if the format is valid.")
+				})
+				.always(function() {
+					console.log("complete");
+			});
+		} else {
+			alert("The field cannot be empty.")
+		}
+		
+	}
 
 	$('a.send-emails').on('click', function(e) {
         var c = confirm("This is a mass email function. Are you sure?");

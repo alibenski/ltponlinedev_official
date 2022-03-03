@@ -38,6 +38,29 @@ class SystemController extends Controller
         return view('system.system-index', compact('terms', 'term', 'texts', 'onGoingTerm'));
     }
 
+    public function sendToManualEmailAdds(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'emails'       => 'required|array',
+            'emails.*'      => 'email',
+        ]);
+
+        if ($validator->fails()) {
+            $data = "The given data is invalid. Check if the format is valid. Window will refresh.";
+            return response()->json($data);
+        }
+
+        $collection = collect($request->emails);
+        $chunkedEmails = $collection->chunk(40);
+        foreach ($chunkedEmails as $emails) {
+            $this->sendGeneralEmailJob($emails);
+        }
+
+        $data = $request->emails;
+
+        return response()->json($data);
+    }
+
     public function sendToFocalPoints(Request $request)
     {
         // query focal points
