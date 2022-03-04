@@ -34,7 +34,7 @@ class LateEnrolmentController extends Controller
             $url = URL::temporarySignedRoute('late-what-org', now()->addDays(1), ['transaction' => $recordId]);
 
             Mail::to($request->email)->send(new EmailLateRegister($url));
-            
+
             return response()->json($url);
         }
     }
@@ -84,8 +84,7 @@ class LateEnrolmentController extends Controller
             session()->flash('check', 1);
             session()->put('url', $request->url);
             return redirect()->route('late-registration');
-        }
-        else
+        } else
             return redirect()->back();
     }
 
@@ -93,7 +92,7 @@ class LateEnrolmentController extends Controller
     {
         $url = session()->get('url');
         $check = $request->session()->get('check');
-        if ($check == 1 ) {
+        if ($check == 1) {
             $courses = Course::all();
             $languages = DB::table('languages')->pluck("name", "code")->all();
             $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
@@ -104,8 +103,8 @@ class LateEnrolmentController extends Controller
             //whereYear('Term_End', $now_year)  
             // $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
             $terms = Term::orderBy('Term_Code', 'desc')
-                            ->whereDate('Term_Begin', '>=', $now_date)
-                            ->get()->min();
+                ->whereDate('Term_Begin', '>=', $now_date)
+                ->get()->min();
 
             //query the next term based Term_Begin column is greater than today's date and then get min
             $next_term = Term::orderBy('Term_Code', 'desc')
@@ -139,9 +138,11 @@ class LateEnrolmentController extends Controller
             return view('form.late.late-registration', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {
             if ($url) {
-                return redirect()->to($url);
-            } 
-            
+                $errors = $request->session()->get('errors');
+
+                return redirect()->to($url)->withErrors($errors->all());
+            }
+
             return redirect('home')->with('interdire-msg', 'Access denied. Please refer to the link that the CLM Secretariat sent to your email.');
         }
     }
@@ -345,7 +346,7 @@ class LateEnrolmentController extends Controller
         $placementForm->Term = $term_id;
         $placementForm->INDEXID = $index_id;
         $placementForm->DEPT = $org;
-        $placementForm->eform_submit_count = $eform_submit_count;   
+        $placementForm->eform_submit_count = $eform_submit_count;
         $placementForm->approval = $request->approval;
         $placementForm->placement_schedule_id = $request->placementLang;
         $placementForm->std_comments = $request->std_comment;
@@ -407,8 +408,8 @@ class LateEnrolmentController extends Controller
             // whereYear('Term_End', $now_year)  
             // $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
             $terms = Term::orderBy('Term_Code', 'desc')
-                            ->whereDate('Term_Begin', '>=', $now_date)
-                            ->get()->min();
+                ->whereDate('Term_Begin', '>=', $now_date)
+                ->get()->min();
 
             //query the next term based Term_Begin column is greater than today's date and then get min
             $next_term = Term::orderBy('Term_Code', 'desc')
@@ -441,14 +442,16 @@ class LateEnrolmentController extends Controller
             return view('form.late.late-selfpay-form', compact('courses', 'languages', 'terms', 'next_term', 'prev_term', 'repos', 'repos_lang', 'user', 'org', 'days'));
         } else {
             if ($url) {
-                return redirect()->to($url);
-            } 
+                $errors = $request->session()->get('errors');
+
+                return redirect()->to($url)->withErrors($errors->all());
+            }
             return redirect('home')->with('interdire-msg', 'Access denied. Please refer to the link that the CLM Secretariat sent to your email.');
         }
     }
 
     public function storeLateSelfpayForm(Request $request)
-    {        
+    {
         $index_id = $request->input('index_id');
         $language_id = $request->input('L');
         $course_id = $request->input('course_id');
@@ -518,6 +521,17 @@ class LateEnrolmentController extends Controller
         $form_counter = 1;
         if (isset($lastValueCollection->form_counter)) {
             $form_counter = $lastValueCollection->form_counter + 1;
+        }
+
+        // validate fields for placement form
+        if ($request->placementDecisionB === '0') {
+            $this->validate($request, array(
+                'placementLang' => 'required|integer',
+                'agreementBtn' => 'required|',
+                'dayInput' => 'required|',
+                'timeInput' => 'required|',
+                'course_preference_comment' => 'required|',
+            ));
         }
 
         //Store the attachments to storage path and save in db table
@@ -631,7 +645,6 @@ class LateEnrolmentController extends Controller
         $request->session()->flash('success', 'Thank you. The enrolment form has been submitted to the Language Secretariat for processing.');
 
         return redirect()->route('thankyouSelfPay');
-    
     }
 
     public function postSelfPayPlacementInfo(Request $request, $attachment_pay_file, $attachment_identity_file)
@@ -710,7 +723,7 @@ class LateEnrolmentController extends Controller
     public function lateCheckPlacementCourseAjax(Request $request)
     {
         if ($request->ajax()) {
-            
+
             // first validation
             // get the last enrolment from PASHQ table including cancelled ones
             $repos_lang = Repo::withTrashed()->orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
@@ -735,15 +748,15 @@ class LateEnrolmentController extends Controller
                 $prev_term = $selectedTerm - 1;
                 // query placement table with summer term code
                 $placementData = PlacementForm::withTrashed()->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
-                ->orWhere(function($query) use($prev_term, $request){
-                    $query->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
-                })->first();
+                    ->orWhere(function ($query) use ($prev_term, $request) {
+                        $query->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                    })->first();
             } else {
                 // $placementData = null;
                 $placementData = PlacementForm::withTrashed()->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
-                ->orWhere(function($q) use($prev_termCode, $request){
-                    $q->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
-                })->first();
+                    ->orWhere(function ($q) use ($prev_termCode, $request) {
+                        $q->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                    })->first();
             }
 
             // Questions: 
@@ -829,5 +842,4 @@ class LateEnrolmentController extends Controller
             return response()->json($data);
         }
     }
-
 }
