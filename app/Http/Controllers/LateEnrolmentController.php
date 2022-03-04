@@ -139,8 +139,10 @@ class LateEnrolmentController extends Controller
         } else {
             if ($url) {
                 $errors = $request->session()->get('errors');
-
-                return redirect()->to($url)->withErrors($errors->all());
+                if ($errors) {
+                    return redirect()->to($url)->withErrors($errors->all());
+                }
+                return redirect()->to($url);
             }
 
             return redirect('home')->with('interdire-msg', 'Access denied. Please refer to the link that the CLM Secretariat sent to your email.');
@@ -443,8 +445,10 @@ class LateEnrolmentController extends Controller
         } else {
             if ($url) {
                 $errors = $request->session()->get('errors');
-
-                return redirect()->to($url)->withErrors($errors->all());
+                if ($errors) {
+                    return redirect()->to($url)->withErrors($errors->all());
+                }
+                return redirect()->to($url);
             }
             return redirect('home')->with('interdire-msg', 'Access denied. Please refer to the link that the CLM Secretariat sent to your email.');
         }
