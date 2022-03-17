@@ -26,7 +26,7 @@ class ReportsController extends Controller
 
     public function queryAllStudentsByYear($request, $columns)
     {
-         $terms = Term::orderBy('Term_Code', 'asc')
+        $terms = Term::orderBy('Term_Code', 'asc')
             ->select('Term_Code', 'Term_Begin')
             ->get();
 
@@ -37,7 +37,7 @@ class ReportsController extends Controller
                 $termCode[] = $value->Term_Code;
             }
         }
-        
+
         $arrayCollection = new \AppendIterator();
         foreach ($termCode as $term) {
             // 
@@ -52,200 +52,204 @@ class ReportsController extends Controller
     public function queryAllStudentsMerged($term, $columns, $request)
     {
         $records = new Repo;
-            foreach ($columns as $column) {
-                if ($request->filled($column)) {
-                    $records = $records->where($column, $request->input($column));
-                }
-                    $records = $records
-                        ->where('Term', $term)
-                        ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L', )
-                        ->with(['users' => function($quser1){
-                            $quser1->with(['sddextr' => function($qsdd11){
-                                $qsdd11->select('INDEXNO','SEX');
-                            }])
-                            ->select('indexno', 'id', 'name');
-                        }])
-                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
-                        ->with(['courses' => function($qcourse1){
-                            $qcourse1->select('Te_Code_New', 'Description');
-                        }])
-                        ->with(['languages' => function($qlang1){
-                            $qlang1->select('code', 'name', 'name_fr');
-                        }])
-                        ->with(['courseschedules' => function ($q1) {
-                            $q1->with('prices')->with('courseduration');
-                        }])
-                        ->with('classrooms')
-                        ->whereHas('classrooms', function ($query1) {
-                            $query1->whereNotNull('Tch_ID')
-                                ->where('Tch_ID', '!=', 'TBD');
-                        })
-                        ->with(['enrolments' => function ($q11) use($term) {
-                            $q11->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID','id','profile');
-                            }])
-                        // ->with('enrolments')
-                        ->whereHas('enrolments', function ($query11) use ($term) {
-                            $query11->where('Term', $term)
-                            // ->where('is_self_pay_form', '1')
-                                ->whereNotNull('CodeIndexID');
-                        })
-                        ->with('classrooms.teachers')
-                        // ->with('classrooms.courseSchedule.courseduration')
-                        // ->with('classrooms.courseSchedule.prices')
-                        ;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $records = $records->where($column, $request->input($column));
             }
+            $records = $records
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                ->with(['users' => function ($quser1) {
+                    $quser1->with(['sddextr' => function ($qsdd11) {
+                        $qsdd11->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name');
+                }])
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->with(['courses' => function ($qcourse1) {
+                    $qcourse1->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang1) {
+                    $qlang1->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q1) {
+                    $q1->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query1) {
+                    $query1->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                ->with(['enrolments' => function ($q11) use ($term) {
+                    $q11->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                // ->with('enrolments')
+                ->whereHas('enrolments', function ($query11) use ($term) {
+                    $query11->where('Term', $term)
+                        // ->where('is_self_pay_form', '1')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
 
         $records = $records->get();
 
         $pashFromPlacement = new Repo;
-            foreach ($columns as $column) {
-                if ($request->filled($column)) {
-                    $pashFromPlacement = $pashFromPlacement->where($column, $request->input($column));
-                }
-                    $pashFromPlacement = $pashFromPlacement
-                        ->where('Term', $term)
-                        ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L', )
-                        ->with(['users' => function($quser0){
-                            $quser0->with(['sddextr' => function($qsdd00){
-                                $qsdd00->select('INDEXNO','SEX');
-                            }])
-                            ->select('indexno', 'id', 'name');
-                        }])
-                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
-                        ->with(['courses' => function($qcourse0){
-                            $qcourse0->select('Te_Code_New', 'Description');
-                        }])
-                        ->with(['languages' => function($qlang0){
-                            $qlang0->select('code', 'name', 'name_fr');
-                        }])
-                        ->with(['courseschedules' => function ($q0) {
-                            $q0->with('prices')->with('courseduration');
-                        }])
-                        ->with('classrooms')
-                        ->whereHas('classrooms', function ($query0) {
-                            $query0->whereNotNull('Tch_ID')
-                                ->where('Tch_ID', '!=', 'TBD');
-                        })
-                        // ->with('placements')
-                        ->with(['placements' => function ($q00) use($term) {
-                            $q00->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID','id','profile');
-                            }])
-                        ->whereHas('placements', function ($query00) use ($term) {
-                            $query00->where('Term', $term)
-                            // ->where('is_self_pay_form', '1')
-                                ->whereNotNull('CodeIndexID');
-                        })
-                        ->with('classrooms.teachers')
-                        // ->with('classrooms.courseSchedule.courseduration')
-                        // ->with('classrooms.courseSchedule.prices')
-                        ;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $pashFromPlacement = $pashFromPlacement->where($column, $request->input($column));
             }
-                
+            $pashFromPlacement = $pashFromPlacement
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                ->with(['users' => function ($quser0) {
+                    $quser0->with(['sddextr' => function ($qsdd00) {
+                        $qsdd00->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name');
+                }])
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->with(['courses' => function ($qcourse0) {
+                    $qcourse0->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang0) {
+                    $qlang0->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q0) {
+                    $q0->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query0) {
+                    $query0->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                // ->with('placements')
+                ->with(['placements' => function ($q00) use ($term) {
+                    $q00->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                ->whereHas('placements', function ($query00) use ($term) {
+                    $query00->where('Term', $term)
+                        // ->where('is_self_pay_form', '1')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
+
         $pashFromPlacement = $pashFromPlacement->get();
 
 
         // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
         $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
         $cancelledEnrolmentRecords = new Repo;
-            foreach ($columns as $column) {
-                if ($request->filled($column)) {
-                    $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where($column, $request->input($column));
-                }
-                    $cancelledEnrolmentRecords = $cancelledEnrolmentRecords
-                        ->onlyTrashed()
-                        ->with(['users' => function($quser2){
-                            $quser2->with(['sddextr' => function($qsdd22){
-                                $qsdd22->select('INDEXNO','SEX');
-                            }])
-                            ->select('indexno', 'id', 'name');
-                        }])
-                        ->where('Term', $term)
-                        ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L', )
-                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
-                        ->where('deleted_at', '>', $termCancelDeadline)
-                        // ->whereNull('cancelled_but_not_billed')
-                        ->with(['courses' => function($qcourse2){
-                            $qcourse2->select('Te_Code_New', 'Description');
-                        }])
-                        ->with(['languages' => function($qlang2){
-                            $qlang2->select('code', 'name', 'name_fr');
-                        }])
-                        ->with(['courseschedules' => function ($q2) {
-                            $q2->with('prices')->with('courseduration');
-                        }])
-                        ->with('classrooms')
-                        ->whereHas('classrooms', function ($query2) {
-                            $query2->whereNotNull('Tch_ID')
-                                ->where('Tch_ID', '!=', 'TBD');
-                        })
-                        // ->with('enrolments')
-                        ->with(['enrolments' => function ($q22) use($term) {
-                            $q22->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID','id','profile');
-                            }])
-                        ->whereHas('enrolments', function ($query22) use ($term) {
-                            $query22->where('Term', $term)
-                            // ->where('is_self_pay_form', '1')
-                                ->whereNotNull('CodeIndexID');
-                        })
-                        ->with('classrooms.teachers')
-                        // ->with('classrooms.courseSchedule.courseduration')
-                        // ->with('classrooms.courseSchedule.prices')
-                        ;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where($column, $request->input($column));
             }
-        
+            $cancelledEnrolmentRecords = $cancelledEnrolmentRecords
+                ->onlyTrashed()
+                ->with(['users' => function ($quser2) {
+                    $quser2->with(['sddextr' => function ($qsdd22) {
+                        $qsdd22->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name');
+                }])
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->where('deleted_at', '>', $termCancelDeadline)
+                // ->whereNull('cancelled_but_not_billed')
+                ->with(['courses' => function ($qcourse2) {
+                    $qcourse2->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang2) {
+                    $qlang2->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q2) {
+                    $q2->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query2) {
+                    $query2->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                // ->with('enrolments')
+                ->with(['enrolments' => function ($q22) use ($term) {
+                    $q22->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                ->whereHas('enrolments', function ($query22) use ($term) {
+                    $query22->where('Term', $term)
+                        // ->where('is_self_pay_form', '1')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
+
         $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->get();
 
         $cancelledPlacementRecords = new Repo;
-            foreach ($columns as $column) {
-                if ($request->filled($column)) {
-                    $cancelledPlacementRecords = $cancelledPlacementRecords->where($column, $request->input($column));
-                }
-                    $cancelledPlacementRecords = $cancelledPlacementRecords
-                        ->onlyTrashed()
-                        ->with(['users' => function($quser3){
-                            $quser3->with(['sddextr' => function($qsdd33){
-                                $qsdd33->select('INDEXNO','SEX');
-                            }])
-                            ->select('indexno', 'id', 'name');
-                        }])
-                        ->where('Term', $term)
-                        ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L', )
-                        // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
-                        ->where('deleted_at', '>', $termCancelDeadline)
-                        // ->whereNull('cancelled_but_not_billed')
-                        ->with(['courses' => function($qcourse3){
-                            $qcourse3->select('Te_Code_New', 'Description');
-                        }])
-                        ->with(['languages' => function($qlang3){
-                            $qlang3->select('code', 'name', 'name_fr');
-                        }])
-                        ->with(['courseschedules' => function ($q3) {
-                            $q3->with('prices')->with('courseduration');
-                        }])
-                        ->with('classrooms')
-                        ->whereHas('classrooms', function ($query3) {
-                            $query3->whereNotNull('Tch_ID')
-                                ->where('Tch_ID', '!=', 'TBD');
-                        })
-                        // ->with('placements')
-                        ->with(['placements' => function ($query33) use($term) {
-                            $query33->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID','id','profile');
-                            }])
-                        ->whereHas('placements', function ($query33) use ($term) {
-                            $query33->where('Term', $term)
-                            // ->where('is_self_pay_form', '1')
-                                ->whereNotNull('CodeIndexID');
-                        })
-                        ->with('classrooms.teachers')
-                        // ->with('classrooms.courseSchedule.courseduration')
-                        // ->with('classrooms.courseSchedule.prices')
-                        ;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $cancelledPlacementRecords = $cancelledPlacementRecords->where($column, $request->input($column));
             }
-            
+            $cancelledPlacementRecords = $cancelledPlacementRecords
+                ->onlyTrashed()
+                ->with(['users' => function ($quser3) {
+                    $quser3->with(['sddextr' => function ($qsdd33) {
+                        $qsdd33->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name');
+                }])
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->where('deleted_at', '>', $termCancelDeadline)
+                // ->whereNull('cancelled_but_not_billed')
+                ->with(['courses' => function ($qcourse3) {
+                    $qcourse3->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang3) {
+                    $qlang3->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q3) {
+                    $q3->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query3) {
+                    $query3->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                // ->with('placements')
+                ->with(['placements' => function ($query33) use ($term) {
+                    $query33->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                ->whereHas('placements', function ($query33) use ($term) {
+                    $query33->where('Term', $term)
+                        // ->where('is_self_pay_form', '1')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
+
         $cancelledPlacementRecords = $cancelledPlacementRecords->get();
 
         $recordsMerged = $records->merge($pashFromPlacement)->merge($pashFromPlacement)->merge($cancelledEnrolmentRecords)->merge($cancelledPlacementRecords);
-        
+
         yield $recordsMerged;
     }
 
@@ -272,7 +276,7 @@ class ReportsController extends Controller
                 foreach ($arrayCollection as $dataValue) {
                     foreach ($dataValue as $v) {
                         foreach ($v as $value) {
-                                $arr[] = $value;
+                            $arr[] = $value;
                         }
                     }
                 }
@@ -304,14 +308,13 @@ class ReportsController extends Controller
                     'term' => $term,
                     'count' => $qryStudentsBefore2019,
                 ];
-            } 
-            else {
+            } else {
                 $qryStudents = Repo::where('Term', $term)
-                ->whereHas('classrooms', function ($q) {
-                    // query all students enrolled to current term excluding waitlisted
-                    $q->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
-                })
-                ->get()->count();
+                    ->whereHas('classrooms', function ($q) {
+                        // query all students enrolled to current term excluding waitlisted
+                        $q->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
+                    })
+                    ->get()->count();
                 $obj[] = (object) [
                     'term' => $term,
                     'count' => $qryStudents,
@@ -649,7 +652,7 @@ class ReportsController extends Controller
         foreach ($termsGte2019 as $valueTermCode) {
             $containerTerms[] = $valueTermCode->Term_Code;
         }
-        
+
         $languagesCollection = DB::table('languages')->select('id', 'name', 'code')->orderBy('id', 'asc')->get();
         $languages = $languagesCollection->pluck(['name']);
 
@@ -661,7 +664,7 @@ class ReportsController extends Controller
                 $term->Term_Code => $counter
             ];
         }
-        
+
         $containerArab = [];
         foreach ($termsGte2019 as $term) {
             $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD')->where('L', 'A');
@@ -703,7 +706,7 @@ class ReportsController extends Controller
             $counterSpanish = $class2019->count();
             $containerSpanish[] = $counterSpanish;
         }
-        
+
         $records = array_map(null, $containerArab, $containerChinese, $containerEnglish, $containerFrench, $containerRussian, $containerSpanish);
 
         $obj = (object) [
@@ -725,13 +728,12 @@ class ReportsController extends Controller
         foreach ($termsGte2019 as $valueTermCode) {
             $containerTerms[] = $valueTermCode->Term_Code;
         }
-        
+
         $container = [];
         foreach ($termsGte2019 as $term) {
             $class2019 = Classroom::where('Te_Term', $term->Term_Code)->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
             $counter = $class2019->count();
             $container[] = $counter;
-            
         }
 
         $mergedArrayRegistrations = $container;

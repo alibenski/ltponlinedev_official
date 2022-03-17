@@ -133,14 +133,16 @@
 						<th>Language</th>
 						<th>Description</th>
 						<th>Teacher</th>
-						<th>Price USD</th>
+						{{-- <th>Price USD</th> --}}
 						<th>Duration</th>
 						<th>Organization</th>
 						<th>SelfPayment</th>
+						<th>MOU</th>
+						<th>Sales Orders</th>
 						<th>Profile</th>
 						<th>Name</th>
 						<th>Gender</th>
-						<th>RESULT</th>
+						{{-- <th>RESULT</th> --}}
 						<th>Cancelled Not Billed</th>
 						<th>Excluded From Billing</th>
 						<th>Cancel Date</th>
@@ -152,14 +154,16 @@
 						<th>Language</th>
 						<th>Description</th>
 						<th>Teacher</th>
-						<th>Price USD</th>
+						{{-- <th>Price USD</th> --}}
 						<th>Duration</th>
 						<th>Organization</th>
 						<th>SelfPayment</th>
+						<th>MOU</th>
+						<th>Sales Orders</th>
 						<th>Profile</th>
 						<th>Name</th>
 						<th>Gender</th>
-						<th>RESULT</th>
+						{{-- <th>RESULT</th> --}}
 						<th>Cancelled Not Billed</th>
 						<th>Excluded From Billing</th>
 						<th>Cancel Date</th>
@@ -324,10 +328,12 @@ $(document).ready(function() {
 							{ "data": "courses.Description" }, 
 							{ "data": "classrooms.teachers.Tch_Name",
 		        					"defaultContent": "" }, 
-							{ "data": "courseschedules.prices.price_usd" }, 
+							// { "data": "courseschedules.prices.price_usd" }, 
 							{ "data": "courseschedules.courseduration.duration_name_en" }, 
 							{ "data": "DEPT" },  
 							{ "data": "is_self_pay_form" },  
+							{ "data": "organizations.MOU" },  
+							{ "data": "organizations.sales_order" },  
 							{ "data": function ( row, type, val, meta ) {
 									if (row.hasOwnProperty('enrolments')) {
 										if (row.enrolments.length > 0) {
@@ -354,33 +360,33 @@ $(document).ready(function() {
 								}
 							
 							}, 
-							{ "data": "Result", "className": "result" },
+							// { "data": "Result", "className": "result" },
 							{ "data": "cancelled_but_not_billed" },
 							{ "data": "exclude_from_billing" },
 							{ "data": "deleted_at" }
 								],
-					"createdRow": function( row, data, dataIndex ) {
-								if ( data['Result'] == 'P') {
-								$(row).addClass( 'pass' );
-								$(row).find("td.result").text('PASS');
-								}
+					// "createdRow": function( row, data, dataIndex ) {
+					// 			if ( data['Result'] == 'P') {
+					// 			$(row).addClass( 'pass' );
+					// 			$(row).find("td.result").text('PASS');
+					// 			}
 
-								if ( data['Result'] == 'F') {
-								$(row).addClass( 'label-danger' );
-								$(row).find("td.result").text('Fail');
-								}
+					// 			if ( data['Result'] == 'F') {
+					// 			$(row).addClass( 'label-danger' );
+					// 			$(row).find("td.result").text('Fail');
+					// 			}
 
-								if ( data['Result'] == 'I') {
-								$(row).addClass( 'label-warning' );
-								$(row).find("td.result").text('Incomplete');
-								}
+					// 			if ( data['Result'] == 'I') {
+					// 			$(row).addClass( 'label-warning' );
+					// 			$(row).find("td.result").text('Incomplete');
+					// 			}
 
-								if ( data['deleted_at'] !== null) {
-								$(row).addClass( 'bg-navy' );
-								$(row).find("td.result").text('Late Cancellation');
-								}
+					// 			if ( data['deleted_at'] !== null) {
+					// 			$(row).addClass( 'bg-navy' );
+					// 			$(row).find("td.result").text('Late Cancellation');
+					// 			}
 
-							}
+					// 		}
 				})
 			}		
 	}
