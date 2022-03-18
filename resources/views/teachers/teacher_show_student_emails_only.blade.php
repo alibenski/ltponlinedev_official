@@ -2,9 +2,10 @@
   <div class="preloader2"><p>Please wait... Fetching data from the database...</p></div>
   <h4><strong>Student Emailss of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
   
-  <h5 style="margin-left: 1.5rem">{{$course->Term}}-{{substr($course->courses->Description, 0, 2)}} {{substr($course->courses->Description, strpos($course->courses->Description, ": ") + 1)}}-{{substr($course->classrooms->teachers->Tch_Firstname, 0, 1)}}. {{$course->classrooms->teachers->Tch_Lastname}}-{{substr($course->schedules->name, 0, 3)}}@if (($pos = strrpos($course->schedules->name, "&")) !== FALSE)&{{str_replace(' ','',substr($course->schedules->name, $pos + 1, 4))}} @endif
-									@if(\Carbon\Carbon::parse($course->schedules->begin_time) < \Carbon\Carbon::parse('1899-12-30 12:00:00'))Morning @else Lunch @endif // {{$course->CodeClass}}</h5>
-  <table class="table table-bordered table-striped">
+  <h4 style="margin-left: 1.5rem"><b>Class Code:</b> {{$course->Term}}-{{substr($course->courses->Description, 0, 2)}} {{substr($course->courses->Description, strpos($course->courses->Description, ": ") + 1)}}-{{substr($course->classrooms->teachers->Tch_Firstname, 0, 1)}}. {{$course->classrooms->teachers->Tch_Lastname}}-{{substr($course->schedules->name, 0, 3)}}@if (($pos = strrpos($course->schedules->name, "&")) !== FALSE)&{{str_replace(' ','',substr($course->schedules->name, $pos + 1, 4))}} @endif
+									@if(\Carbon\Carbon::parse($course->schedules->begin_time) < \Carbon\Carbon::parse('1899-12-30 12:00:00'))Morning @else Lunch @endif // {{$course->CodeClass}}</h4>
+  <br />                  
+  <table id="sampol" class="table table-bordered table-striped">
       <thead>
           <tr>
               <th>Email addresses</th>
@@ -25,26 +26,18 @@
   <input type="hidden" name="_token" value="{{ Session::token() }}">
 
 </div>
-<div id="modalshow" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body-schedule">
-            </div> 
-            <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 $(document).ready(function () {
+    $('#sampol').DataTable({
+        "fixedHeader": true,
+        "deferRender": true,
+        "dom": 'B<"clear">lfrtip',
+        "pageLength": 50,
+        "buttons": [
+                'copy', 'csv', 'excel', 'pdf'
+            ],
+    });
     $(".preloader2").fadeOut(600);
-    
 });
 </script>
 <script> 
