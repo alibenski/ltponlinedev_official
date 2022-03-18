@@ -123,6 +123,7 @@
 						{{-- <button id="manageAttendanceBtn" value="{{ $classroom->Code}}" class="btn btn-default">Manage Attendance</button> --}}
 						<a href="{{ route('teacher-select-week', $classroom->Code) }}" class="btn btn-default btn-space">Manage Attendance</a>
 						<button id="enterResultsBtn" value="{{ $classroom->Code}}" class="btn btn-default btn-space">Enter Results</button>
+                        <button id="showStudentEmailsBtn" value="{{ $classroom->Code}}" class="btn btn-default btn-space">Show Emails for Moodle</button>
 						{{-- <form action="{{ route('teacher-manage-attendance') }}" method="GET">
 							<button type="submit" class="btn btn-default btn-space">Manage Attendance</button>
 							<input type="hidden" value="{{ $classroom->Code}}" name="Code">
@@ -276,6 +277,41 @@ $("button[id='showStudentsBtn']").click(function(){
       console.log("complete show students");
   });
 }); 
+
+$("button[id='showStudentEmailsBtn']").click(function(){
+  var Code = $(this).val();
+  var token = $("input[name='_token']").val();
+
+  $("button[id='showStudentEmailsBtn'][value='"+Code+"']").addClass('btn-success');
+  $("button[id='showStudentEmailsBtn'][value='"+Code+"']").removeClass('btn-default');
+  $("button").not("button[id='showStudentEmailsBtn'][value='"+Code+"']").addClass('btn-default');
+  $("button").not("button[id='showStudentEmailsBtn'][value='"+Code+"']").removeClass('btn-success');
+
+
+  $.ajax({
+      url: "{{ route('teacher-show-student-emails-only') }}", 
+      method: 'POST',
+      data: {Code:Code, _token:token},
+  })
+  .done(function(data) {
+  		// console.log(data)
+        $(".students-here").html(data);
+        $(".students-here").html(data.options);
+        
+        if (!$.isArray(data)) {
+            alert("An error occured while loading Show Students Page. Click OK to reload.");
+            window.location.reload();
+        }
+  })
+  .fail(function(data) {
+      console.log("error");
+      alert("An error occured while loading Show Students Page. Click OK to reload.");
+      window.location.reload();
+  })
+  .always(function(data) {
+      console.log("complete show students");
+  });
+});
 
 $("button[id='enterResultsBtn']").click(function(){
   var Code = $(this).val();
