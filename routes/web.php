@@ -147,6 +147,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     Route::post('teacher-show-students', ['as' => 'teacher-show-students', 'uses' => 'TeachersController@teacherShowStudents']);
 
+    Route::post('teacher-show-student-emails-only', ['as' => 'teacher-show-student-emails-only', 'uses' => 'TeachersController@teacherShowStudentEmailsOnly']);
+
     Route::post('teacher-enter-results', ['as' => 'teacher-enter-results', 'uses' => 'TeachersController@teacherEnterResults']);
 
     Route::put('ajax-save-results', ['as' => 'ajax-save-results', 'uses' => 'TeachersController@ajaxSaveResults']);

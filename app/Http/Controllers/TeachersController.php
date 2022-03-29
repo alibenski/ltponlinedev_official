@@ -34,7 +34,7 @@ class TeachersController extends Controller
 
     public function teacherDashboard(Request $request)
     {
-        if ( Auth::user()->hasRole('Teacher')) {
+        if (Auth::user()->hasRole('Teacher')) {
             $terms = Term::orderBy('Term_Code', 'desc')->get();
 
             if (is_object(Auth::user()->teachers)) {
@@ -45,15 +45,15 @@ class TeachersController extends Controller
                     ->where('Tch_ID', '!=', 'TBD')
                     ->where('Te_Term', Session::get('Term'))
                     ->get();
-    
+
                 return view('teachers.teacher_dashboard', compact('terms', 'assigned_classes', 'all_classes'));
             }
 
             // notify admin by email
-                Mail::raw("User->Teacher is a non-object id ".Auth::id(), function($message) {
+            Mail::raw("User->Teacher is a non-object id " . Auth::id(), function ($message) {
                 $message->from('ltp_web_admin@unog.ch', 'CLM Language Web Admin');
-                $message->to('allyson.frias@un.org')->subject("User->Teacher is a non-object".Auth::id());
-                });
+                $message->to('allyson.frias@un.org')->subject("User->Teacher is a non-object" . Auth::id());
+            });
 
             $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');
             return redirect()->route('home');
@@ -61,7 +61,6 @@ class TeachersController extends Controller
 
         $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');
         return redirect()->route('home');
-
     }
 
     public function teacherSearchUser()
@@ -646,12 +645,12 @@ class TeachersController extends Controller
 
     public function teacherViewClassrooms(Request $request)
     {
-        if ( Auth::user()->hasRole('Teacher')) {
+        if (Auth::user()->hasRole('Teacher')) {
             $assigned_classes = Classroom::where('Tch_ID', Auth::user()->teachers->Tch_ID)
                 ->where('Te_Term', Session::get('Term'))
                 ->get();
-    
-            return view('teachers.teacher_view_classrooms', compact('assigned_classes'));    
+
+            return view('teachers.teacher_view_classrooms', compact('assigned_classes'));
         }
 
         $request->session()->flash('error', 'Insufficient access rights. You have been redirected.');
@@ -664,8 +663,7 @@ class TeachersController extends Controller
             // ->where('Tch_ID', '!=', 'TBD')
             ->where('Te_Term', Session::get('Term'))
             ->get()
-            ->sortBy('course.level')
-            ;
+            ->sortBy('course.level');
 
         return view('teachers.teacher_view_all_classrooms', compact('assigned_classes'));
     }
@@ -698,6 +696,32 @@ class TeachersController extends Controller
         }
 
         $data = view('teachers.teacher_show_students', compact('course', 'form_info'))->render();
+        return response()->json([$data]);
+    }
+
+    public function teacherShowStudentEmailsOnly(Request $request)
+    {
+        $form_info = Repo::withTrashed()
+            ->where('CodeClass', $request->Code)
+            ->where('Term', Session::get('Term'))
+            ->join('users', 'LTP_PASHQTcur.INDEXID', '=', 'users.indexno')
+            ->orderBy('users.nameLast', 'asc')
+            ->select('LTP_PASHQTcur.*')
+            ->get();
+
+        $course = Repo::where('CodeClass', $request->Code)
+            ->where('Term', Session::get('Term'))
+            ->first();
+
+        if (is_null($course)) {
+            return view('errors.404_custom');
+        }
+
+        if (is_null($form_info)) {
+            return view('errors.404_custom');
+        }
+
+        $data = view('teachers.teacher_show_student_emails_only', compact('course', 'form_info'))->render();
         return response()->json([$data]);
     }
 
@@ -877,7 +901,7 @@ class TeachersController extends Controller
 
     public function ajaxCheckIfNotAssigned(Request $request)
     {
-        
+
         if ($request->ajax()) {
             $indexid = $request->indexid;
             $language = $request->L;
@@ -1110,7 +1134,7 @@ class TeachersController extends Controller
                 ->where('eform_submit_count', $eform_submit_count)
                 ->where('Term', $term)
                 ->get();
-            
+
             if ($enrolment_to_be_copied->count() > 1) {
                 $updated_enrolment_record = $this->verifyAndNotAssignRecords($assign_modal, $enrolment_to_be_copied, $teacher_comments);
                 $data = $updated_enrolment_record;
@@ -1425,17 +1449,17 @@ class TeachersController extends Controller
             $pash_record->update([
                 'no_show' => 1,
                 'no_show_by' => Auth::user()->id,
-    
+
             ]);
             $classroom = $pash_record->classrooms->course->Description;
             $schedule = $pash_record->classrooms->scheduler->name;
-    
-            Mail::raw("Student (".$pash_record->users->name.") marked as NO-SHOW in ". $classroom ." - ". $schedule ." by ".Auth::user()->name, function ($message) use($pash_record) {
-                    $message->from('clm_language@unog.ch', 'CLM Online [Do Not Reply]');
-                    $message->to(['clm_language@un.org'])->subject('Student ('.$pash_record->users->name.') marked as NO-SHOW');
-                });
+
+            Mail::raw("Student (" . $pash_record->users->name . ") marked as NO-SHOW in " . $classroom . " - " . $schedule . " by " . Auth::user()->name, function ($message) use ($pash_record) {
+                $message->from('clm_language@unog.ch', 'CLM Online [Do Not Reply]');
+                $message->to(['clm_language@un.org'])->subject('Student (' . $pash_record->users->name . ') marked as NO-SHOW');
+            });
             $data = $pash_record;
-    
+
             return response()->json($data);
         }
 
