@@ -1,5 +1,5 @@
 @extends('admin.admin')
-
+@section('tabtitle', 'Custom Billing Report')
 @section('customcss')
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
@@ -24,12 +24,12 @@
 				<div class="col-sm-12">
 					<div class="row">
 						<div class="col-md-12">
-							<div class="alert alert-info">
+							<div class="alert alert-warning">
 								<p class="text-justify"><i class="fa fa-info-circle"></i> Information about the data below: <br />
 								<ul>
 									<li>Includes students who cancelled late after deadline</li>
-									<li>Late cancellations can be filtered with Cancelled Not Billed column</li>
-									<li>Late cancellations can be filtered with Excluded From Billing column</li>
+									<li>DOES NOT include late cancellations but not billed</li>
+									<li>DOES NOT include forms which were excluded from billing</li>
 								</ul>
 								</p>
 							</div>
