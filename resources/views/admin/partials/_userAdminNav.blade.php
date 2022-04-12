@@ -1,4 +1,5 @@
 
+	@hasrole('Admin')
 	<ul class="nav nav-tabs">
 		@if (Auth::user()->id == 3292)
 		<li role="presentation" class="{{ Request::is('*manage-user-enrolment-data-by-history') ? "active" : ""}}"><a href="/admin/user/{{$student->id}}/manage-user-enrolment-data-by-history">LTP Data by History</a></li>
@@ -20,3 +21,4 @@
 			</ul>
 		</li>-->
 	</ul>
+	@endhasrole
