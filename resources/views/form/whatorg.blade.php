@@ -85,6 +85,10 @@
                       </select>
                     </div>
                     <p class="small text-danger"><strong>You can search for your organization directly or scroll through the box / drop-down menu.</strong></p>
+
+                    <div id="countrySectionMain"></div>
+                    <div id="ngoSectionMain"></div>
+
                   </div>
                 </div>
 

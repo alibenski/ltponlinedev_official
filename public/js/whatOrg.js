@@ -103,7 +103,7 @@ $('select[id="profile"]').on('change', function () {
 });
 
 // ajax post on change event of Org dropdown
-$('select[id="input"]').change(function () {
+$('select[id="input"]').on("change", function () {
   var dOrg = $('select[id="input"]').val();
   var dProfile = $('select[id="profile"]').val();
   var dDecision = $('input[name="decision"]:checked').val();
@@ -133,6 +133,22 @@ function orgCompare(dProfile, dOrg, dDecision, token) {
         $('button[type="submit"]').addClass("btn-success", 800);
         console.log('t profile: ' + dProfile);
         console.log('t decision: ' + dDecision);
+
+        // check if MSU or NGO and show related fields (required)
+        if(dOrg === "MSU") {
+          $.ajax({
+              url: "{{ route('ajax-select-country') }}", 
+              method: 'GET',
+              success: function(data, status) {
+                  console.log(data)
+              $("#countrySectionMain").html("");
+              $("#countrySectionMain").html(data.options);
+              }
+          });  
+        }
+        if(dOrg === "NGO") {
+          $("#ngoSectionMain").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+        }
       }
     });
   } else {
