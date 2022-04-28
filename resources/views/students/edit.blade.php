@@ -143,7 +143,8 @@
                                     {{-- apply jS or HTML preferred characters for this field --}}
                                     <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                                 </div>
-                                <input id="email" name="email" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->email }} @endif" class="form-control"  type="text">                                    
+                                <input id="email" name="email" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->email }} @endif" class="form-control"  type="text" @if(substr($student->email, strpos($student->email, "@") + 1)   === "un.org") disabled @endif>
+                                @if(substr($student->email, strpos($student->email, "@") + 1)   === "un.org") <p class="small text-danger"><strong>IMPORTANT NOTE:</strong> You are using the official un.org email address. You cannot change your email address without approval. Please send an email to the language secretariat (<a href="mailto:clm_language@un.org">click here</a>) and provide the new email address with a justification for the change. </p> @endif                                
                                 <p class="small text-danger"><strong>IMPORTANT NOTE:</strong> Once you change your email address, this will become <strong>your login and your official email address</strong> to which we will be sending notifications and other future correspondences.</p>
                             </div>
                         </div>

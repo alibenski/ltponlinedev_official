@@ -196,7 +196,7 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;"></h1>
                                     <p>Dear {{ $staff_name }}, </p>
                                     <p style="text-align: justify">
-                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>. (Monday 3 January is a United Nations holiday, no courses will take place that day). Please see below the information about your course:
+                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>. (Monday 18 April is a United Nations holiday, no courses will take place that day). Please see below the information about your course:
                                     </p>
                                     
                                     <p>
@@ -355,7 +355,7 @@
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
                                     <p>Cher / Chère {{ $staff_name }},</p>
                                     <p style="text-align: justify">
-                                        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong> (le lundi 3 janvier étant un jour férié aux Nations Unies, aucun cours n’aura lieu ce jour-là). Voici ci-dessous les informations relatives à votre cours :
+                                        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong> (le lundi 18 avril étant un jour férié aux Nations Unies, aucun cours n’aura lieu ce jour-là). Voici ci-dessous les informations relatives à votre cours :
                                     </p>
                                     
                                     <p>
