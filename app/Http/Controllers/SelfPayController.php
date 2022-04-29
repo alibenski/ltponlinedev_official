@@ -774,6 +774,7 @@ class SelfPayController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $index_id = $request->input('index_id');
         $language_id = $request->input('L');
         $course_id = $request->input('course_id');
