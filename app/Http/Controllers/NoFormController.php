@@ -238,8 +238,21 @@ class NoFormController extends Controller
             // 'mgr_email' => 'required|email',
             'approval' => 'required',
             'org' => 'required',
+            'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
+
+        if ($org === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required|'
+            ));
+        }
+
+        if ($org === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|'
+            ));
+        }
 
         //loop for storing Code value to database
         $ingredients = [];
@@ -261,6 +274,8 @@ class NoFormController extends Controller
                 'approval' => $request->approval,
                 'continue_bool' => 0,
                 'DEPT' => $org,
+                'country_mission' => $request->input('countryMission'),
+                'ngo_name' => $request->input('ngoName'),
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,

@@ -903,6 +903,9 @@ class SelfPayController extends Controller
             'schedule_id' => 'required|',
             'course_id' => 'required|',
             'L' => 'required|',
+            'org' => 'required',
+            'regular_enrol_comment' => 'required',
+            'agreementBtn' => 'required|',
         ));
 
         if ($org === 'MSU') {

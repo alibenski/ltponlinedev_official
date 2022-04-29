@@ -235,6 +235,7 @@ class RepoController extends Controller
             // 'mgr_email' => 'required|email',
             'approval' => 'required',
             'org' => 'required',
+            'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
 
@@ -271,7 +272,7 @@ class RepoController extends Controller
                 'continue_bool' => 1,
                 'DEPT' => $org,
                 'country_mission' => $request->input('countryMission'),
-                "ngo_name" => $request->input('ngoName'),
+                'ngo_name' => $request->input('ngoName'),
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
