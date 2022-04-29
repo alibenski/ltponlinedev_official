@@ -396,6 +396,7 @@
       $(".submission-part").attr('style', 'display: none');
       $("input[name='placementDecisionB']").val("");
       $("textarea[name='course_preference_comment']").removeAttr('required'); // reset comment box as not required field
+      $("textarea[name='regular_enrol_comment']").removeAttr('required'); // reset comment box as not required field
   // populate placement schedules
       $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
@@ -485,6 +486,7 @@
               $(".placement-beginner-msg").attr('style', 'display:none');
             }
             else {
+              $("textarea[name='regular_enrol_comment']").attr('required', 'required');
               $("input[name='placementDecisionB']").removeAttr('required');
               $("input[name='placementLang']").removeAttr('required');
               $(".regular-enrol").removeAttr('style');
@@ -513,6 +515,7 @@
   });
   // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
+      $("textarea[name='regular_enrol_comment']").attr('required', 'required');
       $.get("{{ route('check-enrolment-entries-ajax') }}", function(data) {
             console.log('regular enrol form count:' + data);
             if (data >= 2) {
@@ -567,6 +570,8 @@
   // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
     $("input[name='placementDecisionB']").val("0");
+    $("textarea[name='regular_enrol_comment']").removeAttr('required');
+    $("textarea[name='course_preference_comment']").attr('required', 'required');
       $.get("{{ route('check-placement-entries-ajax') }}", function(data) {
             console.log(data.length);
             if (data.length >= 2) {
