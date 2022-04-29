@@ -60,6 +60,12 @@
                       </div>
                       <input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}@if (Auth::user()->sddextr->DEPT === 'MSU') @if (Auth::user()->sddextr->countryMission)- {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @else - (country update needed) @endif @endif @if (Auth::user()->sddextr->DEPT === 'NGO')@if (Auth::user()->sddextr->ngo_name)- {{ Auth::user()->sddextr->ngo_name }} @else - (NGO name update needed) @endif @endif" readonly> 
                       <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
+                      @if (!is_null($user->sddextr->countryMission))
+                      <input  name="countryMission" class="form-control"  type="hidden" value="{{ $user->sddextr->countryMission->id }}" readonly>
+                      @endif
+                      @if (!is_null($user->sddextr->ngo_name))
+                      <input  name="ngoName" class="form-control"  type="hidden" value="{{ $user->sddextr->ngo_name }}" readonly>
+                      @endif
                     </div>
                 </div>
 
