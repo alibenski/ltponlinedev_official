@@ -112,6 +112,10 @@
                       </select>
                     </div>
                     <p class="small text-danger"><strong>You can search for your organization directly or scroll through the box / drop-down menu.</strong></p>
+
+                    <div id="countrySectionMain"></div>
+                    <div id="ngoSectionMain"></div>
+                    
                   </div>
                 </div>
 
@@ -138,6 +142,10 @@
                 <p>It looks like you are a new student or you have changed organizations since your last enrolment. Please confirm and click the Next button.</p>
                 <label for="organization">New Organization:</label> <input id="textOrg" type="text" value="" readonly="" style="width: 100%"> <input id="inputOrg" name="" type="hidden" value="" readonly="">
               </div>
+
+              <div id="countrySection"></div>
+              <div id="ngoSection"></div>
+
               <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
                     {{-- <input id="decision2" name="decision" type="hidden" value="0"> --}}
@@ -193,4 +201,27 @@
 </script>
 
 <script src="{{ asset('js/whatOrg.js') }}"></script>
+<script>
+  function getCountry() {
+      $.ajax({
+          url: "{{ route('ajax-select-country') }}", 
+          method: 'GET',
+          success: function(data, status) {
+              console.log(data)
+          $("#countrySection").html("");
+          $("#countrySection").html(data.options);
+          }
+      });  
+  }
+
+  $("#modalshow").on("shown.bs.modal", function (e) {
+    // check if MSU or NGO and show related fields (required)
+    if($("#inputOrg").val() === "MSU") {
+      getCountry();
+    }
+    if($("#inputOrg").val() === "NGO") {
+      $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+    }
+  })
+</script>
 @stop

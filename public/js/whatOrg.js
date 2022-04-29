@@ -109,6 +109,7 @@ $('select[id="input"]').on("change", function () {
   var dDecision = $('input[name="decision"]:checked').val();
   var token = $('meta[name=csrf-token]').attr('content');
   orgCompare(dProfile, dOrg, dDecision, token);
+  showCountryNGO(dOrg);
 });
 
 function orgCompare(dProfile, dOrg, dDecision, token) {
@@ -133,25 +134,27 @@ function orgCompare(dProfile, dOrg, dDecision, token) {
         $('button[type="submit"]').addClass("btn-success", 800);
         console.log('t profile: ' + dProfile);
         console.log('t decision: ' + dDecision);
-
-        // check if MSU or NGO and show related fields (required)
-        if(dOrg === "MSU") {
-          $.ajax({
-              url: "{{ route('ajax-select-country') }}", 
-              method: 'GET',
-              success: function(data, status) {
-                  console.log(data)
-              $("#countrySectionMain").html("");
-              $("#countrySectionMain").html(data.options);
-              }
-          });  
-        }
-        if(dOrg === "NGO") {
-          $("#ngoSectionMain").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
-        }
       }
     });
   } else {
     console.log('orgSelect reset value to ' + dOrg);
   }
+}
+
+function showCountryNGO(dOrg) {
+  // check if MSU or NGO and show related fields (required)
+    if(dOrg === "MSU") {
+      $.ajax({
+          url: "/ajax-select-country", 
+          method: 'GET',
+          success: function(data, status) {
+              console.log(data)
+          $("#countrySectionMain").html("");
+          $("#countrySectionMain").html(data.options);
+          }
+      });  
+    }
+    if(dOrg === "NGO") {
+      $("#ngoSectionMain").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+    }
 }

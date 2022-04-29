@@ -238,6 +238,18 @@ class RepoController extends Controller
             'agreementBtn' => 'required|',
         ));
 
+        if ($org === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required|'
+            ));
+        }
+
+        if ($org === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|'
+            ));
+        }
+
         //loop for storing Code value to database
         $ingredients = [];
         for ($i = 0; $i < count($schedule_id); $i++) {
@@ -258,6 +270,8 @@ class RepoController extends Controller
                 'approval' => $request->approval,
                 'continue_bool' => 1,
                 'DEPT' => $org,
+                'country_mission' => $request->input('countryMission'),
+                "ngo_name" => $request->input('ngoName'),
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
