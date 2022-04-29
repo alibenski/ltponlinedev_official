@@ -393,6 +393,18 @@ class PlacementFormController extends Controller
             'course_preference_comment' => 'required|',
         ));
 
+        if ($org === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required|'
+            ));
+        }
+
+        if ($org === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|'
+            ));
+        }
+
         $qryEformCount = PlacementForm::withTrashed()
             ->where('INDEXID', $index_id)
             ->where('Term', $term_id)
@@ -409,6 +421,8 @@ class PlacementFormController extends Controller
         $placementForm->Term = $term_id;
         $placementForm->INDEXID = $index_id;
         $placementForm->DEPT = $org;
+        $placementForm->country_mission = $request->input('countryMission');
+        $placementForm->ngo_name = $request->input('ngoName');
         $placementForm->attachment_id = $attachment_identity_file->id;
         $placementForm->attachment_pay = $attachment_pay_file->id;
         $placementForm->is_self_pay_form = 1;
