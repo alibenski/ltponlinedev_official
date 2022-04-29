@@ -774,7 +774,6 @@ class SelfPayController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $index_id = $request->input('index_id');
         $language_id = $request->input('L');
         $course_id = $request->input('course_id');
@@ -906,6 +905,18 @@ class SelfPayController extends Controller
             'L' => 'required|',
         ));
 
+        if ($org === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required|'
+            ));
+        }
+
+        if ($org === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|'
+            ));
+        }
+
         //loop for storing Code value to database
         $ingredients = [];
         for ($i = 0; $i < count($schedule_id); $i++) {
@@ -927,6 +938,8 @@ class SelfPayController extends Controller
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'DEPT' => $org,
+                'country_mission' => $request->input('countryMission'),
+                "ngo_name" => $request->input('ngoName'),
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
                 'flexibleBtn' => $flexibleBtn,
