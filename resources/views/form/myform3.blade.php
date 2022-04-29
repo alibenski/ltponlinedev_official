@@ -246,7 +246,7 @@
                               <label class="col-md-12 control-label text-danger">Comments: <i>(required)</i></label>
                               <div class="col-md-12 pink-border">
                               <small class="text-danger"><i class="fa fa-warning"></i> <strong>You are required to fill this comment box. Failure to do so will nullify your submission.</strong></small>
-                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, passed LPE, etc." required=""></textarea>
+                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="Please indicate if you are available for in-person or/and online courses, preferred course, schedule flexbility, constraints, passed LPE, etc." required="required"></textarea>
                               </div>
                             </div>
 
