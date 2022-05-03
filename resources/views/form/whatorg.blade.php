@@ -53,7 +53,7 @@
                     </ul>
                   </p>
                     
-                  <p>View their respective schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank"><strong> HERE</strong></a> before proceeding below. </p>                  
+                  <p>View their respective schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank"><strong> HERE</strong></a> before proceeding below. </p>                  
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
