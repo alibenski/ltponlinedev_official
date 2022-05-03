@@ -76,7 +76,7 @@
                 <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
                   <p>Before continuing, please follow the following instructions:</p>
                   <ol>
-                    <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en.pdf" target="_blank">HERE</a></li>
+                    <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank">HERE</a></li>
                     <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
                     <li>Prepare a copy of your carte de légitimation or work certificate</li>
                   </ol>
