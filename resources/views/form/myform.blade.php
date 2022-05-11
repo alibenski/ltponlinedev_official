@@ -281,6 +281,9 @@
                             <!-- SHOW CHOICES REAL TIME -->
                     <div class="form-group col-md-12">
                       <div class="card">
+                        <div class="form-group m-2">
+                            <div class="col-md-12 alert alert-secondary"><p>Please note that your chosen course and schedule are NOT guaranteed.</p></div>
+                        </div>
                         <div class="row">        
                             <div class="form-group">
                               <label for="first" class="col-md-12 control-label" style="color: green;">Student availability 1:</label> 
