@@ -21,6 +21,8 @@ use App\SDDEXTR;
 use App\Term;
 use App\Torgan;
 use App\User;
+use App\Services\User\MsuUpdateField;
+use App\Services\User\NgoUpdateField;
 
 class LateEnrolmentController extends Controller
 {
@@ -55,8 +57,19 @@ class LateEnrolmentController extends Controller
         return view('form.late.late-what-org', compact('url', 'next_term', 'org'));
     }
 
-    public function lateWhatForm(Request $request)
+    public function lateWhatForm(Request $request, MsuUpdateField $msuUpdateField, NgoUpdateField $ngoUpdateField)
     {
+        if ($request->organization === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required',
+            ));
+        }
+
+        if ($request->organization === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required',
+            ));
+        }
         // if part of new organization, then save the new organization to sddextr     
         // save CAT to Auth User table   
         $id = Auth::id();
@@ -249,8 +262,21 @@ class LateEnrolmentController extends Controller
             // 'mgr_email' => 'required|email',
             'approval' => 'required',
             'org' => 'required',
+            'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
+
+        if ($org === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required|'
+            ));
+        }
+
+        if ($org === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|'
+            ));
+        }
 
         //loop for storing Code value to database
         $ingredients = [];
@@ -269,12 +295,14 @@ class LateEnrolmentController extends Controller
                 'approval' => $request->approval,
                 'continue_bool' => 1,
                 'DEPT' => $org,
+                'country_mission' => $request->input('countryMission'),
+                'ngo_name' => $request->input('ngoName'),
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
                 'std_comments' => $std_comments,
-                'overall_approval' => 1,
+                'overall_approval' => 1, // late enrolments are assumed pre-approved by HR Focal Points
                 'admin_eform_comment' => 'late registration form [auto-generated]',
             ]);
             foreach ($ingredients as $data) {
