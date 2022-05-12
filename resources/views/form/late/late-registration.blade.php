@@ -212,7 +212,7 @@
                               <label class="col-md-12 control-label text-danger">Comments: <i>(required)</i></label>
                               <div class="col-md-12 pink-border">
                               <small class="text-danger"><i class="fa fa-warning"></i> <strong>You are required to fill this comment box. Failure to do so will nullify your submission.</strong></small>
-                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="preferred course, schedule flexbility, constraints, passed LPE, etc." required=""></textarea>
+                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="Please indicate if you are available for in-person or/and online courses, preferred course, schedule flexbility, constraints, passed LPE, etc." required="required"></textarea>
                               </div>
                             </div>
 
@@ -265,10 +265,11 @@
                     </div> 
 
                     <div class="form-group">
-                        <label class="col-md-12 control-label">Comments: <i>(optional)</i></label>
+                        <label class="col-md-12 control-label">Comments: <span class="small text-danger"><strong>Required field</strong></span></label>
                         <div class="col-md-12">
-                          <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder=""></textarea>
-                          <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small>
+                          <span class="text-danger">Please indicate below if you are available for in-person or/and online courses and any other relevant information, for example: time constraints or a second preferred course, etc.</span>
+                          <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder="" required="required"></textarea>
+                          {{-- <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small> --}}
                         </div>
                     </div>
 
@@ -390,6 +391,7 @@
       $(".submission-part").attr('style', 'display: none');
       $("input[name='placementDecisionB']").val("");
       $("textarea[name='course_preference_comment']").removeAttr('required'); // reset comment box as not required field
+      $("textarea[name='regular_enrol_comment']").removeAttr('required'); // reset comment box as not required field
   // populate placement schedules
       $("label[for='scheduleChoices']").remove();
       $(".scheduleChoices").remove();
@@ -405,7 +407,7 @@
         $(".place-here").hide().append('<label for="scheduleChoices">If you are in Geneva, please select one of the dates shown. If you are outside Geneva, please select the <em>online</em> option.</label>').fadeIn('fast');
       } else {
         $(".alert-placement-instruction").removeClass('hidden');
-        $(".place-here").hide().append('<label for="scheduleChoices">Placement test date(s):</label>').fadeIn('fast');
+        $(".place-here").hide().append('<label for="scheduleChoices">Placement test date(s): <span class="text-danger"><em>(required)</em></span></label>').fadeIn('fast');
       }
 
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
@@ -439,10 +441,9 @@
                   if (val.is_online == 1) {
                     $(".scheduleChoices").append('<div class="input-group-prepend"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label></div>').fadeIn();
                   } else {
-                    $(".scheduleChoices").append('<div class="input-group-prepend"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +' (in person)</label></div>').fadeIn();
+                    $(".scheduleChoices").append('<div class="input-group-prepend"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label></div>').fadeIn();
                   }
               }); // end of $.each
-
               // if no schedule, tell student there is none
               if (!$("input[name='placementLang']").length){
                 console.log('no schedule input');
@@ -479,6 +480,7 @@
               $(".placement-beginner-msg").attr('style', 'display:none');
             }
             else {
+              $("textarea[name='regular_enrol_comment']").attr('required', 'required');
               $("input[name='placementDecisionB']").removeAttr('required');
               $("input[name='placementLang']").removeAttr('required');
               $(".regular-enrol").removeAttr('style');
@@ -491,7 +493,7 @@
                       if (data >= 2) {
                         alert('You are not allowed to submit more than 2 enrolment forms. You will now be redirected to the submitted forms page.');
                         $("#loader").fadeIn(500);
-                        var delay = 2000;
+                        var delay = 1000;
                         setTimeout(function() {
                         var redirUrl = "{{ route('submitted') }}";
                         $(location).attr('href',redirUrl);
@@ -507,6 +509,7 @@
   });
   // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
+      $("textarea[name='regular_enrol_comment']").attr('required', 'required');
       $.get("{{ route('late-check-enrolment-entries-ajax') }}", function(data) {
             console.log('regular enrol form count:' + data);
             if (data >= 2) {
@@ -531,7 +534,7 @@
                   $("select[name='course_id']").html('');
                   $("select[name='course_id']").html(data.options);
                   $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
-                  $("select[name='course_id'] option:not(:selected)").prop('disabled', true); // remove the other options
+                  $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
                   console.log($("select[name='course_id']").val());
                   // get schedule of selected language level 1 
                   var course_id = $("select[name='course_id']").val();
@@ -543,7 +546,6 @@
                       method: 'POST',
                       data: {course_id:course_id, _token:token, term_id:term },
                       success: function(data) {
-                        console.log(data)
                         $("select[name='schedule_id[]']").html('');
                         $("select[name='schedule_id[]']").html(data.options);
                       }
@@ -561,6 +563,8 @@
   // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
     $("input[name='placementDecisionB']").val("0");
+    $("textarea[name='regular_enrol_comment']").removeAttr('required');
+    $("textarea[name='course_preference_comment']").attr('required', 'required');
       $.get("{{ route('late-check-placement-entries-ajax') }}", function(data) {
             console.log(data.length);
             if (data.length >= 2) {
@@ -605,6 +609,7 @@
           method: 'POST',
           data: {L:L, term_id:term, _token:token},
           success: function(data, status) {
+            console.log(data);
             $("select[name='course_id']").html('');
             $("select[name='course_id']").html(data.options);
           }
