@@ -79,6 +79,10 @@ class LateEnrolmentController extends Controller
         // save organization to sddextr table
         $student->sddextr->CAT = $request->profile;
         $student->sddextr->DEPT = $request->input('organization');
+
+        $msuUpdateField->checkMsuValue($student, $request);
+        $ngoUpdateField->checkNgoValue($student, $request);
+
         $student->sddextr->save();
 
         // query Torgan table if $request->organization is selfpaying or not
@@ -360,6 +364,18 @@ class LateEnrolmentController extends Controller
             'course_preference_comment' => 'required|',
         ));
 
+        if ($org === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required|'
+            ));
+        }
+
+        if ($org === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|'
+            ));
+        }
+
         $qryEformCount = PlacementForm::withTrashed()
             ->where('INDEXID', $index_id)
             ->where('Term', $term_id)
@@ -384,12 +400,6 @@ class LateEnrolmentController extends Controller
         $placementForm->overall_approval = 1;
         $placementForm->admin_plform_comment = 'late placement registration form [auto-generated]';
         $placementForm->save();
-
-        // if (in_array($placementForm->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
-        //     $placementForm->update([
-        //         'overall_approval' => 1,
-        //     ]);
-        // }
 
         // get newly created placement form record
         $latest_placement_form = placementForm::orderBy('id', 'desc')->where('INDEXID', Auth::user()->indexno)->where('Term', $term_id)->where('L', $language_id)->first();
@@ -532,6 +542,17 @@ class LateEnrolmentController extends Controller
             'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
             'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
         ));
+
+        // validate fields for placement form
+        if ($request->placementDecisionB === '0') {
+            $this->validate($request, array(
+                'placementLang' => 'required|integer',
+                'agreementBtn' => 'required|',
+                'dayInput' => 'required|',
+                'timeInput' => 'required|',
+                'course_preference_comment' => 'required|',
+            ));
+        }
         // control the number of submitted enrolment forms
         $qryEformCount = Preenrolment::withTrashed()
             ->where('INDEXID', $index_id)
@@ -553,17 +574,6 @@ class LateEnrolmentController extends Controller
         $form_counter = 1;
         if (isset($lastValueCollection->form_counter)) {
             $form_counter = $lastValueCollection->form_counter + 1;
-        }
-
-        // validate fields for placement form
-        if ($request->placementDecisionB === '0') {
-            $this->validate($request, array(
-                'placementLang' => 'required|integer',
-                'agreementBtn' => 'required|',
-                'dayInput' => 'required|',
-                'timeInput' => 'required|',
-                'course_preference_comment' => 'required|',
-            ));
         }
 
         //Store the attachments to storage path and save in db table
@@ -614,7 +624,22 @@ class LateEnrolmentController extends Controller
             'schedule_id' => 'required|',
             'course_id' => 'required|',
             'L' => 'required|',
+            'org' => 'required',
+            'regular_enrol_comment' => 'required',
+            'agreementBtn' => 'required|',
         ));
+
+        if ($org === 'MSU') {
+            $this->validate($request, array(
+                'countryMission' => 'required|'
+            ));
+        }
+
+        if ($org === 'NGO') {
+            $this->validate($request, array(
+                'ngoName' => 'required|'
+            ));
+        }
 
         //loop for storing Code value to database
         $ingredients = [];
@@ -637,6 +662,8 @@ class LateEnrolmentController extends Controller
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'DEPT' => $org,
+                'country_mission' => $request->input('countryMission'),
+                "ngo_name" => $request->input('ngoName'),
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
                 'flexibleBtn' => $flexibleBtn,
