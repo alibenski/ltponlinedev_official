@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailLateRegister extends Mailable
+class EmailLateEnrol extends Mailable
 {
     use Queueable, SerializesModels;
     public $url;
@@ -29,7 +29,7 @@ class EmailLateRegister extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.emailLateRegister')
-            ->subject('New User Account - UNOG CLM LTP (Late)');
+        return $this->view('emails.emailLateEnrol')
+            ->subject('Late Enrolment Registration Form - UNOG CLM LTP');
     }
 }

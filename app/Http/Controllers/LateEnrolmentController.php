@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Course;
 use App\Day;
 use App\File;
+use App\Mail\EmailLateEnrol;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -20,7 +21,6 @@ use App\SDDEXTR;
 use App\Term;
 use App\Torgan;
 use App\User;
-use App\Mail\EmailLateRegister;
 
 class LateEnrolmentController extends Controller
 {
@@ -33,7 +33,7 @@ class LateEnrolmentController extends Controller
 
             $url = URL::temporarySignedRoute('late-what-org', now()->addDays(1), ['transaction' => $recordId]);
 
-            Mail::to($request->email)->send(new EmailLateRegister($url));
+            Mail::to($request->email)->send(new EmailLateEnrol($url));
 
             return response()->json($url);
         }
