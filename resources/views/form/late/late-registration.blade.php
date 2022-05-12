@@ -200,7 +200,11 @@
                                 <div class="col-md-12">
                                   @foreach ($days as $id => $name)
                                       <div class="input-group col-md-12">                             
-                                        <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}">
+                                        <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}" 
+                                        @if (substr($terms->Term_Code, -1) == '8')
+                                        checked                                            
+                                        @endif
+                                        >
                                         <label for="{{ $name }}" class="form-control-static">{{ $name }}</label>
                                       </div>
                                   @endforeach
