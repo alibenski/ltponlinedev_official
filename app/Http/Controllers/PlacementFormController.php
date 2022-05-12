@@ -348,6 +348,8 @@ class PlacementFormController extends Controller
         $placementForm->Term = $term_id;
         $placementForm->INDEXID = $index_id;
         $placementForm->DEPT = $org;
+        $placementForm->country_mission = $request->input('countryMission');
+        $placementForm->ngo_name = $request->input('ngoName');
         $placementForm->eform_submit_count = $eform_submit_count;
         // $placementForm->mgr_email = $mgr_email;
         // $placementForm->mgr_fname = $mgr_fname;
