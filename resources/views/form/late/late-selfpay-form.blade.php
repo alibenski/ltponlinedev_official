@@ -292,10 +292,18 @@
                     <div class="form-group col-md-12">
                       <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
                         <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another schedule (days/times) if the selected class is full. 
+                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another <b>schedule (days/times)</b> if the selected class is full. 
                         </label>
                       </div>
                     </div> 
+
+                    <div class="form-group col-md-12">
+                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
+                        <input id="flexibleFormat" name="flexibleFormat" class="with-font" type="checkbox" value="1">
+                        <label for="flexibleFormat" class="form-control-static">I am flexible about the delivery mode and <b>can accept either in-person or online</b> if my first choice of mode is not available. 
+                        </label>
+                      </div>
+                    </div>  
 
                     <div class="form-group">
                         <label class="col-md-12 control-label">Comments: <span class="small text-danger"><strong>Required field</strong></span></label>
