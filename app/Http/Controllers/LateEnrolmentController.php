@@ -305,6 +305,7 @@ class LateEnrolmentController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
+                'flexibleFormat' => $request->flexibleFormat,
                 'std_comments' => $std_comments,
                 'overall_approval' => 1, // late enrolments are assumed pre-approved by HR Focal Points
                 'admin_eform_comment' => 'late registration form [auto-generated]',
@@ -669,6 +670,7 @@ class LateEnrolmentController extends Controller
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
                 'flexibleBtn' => $flexibleBtn,
+                'flexibleFormat' => $request->flexibleFormat,
                 'admin_eform_comment' => 'selfpay late registration form [auto-generated]',
             ]);
 
