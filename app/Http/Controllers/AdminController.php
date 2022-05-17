@@ -57,10 +57,10 @@ class AdminController extends Controller
             foreach ($collect_term as $value) {
                 $term = $value->Term_Code;
                 $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
-                
+
                 $records = new Repo;
                 $records = $records->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
-                    
+
                 $records_1 = $records->with('users')
                     ->where('DEPT', 'OCHA')
                     ->with('terms')
@@ -83,7 +83,7 @@ class AdminController extends Controller
 
                 $pashFromPlacement = new Repo;
                 $pashFromPlacement = $pashFromPlacement->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
-                
+
                 $records_0 = $pashFromPlacement->with('users')
                     ->where('DEPT', 'OCHA')
                     ->with('terms')
@@ -104,11 +104,11 @@ class AdminController extends Controller
                     })
                     ->get();
 
-                
+
                 // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
                 $cancelledEnrolmentRecords = new Repo;
                 $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
-    
+
                 $records_2 = $cancelledEnrolmentRecords->onlyTrashed()->with('users')
                     ->where('DEPT', 'OCHA')
                     ->with('terms')
@@ -134,7 +134,7 @@ class AdminController extends Controller
 
                 $cancelledPlacementRecords = new Repo;
                 $cancelledPlacementRecords = $cancelledPlacementRecords->where('Term', $value->Term_Code)->whereNull('is_self_pay_form');
-    
+
                 $records_3 = $cancelledPlacementRecords->onlyTrashed()->with('users')
                     ->where('DEPT', 'OCHA')
                     ->with('terms')
@@ -156,27 +156,27 @@ class AdminController extends Controller
                         $query33->where('Term', $term)->whereNull('is_self_pay_form');
                     })
                     ->get();
-                
-                
+
+
                 $records_merged[] = $records_1->merge($records_0)->merge($records_2)->merge($records_3);
             }
-            
+
             $arr = [];
             foreach ($records_merged as $val) {
                 foreach ($val as $balyu) {
                     $arr[] = $balyu;
                 }
             }
-            
+
             $data = $arr;
-            
+
             return response()->json(['data' => $data]);
         }
     }
 
     public function adminExtractData2018(Request $request)
     {
-        $terms = Repo::whereBetween('Term', ['180' , '190'])->select('Term')->groupBy('Term')->get()->toArray();
+        $terms = Repo::whereBetween('Term', ['180', '190'])->select('Term')->groupBy('Term')->get()->toArray();
         $array = [];
         foreach ($terms as $v) {
             $array[] = $v['Term'];
@@ -188,10 +188,10 @@ class AdminController extends Controller
 
         foreach ($collect_term as $value) {
             $term = $value->Term_Code;
-            
+
             $records = new Repo;
             $records = $records->where('Term', $term);
-        
+
             $records_1 = $records
                 ->where('DEPT', 'OCHA')
                 ->with('terms')
@@ -208,7 +208,7 @@ class AdminController extends Controller
                 $arr[] = $balyu;
             }
         }
-        
+
         $data = $arr;
 
         return response()->json(['data' => $data]);
@@ -226,27 +226,25 @@ class AdminController extends Controller
         if ($request->term) {
             $term = $request->term;
             $fromPlacements = Repo::where('Term', $term)
-                ->whereHas('classrooms', function($q3)
-                {
+                ->whereHas('classrooms', function ($q3) {
                     $q3->whereNotNull('Tch_ID')
                         ->where('Tch_ID', '!=', 'TBD');
                 })
-                ->whereHas('courses', function($q4)
-                {
+                ->whereHas('courses', function ($q4) {
                     $q4->where('level', '!=', '1');
                 })
-                ->whereHas('placements', function($query) use ($term){
-                    $query->where('Term', $term)->whereIn('L', ['A','C','R','S'])->whereNotNull('CodeIndexID');
+                ->whereHas('placements', function ($query) use ($term) {
+                    $query->where('Term', $term)->whereIn('L', ['A', 'C', 'R', 'S'])->whereNotNull('CodeIndexID');
                 })
                 // ->whereRaw('SUBSTRING(Te_Code, 2, 2) = "1R"')
-                ->whereIn('L', ['A','C','R','S'])
+                ->whereIn('L', ['A', 'C', 'R', 'S'])
                 ->with('users')->select('INDEXID')->groupBy('INDEXID')->get()->sortBy('INDEXID');
-            
+
             $array2 = [];
             $arr2_exists = [];
             foreach ($fromPlacements as $value2) {
                 $existing2 = Repo::where('Term', '>', '190')->where('Term', '<', $term)->where('INDEXID', $value2->INDEXID)->exists();
-                if($existing2 === false){
+                if ($existing2 === false) {
                     $array2[] = [
                         'INDEXID' => $value2->INDEXID,
                         'lastname' => $value2->users->nameLast,
@@ -264,12 +262,11 @@ class AdminController extends Controller
                     ];
                 }
             }
-    
+
             $data = $array2;
-            
+
             return response()->json($data);
         }
-
     }
 
     public function adminQueryExportMoodle(Request $request)
@@ -277,8 +274,7 @@ class AdminController extends Controller
         if ($request->term) {
             $term = $request->term;
             $pash_records = Repo::where('Term', $term)
-                ->whereHas('classrooms', function($q)
-                {
+                ->whereHas('classrooms', function ($q) {
                     $q->whereNotNull('Tch_ID')
                         ->where('Tch_ID', '!=', 'TBD');
                 })
@@ -286,8 +282,7 @@ class AdminController extends Controller
                 // ->where(\DB::raw('substr(Te_Code, 2, 2)'), '=' , '1R')
                 // ->whereRaw('SUBSTRING(Te_Code, 2, 2) = "1R"')
                 // ->whereIn('L', ['A','C','R','S'])
-                ->whereHas('courses', function($q2)
-                {
+                ->whereHas('courses', function ($q2) {
                     $q2->where('level', '1');
                 })
                 ->with('users')->select('INDEXID')->groupBy('INDEXID')->get()->sortBy('Te_Code');
@@ -297,7 +292,7 @@ class AdminController extends Controller
             foreach ($pash_records as $key => $value) {
                 $existing = Repo::where('Term', '>', '190')->where('Term', '<', $term)->where('INDEXID', $value->INDEXID)->exists();
                 // $array[] = $existing;
-                if($existing === false){
+                if ($existing === false) {
                     $array[] = [
                         'INDEXID' => $value->INDEXID,
                         'lastname' => $value->users->nameLast,
@@ -315,9 +310,9 @@ class AdminController extends Controller
                     ];
                 }
             }
-    
+
             $data = $array;
-            
+
             return response()->json($data);
         }
     }
@@ -340,16 +335,16 @@ class AdminController extends Controller
         if ($request->ajax()) {
             $term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first();
             // query all students enrolled to current term excluding waitlisted
-            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT', 'Result','is_self_pay_form')->where('Term', $term->Term_Code)
+            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT', 'Result', 'is_self_pay_form')->where('Term', $term->Term_Code)
                 ->whereHas('classrooms', function ($q) {
                     $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
-                    })
-                ->with(['enrolments' => function ($q1) use($term) {
+                })
+                ->with(['enrolments' => function ($q1) use ($term) {
                     $q1->where('Term', $term->Term_Code);
-                    }])
-                ->with(['placements' => function ($q2) use($term) {
+                }])
+                ->with(['placements' => function ($q2) use ($term) {
                     $q2->where('Term', $term->Term_Code);
-                    }])
+                }])
                 ->with('users.sddextr') // access sddextr model via user model relationship
                 ->with('languages')
                 ->with('courses')
@@ -370,13 +365,13 @@ class AdminController extends Controller
         if ($request->ajax()) {
             $term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first();
             // query all students enrolled to current term including waitlisted
-            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT','is_self_pay_form')->where('Term', $term->Term_Code)
-                ->with(['enrolments' => function ($q1) use($term) {
+            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT', 'is_self_pay_form')->where('Term', $term->Term_Code)
+                ->with(['enrolments' => function ($q1) use ($term) {
                     $q1->where('Term', $term->Term_Code);
-                    }])
-                ->with(['placements' => function ($q2) use($term) {
+                }])
+                ->with(['placements' => function ($q2) use ($term) {
                     $q2->where('Term', $term->Term_Code);
-                    }])
+                }])
                 ->with('users.sddextr') // access sddextr model via user model relationship
                 ->with('languages')
                 ->with('courses')
@@ -393,7 +388,7 @@ class AdminController extends Controller
      */
     public function moveToPash()
     {
-        $results = \DB::select("INSERT into LTP_PASHQTcur (INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,is_self_pay_form,flexibleBtn,convocation_email_sent,form_counter,eform_submit_count,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments,std_comments, hr_comments, teacher_comments,  admin_eform_comment, admin_plform_comment, course_preference_comment) SELECT INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,is_self_pay_form,flexibleBtn,convocation_email_sent,form_counter,eform_submit_count,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments,std_comments, hr_comments, teacher_comments, admin_eform_comment, admin_plform_comment, course_preference_comment FROM tblLTP_preview");
+        $results = \DB::select("INSERT into LTP_PASHQTcur (INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,is_self_pay_form,flexibleBtn,flexibleFormat,convocation_email_sent,form_counter,eform_submit_count,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments,std_comments, hr_comments, teacher_comments,  admin_eform_comment, admin_plform_comment, course_preference_comment) SELECT INDEXID,CodeIndexIDClass,CodeClass,CodeIndexID,Code,schedule_id,Te_Code,L,is_self_pay_form,flexibleBtn,flexibleFormat,convocation_email_sent,form_counter,eform_submit_count,Term,DEPT,PS,created_at,UpdatedOn,deleted_at,EMAIL,Comments,std_comments, hr_comments, teacher_comments, admin_eform_comment, admin_plform_comment, course_preference_comment FROM tblLTP_preview");
     }
 
     public function setSessionTerm(Request $request)
@@ -423,29 +418,29 @@ class AdminController extends Controller
                 ->get();
 
             foreach ($approvedEnrolmentForms as $key => $value) {
-                $arrIndexEnrolment[] = $value->INDEXID.'-'.$value->L;
+                $arrIndexEnrolment[] = $value->INDEXID . '-' . $value->L;
             }
 
             $arrIndexPlacement = [];
-            $approvedPlacementForms = PlacementForm::select('INDEXID','L')
+            $approvedPlacementForms = PlacementForm::select('INDEXID', 'L')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
                 ->whereNotNull('modified_by')
-                ->groupBy('INDEXID','L')
+                ->groupBy('INDEXID', 'L')
                 ->get();
 
             foreach ($approvedPlacementForms as $keyP => $valueP) {
-                $arrIndexPlacement[] = $valueP->INDEXID.'-'.$valueP->L;
+                $arrIndexPlacement[] = $valueP->INDEXID . '-' . $valueP->L;
             }
 
             $arrIndexPASH = [];
-            $qryPASH = Repo::withTrashed()->select('INDEXID','L')
+            $qryPASH = Repo::withTrashed()->select('INDEXID', 'L')
                 ->where('Term', $request->session()->get('Term'))
-                ->groupBy('INDEXID','L')
+                ->groupBy('INDEXID', 'L')
                 ->get();
 
             foreach ($qryPASH as $key1 => $value1) {
-                $arrIndexPASH[] = $value1->INDEXID.'-'.$value1->L;
+                $arrIndexPASH[] = $value1->INDEXID . '-' . $value1->L;
             }
 
             $diffEnrolPASH = array_diff($arrIndexEnrolment, $arrIndexPASH);
@@ -649,37 +644,37 @@ class AdminController extends Controller
             $termSet = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->session()->get('Term'))->first();
 
             $arrIndexEnrolment = [];
-            $approvedEnrolmentForms = Preenrolment::select('INDEXID','L')
+            $approvedEnrolmentForms = Preenrolment::select('INDEXID', 'L')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
                 ->whereNotNull('modified_by')
-                ->groupBy('INDEXID','L')
+                ->groupBy('INDEXID', 'L')
                 ->get();
 
             foreach ($approvedEnrolmentForms as $key => $value) {
-                $arrIndexEnrolment[] = $value->INDEXID.'-'.$value->L;
+                $arrIndexEnrolment[] = $value->INDEXID . '-' . $value->L;
             }
 
             $arrIndexPlacement = [];
-            $approvedPlacementForms = PlacementForm::select('INDEXID','L')
+            $approvedPlacementForms = PlacementForm::select('INDEXID', 'L')
                 ->where('Term', $request->session()->get('Term'))
                 ->where('overall_approval', 1)
                 ->whereNotNull('modified_by')
-                ->groupBy('INDEXID','L')
+                ->groupBy('INDEXID', 'L')
                 ->get();
 
             foreach ($approvedPlacementForms as $keyP => $valueP) {
-                $arrIndexPlacement[] = $valueP->INDEXID.'-'.$valueP->L;
+                $arrIndexPlacement[] = $valueP->INDEXID . '-' . $valueP->L;
             }
 
             $arrIndexPASH = [];
-            $qryPASH = Repo::withTrashed()->select('INDEXID','L')
+            $qryPASH = Repo::withTrashed()->select('INDEXID', 'L')
                 ->where('Term', $request->session()->get('Term'))
-                ->groupBy('INDEXID','L')
+                ->groupBy('INDEXID', 'L')
                 ->get();
 
             foreach ($qryPASH as $key1 => $value1) {
-                $arrIndexPASH[] = $value1->INDEXID.'-'.$value1->L;
+                $arrIndexPASH[] = $value1->INDEXID . '-' . $value1->L;
             }
 
             $diffEnrolPASH = array_diff($arrIndexEnrolment, $arrIndexPASH);

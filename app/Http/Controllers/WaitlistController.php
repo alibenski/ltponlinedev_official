@@ -468,6 +468,7 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 2,
                     ]);
                     foreach ($ingredients2 as $data2) {
@@ -551,6 +552,7 @@ class WaitlistController extends Controller
                         'form_counter' => $value_placement->form_counter,
                         'agreementBtn' => $value_placement->agreementBtn,
                         'flexibleBtn' => $value_placement->flexibleBtn,
+                        'flexibleFormat' => $value_placement->flexibleFormat,
                         'PS' => 2,
                     ]);
                     foreach ($placement_ingredients2 as $placement_data2) {
@@ -602,6 +604,7 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 3,
                     ]);
                     foreach ($ingredients3 as $data) {
@@ -645,6 +648,7 @@ class WaitlistController extends Controller
                         'form_counter' => $value4->form_counter,
                         'agreementBtn' => $value4->agreementBtn,
                         'flexibleBtn' => $value4->flexibleBtn,
+                        'flexibleFormat' => $value4->flexibleFormat,
                         'PS' => 4,
                     ]);
                     foreach ($ingredients4 as $data4) {
