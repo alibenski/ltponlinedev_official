@@ -55,11 +55,11 @@ class PreviewController extends Controller
                 ->where('Te_Term', $request->term_id)
                 // ->whereNull('Code')
                 ->with('course')
-                ->select( 'specialized', 'Te_Code_New', 'L')
-                ->groupBy( 'specialized', 'Te_Code_New', 'L')
+                ->select('specialized', 'Te_Code_New', 'L')
+                ->groupBy('specialized', 'Te_Code_New', 'L')
                 ->get()
                 // ->sortBy('course.id')
-                ;
+            ;
 
             $data = view('preview-course-boxes', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
@@ -91,18 +91,18 @@ class PreviewController extends Controller
      * 
      * Ajax call to get all pending Placement forms for the selected Term
      * 
-    **/
+     **/
     public function ajaxPreviewGetPendingPlacementCount(Request $request)
     {
         $term = Session::get('Term');
 
         $placement_forms = PlacementForm::select('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
-        ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
-        ->whereNull('CodeIndexID')
-        ->where('overall_approval', 1)
-        ->where('L', $request->languageSelected)
-        ->where('Term', $term)
-        ->get()->count();
+            ->groupBy('selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at')
+            ->whereNull('CodeIndexID')
+            ->where('overall_approval', 1)
+            ->where('L', $request->languageSelected)
+            ->where('Term', $term)
+            ->get()->count();
 
         $data = $placement_forms;
         return response()->json($data);
@@ -254,8 +254,7 @@ class PreviewController extends Controller
                 ->get()
                 ->sortBy('Te_Code_New')
                 ->sortBy('course.level')
-                ->groupBy('courseSchedule.specialized')
-                ;
+                ->groupBy('courseSchedule.specialized');
 
             $data = view('preview-class-boxes', compact('classrooms'))->render();
             return response()->json(['options' => $data]);
@@ -276,15 +275,15 @@ class PreviewController extends Controller
                 // ->toArray();
                 ->pluck('CodeClass')
                 ->toArray();
-    
-    
+
+
             // $data = $count;
             $data = array_count_values($count);
             return response()->json($data);
         }
 
         $data = [
-            "status" => "fail", 
+            "status" => "fail",
             "message" => "Error getting student count per class."
         ];
         return response()->json($data);
@@ -299,11 +298,10 @@ class PreviewController extends Controller
         }
 
         $data = [
-            "status" => "fail", 
+            "status" => "fail",
             "message" => "Error getting student count per class."
         ];
         return response()->json($data);
-
     }
 
     public function viewClassroomsPerSection($code)
@@ -1198,6 +1196,7 @@ class PreviewController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleFormat' => $value->flexibleFormat,
                     'is_self_pay_form' => $value->is_self_pay_form,
                     'PS' => 1,
                     'std_comments' => $value->std_comments,
@@ -1291,6 +1290,7 @@ class PreviewController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleFormat' => $value->flexibleFormat,
                     'is_self_pay_form' => $value->is_self_pay_form,
                     'PS' => 2,
                     'std_comments' => $value->std_comments,
@@ -1414,6 +1414,7 @@ class PreviewController extends Controller
                     'form_counter' => $value_placement->form_counter,
                     'agreementBtn' => $value_placement->agreementBtn,
                     'flexibleBtn' => $value_placement->flexibleBtn,
+                    'flexibleFormat' => $value_placement->flexibleFormat,
                     'is_self_pay_form' => $value_placement->is_self_pay_form,
                     'PS' => 2,
                     'std_comments' => $value_placement->std_comments,
@@ -1490,6 +1491,7 @@ class PreviewController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleFormat' => $value->flexibleFormat,
                     'is_self_pay_form' => $value->is_self_pay_form,
                     'PS' => 3,
                     'std_comments' => $value->std_comments,
@@ -1595,6 +1597,7 @@ class PreviewController extends Controller
                     'form_counter' => $value4->form_counter,
                     'agreementBtn' => $value4->agreementBtn,
                     'flexibleBtn' => $value4->flexibleBtn,
+                    'flexibleFormat' => $value4->flexibleFormat,
                     'is_self_pay_form' => $value4->is_self_pay_form,
                     'PS' => 4,
                     'std_comments' => $value4->std_comments,
@@ -1655,6 +1658,7 @@ class PreviewController extends Controller
                 'form_counter' => $value->form_counter,
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
+                'flexibleFormat' => $value->flexibleFormat,
                 'is_self_pay_form' => $value->is_self_pay_form,
                 'PS' => 5,
                 'std_comments' => $value->std_comments,
@@ -1702,6 +1706,7 @@ class PreviewController extends Controller
                 'form_counter' => $valuePlacement->form_counter,
                 'agreementBtn' => $valuePlacement->agreementBtn,
                 'flexibleBtn' => $valuePlacement->flexibleBtn,
+                'flexibleFormat' => $valuePlacement->flexibleFormat,
                 'is_self_pay_form' => $valuePlacement->is_self_pay_form,
                 'PS' => 5,
                 'std_comments' => $valuePlacement->std_comments,
@@ -1824,6 +1829,7 @@ class PreviewController extends Controller
                                 'form_counter' => $value->form_counter,
                                 'agreementBtn' => $value->agreementBtn,
                                 'flexibleBtn' => $value->flexibleBtn,
+                                'flexibleFormat' => $value->flexibleFormat,
                                 'is_self_pay_form' => $value->is_self_pay_form,
                                 'PS' => $value->PS,
                                 'std_comments' => $value->std_comments,
@@ -1898,6 +1904,7 @@ class PreviewController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleFormat' => $value->flexibleFormat,
                         'is_self_pay_form' => $value->is_self_pay_form,
                         'PS' => $value->PS,
                         'std_comments' => $value->std_comments,
@@ -2417,6 +2424,7 @@ class PreviewController extends Controller
                             'form_counter' => $value->form_counter,
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
+                            'flexibleFormat' => $value->flexibleFormat,
                             'is_self_pay_form' => $value->is_self_pay_form,
                             'PS' => 1,
                             'std_comments' => $value->std_comments,
@@ -2497,6 +2505,7 @@ class PreviewController extends Controller
                             'form_counter' => $value->form_counter,
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
+                            'flexibleFormat' => $value->flexibleFormat,
                             'is_self_pay_form' => $value->is_self_pay_form,
                             'PS' => 2,
                             'std_comments' => $value->std_comments,
@@ -2593,6 +2602,7 @@ class PreviewController extends Controller
                             'form_counter' => $value_placement->form_counter,
                             'agreementBtn' => $value_placement->agreementBtn,
                             'flexibleBtn' => $value_placement->flexibleBtn,
+                            'flexibleFormat' => $value_placement->flexibleFormat,
                             'is_self_pay_form' => $value_placement->is_self_pay_form,
                             'PS' => 2,
                             'std_comments' => $value_placement->std_comments,
@@ -2657,6 +2667,7 @@ class PreviewController extends Controller
                             'form_counter' => $value->form_counter,
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
+                            'flexibleFormat' => $value->flexibleFormat,
                             'is_self_pay_form' => $value->is_self_pay_form,
                             'PS' => 3,
                             'std_comments' => $value->std_comments,
@@ -2739,6 +2750,7 @@ class PreviewController extends Controller
                         'form_counter' => $value4->form_counter,
                         'agreementBtn' => $value4->agreementBtn,
                         'flexibleBtn' => $value4->flexibleBtn,
+                        'flexibleFormat' => $value4->flexibleFormat,
                         'is_self_pay_form' => $value4->is_self_pay_form,
                         'PS' => 4,
                         'std_comments' => $value4->std_comments,
@@ -2792,6 +2804,7 @@ class PreviewController extends Controller
                     'form_counter' => $value5->form_counter,
                     'agreementBtn' => $value5->agreementBtn,
                     'flexibleBtn' => $value5->flexibleBtn,
+                    'flexibleFormat' => $value5->flexibleFormat,
                     'is_self_pay_form' => $value5->is_self_pay_form,
                     'PS' => 5,
                     'std_comments' => $value5->std_comments,
@@ -2841,6 +2854,7 @@ class PreviewController extends Controller
                     'form_counter' => $valuePlacement5->form_counter,
                     'agreementBtn' => $valuePlacement5->agreementBtn,
                     'flexibleBtn' => $valuePlacement5->flexibleBtn,
+                    'flexibleFormat' => $valuePlacement5->flexibleFormat,
                     'is_self_pay_form' => $valuePlacement5->is_self_pay_form,
                     'PS' => 5,
                     'std_comments' => $valuePlacement5->std_comments,
