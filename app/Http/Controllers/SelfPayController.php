@@ -946,6 +946,7 @@ class SelfPayController extends Controller
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
                 'flexibleBtn' => $flexibleBtn,
+                'flexibleFormat' => $request->flexibleFormat,
                 'std_comments' => $request->regular_enrol_comment,
             ]);
 
