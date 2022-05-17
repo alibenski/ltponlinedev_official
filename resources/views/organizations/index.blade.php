@@ -25,9 +25,11 @@
                     <th>Focal Point Emails</th>
                     <th>Has Learning Partner</th>
                     <th>Self Paying Students</th>
-                    <th>Not Billed</th>
+                    <th>MOU</th>
+                    <th>Sales Order</th>
+                    {{-- <th>Not Billed</th>
 					<th>Billed via FRMS</th>
-					<th>Billed By Secretariat</th>
+					<th>Billed By Secretariat</th> --}}
 				</thead>
 
 				<tbody>
@@ -61,6 +63,16 @@
                                 @endif
                             </td>
                             <td>
+                                @if ($organization->MOU == 1)
+                                    <i class="fa fa-check"></i>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($organization->sales_order == 1)
+                                    <i class="fa fa-check"></i>
+                                @endif
+                            </td>
+                            {{-- <td>
                                 @if ($organization->not_billed == 1)
                                     <i class="fa fa-check"></i>
                                 @endif
@@ -74,7 +86,7 @@
                                 @if ($organization->billed_ext_umoja == 1)
                                     <i class="fa fa-check"></i>
                                 @endif
-                            </td>
+                            </td> --}}
 						</tr>
 					@endforeach
 				</tbody>
