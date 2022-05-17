@@ -400,6 +400,7 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 1,
                     ]);
                     foreach ($ingredients as $data) {
