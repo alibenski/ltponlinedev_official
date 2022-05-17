@@ -279,6 +279,7 @@ class NoFormController extends Controller
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
+                'flexibleFormat' => $request->flexibleFormat,
                 'flexibleBtn' => $flexibleBtn,
                 // 'contractDate' => $contractDate,  
                 'std_comments' => $std_comments,
