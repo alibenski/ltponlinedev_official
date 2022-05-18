@@ -37,7 +37,7 @@ class PreenrolmentController extends Controller
         $enrolment = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc');
         $enrolment_details = $enrolment->get();
         $enrolment_id = $enrolment->select('id')->get();
-        
+
         $enrolment_id_array = [];
         foreach ($enrolment_id as $value) {
             $enrolment_id_array[] = $value->id;
@@ -57,8 +57,8 @@ class PreenrolmentController extends Controller
             'indexno' => 'required',
             'enrolment_id' => 'required',
         ]);
-        
-        $codeIndexId = $request->course_id.'-'.$request->schedule_id.'-'.$request->term_id.'-'.$request->indexno;
+
+        $codeIndexId = $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno;
         $request->merge(['CodeIndexID' => $codeIndexId]);
         $this->validate($request, array(
             'CodeIndexID' => Rule::unique('tblLTP_Enrolment')->where(function ($query) use ($request) {
@@ -67,15 +67,15 @@ class PreenrolmentController extends Controller
                     ->where('deleted_at', NULL);
             })
         ));
-       
+
         $flexibleBtn = 1;
-        if(!isset($request->flexibleBtn)) {
+        if (!isset($request->flexibleBtn)) {
             $flexibleBtn = NULL;
         }
 
         $enrolment_forms_to_be_modified = Preenrolment::whereIn('id', $request->enrolment_id)->orderBy('id', 'asc')->get();
 
-        foreach ($enrolment_forms_to_be_modified as $data) {   
+        foreach ($enrolment_forms_to_be_modified as $data) {
             $arr = $data->attributesToArray();
             $record = ModifiedForms::create($arr);
             // ModifiedForms::where('auto_id', $record->id)->update(['modified_by' => Auth::id()]);
@@ -109,7 +109,7 @@ class PreenrolmentController extends Controller
             $delform->schedule_id = null;
             $delform->save();
             $delform->delete();
-        } 
+        }
 
         return redirect()->route('previous-submitted')->with('success', 'Form successfully modified.');
     }
@@ -322,8 +322,8 @@ class PreenrolmentController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('Te_Code', $request->Te_Code)
-                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
                 ->get();
 
             $arr1 = [];
@@ -397,8 +397,8 @@ class PreenrolmentController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('Te_Code', $request->Te_Code)
-                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
                 ->get();
 
             $arr1 = [];
@@ -1300,9 +1300,9 @@ class PreenrolmentController extends Controller
             $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
             $term_year = new Carbon($term_date_time);
             $term_year = $term_year->year;
-            $seasonYear = $term_season_en.' '.$term_year;
+            $seasonYear = $term_season_en . ' ' . $term_year;
 
-            $subject = 'Cancellation: '.$staff_name.' - '.$display_language_en.' ('.$seasonYear.')';
+            $subject = 'Cancellation: ' . $staff_name . ' - ' . $display_language_en . ' (' . $seasonYear . ')';
 
             Mail::to($std_email)->send(new cancelConvocation($staff_name, $display_language_fr, $display_language_en, $schedule, $subject, $type));
 

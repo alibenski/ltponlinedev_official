@@ -71,6 +71,13 @@
 						<strong>No</strong>
 						@endif
 					</p>
+					<p>Flexible Format Either (In-person or Online): 
+						@if ( $element->flexibleFormat == 1)
+						<strong>Yes</strong>
+						@else
+						<strong>No</strong>
+						@endif
+					</p>
 					<p>
 						Last placement test taken: 
 						<br>
