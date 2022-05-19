@@ -569,7 +569,7 @@
                   $("select[name='course_id']").html('');
                   $("select[name='course_id']").html(data.options);
                   $("select[name='course_id']")[0].selectedIndex = 1; // select the first option
-                  $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
+                  // $("select[name='course_id'] option:not(:selected)").remove(); // remove the other options
                   console.log($("select[name='course_id']").val());
                   // get schedule of selected language level 1 
                   var course_id = $("select[name='course_id']").val();

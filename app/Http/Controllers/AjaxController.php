@@ -38,7 +38,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachBadgeCdl(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-badge-cdl')->render();
             return response()->json(['options' => $data]);
         }
@@ -47,7 +47,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachMSU(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-msu')->render();
             return response()->json(['options' => $data]);
         }
@@ -56,7 +56,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachSpouse(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-spouse')->render();
             return response()->json(['options' => $data]);
         }
@@ -65,7 +65,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachSpouse1(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-spouse-1')->render();
             return response()->json(['options' => $data]);
         }
@@ -74,7 +74,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachSpouse2(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-spouse-2')->render();
             return response()->json(['options' => $data]);
         }
@@ -83,7 +83,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachRetired(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-retired')->render();
             return response()->json(['options' => $data]);
         }
@@ -92,7 +92,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachServ(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-serv')->render();
             return response()->json(['options' => $data]);
         }
@@ -101,7 +101,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachNgo(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-ngo')->render();
             return response()->json(['options' => $data]);
         }
@@ -110,7 +110,7 @@ class AjaxController extends Controller
     public function ajaxFileAttachPress(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = view('file_attachment_field.ajax-file-attach-press')->render();
             return response()->json(['options' => $data]);
         }
@@ -441,7 +441,7 @@ class AjaxController extends Controller
                 ->get()
                 ->sortBy('course.level')
                 ->groupBy('specialized');
-                // ->pluck("course.Description", "Te_Code_New");
+            // ->pluck("course.Description", "Te_Code_New");
             $data = view('ajax-select', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
         }
@@ -464,7 +464,7 @@ class AjaxController extends Controller
                 ->get()
                 ->sortBy('course.level')
                 ->groupBy('specialized');
-                // ->pluck("course.Description", "Te_Code_New");
+            // ->pluck("course.Description", "Te_Code_New");
 
             $data = view('ajax-select', compact('select_courses'))->render();
             return response()->json(['options' => $data]);
@@ -498,7 +498,7 @@ class AjaxController extends Controller
                 ->all();
             if ($request->L == 'A') {
                 $my_array = $select_courses;
-                $allowed  = ['AB1GE0'];
+                $allowed  = ['AB1GE0', 'AB1GE1'];
                 $filtered = array_filter(
                     $my_array,
                     function ($key) use ($allowed) {
@@ -509,7 +509,7 @@ class AjaxController extends Controller
             }
             if ($request->L == 'C') {
                 $my_array = $select_courses;
-                $allowed  = ['CB1GE0'];
+                $allowed  = ['CB1GE0', 'CB1GE1'];
                 $filtered = array_filter(
                     $my_array,
                     function ($key) use ($allowed) {
@@ -520,7 +520,7 @@ class AjaxController extends Controller
             }
             if ($request->L == 'E') {
                 $my_array = $select_courses;
-                $allowed  = ['EB1GE0'];
+                $allowed  = ['EB1GE0', 'EB1GE1'];
                 $filtered = array_filter(
                     $my_array,
                     function ($key) use ($allowed) {
@@ -531,7 +531,7 @@ class AjaxController extends Controller
             }
             if ($request->L == 'F') {
                 $my_array = $select_courses;
-                $allowed  = ['FB1GE0'];
+                $allowed  = ['FB1GE0', 'FB1GE1'];
                 $filtered = array_filter(
                     $my_array,
                     function ($key) use ($allowed) {
@@ -542,7 +542,7 @@ class AjaxController extends Controller
             }
             if ($request->L == 'R') {
                 $my_array = $select_courses;
-                $allowed  = ['RB1GE0'];
+                $allowed  = ['RB1GE0', 'RB1GE1'];
                 $filtered = array_filter(
                     $my_array,
                     function ($key) use ($allowed) {
@@ -553,7 +553,7 @@ class AjaxController extends Controller
             }
             if ($request->L == 'S') {
                 $my_array = $select_courses;
-                $allowed  = ['SB1GE0'];
+                $allowed  = ['SB1GE0', 'SB1GE1'];
                 $filtered = array_filter(
                     $my_array,
                     function ($key) use ($allowed) {
@@ -692,7 +692,7 @@ class AjaxController extends Controller
     public function ajaxCheckPlacementCourse(Request $request)
     {
         if ($request->ajax()) {
-            
+
             // first validation
             // get the last enrolment from PASHQ table (does NOT include cancelled ones)
             $repos_lang = Repo::orderBy('Term', 'desc')->where('L', $request->L)->where('INDEXID', $request->index)->first();
@@ -717,15 +717,15 @@ class AjaxController extends Controller
                 $prev_term = $selectedTerm - 1;
                 // query placement table with summer term code
                 $placementData = PlacementForm::withTrashed()->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
-                ->orWhere(function($query) use($prev_term, $request){
-                    $query->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
-                })->first();
+                    ->orWhere(function ($query) use ($prev_term, $request) {
+                        $query->where('Term', $prev_term)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                    })->first();
             } else {
                 // $placementData = null;
                 $placementData = PlacementForm::withTrashed()->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
-                ->orWhere(function($q) use($prev_termCode, $request){
-                    $q->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
-                })->first();
+                    ->orWhere(function ($q) use ($prev_termCode, $request) {
+                        $q->where('Term', $prev_termCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                    })->first();
             }
 
             // query placement table if student placement enrolment data exists or not for the previous previous term
@@ -737,15 +737,15 @@ class AjaxController extends Controller
                 $prev_term2 = $selectedTerm2 - 1;
                 // query placement table with summer term code
                 $placementData = PlacementForm::withTrashed()->where('Term', $prev_term2)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
-                ->orWhere(function($query) use($prev_term2, $request){
-                    $query->where('Term', $prev_term2)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
-                })->first();
+                    ->orWhere(function ($query) use ($prev_term2, $request) {
+                        $query->where('Term', $prev_term2)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                    })->first();
             } else {
                 // $placementData = null;
                 $placementData = PlacementForm::withTrashed()->where('Term', $prev_prev_TermCode)->where('L', $request->L)->where('INDEXID', $request->index)->whereNotNull('CodeIndexID')
-                ->orWhere(function($q) use($prev_prev_TermCode, $request){
-                    $q->where('Term', $prev_prev_TermCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
-                })->first();
+                    ->orWhere(function ($q) use ($prev_prev_TermCode, $request) {
+                        $q->where('Term', $prev_prev_TermCode)->where('L', $request->L)->where('INDEXID', $request->index)->where('Result', '!=', null);
+                    })->first();
             }
 
             // Questions: 
