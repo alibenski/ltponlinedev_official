@@ -71,6 +71,7 @@
 		            <th>Course</th>
 		            <th>Schedule</th>
 		            <th>Flexible?</th>
+		            <th>Flexible Format?</th>
 		            <th>Organization</th>
 		            <th>Student Cancelled?</th>
 		            <th>HR Approval</th>
@@ -123,6 +124,13 @@
 					<td>
 						@if($form->flexibleBtn == 1)
                                     <span class="label label-success margin-label">Yes</span>
+                                  @else
+                          -
+                                  @endif
+					</td>
+					<td>
+						@if($form->flexibleFormat == 1)
+                                    <span class="label label-default margin-label bg-yellow">Yes</span>
                                   @else
                           -
                                   @endif

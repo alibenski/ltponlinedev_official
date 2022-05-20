@@ -64,6 +64,9 @@
 	<div class="form-group">
 	    <label class="control-label" for="flexible_show">Is Flexible: @if($selfpay_student->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
 	</div>
+	<div class="form-group">
+	    <label class="control-label" for="flexible_format">Is Flexible Format (In-person or Online): @if($selfpay_student->flexibleFormat == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
+	</div>
 	{{-- <div class="form-group">
 		<label class="control-label" for="optradio">Choose Default Text:</label>
 		<div class="col-md-12">

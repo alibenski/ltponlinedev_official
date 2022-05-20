@@ -36,6 +36,13 @@
 						<strong>No</strong>
 						@endif
 					</p>
+					<p>Flexible Format (In-person or Online): 
+						@if ( $element->flexibleFormat == 1)
+						<strong>Yes</strong>
+						@else
+						<strong>No</strong>
+						@endif
+					</p>
 					<p>
 						<button type="button" class="show-modal-history btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View Course History</button>
 

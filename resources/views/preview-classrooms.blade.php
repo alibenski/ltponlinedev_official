@@ -112,6 +112,7 @@
                   <th>Contact No.</th>
                   <th>Priority</th>
                   <th>Flexible?</th>
+                  <th>Flexible Format?</th>
                   <th>Schedules</th>
                   <th>Comments</th>
                   <th>Remark</th>
@@ -218,6 +219,13 @@
                 <td>
                   @if($form->flexibleBtn == 1)
                               <span class="label label-success margin-label">Yes</span>
+                            @else
+                    -
+                            @endif
+                </td>
+                <td>
+                  @if($form->flexibleFormat == 1)
+                              <span class="label label-warning margin-label">Yes</span>
                             @else
                     -
                             @endif

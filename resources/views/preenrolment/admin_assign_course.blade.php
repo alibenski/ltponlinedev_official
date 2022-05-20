@@ -71,7 +71,7 @@
 						<strong>No</strong>
 						@endif
 					</p>
-					<p>Flexible Format Either (In-person or Online): 
+					<p>Flexible Format (In-person or Online): 
 						@if ( $element->flexibleFormat == 1)
 						<strong>Yes</strong>
 						@else
