@@ -81,7 +81,8 @@
 				@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
 				</td>
 				<td>
-                    @if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif
+                    @if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
+                    @if($form->DEPT == '999') SPOUSE @endif
                     @if ($form->DEPT === 'MSU')
                         @if ($form->users->sddextr->countryMission)
                         - {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 

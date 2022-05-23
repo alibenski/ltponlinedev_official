@@ -39,7 +39,25 @@
 							
 							
 							</td>
-							<td>@if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif</td>
+							<td>
+								@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
+								@if($form->DEPT == '999') SPOUSE @endif
+								@if ($form->DEPT === 'MSU')
+									@if ($form->users->sddextr->countryMission)
+									- {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 
+									@else 
+									- (country update needed)
+									@endif
+								@endif
+
+								@if ($form->DEPT === 'NGO')
+									@if ($form->users->sddextr->ngo_name)
+									- {{ $form->users->sddextr->ngo_name }} 
+									@else
+									- (NGO name update needed)
+									@endif
+								@endif	
+							</td>
 			                <td>
 			                	{{ $form->terms->Comments }} {{ date('Y', strtotime($form->terms->Term_Begin)) }}
 			                	<input type="hidden" name="Term" value="{{$form->Term}}">

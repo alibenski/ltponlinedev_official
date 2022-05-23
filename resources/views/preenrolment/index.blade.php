@@ -93,8 +93,9 @@
 					<td>
 						<a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a>
 					</td>
-					<td>{{ $form->DEPT }}
-						@if($form->DEPT == '999') SPOUSE @else {{ $form->DEPT }} @endif
+					<td>
+						@if(empty($form->DEPT)) None @else {{ $form->DEPT }}  @endif
+						@if($form->DEPT == '999') SPOUSE @endif
 						@if ($form->DEPT === 'MSU')
 							@if ($form->users->sddextr->countryMission)
 							- {{ $form->users->sddextr->countryMission->ABBRV_NAME }} 
