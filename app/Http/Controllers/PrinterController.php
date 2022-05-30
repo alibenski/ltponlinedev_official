@@ -15,6 +15,11 @@ class PrinterController extends Controller
     {
         $printLanguage = $request->language;
         $pashId = Repo::orderBy('id', 'desc')->where('id', $request->id)->first();
+
+        if (is_null($pashId)) {
+            return view('errors.printer_error');
+        }
+
         $userName = $pashId->users->name;
         $term = $pashId->Term;
         $termSeasonEn = ucfirst(strtolower($pashId->terms->Comments));
@@ -76,7 +81,7 @@ class PrinterController extends Controller
     {
         $printLanguage = $request->language;
         $pashId = Repo::orderBy('id', 'desc')->where('id', $request->id)->first();
-        
+
         $userName = $pashId->users->name;
         $term = $pashId->Term;
         $termSeasonEn = ucfirst(strtolower($pashId->terms->Comments));
