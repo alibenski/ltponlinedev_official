@@ -28,6 +28,11 @@ class Repo extends Model
      */
     const UPDATED_AT = 'UpdatedOn';
 
+    public function history()
+    {
+        return $this->morphMany(PashHistory::class, 'pash_historical', 'reference_table', 'reference_id');
+    }
+
     //declare the foreign key on the 3rd parameter of the function
     //in this case, field Te_Code inside table PASH is associated to foreign key Te_Code
     //which is a field in table LTP_Terms (Model: Term) 
