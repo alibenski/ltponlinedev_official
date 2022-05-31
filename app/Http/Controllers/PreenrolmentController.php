@@ -35,6 +35,11 @@ class PreenrolmentController extends Controller
     {
         // get id(s) of form
         $enrolment = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc');
+
+        if (empty($enrolment->first())) {
+            return view('errors.401_custom');
+        }
+
         $enrolment_details = $enrolment->get();
         $enrolment_id = $enrolment->select('id')->get();
 

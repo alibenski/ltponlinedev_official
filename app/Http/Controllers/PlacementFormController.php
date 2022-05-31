@@ -61,6 +61,11 @@ class PlacementFormController extends Controller
     public function studentEditPlacementFormView($id)
     {
         $enrolment_details = PlacementForm::find($id);
+
+        if (is_null($enrolment_details)) {
+            return view('errors.401_custom');
+        }
+
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
 
