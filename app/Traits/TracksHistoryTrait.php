@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use App\History;
+use App\PashHistory;
 
 trait TracksHistoryTrait
 {
@@ -20,17 +21,32 @@ trait TracksHistoryTrait
         $func = $func ?: [$this, 'getHistoryBody'];
 
         // Get the dirty fields and run them through the custom function, then insert them into the history table
-        $this->getUpdated($model)
-            ->map(function ($value, $field) use ($func, $model) {
-                return call_user_func_array($func, [$model, $value, $field]);
-            })
-            ->each(function ($fields) use ($table, $id, $actor_id) {
-                History::create([
-                    'reference_table' => $table,
-                    'reference_id'    => $id,
-                    'actor_id'        => $actor_id,
-                ] + $fields);
-            });
+        if ($table == 'LTP_PASHQTcur') {
+            $this->getUpdated($model)
+                ->map(function ($value, $field) use ($func, $model) {
+                    return call_user_func_array($func, [$model, $value, $field]);
+                })
+                ->each(function ($fields) use ($table, $model, $id, $actor_id) {
+                    PashHistory::create([
+                        'reference_table' => $table,
+                        'reference_id'    => $id,
+                        'indexno'    => $model->INDEXID,
+                        'actor_id'        => $actor_id,
+                    ] + $fields);
+                });
+        } else {
+            $this->getUpdated($model)
+                ->map(function ($value, $field) use ($func, $model) {
+                    return call_user_func_array($func, [$model, $value, $field]);
+                })
+                ->each(function ($fields) use ($table, $id, $actor_id) {
+                    History::create([
+                        'reference_table' => $table,
+                        'reference_id'    => $id,
+                        'actor_id'        => $actor_id,
+                    ] + $fields);
+                });
+        }
     }
 
     protected function getHistoryBody($model, $value, $field)
