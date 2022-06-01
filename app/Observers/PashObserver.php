@@ -15,7 +15,7 @@ class PashObserver
      * @param  \App\Repo  $repo
      * @return void
      */
-    public function updated(Repo $model)
+    public function updated($model)
     {
         $this->track($model);
     }

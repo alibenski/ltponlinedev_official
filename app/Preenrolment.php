@@ -13,6 +13,12 @@ class Preenrolment extends Model
     protected $fillable = [
         'CodeIndexID', 'Code', 'Te_Code', 'schedule_id', 'Term', 'INDEXID', 'mgr_email', 'mgr_fname', 'mgr_lname', 'L', 'profile', 'continue_bool', 'approval', 'approval_hr', 'DEPT', 'country_mission', 'ngo_name', 'attachment_id', 'attachment_pay', 'is_self_pay_form', 'selfpay_approval', 'form_counter', 'eform_submit_count', 'cancelled_by_student', 'agreementBtn', 'consentBtn', 'flexibleBtn', 'flexibleFormat', 'contractDate', 'Comments', 'modified_by', 'updated_by_admin', 'std_comments', 'overall_approval', 'teacher_comments', 'admin_eform_comment', 'admin_plform_comment', 'created_at', 'admin_eform_cancel_comment', 'admin_plform_cancel_comment', 'cancelled_by_admin',
     ];
+
+    public function history()
+    {
+        return $this->morphMany(PashHistory::class, 'historical', 'reference_table', 'reference_id', 'indexno');
+    }
+
     /**
      * The storage format of the model's date columns.
      *
