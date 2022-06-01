@@ -22,18 +22,11 @@ trait TracksHistoryTrait
 
         // Get the dirty fields and run them through the custom function, then insert them into the history table
         if ($table == 'LTP_PASHQTcur') {
-            $this->getUpdated($model)
-                ->map(function ($value, $field) use ($func, $model) {
-                    return call_user_func_array($func, [$model, $value, $field]);
-                })
-                ->each(function ($fields) use ($table, $model, $id, $actor_id) {
-                    PashHistory::create([
-                        'reference_table' => $table,
-                        'reference_id'    => $id,
-                        'indexno'    => $model->INDEXID,
-                        'actor_id'        => $actor_id,
-                    ] + $fields);
-                });
+            $this->storeChanges($model, $func, $table, $id, $actor_id);
+        } elseif ($table == 'tblLTP_Enrolment') {
+            $this->storeChanges($model, $func, $table, $id, $actor_id);
+        } elseif ($table == 'tblLTP_Placement_Forms') {
+            $this->storeChanges($model, $func, $table, $id, $actor_id);
         } else {
             $this->getUpdated($model)
                 ->map(function ($value, $field) use ($func, $model) {
@@ -47,6 +40,22 @@ trait TracksHistoryTrait
                     ] + $fields);
                 });
         }
+    }
+
+    protected function storeChanges($model, $func, $table, $id, $actor_id)
+    {
+        $this->getUpdated($model)
+            ->map(function ($value, $field) use ($func, $model) {
+                return call_user_func_array($func, [$model, $value, $field]);
+            })
+            ->each(function ($fields) use ($table, $model, $id, $actor_id) {
+                PashHistory::create([
+                    'reference_table' => $table,
+                    'reference_id'    => $id,
+                    'indexno'    => $model->INDEXID,
+                    'actor_id'        => $actor_id,
+                ] + $fields);
+            });
     }
 
     protected function getHistoryBody($model, $value, $field)

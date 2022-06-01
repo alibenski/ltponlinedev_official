@@ -7,13 +7,14 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Queue\Events\JobFailed;
 use Validator;
-use App\Preenrolment;
 use Illuminate\Support\Facades\Mail;
 use App\User;
 use App\SDDEXTR;
 use App\Observers\UserObserver;
 use App\Repo;
 use App\Observers\PashObserver;
+use App\Preenrolment;
+use App\PlacementForm;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         SDDEXTR::observe(UserObserver::class);
         Repo::observe(PashObserver::class);
+        Preenrolment::observe(PashObserver::class);
+        PlacementForm::observe(PashObserver::class);
 
         Schema::defaultStringLength(191);
 
