@@ -8,13 +8,13 @@ class PashHistory extends Model
 {
     protected $table = 'pash_history';
     protected $fillable = [
-        'reference_table', 'reference_id', 'actor_id', 'body'
+        'reference_table', 'reference_id', 'indexno', 'actor_id', 'body'
     ];
 
     /**
      * Get all of the owning commentable models.
      */
-    public function pash_historical()
+    public function historical()
     {
         return $this->morphTo();
     }

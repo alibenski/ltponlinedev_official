@@ -2,20 +2,65 @@
 
 namespace App\Observers;
 
-use App\Traits\TracksPashHistoryTrait;
+use App\Repo;
+use App\Traits\TracksHistoryTrait;
 
 class PashObserver
 {
-    use TracksPashHistoryTrait;
+    use TracksHistoryTrait;
 
     /**
-     * Handle the user "updated" event.
+     * Handle the repo "updated" event.
      *
-     * @param  \App\Repo  $user
+     * @param  \App\Repo  $repo
      * @return void
      */
-    public function updated($model)
+    public function updated(Repo $model)
     {
         $this->track($model);
+    }
+
+    /**
+     * Handle the repo "created" event.
+     *
+     * @param  \App\Repo  $repo
+     * @return void
+     */
+    public function created(Repo $repo)
+    {
+        //
+    }
+
+    /**
+     * Handle the repo "deleted" event.
+     *
+     * @param  \App\Repo  $repo
+     * @return void
+     */
+    public function deleted(Repo $repo)
+    {
+        //
+    }
+
+    /**
+     * Handle the repo "restored" event.
+     *
+     * @param  \App\Repo  $repo
+     * @return void
+     */
+    public function restored(Repo $repo)
+    {
+        //
+    }
+
+    /**
+     * Handle the repo "force deleted" event.
+     *
+     * @param  \App\Repo  $repo
+     * @return void
+     */
+    public function forceDeleted(Repo $repo)
+    {
+        //
     }
 }

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Mail;
 use App\User;
 use App\SDDEXTR;
 use App\Observers\UserObserver;
+use App\Repo;
+use App\Observers\PashObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         SDDEXTR::observe(UserObserver::class);
+        Repo::observe(PashObserver::class);
 
         Schema::defaultStringLength(191);
 

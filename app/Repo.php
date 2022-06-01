@@ -30,7 +30,7 @@ class Repo extends Model
 
     public function history()
     {
-        return $this->morphMany(PashHistory::class, 'pash_historical', 'reference_table', 'reference_id');
+        return $this->morphMany(PashHistory::class, 'historical', 'reference_table', 'reference_id', 'indexno');
     }
 
     //declare the foreign key on the 3rd parameter of the function
