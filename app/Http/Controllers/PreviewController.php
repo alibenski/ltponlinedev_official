@@ -1163,7 +1163,7 @@ class PreviewController extends Controller
         $arrValueFromRequest = $data['arrValue'];
         $arrWaitlisted_filtered = $data['arrWaitlisted_filtered'];
         $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);
-        $arrValue = $arrValueDiff;
+        $arrValue = array_values($arrValueDiff);
 
         $enrolmentEndDate = Term::where('Term_Code', $request->Term)
             ->first()->Enrol_Date_End;
@@ -1257,8 +1257,11 @@ class PreviewController extends Controller
     {
         $data = $this->getApprovedEnrolmentForms($request);
         $arrINDEXID = $data['arrINDEXID'];
-        $arrValue = $data['arrValue'];
-
+        // $arrValue = $data['arrValue'];
+        $arrValueFromRequest = $data['arrValue'];
+        $arrWaitlisted_filtered = $data['arrWaitlisted_filtered'];
+        $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);
+        $arrValue = $arrValueDiff;
         $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
 
         $enrolmentEndDate = Term::where('Term_Code', $request->Term)
