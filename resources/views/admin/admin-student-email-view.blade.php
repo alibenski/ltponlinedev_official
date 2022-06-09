@@ -32,6 +32,9 @@
 					<th>Description</th>
 					<th>Teacher</th>
 					<th>Result</th>
+					<th>Written</th>
+					<th>Oral</th>
+					<th>Overall Result</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -47,6 +50,9 @@
 					<th>Description</th>
 					<th>Teacher</th>
 					<th>Result</th>
+					<th>Written</th>
+					<th>Oral</th>
+					<th>Overall Grade</th>
 				</tr>
 			</tfoot>
 		</table>
@@ -119,7 +125,10 @@
 						{ "data": "languages.name" }, 
 						{ "data": "courses.Description" },  
 						{ "data": "classrooms.teachers.Tch_Name" },
-						{ "data": "Result" }
+						{ "data": "Result" },
+						{ "data": "Written" },
+						{ "data": "Oral" },
+						{ "data": "Overall_Grade" }
 							],
 			})
 		}
