@@ -142,7 +142,7 @@
 						<th>Profile</th>
 						<th>Name</th>
 						<th>Gender</th>
-						{{-- <th>RESULT</th> --}}
+						<th>RESULT</th>
 						<th>Cancelled Not Billed</th>
 						<th>Excluded From Billing</th>
 						<th>Cancel Date</th>
@@ -163,7 +163,7 @@
 						<th>Profile</th>
 						<th>Name</th>
 						<th>Gender</th>
-						{{-- <th>RESULT</th> --}}
+						<th>RESULT</th>
 						<th>Cancelled Not Billed</th>
 						<th>Excluded From Billing</th>
 						<th>Cancel Date</th>
@@ -360,33 +360,33 @@ $(document).ready(function() {
 								}
 							
 							}, 
-							// { "data": "Result", "className": "result" },
+							{ "data": "Result", "className": "result" },
 							{ "data": "cancelled_but_not_billed" },
 							{ "data": "exclude_from_billing" },
 							{ "data": "deleted_at" }
 								],
-					// "createdRow": function( row, data, dataIndex ) {
-					// 			if ( data['Result'] == 'P') {
-					// 			$(row).addClass( 'pass' );
-					// 			$(row).find("td.result").text('PASS');
-					// 			}
+					"createdRow": function( row, data, dataIndex ) {
+								if ( data['Result'] == 'P') {
+								$(row).addClass( 'pass' );
+								$(row).find("td.result").text('PASS');
+								}
 
-					// 			if ( data['Result'] == 'F') {
-					// 			$(row).addClass( 'label-danger' );
-					// 			$(row).find("td.result").text('Fail');
-					// 			}
+								if ( data['Result'] == 'F') {
+								$(row).addClass( 'label-danger' );
+								$(row).find("td.result").text('Fail');
+								}
 
-					// 			if ( data['Result'] == 'I') {
-					// 			$(row).addClass( 'label-warning' );
-					// 			$(row).find("td.result").text('Incomplete');
-					// 			}
+								if ( data['Result'] == 'I') {
+								$(row).addClass( 'label-warning' );
+								$(row).find("td.result").text('Incomplete');
+								}
 
-					// 			if ( data['deleted_at'] !== null) {
-					// 			$(row).addClass( 'bg-navy' );
-					// 			$(row).find("td.result").text('Late Cancellation');
-					// 			}
+								if ( data['deleted_at'] !== null) {
+								$(row).addClass( 'bg-navy' );
+								$(row).find("td.result").text('Late Cancellation');
+								}
 
-					// 		}
+							}
 				})
 			}		
 	}
