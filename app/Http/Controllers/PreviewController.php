@@ -1043,11 +1043,14 @@ class PreviewController extends Controller
                 ->orWhere('Tch_ID', '=', 'TBD');
         })
             ->get();
-
+        $arrWaitlisted = [];
         foreach ($students_waitlisted as $data) {
             $arr = $data->attributesToArray();
             $clone_forms = Waitlist::create($arr);
+            $arrWaitlisted[] = $data->INDEXID;
         }
+        $arrWaitlisted_filtered = array_filter($arrWaitlisted);
+
         // query enrolment forms where updated_by_admin = 1 and overall_approval = 1
         // sort enrolment forms by date of submission
         $approved_0_1_collect = Preenrolment::whereIn('DEPT', ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])->where('Term', $request->Term)->where('approval', '1')->where('updated_by_admin', 1)->where('overall_approval', 1)->orderBy('created_at', 'asc')->get();
@@ -1144,8 +1147,9 @@ class PreviewController extends Controller
         }
 
         $data = [
-            'arrINDEXID' => $arrINDEXID,
-            'arrValue' => $arrValue
+            'arrINDEXID' => $arrINDEXID, // index of all overall approved regular enrolment forms
+            'arrValue' => $arrValue,     //index of all re-enrolling students from previous term
+            'arrWaitlisted_filtered' => $arrWaitlisted_filtered     //index of all waitlisted students from previous term
         ];
 
         return $data;
@@ -1156,7 +1160,11 @@ class PreviewController extends Controller
         DB::table('tblLTP_preview_TempSort')->truncate();
 
         $data = $this->getApprovedEnrolmentForms($request);
-        $arrValue = $data['arrValue'];
+        $arrValueFromRequest = $data['arrValue'];
+        $arrWaitlisted_filtered = $data['arrWaitlisted_filtered'];
+        $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);
+        $arrValue = array_values($arrValueDiff);
+
         $enrolmentEndDate = Term::where('Term_Code', $request->Term)
             ->first()->Enrol_Date_End;
 
@@ -1249,8 +1257,11 @@ class PreviewController extends Controller
     {
         $data = $this->getApprovedEnrolmentForms($request);
         $arrINDEXID = $data['arrINDEXID'];
-        $arrValue = $data['arrValue'];
-
+        // $arrValue = $data['arrValue'];
+        $arrValueFromRequest = $data['arrValue'];
+        $arrWaitlisted_filtered = $data['arrWaitlisted_filtered'];
+        $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);  // re-enrolled only, re-enrolled/wailisted  not included 
+        $arrValue = $arrValueDiff;
         $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
 
         $enrolmentEndDate = Term::where('Term_Code', $request->Term)
@@ -1445,8 +1456,11 @@ class PreviewController extends Controller
     {
         $data = $this->getApprovedEnrolmentForms($request);
         $arrINDEXID = $data['arrINDEXID'];
-        $arrValue = $data['arrValue'];
-        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
+        $arrValueFromRequest = $data['arrValue'];       // index of all re-enrolling students from previous term, including waitlisted ones
+        $arrWaitlisted_filtered = $data['arrWaitlisted_filtered'];
+        $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);  // re-enrolled only, re-enrolled/wailisted  not included 
+        $arrValue = $arrValueDiff;
+        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);   // index of waitlisted 
 
         $arrValue1_2 = [];
         $arrValue1_2 = array_merge($arrValue, $arrValue2);
