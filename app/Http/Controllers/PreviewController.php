@@ -1260,7 +1260,7 @@ class PreviewController extends Controller
         // $arrValue = $data['arrValue'];
         $arrValueFromRequest = $data['arrValue'];
         $arrWaitlisted_filtered = $data['arrWaitlisted_filtered'];
-        $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);
+        $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);  // re-enrolled only, re-enrolled/wailisted  not included 
         $arrValue = $arrValueDiff;
         $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
 
@@ -1456,8 +1456,11 @@ class PreviewController extends Controller
     {
         $data = $this->getApprovedEnrolmentForms($request);
         $arrINDEXID = $data['arrINDEXID'];
-        $arrValue = $data['arrValue'];
-        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);
+        $arrValueFromRequest = $data['arrValue'];       // index of all re-enrolling students from previous term, including waitlisted ones
+        $arrWaitlisted_filtered = $data['arrWaitlisted_filtered'];
+        $arrValueDiff = array_diff($arrValueFromRequest, $arrWaitlisted_filtered);  // re-enrolled only, re-enrolled/wailisted  not included 
+        $arrValue = $arrValueDiff;
+        $arrValue2 = $this->getArrValue2($arrINDEXID, $arrValue);   // index of waitlisted 
 
         $arrValue1_2 = [];
         $arrValue1_2 = array_merge($arrValue, $arrValue2);
