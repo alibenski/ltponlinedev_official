@@ -119,6 +119,18 @@
                             <br/>
                             <strong>Note that LTP Secretariat still needs to approve late Selfpaying forms.</strong>  
                             </p>
+                            <div class="form-group">
+                                <label for="term" class="col-md-12 control-label">Select Term:</label>
+                                <div class="form-group col-sm-12">
+                                    <div class="dropdown">
+                                    <select id="term" name="term" class="col-md-8 form-control modal-input-term" style="width: 100%;" required="required">
+                                        @foreach($terms as $value)  
+                                            <option value="{{$value->Term_Code}}">{{$value->Term_Code}} - {{$value->Comments}} - {{$value->Term_Name}}</option>
+                                        @endforeach
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-12">
                             <input type="hidden" id="email" name="email" class="col-md-6 modal-input-email" value="" autofocus required>
                             </div>
@@ -160,13 +172,14 @@ $('button.send-late-btn').on('click', function(event) {
     event.preventDefault();
     $(this).attr('disabled', 'disabled');
     let email = $('input.modal-input-email').val();
+    let term = $('select.modal-input-term').val();
     let token = $("input[name='_token']").val();
     
     if (email) {
         $.ajax({
             url: '{{ route('generate-URL-late-enrolment') }}',
             type: 'POST',
-            data: {email:email, _token:token},
+            data: {term:term, email:email, _token:token},
         })
         .done(function(data) {
             $("input#email").val('');

@@ -122,7 +122,7 @@ class LateEnrolmentController extends Controller
             $terms = Term::orderBy('Term_Code', 'desc')
                 ->whereDate('Term_Begin', '>=', $now_date)
                 ->get()->min();
-
+            dd($request);
             //query the next term based Term_Begin column is greater than today's date and then get min
             $next_term = Term::orderBy('Term_Code', 'desc')
                 ->where('Term_Code', $terms->Term_Next)->get();

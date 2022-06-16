@@ -335,6 +335,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
         if (\Request::input('search')) {
             $queries = [];
             $query = \Request::input('search');
@@ -344,13 +345,12 @@ class UserController extends Controller
             $users = User::search($query)->paginate(20);
             $users->appends($queries);
             if ($users->getCollection()->count() == 0) {
-                return redirect()->route('users.index')->with('users', $users)->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
+                return redirect()->route('users.index', compact('users', 'terms'))->with('interdire-msg', 'No such user found in the login accounts records of the system. ');
             }
-
-            return view('users.index')->with('users', $users);
+            return view('users.index', compact('users', 'terms'));
         }
         $users = User::paginate(20);
-        return view('users.index')->with('users', $users);
+        return view('users.index', compact('users', 'terms'));
     }
 
     /**
