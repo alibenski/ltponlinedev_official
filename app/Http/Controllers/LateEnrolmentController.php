@@ -451,6 +451,17 @@ class LateEnrolmentController extends Controller
     public function lateSelfpayForm(Request $request)
     {
         $url = session()->get('url');
+        // Use parse_url() function to parse the URL 
+        // and return an associative array which
+        // contains its various components
+        $url_components = parse_url($url);
+
+        // Use parse_str() function to parse the
+        // string passed via URL
+        parse_str($url_components['query'], $params);
+
+        // Display result
+        $term = $params['term'];
         $checkSelfPay = $request->session()->get('checkSelfPay');
         if ($checkSelfPay == 1) {
 
@@ -463,9 +474,10 @@ class LateEnrolmentController extends Controller
             // query the current term based on year and Term_End column is greater than today's date
             // whereYear('Term_End', $now_year)  
             // $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_Begin', '>=', $now_date)
-                ->get()->min();
+            // $terms = Term::orderBy('Term_Code', 'desc')
+            //     ->whereDate('Term_Begin', '>=', $now_date)
+            //     ->get()->min();
+            $terms = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $term)->first();
 
             //query the next term based Term_Begin column is greater than today's date and then get min
             $next_term = Term::orderBy('Term_Code', 'desc')
