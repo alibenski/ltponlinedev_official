@@ -132,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                            <input type="hidden" id="email" name="email" class="col-md-6 modal-input-email" value="" autofocus required>
+                            <input type="hidden" id="email" name="email" class="col-md-6 modal-input-email" value="" required>
                             </div>
                             <button id="saveBtn" type="button" class="btn btn-space btn-success btn-block button-prevent-multi-submit send-late-btn" style="margin: 1px;">
                             <i class="fa fa-envelope"></i> Send Email

@@ -29,10 +29,10 @@
       <div class="card">
           <div class="card-header bg-info text-white">Enrolment Form for: 
             <strong>
-              @if(empty($next_term))
+              @if(empty($term))
               Enrolment Period Closed
               @else 
-              {{ $next_term->Term_Name.' - '.$next_term->Comments.' Term' }}
+              {{ $term->Term_Name.' - '.$term->Comments.' Term' }}
               @endif
             </strong>
           </div>

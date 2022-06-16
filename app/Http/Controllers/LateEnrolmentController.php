@@ -30,10 +30,10 @@ class LateEnrolmentController extends Controller
     {
         if ($request->ajax()) {
             $recordId = DB::table('url_generator')->insertGetId(
-                ['user_id' => Auth::id(), 'email' => $request->email, 'description' => 'late registration link']
+                ['user_id' => Auth::id(), 'email' => $request->email, 'description' => 'late registration form link']
             );
 
-            $url = URL::temporarySignedRoute('late-what-org', now()->addDays(1), ['transaction' => $recordId]);
+            $url = URL::temporarySignedRoute('late-what-org', now()->addDays(1), ['transaction' => $recordId, 'term' => $request->term]);
 
             Mail::to($request->email)->send(new EmailLateEnrol($url));
 
@@ -47,14 +47,14 @@ class LateEnrolmentController extends Controller
         if (!$request->hasValidSignature() || Auth::user()->email != $qryEmail) {
             abort(401);
         }
-
+        $term = Term::where('Term_Code', $request->term)->first();
         $url = $request->fullUrl();
         $now_date = Carbon::now()->toDateString();
         $now_year = Carbon::now()->year;
         $next_term = Term::orderBy('Term_Code', 'desc')->whereDate('Term_Begin', '>=', $now_date)->get()->min();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
 
-        return view('form.late.late-what-org', compact('url', 'next_term', 'org'));
+        return view('form.late.late-what-org', compact('term', 'url', 'next_term', 'org'));
     }
 
     public function lateWhatForm(Request $request, MsuUpdateField $msuUpdateField, NgoUpdateField $ngoUpdateField)
@@ -108,6 +108,18 @@ class LateEnrolmentController extends Controller
     public function lateRegistration(Request $request)
     {
         $url = session()->get('url');
+        // Use parse_url() function to parse the URL 
+        // and return an associative array which
+        // contains its various components
+        $url_components = parse_url($url);
+
+        // Use parse_str() function to parse the
+        // string passed via URL
+        parse_str($url_components['query'], $params);
+
+        // Display result
+        $term = $params['term'];
+
         $check = $request->session()->get('check');
         if ($check == 1) {
             $courses = Course::all();
@@ -119,10 +131,11 @@ class LateEnrolmentController extends Controller
             //query the current term based on year and Term_End column is greater than today's date
             //whereYear('Term_End', $now_year)  
             // $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
-            $terms = Term::orderBy('Term_Code', 'desc')
-                ->whereDate('Term_Begin', '>=', $now_date)
-                ->get()->min();
-            dd($request);
+            // $terms = Term::orderBy('Term_Code', 'desc')
+            //     ->whereDate('Term_Begin', '>=', $now_date)
+            //     ->get()->min();
+            $terms = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $term)->first();
+
             //query the next term based Term_Begin column is greater than today's date and then get min
             $next_term = Term::orderBy('Term_Code', 'desc')
                 ->where('Term_Code', $terms->Term_Next)->get();
