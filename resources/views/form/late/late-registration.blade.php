@@ -522,6 +522,7 @@
   });
   // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
+      let term = $("input[name='term_id']").val();
       $("textarea[name='regular_enrol_comment']").attr('required', 'required');
       $.get("{{ route('late-check-enrolment-entries-ajax') }}", { term: term }, function(data) {
             console.log('regular enrol form count:' + data);
@@ -575,10 +576,11 @@
   });
   // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
+    let term = $("input[name='term_id']").val();
     $("input[name='placementDecisionB']").val("0");
     $("textarea[name='regular_enrol_comment']").removeAttr('required');
     $("textarea[name='course_preference_comment']").attr('required', 'required');
-      $.get("{{ route('late-check-placement-entries-ajax') }}", function(data) {
+      $.get("{{ route('late-check-placement-entries-ajax') }}", { term: term }, function(data) {
             console.log(data.length);
             if (data.length >= 2) {
               alert('You are not allowed to submit more than 2 placement test forms. The page will now reload.');

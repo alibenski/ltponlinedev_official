@@ -907,11 +907,15 @@ class LateEnrolmentController extends Controller
         }
     }
 
+    /* 
+        You are not allowed to submit more than 2 placement forms
+    */
     public function lateCheckPlacementEntriesAjax(Request $request)
     {
         if (Auth::check()) {
             $current_user = Auth::user()->indexno;
-            $termCode = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+            // $termCode = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+            $termCode = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first()->Term_Code;
 
             $placementFromCount = PlacementForm::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)
