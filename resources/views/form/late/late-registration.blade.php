@@ -388,7 +388,7 @@
         minView: 2, 
     });
     let term = $("input[name='term_id']").val();
-    $.get("/late-check-placement-form-ajax", { term: term }, function(data) {console.log(data)
+    $.get("/late-check-placement-form-ajax", { term: term }, function(data) {
       $.each(data, function(index, val) {
         console.log('placementFormLang = ' + val.L);
         $("input[name='L'][value='"+ val.L +"']").attr('disabled', true); // check if the student already submitted placement form

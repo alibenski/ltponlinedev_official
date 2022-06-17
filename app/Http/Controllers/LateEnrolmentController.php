@@ -825,6 +825,9 @@ class LateEnrolmentController extends Controller
         }
     }
 
+    /* 
+        check if student is new or missed 2 terms 
+    */
     public function lateCheckPlacementCourseAjax(Request $request)
     {
         if ($request->ajax()) {
