@@ -843,7 +843,8 @@ class LateEnrolmentController extends Controller
                 $repos_value = $repos_lang->Term;
             }
             // get the previous term code of the previous term of the current enrolment term
-            $current_enrol_term = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject();
+            // $current_enrol_term = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject();
+            $current_enrol_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term_id)->first();
             $prev_termCode = $current_enrol_term->Term_Prev;
             $prev_prev_TermCode = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $prev_termCode)->value('Term_Prev');
 
