@@ -802,12 +802,15 @@ class LateEnrolmentController extends Controller
         $this->postPlacementInfoAdditional($request, $placement_form_id);
     }
 
+    /* 
+        check if the student already submitted placement form
+     */
     public function lateCheckPlacementFormAjax(Request $request)
     {
         if (Auth::check()) {
             $current_user = Auth::user()->indexno;
-            $termCode = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
-
+            // $termCode = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+            $termCode = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first()->Term_Code;
             $placementData = PlacementForm::orderBy('Term', 'desc')
                 ->where('INDEXID', $current_user)
                 ->where('Term', $termCode)
