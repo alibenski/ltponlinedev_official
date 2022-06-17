@@ -524,7 +524,7 @@
               $(".placementTestMsg").attr('style', 'display:none');
               $(".placement-enrol").attr('style', 'display:none');
               $(".placement-beginner-msg").attr('style', 'display:none');
-                $.get("{{ route('late-check-selfpay-entries-ajax') }}", function(data) {
+                $.get("{{ route('late-check-selfpay-entries-ajax') }}", { term: term }, function(data) {
                       console.log('selfpay enrol form count:' + data);
                       if (data >= 2) {
                         alert('You are not allowed to submit more than 2 payment-based enrolment forms. You will now be redirected to the submitted forms page.');
@@ -545,8 +545,9 @@
   });
   // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
+      let term = $("input[name='term_id']").val();
       $("textarea[name='regular_enrol_comment']").attr('required', 'required');
-      $.get("{{ route('late-check-selfpay-entries-ajax') }}", function(data) {
+      $.get("{{ route('late-check-selfpay-entries-ajax') }}", { term: term }, function(data) {
             console.log('regular enrol form count:' + data);
             if (data >= 2) {
               alert('You are not allowed to submit more than 2 payment-based enrolment forms. However, if you are not a complete beginner, you could submit a placement test form. The page will now reload.');
@@ -597,10 +598,11 @@
   });
   // when student clicks NO I am not a beginner
   $("#placementDecision4").on('click', function() {
+    let term = $("input[name='term_id']").val();
     $("input[name='placementDecisionB']").val("0");
     $("textarea[name='regular_enrol_comment']").removeAttr('required');
     $("textarea[name='course_preference_comment']").attr('required', 'required');
-      $.get("{{ route('late-check-selfpay-placement-entries-ajax') }}", function(data) {
+      $.get("{{ route('late-check-selfpay-placement-entries-ajax') }}", { term: term }, function(data) {
             console.log(data.length);
             if (data.length >= 2) {
               alert('You are not allowed to submit more than 2 payment-based placement test forms. The page will now reload.');
