@@ -501,7 +501,7 @@
               $(".placementTestMsg").attr('style', 'display:none');
               $(".placement-enrol").attr('style', 'display:none');
               $(".placement-beginner-msg").attr('style', 'display:none');
-                $.get("{{ route('late-check-enrolment-entries-ajax') }}", function(data) {
+                $.get("{{ route('late-check-enrolment-entries-ajax') }}", { term: term }, function(data) {
                       console.log('regular enrol form count:' + data);
                       if (data >= 2) {
                         alert('You are not allowed to submit more than 2 enrolment forms. You will now be redirected to the submitted forms page.');
@@ -523,7 +523,7 @@
   // when clicks YES I am a beginner
   $("#placementDecision3").on('click', function() {
       $("textarea[name='regular_enrol_comment']").attr('required', 'required');
-      $.get("{{ route('late-check-enrolment-entries-ajax') }}", function(data) {
+      $.get("{{ route('late-check-enrolment-entries-ajax') }}", { term: term }, function(data) {
             console.log('regular enrol form count:' + data);
             if (data >= 2) {
               alert('You are not allowed to submit more than 2 enrolment forms. However, if you are not a complete beginner, you could submit a placement test form. The page will now reload.');

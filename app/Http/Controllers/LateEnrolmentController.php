@@ -886,13 +886,17 @@ class LateEnrolmentController extends Controller
         }
     }
 
+    /* 
+        You are not allowed to submit more than 2 enrolment forms
+    */
     public function lateCheckEnrolmentEntriesAjax(Request $request)
     {
         if (Auth::check()) {
             $current_user = Auth::user()->indexno;
             $eformGrouped = Preenrolment::distinct('Te_Code')->where('INDEXID', '=', $current_user)
-                ->where(function ($q) {
-                    $latest_term = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+                ->where(function ($q) use ($request) {
+                    // $latest_term = \App\Helpers\GlobalFunction::instance()->lateEnrolTermObject()->Term_Code;
+                    $latest_term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first()->Term_Code;
                     // do NOT count number of submitted forms disapproved by manager or HR learning partner  
                     $q->where('Term', $latest_term)->where('deleted_at', NULL)
                         ->where('is_self_pay_form', NULL);
