@@ -60,6 +60,15 @@
                 <label type="text" class="form-control">View Payment-based Forms Only</label>
             </div>
         </div>
+
+        <div class="col-sm-4">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="selfpay_approval" value=2 >                 
+              </span>
+                <label type="text" class="form-control bg-yellow">View Pending Payment-based Forms</label>
+            </div>
+        </div>
         
       </div>
     </div>
