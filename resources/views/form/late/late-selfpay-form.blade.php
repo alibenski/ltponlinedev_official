@@ -106,12 +106,24 @@
                             <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
                           </div>
                         
-                          <div class="form-group">
-                            <label for="identityfile" class="col-md-3 control-label">Upload Proof of Identity: </label>
+                          <div class="form-group my-3 py-3 border">
+                            <label for="identityfile" class="col-md-12 control-label">Proof of Identity - Upload a copy of either one of the following documents:</label>
+                            
+                              <ul>
+                                <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>
+                                <li><u>For spouses</u>:
+                                  <ul> 
+                                    <li>copy of applicant UN agency badge ID, or copy of “carte de légitimation” (both front and back sides)</li> 
+                                    OR
+                                    <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
+                                  </ul>
+                                </li>
+                              </ul>
+                              
                             <input name="identityfile" type="file" class="col-md-9 form-control-static" required="required">
                           </div>
 
-                          <div class="form-group">
+                          <div class="form-group my-3 py-3 border">
                             <label for="payfile" class="col-md-3 control-label">Upload Proof of Payment: </label>
                             <input name="payfile" type="file" class="col-md-9 form-control-static" required="required">
                           </div>

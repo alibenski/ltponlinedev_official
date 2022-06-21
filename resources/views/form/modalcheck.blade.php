@@ -12,7 +12,18 @@
                 <ul>
                     <li>The course and schedule selected</li>
                     <li>Copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
-                    <li>Copy of your carte de légitimation or employee attestation</li>
+                    <li>Prepare a copy of either one of the following documents:
+                      <ul>
+                        <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>
+                        <li><u>For spouses</u>:
+                          <ul> 
+                            <li>copy of applicant UN agency badge ID, or copy of “carte de légitimation” (both front and back sides)</li> 
+                            OR
+                            <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
                 </ul>
                 <p>You are eligible to use this enrolment form if you are a member of:</p>
                 <ul>
