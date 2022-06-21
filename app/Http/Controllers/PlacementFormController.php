@@ -694,7 +694,7 @@ class PlacementFormController extends Controller
 
         if ($request->selfpay_approval == 2) {
             $placement_forms = $this->getSelfPayFormPending($request, $placement_forms, $queries);
-            $count = 0;
+            $count = $placement_forms->count();
             return view('placement_forms.filteredPlacementForms', compact('placement_forms', 'count', 'languages', 'org'));
         }
 

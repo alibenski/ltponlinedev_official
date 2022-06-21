@@ -57,6 +57,11 @@
 		<span class="info-box-icon bg-orange"><i class="fa fa-list"></i></span>
 		<div class="info-box-content">
 			<p>Currently Viewing:</p> 
+				@if (Request::filled('selfpay_approval'))
+					@if (Request::input('selfpay_approval') == 2)
+						<p><strong>Pending Payment-based Placement Forms</strong></p>
+					@endif
+				@endif
 				@if(Session::has('Term'))Term Code: {{ Session::get('Term') }}@else @endif 	
 				@if(Request::filled('L')) / 
 					<strong> 	
