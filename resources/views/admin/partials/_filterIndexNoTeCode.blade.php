@@ -97,7 +97,6 @@
 
 <script type="text/javascript">
   $("input[name='pending_approval_hr']").on("click", function(){
-    console.log("ching")
     if ($(this).is(":checked", true)) {
       $("input[type='checkbox']").not("input[name='pending_approval_hr']").prop("disabled", true);
     } else {
@@ -106,6 +105,10 @@
   }); 
 
   $("input[name='selfpay_approval']").on("click", function(){
-      
+      if ($(this).is(":checked", true)) {
+      $("input[type='checkbox']").not("input[name='selfpay_approval']").prop("disabled", true);
+    } else {
+      $("input[type='checkbox']").prop("disabled", false);
+    }
   }); 
 </script>
