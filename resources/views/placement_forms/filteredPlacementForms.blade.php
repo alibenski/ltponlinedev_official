@@ -296,7 +296,7 @@ $(document).ready(function() {
         success: function(data, status) {
             console.log(data)
 			if (data.length < 1) {
-				alert("Selected term is before 2019. Data is not available at the moment.");
+				alert("Query is not valid or the selected term is before 2019. Data is not available. Please contact admin for more information.");
 				return false;
 			}
 			$.each(data, function(x, y) {
