@@ -89,7 +89,7 @@
 
 @else
 <div class="row col-sm-12">
-	<a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'), 'is_self_pay_form' => \Request::input('is_self_pay_form'), 'selfpay_approval' => \Request::input('selfpay_approval') ]) }}" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Extract Displayed Placement Forms 
+	<a href="{{ route('placement-form-approved-view',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'), 'is_self_pay_form' => \Request::input('is_self_pay_form'), 'selfpay_approval' => \Request::input('selfpay_approval'), 'pending_approval_hr' => \Request::input('pending_approval_hr') ]) }}" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Extract Displayed Placement Forms 
 		@if (Request::filled('L'))
 			@if (Request::get('L') == 'A') (Arabic)
 			@elseif (Request::get('L') == 'C') (Chinese)

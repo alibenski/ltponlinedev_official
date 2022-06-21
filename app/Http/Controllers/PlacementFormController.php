@@ -642,6 +642,12 @@ class PlacementFormController extends Controller
             return view('placement_forms.approvedPlacementForms', compact('placement_forms'));
         }
 
+        if ($request->pending_approval_hr == 1) {
+            $placement_forms = $this->getHRPending($request, $placement_forms, $queries);
+            $count = $placement_forms->count();
+            return view('placement_forms.approvedPlacementForms', compact('placement_forms'));
+        }
+
         $columns = [
             'L', 'DEPT', 'is_self_pay_form',
         ];
@@ -694,6 +700,12 @@ class PlacementFormController extends Controller
 
         if ($request->selfpay_approval == 2) {
             $placement_forms = $this->getSelfPayFormPending($request, $placement_forms, $queries);
+            $count = $placement_forms->count();
+            return view('placement_forms.filteredPlacementForms', compact('placement_forms', 'count', 'languages', 'org'));
+        }
+
+        if ($request->pending_approval_hr == 1) {
+            $placement_forms = $this->getHRPending($request, $placement_forms, $queries);
             $count = $placement_forms->count();
             return view('placement_forms.filteredPlacementForms', compact('placement_forms', 'count', 'languages', 'org'));
         }
@@ -787,6 +799,42 @@ class PlacementFormController extends Controller
         }
 
         $placement_forms = $placement_forms->where('overall_approval', 2)->paginate(20)->appends($queries);
+        return $placement_forms;
+    }
+
+    public function getHRPending($request, $placement_forms, $queries)
+    {
+        $columns = [
+            'L', 'DEPT',
+        ];
+
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $placement_forms = $placement_forms->where($column, $request->input($column));
+                $queries[$column] = $request->input($column);
+            }
+        }
+
+        if (Session::has('Term')) {
+            $placement_forms = $placement_forms->where('Term', Session::get('Term'));
+            $queries['Term'] = Session::get('Term');
+        }
+
+        if ($request->filled('not_assigned')) {
+            $placement_forms = $placement_forms->whereNull('assigned_to_course');
+            $queries['not_assigned'] = $request->input('not_assigned');
+        }
+
+        if ($request->filled('search')) {
+            $name = $request->input('search');
+            $placement_forms = $placement_forms->with('users')
+                ->whereHas('users', function ($q) use ($name) {
+                    return $q->where('name', 'LIKE', '%' . $name . '%')->orWhere('email', 'LIKE', '%' . $name . '%');
+                });
+            $queries['search'] = $request->input('search');
+        }
+
+        $placement_forms = $placement_forms->whereNull('is_self_pay_form')->whereNull('approval_hr')->whereNull('overall_approval')->paginate(20)->appends($queries);
         return $placement_forms;
     }
 

@@ -60,13 +60,27 @@
                 <label type="text" class="form-control">View Payment-based Forms Only</label>
             </div>
         </div>
+      </div>
+    </div>
 
+    <div class="form-group col-sm-12">
+      <label for="pending" class="control-label"> Filters for Pending Placement Forms:</label>
+      <div class="col-sm-12">
         <div class="col-sm-4">
             <div class="input-group"> 
               <span class="input-group-addon">       
                 <input type="checkbox" name="selfpay_approval" value=2 >                 
               </span>
                 <label type="text" class="form-control bg-yellow">View Pending Payment-based Forms</label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="input-group"> 
+              <span class="input-group-addon">       
+                <input type="checkbox" name="pending_approval_hr" value=1 >                 
+              </span>
+                <label type="text" class="form-control">View HR-Pending Placement Forms</label>
             </div>
         </div>
         
@@ -80,3 +94,18 @@
                 <button type="submit" class="btn btn-success filter-submit-btn">Submit</button>
 @else
 @endif
+
+<script type="text/javascript">
+  $("input[name='pending_approval_hr']").on("click", function(){
+    console.log("ching")
+    if ($(this).is(":checked", true)) {
+      $("input[type='checkbox']").not("input[name='pending_approval_hr']").prop("disabled", true);
+    } else {
+      $("input[type='checkbox']").prop("disabled", false);
+    }
+  }); 
+
+  $("input[name='selfpay_approval']").on("click", function(){
+      
+  }); 
+</script>
