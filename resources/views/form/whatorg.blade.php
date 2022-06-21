@@ -77,7 +77,18 @@
                   <ol>
                     <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank">HERE</a></li>
                     <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
-                    <li>Prepare a copy of your carte de légitimation or work certificate</li>
+                    <li>Prepare a copy of either one of the following documents:
+                      <ul>
+                        <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>
+                        <li><u>For spouses</u>:
+                          <ul> 
+                            <li>copy of applicant UN agency badge ID, or copy of “carte de légitimation” (both front and back sides)</li> 
+                            OR
+                            <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
                   </ol>
                   <p>After following the instructions, please fill in the fields below and click the "Next" button to continue.</p>
                   {{-- end of id="secretMsg1"  --}}
