@@ -33,7 +33,7 @@ class LateEnrolmentController extends Controller
                 ['user_id' => Auth::id(), 'email' => $request->email, 'description' => 'late registration form link']
             );
 
-            $url = URL::temporarySignedRoute('late-what-org', now()->addDays(1), ['transaction' => $recordId, 'term' => $request->term]);
+            $url = URL::temporarySignedRoute('late-what-org', now()->addDays(4), ['transaction' => $recordId, 'term' => $request->term]);
 
             Mail::to($request->email)->send(new EmailLateEnrol($url));
 

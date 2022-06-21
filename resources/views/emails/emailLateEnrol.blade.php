@@ -14,7 +14,7 @@
                             <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal; text-align: center;">CLM Online Enrolment</h1>
                             <p> Hello there! Thank you for your interest in our language training programme. </p>
                         <p> Please click the button below to log in to the platform and gain access to the enrolment form.</p>
-                            <p> Note: The link will expire in 24 hours.</p>
+                            <p> Note: The link will expire in <strong>4 days (96 hours)</strong>.</p>
                         </td>
                     </tr>
                     <tr>
