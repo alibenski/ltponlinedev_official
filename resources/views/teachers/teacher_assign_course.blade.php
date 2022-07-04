@@ -29,7 +29,7 @@
 			                @endif
 						@endforeach    
 		                </ol>
-					<p>Flexible: 
+					<p>Flexible Schedule (day/time): 
 						@if ( $element->flexibleBtn == 1)
 						<strong>Yes</strong>
 						@else
