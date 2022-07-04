@@ -76,7 +76,16 @@
                      {{ method_field('DELETE') }}
                   	</form> --}}
                     </td>
-                    <td>{{ $user->indexno }}</td>
+                    <td>
+                        {{ $user->indexno }}
+                        @if ($user->newUserInt)
+                            {{ $user->newUserInt->dob }}
+                        @elseif($user->newUserExt)
+                            {{ $user->newUserExt->dob }}
+                        {{-- @else
+                            NO LINK TO NEW USER TABLE --}}
+                        @endif
+                    </td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>@if(empty($user->sddextr->PHONE )) none @else <strong> {{$user->sddextr->PHONE}} </strong>@endif</td>
