@@ -29,6 +29,12 @@
 			                @endif
 						@endforeach    
 		                </ol>
+					<div class="form-group">
+					    <label class="control-label" for="std_comments">Student Comments:</label>
+					    <div class="">
+					        <textarea class="form-control" name="std_comments" cols="40" rows="3" readonly  placeholder="no comment">{{ $element->std_comments }}</textarea>
+					    </div>
+					</div>
 					<p>Flexible Schedule (day/time): 
 						@if ( $element->flexibleBtn == 1)
 						<strong>Yes</strong>
