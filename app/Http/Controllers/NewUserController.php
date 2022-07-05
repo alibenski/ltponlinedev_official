@@ -461,7 +461,7 @@ class NewUserController extends Controller
             $newUser->updated_by = Auth::user()->id;
             $newUser->save();
 
-            
+
             if ($request->emailText != null) {
                 // get emailText and save but no email send
                 $newUser = NewUser::findOrFail($id);
@@ -481,9 +481,9 @@ class NewUserController extends Controller
             $newUser = NewUser::findOrFail($id);
             $newUser->approved_account = 3;
             $newUser->updated_by = Auth::user()->id;
-            
+
             $this->updateAttachments($request, $newUser);
-            
+
             $this->updateNewUser($newUser, $request, $msuUpdateField, $ngoUpdateField);
 
             if ($request->emailText != null) {
@@ -494,9 +494,9 @@ class NewUserController extends Controller
                 $newUserComment->new_user_id = $request->id;
                 $newUserComment->user_id = Auth::user()->id;
                 $newUserComment->save();
-    
+
                 $html = "Your user account request has been set to PENDING status. <br/>Please see comment from the secretariat: <br/><b>" . $request->emailText . "</b>";
-                Mail::send([],[], function ($message) use($newUser, $html) {
+                Mail::send([], [], function ($message) use ($newUser, $html) {
                     $message->from('clm_language@unog.ch', 'CLM LTP Secretariat');
                     $message->to($newUser->email)->subject('Pending: LTP Online User Account Request');
                     $message->setBody($html, 'text/html');
@@ -529,16 +529,16 @@ class NewUserController extends Controller
                 $newUserComment->new_user_id = $request->id;
                 $newUserComment->user_id = Auth::user()->id;
                 $newUserComment->save();
-            }    
-    
+            }
+
             $newUser = NewUser::findOrFail($id);
             $newUser->approved_account = 1;
             $newUser->updated_by = Auth::user()->id;
-            
+
             $this->updateAttachments($request, $newUser);
 
             $this->updateNewUser($newUser, $request, $msuUpdateField, $ngoUpdateField);
-            
+
             // save entry to Auth table
             $user = User::create([
                 'indexno_old' => $request->indexno,
@@ -555,7 +555,7 @@ class NewUserController extends Controller
             // send email with credentials
             $sddextr_email_address = $request->email;
             Mail::to($request->email)->send(new SendAuthMail($sddextr_email_address));
-    
+
             // save entry to SDDEXTR table
             $sddextr = SDDEXTR::create([
                 'INDEXNO_old' => $request->indexno,
@@ -644,7 +644,6 @@ class NewUserController extends Controller
 
                 $newUser->attachment_id_2 = $attachment_contract_file2->id;
             }
-            
         }
     }
 
@@ -653,12 +652,13 @@ class NewUserController extends Controller
         $filtered = array_filter($request->all());
         $newUser->update($filtered);
 
+        if (!is_null($request->org)) {
+            $msuUpdateField->checkMsuValueNewUser($newUser, $request);
+            $ngoUpdateField->checkNgoValueNewUser($newUser, $request);
+        }
+
         $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
         $newUser->nameLast = strtoupper($request->nameLast);
-
-        $msuUpdateField->checkMsuValueNewUser($newUser, $request);
-        $ngoUpdateField->checkNgoValueNewUser($newUser, $request);
-
         $newUser->save();
     }
 
