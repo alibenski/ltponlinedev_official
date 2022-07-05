@@ -65,12 +65,6 @@ class User extends Authenticatable
         return $this->hasOne('App\NewUser', 'indexno_new', 'indexno');
     }
 
-    public function newUserExt()
-    {
-        dd(\App\NewUser::append('ext_index')->first());
-        return $this->hasOne('App\NewUser', 'ext_index', 'indexno');
-    }
-
     public function preenrolment()
     {
         return $this->hasMany('App\Preenrolment', 'INDEXID', 'indexno');
