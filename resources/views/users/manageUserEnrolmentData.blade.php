@@ -25,6 +25,7 @@
 	
 	<h3>Viewing: <strong>{{ $student->name }}</strong> [{{ $student->indexno }}]</h3>
 
+	@include('users.profile')
 	@include('admin.partials._userAdminNav')
 
 	<h3>@if(Request::input('Term'))Term: {{ Request::input('Term') }} - {{ $term_info->Comments }} {{ date('Y', strtotime($term_info->Term_Begin )) }}@else Please Choose Term @endif</h3>
