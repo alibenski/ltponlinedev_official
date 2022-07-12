@@ -474,7 +474,7 @@
                                         Veuillez lire attentivement les informations avant le début du trimestre disponibles sur notre site web en cliquant (<a href="https://learning.unog.ch/fr/node/1472">ici</a>). 
                                     </p>
                                     <p style="text-align: justify">
-                                        Si vous ne pouvez pas être présent(e)s la première jour, vous devez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s la première jour peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.
+                                        Si vous ne pouvez pas être présent(e)s le premier jour, vous devez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s le premier jour peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.
                                     </p>    
                                     <p style="color: red;text-align: justify;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit(e) à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/fr/node/1301#position5">ici</a>.
