@@ -316,7 +316,7 @@
                                         Please read carefully the information before start of term on our website (<a href="https://learning.unog.ch/node/1472">click here</a>). 
                                     </p>
                                     <p style="text-align: justify">
-                                        <u>If you are unable to attend the first day</u>, you must inform your teacher by email before the term starts. Participants who do not attend class during the first day may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
+                                        <u>If you are unable to attend the first week of the term</u>, you must inform your teacher by email before the term starts. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
                                     <p style="color: red;text-align: justify;">
                                         Should you need to cancel your enrolment (or one of them in case of registering in two courses), you must do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be refunded after this date. For fees reimbursement, please click <a href="https://learning.unog.ch/node/1301#position5">here</a>.
@@ -474,7 +474,7 @@
                                         Veuillez lire attentivement les informations avant le début du trimestre disponibles sur notre site web en cliquant (<a href="https://learning.unog.ch/fr/node/1472">ici</a>). 
                                     </p>
                                     <p style="text-align: justify">
-                                        Si vous ne pouvez pas être présent(e)s le premier jour, vous devez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s le premier jour peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.
+                                        Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.
                                     </p>    
                                     <p style="color: red;text-align: justify;">
                                         Si vous devez annuler votre inscription (ou une de vos inscriptions si vous vous êtes inscrit(e) à deux cours), vous devez le faire avant le {{ $cancel_date_limit_string_fr }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. Pour toute information sur le remboursement, cliquer <a href="https://learning.unog.ch/fr/node/1301#position5">ici</a>.
