@@ -24,7 +24,8 @@
 										<p>{{ $e->Tch_Name }}:</p>
 											@foreach ($e->classrooms as $element)
 											<p style="margin-left: 50px">
-			                            		LTP-{{ $selectedTerm->Term_Code }}-{{ $e->Tch_ID }}-{{$element->course->Description}}-{{$element->Te_Code_New}}:{{$element->scheduler->time_combination}} 
+			                            		{{ $selectedTerm->Term_Code }}-{{substr($element->course->Description, 0, 2)}} {{substr($element->course->Description, strpos($element->course->Description, ": ") + 1)}}-{{substr($element->teachers->Tch_Firstname, 0, 1)}}. {{$element->teachers->Tch_Lastname}}-{{substr($element->scheduler->name, 0, 3)}}@if (($pos = strrpos($element->scheduler->name, "&")) !== FALSE)&{{str_replace(' ','',substr($element->scheduler->name, $pos + 1, 4))}} @endif
+									            @if(\Carbon\Carbon::parse($element->scheduler->begin_time) < \Carbon\Carbon::parse('1899-12-30 12:00:00'))Morning @else Lunch @endif // {{$element->Code}}
 											</p>
 											@endforeach
 										@endif

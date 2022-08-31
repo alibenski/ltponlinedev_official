@@ -196,7 +196,7 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;"></h1>
                                     <p>Dear {{ $staff_name }}, </p>
                                     <p style="text-align: justify">
-                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>. (Monday 18 April is a United Nations holiday, no courses will take place that day). Please see below the information about your course:
+                                        We have the pleasure to inform you that you are successfully registered in a language class for the coming term from <strong>{{ $term_en }}</strong>. Please see below the information about your course:
                                     </p>
                                     
                                     <p>
@@ -209,29 +209,29 @@
                                         <br>
                                         @foreach($classrooms as $classroom)
                                           @if(!empty($classroom->Te_Mon_Room))
-                                          <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }} *</strong></p>
+                                          <p>Monday Room: <strong>{{ $classroom->roomsMon->Rl_Room }} </strong></p>
                                           {{-- <p>Monday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Tue_Room))
-                                          <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }} *</strong></p>
+                                          <p>Tuesday Room: <strong>{{ $classroom->roomsTue->Rl_Room }} </strong></p>
                                           {{-- <p>Tuesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Wed_Room))
-                                          <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }} *</strong></p>
+                                          <p>Wednesday Room: <strong>{{ $classroom->roomsWed->Rl_Room }} </strong></p>
                                           {{-- <p>Wednesday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Thu_Room))
-                                          <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }} *</strong></p>
+                                          <p>Thursday Room: <strong>{{ $classroom->roomsThu->Rl_Room }} </strong></p>
                                           {{-- <p>Thursday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Fri_Room))
-                                          <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }} *</strong></p>
+                                          <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }} </strong></p>
                                           {{-- <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
                                     </p>
                                     <br>
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         * <span style="color: red;">Important note: Due to the situation related to COVID-19, the term will start remotely, and the face-to-face component will be delivered online. Should the situation evolve during the term, the delivery mode might change taking into account local health and safety conditions, except for courses advertised as online that will remain online.</span>
                                     </p>
                                         
@@ -241,62 +241,61 @@
 
                                     <p style="text-align: justify">
                                         How are we going to interact and which tools are we going to use?
-                                    </p>
+                                    </p> --}}
                                     <ol>
                                         <li>
-                                            <p style="text-align: justify">
-                                            <b>Microsoft Teams</b> <br>
-                                            We will use Microsoft Teams as the teleconferencing tool to replace your face-to-face sessions. Virtual sessions will take place at the time indicated above. Further details about how to join your session will be sent by your teacher before the beginning of the term.
-                                            </p>
+                                            <strong>For courses delivered online:</strong>
                                         </li>
+                                        <p style="text-align: justify">
+                                        <b>Microsoft Teams</b> <br>
+                                        We will use Microsoft Teams as the teleconferencing tool for the virtual sessions that will take place at the time indicated above. Further details about how to join your session will be sent by your teacher before the beginning of the term.
+                                        </p>
+                                        <p style="text-align: justify">
+                                        <b>IT requirements</b> <br>
+                                        <ul>
+                                            <li style="text-align: justify">
+                                                Ensure that you have a camera, headphones and a microphone.
+                                            </li>
+                                            <li style="text-align: justify">
+                                                Test the connection before the course. 
+                                            </li>
+                                            <li style="text-align: justify">
+                                                Contact your Organization’s IT department if you have any problems.
+                                            </li>
+                                            <li style="text-align: justify">
+                                                When attending the course, close all other applications and files. This will ensure that you focus on the content of the course as if you were attending a face-to-face course and will not overload the bandwidth.
+                                            </li>
+                                        </ul>
+                                        </p>
 
                                         <li>
-                                            <p style="text-align: justify">
-                                            <b><a href="https://moodle.unog.ch/unog/login/index.php">Moodle</a></b> <br>
-                                            <ul>
-                                                <li style="text-align: justify">
-                                                    <u>Once notified by your teacher</u>, you will find your learning material and autonomous activities on the CLM e-learning Moodle platform at <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Before you start your class, make sure to log in to your course to familiarize yourself with the content and access the training materials.
-                                                </li>
-                                                {{-- <li style="text-align: justify">
-                                                    Update your profile by adding a picture in your profile.
-                                                </li> --}}
-                                                {{-- <li style="text-align: justify">
-                                                    If you are new to the Language Training Programme and don’t have your Moodle access yet, you will receive your credentials and the log-in instructions by email before your first class. 
-                                                </li> --}}
-                                                <li style="text-align: justify">
-                                                    If you don’t have a Moodle access yet, please use the following credentials to log in:
-                                                    <br />- Username: first part before the @  of your email address (ex. “psmith” is the username for psmith@un.org) 
-                                                    <br />- Default password: Welcome2U_2022# (you will be asked to change it when you log in)
-                                                </li>
-                                            </ul>
-                                            </p>
+                                            <strong>For all courses, online and in-person:</strong> 
                                         </li>
+                                        <p style="text-align: justify">
+                                        <b><a href="https://moodle.unog.ch/unog/login/index.php">Moodle</a></b> <br>
+                                        <ul>
+                                            <li style="text-align: justify">
+                                                <u>Once notified by your teacher</u>, you will find your learning material and autonomous activities on the CLM e-learning Moodle platform at <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Before you start your class, make sure to log in to your course to familiarize yourself with the content and access the training materials.
+                                            </li>
+                                            {{-- <li style="text-align: justify">
+                                                Update your profile by adding a picture in your profile.
+                                            </li> --}}
+                                            {{-- <li style="text-align: justify">
+                                                If you are new to the Language Training Programme and don’t have your Moodle access yet, you will receive your credentials and the log-in instructions by email before your first class. 
+                                            </li> --}}
+                                            <li style="text-align: justify">
+                                                If you don’t have a Moodle access yet, please use the following credentials to log in:
+                                                <br />- Username: first part before the @  of your email address (ex. “psmith” is the username for psmith@un.org) 
+                                                <br />- Default password: Welcome2U_2022# (you will be asked to change it when you log in)
+                                            </li>
+                                        </ul>
+                                        </p>
 
-                                        <li>
-                                            <p style="text-align: justify">
-                                            <b>IT requirements</b> <br>
-                                            <ul>
-                                                <li style="text-align: justify">
-                                                    Ensure that you have a camera, headphones and a microphone.
-                                                </li>
-                                                <li style="text-align: justify">
-                                                    Test the connection before the course. 
-                                                </li>
-                                                <li style="text-align: justify">
-                                                    Contact your Organization’s IT department if you have any problems.
-                                                </li>
-                                                <li style="text-align: justify">
-                                                    When attending the course, close all other applications and files. This will ensure that you focus on the content of the course as if you were attending a face-to-face course and will not overload the bandwidth.
-                                                </li>
-                                            </ul>
-                                            </p>
-                                        </li>
-
-                                        <li>
+                                        {{-- <li>
                                             <p style="text-align: justify">
                                             <b>Books and training materials:</b> please find <a href="https://learning.unog.ch/node/1443">here the list of books and materials</a> that you need to acquire before your class starts
                                             </p>
-                                        </li>
+                                        </li> --}}
                                     </ol>
 
                                     {{-- <p style="text-align: justify">
@@ -313,6 +312,9 @@
                                     {{-- <p style="text-align: justify">
                                         If you encounter any issue with your registration in the above mentioned course, please contact the Language Training secretariat at <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p> --}}
+                                    <p style="text-align: justify">
+                                        Please read carefully the information before start of term on our website (<a href="https://learning.unog.ch/node/1472">click here</a>). 
+                                    </p>
                                     <p style="text-align: justify">
                                         <u>If you are unable to attend the first week of the term</u>, you must inform your teacher by email before the term starts. Participants who do not attend class during the first week of the term may be disenrolled from the course and their seat given to participants who were placed on a waiting list.
                                     </p>
@@ -355,7 +357,7 @@
                                 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
                                     <p>Cher / Chère {{ $staff_name }},</p>
                                     <p style="text-align: justify">
-                                        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong> (le lundi 18 avril étant un jour férié aux Nations Unies, aucun cours n’aura lieu ce jour-là). Voici ci-dessous les informations relatives à votre cours :
+                                        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
                                     </p>
                                     
                                     <p>
@@ -368,29 +370,29 @@
                                         <br> 
                                         @foreach($classrooms as $classroom)
                                           @if(!empty($classroom->Te_Mon_Room))
-                                          <p>Salle du lundi : <strong>{{ $classroom->roomsMon->Rl_Room }} *</strong></p>
+                                          <p>Salle du lundi : <strong>{{ $classroom->roomsMon->Rl_Room }}</strong></p>
                                           {{-- <p>horaire lundi : <strong>{{ date('H:i', strtotime($classroom->Te_Mon_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Mon_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Tue_Room))
-                                          <p>Salle du mardi : <strong>{{ $classroom->roomsTue->Rl_Room }} *</strong></p>
+                                          <p>Salle du mardi : <strong>{{ $classroom->roomsTue->Rl_Room }}</strong></p>
                                           {{-- <p>horaire mardi : <strong>{{ date('H:i', strtotime($classroom->Te_Tue_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Tue_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Wed_Room))
-                                          <p>Salle du mercredi : <strong>{{ $classroom->roomsWed->Rl_Room }} *</strong></p>
+                                          <p>Salle du mercredi : <strong>{{ $classroom->roomsWed->Rl_Room }}</strong></p>
                                           {{-- <p>horaire mercredi : <strong>{{ date('H:i', strtotime($classroom->Te_Wed_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Wed_ETime)) }}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Thu_Room))
-                                          <p>Salle du jeudi : <strong>{{ $classroom->roomsThu->Rl_Room }} *</strong></p>
+                                          <p>Salle du jeudi : <strong>{{ $classroom->roomsThu->Rl_Room }}</strong></p>
                                           {{-- <p>horaire jeudi : <strong>{{ date('H:i', strtotime($classroom->Te_Thu_BTime)) }} - {{ date('H:i', strtotime($classroom->Te_Thu_ETime ))}}</strong></p> --}}
                                           @endif
                                           @if(!empty($classroom->Te_Fri_Room))
-                                          <p>Salle du vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }} *</strong></p>
+                                          <p>Salle du vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
                                           {{-- <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
                                         @endforeach
                                     </p>
                                     <br>
-                                    <p style="text-align: justify">
+                                    {{-- <p style="text-align: justify">
                                         * <span style="color: red;">Remarque importante : En raison de la situation liée à COVID-19, le trimestre commencera à distance et la composante en face à face sera dispensée de façon virtuelle. Si la situation évolue au cours du trimestre, le mode d’enseignement pourrait être amené à changer suivant les règles locales de santé et de sécurité, sauf pour les cours annoncés comme étant dispensés en ligne qui resteront en ligne.</span>
                                     </p>
                                         
@@ -400,59 +402,59 @@
 
                                     <p style="text-align: justify">
                                         Comment allons-nous interagir et quels outils allons-nous utiliser ?
-                                    </p>
+                                    </p> --}}
                                     <ol>
                                         <li>
-                                            <p style="text-align: justify">
-                                            <b>Microsoft Teams</b> <br>
-                                            Nous utiliserons Microsoft Teams comme outil de téléconférence pour remplacer vos sessions en face-à-face. Les sessions auront lieu au moment de votre cours, comme indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
-                                            </p>
+                                            <strong>Pour les cours annoncés en ligne :</strong>
                                         </li>
+                                        <p style="text-align: justify">
+                                        <b>Microsoft Teams</b> <br>
+                                        Nous utiliserons Microsoft Teams comme outil de téléconférence. Les sessions auront lieu au moment indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début du trimestre.
+                                        </p>
+                                        
+                                        <p style="text-align: justify">
+                                        <b>Exigences informatiques</b> <br>
+                                        <ul>
+                                            <li style="text-align: justify">
+                                                Assurez-vous que vous avez une caméra, des écouteurs et un microphone.
+                                            </li>
+                                            <li style="text-align: justify">
+                                                Testez la connexion avant le cours. 
+                                            </li>
+                                            <li style="text-align: justify">
+                                                Contactez le département informatique de votre organisation si vous avez un problème.
+                                            </li>
+                                            <li style="text-align: justify">
+                                                Lorsque vous assistez au cours, fermez toutes les autres applications et tous les autres dossiers. Cela vous permettra de vous concentrer sur le contenu du cours comme si vous suiviez un cours en face à face et de ne pas surcharger la bande passante.
+                                            </li>
+                                        </ul>
+                                        </p>
 
                                         <li>
-                                            <p style="text-align: justify">
-                                            <b><a href="https://moodle.unog.ch/unog/login/index.php">Moodle</a></b> <br>
-                                            <ul>
-                                                <li style="text-align: justify">
-                                                    <u>Lorsque vous en serez informé(e) par votre professeur(e)</u>, vous trouverez votre matériel d'apprentissage et vos activités en autonomie sur la plateforme d'apprentissage Moodle du CFM : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Avant de commencer votre cours, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel de formation.
-                                                </li>
-                                                {{-- <li style="text-align: justify">
-                                                    Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
-                                                </li> --}}
-                                                <li style="text-align: justify">
-                                                    Si vous n'avez pas encore votre accès à Moodle, veuillez vous connecter avec les identifiants suivants :
-                                                    <br />- Nom d’utilisateur : la première partie avant le @ de votre adresse email (ex. “psmith” pour psmith@un.org) 
-                                                    <br />- Mot de passe par défaut : Welcome2U_2022# (vous devrez le modifier lors de la première connexion)
-                                                </li>
-                                            </ul>
-                                            </p>
+                                            <strong>Pour tous les cours, en ligne et en présentiel :</strong>
                                         </li>
-
-                                        <li>
-                                            <p style="text-align: justify">
-                                            <b>Exigences informatiques</b> <br>
-                                            <ul>
-                                                <li style="text-align: justify">
-                                                    Assurez-vous que vous avez une caméra, des écouteurs et un microphone.
-                                                </li>
-                                                <li style="text-align: justify">
-                                                    Testez la connexion avant le cours. 
-                                                </li>
-                                                <li style="text-align: justify">
-                                                    Contactez le département informatique de votre organisation si vous avez un problème.
-                                                </li>
-                                                <li style="text-align: justify">
-                                                    Lorsque vous assistez au cours, fermez toutes les autres applications et tous les autres dossiers. Cela vous permettra de vous concentrer sur le contenu du cours comme si vous suiviez un cours en face à face et de ne pas surcharger la bande passante.
-                                                </li>
-                                            </ul>
+                                        <p style="text-align: justify">
+                                        <b><a href="https://moodle.unog.ch/unog/login/index.php">Moodle</a></b> <br>
+                                        <ul>
+                                            <li style="text-align: justify">
+                                                <u>Lorsque vous en serez informé(e) par votre professeur(e)</u>, vous trouverez votre matériel d'apprentissage et vos activités en autonomie sur la plateforme d'apprentissage Moodle du CFM : <a href="https://moodle.unog.ch/unog/login/index.php">https://moodle.unog.ch/unog/login/index.php</a>. Avant de commencer votre cours, assurez-vous de vous connecter à votre cours pour vous familiariser avec le contenu et accéder au matériel de formation.
+                                            </li>
+                                            {{-- <li style="text-align: justify">
+                                                Si vous êtes nouveau dans le programme de formation linguistique et que vous n'avez pas encore votre accès à Moodle, vous recevrez vos identifiants et les instructions de connexion par courrier électronique avant votre premier cours. 
+                                            </li> --}}
+                                            <li style="text-align: justify">
+                                                Si vous n'avez pas encore votre accès à Moodle, veuillez vous connecter avec les identifiants suivants :
+                                                <br />- Nom d’utilisateur : la première partie avant le @ de votre adresse email (ex. “psmith” pour psmith@un.org) 
+                                                <br />- Mot de passe par défaut : Welcome2U_2022# (vous devrez le modifier lors de la première connexion)
+                                            </li>
+                                        </ul>
                                             </p>
-                                        </li>
 
-                                        <li>
+                                        {{-- <li>
                                             <p style="text-align: justify">
                                             <b>Livres et matériel :</b> veuillez trouver <a href="https://learning.unog.ch/fr/node/1443">ici la liste des livres</a> à se procurer avant le premier cours.
                                             </p>
-                                        </li>
+                                        </li> --}}
                                     </ol>
 
                                     {{-- <p style="text-align: justify">
@@ -468,6 +470,9 @@
                                     {{-- <p style="text-align: justify">
                                         Si vous rencontrez des problèmes quant à votre cours mentionné ci-dessus, veuillez contacter le secrétariat de la formation linguistique à l'adresse <a href="mailto: clm_language@un.org">clm_language@un.org</a>. 
                                     </p> --}}
+                                    <p style="text-align: justify">
+                                        Veuillez lire attentivement les informations avant le début du trimestre disponibles sur notre site web en cliquant (<a href="https://learning.unog.ch/fr/node/1472">ici</a>). 
+                                    </p>
                                     <p style="text-align: justify">
                                         Si vous ne pouvez pas être présent(e)s la première semaine du trimestre, vous devez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.
                                     </p>    
