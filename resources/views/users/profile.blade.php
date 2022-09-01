@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-9" style="margin-bottom: 1rem">
+    <div class="col-md-4" style="margin-bottom: 1rem">
         <div class="card">
             <div class="card-header bg-primary"><strong class="text-white">Student Profile</strong></div>
 
@@ -148,23 +148,86 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-4 offset-md-4"><a href="{{ route('students.edit', $student->id) }}" class="btn btn-block btn-outline-info">Edit Profile</a>
-                    </div>
+                    {{-- <div class="col-md-4 offset-md-4"><a href="{{ route('students.edit', $student->id) }}" class="btn btn-block btn-outline-info">Edit Profile</a>
+                    </div> --}}
                 </form>
             </div>
         </div>
     </div>  
-    <div class="col-md-3">
+    
+    <div class="col-md-4">
         <div class="card">
-            <div class="card-header bg-info text-center"><strong>UN Language Courses</strong></div>
+            <div class="card-header bg-info text-center"><strong>New User Info</strong></div>
             <div class="card-body">
                 <ul  class="list-group">
-                    <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a>
-                    <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a>
-                    <a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English</a>
-                    <a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French</a>
-                    <a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian</a>
-                    <a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish</a>
+            
+                    <div class="form-group">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <label class="control-label">Attachment 1: </label>
+                                @if(empty($student->newUserInt->filesId->path)) <strong>None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+                
+                                {{-- <div class="form-group">
+                                    <label class="control-label col-sm-12">Attach another file to replace attachment 1: </label>
+                                    <input name="contractfile" type="file" class="col-md-12 form-control-static mb-1">
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <label class="control-label">Attachment 2: </label>
+                                @if(empty($student->newUserInt->filesId2->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+                                
+                                {{-- <div class="form-group">
+                                    <label class="control-label col-sm-12">Attach another file to replace attachment 2: </label>
+                                    <input name="contractfile2" type="file" class="col-md-12 form-control-static mb-1">
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+
+                </ul>
+            </div>
+        </div>
+    </div> 
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-center"><strong>New User Info</strong></div>
+            <div class="card-body">
+                <ul  class="list-group">
+            
+                    <div class="form-group">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <label class="control-label">Attachment 1: </label>
+                                @if(empty($student->newUserInt->filesId->path)) <strong>None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+                
+                                {{-- <div class="form-group">
+                                    <label class="control-label col-sm-12">Attach another file to replace attachment 1: </label>
+                                    <input name="contractfile" type="file" class="col-md-12 form-control-static mb-1">
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <label class="control-label">Attachment 2: </label>
+                                @if(empty($student->newUserInt->filesId2->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+                                
+                                {{-- <div class="form-group">
+                                    <label class="control-label col-sm-12">Attach another file to replace attachment 2: </label>
+                                    <input name="contractfile2" type="file" class="col-md-12 form-control-static mb-1">
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+
                 </ul>
             </div>
         </div>
