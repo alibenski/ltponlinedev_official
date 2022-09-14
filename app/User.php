@@ -60,6 +60,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function newUserInt()
+    {
+        return $this->hasOne('App\NewUser', 'indexno_new', 'indexno');
+    }
+
     public function preenrolment()
     {
         return $this->hasMany('App\Preenrolment', 'INDEXID', 'indexno');

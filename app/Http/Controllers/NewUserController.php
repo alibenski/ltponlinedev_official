@@ -656,7 +656,7 @@ class NewUserController extends Controller
             $msuUpdateField->checkMsuValueNewUser($newUser, $request);
             $ngoUpdateField->checkNgoValueNewUser($newUser, $request);
         }
-
+        $newUser->indexno_new = $request->indexno;
         $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
         $newUser->nameLast = strtoupper($request->nameLast);
         $newUser->save();

@@ -25,6 +25,7 @@
 	
 	<h3>Viewing: <strong>{{ $student->name }}</strong> [{{ $student->indexno }}]</h3>
 
+	{{-- @include('users.profile') --}}
 	@include('admin.partials._userAdminNav')
 
 	<h3>@if(Request::input('Term'))Term: {{ Request::input('Term') }} - {{ $term_info->Comments }} {{ date('Y', strtotime($term_info->Term_Begin )) }}@else Please Choose Term @endif</h3>
@@ -858,6 +859,26 @@
 						        {{-- <div class="col-md-4 col-md-offset-4"><a href="{{ route('students.edit', $student->id) }}" class="btn btn-block btn-info btn-md">Edit my CLM Online Profile</a>
 						        </div> --}}
 						    </form>
+						</div>
+					</div>
+						
+					<div class="form-group">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<label class="control-label">New User Attachment 1: </label>
+								@if(empty($student->newUserInt->filesId->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group ">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<label class="control-label">New User Attachment 2: </label>
+								@if(empty($student->newUserInt->filesId2->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+								
+							</div>
 						</div>
 					</div>
                     

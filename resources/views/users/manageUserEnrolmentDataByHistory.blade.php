@@ -893,6 +893,26 @@
 						    </form>
 						</div>
 					</div>
+
+					<div class="form-group">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<label class="control-label">New User Attachment 1: </label>
+								@if(empty($student->newUserInt->filesId->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group ">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<label class="control-label">New User Attachment 2: </label>
+								@if(empty($student->newUserInt->filesId2->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+								
+							</div>
+						</div>
+					</div>
                     
             </div>
             <div class="modal-footer">
