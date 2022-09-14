@@ -128,7 +128,7 @@
                             <input name="payfile" type="file" class="col-md-9 form-control-static" required="required">
                           </div>
 
-                          <div class="form-group my-3 py-3 border">
+                          {{-- <div class="form-group my-3 py-3 border">
                             <label for="contract-file" class="col-md-3 control-label">Upload Contract: </label>
                             <input name="contract-file" type="file" class="col-md-9 form-control-static" required="required">
                           </div>
@@ -157,7 +157,7 @@
                                   }
                                   return false;
                               }
-                          </script>  
+                          </script>   --}}
 
                           <div class="form-group col-md-12">
                                 <div class="disclaimer-consent alert alert-default alert-block col-md-10 col-md-offset-1">
