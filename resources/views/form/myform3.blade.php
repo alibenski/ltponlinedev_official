@@ -128,36 +128,9 @@
                             <input name="payfile" type="file" class="col-md-9 form-control-static" required="required">
                           </div>
 
-                          {{-- <div class="form-group my-3 py-3 border">
-                            <label for="contract-file" class="col-md-3 control-label">Upload Contract: </label>
-                            <input name="contract-file" type="file" class="col-md-9 form-control-static" required="required">
-                          </div>
+                          @include('file_attachment_field.contract-file-attachment')
 
-                          <div id="filesContainer" class="form-group my-3 py-3 border">
-                            
-                            <div class="col-md-3 my-1 py-1">
-                            <button id="addFile" onclick="return Count();" class="btn btn-secondary"><i class="fa fa-plus"></i> Add</button>
-                            </div>
-
-                            <label for="add-file" class="col-md-3 control-label">Additional Files: (optional) </label>
-                            <input name="add-file-0" type="file" class="col-md-9 form-control-static">
-                          </div>
-
-                          <script>
-                            var count = 0;
-                              function Count() {
-                                  count++;
-                                  console.log(count)
-                                  if (count < 3) {
-                                    $('#filesContainer').append(
-                                        $('<input/>').attr('type', 'file').attr('name', 'add-file-'+count)
-                                    );
-                                  } else {
-                                    $('#addFile').attr('disable', true);
-                                  }
-                                  return false;
-                              }
-                          </script>   --}}
+                          @include('file_attachment_field.multiple-file-attachment')
 
                           <div class="form-group col-md-12">
                                 <div class="disclaimer-consent alert alert-default alert-block col-md-10 col-md-offset-1">
