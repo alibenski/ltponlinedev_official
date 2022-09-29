@@ -867,9 +867,10 @@ class SelfPayController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
                 'filename' => $filename,
@@ -880,9 +881,10 @@ class SelfPayController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
                 'filename' => $filename,
@@ -965,10 +967,11 @@ class SelfPayController extends Controller
         }
 
         foreach ($ingredients as $data_id) {
-            // find newly created contract and additional files id and save enrolment id(s)
+            // create contract and additional files id and save enrolment id(s)
             if ($request->hasFile('identityfile2')) {
                 $request->file('identityfile2');
-                $filename = 'back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension();
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension();
                 //Store attachment
                 $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile2'), 'back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension());
                 //Create new record in db table
@@ -983,7 +986,8 @@ class SelfPayController extends Controller
             }
             if ($request->hasFile('contractFile')) {
                 $request->file('contractFile');
-                $filename = 'contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension();
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension();
                 //Store attachment
                 $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('contractFile'), 'contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension());
                 //Create new record in db table
@@ -998,7 +1002,8 @@ class SelfPayController extends Controller
             }
             if ($request->hasFile('addFile0')) {
                 $request->file('addFile0');
-                $filename = 'additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension();
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension();
                 //Store attachment
                 $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile0'), 'additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension());
                 //Create new record in db table
@@ -1013,7 +1018,8 @@ class SelfPayController extends Controller
             }
             if ($request->hasFile('addFile1')) {
                 $request->file('addFile1');
-                $filename = 'additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension();
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension();
                 //Store attachment
                 $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile1'), 'additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension());
                 //Create new record in db table
@@ -1028,7 +1034,8 @@ class SelfPayController extends Controller
             }
             if ($request->hasFile('addFile2')) {
                 $request->file('addFile2');
-                $filename = 'additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension();
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension();
                 //Store attachment
                 $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile2'), 'additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension());
                 //Create new record in db table
