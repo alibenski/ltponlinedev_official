@@ -466,7 +466,7 @@ class PlacementFormController extends Controller
             $time = date("d-m-Y") . "-" . time();
             $filename = $time . '_back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile2'), 'back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile2'), $time . '_back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension());
             //Create new record in db table
             $attachment_identity_2_file = new Identity2File([
                 'user_id' => Auth::user()->id,
@@ -482,7 +482,7 @@ class PlacementFormController extends Controller
             $time = date("d-m-Y") . "-" . time();
             $filename = $time . '_contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('contractFile'), 'contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('contractFile'), $time . '_contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension());
             //Create new record in db table
             $attachment_contract_file = new ContractFile([
                 'user_id' => Auth::user()->id,
@@ -498,7 +498,7 @@ class PlacementFormController extends Controller
             $time = date("d-m-Y") . "-" . time();
             $filename = $time . '_additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile0'), 'additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile0'), $time . '_additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension());
             //Create new record in db table
             $attachment_add_file_0 = new AdditionalFile([
                 'user_id' => Auth::user()->id,
@@ -514,7 +514,7 @@ class PlacementFormController extends Controller
             $time = date("d-m-Y") . "-" . time();
             $filename = $time . '_additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile1'), 'additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile1'), $time . '_additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension());
             //Create new record in db table
             $attachment_add_file_1 = new AdditionalFile([
                 'user_id' => Auth::user()->id,
@@ -530,7 +530,7 @@ class PlacementFormController extends Controller
             $time = date("d-m-Y") . "-" . time();
             $filename = $time . '_additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile2'), 'additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile2'), $time . '_additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension());
             //Create new record in db table
             $attachment_add_file_2 = new AdditionalFile([
                 'user_id' => Auth::user()->id,
@@ -1431,9 +1431,10 @@ class PlacementFormController extends Controller
         // store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'converted_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_converted_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
                 'filename' => $filename,
@@ -1444,9 +1445,10 @@ class PlacementFormController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'converted_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_converted_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
                 'filename' => $filename,

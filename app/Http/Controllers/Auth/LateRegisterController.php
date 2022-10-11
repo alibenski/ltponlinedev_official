@@ -96,7 +96,8 @@ class LateRegisterController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('contractfile')) {
             $request->file('contractfile');
-            $filename = 'new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
             //Create new record in db table
@@ -110,7 +111,8 @@ class LateRegisterController extends Controller
 
         if ($request->hasFile('contractfile2')) {
             $request->file('contractfile2');
-            $filename2 = 'new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename2 = $time . '_new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
             //Store attachment
             $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
             //Create new record in db table

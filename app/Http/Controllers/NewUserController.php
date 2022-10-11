@@ -345,7 +345,8 @@ class NewUserController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('contractfile')) {
             $request->file('contractfile');
-            $filename = 'new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
             //Create new record in db table
@@ -359,7 +360,8 @@ class NewUserController extends Controller
 
         if ($request->hasFile('contractfile2')) {
             $request->file('contractfile2');
-            $filename2 = 'new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename2 = $time . '_new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
             //Store attachment
             $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
             //Create new record in db table
@@ -601,8 +603,8 @@ class NewUserController extends Controller
 
             $fileId = $newUser->attachment_id;
             $attachment_contract_file = FileNewUser::findOrFail($fileId);
-            // use same filename to overwrite
-            $filename = $attachment_contract_file->filename;
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $attachment_contract_file->filename;
             //Store attachment
             $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
             //UPDATE record in db table
@@ -620,7 +622,8 @@ class NewUserController extends Controller
             $fileId2 = $newUser->attachment_id_2;
             if ($fileId2) {
                 $attachment_contract_file2 = FileNewUser::findOrFail($fileId2);
-                $filename2 = $attachment_contract_file2->filename;
+                $time = date("d-m-Y") . "-" . time();
+                $filename2 = $time . '_' . $attachment_contract_file2->filename;
                 //Store attachment
                 $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
                 //UPDATE record in db table
@@ -631,7 +634,8 @@ class NewUserController extends Controller
                 ]);
                 $attachment_contract_file2->save();
             } else {
-                $filename2 = 'new_user_request_spouse_2_' . strtoupper($newUser->nameLast) . '_' . $newUser->nameFirst . '.' . $request->contractfile2->extension();
+                $time = date("d-m-Y") . "-" . time();
+                $filename2 = $time . '_new_user_request_spouse_2_' . strtoupper($newUser->nameLast) . '_' . $newUser->nameFirst . '.' . $request->contractfile2->extension();
                 //Store attachment
                 $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
                 //Create record in db table
