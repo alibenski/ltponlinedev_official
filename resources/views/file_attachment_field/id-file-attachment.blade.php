@@ -1,5 +1,5 @@
 <div class="form-group my-3 py-3 border">
-    <label for="identityfile" class="col-md-12 control-label">Proof of Identity - Upload a copy of either one of the following documents: <span class="font-weight-bold text-danger">(required)</span></label>
+    <label for="identityfile" class="col-md-12 control-label">Proof of Identity - Upload a copy of either one of the following documents <strong>which covers the whole duration of the term:</strong> <span class="font-weight-bold text-danger">(required)</span></label>
 
     <ul>
     <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>

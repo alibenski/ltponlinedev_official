@@ -77,7 +77,7 @@
                   <ol>
                     <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank">HERE</a></li>
                     <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
-                    <li>Prepare a copy of either one of the following documents:
+                    <li>Prepare a copy of either one of the following documents <strong>which covers the whole duration of the term:</strong>
                       <ul>
                         <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>
                         <li><u>For spouses</u>:
