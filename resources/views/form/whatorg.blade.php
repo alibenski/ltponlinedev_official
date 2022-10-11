@@ -59,10 +59,10 @@
 
                 <!-- MAKE A DECISION SECTION -->
                 <div class="form-group col-md-12">
-                  <h5>STEP 2: </h5>Proceed with the enrolment procedure.
+                  <h5>STEP 2: </h5>Choose your Enrolment Type.
                 </div>
                 <div class="d-flex form-group">
-                    <label class="col-md-3 control-label">Enrolment Type:</label>
+                    <label class="col-md-3 control-label"><strong>Enrolment Type:</strong></label>
 
                       <div class="col-md-5">
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
