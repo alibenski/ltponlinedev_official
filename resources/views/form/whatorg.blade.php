@@ -15,12 +15,12 @@
           <div class="card-header bg-info text-center"><strong>Information/Content/Format of UN Language Courses</strong></div>
           <div class="card-body">
               <ul  class="list-group">
-                  <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a>
-                  <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a>
-                  <a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English</a>
-                  <a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French</a>
-                  <a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian</a>
-                  <a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish</a>
+                  <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a>
+                  <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese Info</a>
+                  <a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English Info</a>
+                  <a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French Info</a>
+                  <a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian Info</a>
+                  <a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish Info</a>
               </ul>
           </div>
       </div>
@@ -42,14 +42,15 @@
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
                   <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
-                  <p>Please view the content, format, and other information from the latest available courses in each language: 
+                  <h5>STEP 1: </h5> 
+                  <p> Read the content, format, and other information from the latest available courses in each language. 
                     <ul  class="nav nav-fill">
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish Info</a></li>
                     </ul>
                   </p>
                     
@@ -57,7 +58,9 @@
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-                
+                <div class="form-group col-md-12">
+                  <h5>STEP 2: </h5>Proceed with the enrolment procedure.
+                </div>
                 <div class="d-flex form-group">
                     <label class="col-md-3 control-label">Enrolment Type:</label>
 
@@ -73,7 +76,7 @@
                 </div>
 
                 <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
-                  <p>Before continuing, please follow the following instructions:</p>
+                  <p>Before continuing, please follow the instructions:</p>
                   <ol>
                     <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank">HERE</a></li>
                     <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
