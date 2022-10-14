@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modal-check" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <span><h5 class="modal-title" id="memberModalLabel"><i class="fa fa-lg fa-info-circle text-primary btn-space"></i>Reminder for self-paying students</h5></span>
@@ -12,12 +12,12 @@
                 <ul>
                     <li>The course and schedule selected</li>
                     <li>Copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
-                    <li>Prepare a copy of either one of the following documents:
+                    <li>Prepare a copy of either one of the following documents <strong>which covers the whole duration of the term:</strong>
                       <ul>
-                        <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>
+                        <li>UN agency badge, or contract, or “carte de légitimation” (both front and back sides)</li>
                         <li><u>For spouses</u>:
                           <ul> 
-                            <li>copy of applicant UN agency badge ID, or copy of “carte de légitimation” (both front and back sides)</li> 
+                            <li>copy of applicant UN agency badge, or copy of “carte de légitimation” (both front and back sides)</li> 
                             OR
                             <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
                           </ul>

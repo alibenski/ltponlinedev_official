@@ -415,7 +415,8 @@ class UserController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('contractfile')) {
             $request->file('contractfile');
-            $filename = 'new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_new_user_request_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile'), $filename);
             //Create new record in db table
@@ -429,7 +430,8 @@ class UserController extends Controller
 
         if ($request->hasFile('contractfile2')) {
             $request->file('contractfile2');
-            $filename2 = 'new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename2 = $time . '_new_user_request_spouse_2_' . strtoupper($request->nameLast) . '_' . $request->nameFirst . '.' . $request->contractfile2->extension();
             //Store attachment
             $filestore2 = Storage::putFileAs('public/attachment_newuser', $request->file('contractfile2'), $filename2);
             //Create new record in db table
@@ -930,11 +932,15 @@ class UserController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->identityfile->extension();
+            $user = User::where('indexno', $request->INDEXID)->first();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('identityfile'), 'id_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('identityfile'), $time . '_id_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
+                'user_id' => $user->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -943,11 +949,15 @@ class UserController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->payfile->extension();
+            $user = User::where('indexno', $request->INDEXID)->first();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('payfile'), 'payment_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('payfile'), $time . '_payment_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
+                'user_id' => $user->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,

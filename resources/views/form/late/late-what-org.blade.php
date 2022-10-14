@@ -15,12 +15,12 @@
           <div class="card-header bg-info text-center"><strong>Information/Content/Format of UN Language Courses</strong></div>
           <div class="card-body">
               <ul  class="list-group">
-                  <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a>
-                  <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a>
-                  <a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English</a>
-                  <a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French</a>
-                  <a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian</a>
-                  <a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish</a>
+                  <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a>
+                  <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese Info</a>
+                  <a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English Info</a>
+                  <a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French Info</a>
+                  <a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian Info</a>
+                  <a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish Info</a>
               </ul>
           </div>
       </div>
@@ -43,14 +43,15 @@
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
                   <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
-                  <p>Please view the content, format, and other information from the latest available courses in each language: 
+                  <h5>STEP 1: </h5> 
+                  <p> Read the content, format, and other information from the latest available courses in each language. 
                     <ul  class="nav nav-fill">
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian Info</a></li>
+                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish Info</a></li>
                     </ul>
                   </p>
                     
@@ -58,7 +59,9 @@
                 </div>
 
                 <!-- MAKE A DECISION SECTION -->
-                
+                <div class="form-group col-md-12">
+                  <h5>STEP 2: </h5>Choose your Enrolment Type.
+                </div>
                 <div class="d-flex form-group">
                     <label class="col-md-3 control-label">Enrolment Type:</label>
 
@@ -80,10 +83,10 @@
                     <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
                     <li>Prepare a copy of either one of the following documents:
                       <ul>
-                        <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>
+                        <li>UN agency badge, or contract, or “carte de légitimation” (both front and back sides)</li>
                         <li><u>For spouses</u>:
                           <ul> 
-                            <li>copy of applicant UN agency badge ID, or copy of “carte de légitimation” (both front and back sides)</li> 
+                            <li>copy of applicant UN agency badge, or copy of “carte de légitimation” (both front and back sides)</li> 
                             OR
                             <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
                           </ul>

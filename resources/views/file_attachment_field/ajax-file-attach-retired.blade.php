@@ -1,5 +1,5 @@
 <div class="form-group{{ $errors->has('contractfile') ? 'is-invalid' : '' }}">
-    <label for="contractfile" class="col-md-12 control-label"><strong>For retired staff, please provide a copy of either of the following:</strong> <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span> <br />UN badge ID or <br />proof of retirement status from your UN agency or <br />carte de légitimation</label>
+    <label for="contractfile" class="col-md-12 control-label"><strong>For retired staff, please provide a copy of either of the following:</strong> <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span> <br />UN badge or <br />proof of retirement status from your UN agency or <br />carte de légitimation</label>
     <div class="col-md-12">
     <input name="contractfile" type="file" class="col-md-12 form-control-static" required="required">
         @if ($errors->has('contractfile'))

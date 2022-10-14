@@ -1069,11 +1069,14 @@ class PreenrolmentController extends Controller
         // store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'converted_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_converted_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -1082,11 +1085,14 @@ class PreenrolmentController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'converted_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_converted_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\AdditionalFile;
 use App\AdminComment;
 use App\AdminCommentPlacement;
 use App\Classroom;
+use App\ContractFile;
+use App\Identity2File;
 use App\Course;
 use App\Day;
 use App\File;
@@ -160,12 +163,15 @@ class SelfPayController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -173,12 +179,15 @@ class SelfPayController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -237,12 +246,15 @@ class SelfPayController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -250,12 +262,15 @@ class SelfPayController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -329,12 +344,15 @@ class SelfPayController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -342,12 +360,15 @@ class SelfPayController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' .  $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -416,12 +437,15 @@ class SelfPayController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -429,12 +453,15 @@ class SelfPayController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -819,8 +846,14 @@ class SelfPayController extends Controller
         }
         // 1st part of validate other input fields 
         $this->validate($request, array(
-            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
             'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+        ));
+
+        // separated for optional validation in the future
+        $this->validate($request, array(
+            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'identityfile2' => 'required|mimes:pdf,doc,docx|max:8000',
+            'contractFile' => 'required|mimes:pdf,doc,docx|max:8000',
         ));
 
         if ($request->placementDecisionB === '0') {
@@ -858,11 +891,14 @@ class SelfPayController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
+                'user_id' => Auth::user()->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -871,11 +907,14 @@ class SelfPayController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
+                'user_id' => Auth::user()->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -952,6 +991,95 @@ class SelfPayController extends Controller
 
             foreach ($ingredients as $data) {
                 $data->save();
+            }
+        }
+
+        foreach ($ingredients as $data_id) {
+            // create contract and additional files id and save enrolment id(s)
+            if ($request->hasFile('identityfile2')) {
+                $request->file('identityfile2');
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension();
+                //Store attachment
+                $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile2'), $time . '_back_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile2->extension());
+                //Create new record in db table
+                $attachment_identity_2_file = new Identity2File([
+                    'user_id' => Auth::user()->id,
+                    'actor_id' => Auth::user()->id,
+                    'enrolment_id' => $data_id->id,
+                    'filename' => $filename,
+                    'size' => $request->identityfile2->getClientSize(),
+                    'path' => $filestore,
+                ]);
+                $attachment_identity_2_file->save();
+            }
+            if ($request->hasFile('contractFile')) {
+                $request->file('contractFile');
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension();
+                //Store attachment
+                $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('contractFile'), $time . '_contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension());
+                //Create new record in db table
+                $attachment_contract_file = new ContractFile([
+                    'user_id' => Auth::user()->id,
+                    'actor_id' => Auth::user()->id,
+                    'enrolment_id' => $data_id->id,
+                    'filename' => $filename,
+                    'size' => $request->contractFile->getClientSize(),
+                    'path' => $filestore,
+                ]);
+                $attachment_contract_file->save();
+            }
+            if ($request->hasFile('addFile0')) {
+                $request->file('addFile0');
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension();
+                //Store attachment
+                $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile0'), $time . '_additional_file_0_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile0->extension());
+                //Create new record in db table
+                $attachment_add_file_0 = new AdditionalFile([
+                    'user_id' => Auth::user()->id,
+                    'actor_id' => Auth::user()->id,
+                    'enrolment_id' => $data_id->id,
+                    'filename' => $filename,
+                    'size' => $request->addFile0->getClientSize(),
+                    'path' => $filestore,
+                ]);
+                $attachment_add_file_0->save();
+            }
+            if ($request->hasFile('addFile1')) {
+                $request->file('addFile1');
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension();
+                //Store attachment
+                $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile1'), $time . '_additional_file_1_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile1->extension());
+                //Create new record in db table
+                $attachment_add_file_1 = new AdditionalFile([
+                    'user_id' => Auth::user()->id,
+                    'actor_id' => Auth::user()->id,
+                    'enrolment_id' => $data_id->id,
+                    'filename' => $filename,
+                    'size' => $request->addFile1->getClientSize(),
+                    'path' => $filestore,
+                ]);
+                $attachment_add_file_1->save();
+            }
+            if ($request->hasFile('addFile2')) {
+                $request->file('addFile2');
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension();
+                //Store attachment
+                $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('addFile2'), $time . '_additional_file_2_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->addFile2->extension());
+                //Create new record in db table
+                $attachment_add_file_2 = new AdditionalFile([
+                    'user_id' => Auth::user()->id,
+                    'actor_id' => Auth::user()->id,
+                    'enrolment_id' => $data_id->id,
+                    'filename' => $filename,
+                    'size' => $request->addFile2->getClientSize(),
+                    'path' => $filestore,
+                ]);
+                $attachment_add_file_2->save();
             }
         }
 

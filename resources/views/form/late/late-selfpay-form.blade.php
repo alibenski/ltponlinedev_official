@@ -110,10 +110,10 @@
                             <label for="identityfile" class="col-md-12 control-label">Proof of Identity - Upload a copy of either one of the following documents:</label>
                             
                               <ul>
-                                <li>UN agency badge ID, or contract, or “carte de légitimation” (both front and back sides)</li>
+                                <li>UN agency badge, or contract, or “carte de légitimation” (both front and back sides)</li>
                                 <li><u>For spouses</u>:
                                   <ul> 
-                                    <li>copy of applicant UN agency badge ID, or copy of “carte de légitimation” (both front and back sides)</li> 
+                                    <li>copy of applicant UN agency badge, or copy of “carte de légitimation” (both front and back sides)</li> 
                                     OR
                                     <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
                                   </ul>
