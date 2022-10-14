@@ -340,7 +340,7 @@
                                     <br><br>
                                     {{-- <p>
                                         <h4><strong>Language Training Secretariat</strong></h4>
-                                        Annex Bocage 2 - Room 5 (ground floor) - we are available via email or on the phone<br>
+                                        Annex Bocage - A2-108 (first floor) - we are available via email or on the phone<br>
                                         <br>
                                         Opening hours : 9:00-12:30 from Monday to Friday.<br>
                                         Telephone: 00 41 22 917 44 09<br><br>
