@@ -607,9 +607,10 @@ class LateEnrolmentController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), 'id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
                 'filename' => $filename,
@@ -620,9 +621,10 @@ class LateEnrolmentController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
-            $filename = $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
-            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), 'payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
+            $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
                 'filename' => $filename,
