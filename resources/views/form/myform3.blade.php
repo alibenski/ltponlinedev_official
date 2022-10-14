@@ -108,9 +108,9 @@
                         
                           @include('file_attachment_field.id-file-attachment')
 
-                          @include('file_attachment_field.payment-file-attachment')
-
                           @include('file_attachment_field.contract-file-attachment')
+                          
+                          @include('file_attachment_field.payment-file-attachment')
 
                           @include('file_attachment_field.multiple-file-attachment')
 

@@ -470,6 +470,7 @@ class PlacementFormController extends Controller
             //Create new record in db table
             $attachment_identity_2_file = new Identity2File([
                 'user_id' => Auth::user()->id,
+                'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
                 'size' => $request->identityfile2->getClientSize(),
@@ -486,6 +487,7 @@ class PlacementFormController extends Controller
             //Create new record in db table
             $attachment_contract_file = new ContractFile([
                 'user_id' => Auth::user()->id,
+                'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
                 'size' => $request->contractFile->getClientSize(),
@@ -502,6 +504,7 @@ class PlacementFormController extends Controller
             //Create new record in db table
             $attachment_add_file_0 = new AdditionalFile([
                 'user_id' => Auth::user()->id,
+                'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
                 'size' => $request->addFile0->getClientSize(),
@@ -518,6 +521,7 @@ class PlacementFormController extends Controller
             //Create new record in db table
             $attachment_add_file_1 = new AdditionalFile([
                 'user_id' => Auth::user()->id,
+                'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
                 'size' => $request->addFile1->getClientSize(),
@@ -534,6 +538,7 @@ class PlacementFormController extends Controller
             //Create new record in db table
             $attachment_add_file_2 = new AdditionalFile([
                 'user_id' => Auth::user()->id,
+                'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
                 'size' => $request->addFile2->getClientSize(),
@@ -1437,6 +1442,8 @@ class PlacementFormController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_converted_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -1451,6 +1458,8 @@ class PlacementFormController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_converted_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,

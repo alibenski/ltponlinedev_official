@@ -169,7 +169,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -183,7 +185,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -248,7 +252,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -262,7 +268,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -342,7 +350,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -356,7 +366,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
@@ -431,7 +443,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
 
             $attachment_identity_file = File::find($request->identity_id);
-            $attachment_identity_file->update([
+            $attachment_identity_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -445,7 +459,9 @@ class SelfPayController extends Controller
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
 
             $attachment_pay_file = File::find($request->payment_id);
-            $attachment_pay_file->update([
+            $attachment_pay_file->update([ //change to create new
+                // 'user_id' => get the id of form owner
+                // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,

@@ -1,4 +1,4 @@
-<div class="form-group my-3 py-3 border">
+<div class="form-group my-3 py-3 px-1 border">
     <label for="identityfile" class="col-md-12 control-label">Proof of Identity - Upload a copy of either one of the following documents <strong>which covers the whole duration of the term:</strong> <span class="font-weight-bold text-danger">(required)</span></label>
 
     <ul>
@@ -7,7 +7,7 @@
         <ul> 
         <li>copy of applicant UN agency badge, or copy of “carte de légitimation” (both front and back sides)</li> 
         OR
-        <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
+        <li>spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides) + copy of proof of marriage (use <strong>Additional Files section below</strong> to upload the marriage document) </li> 
         </ul>
     </li>
     </ul>

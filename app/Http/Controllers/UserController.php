@@ -932,12 +932,15 @@ class UserController extends Controller
         //Store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
+            $user = User::where('indexno', $request->INDEXID)->first();
             $time = date("d-m-Y") . "-" . time();
             $filename = $time . '_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->identityfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('identityfile'), $time . '_id_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
+                'user_id' => $user->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -946,12 +949,15 @@ class UserController extends Controller
         }
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
+            $user = User::where('indexno', $request->INDEXID)->first();
             $time = date("d-m-Y") . "-" . time();
             $filename = $time . '_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->payfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('payfile'), $time . '_payment_' . $request->INDEXID . '_' . $request->Term . '_' . $request->Te_Code . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
+                'user_id' => $user->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
