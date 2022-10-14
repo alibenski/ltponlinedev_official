@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="col-md-12 my-3 border">
-        <p>Applicant's UN badge ID or carte de légitimation</p>
+        <p>Applicant's UN badge or carte de légitimation</p>
         <input name="contractfile" type="file" class="col-md-12 form-control-static mb-1" required="required">
         @if ($errors->has('contractfile'))
             <span class="alert alert-danger help-block">

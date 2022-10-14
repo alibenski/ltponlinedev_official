@@ -9,7 +9,7 @@
         @endif
     </div>
     <div class="col-md-12 my-3 border">
-        <p>Staff (UN or permanent mission) UN badge ID or carte de légitimation</p>
+        <p>Staff (UN or permanent mission) UN badge or carte de légitimation</p>
         <input name="contractfile2" type="file" class="col-md-12 form-control-static mb-1" required="required">
         @if ($errors->has('contractfile2'))
             <span class="alert alert-danger help-block">
