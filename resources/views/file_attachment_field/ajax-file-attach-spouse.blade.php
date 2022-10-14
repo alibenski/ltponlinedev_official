@@ -5,13 +5,13 @@
         <div class="form-check col-md-12">
             <input class="form-check-input" type="radio" name="spouseRadio" id="spouseRadio1" value=1>
             <label class="form-check-label" for="spouseRadio1">
-                Applicant's UN badge or carte de légitimation
+                Applicant's UN badge or carte de légitimation <strong>(both front and back sides in one file)</strong>
             </label>
         </div>
         <div class="form-check col-md-12">
             <input class="form-check-input" type="radio" name="spouseRadio" id="spouseRadio2" value=2>
             <label class="form-check-label" for="spouseRadio2">
-                Proof of marriage between the applicant and the staff (UN or permanent mission) AND staff (UN or permanent mission) UN badge or carte de légitimation
+                Proof of marriage between the applicant and the staff (UN or permanent mission) AND staff (UN or permanent mission) UN badge or carte de légitimation <strong>(both front and back sides in one file)</strong>
             </label>
         </div>
     </div>
