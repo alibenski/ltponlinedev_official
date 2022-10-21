@@ -485,13 +485,16 @@ class SelfPayController extends Controller
      */
     public function edit(Request $request, $indexid, $tecode, $term)
     {
-        $selfpay_student = Preenrolment::select('INDEXID', 'L', 'Te_Code', 'Term', 'eform_submit_count', 'profile', 'DEPT', 'flexibleBtn', 'flexibleFormat', 'attachment_id', 'attachment_pay')->where('is_self_pay_form', '1')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
+        $selfpay_student = Preenrolment::select('id', 'INDEXID', 'L', 'Te_Code', 'Term', 'eform_submit_count', 'profile', 'DEPT', 'flexibleBtn', 'flexibleFormat', 'attachment_id', 'attachment_pay')->where('is_self_pay_form', '1')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('Term', $term)->first();
 
         $show_sched_selfpay = Preenrolment::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('Te_Code', $tecode)->where('Term', $term)->get();
 
         $show_admin_comments = Preenrolment::select('CodeIndexID', 'INDEXID', 'Te_Code', 'Term', 'profile', 'DEPT', 'flexibleBtn', 'flexibleFormat')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('is_self_pay_form', '1')->where('Term', $term)->first()->adminComment;
 
-        return view('selfpayforms.edit', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments'));
+        $backSideId = Identity2File::where('enrolment_id', $selfpay_student->id)->get();
+        $contractFiles = ContractFile::where('enrolment_id', $selfpay_student->id)->get();
+
+        return view('selfpayforms.edit', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments', 'backSideId', 'contractFiles'));
     }
 
     /**
