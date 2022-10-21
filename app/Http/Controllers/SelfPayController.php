@@ -493,8 +493,9 @@ class SelfPayController extends Controller
 
         $backSideId = Identity2File::where('enrolment_id', $selfpay_student->id)->get();
         $contractFiles = ContractFile::where('enrolment_id', $selfpay_student->id)->get();
+        $additionalFiles = AdditionalFile::where('enrolment_id', $selfpay_student->id)->get();
 
-        return view('selfpayforms.edit', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments', 'backSideId', 'contractFiles'));
+        return view('selfpayforms.edit', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments', 'backSideId', 'contractFiles', 'additionalFiles'));
     }
 
     /**
