@@ -68,7 +68,23 @@
 	<div class="form-group">
 	    <label class="control-label" for="org_show">Organization:</label>
 	    <div class="">
-	        <input type="text" class="form-control" name="org_show" value="{{ $selfpay_student->DEPT }}" readonly>
+	        <input type="text" class="form-control" name="org_show" value="{{ $selfpay_student->DEPT }}
+			@if ($selfpay_student->users->sddextr->DEPT === 'MSU')
+				@if ($selfpay_student->users->sddextr->countryMission)
+				- {{ $selfpay_student->users->sddextr->countryMission->ABBRV_NAME }} 
+				@else 
+				- (country update needed)
+				@endif
+			@endif
+
+			@if ($selfpay_student->users->sddextr->DEPT === 'NGO')
+				@if ($selfpay_student->users->sddextr->ngo_name)
+				- {{ $selfpay_student->users->sddextr->ngo_name }} 
+				@else
+				- (NGO name update needed)
+				@endif
+			@endif
+			" readonly>
 	    </div>
 	</div>
 	<div class="form-group">	
