@@ -37,13 +37,13 @@
 	</div>
 	<div class="form-group">	
 		<label class="control-label" for="org_show">ID (Back Side):</label>
-		<td>@if (empty($backSideId)) None @else @foreach ($backSideId as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($backSideId->count())) None @else @foreach ($backSideId as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
 			@endif
 		</td>
 	</div>	
 	<div class="form-group">	
 		<label class="control-label" for="org_show">Contract:</label>
-		<td>@if (empty($contractFiles)) None @else @foreach ($contractFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($contractFiles->count())) None @else @foreach ($contractFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
 			@endif
 		</td>
 	</div>	
@@ -54,7 +54,7 @@
 
 	<div class="form-group">	
 		<label class="control-label" for="org_show">Additional Files:</label>
-		<td>@if (empty($additionalFiles)) None @else @foreach ($additionalFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($additionalFiles->count())) None @else @foreach ($additionalFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
 			@endif
 		</td>
 	</div>	

@@ -35,9 +35,27 @@
 		<td>@if(empty($selfpay_student->filesId->path)) None @else <a href="{{ Storage::url($selfpay_student->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>	
 	</div>
 	<div class="form-group">	
+		<label class="control-label" for="org_show">ID (Back Side):</label>
+		<td>@if (empty($backSideId->count())) None @else @foreach ($backSideId as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+			@endif
+		</td>
+	</div>	
+	<div class="form-group">	
+		<label class="control-label" for="org_show">Contract:</label>
+		<td>@if (empty($contractFiles->count())) None @else @foreach ($contractFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+			@endif
+		</td>
+	</div>	
+	<div class="form-group">	
 		<label class="control-label" for="org_show">Payment Proof:</label>
 		<td>@if(empty($selfpay_student->filesPay->path)) None @else <a href="{{ Storage::url($selfpay_student->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
-	</div>				
+	</div>
+	<div class="form-group">	
+		<label class="control-label" for="org_show">Additional Files:</label>
+		<td>@if (empty($additionalFiles->count())) None @else @foreach ($additionalFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+			@endif
+		</td>
+	</div>
 	<div class="form-group">
 	    <label class="control-label" for="profile_show">Profile:</label>
 	    <div class="">
