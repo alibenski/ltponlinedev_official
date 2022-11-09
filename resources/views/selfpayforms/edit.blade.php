@@ -33,28 +33,28 @@
 	</div>
 	<div class="form-group">
 		<label class="control-label" for="org_show">ID (Front Side):</label>
-		<td>@if(empty($selfpay_student->filesId->path)) None @else <a href="{{ Storage::url($selfpay_student->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>	
+		<td>@if(empty($selfpay_student->filesId->path)) None @else <a href="{{ Storage::url($selfpay_student->filesId->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>	
 	</div>
 	<div class="form-group">	
 		<label class="control-label" for="org_show">ID (Back Side):</label>
-		<td>@if (empty($backSideId->count())) None @else @foreach ($backSideId as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($backSideId->count())) None @else @foreach ($backSideId as $item) <a href="{{ Storage::url($item->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
 			@endif
 		</td>
 	</div>	
 	<div class="form-group">	
 		<label class="control-label" for="org_show">Contract:</label>
-		<td>@if (empty($contractFiles->count())) None @else @foreach ($contractFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($contractFiles->count())) None @else @foreach ($contractFiles as $item) <a href="{{ Storage::url($item->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
 			@endif
 		</td>
 	</div>	
 	<div class="form-group">	
 		<label class="control-label" for="org_show">Payment Proof:</label>
-		<td>@if(empty($selfpay_student->filesPay->path)) None @else <a href="{{ Storage::url($selfpay_student->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
+		<td>@if(empty($selfpay_student->filesPay->path)) None @else <a href="{{ Storage::url($selfpay_student->filesPay->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
 	</div>	
 
 	<div class="form-group">	
 		<label class="control-label" for="org_show">Additional Files:</label>
-		<td>@if (empty($additionalFiles->count())) None @else @foreach ($additionalFiles as $item) <a href="{{ Storage::url($item->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($additionalFiles->count())) None @else @foreach ($additionalFiles as $item) <a href="{{ Storage::url($item->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
 			@endif
 		</td>
 	</div>	
@@ -68,23 +68,9 @@
 	<div class="form-group">
 	    <label class="control-label" for="org_show">Organization:</label>
 	    <div class="">
-	        <input type="text" class="form-control" name="org_show" value="{{ $selfpay_student->DEPT }}
-			@if ($selfpay_student->users->sddextr->DEPT === 'MSU')
-				@if ($selfpay_student->users->sddextr->countryMission)
-				- {{ $selfpay_student->users->sddextr->countryMission->ABBRV_NAME }} 
-				@else 
-				- (country update needed)
-				@endif
-			@endif
-
-			@if ($selfpay_student->users->sddextr->DEPT === 'NGO')
-				@if ($selfpay_student->users->sddextr->ngo_name)
-				- {{ $selfpay_student->users->sddextr->ngo_name }} 
-				@else
-				- (NGO name update needed)
-				@endif
-			@endif
-			" readonly>
+	        <input type="text" class="form-control" name="org_show" value="{{ $selfpay_student->DEPT }} @if ($selfpay_student->users->sddextr->DEPT === 'MSU') @if ($selfpay_student->users->sddextr->countryMission) - {{ $selfpay_student->users->sddextr->countryMission->ABBRV_NAME }} @else - (country update needed) @endif
+			@endif @if ($selfpay_student->users->sddextr->DEPT === 'NGO') @if ($selfpay_student->users->sddextr->ngo_name) - {{ $selfpay_student->users->sddextr->ngo_name }} @else
+				- (NGO name update needed) @endif @endif " readonly>
 	    </div>
 	</div>
 	<div class="form-group">	
