@@ -427,8 +427,11 @@ class SelfPayController extends Controller
     public function addAttachmentsStore(Request $request)
     {
         $this->validate($request, [
-            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+            'identityfile2' => 'mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'mimes:pdf,doc,docx|max:8000',
+            'contractFile' => 'mimes:pdf,doc,docx|max:8000',
+            'addFile0' => 'mimes:pdf,doc,docx|max:8000',
         ]);
 
         $index_id = $request->INDEXID;
@@ -436,6 +439,8 @@ class SelfPayController extends Controller
         $language_id = $request->L;
         $course_id = $request->Te_Code;
         $eform_submit_count = $request->eform_submit_count;
+        $userId = User::where('indexno', $index_id)->select('id')->first();
+        $placement_form = 0;
 
         $selfpayforms = Preenrolment::where('INDEXID', $index_id)
             ->where('L', $language_id)
@@ -486,6 +491,10 @@ class SelfPayController extends Controller
             ]);
         }
 
+        foreach ($selfpayforms as $data_id) {
+            $this->storeBackIdContractAttachments($request, $index_id, $term_id, $language_id, $course_id, $data_id, $userId, $placement_form);
+        }
+
         Mail::raw("Selfpay Student Attachment Update (Regular Form): " . Auth::user()->name . ' ( ' . $index_id . ' )', function ($message) {
             $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
             $message->to('clm_language@un.org')->subject('Notification: Selfpay Student Attachment Update (Regular Form)');
@@ -521,8 +530,11 @@ class SelfPayController extends Controller
     public function addAttachmentsPlacementStore(Request $request)
     {
         $this->validate($request, [
-            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+            'identityfile2' => 'mimes:pdf,doc,docx|max:8000',
+            'payfile' => 'mimes:pdf,doc,docx|max:8000',
+            'contractFile' => 'mimes:pdf,doc,docx|max:8000',
+            'addFile0' => 'mimes:pdf,doc,docx|max:8000',
         ]);
 
         $index_id = $request->INDEXID;
@@ -530,6 +542,8 @@ class SelfPayController extends Controller
         $language_id = $request->L;
         $course_id = $request->Te_Code;
         $eform_submit_count = $request->eform_submit_count;
+        $userId = User::where('indexno', $index_id)->select('id')->first();
+        $placement_form = 1;
 
         $selfpayforms = PlacementForm::where('INDEXID', $index_id)
             ->where('L', $language_id)
@@ -577,6 +591,10 @@ class SelfPayController extends Controller
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,
             ]);
+        }
+
+        foreach ($selfpayforms as $data_id) {
+            $this->storeBackIdContractAttachments($request, $index_id, $term_id, $language_id, $course_id, $data_id, $userId, $placement_form);
         }
 
         Mail::raw("Selfpay Student Attachment Update (Placement Form): " . Auth::user()->name . ' ( ' . $index_id . ' )', function ($message) {
