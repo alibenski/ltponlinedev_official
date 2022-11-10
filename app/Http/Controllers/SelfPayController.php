@@ -136,7 +136,10 @@ class SelfPayController extends Controller
     {
         $this->validate($request, [
             'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+            'identityfile2' => 'mimes:pdf,doc,docx|max:8000',
             'payfile' => 'mimes:pdf,doc,docx|max:8000',
+            'contractFile' => 'mimes:pdf,doc,docx|max:8000',
+            'addFile0' => 'mimes:pdf,doc,docx|max:8000',
         ]);
 
         $index_id = $request->INDEXID;
@@ -220,7 +223,10 @@ class SelfPayController extends Controller
     {
         $this->validate($request, [
             'identityfile' => 'mimes:pdf,doc,docx|max:8000',
+            'identityfile2' => 'mimes:pdf,doc,docx|max:8000',
             'payfile' => 'mimes:pdf,doc,docx|max:8000',
+            'contractFile' => 'mimes:pdf,doc,docx|max:8000',
+            'addFile0' => 'mimes:pdf,doc,docx|max:8000',
         ]);
 
         $index_id = $request->INDEXID;
