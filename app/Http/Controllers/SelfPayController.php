@@ -620,9 +620,9 @@ class SelfPayController extends Controller
 
         $show_admin_comments = Preenrolment::select('CodeIndexID', 'INDEXID', 'Te_Code', 'Term', 'profile', 'DEPT', 'flexibleBtn', 'flexibleFormat')->where('INDEXID', $indexid)->where('Te_Code', $tecode)->where('is_self_pay_form', '1')->where('Term', $term)->first()->adminComment;
 
-        $backSideId = Identity2File::select('path')->where('enrolment_id', $selfpay_student->id)->get();
-        $contractFiles = ContractFile::select('path')->where('enrolment_id', $selfpay_student->id)->get();
-        $additionalFiles = AdditionalFile::select('path')->where('enrolment_id', $selfpay_student->id)->get();
+        $backSideId = Identity2File::select('path')->orderBy('id', 'desc')->where('enrolment_id', $selfpay_student->id)->get();
+        $contractFiles = ContractFile::select('path')->orderBy('id', 'desc')->where('enrolment_id', $selfpay_student->id)->get();
+        $additionalFiles = AdditionalFile::select('path')->orderBy('id', 'desc')->where('enrolment_id', $selfpay_student->id)->get();
 
         return view('selfpayforms.edit', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments', 'backSideId', 'contractFiles', 'additionalFiles'));
     }
@@ -793,9 +793,9 @@ class SelfPayController extends Controller
 
         $show_admin_comments = PlacementForm::where('INDEXID', $indexid)->where('is_self_pay_form', '1')->where('L', $language)->where('Term', $term)->first()->adminCommentPlacement;
 
-        $backSideId = Identity2File::select('path')->where('placement_id', $selfpay_student->id)->get();
-        $contractFiles = ContractFile::select('path')->where('placement_id', $selfpay_student->id)->get();
-        $additionalFiles = AdditionalFile::select('path')->where('placement_id', $selfpay_student->id)->get();
+        $backSideId = Identity2File::select('path')->orderBy('id', 'desc')->where('placement_id', $selfpay_student->id)->get();
+        $contractFiles = ContractFile::select('path')->orderBy('id', 'desc')->where('placement_id', $selfpay_student->id)->get();
+        $additionalFiles = AdditionalFile::select('path')->orderBy('id', 'desc')->where('placement_id', $selfpay_student->id)->get();
 
         return view('selfpayforms.edit-placement-selfpay', compact('selfpay_student', 'show_sched_selfpay', 'show_admin_comments', 'backSideId', 'contractFiles', 'additionalFiles'));
     }

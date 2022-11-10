@@ -36,13 +36,13 @@
 	</div>
 	<div class="form-group">	
 		<label class="control-label" for="org_show">ID (Back Side):</label>
-		<td>@if (empty($backSideId->count())) None @else @foreach ($backSideId as $item) <a href="{{ Storage::url($item->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($backSideId->count())) None @else @foreach ($backSideId as $item) @if ($loop->first)<a href="{{ Storage::url($item->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a>@endif @endforeach 
 			@endif
 		</td>
 	</div>	
 	<div class="form-group">	
 		<label class="control-label" for="org_show">Contract:</label>
-		<td>@if (empty($contractFiles->count())) None @else @foreach ($contractFiles as $item) <a href="{{ Storage::url($item->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endforeach 
+		<td>@if (empty($contractFiles->count())) None @else @foreach ($contractFiles as $item) @if ($loop->first)<a href="{{ Storage::url($item->path) }}" onclick="window.open(this.href, '', 'resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no'); return false;"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a>@endif @endforeach 
 			@endif
 		</td>
 	</div>	
