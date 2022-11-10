@@ -12,9 +12,9 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-		<div class="table-responsive col-sm-12 filtered-table">
 		<form method="POST" action="{{ route('admin-add-attachments-placement-store') }}" class="col-sm-12 form-horizontal form-prevent-multi-submit" enctype="multipart/form-data">
 		{{ csrf_field() }}
+			<div class="table-responsive col-sm-12 filtered-table">
 				<table class="table table-bordered table-striped">
 				    <thead>
 				        <tr>
@@ -84,35 +84,31 @@
 						@endforeach
 				    </tbody>
 				</table>
-		</div>
+			</div>
 
-		<div class="form-group col-md-12 file-section">
-			<div class="col-md-12">
-            <h3>Attach your valid documents here</h3>
+			<div class="form-group col-md-12 file-section">
+				<div class="col-md-12">
+				<h3>Attach valid documents here</h3>
 
-              <div class="big text-danger">
-                <p><strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong><p>
-                <p><strong>Please upload both documents. Both are required.</strong><p>
-              </div>
-            
-              <div class="form-group col-md-12">
-                <label for="identityfile">Upload Proof of Identity: </label>
-                <input name="identityfile" type="file">
-              </div>
+				<div class="big text-danger">
+					<p><strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong><p>
+					<p><strong>Please select file to upload.</strong><p>
+				</div>
+				
+				@include('selfpayforms.partials-upload-attachment.upload-attachments')
 
-              <div class="form-group col-md-12">
-                <label for="payfile">Upload Proof of Payment: </label>
-                <input name="payfile" type="file">
-              </div>  
-
-              <div class="col-md-4 col-md-offset-4">
-                  <button type="submit" class="btn btn-success btn-block">Submit Files</button>
-                  <input type="hidden" name="_token" value="{{ Session::token() }}">
-				  {{ method_field('PUT') }}
-              </div>
-            </div>
+				</div>
+			</div>
 		</form>
-        </div>
 	</div>
 </div>
+@stop
+@section('scripts_code')
+<script src="{{ asset('js/upload-attachments.js') }}"></script>
+<script>
+	$( document ).ready(function() {
+		$("button#addFile").prop("hidden", true);
+		$("label[for='addFile']").prop("hidden", true);
+	});
+</script>
 @stop

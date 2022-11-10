@@ -113,7 +113,7 @@
 	    </div>
 	</div> --}}
 	<div class="form-group">
-	    <div class="col-sm-12"><button type="button" class="show-modal btn btn-info pull-right" data-toggle="modal"><span class="glyphicon glyphicon-comment"></span>  View All Admin Notes</button></div>
+	    <div class="button-div"><button type="button" class="show-modal btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-comment"></span>  View All Admin Notes/Comments</button></div>
 	    <label class="control-label" for="admin_comment_show">Admin Comment: </label>
 	    <p class="text-danger"><strong>If pending/disapproved status, please write the reason on the text area below. The text below will be included in the email communication to the student. </strong></p>
 	    <div class="">
