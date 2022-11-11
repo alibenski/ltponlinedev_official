@@ -1450,7 +1450,7 @@ class PlacementFormController extends Controller
                 $attachment_contract_file->save();
             }
         }
-        $enrolmentInfo = Preenrolment::withTrashed()->find($enrolmentID->first()->id);
+        $enrolmentInfo = PlacementForm::withTrashed()->find($enrolmentID->first()->id);
         // store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
