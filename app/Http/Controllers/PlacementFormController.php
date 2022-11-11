@@ -1431,19 +1431,37 @@ class PlacementFormController extends Controller
             if (!is_null($enrolmentForm->L)) {
                 $language_id = $enrolmentForm->L;
             }
-        }
 
+            if ($request->hasFile('contractFile')) {
+                $request->file('contractFile');
+                $time = date("d-m-Y") . "-" . time();
+                $filename = $time . '_converted_contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension();
+                //Store attachment
+                $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('contractFile'), $time . '_converted_contract_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->contractFile->extension());
+                //Create new record in db table
+                $attachment_contract_file = new ContractFile([
+                    'user_id' => $enrolmentForm->users->id,
+                    'actor_id' => Auth::user()->id,
+                    'placement_id' => $enrolmentForm->id,
+                    'filename' => $filename,
+                    'size' => $request->contractFile->getClientSize(),
+                    'path' => $filestore,
+                ]);
+                $attachment_contract_file->save();
+            }
+        }
+        $enrolmentInfo = Preenrolment::withTrashed()->find($enrolmentID->first()->id);
         // store the attachments to storage path and save in db table
         if ($request->hasFile('identityfile')) {
             $request->file('identityfile');
             $time = date("d-m-Y") . "-" . time();
-            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
+            $filename = $time . '_converted_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('identityfile'), $time . '_converted_id_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->identityfile->extension());
             //Create new record in db table
             $attachment_identity_file = new File([
-                // 'user_id' => get the id of form owner
-                // 'actor_id' => Auth::user()->id,
+                'user_id' => $enrolmentInfo->users->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->identityfile->getClientSize(),
                 'path' => $filestore,
@@ -1453,13 +1471,13 @@ class PlacementFormController extends Controller
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
             $time = date("d-m-Y") . "-" . time();
-            $filename = $time . '_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
+            $filename = $time . '_converted_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension();
             //Store attachment
             $filestore = Storage::putFileAs('public/pdf/' . $index_id, $request->file('payfile'), $time . '_converted_payment_' . $index_id . '_' . $term_id . '_' . $language_id . '_' . $course_id . '.' . $request->payfile->extension());
             //Create new record in db table
             $attachment_pay_file = new File([
-                // 'user_id' => get the id of form owner
-                // 'actor_id' => Auth::user()->id,
+                'user_id' => $enrolmentInfo->users->id,
+                'actor_id' => Auth::user()->id,
                 'filename' => $filename,
                 'size' => $request->payfile->getClientSize(),
                 'path' => $filestore,

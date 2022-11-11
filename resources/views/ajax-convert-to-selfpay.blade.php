@@ -14,6 +14,9 @@
             <label for="payfile">Upload Proof of Payment: (required)</label>
             <input name="payfile" type="file" required="">
           </div>  
+
+          @include('file_attachment_field.contract-file-attachment')
+          
         </div>
     </div>
 </div>
