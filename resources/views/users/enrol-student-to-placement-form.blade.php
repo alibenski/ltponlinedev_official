@@ -125,7 +125,10 @@
                   <div class="form-group">
                     <label for="payfile">Upload Proof of Payment: </label>
                     <input name="payfile" type="file">
-                  </div>  
+                  </div>
+                  
+                  @include('file_attachment_field.contract-file-attachment')
+                  
                 </div>
             </div>
 			

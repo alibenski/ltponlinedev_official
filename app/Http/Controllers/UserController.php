@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ContractFile;
 use App\File;
 use App\Language;
 use App\ModifiedForms;
@@ -927,6 +928,7 @@ class UserController extends Controller
         $this->validate($request, [
             'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
             'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
+            'contractFile' => 'required|mimes:pdf,doc,docx|max:8000',
         ]);
 
         //Store the attachments to storage path and save in db table
@@ -1024,6 +1026,25 @@ class UserController extends Controller
             'Comments' => $request->Comments,
             // 'contractDate' => $contractDate,
         ]);
+
+        if ($request->hasFile('contractFile')) {
+            $request->file('contractFile');
+            $user = User::where('indexno', $request->INDEXID)->first();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_contract_' . $request->INDEXID . '_' . $request->Term . '_' . $request->L . '_' . $request->Te_Code . '.' . $request->contractFile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('contractFile'), $time . '_contract_' . $request->INDEXID . '_' . $request->Term . '_' . $request->L . '_' . $request->Te_Code . '.' . $request->contractFile->extension());
+            //Create new record in db table
+            $attachment_contract_file = new ContractFile([
+                'user_id' => $user->id,
+                'actor_id' => Auth::user()->id,
+                'enrolment_id' => $new_enrolment->id,
+                'filename' => $filename,
+                'size' => $request->contractFile->getClientSize(),
+                'path' => $filestore,
+            ]);
+            $attachment_contract_file->save();
+        }
     }
 
     public function enrolStudentToPlacementForm(Request $request, $id)
@@ -1169,5 +1190,24 @@ class UserController extends Controller
             'Comments' => $request->Comments,
             // 'contractDate' => $contractDate,
         ]);
+
+        if ($request->hasFile('contractFile')) {
+            $request->file('contractFile');
+            $user = User::where('indexno', $request->INDEXID)->first();
+            $time = date("d-m-Y") . "-" . time();
+            $filename = $time . '_contract_' . $request->INDEXID . '_' . $request->Term . '_' . $request->L . '_' . '.' . $request->contractFile->extension();
+            //Store attachment
+            $filestore = Storage::putFileAs('public/pdf/' . $request->INDEXID, $request->file('contractFile'), $time . '_contract_' . $request->INDEXID . '_' . $request->Term . '_' . $request->L . '_' . '.' . $request->contractFile->extension());
+            //Create new record in db table
+            $attachment_contract_file = new ContractFile([
+                'user_id' => $user->id,
+                'actor_id' => Auth::user()->id,
+                'placement_id' => $new_enrolment->id,
+                'filename' => $filename,
+                'size' => $request->contractFile->getClientSize(),
+                'path' => $filestore,
+            ]);
+            $attachment_contract_file->save();
+        }
     }
 }
