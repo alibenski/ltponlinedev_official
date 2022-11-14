@@ -125,9 +125,15 @@
                                 <h4><strong>{{ $form->courses->EDescription }}</strong></h4>
                                     @if (\Carbon\Carbon::now() < $next_term->Enrol_Date_End)
                                       @if(is_null($form->deleted_at))
-                                      <div class="col-sm-6">
-                                        <a href={{ route('student-edit-enrolment-form-view', [ $form->Term, $form->INDEXID, $form->Te_Code ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
-                                      </div>
+                                        @if (in_array($form->Te_Code,['AB1GE0', 'AB1GE1', 'CB1GE0', 'CB1GE1', 'EB1GE0', 'EB1GE1', 'FB1GE0', 'FB1GE1', 'RB1GE0', 'RB1GE1', 'SB1GE0', 'SB1GE1']))
+                                        <div class="col-sm-6">
+                                          <button disabled class="btn btn-sm btn-outline-danger btn-block btn-space"> Cannot Modify</button>
+                                        </div>
+                                        @else  
+                                        <div class="col-sm-6">
+                                          <a href={{ route('student-edit-enrolment-form-view', [ $form->Term, $form->INDEXID, $form->Te_Code ]) }} class="btn btn-sm btn-outline-success btn-block btn-space"> Modify</a>
+                                        </div>
+                                        @endif
                                       @endif    
                                     @endif
                                     
