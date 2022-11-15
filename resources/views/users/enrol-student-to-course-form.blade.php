@@ -229,6 +229,7 @@ $(document).ready(function() {
         $('.file-section').removeClass('hidden');
       } else if ($('#decision2').is(':checked')) {
         $('.file-section').addClass('hidden');
+		$("input[name='contractFile']").removeAttr("required");
       }  
     });
 </script>
