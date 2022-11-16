@@ -1,5 +1,14 @@
+@extends('layouts.adminLTE3.index')
+@section('customcss')
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+@endsection
+@section('content')
+  
+@include('partials._messages')
+
 <div class="row">
-    <div class="col-md-4" style="margin-bottom: 1rem">
+    <div class="col-md-6" style="margin-bottom: 1rem">
         <div class="card">
             <div class="card-header bg-primary"><strong class="text-white">Student Profile</strong></div>
 
@@ -11,12 +20,31 @@
                 @endif
 
                 <form class="form-horizontal">
-                    
+                    <div class="form-group row">
+                        <label for="fullName" class="col-md-4 col-form-label">User #:</label>
+
+                        <div class="col-md-8 font-weight-bold">
+                            <p class="col-form-label"> 
+                                {{ $student->id }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="fullName" class="col-md-4 col-form-label">Index No:</label>
+
+                        <div class="col-md-8 font-weight-bold">
+                            <p class="col-form-label"> 
+                                {{ $student->indexno }}
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="fullName" class="col-md-4 col-form-label">Profile:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p> 
+                            <p class="col-form-label"> 
                                 @if(empty( $student->profile )) Update Needed 
                                 @else
                                     @if( $student->profile == "STF") Staff Member @endif
@@ -39,7 +67,7 @@
                         <label for="org" class="col-md-4 col-form-label">Organization:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif
+                            <p class="col-form-label">@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif
 
                             @if ($student->sddextr->DEPT === 'MSU')
                                 @if ($student->sddextr->countryMission)
@@ -65,7 +93,7 @@
                         <label for="title" class="col-md-4 col-form-label">Title:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty ( $student->sddextr )) Update Needed @else {{ $student->sddextr->TITLE }} @endif</p>
+                            <p class="col-form-label">@if(empty ( $student->sddextr )) Update Needed @else {{ $student->sddextr->TITLE }} @endif</p>
                         </div>
                     </div>
 
@@ -73,7 +101,7 @@
                         <label for="fullName" class="col-md-4 col-form-label">Full Name:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty( $student->sddextr )) Update Needed @else {{ $student->sddextr->LASTNAME }}, {{ $student->sddextr->FIRSTNAME }} @endif</p>
+                            <p class="col-form-label">@if(empty( $student->sddextr )) Update Needed @else {{ $student->sddextr->LASTNAME }}, {{ $student->sddextr->FIRSTNAME }} @endif</p>
                         </div>
                     </div>
 
@@ -81,7 +109,7 @@
                         <label for="email" class="col-md-4 col-form-label">Email Address:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>{{ $student->email }}</p>
+                            <p class="col-form-label">{{ $student->email }}</p>
                         </div>
                     </div>
 
@@ -89,7 +117,7 @@
                         <label for="gender" class="col-md-4 col-form-label">Gender:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty ( $student->sddextr )) Update Needed 
+                            <p class="col-form-label">@if(empty ( $student->sddextr )) Update Needed 
                                 @else 
                                     @if (strtoupper($student->sddextr->SEX) == "M") Male @endif
                                     @if (strtoupper($student->sddextr->SEX) == "F") Female @endif
@@ -103,7 +131,7 @@
                         <label for="contactNo" class="col-md-4 col-form-label">Contact Number:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->PHONE }} @endif</p>
+                            <p class="col-form-label">@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->PHONE }} @endif</p>
                         </div>
                     </div>
                     
@@ -112,7 +140,7 @@
                         <label for="contactNo" class="col-md-4 col-form-label">Date of Birth:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->BIRTH }} @endif</p>
+                            <p class="col-form-label">@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->BIRTH }} @endif</p>
                         </div>
                     </div>
 
@@ -120,7 +148,7 @@
                         <label for="jobAppointment" class="col-md-4 col-form-label">Type of Appointment:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->CATEGORY }} @endif</p>
+                            <p class="col-form-label">@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->CATEGORY }} @endif</p>
                         </div>
                     </div>
 
@@ -128,7 +156,7 @@
                         <label for="gradeLevel" class="col-md-4 col-form-label">Grade Level:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->LEVEL }}@endif</p>
+                            <p class="col-form-label">@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->LEVEL }}@endif</p>
                         </div>
                     </div>
 
@@ -136,7 +164,7 @@
                         <label for="course" class="col-md-4 col-form-label">Last UN Language Course:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p>
+                            <p class="col-form-label">
                                 @if(empty ($repos_lang))
                                 None
                                 @else
@@ -155,7 +183,7 @@
         </div>
     </div>  
     
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-info text-center"><strong>New User Info</strong></div>
             <div class="card-body">
@@ -179,7 +207,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <label class="control-label">Attachment 2: </label>
-                                @if(empty($student->newUserInt->filesId2->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+                                @if(empty($student->newUserInt->filesId2->path)) <strong>None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
                                 
                                 {{-- <div class="form-group">
                                     <label class="control-label col-sm-12">Attach another file to replace attachment 2: </label>
@@ -194,7 +222,7 @@
         </div>
     </div> 
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-header bg-info text-center"><strong>New User Info</strong></div>
             <div class="card-body">
@@ -218,7 +246,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <label class="control-label">Attachment 2: </label>
-                                @if(empty($student->newUserInt->filesId2->path)) <strong class="badge">None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
+                                @if(empty($student->newUserInt->filesId2->path)) <strong>None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
                                 
                                 {{-- <div class="form-group">
                                     <label class="control-label col-sm-12">Attach another file to replace attachment 2: </label>
@@ -233,3 +261,8 @@
         </div>
     </div> 
 </div>
+@endsection
+
+@section('java_script')
+
+@endsection

@@ -31,6 +31,12 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function viewUserProfile(Request $request, $id)
+    {
+        $student = User::where('id', $id)->first();
+        return view('users.view-user-profile', compact('student'));
+    }
+
     public function updateIndexView()
     {
 
@@ -86,7 +92,6 @@ class UserController extends Controller
 
         return view('users.update-pash-view', compact('getIndex', 'getLastKey'));
     }
-
 
     public function updatePASHIndexID(Request $request)
     {
