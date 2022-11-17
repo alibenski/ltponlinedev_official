@@ -226,7 +226,7 @@
   @endif
 @endhasrole
 
-@hasrole('Teacher FP')
+{{-- @hasrole('Teacher FP') --}}
   <a href="{{ route('teacher-search-user') }}"> 
     <div class="col-sm-4 col-xs-12">
         <div class="info-box">
@@ -241,7 +241,7 @@
         <!-- /.info-box -->
     </div>
   </a>
-@endhasrole
+{{-- @endhasrole --}}
 
 @endsection
 
