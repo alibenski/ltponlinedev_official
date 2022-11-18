@@ -112,7 +112,7 @@ class RegisterController extends Controller
             'name' => $data['nameFirst'] . ' ' . strtoupper($data['nameLast']),
             'nameFirst' => $data['nameFirst'],
             'nameLast' => strtoupper($data['nameLast']),
-            'email' => $data['email'],
+            'email' => strtolower($data['email']),
             'password' => Hash::make($data['password']),
         ]);
 

@@ -198,8 +198,8 @@ class StudentController extends Controller
         }
         if (!is_null($request->input('organization'))) {
             $student->sddextr->DEPT = $request->input('organization');
-            $msuUpdateField->checkMsuValue($student, $request);   
-            $ngoUpdateField->checkNgoValue($student, $request);   
+            $msuUpdateField->checkMsuValue($student, $request);
+            $ngoUpdateField->checkNgoValue($student, $request);
         }
         if (!is_null($request->input('contactNo'))) {
             $student->sddextr->PHONE = $request->input('contactNo');
@@ -283,18 +283,18 @@ class StudentController extends Controller
                 // change data in the User table
                 // User::where(['id' => $id, 'temp_email' => $temp_email, 'update_token' => $update_token])->update(['email' => $temp_email, 'temp_email' => NULL, 'approved_update' => '1', 'update_token' => NULL]);
                 $u = User::find($id);
-                $u->email = $temp_email;
+                $u->email = strtolower($temp_email);
                 $u->temp_email = NULL;
                 $u->approved_update = '1';
                 $u->update_token = NULL;
                 $u->save();
                 // change e-mail address in the sddextr
-                SDDEXTR::where(['INDEXNO' => $student->indexno])->update(['EMAIL' => $temp_email]);
+                SDDEXTR::where(['INDEXNO' => $student->indexno])->update(['EMAIL' => strtolower($temp_email)]);
 
                 // change e-mail address in the teachers table if profile is a teacher
                 $teacher = Teachers::where('IndexNo', $student->indexno)->first();
                 if ($teacher) {
-                    $teacher->update(['email' => $temp_email]);
+                    $teacher->update(['email' => strtolower($temp_email)]);
                 }
 
                 // redirect to login page to use new email as username 
