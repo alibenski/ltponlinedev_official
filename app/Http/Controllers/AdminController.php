@@ -249,7 +249,7 @@ class AdminController extends Controller
                         'INDEXID' => $value2->INDEXID,
                         'lastname' => $value2->users->nameLast,
                         'firstname' => $value2->users->nameFirst,
-                        'email' => $value2->users->email,
+                        'email' => strtolower($value2->users->email),
                         // 'Te_Code' => $value2->Te_Code,
                     ];
                 } else {
@@ -257,7 +257,7 @@ class AdminController extends Controller
                         'INDEXID' => $value2->INDEXID,
                         'lastname' => $value2->users->nameLast,
                         'firstname' => $value2->users->nameFirst,
-                        'email' => $value2->users->email,
+                        'email' => strtolower($value2->users->email),
                         // 'Te_Code' => $value2->Te_Code,
                     ];
                 }
@@ -297,7 +297,7 @@ class AdminController extends Controller
                         'INDEXID' => $value->INDEXID,
                         'lastname' => $value->users->nameLast,
                         'firstname' => $value->users->nameFirst,
-                        'email' => $value->users->email,
+                        'email' => strtolower($value->users->email),
                         // 'Te_Code' => $value->Te_Code,
                     ];
                 } else {
@@ -305,7 +305,7 @@ class AdminController extends Controller
                         'INDEXID' => $value->INDEXID,
                         'lastname' => $value->users->nameLast,
                         'firstname' => $value->users->nameFirst,
-                        'email' => $value->users->email,
+                        'email' => strtolower($value->users->email),
                         // 'Te_Code' => $value->Te_Code,
                     ];
                 }

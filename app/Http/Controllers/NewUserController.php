@@ -122,7 +122,7 @@ class NewUserController extends Controller
         if ($query_sddextr_record) {
             $user = User::create([
                 'indexno' => $query_sddextr_record->INDEXNO,
-                'email' => trim($query_sddextr_record->EMAIL),
+                'email' => strtolower(trim($query_sddextr_record->EMAIL)),
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
                 'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
                 'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
@@ -250,7 +250,7 @@ class NewUserController extends Controller
             $user = User::create([
                 'indexno_old' => $query_sddextr_record->INDEXNO_old,
                 'indexno' => $query_sddextr_record->INDEXNO,
-                'email' => $query_sddextr_record->EMAIL,
+                'email' => strtolower($query_sddextr_record->EMAIL),
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
                 'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
                 'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
@@ -545,7 +545,7 @@ class NewUserController extends Controller
             $user = User::create([
                 'indexno_old' => $request->indexno,
                 'indexno' => $request->indexno,
-                'email' => $request->email,
+                'email' => strtolower($request->email),
                 'profile' => $newUser->profile,
                 'nameFirst' => $request->nameFirst,
                 'nameLast' => strtoupper($request->nameLast),
@@ -569,7 +569,7 @@ class NewUserController extends Controller
                 'DEPT' => $newUser->org,
                 'PHONE' => $newUser->contact_num,
                 'BIRTH' => $newUser->dob,
-                'EMAIL' => $request->email,
+                'EMAIL' => strtolower($request->email),
             ]);
 
             if ($newUser->org == 'MSU') {

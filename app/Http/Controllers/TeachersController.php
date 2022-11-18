@@ -448,7 +448,7 @@ class TeachersController extends Controller
                 'indexno_old' => $query_sddextr_record->INDEXNO_old,
                 'indexno' => $query_sddextr_record->INDEXNO,
                 'profile' => $request->profile,
-                'email' => $query_sddextr_record->EMAIL,
+                'email' => strtolower($query_sddextr_record->EMAIL),
                 'nameFirst' => $query_sddextr_record->FIRSTNAME,
                 'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
                 'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
@@ -466,7 +466,7 @@ class TeachersController extends Controller
             'indexno' => $request->indexno,
             'indexno_old' => $request->indexno,
             'profile' => $request->profile,
-            'email' => $request->email,
+            'email' => strtolower($request->email),
             'nameFirst' => $request->nameFirst,
             'nameLast' => strtoupper($request->nameLast),
             'name' => $request->nameFirst . ' ' . strtoupper($request->nameLast),
@@ -492,7 +492,7 @@ class TeachersController extends Controller
             'TITLE' => $request->title,
             'FIRSTNAME' => $request->nameFirst,
             'LASTNAME' => strtoupper($request->nameLast),
-            'EMAIL' => $request->email,
+            'EMAIL' => strtolower($request->email),
             'SEX' => $request->gender,
             'DEPT' => $request->org,
             'PHONE' => $request->contact_num,
@@ -623,8 +623,8 @@ class TeachersController extends Controller
         $sddextr = SDDEXTR::where('INDEXNO', $teacher->IndexNo)->first();
 
         if ($request->email) {
-            $user->update(['email' => $request->email]);
-            $sddextr->update(['EMAIL' => $request->email]);
+            $user->update(['email' => strtolower($request->email)]);
+            $sddextr->update(['EMAIL' => strtolower($request->email)]);
         }
         if ($request->Tch_Firstname) {
             $user->update(['nameFirst' => $request->Tch_Firstname]);
