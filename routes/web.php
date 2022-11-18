@@ -434,7 +434,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store-late-registration', ['as' => 'store-late-registration', 'uses' => 'LateEnrolmentController@storeLateRegistration']);
         Route::get('/late-selfpay-form', ['as' => 'late-selfpay-form', 'uses' => 'LateEnrolmentController@lateSelfpayForm']);
         Route::post('/store-late-selfpay-form', ['as' => 'store-late-selfpay-form', 'uses' => 'LateEnrolmentController@storeLateSelfpayForm']);
-        Route::get('late-check-placement-form-ajax', ['as' => 'late-check-placement-form-ajax', 'uses' => 'LateEnrolmentCprofileontroller@lateCheckPlacementFormAjax']);
+        Route::get('late-check-placement-form-ajax', ['as' => 'late-check-placement-form-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementFormAjax']);
         Route::post('late-check-placement-course-ajax', ['as' => 'late-check-placement-course-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementCourseAjax']);
         Route::get('late-check-enrolment-entries-ajax', ['as' => 'late-check-enrolment-entries-ajax', 'uses' => 'LateEnrolmentController@lateCheckEnrolmentEntriesAjax']);
         Route::get('late-check-placement-entries-ajax', ['as' => 'late-check-placement-entries-ajax', 'uses' => 'LateEnrolmentController@lateCheckPlacementEntriesAjax']);
