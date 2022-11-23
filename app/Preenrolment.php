@@ -97,4 +97,8 @@ class Preenrolment extends Model
     {
         return $this->hasMany('App\Repo', 'INDEXID', 'INDEXID');
     }
+    public function contracts()
+    {
+        return $this->hasMany('App\ContractFile', 'enrolment_id');
+    }
 }

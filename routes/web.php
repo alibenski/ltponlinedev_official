@@ -256,6 +256,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm']);
     Route::post('user/enrol-student-to-placement-insert', ['as' => 'enrol-student-to-placement-insert', 'uses' => 'UserController@enrolStudentToPlacementInsert']);
 
+    // update contract expiry field
+    Route::put('/user/user-update-contract', ['as' => 'user-update-contract', 'uses' => 'UserController@userUpdateContract']);
     // adminLTEv3 views
     Route::get('user/{id}/view-user-profile', ['as' => 'view-user-profile', 'uses' => 'UserController@viewUserProfile']);
 

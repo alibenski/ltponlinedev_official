@@ -61,6 +61,8 @@
 	            <th>Name</th>
 	            <th>Organization</th>
                 <th>Term</th>
+                <th>Contract Exp</th>
+                <th>Contract Proof</th>
                 <th>Language</th>
 	            <th>ID Proof</th>
 	            <th>Payment Proof</th>
@@ -100,6 +102,8 @@
                     @endif
                 
                 </td>
+                <td>{{ $form->Term }}</td>
+                <td>{{ $form->Term }}</td>
                 <td>{{ $form->Term }}</td>
                 <td>{{ $form->L }}</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>

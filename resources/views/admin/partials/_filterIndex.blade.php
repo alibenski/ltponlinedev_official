@@ -23,7 +23,7 @@
     </div>
     
     @if(!Request::is('admin/placement-form') && !Request::is('admin/selfpayform/index-placement-selfpay'))
-    <div class="form-group">
+    <div class="form-group col-md-6">
         <label for="Te_Code" class="col-md-12 control-label"> Course: </label>
         <div class="form-group col-sm-12">
           <div class="dropdown">
@@ -36,7 +36,7 @@
     @else
     @endif
     
-    <div class="form-group">           
+    <div class="form-group col-md-6">           
       <label for="organization" class="col-md-12 control-label"> Organization:</label>
       <div class="form-group col-sm-12">
         <div class="dropdown">

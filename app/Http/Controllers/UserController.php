@@ -31,6 +31,15 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function userUpdateContract(Request $request)
+    {
+        $user = User::where('id', $request->id)->first();
+        $array = ['contract_date' => $request->contract_date];
+        $user->update($array);
+
+        return redirect()->back();
+    }
+
     public function viewUserProfile(Request $request, $id)
     {
         $student = User::where('id', $id)->first();

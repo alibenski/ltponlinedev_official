@@ -19,7 +19,7 @@
                     </div>
                 @endif
 
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <div class="form-group row">
                         <label for="staticId" class="col-md-4 col-form-label">User #:</label>
 
@@ -36,37 +36,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="contract-date" class="col-md-4 col-form-label">Contract Date:</label>
-                        @if (is_null($student->contract_date)) 
-                            <form id="updateContractDate" method="POST" action="" class="form-horizontal">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="">Date Format (YYYY-MM-DD)</label>
-                                            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                                                <input type="text" id="contract-date" name="contract_date" class="form-control datetimepicker-input" data-target="#datetimepicker4" />
-
-                                                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 offset-md-4">
-                                    <button type="submit" class="btn btn-success btn-block">Submit</button>
-                                    <input type="hidden" name="_token" value="{{ Session::token() }}">
-                                    {{ method_field('PUT') }}
-                                </div>
-                            </form>
-                        @else
-                            <div class="col-md-8 font-weight-bold">
-                                <input type="text" readonly class="form-control-plaintext" id="staticId" value="{{ $student->contract_date }}">
-                            </div>
-                        @endif
-                    </div>
+                    @include('contract_field.contract-form-view-user-profile')
 
                     <div class="form-group row">
                         <label for="fullName" class="col-md-4 col-form-label">Profile:</label>
@@ -206,7 +176,7 @@
                     </div>
                     {{-- <div class="col-md-4 offset-md-4"><a href="{{ route('students.edit', $student->id) }}" class="btn btn-block btn-outline-info">Edit Profile</a>
                     </div> --}}
-                </form>
+                </div>
             </div>
         </div>
     </div>  
@@ -274,7 +244,6 @@
     </div> 
 </div>
 @endsection
-
 @section('java_script')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>

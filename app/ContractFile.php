@@ -11,6 +11,6 @@ class ContractFile extends Model
 
     public function enrolmentId()
     {
-        return $this->belongsToMany('App\Preenrolment', 'enrolment_id');
+        return $this->belongsTo('App\Preenrolment', 'enrolment_id');
     }
 }
