@@ -4,7 +4,7 @@
 
             <form id="" method="POST" action="{{ route('user-update-contract') }}" class="form-horizontal contract-form">
                
-                <input id="userId" type="hidden" name="id" value="" />
+                <input id="userIdModal" type="hidden" name="id" value="" />
                 
                 @include('contract_field.contract-file-field')
     

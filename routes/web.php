@@ -274,6 +274,11 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::post('update-modifiedforms-index', ['as' => 'update-modifiedforms-index', 'uses' => 'UserController@updateModifiedFormsIndex']);
 
     /**
+     * Contract Routes
+     */
+    Route::get('get-contract-file', ['as' => 'get-contract-file', 'uses' => 'ContractsController@getContractFile']);
+
+    /**
      * Billing Routes
      */
     Route::get('billing-index', ['as' => 'billing-index', 'uses' => 'BillingController@billingIndex']);

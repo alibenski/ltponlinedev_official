@@ -48,7 +48,7 @@
 @else
 {{ $selfpayforms->links() }}
 <div class="table-responsive col-sm-12 filtered-table">
-	<table class="table table-bordered table-striped">
+	<table id="tblRegularSelfpayment" class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
 	            <th>Operation</th>
@@ -99,12 +99,20 @@
                 <td>{{ $form->Term }}</td>
                 <td>
                     @if (is_null($form->users->contract_date))
-                    <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" type="button" class="show-modal btn btn-space btn-default  button-prevent-multi-submit confirm" title="Enter Contract Expiry"><i class="fa fa-calendar"></i> Enter Contract</button>
+                    <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" type="button" class="show-modal btn btn-space btn-default  button-prevent-multi-submit confirm" title="Enter Contract Expiry"><i class="far fa-calendar"></i> Enter Contract Date</button>
                     @else
                     {{ $form->users->contract_date }}
                     @endif
                 </td>
-                <td>{{ $form->Term }}</td>
+                <td>
+                    <input id="userId" type="hidden" name="id" value="{{ $form->users->id }}"/>
+                    <input id="indexId" type="hidden" name="indexid" value="{{ $form->INDEXID }}"/>
+                    <input id="teCode" type="hidden" name="te_code" value="{{ $form->Te_Code }}"/>
+                    <input id="term" type="hidden" name="term" value="{{ $form->Term }}"/>
+                    <input id="formType" type="hidden" name="regular_form" value=1 />
+                    <div class="contract-section-{{ $form->users->id }}-{{ $form->Te_Code }}-{{ $form->Term }}"></div>
+                    <button id="viewContractFile" class="btn btn-secondary">View Contract</button>
+                </td>
                 <td>{{ $form->courses->Description }}</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fas fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>
 				<td>@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="far fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>
@@ -140,6 +148,49 @@
 @stop
 
 @section('java_script')
+<script>
+    $(document).ready(function() {       
+        const token = $("input[name='_token']").val();
+        
+        $("button#viewContractFile").on("click", function () {
+            let userId = $(this).closest("tr").find("input[name='id']").val();
+            let indexId = $(this).closest("tr").find("input[name='indexid']").val();
+            let teCode = $(this).closest("tr").find("input[name='te_code']").val();
+            let term = $(this).closest("tr").find("input[name='term']").val();
+            let formType = $(this).closest("tr").find("input[name='regular_form']").val();
+            
+            $.ajax({
+                url: "{{ route('get-contract-file') }}",
+                type: "GET",
+                data: {userId:userId, indexId:indexId,  teCode:teCode, term:term, formType:formType, _token:token},
+            })
+            .done(function(data) {            
+                console.log(data)
+                    if (data != "none") {
+                        let stringPath = data['path'].replace("public", "storage");                        
+                        window.open("\/" + stringPath + " ", "_blank", "resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no"); 
+                        return false;
+                    }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("job complete");
+            });
+        });
+        // reiterate every row of table
+        $("#tblRegularSelfpayment > tbody  > tr").each(function(index, tr) { 
+            let userId = $(this).closest("tr").find("input[name='id']").val();
+            let indexId = $(this).closest("tr").find("input[name='indexid']").val();
+            let teCode = $(this).closest("tr").find("input[name='te_code']").val();
+            let term = $(this).closest("tr").find("input[name='term']").val();
+            let formType = $(this).closest("tr").find("input[name='regular_form']").val();
+        });
+        
+
+    });
+</script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
 <script>
@@ -161,7 +212,7 @@ $(document).ready(function() {
 // Show a post
 $(document).on('click', '.show-modal', function() {
     $('.modal-title').text('Showing Information');
-    $('#userId').val($(this).data('id'));
+    $('#userIdModal').val($(this).data('id'));
     $('.contract-form').attr('id', 'updateContractDate-'+$(this).data('id'));
     $('#showModal').modal('show'); 
 });
