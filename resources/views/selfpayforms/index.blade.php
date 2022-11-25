@@ -127,8 +127,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title"></h4>
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 
@@ -211,7 +213,7 @@ $(document).ready(function() {
 <script>
 // Show a post
 $(document).on('click', '.show-modal', function() {
-    $('.modal-title').text('Showing Information');
+    $('.modal-title').text('Enter Contract Expiry Date');
     $('#userIdModal').val($(this).data('id'));
     $('.contract-form').attr('id', 'updateContractDate-'+$(this).data('id'));
     $('#showModal').modal('show'); 
