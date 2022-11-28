@@ -19,26 +19,24 @@
                     </div>
                 @endif
 
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <div class="form-group row">
-                        <label for="fullName" class="col-md-4 col-form-label">User #:</label>
+                        <label for="staticId" class="col-md-4 col-form-label">User #:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p class="col-form-label"> 
-                                {{ $student->id }}
-                            </p>
+                            <input type="text" readonly class="form-control-plaintext" id="staticId" value="{{ $student->id }}">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="fullName" class="col-md-4 col-form-label">Index No:</label>
+                        <label for="staticIndex" class="col-md-4 col-form-label">Index No:</label>
 
                         <div class="col-md-8 font-weight-bold">
-                            <p class="col-form-label"> 
-                                {{ $student->indexno }}
-                            </p>
+                            <input type="text" readonly class="form-control-plaintext" id="staticIndex" value="{{ $student->indexno }}">
                         </div>
                     </div>
+
+                    @include('contract_field.contract-form-view-user-profile')
 
                     <div class="form-group row">
                         <label for="fullName" class="col-md-4 col-form-label">Profile:</label>
@@ -178,53 +176,37 @@
                     </div>
                     {{-- <div class="col-md-4 offset-md-4"><a href="{{ route('students.edit', $student->id) }}" class="btn btn-block btn-outline-info">Edit Profile</a>
                     </div> --}}
-                </form>
+                </div>
             </div>
         </div>
     </div>  
     
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header bg-info text-center"><strong>New User Info</strong></div>
+            <div class="card-header bg-info text-center"><strong>ID Form Attachments</strong></div>
             <div class="card-body">
-                <ul  class="list-group">
-            
-                    <div class="form-group">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <label class="control-label">Attachment 1: </label>
-                                @if(empty($student->newUserInt->filesId->path)) <strong>None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
-                
-                                {{-- <div class="form-group">
-                                    <label class="control-label col-sm-12">Attach another file to replace attachment 1: </label>
-                                    <input name="contractfile" type="file" class="col-md-12 form-control-static mb-1">
-                                </div> --}}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group ">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <label class="control-label">Attachment 2: </label>
-                                @if(empty($student->newUserInt->filesId2->path)) <strong>None</strong> @else <a href="{{ Storage::url($student->newUserInt->filesId2->path) }}" target="_blank"><i class="fa fa-file fa-3x" aria-hidden="true"></i></a> @endif
-                                
-                                {{-- <div class="form-group">
-                                    <label class="control-label col-sm-12">Attach another file to replace attachment 2: </label>
-                                    <input name="contractfile2" type="file" class="col-md-12 form-control-static mb-1">
-                                </div> --}}
-                            </div>
-                        </div>
-                    </div>
-
-                </ul>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">File</th>
+                        <th scope="col">Creation Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <th scope="row"></th>
+                        <td>file_name.pdf</td>
+                        <td>{{ $student->contract_date }}</td>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div> 
 
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header bg-info text-center"><strong>New User Info</strong></div>
+            <div class="card-header bg-info text-center"><strong>Payment Form Attachments</strong></div>
             <div class="card-body">
                 <ul  class="list-group">
             
@@ -262,7 +244,14 @@
     </div> 
 </div>
 @endsection
-
 @section('java_script')
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#datetimepicker4').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
+</script>
 @endsection

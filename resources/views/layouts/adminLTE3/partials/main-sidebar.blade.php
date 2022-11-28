@@ -11,7 +11,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('adminLTE3/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('adminLTE3/dist/img/avatar.png') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -39,31 +39,28 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Dashboard
+                ADMIN OPERATIONS
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./index.html" class="nav-link">
+                <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('admin/users') ? "active" : ""}}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
+                  <p>User Administration</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
+                <a href="{{ route('system-index') }}" class="nav-link {{ Request::is(route('system-index')) ? "active" : ""}}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index3.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
+                  <p>System Operations</p>
                 </a>
               </li>
             </ul>
           </li>
+        </ul>
+      </nav> 
+      {{--    
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
@@ -667,7 +664,7 @@
             </a>
           </li>
         </ul>
-      </nav>
+      </nav> --}}
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

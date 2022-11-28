@@ -1,7 +1,8 @@
-@extends('admin.admin')
+@extends('layouts.adminLTE3.index')
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 @stop
 @section('content')
 {{-- <div class="nav-tabs-custom">
@@ -19,14 +20,14 @@
 
 <div class="row">
     <div class="col-sm-12">
-    <div class="box box-default">
-        <div class="box-header with-border">
-            <h3 class="box-title">Filters:</h3>
-            <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+    <div class="card card-default">
+        <div class="card-header with-border">
+            <h3 class="card-title">Filters:</h3>
+            <div class="card-tools pull-right">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
             </div>
         </div>
-    <div class="box-body">
+    <div class="card-body">
         <form id="form-filter" method="GET" action="{{ route('index-placement-selfpay',['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term')]) }}">
             
             @include('admin.partials._filterIndex')
@@ -37,7 +38,7 @@
 
         </form>
     </div>
-    <div class="box-footer">
+    <div class="card-footer">
         <div class="form-group">    
             <div class="input-group-btn">
                 <a href="{{ route('index-placement-selfpay', ['L' => \Request::input('L'), 'DEPT' => Request::input('DEPT'), 'Term' => Session::get('Term'),'is_self_pay_form' => \Request::input('is_self_pay_form'), 'overall_approval' => \Request::input('overall_approval'),'selfpay_approval' => \Request::input('selfpay_approval'),'sort' => 'asc']) }}" class="btn btn-default">Oldest First</a>
@@ -48,12 +49,13 @@
     </div>
     </div>
 </div>
+
 @if(is_null($selfpayforms))
 
 @else
 {{ $selfpayforms->links() }}
 <div class="table-responsive col-sm-12 filtered-table">
-	<table class="table table-bordered table-striped">
+	<table id="tblPlacementSelfpayment" class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
 	            <th>Operation</th>
@@ -61,6 +63,8 @@
 	            <th>Name</th>
 	            <th>Organization</th>
                 <th>Term</th>
+                <th>Contract Exp</th>
+                <th>Contract Proof</th>
                 <th>Language</th>
 	            <th>ID Proof</th>
 	            <th>Payment Proof</th>
@@ -98,12 +102,27 @@
                         - (NGO name update needed)
                         @endif
                     @endif
-                
                 </td>
                 <td>{{ $form->Term }}</td>
+                <td>
+                    @if (is_null($form->users->contract_date))
+                    <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->L }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" type="button" class="show-modal btn btn-space btn-default  button-prevent-multi-submit confirm" title="Enter Contract Expiry"><i class="far fa-calendar"></i> Enter Contract Date</button>
+                    @else
+                    {{ $form->users->contract_date }}
+                    @endif
+                </td>
+                <td>
+                    <input id="userId" type="hidden" name="id" value="{{ $form->users->id }}"/>
+                    <input id="indexId" type="hidden" name="indexid" value="{{ $form->INDEXID }}"/>
+                    <input id="L" type="hidden" name="L" value="{{ $form->L }}"/>
+                    <input id="term" type="hidden" name="term" value="{{ $form->Term }}"/>
+                    <input id="formType" type="hidden" name="regular_form" value=0 />
+                    <div class="contract-section-{{ $form->users->id }}-{{ $form->L }}-{{ $form->Term }}"></div>
+                    <button id="viewContractFile" class="btn btn-secondary">View Contract</button>
+                </td>
                 <td>{{ $form->L }}</td>
-				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fa fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>
-				<td>@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif </td>
+				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fas fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>
+				<td>@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="far fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>
 				<td>{{ $form->created_at}}</td>
 			</tr>
 			@endforeach
@@ -115,13 +134,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title"></h4>
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group class-list"></div>
-                </form>
+                
+                @include('contract_field.contract-form-index-placement-selfpay')
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-dismiss="modal">
                         <span class='glyphicon glyphicon-remove'></span> Close
@@ -136,6 +157,48 @@
 @stop
 
 @section('java_script')
+<script>
+    $(document).ready(function() {       
+        const token = $("input[name='_token']").val();
+        
+        $("button#viewContractFile").on("click", function () {
+            let userId = $(this).closest("tr").find("input[name='id']").val();
+            let indexId = $(this).closest("tr").find("input[name='indexid']").val();
+            let L = $(this).closest("tr").find("input[name='L']").val();
+            let term = $(this).closest("tr").find("input[name='term']").val();
+            let formType = $(this).closest("tr").find("input[name='regular_form']").val();
+            
+            $.ajax({
+                url: "{{ route('get-contract-file') }}",
+                type: "GET",
+                data: {userId:userId, indexId:indexId,  L:L, term:term, formType:formType, _token:token},
+            })
+            .done(function(data) {            
+                console.log(data)
+                    if (data != "none") {
+                        let stringPath = data['path'].replace("public", "storage");                        
+                        window.open("\/" + stringPath + " ", "_blank", "resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no"); 
+                        return false;
+                    }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("job complete");
+            });
+        });
+    });
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#datetimepicker4').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
+</script>
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -145,37 +208,12 @@ $(document).ready(function() {
 });
 </script>
 <script>
-// Show a post
+// Show modal
 $(document).on('click', '.show-modal', function() {
-    $('.modal-title').text('Showing Information');
-    $('#id_show').val($(this).data('id'));
-    $('#title_show').val($(this).data('title'));
-    // $('#form-filter').removeAttr('action');
-    // $('.filter-submit-btn').replaceWith('<a class="btn btn-success next-link btn-default btn-block button-prevent-multi-submit" disabled>Next</a>');
-    var index = $(this).data('index');
-    var tecode = $(this).data('tecode');
-    var term = $(this).data('term');
-    $('#showModal').modal('show');
-
-    $.ajax({
-        url: '{{ route('show-schedule-selfpay') }}',
-        type: 'GET',
-        data: {'index' : index, 'tecode' : tecode, 'term' : term,
-        },
-    })
-    .done(function(data) {
-        console.log("success");
-        console.log(data);
-        $(".class-list").html('');
-        $(".class-list").html(data.options);
-        $( '#accordion' ).accordion({collapsible: true,heightStyle: "content"});
-    })
-    .fail(function() {
-        console.log("error");
-    })
-    .always(function() {
-        console.log("complete");
-    });    
+    $('.modal-title').text('Enter Contract Expiry Date');
+    $('#userIdModal').val($(this).data('id'));
+    $('.contract-form').attr('id', 'updateContractDate-'+$(this).data('id'));
+    $('#showModal').modal('show'); 
 });
 
 // on modal close
