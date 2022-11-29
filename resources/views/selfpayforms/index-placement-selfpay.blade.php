@@ -106,9 +106,11 @@
                 <td>{{ $form->Term }}</td>
                 <td>
                     @if (is_null($form->users->contract_date))
-                    <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->L }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" type="button" class="show-modal btn btn-space btn-default  button-prevent-multi-submit confirm" title="Enter Contract Expiry"><i class="far fa-calendar"></i> Enter Contract Date</button>
+                    <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->L }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" data-username="{{ $form->users->name }}" type="button" class="show-modal btn btn-space btn-default  button-prevent-multi-submit confirm" title="Enter Contract Expiry"><i class="far fa-calendar"></i> Enter Contract Date</button>
                     @else
                     {{ $form->users->contract_date }}
+                    <br />
+                    <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->L }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" data-username="{{ $form->users->name }}" type="button" class="show-modal btn btn-space btn-dark button-prevent-multi-submit confirm" title="Edit Contract Expiry"><i class="far fa-edit"></i> Edit</button>
                     @endif
                 </td>
                 <td>
@@ -140,7 +142,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                
+                <input id="userNameModal" type="text" name="username" value="" class="form-control-plaintext" readonly />
                 @include('contract_field.contract-form-index-placement-selfpay')
 
                 <div class="modal-footer">
@@ -212,6 +214,7 @@ $(document).ready(function() {
 $(document).on('click', '.show-modal', function() {
     $('.modal-title').text('Enter Contract Expiry Date');
     $('#userIdModal').val($(this).data('id'));
+    $('#userNameModal').val($(this).data('username'));
     $('.contract-form').attr('id', 'updateContractDate-'+$(this).data('id'));
     $('#showModal').modal('show'); 
 });
