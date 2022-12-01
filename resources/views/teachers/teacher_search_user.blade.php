@@ -14,7 +14,7 @@
                 <input type="text" name="search" class="form-control">
                 <div class="input-group-btn">
                     <button type="submit" class="btn btn-info button-prevent-multi-submit">Search by Name/Email</button>
-                    <a href="/admin/users/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
+                    <a href="/admin/teacher-search-user/" class="filter-reset btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></a>
                 </div>
             </div>
         </form>    
@@ -32,10 +32,7 @@
                     <th>First Name</th>
                     <th>Email</th>
                     <th>Contact Number</th>
-                    <th>Member Since</th>
-                    <th>Has logged in?</th>
                     <th>Last Login At</th>
-                    <th>User Roles</th>
                 </tr>
             </thead>
 
@@ -50,20 +47,11 @@
                     <td>{{ $user->nameFirst }}</td>
                     <td>{{ $user->email }}</td>
                     <td>@if(empty($user->sddextr->PHONE )) none @else <strong> {{$user->sddextr->PHONE}} </strong>@endif</td>
-                    <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>                    
-                    <td>
-                        @if( $user->created_at != $user->updated_at)
-                            <h4><span class="label label-success">Yes</span></h4>
-                        @else
-                            <h4><span class="label label-danger">Never</span></h4>
-                        @endif
-                    </td>
                     <td>
                         @if ($user->last_login_at)
                             {{ $user->last_login_at}}
                         @endif
                     </td>                    
-                    <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
                 </tr>
                 @endforeach
             </tbody>

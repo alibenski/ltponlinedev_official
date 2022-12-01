@@ -52,6 +52,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
+@hasrole('Admin')
 @if(env('APP_ENV')!='production')
 <body class="hold-transition skin-red sidebar-mini">
 @else
@@ -286,3 +287,4 @@ desired effect
   @yield('java_script')
 </body>
 </html>
+@endhasrole

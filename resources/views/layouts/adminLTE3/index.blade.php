@@ -38,6 +38,7 @@
   * sidebar-collapse
   * sidebar-mini
 -->
+@hasrole('Admin')
 <body class="hold-transition sidebar-collapse">
 <div class="wrapper">
 
@@ -118,3 +119,4 @@
 @yield('java_script')
 </body>
 </html>
+@endhasrole
