@@ -52,7 +52,8 @@
 								@endif
 							</h4>
 								@if (!is_null($term))
-									<a href="{{ route('view-convocation-email-text') }}" class="btn btn-info"><i class="fa fa-eye"></i> View Convocation Email Text</a>
+									<a href="{{ route('view-convocation-email-text') }}" class="btn btn-info btn-space"><i class="fa fa-eye"></i> View Convocation Email Text</a>
+									<a href="{{ route('send-convo-to-language-smb') }}" class="btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to CLM Language SMB</a>
 								@endif
 						</div>
 	

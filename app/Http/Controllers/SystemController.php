@@ -38,6 +38,81 @@ class SystemController extends Controller
         return view('system.system-index', compact('terms', 'term', 'texts', 'onGoingTerm'));
     }
 
+    public function sendConvoToLanguageSmb(Request $request)
+    {
+        $convocation_all = Repo::where('Term', Session::get('Term'))->get();
+        // query students who will be put in waitlist
+        $convocation_waitlist = Repo::where('Term', Session::get('Term'))->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD');
+        })->get();
+        // query students who will receive convocation
+        $convocation = Repo::where('Term', Session::get('Term'))->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })->get()->take(1);
+
+
+        $convocation_diff3 = $convocation->diff($convocation_waitlist); // send email convocation to this collection
+
+        $convocation_diff3 = $convocation_diff3->where('convocation_email_sent', null);
+        // $convocation_diff3 = $convocation_diff3->where('INDEXID', '17942');
+
+        foreach ($convocation_diff3 as $value) {
+
+            $course_name = Course::where('Te_Code_New', $value->Te_Code)->first();
+            $course_name_en = $course_name->EDescription;
+            $course_name_fr = $course_name->FDescription;
+
+            $schedule = $value->schedules->name;
+            // $room = $value->CodeClass; 
+            // get schedule and room details from classroom table
+            $classrooms = Classroom::where('Code', $value->CodeClass)->get();
+
+
+            $teacher_id = $value->classrooms->Tch_ID;
+            $teacher = Teachers::where('Tch_ID', $teacher_id)->first()->Tch_Name;
+            $teacher_email = Teachers::where('Tch_ID', $teacher_id)->first()->email;
+
+            // get term values
+            $term = $value->Term;
+            // get term values and convert to strings
+            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
+            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+
+            $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
+            $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+
+            $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+            $term_year = new Carbon($term_date_time);
+            $term_year = $term_year->year;
+
+            // get cancel date limit
+            $queryCancelDateLimit = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+            $cancel_date_limit = new Carbon($queryCancelDateLimit);
+            $cancel_date_limit->subDay();
+
+            $termCancelMonth = date('F', strtotime($cancel_date_limit));
+            $termCancelDate = date('d', strtotime($cancel_date_limit));
+            $termCancelYear = date('Y', strtotime($cancel_date_limit));
+
+            // cancel limit date convert to string
+            $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+            // translate 
+            $termCancelMonthFr = __('months.' . $termCancelMonth, [], 'fr');
+            $cancel_date_limit_string_fr = $termCancelDate . ' ' . $termCancelMonthFr . ' ' . $termCancelYear;
+
+            $staff_name = $value->users->name;
+            $staff_email = $value->users->email;
+
+            Mail::to('clm_language@un.org')->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year, $cancel_date_limit_string, $cancel_date_limit_string_fr));
+        }
+
+        session()->flash('success', 'Convocation email sent to CLM Language SMB');
+        return back();
+    }
+
     public function sendToManualEmailAdds(Request $request)
     {
         $validator = Validator::make($request->all(), [

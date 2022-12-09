@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::post('generate-URL', ['as' => 'generate-URL', 'uses' => 'Auth\LateRegisterController@generateRandomURL']);
     Route::post('generate-URL-late-enrolment', ['as' => 'generate-URL-late-enrolment', 'uses' => 'LateEnrolmentController@generateRandomURL']);
 
+    Route::get('send-convo-to-language-smb', 'SystemController@sendConvoToLanguageSmb')->name('send-convo-to-language-smb');
     Route::get('send-broadcast-enrolment-is-open', 'SystemController@sendBroadcastEnrolmentIsOpen')->name('send-broadcast-enrolment-is-open');
     Route::get('send-general-email', 'SystemController@sendGeneralEmail')->name('send-general-email');
     Route::get('send-email-to-enrolled-students-of-selected-term', 'SystemController@sendEmailToEnrolledStudentsOfSelectedTerm')->name('send-email-to-enrolled-students-of-selected-term');
