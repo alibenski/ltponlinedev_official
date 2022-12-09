@@ -47,7 +47,7 @@
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
         <tr>
             <td style="padding: 20px 0; text-align: center">
-                <img src="/img/online_equip_icons.png" width="450" height="100" alt="CLM Language Training" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                <img src="https://ltponlinedev.unog.ch/img/online_equip_icons_fr.png" width="450" height="100" alt="CLM Language Training" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
             </td>
         </tr>
     </table>
