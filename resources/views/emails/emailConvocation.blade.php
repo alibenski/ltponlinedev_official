@@ -230,19 +230,17 @@
                                           @endif
                                         @endforeach
                                     </p>
-                                    <br />
                                     
                                     <ul>
                                         <li style="text-align: justify">Some courses require course books. Please check the <a href="https://learning.unog.ch/node/1443">list of materials</a> necessary to purchase before your course starts.</li>
                                         <li style="text-align: justify">Your teacher will email you with further instructions and the link to your course material and autonomous activities on the CLM Moodle e-learning platform.</li>
                                     </ul>
-                                    <br />
                                     <h4><strong><u>Important information for ONLINE courses</u></strong></h4>
                                     <p style="text-align: justify">Please note the equipment you will need: </p>
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
                                         <tr>
                                             <td style="padding: 20px 0; text-align: center">
-                                                <img src="https://ltponlinedev.unog.ch/img/online_equip_icons.png" width="450" height="100" alt="CLM Language Training" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                                                <img src="https://ltponlinedev.unog.ch/img/online_equip_icons.png" width="450" alt="CLM Language Training" border="0" style="height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                             </td>
                                         </tr>
                                     </table>
