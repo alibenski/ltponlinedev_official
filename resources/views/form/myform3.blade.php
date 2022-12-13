@@ -106,9 +106,11 @@
                             <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
                           </div>
                         
-                          @include('file_attachment_field.id-file-attachment')
-
-                          @include('file_attachment_field.contract-file-attachment')
+                          @if ($terms->Term_End > $user->contract_date)
+                            @include('file_attachment_field.id-file-attachment')
+                          
+                            @include('file_attachment_field.contract-file-attachment')
+                          @endif
                           
                           @include('file_attachment_field.payment-file-attachment')
 
