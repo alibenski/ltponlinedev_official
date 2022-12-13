@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-
+@include('admin.partials._tipsAlertBox')
 <div class='col-md-12'>
 
     <form method="POST" action="{{ route('store-enrolment-is-open-text', [$text->id]) }}">
