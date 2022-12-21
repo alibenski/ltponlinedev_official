@@ -2933,6 +2933,7 @@ class PreviewController extends Controller
                     // query student count who are not yet assigned to a class section (null) and order by priority
                     $getPashStudents = Preview::where('Code', $valueCode2->Code)
                         ->where('CodeIndexIDClass', null)
+                        ->where('INDEXID', $request->INDEXID)
                         ->orderBy('id', 'asc')
                         ->orderBy('PS', 'asc')
                         ->get();
