@@ -16,8 +16,8 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Organization</th>
 	            <th>Language</th>
 	            <th>Exam Date</th>
-	            <th>Preferred Day(s)</th>
-	            <th>Preferred Time(s)</th>
+	            <th>Availability Day(s)</th>
+	            <th>Availability Time(s)</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>            
 	            <th>Assigned to Course?</th>            
@@ -64,8 +64,8 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Organization</th>
 	            <th>Language</th>
 	            <th>Exam Date</th>
-	            <th>Preferred Day(s)</th>
-	            <th>Preferred Time(s)</th>
+	            <th>Availability Day(s)</th>
+	            <th>Availability Time(s)</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>	
 	            <th>Assigned to Course?</th>             
