@@ -174,6 +174,8 @@
                         let stringPath = data['path'].replace("public", "storage");                        
                         window.open("\/" + stringPath + " ", "_blank", "resizable=yes,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no"); 
                         return false;
+                    } else {
+                        alert("No contract file attachment found. Please upload the document.")
                     }
             })
             .fail(function() {

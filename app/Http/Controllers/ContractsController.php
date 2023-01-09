@@ -15,14 +15,18 @@ class ContractsController extends Controller
             $formId = Preenrolment::orderBy('id', 'desc')->where('INDEXID', $request->indexId)->where('Te_Code', $request->teCode)->where('Term', $request->term)->first();
             $contractFile = ContractFile::where('user_id', $request->userId)->where('enrolment_id', $formId->id)->first();
 
-            $data = [
-                'userId' => $request->userId,
-                'teCode' => $request->teCode,
-                'term' => $request->term,
-                'path' => $contractFile->path
-            ];
-            if (!$contractFile->path) {
+            if (is_null($contractFile)) {
                 $data = 'none';
+            } else {
+                $data = [
+                    'userId' => $request->userId,
+                    'teCode' => $request->teCode,
+                    'term' => $request->term,
+                    'path' => $contractFile->path
+                ];
+                if (!$contractFile->path) {
+                    $data = 'none';
+                }
             }
 
             return $data;
@@ -32,19 +36,23 @@ class ContractsController extends Controller
             $formId = PlacementForm::orderBy('id', 'desc')->where('INDEXID', $request->indexId)->where('L', $request->L)->where('Term', $request->term)->first();
             $contractFile = ContractFile::where('user_id', $request->userId)->where('placement_id', $formId->id)->first();
 
-            $data = [
-                'userId' => $request->userId,
-                'L' => $request->L,
-                'term' => $request->term,
-                'path' => $contractFile->path
-            ];
-            if (!$contractFile->path) {
+            if (is_null($contractFile)) {
                 $data = 'none';
+            } else {
+                $data = [
+                    'userId' => $request->userId,
+                    'L' => $request->L,
+                    'term' => $request->term,
+                    'path' => $contractFile->path
+                ];
+                if (!$contractFile->path) {
+                    $data = 'none';
+                }
             }
 
             return $data;
         }
 
-        return "no data";
+        return "none";
     }
 }
