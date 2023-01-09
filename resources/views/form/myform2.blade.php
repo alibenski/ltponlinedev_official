@@ -123,108 +123,11 @@
                     </div>
 
                   <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
-                    <div class="form-group col-md-12">
-                      <div class="alert alert-danger col-md-12">
-                        <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
-                        <p class="text-justify"><strong>If you have already passed the LPE or the highest level of your chosen language but have not taken classes during two terms, you are still required to fill in the form below. However the placement test might not be necessary depending on the information you provide. The language training secretariat will examine your request and make a decision.</strong></p>
-                      </div>
-                    </div>
+                    @include('form.partials.placement_form.importantNote')
 
-                    <div class="col-md-12">
-                      <div class="card">
-                        <div class="card-header bg-primary col-md-12"><strong>Placement test dates</strong></div>
-                        <div class="card-body">
-                          <div class="row col-md-12">
-                            <div class="alert alert-info alert-dismissible alert-placement-instruction">
-                              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                              <p class="text-justify">Please select a date (required) for your placement test from the options available. If you are unable to take the placement test on the given dates, then please write the reason in the comments box and indicate your availability.  Where possible, we will try to accommodate your wishes.  If it is not possible, you will need to apply again for the following term.</p> 
-                              <p class="text-justify"> If you think that the placement test is not necessary for you, for whatever reason, please explain why in the box below.</p> 
-                            </div>
-                          </div>
-                          
-                          <div class="otherQuestions2 row col-md-12">
-                            <div class="insert-container col-md-12">
-                                <div class="form-group">
-                                  <div class="place-here col-md-12">
-                                  <label for="scheduleChoices"></label>
-                                    <div class="scheduleChoices col-md-12">
-                                    {{-- insert jquery schedules here --}}
-                                    </div>
-                                  </div>
-                                </div>
-                              <div class="insert-msg"></div>
-
-                              <div class="col-md-12 form-group">
-                                <label class="col-md-12 control-label">Comments: <i>(optional)</i></label>
-                                <div class="col-md-12 ">
-                                <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="For queries or comments about the placement test e.g. time, place, date, constraints, etc."></textarea>
-                                </div>
-                              </div>
-
-                            </div>    
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    @include('form.partials.placement_form.testDates')
                     
-                    <div class="col-md-12 mt-4">
-                      <div class="card">
-                        <div class="card-header bg-primary col-md-12"><strong>Information about your course preference</strong></div>
-                        <div class="card-body">
-                          <div class="row">
-                            <div class="col-md-12 alert alert-danger">
-                            <p>Please indicate the time and the days you are available to attend the course. Check/tick all that apply.</p>
-                            <p>For summer term, all days are checked/ticked.</p>
-                            </div>
-                          </div>
-                          <div class="row col-md-12">
-                            <div class="otherQuestions col-md-12">
-                              <div class="form-group">
-                                <label for="" class="control-label">Time: <span class="text-danger"><em>(required)</em></span></label>
-                                <div class="col-md-12">
-                                      <div class="input-group col-md-12">                             
-                                        <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
-                                        <label for="morning" class="form-control-static">Morning (8 to 9.30 or 10 a.m.)</label>
-                                      </div>
-                                      
-                                      <div class="input-group col-md-12">
-                                        <input id="afternoon" name="timeInput[]" class="with-font" type="checkbox" value="afternoon">
-                                        <label for="afternoon" class="form-control-static">Afternoon (12.30 to 2 or 2.30 p.m.)</label>
-                                      </div>
-                                 </div>
-                              </div>
-                            </div>
-
-                            <div class="otherQuestions3 col-md-12">
-                              <div class="form-group">
-                                <label for="" class="control-label">Day: <span class="text-danger"><em>(required)</em></span></label>
-                                <div class="col-md-12">
-                                  @foreach ($days as $id => $name)
-                                      <div class="input-group col-md-12">                             
-                                        <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}" 
-                                        @if (substr($terms->Term_Code, -1) == '8')
-                                        checked                                            
-                                        @endif
-                                        >
-                                        <label for="{{ $name }}" class="form-control-static">{{ $name }}</label>
-                                      </div>
-                                  @endforeach
-                                 </div>
-                              </div>
-                            </div>
-
-                            <div class="col-md-12 form-group">
-                              <label class="col-md-12 control-label text-danger">Comments: <i>(required)</i></label>
-                              <div class="col-md-12 pink-border">
-                              <small class="text-danger"><i class="fa fa-warning"></i> <strong>You are required to fill this comment box. Failure to do so will nullify your submission.</strong></small>
-                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="Please indicate if you are available for in-person or/and online courses, preferred course, schedule flexbility, constraints, passed LPE, etc." required="required"></textarea>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div> {{-- end card body --}}
-                      </div>
-                    </div>
+                    @include('form.partials.placement_form.coursePreference')
 
                   </div> {{-- end of placement test enrolment part --}}
 
