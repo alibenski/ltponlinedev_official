@@ -18,6 +18,7 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Exam Date</th>
 	            <th>Availability Day(s)</th>
 	            <th>Availability Time(s)</th>
+				<th>Availability Delivery Mode(s)</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>            
 	            <th>Assigned to Course?</th>            
@@ -48,6 +49,17 @@ Total Count: {{ count($placement_forms) }}
 				</td>
 				<td>{{ $form->dayInput }}</td>
 				<td>{{ $form->timeInput }}</td>
+				<td>
+					@if(!is_null($form->deliveryMode))
+						@if($form->deliveryMode === 0) in-person
+						@elseif($form->deliveryMode ===1) online
+						@elseif($form->deliveryMode ===2) both in-person and online
+						@endif
+					@else
+					-
+					@endif
+				
+				</td>
 				<td>{{ $form->std_comments }}</td>
 				<td>{{ $form->course_preference_comment }}</td>
 				<td>@if($form->assigned_to_course == 1) Yes @endif</td>
@@ -66,6 +78,7 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Exam Date</th>
 	            <th>Availability Day(s)</th>
 	            <th>Availability Time(s)</th>
+				<th>Availability Delivery Mode(s)</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>	
 	            <th>Assigned to Course?</th>             

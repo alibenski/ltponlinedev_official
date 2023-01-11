@@ -70,9 +70,9 @@
 		            <th>Contact No.</th>
 		            <th>Course</th>
 		            <th>Schedule</th>
-		            <th>Available Time(s)</th>
-		            <th>Available Day(s)</th>
-		            <th>Available Delivery Mode(s)</th>
+		            <th>Availability Day(s)</th>
+		            <th>Availability Time(s)</th>
+		            <th>Availability Delivery Mode(s)</th>
 		            <th>Flexible?</th>
 		            <th>Flexible Format?</th>
 		            <th>Organization</th>
@@ -125,15 +125,15 @@
 						<div class="student-count-schedule-{{ $form->INDEXID }}"></div>
 					</td>
 					<td>
-						@if(!is_null($form->timeInput))
-                                    <span class="label label-warning margin-label">{{$form->timeInput}}</span>
-                                  @else
-                          -
-                                  @endif
+						@if(!is_null($form->dayInput))
+									<span class="label label-warning margin-label">{{$form->dayInput}}</span>
+								  @else
+						  -
+								  @endif
 					</td>
 					<td>
-						@if(!is_null($form->dayInput))
-                                    <span class="label label-warning margin-label">{{$form->dayInput}}</span>
+						@if(!is_null($form->timeInput))
+                                    <span class="label label-warning margin-label">{{$form->timeInput}}</span>
                                   @else
                           -
                                   @endif

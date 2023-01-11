@@ -105,7 +105,7 @@
 				</div>
 
 				<div class="form-group">
-				    <label class="control-label" for="flexible_show">Available Delivery Mode: </label>
+				    <label class="control-label" for="flexible_show">Availability Delivery Mode: </label>
 					<div class="panel panel-body">
 					@if($placement_form->deliveryMode === 0)<span class="glyphicon glyphicon-ok text-success"></span> in-person @elseif($placement_form->deliveryMode === 1)<span class="glyphicon glyphicon-ok text-success"></span> online @elseif($placement_form->deliveryMode === 2)<span class="glyphicon glyphicon-ok text-success"></span> both in-person and online @else <span class="glyphicon glyphicon-remove text-danger"></span> No response @endif
 					</div>
@@ -123,13 +123,13 @@
 
 			<div class="col-sm-6">
 				<div class="form-group">
-				    <label class="control-label" for="preferred_days_comment">Available Days:</label>
+				    <label class="control-label" for="preferred_days_comment">Availability Days:</label>
 				    <div class="">
 				        <textarea class="form-control" name="preferred_days_comment" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->dayInput }}</textarea>
 				    </div>
 				</div>
 				<div class="form-group">
-				    <label class="control-label" for="preferred_time_comment">Available Time:</label>
+				    <label class="control-label" for="preferred_time_comment">Availability Time:</label>
 				    <div class="">
 				        <textarea class="form-control" name="preferred_time_comment" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->timeInput }}</textarea>
 				    </div>
