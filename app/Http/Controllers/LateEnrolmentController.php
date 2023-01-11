@@ -432,6 +432,7 @@ class LateEnrolmentController extends Controller
         $this->validate($request, array(
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
             'course_preference_comment' => 'required|',
         ));
 
@@ -443,6 +444,7 @@ class LateEnrolmentController extends Controller
         $data = PlacementForm::findorFail($placement_form_id);
         $data->dayInput = $implodeDay;
         $data->timeInput = $implodeTime;
+        $data->deliveryMode = $request->deliveryMode;
         $data->course_preference_comment = $request->course_preference_comment;
         $data->save();
 
@@ -587,6 +589,7 @@ class LateEnrolmentController extends Controller
                 'agreementBtn' => 'required|',
                 'dayInput' => 'required|',
                 'timeInput' => 'required|',
+                'deliveryMode' => 'required|',
                 'course_preference_comment' => 'required|',
             ));
         }
@@ -860,6 +863,7 @@ class LateEnrolmentController extends Controller
             'agreementBtn' => 'required|',
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
             'course_preference_comment' => 'required|',
         ));
 

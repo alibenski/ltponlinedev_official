@@ -999,6 +999,7 @@ class SelfPayController extends Controller
                 'agreementBtn' => 'required|',
                 'dayInput' => 'required|',
                 'timeInput' => 'required|',
+                'deliveryMode' => 'required|',
                 'course_preference_comment' => 'required|',
             ));
         }
