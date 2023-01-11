@@ -70,6 +70,9 @@
 		            <th>Contact No.</th>
 		            <th>Course</th>
 		            <th>Schedule</th>
+		            <th>Available Time(s)</th>
+		            <th>Available Day(s)</th>
+		            <th>Available Delivery Mode(s)</th>
 		            <th>Flexible?</th>
 		            <th>Flexible Format?</th>
 		            <th>Organization</th>
@@ -120,6 +123,32 @@
 						{{-- <a id="modbtn" class="btn btn-default btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-approval="{{ $form->approval }}" data-formx="{{ $form->form_counter }}" data-mtitle="{{ $form->courses->EDescription }}"> View</a> --}}
 						<a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist Schedule</a>
 						<div class="student-count-schedule-{{ $form->INDEXID }}"></div>
+					</td>
+					<td>
+						@if(!is_null($form->timeInput))
+                                    <span class="label label-warning margin-label">{{$form->timeInput}}</span>
+                                  @else
+                          -
+                                  @endif
+					</td>
+					<td>
+						@if(!is_null($form->dayInput))
+                                    <span class="label label-warning margin-label">{{$form->dayInput}}</span>
+                                  @else
+                          -
+                                  @endif
+					</td>
+					<td>
+						@if(!is_null($form->deliveryMode))
+                                    <span class="label label-warning margin-label">
+										@if($form->deliveryMode === 0) in-person
+										@elseif($form->deliveryMode ===1) online
+										@elseif($form->deliveryMode ===2) both in-person and online
+										@endif
+									</span>
+                                  @else
+                          -
+                                  @endif
 					</td>
 					<td>
 						@if($form->flexibleBtn == 1)
