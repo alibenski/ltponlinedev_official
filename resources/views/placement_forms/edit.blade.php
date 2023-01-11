@@ -6,7 +6,7 @@
 @section('content')
 <div class="row">
 	<div class="callout callout-warning col-sm-12">
-		<h4>Page to convoke students to take a placement examination</h4>
+		<h4>Page to convoke students to take a placement examination (Page not used at the moment)</h4>
 	</div>
 </div>
 <div class="row">
@@ -94,20 +94,20 @@
 			</div>
 	</div>
 	<div class="form-group">
-	    <label class="control-label" for="flexible_show">Is Flexible: @if($placement_form->flexibleBtn == 1)<span class="glyphicon glyphicon-ok text-success"></span> Yes @else <span class="glyphicon glyphicon-remove text-danger"></span> Not flexible @endif</label>
+	    <label class="control-label" for="flexible_show">Available Delivery Mode: @if($placement_form->deliveryMode === 0)<span class="glyphicon glyphicon-ok text-success"></span> in-person @elseif($placement_form->deliveryMode === 1)<span class="glyphicon glyphicon-ok text-success"></span> online @elseif($placement_form->deliveryMode === 2)<span class="glyphicon glyphicon-ok text-success"></span> both in-person and online @else <span class="glyphicon glyphicon-remove text-danger"></span> No response @endif</label>
 	</div>
 	
 	</div> <!-- EOF col-sm-6 -->
 
 	<div class="col-sm-6">
 		<div class="form-group">
-		    <label class="control-label" for="student_comment_show">Preferred Days:</label>
+		    <label class="control-label" for="student_comment_show">Available Days:</label>
 		    <div class="">
 		        <textarea class="form-control" name="student_comment_show" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->dayInput }}</textarea>
 		    </div>
 		</div>
 	<div class="form-group">
-	    <label class="control-label" for="student_comment_show">Preferred Time:</label>
+	    <label class="control-label" for="student_comment_show">Available Time:</label>
 	    <div class="">
 	        <textarea class="form-control" name="student_comment_show" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->timeInput }}</textarea>
 	    </div>
@@ -164,7 +164,7 @@
 			<div class="form-group col-sm-12">
 				{{-- <a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a> --}}
 				{{-- <button type="submit" class="btn btn-danger" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Disapprove</button> --}}
-				<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1"><span class="glyphicon glyphicon-ok"></span>  Submit </button>	
+				<button type="submit" class="btn btn-success pull-right button-prevent-multi-submit" name="submit-approval" value="1" disabled><span class="glyphicon glyphicon-ok"></span>  Submit </button>	
 				{{-- <button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button> --}}
 			</div>
 			<input type="hidden" name="_token" value="{{ Session::token() }}">
