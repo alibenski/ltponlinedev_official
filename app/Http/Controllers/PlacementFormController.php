@@ -71,8 +71,9 @@ class PlacementFormController extends Controller
 
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
+        $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
-        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details', 'languages', 'days'));
+        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details', 'languages', 'days', 'terms'));
     }
 
     public function studentUpdatePlacementForm(Request $request)
@@ -86,6 +87,7 @@ class PlacementFormController extends Controller
             'course_preference_comment' => 'required',
             'indexno' => 'required',
             'term_id' => 'required',
+            'deliveryMode' => 'required|',
             'enrolment_id' => 'required',
         ]);
 
@@ -96,6 +98,11 @@ class PlacementFormController extends Controller
                     $query->where('L', $request->L)
                         ->where('INDEXID', $request->indexno)
                         ->where('Term', $request->term_id)
+                        ->where('deleted_at', NULL);
+                }),
+                'assigned_to_course' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
+                    $query->where('id', $request->enrolment_id)
+                        ->where('assigned_to_course', '1')
                         ->where('deleted_at', NULL);
                 })
             ]
@@ -110,6 +117,7 @@ class PlacementFormController extends Controller
             'placement_schedule_id' => $request->placementLang,
             'timeInput' => implode('-', $request->timeInput),
             'dayInput' => implode('-', $request->dayInput),
+            'deliveryMode' => $request->deliveryMode,
             'course_preference_comment' => $request->course_preference_comment,
             'modified_by' => Auth::id(),
         ]);
