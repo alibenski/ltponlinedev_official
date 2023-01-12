@@ -94,12 +94,12 @@ class PlacementFormController extends Controller
         $this->validate(
             $request,
             [
-                'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
-                    $query->where('L', $request->L)
-                        ->where('INDEXID', $request->indexno)
-                        ->where('Term', $request->term_id)
-                        ->where('deleted_at', NULL);
-                }),
+                // 'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
+                //     $query->where('L', $request->L)
+                //         ->where('INDEXID', $request->indexno)
+                //         ->where('Term', $request->term_id)
+                //         ->where('deleted_at', NULL);
+                // }),
                 'assigned_to_course' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
                     $query->where('id', $request->enrolment_id)
                         ->where('assigned_to_course', '1')

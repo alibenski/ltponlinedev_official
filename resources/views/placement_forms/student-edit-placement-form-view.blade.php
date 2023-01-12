@@ -149,16 +149,16 @@
 
     <div class="col-sm-8 mt-3">
         <div class="card">
-            <div class="card-header bg-warning"><h5>Refill your form below including the desired changes</h5></div>
+            <div class="card-header bg-warning"><h5>Complete the form with the desired info changes</h5></div>
             <div class="card-body">
                 <form method="POST" action="{{ route('student-update-placement-form') }}" class="form-horizontal form-prevent-multi-submit">
                     {{ csrf_field() }}
                     <div class="d-flex flex-wrap">
                       <div class="form-group col-sm-6">
-                        <label class="col-sm-12 control-label">Select language:</label>
+                        <label class="col-sm-12 control-label">Clcik on your selected language:</label>
                             @foreach ($languages as $id => $name)
-                            <div class="input-group col-md-9">
-                                <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
+                            <div class="input-group col-md-9" @if ($enrolment_details->L != $id) style="display: none" @endif>
+                                <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}" @if ($enrolment_details->L != $id) disabled @endif>
                                 <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
                             </div>
                             @endforeach
