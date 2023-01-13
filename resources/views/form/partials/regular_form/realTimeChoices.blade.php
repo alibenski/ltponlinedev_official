@@ -2,7 +2,7 @@
 <div class="form-group col-md-12">
     <div class="card">
     <div class="form-group m-2">
-        <div class="col-md-12 alert alert-secondary"><p>Please note that your chosen course and schedule are NOT guaranteed.</p></div>
+        <div class="col-md-12 alert alert-secondary"><p>Please note that your chosen course and schedule are <strong>NOT guaranteed</strong>.</p></div>
     </div>
     <div class="row">        
         <div class="form-group">

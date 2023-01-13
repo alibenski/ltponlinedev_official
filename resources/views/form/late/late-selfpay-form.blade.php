@@ -5,6 +5,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    
 @stop
 @section('content')
 <div id="loader">
@@ -41,7 +42,7 @@
                 <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>
                 <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                                    
                 
-                @include('form.partials.studentDetailsSection')
+                    @include('form.partials.studentDetailsSection')
 
                     <div class="form-group">
                         <label class="col-md-12 control-label">Select language:</label>
@@ -126,73 +127,16 @@
 
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
-                    <div class="form-group">
-                        <label for="course_id" class="col-md-12 control-label">Course selected: </label>
-                        <div class="col-md-12">
-                          <div class="dropdown">
-                            <select class="col-md-12 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
-                                <option value="">--- Select Course ---</option>
-                            </select>
-                          </div>
-                        </div>
-                    </div>
+                    @include('form.partials.regular_form.courseSelect')
 
-                    <div class="form-group">
-                        <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
-                        <div class="col-md-12">
-                          <div class="dropdown">
-                            <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
-                              <option value="">Fill Out Language and Course Options</option>
-                            </select>
-                          </div>
-                          <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
-                        </div>
-                    </div>
+                    @include('form.partials.regular_form.availableCourseSchedule')
+
+                    @include('form.partials.regular_form.flexibilityOptions') 
                     
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
-                        <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another <b>schedule (days/times)</b> if the selected class is full. 
-                        </label>
-                      </div>
-                    </div> 
+                    @include('form.partials.regular_form.realTimeChoices') 
 
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
-                        <input id="flexibleFormat" name="flexibleFormat" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleFormat" class="form-control-static">I am flexible about the delivery mode and <b>can accept either in-person or online</b> if my first choice of mode is not available. 
-                        </label>
-                      </div>
-                    </div>  
-
-                    <div class="form-group">
-                        <label class="col-md-12 control-label">Comments: <span class="small text-danger"><strong>Required field</strong></span></label>
-                        <div class="col-md-12">
-                          <span class="text-danger">Please indicate below if you are available for in-person or/and online courses and any other relevant information, for example: time constraints or a second preferred course, etc.</span>
-                          <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder="" required="required"></textarea>
-                          {{-- <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small> --}}
-                        </div>
-                    </div>
-
-                          <!-- SHOW CHOICES REAL TIME -->
-                    <div class="form-group col-md-12">
-                      <div class="card">
-                        <div class="row">        
-                            <div class="form-group">
-                              <label for="first" class="col-md-12 control-label" style="color: green;">Student availability 1:</label>
-                              <div class="col-md-12 form-control-static"><p id="first" name=""></p></div>
-                            </div>
-
-                            <div class="form-group">
-                              <label for="second" class="col-md-12 control-label" style="color: #337ab7;">Student availability 2:</label>
-                              <div class="col-md-12 form-control-static"><p id="second"  name=""></p></div>        
-                            </div>
-                        </div>    
-                      </div>  
-                    </div>
                   </div> {{-- end of hidden fields --}}  
-                  
-                          <!-- END OF SHOW CHOICES REAL TIME -->   
+                   
                   <div class="submission-part" style="display: none"> 
 
                     <div class="form-group col-md-12">
