@@ -40,50 +40,7 @@
                 <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>              
                 <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                              
 
-                <div class="form-group">
-                    <label for="" class="col-md-12 control-label">Name:</label>
-
-                    <div class="col-md-12 inputGroupContainer input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-user"></i></span>
-                        </div>
-                        <input  name="" class="form-control"  type="text" value="{{ Auth::user()->sddextr->FIRSTNAME }} {{ Auth::user()->sddextr->LASTNAME }}" readonly>                                    
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="org" class="col-md-12 control-label">Organization:</label>
-                    
-                    <div class="col-md-12 inputGroupContainer input-group">
-                      <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="fa fa-globe"></i></span>
-                      </div>
-                      <input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}@if (Auth::user()->sddextr->DEPT === 'MSU') @if (Auth::user()->sddextr->countryMission)- {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @else - (country update needed) @endif @endif @if (Auth::user()->sddextr->DEPT === 'NGO')@if (Auth::user()->sddextr->ngo_name)- {{ Auth::user()->sddextr->ngo_name }} @else - (NGO name update needed) @endif @endif" readonly> 
-                      <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
-                      @if (!is_null($user->sddextr->countryMission))
-                      <input  name="countryMission" class="form-control"  type="hidden" value="{{ $user->sddextr->countryMission->id }}" readonly>
-                      @endif
-                      @if (!is_null($user->sddextr->ngo_name))
-                      <input  name="ngoName" class="form-control"  type="hidden" value="{{ $user->sddextr->ngo_name }}" readonly>
-                      @endif
-                    </div>
-                </div>
-
-                <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
-                    <label for="name" class="col-md-12 control-label">Last/Current UN Language Course:</label>
-
-                    <div class="col-md-12 inputGroupContainer input-group">
-                      @if(is_null($repos_lang)) None
-                      @else
-                        @foreach( $repos_lang as $value )
-                          <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fa fa-graduation-cap"></i></span>
-                          </div>
-                          <input  name="" class="form-control"  type="text" value="@if(empty($value->Te_Code)) {{ $value->coursesOld->Description }} @else {{ $value->courses->Description}} @endif last @if(empty($value->terms->Term_Name) || is_null($value->terms->Term_Name))No record found @else {{ $value->terms->Term_Name }} (@if($value->Result == 'P') Passed @elseif($value->Result == 'F') Failed @elseif($value->Result == 'I') Incomplete @else -- @endif) @endif" readonly>                            
-                        @endforeach
-                      @endif
-                    </div>
-                </div> 
+                @include('form.partials.studentDetailsSection')
 
                 <!-- NO DECISION SECTION -->
                 <div class="0 box">
@@ -141,74 +98,14 @@
 
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
                     
-                    <div class="form-group">
-                        <label for="course_id" class="col-md-12 control-label">Course selected: </label>
-                        <div class="col-md-12">
-                          <div class="dropdown">
-                            <select class="col-md-12 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
-                                <option value="">--- Select Course ---</option>
-                            </select>
-                          </div>
-                        </div>
-                    </div>
+                    @include('form.partials.regular_form.courseSelect')
 
-                    <div class="form-group">
-                        <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
-                        <div class="col-md-12">
-                          <div class="dropdown">
-                            <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
-                              <option value="">Fill Out Language and Course Options</option>
-                            </select>
-                          </div>
-                          <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
-                        </div>
-                    </div>
+                    @include('form.partials.regular_form.availableCourseSchedule')
 
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
-                        <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another <b>schedule (days/times)</b> if the selected class is full.
-                        </label>
-                      </div>
-                    </div> 
-
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
-                        <input id="flexibleFormat" name="flexibleFormat" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleFormat" class="form-control-static">I am flexible about the delivery mode and <b>can accept either in-person or online</b> if my first choice of mode is not available. 
-                        </label>
-                      </div>
-                    </div>  
-
-                    <div class="form-group">
-                        <label class="col-md-12 control-label">Comments: <span class="small text-danger"><strong>Required field</strong></span></label>
-                        <div class="col-md-12">
-                          <span class="text-danger">Please indicate below if you are available for in-person or/and online courses and any other relevant information, for example: time constraints or a second preferred course, etc.</span>
-                          <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder="" required="required"></textarea>
-                          {{-- <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small> --}}
-                        </div>
-                    </div>
-
-                            <!-- SHOW CHOICES REAL TIME -->
-                    <div class="form-group col-md-12">
-                      <div class="card">
-                        <div class="form-group m-2">
-                            <div class="col-md-12 alert alert-secondary"><p>Please note that your chosen course and schedule are NOT guaranteed.</p></div>
-                        </div>
-                        <div class="row">        
-                            <div class="form-group">
-                              <label for="first" class="col-md-12 control-label" style="color: green;">Student availability 1:</label> 
-                              <div class="col-md-12 form-control-static"><p id="first" name=""></p></div>
-                            </div>
-
-                            <div class="form-group">
-                              <label for="second" class="col-md-12 control-label" style="color: #337ab7;">Student availability 2:</label>
-                              <div class="col-md-12 form-control-static"><p id="second"  name=""></p></div>
-                            </div>
-                        </div>    
-                      </div>  
-                    </div>
-                            <!-- END OF SHOW CHOICES REAL TIME -->   
+                    @include('form.partials.regular_form.flexibilityOptions') 
+                    
+                    @include('form.partials.regular_form.realTimeChoices') 
+                    
                   </div> {{-- end of hidden fields --}}
                     
                   <div class="submission-part" style="display: none">
