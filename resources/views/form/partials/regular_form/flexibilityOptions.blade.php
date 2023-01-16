@@ -15,7 +15,7 @@
                             <label for="flexibleDayYes" class="form-check-label">YES</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input id="flexibleDayNo" name="flexibleDay" class="with-font form-check-input" type="radio" value="">
+                            <input id="flexibleDayNo" name="flexibleDay" class="with-font form-check-input" type="radio" value="0">
                             <label for="flexibleDayNo" class="form-check-label">NO</label>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                             <label for="flexibleTimeYes" class="form-check-label">YES</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input id="flexibleTimeNo" name="flexibleTime" class="with-font form-check-input" type="radio" value="">
+                            <input id="flexibleTimeNo" name="flexibleTime" class="with-font form-check-input" type="radio" value="0">
                             <label for="flexibleTimeNo" class="form-check-label">NO</label>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                             <label for="flexibleFormatYes" class="form-check-label">YES</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input id="flexibleFormatNo" name="flexibleFormat" class="with-font form-check-input" type="radio" value="">
+                            <input id="flexibleFormatNo" name="flexibleFormat" class="with-font form-check-input" type="radio" value="0">
                             <label for="flexibleFormatNo" class="form-check-label">NO</label>
                         </div>
                     </div>
