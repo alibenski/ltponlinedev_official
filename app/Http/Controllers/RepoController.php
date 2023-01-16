@@ -283,7 +283,9 @@ class RepoController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
-                'flexibleFormat' => $request->flexibleFormat,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 // 'contractDate' => $contractDate,
                 'std_comments' => $std_comments,
             ]);

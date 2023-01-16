@@ -950,6 +950,9 @@ class SelfPayController extends Controller
         $agreementBtn = $request->input('agreementBtn');
         $consentBtn = $request->input('consentBtn');
         $flexibleBtn = $request->input('flexibleBtn');
+        $flexibleDay = $request->input('flexibleDay');
+        $flexibleTime = $request->input('flexibleTime');
+        $flexibleFormat = $request->input('flexibleFormat');
         $codex = [];
         //concatenate (implode) Code input before validation   
         if (!empty($schedule_id)) {
@@ -1081,6 +1084,9 @@ class SelfPayController extends Controller
             'course_id' => 'required|',
             'L' => 'required|',
             'org' => 'required',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
             'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
@@ -1123,7 +1129,9 @@ class SelfPayController extends Controller
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
                 'flexibleBtn' => $flexibleBtn,
-                'flexibleFormat' => $request->flexibleFormat,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 'std_comments' => $request->regular_enrol_comment,
             ]);
 
