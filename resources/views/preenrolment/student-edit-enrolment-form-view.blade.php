@@ -116,8 +116,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Student schedule is flexible:</label>
-                    <h6 class="form-control-static">@if($enrolment_details->first()->flexibleBtn == 1) <span id="status" class="badge badge-success">Yes</span> @else <span id="status" class="badge badge-danger">No</span> @endif</h6>
+                    <label>Student flexible day :</label>
+                    <h6 class="form-control-static">@if($enrolment_details->first()->flexibleDay === 1) <span id="status" class="badge badge-success">Yes</span> @elseif($enrolment_details->first()->flexibleDay === 0) <span id="status" class="badge badge-danger">No</span> @else - @endif</h6>
+                </div>
+
+                <div class="form-group">
+                    <label>Student flexible time :</label>
+                    <h6 class="form-control-static">@if($enrolment_details->first()->flexibleTime === 1) <span id="status" class="badge badge-success">Yes</span> @elseif($enrolment_details->first()->flexibleTime === 0) <span id="status" class="badge badge-danger">No</span> @else - @endif</h6>
+                </div>
+
+                <div class="form-group">
+                    <label>Student flexible delivery mode (format) :</label>
+                    <h6 class="form-control-static">@if($enrolment_details->first()->flexibleFormat === 1) <span id="status" class="badge badge-success">Yes</span> @elseif($enrolment_details->first()->flexibleFormat === 0) <span id="status" class="badge badge-danger">No</span> @else - @endif</h6>
                 </div>
                 
                 <div class="form-group">
@@ -150,17 +160,7 @@
                         </div>
                     </div>
 
-                    
-                    <div class="form-group">
-                        <label for="course_id" class="col-md-12 control-label">Select Course: </label>
-                        <div class="col-md-12">
-                            <div class="dropdown">
-                            <select class="col-md-12 form-control course_select_no wx" style="width: 100%" name="course_id" autocomplete="off">
-                                <option value="">--- Select Course ---</option>
-                            </select>
-                            </div>
-                        </div>
-                    </div>
+                    @include('form.partials.regular_form.courseSelect')
 
                     <div id="schedule_section" class="form-group d-none">
                         <label for="schedule_id" class="col-md-12 control-label">Select a schedule: (limited to only 1)</label>
@@ -170,26 +170,18 @@
                                 <option value="">Fill Out Language and Course Options</option>
                             </select>
                             </div>
-                            {{-- <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button> --}}
                         </div>
                     </div>
-                    
 
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
-                        <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another schedule (days/times) if the selected class is full.
-                        </label>
-                      </div>
-                    </div> 
-
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="col-md-12 control-label">Comments: </label>
                         <div class="col-md-12">
                           <textarea name="regular_enrol_comment" class="form-control" maxlength="3500" placeholder=""></textarea>
                           <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small>
                         </div>
-                    </div>
+                    </div> --}}
+
+                    @include('form.partials.regular_form.flexibilityOptions')
 
                     <div class="col-md-3 offset-md-5">
                       <button type="submit" class="btn btn-success button-prevent-multi-submit">Submit Changes</button>

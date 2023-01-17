@@ -36,14 +36,14 @@ class PreenrolmentController extends Controller
     {
         // get id(s) of form
         $enrolment = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc');
-
-        if (empty($enrolment->first())) {
+        // check if form exists
+        $enrolment_first = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc')->first();
+        if (empty($enrolment_first)) {
             return view('errors.401_custom');
         }
 
         $enrolment_details = $enrolment->get();
         $enrolment_id = $enrolment->select('id')->get();
-
         $enrolment_id_array = [];
         foreach ($enrolment_id as $value) {
             $enrolment_id_array[] = $value->id;
@@ -62,6 +62,9 @@ class PreenrolmentController extends Controller
             'schedule_id' => 'required',
             'indexno' => 'required',
             'enrolment_id' => 'required',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
         ]);
 
         $codeIndexId = $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno;
@@ -94,6 +97,9 @@ class PreenrolmentController extends Controller
                 'CodeIndexID' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno,
                 'Code' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id,
                 'flexibleBtn' => $flexibleBtn,
+                'flexibleDay' => $request->flexibleDay,
+                'flexibleTime' => $request->flexibleTime,
+                'flexibleFormat' => $request->flexibleFormat,
                 'modified_by' => Auth::id(),
             ]);
 
