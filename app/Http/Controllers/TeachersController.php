@@ -1191,10 +1191,10 @@ class TeachersController extends Controller
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill($input_1)->save();
-
                 $arr = $data->attributesToArray();
                 $clone_forms = ModifiedForms::create($arr);
+
+                $data->fill($input_1)->save();
             }
 
 
