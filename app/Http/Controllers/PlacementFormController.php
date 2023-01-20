@@ -118,6 +118,9 @@ class PlacementFormController extends Controller
             'timeInput' => implode('-', $request->timeInput),
             'dayInput' => implode('-', $request->dayInput),
             'deliveryMode' => $request->deliveryMode,
+            'flexibleDay' => $request->flexibleDay,
+            'flexibleTime' => $request->flexibleTime,
+            'flexibleFormat' => $request->flexibleFormat,
             'course_preference_comment' => $request->course_preference_comment,
             'modified_by' => Auth::id(),
         ]);
