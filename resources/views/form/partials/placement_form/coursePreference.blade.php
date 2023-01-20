@@ -19,12 +19,12 @@
                             <div class="form-group">
                                 <label for="text-label-time">Available Any Time? </label>
                                 <div class="form-check form-check-inline">                           
-                                    <input id="flexibleTimeYes" name="flexibleTime" class="with-font form-check-input" type="radio" value="1">
-                                    <label for="flexibleTimeYes" class="form-check-label">YES</label>
+                                    <input id="flexibleTimeYesPlacement" name="flexibleTime" class="with-font form-check-input" type="radio" value="1">
+                                    <label for="flexibleTimeYesPlacement" class="form-check-label">YES</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input id="flexibleTimeNo" name="flexibleTime" class="with-font form-check-input" type="radio" value="0">
-                                    <label for="flexibleTimeNo" class="form-check-label">NO</label>
+                                    <input id="flexibleTimeNoPlacement" name="flexibleTime" class="with-font form-check-input" type="radio" value="0">
+                                    <label for="flexibleTimeNoPlacement" class="form-check-label">NO</label>
                                 </div>
                             </div>
                             
@@ -49,13 +49,13 @@
                     $("input[name='flexibleTime']").on("click", function () {
                         $("input[name='timeInput[]']").prop("checked", false);
                     })
-                    $("input#flexibleTimeYes").on("click", function () {
+                    $("input#flexibleTimeYesPlacement").on("click", function () {
                         $("div#timeInputSection").addClass("d-none");
                         $("div#anyTimeSection").removeClass("d-none");
                         $("input[name='timeInput[]']").attr("type", "checkbox");
                         $("input[name='timeInput[]']").prop("checked", true);
                     })
-                    $("input#flexibleTimeNo").on("click", function () {
+                    $("input#flexibleTimeNoPlacement").on("click", function () {
                         $("div#timeInputSection").removeClass("d-none");
                         $("div#anyTimeSection").addClass("d-none");
                         $("input[name='timeInput[]']").attr("type", "radio");
@@ -69,12 +69,12 @@
                             <div class="form-group">
                                 <label for="text-label-day">Available Any Day? </label>
                                 <div class="form-check form-check-inline">                           
-                                    <input id="flexibleDayYes" name="flexibleDay" class="with-font form-check-input" type="radio" value="1">
-                                    <label for="flexibleDayYes" class="form-check-label">YES</label>
+                                    <input id="flexibleDayYesPlacement" name="flexibleDay" class="with-font form-check-input" type="radio" value="1">
+                                    <label for="flexibleDayYesPlacement" class="form-check-label">YES</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input id="flexibleDayNo" name="flexibleDay" class="with-font form-check-input" type="radio" value="0">
-                                    <label for="flexibleDayNo" class="form-check-label">NO</label>
+                                    <input id="flexibleDayNoPlacement" name="flexibleDay" class="with-font form-check-input" type="radio" value="0">
+                                    <label for="flexibleDayNoPlacement" class="form-check-label">NO</label>
                                 </div>
                             </div>
 
@@ -100,12 +100,12 @@
                     $("input[name='flexibleDay']").on("click", function () {
                         $("input[name='dayInput[]']").prop("checked", false);
                     })
-                    $("input#flexibleDayYes").on("click", function () {
+                    $("input#flexibleDayYesPlacement").on("click", function () {
                         $("div#dayInputSection").addClass("d-none");
                         $("div#anyDaySection").removeClass("d-none");
                         $("input[name='dayInput[]']").prop("checked", true);
                     })
-                    $("input#flexibleDayNo").on("click", function () {
+                    $("input#flexibleDayNoPlacement").on("click", function () {
                         $("div#dayInputSection").removeClass("d-none");
                         $("div#anyDaySection").addClass("d-none");
                     })
@@ -135,20 +135,20 @@
                                 <input id="both" name="deliveryMode" class="with-font form-check-input" type="radio" value="2">
                                 <label for="both" class="form-check-label">available for both modes</label>
                             </div>
-                            <input id="flexibleFormatYes" name="flexibleFormat" type="hidden" value="0">
+                            <input id="flexibleFormatYesPlacement" name="flexibleFormat" type="hidden" value="0">
                         </div>
                     </div>
                 </div>
 
                 <script>
                     $("input#in-person").on("click", function () {
-                        $("input#flexibleFormatYes").attr("value", "0");
+                        $("input#flexibleFormatYesPlacement").attr("value", "0");
                     })
                     $("input#online").on("click", function () {
-                        $("input#flexibleFormatYes").attr("value", "0");
+                        $("input#flexibleFormatYesPlacement").attr("value", "0");
                     })
                     $("input#both").on("click", function () {
-                        $("input#flexibleFormatYes").attr("value", "1");
+                        $("input#flexibleFormatYesPlacement").attr("value", "1");
                     })
                 </script>
 
