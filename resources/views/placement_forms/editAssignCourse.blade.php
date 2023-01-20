@@ -186,7 +186,7 @@
 				</div> --}}
 			</div>
 			
-			<div class="form-group">
+			{{-- <div class="form-group">
 				<label for="flexibleQuestion">Is the student's schedule flexible? <span class="text-danger">(Please refer to Availability Delivery Mode field above. Both means YES otherwise, NO.)</span></label>
 				<div class="col-sm-12">
 			        <div class="col-md-4">
@@ -199,7 +199,7 @@
                       <label for="flexibleNo" class="form-control-static">NO</label>
                     </div>
 				</div>
-		    </div>
+		    </div> --}}
 
 			{{-- start of hidden fields --}}
 			<div class="regular-enrol"> 
