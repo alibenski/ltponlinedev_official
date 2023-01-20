@@ -577,6 +577,9 @@ class PlacementFormController extends Controller
             'dayInput' => 'required|',
             'timeInput' => 'required|',
             'deliveryMode' => 'required|',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
             'course_preference_comment' => 'required|',
         ));
 
@@ -589,6 +592,9 @@ class PlacementFormController extends Controller
         $data->dayInput = $implodeDay;
         $data->timeInput = $implodeTime;
         $data->deliveryMode = $request->deliveryMode;
+        $data->flexibleDay = $request->flexibleDay;
+        $data->flexibleTime = $request->flexibleTime;
+        $data->flexibleFormat = $request->flexibleFormat;
         $data->course_preference_comment = $request->course_preference_comment;
         $data->save();
 
