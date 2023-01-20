@@ -149,11 +149,11 @@
                 <form method="POST" action="{{ route('student-update-enrolment-form') }}" class="form-horizontal form-prevent-multi-submit">
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <label class="col-md-12 control-label">Select language:</label>
+                        <label class="col-md-12 control-label">Click on your selected language:</label>
                         <div class="col-md-12">
                             @foreach ($languages as $id => $name)
-                            <div class="input-group col-md-9">
-                                <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}">
+                            <div class="input-group col-md-9" @if ($enrolment_details->first()->L != $id) style="display: none" @endif>
+                                <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}" @if ($enrolment_details->first()->L != $id) disabled @endif>
                                 <label for="{{ $name }}" class="label-lang form-control-static">{{ $name }}</label>
                             </div>
                             @endforeach

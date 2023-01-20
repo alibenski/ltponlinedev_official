@@ -155,7 +155,7 @@
                     {{ csrf_field() }}
                     <div class="d-flex flex-wrap">
                       <div class="form-group col-sm-6">
-                        <label class="col-sm-12 control-label">Clcik on your selected language:</label>
+                        <label class="col-sm-12 control-label">Click on your selected language:</label>
                             @foreach ($languages as $id => $name)
                             <div class="input-group col-md-9" @if ($enrolment_details->L != $id) style="display: none" @endif>
                                 <input id="{{ $name }}" name="L" class="with-font lang_select_no" type="radio" value="{{ $id }}" @if ($enrolment_details->L != $id) disabled @endif>
