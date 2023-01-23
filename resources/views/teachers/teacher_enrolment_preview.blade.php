@@ -83,6 +83,7 @@
 		            {{-- <th>ID Proof</th>
 		            <th>Payment Proof</th> --}}
 		            <th>Comment</th>
+		            <th>Admin Regular Form Comment (from Assign Course)</th>
 		            <th>Admin Placement Form Comment (from Assign Course)</th>
 		            <th>Time Stamp</th>
 		            <th>Cancel Date/Time Stamp</th>
@@ -251,6 +252,7 @@
 						<input type="hidden" name="formL" value="{{$form->L}}">
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
 					</td>
+					<td>{{ $form->admin_eform_comment }}</td>
 					<td>{{ $form->admin_plform_comment }}</td>
 					<td>{{ $form->created_at}}</td>
 					<td>{{ $form->deleted_at}}</td>
