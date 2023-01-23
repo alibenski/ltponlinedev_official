@@ -115,13 +115,13 @@
 		</div>
 
 		<div class="form-group">
-		    <label class="control-label" for="flexibleDay_show">Availability Days:</label>
+		    <label class="control-label" for="dayInput_show">Availability Days:</label>
 		    <div class="panel panel-body">
 		        @if(is_null($placement_form->dayInput)) - @else {{ $placement_form->dayInput }} @endif
 		    </div>
 		</div>
 		<div class="form-group">
-		    <label class="control-label" for="dayInput_show">Flexible Days?</label>
+		    <label class="control-label" for="flexibleDay_show">Flexible Days?</label>
 		    <div class="panel panel-body">
 		        @if(is_null($placement_form->flexibleDay)) - @elseif($placement_form->flexibleDay === 1) <span class="badge label-success">YES</span> @else <span class="badge label-danger">NOT FLEXIBLE</span> @endif
 		    </div>

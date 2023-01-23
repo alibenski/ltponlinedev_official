@@ -105,6 +105,13 @@
 				</div>
 
 				<div class="form-group">
+				    <label class="control-label" for="result_comment">Placement Test Result:</label>
+				    <div class="">
+				        <textarea class="form-control" name="result_comment" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->Result }}</textarea>
+				    </div>
+				</div>
+
+				<div class="form-group">
 				    <label class="control-label" for="flexible_show">Availability Delivery Mode: </label>
 					<div class="panel panel-body">
 					@if($placement_form->deliveryMode === 0)<span class="glyphicon glyphicon-ok text-success"></span> in-person @elseif($placement_form->deliveryMode === 1)<span class="glyphicon glyphicon-ok text-success"></span> online @elseif($placement_form->deliveryMode === 2)<span class="glyphicon glyphicon-ok text-success"></span> both in-person and online @else <span class="glyphicon glyphicon-remove text-danger"></span> No response @endif
@@ -112,10 +119,10 @@
 				</div>
 
 				<div class="form-group">
-				    <label class="control-label" for="result_comment">Placement Test Result:</label>
-				    <div class="">
-				        <textarea class="form-control" name="result_comment" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->Result }}</textarea>
-				    </div>
+					<label class="control-label" for="flexibleFormat_show">Flexible Format?</label>
+					<div class="panel panel-body">
+						@if(is_null($placement_form->flexibleFormat)) - @elseif($placement_form->flexibleFormat === 1) <span class="badge label-success">YES</span> @else <span class="badge label-danger">NOT FLEXIBLE</span> @endif
+					</div>
 				</div>
 
 			</div> 
@@ -129,11 +136,25 @@
 				    </div>
 				</div>
 				<div class="form-group">
+					<label class="control-label" for="flexibleDay_show">Flexible Days?</label>
+					<div class="panel panel-body">
+						@if(is_null($placement_form->flexibleDay)) - @elseif($placement_form->flexibleDay === 1) <span class="badge label-success">YES</span> @else <span class="badge label-danger">NOT FLEXIBLE</span> @endif
+					</div>
+				</div>
+				
+				<div class="form-group">
 				    <label class="control-label" for="preferred_time_comment">Availability Time:</label>
 				    <div class="">
 				        <textarea class="form-control" name="preferred_time_comment" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->timeInput }}</textarea>
 				    </div>
 				</div>
+				<div class="form-group">
+					<label class="control-label" for="flexibleTime_show">Flexible Time?</label>
+					<div class="panel panel-body">
+						@if(is_null($placement_form->flexibleTime)) - @elseif($placement_form->flexibleTime === 1) <span class="badge label-success">YES</span> @else <span class="badge label-danger">NOT FLEXIBLE</span> @endif
+					</div>
+				</div>
+
 				<div class="form-group">
 				    <label class="control-label" for="student_comment_show">Student Comment:</label>
 				    <div class="">
