@@ -198,6 +198,9 @@ class LateEnrolmentController extends Controller
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
+        $flexibleDay = $request->input('flexibleDay');
+        $flexibleTime = $request->input('flexibleTime');
+        $flexibleFormat = $request->input('flexibleFormat');
         // $contractDate = $request->input('contractDate');
         $std_comments = $request->input('regular_enrol_comment');
 
@@ -282,6 +285,9 @@ class LateEnrolmentController extends Controller
             // 'mgr_email' => 'required|email',
             'approval' => 'required',
             'org' => 'required',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
             'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
@@ -321,7 +327,9 @@ class LateEnrolmentController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
-                'flexibleFormat' => $request->flexibleFormat,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 'std_comments' => $std_comments,
                 'overall_approval' => 1, // late enrolments are assumed pre-approved by HR Focal Points
                 'admin_eform_comment' => 'late registration form [auto-generated]',
@@ -378,6 +386,7 @@ class LateEnrolmentController extends Controller
             'agreementBtn' => 'required|',
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
             'course_preference_comment' => 'required|',
         ));
 
@@ -431,6 +440,10 @@ class LateEnrolmentController extends Controller
         $this->validate($request, array(
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
             'course_preference_comment' => 'required|',
         ));
 
@@ -442,6 +455,10 @@ class LateEnrolmentController extends Controller
         $data = PlacementForm::findorFail($placement_form_id);
         $data->dayInput = $implodeDay;
         $data->timeInput = $implodeTime;
+        $data->deliveryMode = $request->deliveryMode;
+        $data->flexibleDay = $request->flexibleDay;
+        $data->flexibleTime = $request->flexibleTime;
+        $data->flexibleFormat = $request->flexibleFormat;
         $data->course_preference_comment = $request->course_preference_comment;
         $data->save();
 
@@ -537,6 +554,9 @@ class LateEnrolmentController extends Controller
         $agreementBtn = $request->input('agreementBtn');
         $consentBtn = $request->input('consentBtn');
         $flexibleBtn = $request->input('flexibleBtn');
+        $flexibleDay = $request->input('flexibleDay');
+        $flexibleTime = $request->input('flexibleTime');
+        $flexibleFormat = $request->input('flexibleFormat');
         $codex = [];
         //concatenate (implode) Code input before validation   
         if (!empty($schedule_id)) {
@@ -586,6 +606,7 @@ class LateEnrolmentController extends Controller
                 'agreementBtn' => 'required|',
                 'dayInput' => 'required|',
                 'timeInput' => 'required|',
+                'deliveryMode' => 'required|',
                 'course_preference_comment' => 'required|',
             ));
         }
@@ -667,6 +688,9 @@ class LateEnrolmentController extends Controller
             'course_id' => 'required|',
             'L' => 'required|',
             'org' => 'required',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
             'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
@@ -709,7 +733,9 @@ class LateEnrolmentController extends Controller
                 'agreementBtn' => $agreementBtn,
                 'consentBtn' => $consentBtn,
                 'flexibleBtn' => $flexibleBtn,
-                'flexibleFormat' => $request->flexibleFormat,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 'std_comments' => $request->regular_enrol_comment,
                 'admin_eform_comment' => 'selfpay late registration form [auto-generated]',
             ]);
@@ -859,6 +885,7 @@ class LateEnrolmentController extends Controller
             'agreementBtn' => 'required|',
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
             'course_preference_comment' => 'required|',
         ));
 

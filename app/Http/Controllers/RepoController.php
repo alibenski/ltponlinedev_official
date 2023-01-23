@@ -151,6 +151,9 @@ class RepoController extends Controller
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
+        $flexibleDay = $request->input('flexibleDay');
+        $flexibleTime = $request->input('flexibleTime');
+        $flexibleFormat = $request->input('flexibleFormat');
         // $contractDate = $request->input('contractDate');
         $std_comments = $request->input('regular_enrol_comment');
 
@@ -235,6 +238,9 @@ class RepoController extends Controller
             // 'mgr_email' => 'required|email',
             'approval' => 'required',
             'org' => 'required',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
             'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
@@ -277,7 +283,9 @@ class RepoController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
                 'flexibleBtn' => $flexibleBtn,
-                'flexibleFormat' => $request->flexibleFormat,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 // 'contractDate' => $contractDate,
                 'std_comments' => $std_comments,
             ]);

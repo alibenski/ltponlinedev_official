@@ -8,6 +8,7 @@
 @section('content')
 
 @include('admin.partials._termSessionMsg')
+<p class="hidden">view-classrooms-per-section</p>
 
 <div class="row">
   <div class="col-sm-12">
@@ -111,7 +112,8 @@
                   <th>Email</th>
                   <th>Contact No.</th>
                   <th>Priority</th>
-                  <th>Flexible?</th>
+                  <th>Flexible Day?</th>
+                  <th>Flexible Time?</th>
                   <th>Flexible Format?</th>
                   <th>Schedules</th>
                   <th>Comments</th>
@@ -216,25 +218,40 @@
                    <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
                   </strong> --}}
                 </td>
+
                 <td>
-                  @if($form->flexibleBtn == 1)
-                              <span class="label label-success margin-label">Yes</span>
-                            @else
+                  @if(is_null($form->flexibleDay))
                     -
-                            @endif
+                  @elseif($form->flexibleDay === 1)
+                    <span class="badge label-success">Yes</span>
+                              @else
+                    <span class="badge label-danger">NOT FLEXIBLE</span>
+                              @endif
                 </td>
                 <td>
-                  @if($form->flexibleFormat == 1)
-                              <span class="label label-warning margin-label">Yes</span>
-                            @else
+                  @if(is_null($form->flexibleTime))
                     -
-                            @endif
+                  @elseif($form->flexibleTime === 1)
+                    <span class="badge label-success">Yes</span>
+                              @else
+                    <span class="badge label-danger">NOT FLEXIBLE</span>
+                              @endif
                 </td>
+                <td>
+                  @if(is_null($form->flexibleFormat))
+                    -
+                  @elseif($form->flexibleFormat === 1)
+                    <span class="badge label-success">Yes</span>
+                              @else
+                    <span class="badge label-danger">NOT FLEXIBLE</span>
+                              @endif
+                </td>
+
                 <td>
                   <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist </a>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-default btn-space view-all-comments" data-toggle="modal"><i class="fa fa-comment"></i> View </button>
+                  <button type="button" class="btn btn-default btn-space view-all-comments" data-toggle="modal" title="View HR student admin etc. comments here"><i class="fa fa-comment"></i> View All Comments</button>
 
                   <div id="viewAllComments-{{ $form->INDEXID }}-{{ $form->Te_Code }}-{{ $form->Term }}" class="modal fade" role="dialog">
                       <div class="modal-dialog">
@@ -251,10 +268,10 @@
                                   <p><strong>Course Preference:</strong> {{ $form->course_preference_comment }}</p>
                                   <p><strong>Teacher Comment:</strong> {{ $form->teacher_comments }}</p>
                                   @if ($form->admin_eform_comment)
-                                    <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_eform_comment }}</p>
+                                    <p><strong>Admin Regular Form Comment When Assigned to Course:</strong> {{ $form->admin_eform_comment }}</p>
                                   @endif
                                   @if ($form->admin_plform_comment)
-                                    <p><strong>Admin Comment When Assigned to Course:</strong> {{ $form->admin_plform_comment }}</p>
+                                    <p><strong>Admin Placement Form Comment When Assigned to Course:</strong> {{ $form->admin_plform_comment }}</p>
                                   @endif
                                   @if ($form->Comments)
                                     <p><strong>Admin Comment on Manually Created Form:</strong> {{ $form->Comments }}</p>

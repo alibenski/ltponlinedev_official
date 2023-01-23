@@ -130,6 +130,9 @@ return [
     */
 
     'custom' => [
+        'assigned_to_course' => [
+            'unique' => 'Cannot modify. This form has already been processed by administration.',
+        ],
         'L' => [
             'required' => 'The language field is required.',
             'unique' => 'You have already submitted a form for the same language.',
