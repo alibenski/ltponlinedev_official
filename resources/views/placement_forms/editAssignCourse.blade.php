@@ -37,7 +37,7 @@
 	<input name="L" type="hidden" value="{{ $placement_form->L }}">
 	<input name="Term" type="hidden" value="{{ $placement_form->Term }}">
 
-	<div class="col-sm-6"> <!-- 1st SECTION -->
+	<div class="col-sm-4"> <!-- 1st SECTION -->
 		<div class="form-group">
 		    <label class="control-label" for="id_show">Name:</label>
 		    <div class="">
@@ -100,10 +100,48 @@
 		</div>
 	</div> <!-- EOF 1st SECTION -->
 	
-	<div class="col-sm-6"> <!-- 2nd SECTION -->
+	<div class="col-sm-4"> <!-- 2nd SECTION -->
 		<div class="form-group">
-			<button type="button" class="show-modal-history btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View Course History</button>
+		    <label class="control-label" for="deliveryMode_show">Availability Delivery Mode: </label>
+			<div class="panel panel-body">
+			@if($placement_form->deliveryMode === 0)<span class="glyphicon glyphicon-ok text-success"></span> in-person @elseif($placement_form->deliveryMode === 1)<span class="glyphicon glyphicon-ok text-success"></span> online @elseif($placement_form->deliveryMode === 2)<span class="glyphicon glyphicon-ok text-success"></span> both in-person and online @else <span class="glyphicon glyphicon-remove text-danger"></span> No response @endif
+			</div>
 		</div>
+		<div class="form-group">
+		    <label class="control-label" for="flexibleFormat_show">Flexible Format?</label>
+		    <div class="panel panel-body">
+		        @if(is_null($placement_form->flexibleFormat)) - @elseif($placement_form->flexibleFormat === 1) <span class="badge label-success">YES</span> @else <span class="badge label-danger">NOT FLEXIBLE</span> @endif
+		    </div>
+		</div>
+
+		<div class="form-group">
+		    <label class="control-label" for="flexibleDay_show">Availability Days:</label>
+		    <div class="panel panel-body">
+		        @if(is_null($placement_form->dayInput)) - @else {{ $placement_form->dayInput }} @endif
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label class="control-label" for="dayInput_show">Flexible Days?</label>
+		    <div class="panel panel-body">
+		        @if(is_null($placement_form->flexibleDay)) - @elseif($placement_form->flexibleDay === 1) <span class="badge label-success">YES</span> @else <span class="badge label-danger">NOT FLEXIBLE</span> @endif
+		    </div>
+		</div>
+
+		<div class="form-group">
+		    <label class="control-label" for="timeInput_show">Availability Time:</label>
+		    <div class="panel panel-body">
+		        @if(is_null($placement_form->timeInput)) - @else {{ $placement_form->timeInput }} @endif
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label class="control-label" for="flexibleTime_show">Flexible Time?</label>
+		    <div class="panel panel-body">
+		        @if(is_null($placement_form->flexibleTime)) - @elseif($placement_form->flexibleTime === 1) <span class="badge label-success">YES</span> @else <span class="badge label-danger">NOT FLEXIBLE</span> @endif
+		    </div>
+		</div>
+	</div> <!-- EOF 2nd SECTION -->
+
+	<div class="col-sm-4"> <!-- 3rd SECTION -->
 		<div class="form-group">
 		    <label class="control-label" for="flexible_show">Waitlist Information: </label>
 				<div class="panel panel-body">
@@ -125,22 +163,7 @@
 				</div>
 		</div>
 		<div class="form-group">
-		    <label class="control-label" for="flexible_show">Availability Delivery Mode: </label>
-			<div class="panel panel-body">
-			@if($placement_form->deliveryMode === 0)<span class="glyphicon glyphicon-ok text-success"></span> in-person @elseif($placement_form->deliveryMode === 1)<span class="glyphicon glyphicon-ok text-success"></span> online @elseif($placement_form->deliveryMode === 2)<span class="glyphicon glyphicon-ok text-success"></span> both in-person and online @else <span class="glyphicon glyphicon-remove text-danger"></span> No response @endif
-			</div>
-		</div>
-		<div class="form-group">
-		    <label class="control-label" for="student_comment_show">Availability Days:</label>
-		    <div class="">
-		        <textarea class="form-control" name="student_comment_show" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->dayInput }}</textarea>
-		    </div>
-		</div>
-		<div class="form-group">
-		    <label class="control-label" for="student_comment_show">Availability Time:</label>
-		    <div class="">
-		        <textarea class="form-control" name="student_comment_show" cols="40" rows="3" readonly placeholder="no comment">{{ $placement_form->timeInput }}</textarea>
-		    </div>
+			<button type="button" class="show-modal-history btn btn-info btn-space" data-toggle="modal"><span class="glyphicon glyphicon-time"></span>  View Course History</button>
 		</div>
 		<div class="form-group">
 		    <label class="control-label" for="student_comment_show">Student Comment:</label>
@@ -155,7 +178,7 @@
 		        <textarea class="form-control" name="admin_comment_show" cols="40" rows="3" readonly  placeholder="no comment">{{ $placement_form->course_preference_comment }}</textarea>
 		    </div>
 		</div>
-	</div> <!-- EOF 2nd SECTION -->
+	</div> <!-- EOF 3rd SECTION -->
 
 	<div class="col-sm-12">
 		<!-- MAKE A DECISION SECTION -->
