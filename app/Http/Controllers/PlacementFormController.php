@@ -129,10 +129,11 @@ class PlacementFormController extends Controller
             $placement_form_data->update(['std_comments' => $request->std_comments]);
         }
 
+        // deprecated flexibleBtn field from term 231 onwards
         if ($request->flexibleBtn == 'on') {
-            $placement_form_data->update(['flexibleBtn' => 1]);
+            $placement_form_data->update(['flexibleBtn' => NULL]);
         } else {
-            $placement_form_data->update(['flexibleBtn' => 0]);
+            $placement_form_data->update(['flexibleBtn' => NULL]);
         }
 
         return redirect()->route('previous-submitted')->with('success', 'Form # ' . $placement_form_data->eform_submit_count . ' successfully modified.');

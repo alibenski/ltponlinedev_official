@@ -169,6 +169,8 @@ class ValidateFormsController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleDay' => $value->flexibleDay,
+                    'flexibleTime' => $value->flexibleTime,
                     'flexibleFormat' => $value->flexibleFormat,
                 ]);
                 foreach ($ingredients as $data) {
@@ -217,6 +219,8 @@ class ValidateFormsController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleDay' => $value->flexibleDay,
+                    'flexibleTime' => $value->flexibleTime,
                     'flexibleFormat' => $value->flexibleFormat,
                 ]);
                 foreach ($ingredients3 as $data) {
