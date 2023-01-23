@@ -218,20 +218,35 @@
                    <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
                   </strong> --}}
                 </td>
+
                 <td>
-                  @if($form->flexibleBtn == 1)
-                              <span class="label label-success margin-label">Yes</span>
-                            @else
+                  @if(is_null($form->flexibleDay))
                     -
-                            @endif
+                  @elseif($form->flexibleDay === 1)
+                    <span class="badge label-success">Yes</span>
+                              @else
+                    <span class="badge label-danger">NOT FLEXIBLE</span>
+                              @endif
                 </td>
                 <td>
-                  @if($form->flexibleFormat == 1)
-                              <span class="label label-warning margin-label">Yes</span>
-                            @else
+                  @if(is_null($form->flexibleTime))
                     -
-                            @endif
+                  @elseif($form->flexibleTime === 1)
+                    <span class="badge label-success">Yes</span>
+                              @else
+                    <span class="badge label-danger">NOT FLEXIBLE</span>
+                              @endif
                 </td>
+                <td>
+                  @if(is_null($form->flexibleFormat))
+                    -
+                  @elseif($form->flexibleFormat === 1)
+                    <span class="badge label-success">Yes</span>
+                              @else
+                    <span class="badge label-danger">NOT FLEXIBLE</span>
+                              @endif
+                </td>
+
                 <td>
                   <a id="modbtn" class="btn btn-info btn-space" data-toggle="modal" href="#modalshow" data-indexno="{{ $form->INDEXID }}"  data-term="{{ $form->Term }}" data-tecode="{{ $form->Te_Code }}" data-formx="{{ $form->eform_submit_count }}" data-mtitle=""><span><i class="fa fa-eye"></i></span> Wishlist </a>
                 </td>
