@@ -85,7 +85,7 @@
 		                @endif
 					</td>
 					<td>
-					@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif
+					@if(empty($form->users->name)) None @else <a href="/admin/user/{{ $form->users->id }}/manage-user-enrolment-data" target="_blank" title="click name to see profile"> {{ $form->users->name }} </a> @endif
 					</td>
 					{{-- <td>{{ $form->Term }}</td> --}}
 					<td>{{ $form->courses->Description }}</td>
