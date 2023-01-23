@@ -73,7 +73,8 @@
 		            <th>Availability Day(s)</th>
 		            <th>Availability Time(s)</th>
 		            <th>Availability Delivery Mode(s)</th>
-		            <th>Flexible?</th>
+		            <th>Flexible Day?</th>
+		            <th>Flexible Time?</th>
 		            <th>Flexible Format?</th>
 		            <th>Organization</th>
 		            <th>Student Cancelled?</th>
@@ -82,6 +83,7 @@
 		            {{-- <th>ID Proof</th>
 		            <th>Payment Proof</th> --}}
 		            <th>Comment</th>
+		            <th>Admin Placement Form Comment (from Assign Course)</th>
 		            <th>Time Stamp</th>
 		            <th>Cancel Date/Time Stamp</th>
 		        </tr>
@@ -151,18 +153,31 @@
                                   @endif
 					</td>
 					<td>
-						@if($form->flexibleBtn == 1)
-                                    <span class="label label-success margin-label">Yes</span>
-                                  @else
-                          -
-                                  @endif
+						@if(is_null($form->flexibleDay))
+							-
+						@elseif($form->flexibleDay === 1)
+                        	<span class="badge label-success">Yes</span>
+                        @else
+							<span class="badge label-danger">NOT FLEXIBLE</span>
+                        @endif
 					</td>
 					<td>
-						@if($form->flexibleFormat == 1)
-                                    <span class="label label-default margin-label bg-yellow">Yes</span>
-                                  @else
-                          -
-                                  @endif
+						@if(is_null($form->flexibleTime))
+							-
+						@elseif($form->flexibleTime === 1)
+							<span class="badge label-success">Yes</span>
+                        @else
+							<span class="badge label-danger">NOT FLEXIBLE</span>
+                        @endif
+					</td>
+					<td>
+						@if(is_null($form->flexibleFormat))
+							-
+						@elseif($form->flexibleFormat === 1)
+                            <span class="badge label-success">Yes</span>
+                        @else
+							<span class="badge label-danger">NOT FLEXIBLE</span>
+                        @endif
 					</td>
 					<td>{{ $form->DEPT }}</td>
 					<td>
@@ -236,6 +251,7 @@
 						<input type="hidden" name="formL" value="{{$form->L}}">
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
 					</td>
+					<td>{{ $form->admin_plform_comment }}</td>
 					<td>{{ $form->created_at}}</td>
 					<td>{{ $form->deleted_at}}</td>
 				</tr>
