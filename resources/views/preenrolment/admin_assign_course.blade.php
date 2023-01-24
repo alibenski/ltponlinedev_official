@@ -64,20 +64,43 @@
 					        <textarea class="form-control" name="std_comments" cols="40" rows="3" readonly  placeholder="no comment">{{ $element->std_comments }}</textarea>
 					    </div>
 					</div>
-					<p>Flexible Schedule (day/time):  
-						@if ( $element->flexibleBtn == 1)
-						<strong>Yes</strong>
-						@else
-						<strong>No</strong>
-						@endif
-					</p>
-					<p>Flexible Format (In-person or Online): 
-						@if ( $element->flexibleFormat == 1)
-						<strong>Yes</strong>
-						@else
-						<strong>No</strong>
-						@endif
-					</p>
+					@if($element->Term > 231)
+						<p>Flexible Day? 
+							@if(is_null($element->flexibleDay))
+								-
+							@elseif($element->flexibleDay === 1)
+								<span class="badge label-success">Yes</span>
+							@else
+								<span class="badge label-danger">NOT FLEXIBLE</span>
+							@endif
+						</p>
+						<p>Flexible Time? 
+							@if(is_null($element->flexibleTime))
+								-
+							@elseif($element->flexibleTime === 1)
+								<span class="badge label-success">Yes</span>
+							@else
+								<span class="badge label-danger">NOT FLEXIBLE</span>
+							@endif
+						</p>
+					@else
+						<p>Flexible Schedule (day/time):  
+							@if ( $element->flexibleBtn == 1)
+							<strong>Yes</strong>
+							@else
+							<strong>No</strong>
+							@endif
+						</p>
+					@endif
+						<p>Flexible Format (In-person or Online): 
+							@if(is_null($element->flexibleFormat))
+								-
+							@elseif($element->flexibleFormat === 1)
+								<span class="badge label-success">Yes</span>
+							@else
+								<span class="badge label-danger">NOT FLEXIBLE</span>
+							@endif
+						</p>
 					<p>
 						Last placement test taken: 
 						<br>

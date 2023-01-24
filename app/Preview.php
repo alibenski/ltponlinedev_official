@@ -11,7 +11,7 @@ class Preview extends Model
 
     protected $table = 'tblLTP_preview';
     protected $fillable = [
-        'CodeIndexIDClass', 'CodeClass', 'schedule_id', 'CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'country_mission', 'ngo_name', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'is_self_pay_form', 'flexibleBtn', 'flexibleFormat', 'form_counter', 'eform_submit_count', 'convocation_email_sent', 'teacher_comments', 'admin_eform_comment', 'admin_plform_comment', 'admin_eform_cancel_comment', 'admin_plform_cancel_comment', 'std_comments', 'hr_comments', 'course_preference_comment',
+        'CodeIndexIDClass', 'CodeClass', 'schedule_id', 'CodeIndexID', 'Code', 'Te_Code', 'Term', 'INDEXID', 'EMAIL', 'L', 'DEPT', 'country_mission', 'ngo_name', 'PS', 'Comments', 'created_at', 'UpdatedOn', 'is_self_pay_form', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'form_counter', 'eform_submit_count', 'convocation_email_sent', 'teacher_comments', 'admin_eform_comment', 'admin_plform_comment', 'admin_eform_cancel_comment', 'admin_plform_cancel_comment', 'std_comments', 'hr_comments', 'course_preference_comment',
     ];
 
     /**

@@ -400,6 +400,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 1,
                     ]);
@@ -468,6 +470,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 2,
                     ]);
@@ -552,6 +556,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value_placement->form_counter,
                         'agreementBtn' => $value_placement->agreementBtn,
                         'flexibleBtn' => $value_placement->flexibleBtn,
+                        'flexibleDay' => $value_placement->flexibleDay,
+                        'flexibleTime' => $value_placement->flexibleTime,
                         'flexibleFormat' => $value_placement->flexibleFormat,
                         'PS' => 2,
                     ]);
@@ -604,6 +610,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 3,
                     ]);
@@ -648,6 +656,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value4->form_counter,
                         'agreementBtn' => $value4->agreementBtn,
                         'flexibleBtn' => $value4->flexibleBtn,
+                        'flexibleDay' => $value4->flexibleDay,
+                        'flexibleTime' => $value4->flexibleTime,
                         'flexibleFormat' => $value4->flexibleFormat,
                         'PS' => 4,
                     ]);

@@ -70,7 +70,11 @@
 		            <th>Contact No.</th>
 		            <th>Course</th>
 		            <th>Schedule</th>
-		            <th>Flexible?</th>
+		            <th>Availability Day(s)</th>
+		            <th>Availability Time(s)</th>
+		            <th>Availability Delivery Mode(s)</th>
+		            <th>Flexible Day?</th>
+		            <th>Flexible Time?</th>
 		            <th>Flexible Format?</th>
 		            <th>Organization</th>
 		            <th>Student Cancelled?</th>
@@ -79,6 +83,8 @@
 		            {{-- <th>ID Proof</th>
 		            <th>Payment Proof</th> --}}
 		            <th>Comment</th>
+		            <th>Admin Regular Form Comment (from Assign Course)</th>
+		            <th>Admin Placement Form Comment (from Assign Course)</th>
 		            <th>Time Stamp</th>
 		            <th>Cancel Date/Time Stamp</th>
 		        </tr>
@@ -122,18 +128,57 @@
 						<div class="student-count-schedule-{{ $form->INDEXID }}"></div>
 					</td>
 					<td>
-						@if($form->flexibleBtn == 1)
-                                    <span class="label label-success margin-label">Yes</span>
+						@if(!is_null($form->dayInput))
+									<span class="label label-warning margin-label">{{$form->dayInput}}</span>
+								  @else
+						  -
+								  @endif
+					</td>
+					<td>
+						@if(!is_null($form->timeInput))
+                                    <span class="label label-warning margin-label">{{$form->timeInput}}</span>
                                   @else
                           -
                                   @endif
 					</td>
 					<td>
-						@if($form->flexibleFormat == 1)
-                                    <span class="label label-default margin-label bg-yellow">Yes</span>
+						@if(!is_null($form->deliveryMode))
+                                    <span class="label label-warning margin-label">
+										@if($form->deliveryMode === 0) in-person
+										@elseif($form->deliveryMode ===1) online
+										@elseif($form->deliveryMode ===2) both in-person and online
+										@endif
+									</span>
                                   @else
                           -
                                   @endif
+					</td>
+					<td>
+						@if(is_null($form->flexibleDay))
+							-
+						@elseif($form->flexibleDay === 1)
+                        	<span class="badge label-success">Yes</span>
+                        @else
+							<span class="badge label-danger">NOT FLEXIBLE</span>
+                        @endif
+					</td>
+					<td>
+						@if(is_null($form->flexibleTime))
+							-
+						@elseif($form->flexibleTime === 1)
+							<span class="badge label-success">Yes</span>
+                        @else
+							<span class="badge label-danger">NOT FLEXIBLE</span>
+                        @endif
+					</td>
+					<td>
+						@if(is_null($form->flexibleFormat))
+							-
+						@elseif($form->flexibleFormat === 1)
+                            <span class="badge label-success">Yes</span>
+                        @else
+							<span class="badge label-danger">NOT FLEXIBLE</span>
+                        @endif
 					</td>
 					<td>{{ $form->DEPT }}</td>
 					<td>
@@ -207,6 +252,8 @@
 						<input type="hidden" name="formL" value="{{$form->L}}">
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
 					</td>
+					<td>{{ $form->admin_eform_comment }}</td>
+					<td>{{ $form->admin_plform_comment }}</td>
 					<td>{{ $form->created_at}}</td>
 					<td>{{ $form->deleted_at}}</td>
 				</tr>

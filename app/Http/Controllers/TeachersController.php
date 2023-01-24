@@ -1039,8 +1039,8 @@ class TeachersController extends Controller
             $enrolment_details = Preenrolment::where('INDEXID', $indexid)
                 ->where('L', $language)
                 ->where('Term', $next_term)
-                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'updatedOn', 'teacher_comments', 'admin_eform_comment', 'std_comments')
-                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'updatedOn', 'teacher_comments', 'admin_eform_comment', 'std_comments')
+                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'updatedOn', 'teacher_comments', 'admin_eform_comment', 'std_comments')
+                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'updatedOn', 'teacher_comments', 'admin_eform_comment', 'std_comments')
                 ->get();
 
             $arr1 = [];
@@ -1191,10 +1191,10 @@ class TeachersController extends Controller
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill($input_1)->save();
-
                 $arr = $data->attributesToArray();
                 $clone_forms = ModifiedForms::create($arr);
+
+                $data->fill($input_1)->save();
             }
 
 
