@@ -31,6 +31,7 @@
                             <div id="anyTimeSection" class="d-none form-group alert alert-success">YES, I am flexible to accept Morning (8 to 9.30 or 10 a.m.) or Afternoon (12.30 to 2 or 2.30 p.m.) classes</div>
 
                             <div id="timeInputSection" class="d-none form-group">
+                                <label for="text-select-time">Please select your available time: </label>
                                 <div class="input-group col-md-12">                             
                                 <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
                                 <label for="morning" class="form-control-static">Morning (8 to 9.30 or 10 a.m.) </label>
@@ -81,6 +82,7 @@
                             <div id="anyDaySection" class="d-none form-group alert alert-success">YES, I am flexible to accept any day of the week (Monday to Friday)</div>
 
                             <div id="dayInputSection" class="d-none form-group">
+                                <label for="text-select-day">Please select your available days: </label>
                                 @foreach ($days as $id => $name)
                                 <div class="input-group col-md-12">                             
                                 <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}"
@@ -121,8 +123,9 @@
 
                 <div class="otherQuestions4 col-md-12 border mt-2">
                     <div class="form-group">
-                    <label for="" class="control-label">Delivery Mode Availability: <span class="text-danger"><em>(required)</em></span></label>
-                    <div class="col-md-12">
+                        <label for="" class="control-label">Delivery Mode Availability: <span class="text-danger"><em>(required)</em></span></label>
+                        <div class="col-md-12">
+                            <label for="text-select-delivery-mode">Please select the delivery mode for which you are available: </label>
                             <div class="form-check">                           
                                 <input id="in-person" name="deliveryMode" class="with-font form-check-input" type="radio" value="0">
                                 <label for="in-person" class="form-check-label">in-person</label>
