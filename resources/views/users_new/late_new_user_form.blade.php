@@ -14,52 +14,6 @@
                 <div class="card-body">
                     <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('late-register') }}">
                         {{ csrf_field() }}
-
-                        {{-- <div class="form-group">
-                            <h5 class="panel-title">Do you have a valid Index from Umoja?</h5>
-                            <div class="col-md-12">
-                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required" autocomplete="off">
-                                <label for="decision1" class="form-control-static">Yes</label>
-                            </div>
-
-                            <div class="col-md-12">
-                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required" autocomplete="off">
-                                <label for="decision2" class="form-control-static">No</label>
-                            </div>
-                        </div> --}}
-
-                        {{-- <div class="indexno-section" hidden> 
-
-                            <div class="form-group {{ $errors->has('indexno') ? 'is-invalid' : '' }}">
-                                <label for="indexno" class="col-md-12 control-label">Index # <span class="small text-danger"></span></label>
-
-                                <div class="col-md-12">
-                                    <input id="indexno" type="text" class="form-control" name="indexno" value="{{ old('indexno') }}" >
-
-                                    @if ($errors->has('indexno'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('indexno') }}</strong>
-                                        </span>
-                                    @endif
-                                    <p class="small text-danger mt-1"><strong>Please delete trailing zeroes if you have an index number which is less than 8 digits e.g. 00012345 -> 12345</strong></p>
-                                </div>
-                            </div>
-
-                        </div> 
-
-                        <div class="message-section" hidden> 
-
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <h5>
-                                        <span class="badge badge-info">Index will be generated automatically</span>
-                                    </h5>
-                                </div>
-                            </div>
-
-                        </div> 
-                        
-                        <hr> --}}
                                                 
                         <div class="form-group {{ $errors->has('profile') ? 'is-invalid' : '' }}">
                             <label for="profile" class="col-md-12 control-label">Profile <span style="color: red"><i class="fa fa-asterisk" aria-hidden="true"></i></span></label>
