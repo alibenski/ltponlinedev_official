@@ -56,10 +56,10 @@
             </div>   --}}
 
             <div class="form-group">
-                <label class="col-md-12 control-label">Comments: <span class="small text-danger"><strong>Required field</strong></span></label>
+                <label class="col-md-12 control-label">Comments: </label>
                 <div class="col-md-12">
                     <span class="text-danger">Please indicate below any other relevant information, for example, a second preferred course</span>
-                    <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder="" required="required"></textarea>
+                    <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder=""></textarea>
                     {{-- <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small> --}}
                 </div>
             </div>
