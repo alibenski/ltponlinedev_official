@@ -112,6 +112,9 @@
                   <th>Email</th>
                   <th>Contact No.</th>
                   <th>Priority</th>
+                  <th>Availability Day(s)</th>
+                  <th>Availability Time(s)</th>
+                  <th>Availability Delivery Mode(s)</th>
                   <th>Flexible Day?</th>
                   <th>Flexible Time?</th>
                   <th>Flexible Format?</th>
@@ -218,7 +221,21 @@
                    <div id="{{ $form->CodeIndexID }}" class="priority-status"></div> 
                   </strong> --}}
                 </td>
-
+                <td>
+                  @if ($form->placements->first())
+                    {{ $form->placements->first()->dayInput }}  
+                  @endif
+                </td>
+                <td>
+                  @if ($form->placements->first())
+                    {{ $form->placements->first()->timeInput }}  
+                  @endif
+                </td>
+                <td>
+                  @if ($form->placements->first()) 
+                    @if($form->placements->first()->deliveryMode === 0)<span class="glyphicon glyphicon-ok text-success"></span> in-person @elseif($form->placements->first()->deliveryMode === 1)<span class="glyphicon glyphicon-ok text-success"></span> online @elseif($form->placements->first()->deliveryMode === 2)<span class="glyphicon glyphicon-ok text-success"></span> both in-person and online @else <span class="glyphicon glyphicon-remove text-danger"></span> No response @endif 
+                  @endif
+                </td>
                 <td>
                   @if(is_null($form->flexibleDay))
                     -

@@ -335,11 +335,11 @@ class PreviewController extends Controller
             $form = Repo::withTrashed()
                 ->where('Term', Session::get('Term'))
                 ->where('CodeIndexID', $value->CodeIndexID)
-                ->with(['enrolments' => function ($q1) {
-                    $q1->where('Term', Session::get('Term'));
+                ->with(['enrolments' => function ($q1) use ($value) {
+                    $q1->where('Term', Session::get('Term'))->where('L', $value->L);
                 }])
-                ->with(['placements' => function ($q2) {
-                    $q2->where('Term', Session::get('Term'));
+                ->with(['placements' => function ($q2) use ($value) {
+                    $q2->where('Term', Session::get('Term'))->where('L', $value->L);
                 }])
                 ->get();
             foreach ($form as $value) {
