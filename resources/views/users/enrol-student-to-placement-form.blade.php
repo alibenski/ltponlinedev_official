@@ -284,11 +284,13 @@ $(document).ready(function() {
       let term = $(this).val();
       if (term.substr(-1) === '8' ) {
           $("input#flexibleDayYesPlacement").prop("checked", true);
+          $("input#flexibleDayNoPlacement").prop("disabled", true);
           $("div#dayInputSection").addClass("d-none");
           $("div#anyDaySection").removeClass("d-none");
           $("input[name='dayInput[]']").prop("checked", true);
       } else {
           $("input#flexibleDayYesPlacement").prop("checked", false);
+          $("input#flexibleDayNoPlacement").prop("disabled", false);
           $("div#anyDaySection").addClass("d-none");
           $("input[name='dayInput[]']").prop("checked", false);
       }
