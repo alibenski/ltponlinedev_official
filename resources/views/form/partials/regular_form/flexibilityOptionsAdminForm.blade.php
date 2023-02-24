@@ -11,18 +11,11 @@
                     <div class="form-group">
                         <label for="text-label-day">Day: </label>
                         <div class="form-check form-check-inline">        
-
-                            @if (substr($terms->Term_Code, -1) == '8') 
-                            <input id="flexibleDayYes" name="flexibleDay" class="with-font form-check-input"  value="1" type="checkbox" checked disabled>
-                            <input name="flexibleDay" class="with-font form-check-input" value="1" type="hidden">
-                            @else
-                            <input id="flexibleDayYes" name="flexibleDay" class="with-font form-check-input"  value="1" type="radio">
-                            @endif
-
+                            <input id="flexibleDayYes" name="flexibleDay" class="with-font form-check-input" type="radio" value="1">
                             <label for="flexibleDayYes" class="form-check-label">YES</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input id="flexibleDayNo" name="flexibleDay" class="with-font form-check-input" type="radio" value="0" @if (substr($terms->Term_Code, -1) == '8') disabled @endif>
+                            <input id="flexibleDayNo" name="flexibleDay" class="with-font form-check-input" type="radio" value="0">
                             <label for="flexibleDayNo" class="form-check-label">NO</label>
                         </div>
                     </div>
@@ -54,7 +47,7 @@
                 </div>
             </div> 
 
-            <div id="summerTermText" class="form-group @if (substr($terms->Term_Code, -1) != '8') d-none @endif">
+            <div id="summerTermText" class="form-group d-none">
                 <p class="text-danger">For summer term, Flexible Day field is checked by default - Monday to Friday</p>
             </div>
 

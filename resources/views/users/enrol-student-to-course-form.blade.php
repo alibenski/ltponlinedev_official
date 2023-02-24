@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-			@include('form.partials.regular_form.flexibilityOptions') 
+			@include('form.partials.regular_form.flexibilityOptionsAdminForm') 
 			
 			<div class="form-group col-sm-12">
 			    <label class="control-label" for="created_at">Manually Set Time Stamp: </label>
@@ -241,14 +241,14 @@ $(document).ready(function() {
   $("select[name='Term']").on("change", function () {              
       let term = $(this).val();
       if (term.substr(-1) === '8' ) {
-          $("input#flexibleDayNo").prop("checked", true);
-          $("input#flexibleDayYes").prop("disabled", true);
+          $("input#flexibleDayYes").prop("checked", true);
+          $("input#flexibleDayNo").prop("disabled", true);
 		  $("div#summerTermText").removeClass("d-none");
 
       } else {
-          $("input#flexibleDayNo").prop("checked", false);
-		  $("input#flexibleDayYes").prop("disabled", false);
           $("input#flexibleDayYes").prop("checked", false);
+		  $("input#flexibleDayNo").prop("disabled", false);
+          $("input#flexibleDayNo").prop("checked", false);
 		  $("div#summerTermText").addClass("d-none");
       }
     });
