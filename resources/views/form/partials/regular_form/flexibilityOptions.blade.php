@@ -47,6 +47,10 @@
                 </div>
             </div> 
 
+            <div class="form-group">
+                <p class="text-danger">For summer term, Flexible Day field is checked by default.</p>
+            </div>
+
             {{-- <div class="form-group col-md-12">
                 <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
                 <input id="flexibleFormat" name="flexibleFormat" class="with-font" type="checkbox" value="1">

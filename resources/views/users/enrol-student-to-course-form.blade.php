@@ -237,6 +237,19 @@ $(document).ready(function() {
 		$("input[name='contractFile']").removeAttr("required");
       }  
     });
+
+  $("select[name='Term']").on("change", function () {              
+      let term = $(this).val();
+      if (term.substr(-1) === '8' ) {
+          $("input#flexibleDayYes").prop("checked", true);
+          $("input#flexibleDayNo").prop("disabled", true);
+
+      } else {
+          $("input#flexibleDayYes").prop("checked", false);
+		  $("input#flexibleDayNo").prop("disabled", false);
+          $("input#flexibleDayNo").prop("checked", false);
+      }
+    });
 </script>
 
 
