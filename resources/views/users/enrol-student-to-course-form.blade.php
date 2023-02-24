@@ -241,13 +241,13 @@ $(document).ready(function() {
   $("select[name='Term']").on("change", function () {              
       let term = $(this).val();
       if (term.substr(-1) === '8' ) {
-          $("input#flexibleDayYes").prop("checked", true);
-          $("input#flexibleDayNo").prop("disabled", true);
+          $("input#flexibleDayNo").prop("checked", true);
+          $("input#flexibleDayYes").prop("disabled", true);
 
       } else {
-          $("input#flexibleDayYes").prop("checked", false);
-		  $("input#flexibleDayNo").prop("disabled", false);
           $("input#flexibleDayNo").prop("checked", false);
+		  $("input#flexibleDayYes").prop("disabled", false);
+          $("input#flexibleDayYes").prop("checked", false);
       }
     });
 </script>
