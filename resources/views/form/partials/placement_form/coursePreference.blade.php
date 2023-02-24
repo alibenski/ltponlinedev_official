@@ -69,17 +69,23 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="text-label-day">Available Any Day? </label>
-                                <div class="form-check form-check-inline">                           
-                                    <input id="flexibleDayYesPlacement" name="flexibleDay" class="with-font form-check-input" type="radio" value="1">
+                                <div class="form-check form-check-inline">
+                                    
+                                    @if (substr($terms->Term_Code, -1) == '8') 
+                                    <input id="flexibleDayYesPlacement" name="flexibleDay" class="with-font form-check-input"  value="1" type="checkbox" checked disabled>
+                                    <input name="flexibleDay" class="with-font form-check-input" value="1" type="hidden">
+                                    @else
+                                    <input id="flexibleDayYesPlacement" name="flexibleDay" class="with-font form-check-input"  value="1" type="radio">
+                                    @endif
                                     <label for="flexibleDayYesPlacement" class="form-check-label">YES</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input id="flexibleDayNoPlacement" name="flexibleDay" class="with-font form-check-input" type="radio" value="0">
+                                    <input id="flexibleDayNoPlacement" name="flexibleDay" class="with-font form-check-input" type="radio" value="0" @if (substr($terms->Term_Code, -1) == '8') disabled @endif>
                                     <label for="flexibleDayNoPlacement" class="form-check-label">NO</label>
                                 </div>
                             </div>
 
-                            <div id="anyDaySection" class="d-none form-group alert alert-success">YES, I am flexible to accept any day of the week (Monday to Friday)</div>
+                            <div id="anyDaySection" class="@if (substr($terms->Term_Code, -1) != '8') d-none @endif form-group alert alert-success">YES, I am flexible to accept any day of the week (Monday to Friday)</div>
 
                             <div id="dayInputSection" class="d-none form-group">
                                 <label for="text-select-day">Please select your available days: </label>
