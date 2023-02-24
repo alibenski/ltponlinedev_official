@@ -47,7 +47,7 @@
                 </div>
             </div> 
 
-            <div class="form-group">
+            <div id="summerTermText" class="form-group d-none">
                 <p class="text-danger">For summer term, Flexible Day field is checked by default.</p>
             </div>
 

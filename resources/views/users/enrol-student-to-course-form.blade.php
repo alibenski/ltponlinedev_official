@@ -243,11 +243,13 @@ $(document).ready(function() {
       if (term.substr(-1) === '8' ) {
           $("input#flexibleDayNo").prop("checked", true);
           $("input#flexibleDayYes").prop("disabled", true);
+		  $("div#summerTermText").removeClass("d-none");
 
       } else {
           $("input#flexibleDayNo").prop("checked", false);
 		  $("input#flexibleDayYes").prop("disabled", false);
           $("input#flexibleDayYes").prop("checked", false);
+		  $("div#summerTermText").addClass("d-none");
       }
     });
 </script>
