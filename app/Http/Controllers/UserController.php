@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ContractFile;
+use App\Day;
 use App\File;
 use App\Language;
 use App\ModifiedForms;
@@ -862,6 +863,9 @@ class UserController extends Controller
     {
         $code_index_id = $request->Te_Code . '-' . $request->schedule_id . '-' . $request->Term . '-' . $request->INDEXID;
         $request->request->add(['CodeIndexID' => $code_index_id]);
+        $flexibleDay = $request->input('flexibleDay');
+        $flexibleTime = $request->input('flexibleTime');
+        $flexibleFormat = $request->input('flexibleFormat');
 
         $this->validate($request, [
             'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID,NULL,id,deleted_at,NULL|',  // do not include soft deleted records 
@@ -922,6 +926,9 @@ class UserController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => 1,
                 'flexibleBtn' => null,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
@@ -1064,13 +1071,15 @@ class UserController extends Controller
     public function enrolStudentToPlacementForm(Request $request, $id)
     {
         $student = User::find($id);
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $terms_select = Term::orderBy('Term_Code', 'desc')->get();
         $languages = Language::pluck("name", "code")->all();
         $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $times = Time::all();
+        $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
+        $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
         // dd($request, $id);
-        return view('users.enrol-student-to-placement-form', compact('languages', 'terms', 'student', 'orgs', 'times'));
+        return view('users.enrol-student-to-placement-form', compact('languages', 'terms_select', 'student', 'orgs', 'times', 'days', 'terms'));
     }
 
     public function enrolStudentToPlacementInsert(Request $request)
@@ -1115,6 +1124,11 @@ class UserController extends Controller
             ]);
         }
 
+        $dayInput = $request->dayInput;
+        $timeInput = $request->timeInput;
+        $implodeDay = implode('-', $dayInput);
+        $implodeTime = implode('-', $timeInput);
+
         if (is_null($request->decision)) {
             // control the number of submitted enrolment forms
             $qryEformCount = PlacementForm::withTrashed()
@@ -1156,6 +1170,12 @@ class UserController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => 1,
                 'flexibleBtn' => null,
+                'dayInput' => $implodeDay,
+                'timeInput' => $implodeTime,
+                'deliveryMode' => $request->deliveryMode,
+                'flexibleDay' => $request->flexibleDay,
+                'flexibleTime' => $request->flexibleTime,
+                'flexibleFormat' => $request->flexibleFormat,
                 'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,

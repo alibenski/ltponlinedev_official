@@ -26,10 +26,11 @@
   <link rel="stylesheet" href="{{ asset('adminLTE3/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- IonIcons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  @yield('customcss')
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('adminLTE3/dist/css/adminlte.min.css') }}">
 
-  @yield('customcss')
+  
 </head>
 <!--
 `body` tag options:

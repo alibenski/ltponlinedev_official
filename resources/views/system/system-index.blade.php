@@ -111,7 +111,7 @@
 				<form class="admin-index-container">
 					<div class="admin-index-column-1">
 						<h4><i class="fa fa-paper-plane" aria-hidden="true"></i> Send to Manual Email Address</h4>
-						<p class="text-danger">Separate email addresses with semi-colon (;)</p>
+						<p class="text-danger">Separate email addresses with semi-colon (;) and limit email entries to less than 500 </p>
 						<h4>
 							<div>
 								<button id="enterEmail" type="button" data-toggle="modal" data-target="#enterEmailModal" aria-haspopup="true" aria-expanded="false" class="btn btn-lg btn-default btn-space btn-enter-email"><i class="fa fa-list"></i> Enter Email </button>
