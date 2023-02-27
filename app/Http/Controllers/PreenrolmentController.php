@@ -49,8 +49,10 @@ class PreenrolmentController extends Controller
             $enrolment_id_array[] = $value->id;
         }
         $languages = DB::table('languages')->pluck("name", "code")->all();
+        // create $terms object variable to apply conditions for summer term
+        $terms = (object)array("Term_Code" => $enrolment_first->Term);
 
-        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array'));
+        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array', 'terms'));
     }
 
     public function studentUpdateEnrolmentForm(Request $request)
