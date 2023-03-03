@@ -71,8 +71,20 @@
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
+
+        @if(Session::has('flash_message'))
+            <div class="container">      
+                <div class="alert alert-success"><em> {!! session('flash_message') !!}</em>
+                </div>
+            </div>
+        @endif 
+
         <div class="row">
           <div class="mx-auto">
+
+            <div class="col-md-12">              
+              @include ('partials._messages') {{-- Include session error messages --}}
+            </div>
             
             @yield('content')
 

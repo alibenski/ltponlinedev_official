@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('layouts.adminLTE3.index')
 
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -34,9 +34,9 @@
     <form method="POST" action="{{ route('course-schedule.store') }}">
       <div class="row">
       <div class="col-md-5"> 
-      <div class="panel panel-primary">
-        <div class="panel-heading"><strong>Basic Info</strong></div>
-        <div class="panel-body">
+      <div class="card card-primary">
+        <div class="card-header"><strong>Basic Info</strong></div>
+        <div class="card-body">
           <div class="form-group">
             <label name="term_id" class="col-md-3 control-label" style="margin: 5px 5px;">Term: </label>
               <select class="col-md-8 form-control select2-one" name="term_id" autocomplete="off" required="required" style="width: 100%">
@@ -51,8 +51,15 @@
             <label for="enrolment_duration" class="col-md-10 control-label" style="margin: 5px 5px;">Enrolment Duration: </label>
             <div class="col-md-12 inputGroupContainer">
                   <div class="input-group">
-                      <span class="input-group-addon"><i class="fa fa-calendar"></i>  Begin</span><input  name="enrol_date_begin" class="form-control"  type="text" value="" readonly>                                    
-                      <span class="input-group-addon"><i class="fa fa-calendar"></i>  End</span><input  name="enrol_date_end" class="form-control"  type="text" value="" readonly>                                    
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-calendar mr-1"></i>  Begin</span>
+                    </div>
+                    <input  name="enrol_date_begin" class="form-control"  type="text" value="" readonly>                                    
+                    
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-calendar mr-1"></i>  End</span>
+                    </div>                                   
+                    <input  name="enrol_date_end" class="form-control"  type="text" value="" readonly> 
                   </div>
             </div>
           </div>  
@@ -67,12 +74,12 @@
               </select>
           </div>
 
-          <div class="hidden">
+          <div class="d-none">
             <div class="form-group">
               <label for="language_css" class="col-md-10 control-label" style="margin: 5px 5px;">Language CSS (Automatically Rendered based on Language selection above via JQuery): </label>
               <div class="col-md-12 inputGroupContainer">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="language_css" class="form-control"  type="text" value="" readonly>                                    
+                        <span class="input-group-text"><i class="fab fa-codepen"></i></span><input  name="language_css" class="form-control"  type="text" value="" readonly>                                    
                     </div>
               </div>
             </div> 
@@ -81,7 +88,7 @@
               <label for="availability_css" class="col-md-10 control-label" style="margin: 5px 5px;">Availability CSS (Automatically Rendered via Controller): </label>
               <div class="col-md-12 inputGroupContainer">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="availability_css" class="form-control"  type="text" value="" readonly>                                    
+                        <span class="input-group-text"><i class="fab fa-codepen"></i></span><input  name="availability_css" class="form-control"  type="text" value="" readonly>                                    
                     </div>
               </div>
             </div> 
@@ -90,7 +97,7 @@
               <label for="website_language" class="col-md-10 control-label" style="margin: 5px 5px;">Website Language (Automatically Rendered via static HTML): </label>
               <div class="col-md-12 inputGroupContainer">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-codepen"></i></span><input  name="website_language" class="form-control"  type="text" value="" readonly>                                    
+                        <span class="input-group-text"><i class="fab fa-codepen"></i></span><input  name="website_language" class="form-control"  type="text" value="" readonly>                                    
                     </div>
               </div>
             </div> 
@@ -98,14 +105,14 @@
 
           <div class="form-group">
               <label for="specialized_course" class="col-md-12 control-label" style="margin: 5px 5px;">Is this a <em>Specialized</em> Course? </label>
-                <div class="radio">
-                  <label>
-                      <input type="radio" name="specialized_course" value=1 /> Yes
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="radio" id="radioSpecialCourseYes" name="specialized_course" value=1 />   Yes
                   </label>
                 </div>
-                <div class="radio">
-                  <label>
-                      <input type="radio" name="specialized_course" value=0 /> No
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="radio" id="radioSpecialCourseNo" name="specialized_course" value=0 />   No
                   </label>
                 </div>
           </div>
@@ -123,26 +130,38 @@
       </div>
 
       <div class="col-md-7"> 
-      <div class="panel panel-info">
-        <div class="panel-heading">Format Duration Pricing</div>
-        <div class="panel-body">
+      <div class="card card-info">
+        <div class="card-header">Format Duration Pricing</div>
+        <div class="card-body">
           <div class="row">
             <div class="col-md-12">
-              <table class="table">
-                <thead>
-                  <th>Format</th>
+              <table class="table table-bordered">
+                <thead class="thead-dark">
+                  <th>Format Category</th>
+                  <th>Format Mode</th>
                   <th>Duration</th>
                   <th>Pricing</th>
                 </thead>
                 <tbody>
                     <tr>
                       <td>
-                            @foreach ($format as $id => $name)
+                            @foreach ($format_category as $id => $name)
 
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="format_id" value="{{ $id }}" required="" /> {{ $name }}
-                                    </label>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="format_category_id" value="{{ $id }}" required="" />{{ $name }} 
+                                  </label>
+                                </div>
+
+                            @endforeach
+                      </td>
+                      <td>
+                            @foreach ($format_mode as $id => $name)
+
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="format_mode_id" value="{{ $id }}" required="" />{{ $name }} 
+                                  </label>
                                 </div>
 
                             @endforeach
@@ -150,10 +169,10 @@
                       <td>
                             @foreach ($duration as $id => $name)
 
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="duration_id" value="{{ $id }}" required="" /> {{ $name }}
-                                    </label>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="duration_id" value="{{ $id }}" required="" />{{ $name }} 
+                                  </label>
                                 </div>
 
                             @endforeach
@@ -161,10 +180,10 @@
                       <td>
                             @foreach ($price as $id => $name)
 
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="price_id" value="{{ $id }}" required="" /> {{ $name }} CHF
-                                    </label>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="price_id" value="{{ $id }}" required="" />  {{ $name }} CHF
+                                  </label>
                                 </div>
 
                             @endforeach
@@ -172,6 +191,15 @@
                     </tr>
                 </tbody>
               </table>
+
+              {{-- @foreach ($format as $id => $name)
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="format_id" value="{{ $id }}" required="" /> {{ $name }}
+                    </label>
+                  </div>
+              @endforeach --}}
+
             </div>
           </div> 
         </div>
@@ -181,9 +209,9 @@
 
       <div class="row">
       <div class="col-md-7">  
-      <div class="panel panel-primary">
-        <div class="panel-heading"><strong>Schedule</strong></div>
-        <div class="panel-body">
+      <div class="card card-primary">
+        <div class="card-header"><strong>Schedule</strong></div>
+        <div class="card-body">
           <div class="row">
             <div class="col-md-12">
               <h4 class="text-center">Select the schedule(s) then click Assign button. </h4>
@@ -228,9 +256,9 @@
       </div>
 
       <div class="col-md-5">
-      <div class="panel panel-info">
-        <div class="panel-heading">Operation</div>
-        <div class="panel-body">
+      <div class="card card-info">
+        <div class="card-header">Operation</div>
+        <div class="card-body">
           <div class="row">
             <div class="col-md-5 col-md-offset-1">
               <a href="{{ route('course-schedule.index') }}" class="btn btn-default btn-block btn-space">Back</a>
@@ -250,42 +278,50 @@
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
+                    <h4 class="modal-title">Confirm Info</h4>
                       <button type="button" class="close" data-dismiss="modal">×</button>
-                      <h4 class="modal-title">Confirm Info</h4>
                   </div>
                   <div class="modal-body">
-                    <div class="row">
+                    <div class="form">
                       
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="confirmTerm">Term:</label>
-                        <p class="confirm-term">--</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="confirmLanguage">Language:</label>
-                        <p class="confirm-language">--</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="confirmCourse">Course:</label>
-                        <p class="confirm-course">--</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="confirmFormat">Format:</label>
-                        <p class="confirm-format">--</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="confirmDuration">Duration:</label>
-                        <p class="confirm-duration">--</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="confirmPrice">Price:</label>
-                        <p class="confirm-price">--</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-12" for="confirmSchedule">Schedule:</label>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmTerm">Term:</label>
+                          <p class="confirm-term">--</p>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmLanguage">Language:</label>
+                          <p class="confirm-language">--</p>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmCourse">Course:</label>
+                          <p class="confirm-course">--</p>
+                        </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmFormat">Specialized Course:</label>
+                          <p class="confirm-specialized-course">--</p>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmFormatCategory">Format Category:</label>
+                          <p class="confirm-format-category">--</p>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmFormatMode">Format Mode:</label>
+                          <p class="confirm-format-mode">--</p>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmDuration">Duration:</label>
+                          <p class="confirm-duration">--</p>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmPrice">Price:</label>
+                          <p class="confirm-price">--</p>
+                      </div>
+                      <div class="form-group">
+                          <label class="control-label col-sm-12" for="confirmSchedule">Schedule:</label>
 
-                          <ul class="confirm-schedule"></ul>
+                            <ul class="confirm-schedule"></ul>
 
-                    </div>
+                      </div>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -320,7 +356,9 @@
     const term = $("select[name='term_id']").children('option:selected').text();
     const language = $("select[name='L']").children('option:selected').text();
     const course = $("select[name='course_id']").children('option:selected').text();
-    const format = $("input[name='format_id']:checked").parent('label').text();
+    const specialized_course = $("input[name='specialized_course']:checked").parent('label').text();
+    const format_category = $("input[name='format_category_id']:checked").parent('label').text();
+    const format_mode = $("input[name='format_mode_id']:checked").parent('label').text();
     const duration = $("input[name='duration_id']:checked").parent('label').text();
     const price = $("input[name='price_id']:checked").parent('label').text();
     let schedules = [];    
@@ -339,7 +377,9 @@
     $('p.confirm-term').text(term);
     $('p.confirm-language').text(language);
     $('p.confirm-course').text(course);
-    $('p.confirm-format').text(format);
+    $('p.confirm-specialized-course').text(specialized_course);
+    $('p.confirm-format-category').text(format_category);
+    $('p.confirm-format-mode').text(format_mode);
     $('p.confirm-duration').text(duration);
     $('p.confirm-price').text(price);
 
