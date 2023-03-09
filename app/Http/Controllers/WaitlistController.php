@@ -85,7 +85,12 @@ class WaitlistController extends Controller
             $firstDayMonth = date('d F', strtotime($term->Term_Begin));
             $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
 
-            return view('emails.defaultEmailWaitlist', compact('firstDayMonth', 'lastDayMonth'));
+            $info = $convocation_waitlist = Repo::where('Term', $term->Term_Code)->whereHas('classrooms', function ($query) {
+                $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD');
+            })->first();
+
+            return view('emails.defaultEmailWaitlist', compact('firstDayMonth', 'lastDayMonth', 'info'));
         }
 
         return "Nothing to show. No term selected.";
@@ -93,14 +98,24 @@ class WaitlistController extends Controller
 
     public function sendDefaultWaitlistEmail(Request $request)
     {
-        $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term')->with(['users' => function ($qusers) {
-            $qusers->select('indexno', 'email');
-        }])->get();
+        $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term', 'Te_Code')
+            ->with([
+                'users' => function ($qusers) {
+                    $qusers->select('indexno', 'email', 'name');
+                }
+            ])
+            ->with([
+                'courses' => function ($query) {
+                    $query->select('Te_Code_New', 'Description');
+                }
+            ])
+            ->get();
+
         $term = Term::where('Term_Code', $request->term_id)->first();
         $firstDayMonth = date('d F', strtotime($term->Term_Begin));
         $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
         foreach ($students_to_email as $value) {
-            Mail::to($value->users->email)->send(new SendDefaultWaitlistEmail($term, $firstDayMonth, $lastDayMonth));
+            Mail::to($value->users->email)->send(new SendDefaultWaitlistEmail($term, $firstDayMonth, $lastDayMonth, $value->users->name, $value->courses->Description));
         }
         $data = $students_to_email;
         return response()->json([$data]);

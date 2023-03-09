@@ -35,7 +35,15 @@ class TextController extends Controller
             $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
             $year = date('Y', strtotime($term->Term_Begin));
 
-            return view('texts.view-default-email-waitlist-text', compact('term', 'firstDayMonth', 'lastDayMonth', 'year'));
+            $info = Repo::where('Term', $term->Term_Code)->whereHas('classrooms', function ($query) {
+                $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD');
+            })->first();
+
+            $name = $info->users->name;
+            $course = $info->courses->Description;
+
+            return view('texts.view-default-email-waitlist-text', compact('term', 'firstDayMonth', 'lastDayMonth', 'year', 'name', 'course'));
         }
 
         return "Nothing to show. No term selected.";
