@@ -6,7 +6,7 @@ use App\Classroom;
 use App\Course;
 use App\CourseSchedule;
 use App\FocalPoints;
-use App\Jobs\SendEmailJob;
+use App\Jobs\SendDefaultWaitlistEmailJob;
 use App\Language;
 use App\Mail\MailtoApprover;
 use App\Mail\SendAuthMail;
@@ -114,11 +114,37 @@ class WaitlistController extends Controller
         $term = Term::where('Term_Code', $request->term_id)->first();
         $firstDayMonth = date('d F', strtotime($term->Term_Begin));
         $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
-        foreach ($students_to_email as $value) {
-            Mail::to($value->users->email)->send(new SendDefaultWaitlistEmail($term, $firstDayMonth, $lastDayMonth, $value->users->name, $value->courses->Description));
+
+        $chunkedStudents = $students_to_email->chunk(40);
+
+        foreach ($chunkedStudents as $emailchunkedStudent) {
+            $this->sendDefaultWaitlistEmailAddDelay($emailchunkedStudent, $term, $firstDayMonth, $lastDayMonth);
         }
+
+        // foreach ($students_to_email as $value) {
+        //     Mail::to($value->users->email)->send(new SendDefaultWaitlistEmail($term, $firstDayMonth, $lastDayMonth, $value->users->name, $value->courses->Description));
+        // }
         $data = $students_to_email;
         return response()->json([$data]);
+    }
+
+    public function sendDefaultWaitlistEmailAddDelay($emailchunkedStudent, $term, $firstDayMonth, $lastDayMonth)
+    {
+        $baseDelay = Carbon::now();
+
+        $getDelay = cache('_jobs.' . SendDefaultWaitlistEmailJob::class, $baseDelay);
+
+        $setDelay = Carbon::parse(
+            $getDelay
+        )->addSeconds(60);
+
+        // insert data to cache table
+        cache([
+            '_jobs.' . SendDefaultWaitlistEmailJob::class => $setDelay
+        ], 5);
+
+        $job = (new SendDefaultWaitlistEmailJob($emailchunkedStudent, $term, $firstDayMonth, $lastDayMonth))->delay($setDelay);
+        dispatch($job);
     }
 
     public function ajaxCheckIfWaitlisted(Request $request)
