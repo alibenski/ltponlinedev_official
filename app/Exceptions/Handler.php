@@ -7,8 +7,8 @@ use Throwable;
 use Illuminate\Session\TokenMismatchException;
 
 use Mail;
-use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
+use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use App\Mail\ExceptionOccured;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -58,9 +58,9 @@ class Handler extends ExceptionHandler
         try {
             $e = FlattenException::create($exception);
 
-            $handler = new SymfonyExceptionHandler();
+            $handler = new HtmlErrorRenderer();
 
-            $html = $handler->getHtml($e);
+            $html = $handler->getBody($e);
 
             Mail::to('allyson.frias@un.org')->send(new ExceptionOccured($html));
         } catch (Throwable $ex) {
