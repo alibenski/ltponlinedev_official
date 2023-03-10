@@ -11,6 +11,7 @@ class ExceptionOccured extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $content;
     /**
      * Create a new message instance.
      *
@@ -29,6 +30,6 @@ class ExceptionOccured extends Mailable
     public function build()
     {
         return $this->view('emails.exception')
-                    ->with('content', $this->content);
+            ->with('content', $this->content);
     }
 }

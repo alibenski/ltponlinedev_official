@@ -8,16 +8,17 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5|^8.0",
-        "fideloper/proxy": "^4.4",
-        "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
-        "laravel/framework": "^7.29",
-        "laravel/tinker": "^2.5",
         "anhskohbo/no-captcha": "3.5.*",
         "barryvdh/laravel-debugbar": "3.7.0",
         "barryvdh/laravel-dompdf": "2.*",
-        "jdavidbakr/mail-tracker": "5.0.*",
+        "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
+        "jdavidbakr/mail-tracker": "4.0.*",
+        "laravel/framework": "^7.29",
         "laravel/helpers": "^1.6.0",
+        "laravel/tinker": "^2.5",
+        "laravel/ui": "^2.5.0",
         "spatie/laravel-permission": "5.9.1"
     },
     "require-dev": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24936ff5f467d984ee3afedcbab66379",
+    "content-hash": "f3814ea017e6bac93266a5edb36b0759",
     "packages": [
         {
             "name": "anhskohbo/no-captcha",
@@ -1381,16 +1381,16 @@
         },
         {
             "name": "jdavidbakr/mail-tracker",
-            "version": "5.0.9",
+            "version": "4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jdavidbakr/mail-tracker.git",
-                "reference": "8802719db16a099d56ba7a3808267b7451fbbf28"
+                "reference": "2a631b8b3e6fa1411966aa2a2c86b4be8e544ead"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jdavidbakr/mail-tracker/zipball/8802719db16a099d56ba7a3808267b7451fbbf28",
-                "reference": "8802719db16a099d56ba7a3808267b7451fbbf28",
+                "url": "https://api.github.com/repos/jdavidbakr/mail-tracker/zipball/2a631b8b3e6fa1411966aa2a2c86b4be8e544ead",
+                "reference": "2a631b8b3e6fa1411966aa2a2c86b4be8e544ead",
                 "shasum": ""
             },
             "require": {
@@ -1410,6 +1410,9 @@
             },
             "type": "library",
             "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
                 "laravel": {
                     "providers": [
                         "jdavidbakr\\MailTracker\\MailTrackerServiceProvider"
@@ -1441,9 +1444,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jdavidbakr/mail-tracker/issues",
-                "source": "https://github.com/jdavidbakr/mail-tracker/tree/5.0.9"
+                "source": "https://github.com/jdavidbakr/mail-tracker/tree/4.0.11"
             },
-            "time": "2022-02-23T13:37:42+00:00"
+            "time": "2020-12-24T23:27:30+00:00"
         },
         {
             "name": "laravel/framework",
@@ -1730,6 +1733,61 @@
                 "source": "https://github.com/laravel/tinker/tree/v2.8.1"
             },
             "time": "2023-02-15T16:40:09+00:00"
+        },
+        {
+            "name": "laravel/ui",
+            "version": "v2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ui.git",
+                "reference": "d01a705763c243b07be795e9d1bb47f89260f73d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/d01a705763c243b07be795e9d1bb47f89260f73d",
+                "reference": "d01a705763c243b07be795e9d1bb47f89260f73d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^7.0",
+                "illuminate/filesystem": "^7.0",
+                "illuminate/support": "^7.0",
+                "php": "^7.2.5|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Ui\\UiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Ui\\": "src/",
+                    "Illuminate\\Foundation\\Auth\\": "auth-backend/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel UI utilities and presets.",
+            "keywords": [
+                "laravel",
+                "ui"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/ui/issues",
+                "source": "https://github.com/laravel/ui/tree/v2.5.0"
+            },
+            "time": "2020-11-03T19:45:19+00:00"
         },
         {
             "name": "league/commonmark",
