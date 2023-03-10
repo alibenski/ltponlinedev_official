@@ -26,10 +26,11 @@
   <link rel="stylesheet" href="{{ asset('adminLTE3/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- IonIcons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  @yield('customcss')
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('adminLTE3/dist/css/adminlte.min.css') }}">
 
-  @yield('customcss')
+  
 </head>
 <!--
 `body` tag options:
@@ -70,8 +71,20 @@
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
+
+        @if(Session::has('flash_message'))
+            <div class="container">      
+                <div class="alert alert-success"><em> {!! session('flash_message') !!}</em>
+                </div>
+            </div>
+        @endif 
+
         <div class="row">
           <div class="mx-auto">
+
+            <div class="col-md-12">              
+              @include ('partials._messages') {{-- Include session error messages --}}
+            </div>
             
             @yield('content')
 

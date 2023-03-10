@@ -140,6 +140,7 @@
 						<th>MOU</th>
 						<th>Sales Orders</th>
 						<th>Profile</th>
+						<th>Index No.</th>
 						<th>Name</th>
 						<th>Gender</th>
 						<th>RESULT</th>
@@ -161,6 +162,7 @@
 						<th>MOU</th>
 						<th>Sales Orders</th>
 						<th>Profile</th>
+						<th>Index No.</th>
 						<th>Name</th>
 						<th>Gender</th>
 						<th>RESULT</th>
@@ -347,6 +349,7 @@ $(document).ready(function() {
 								return "No Profile Set";
 								}
 							},
+							{ "data": "users.indexno" }, 
 							{ "data": "users.name" }, 
 							{ "data": function ( row, type, val, meta ) {
 									if (row.users.sddextr.SEX == 'M' || row.users.sddextr.SEX == 'm') {

@@ -109,9 +109,9 @@ desired effect
               </li> --}}
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left">
+                {{-- <div class="pull-left">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div>
+                </div> --}}
                 <div class="pull-right">
                   <a href="{{ route('logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Sign out</a>
                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -135,6 +135,7 @@ desired effect
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    @hasrole('Admin')
     <section class="content-header">
       <h1>
         <a href="{{ route('admin_dashboard') }}"><i class="fa fa-home"></i> CLM Online Enrolment Administration</a>
@@ -145,7 +146,7 @@ desired effect
         {{-- <li class="active">Here</li> --}}
       </ol>
     </section>
-
+    @endhasrole
     <!-- Main content -->
     <section class="content container-fluid">
       @if(Session::has('flash_message'))

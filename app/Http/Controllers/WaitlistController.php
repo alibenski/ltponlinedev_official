@@ -6,7 +6,7 @@ use App\Classroom;
 use App\Course;
 use App\CourseSchedule;
 use App\FocalPoints;
-use App\Jobs\SendEmailJob;
+use App\Jobs\SendDefaultWaitlistEmailJob;
 use App\Language;
 use App\Mail\MailtoApprover;
 use App\Mail\SendAuthMail;
@@ -85,7 +85,12 @@ class WaitlistController extends Controller
             $firstDayMonth = date('d F', strtotime($term->Term_Begin));
             $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
 
-            return view('emails.defaultEmailWaitlist', compact('firstDayMonth', 'lastDayMonth'));
+            $info = $convocation_waitlist = Repo::where('Term', $term->Term_Code)->whereHas('classrooms', function ($query) {
+                $query->whereNull('Tch_ID')
+                    ->orWhere('Tch_ID', '=', 'TBD');
+            })->first();
+
+            return view('emails.defaultEmailWaitlist', compact('firstDayMonth', 'lastDayMonth', 'info'));
         }
 
         return "Nothing to show. No term selected.";
@@ -93,17 +98,53 @@ class WaitlistController extends Controller
 
     public function sendDefaultWaitlistEmail(Request $request)
     {
-        $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term')->with(['users' => function ($qusers) {
-            $qusers->select('indexno', 'email');
-        }])->get();
+        $students_to_email = Repo::whereIn('id', explode(",", $request->ids))->select('id', 'INDEXID', 'Term', 'Te_Code')
+            ->with([
+                'users' => function ($qusers) {
+                    $qusers->select('indexno', 'email', 'name');
+                }
+            ])
+            ->with([
+                'courses' => function ($query) {
+                    $query->select('Te_Code_New', 'Description');
+                }
+            ])
+            ->get();
+
         $term = Term::where('Term_Code', $request->term_id)->first();
         $firstDayMonth = date('d F', strtotime($term->Term_Begin));
         $lastDayMonth = Carbon::parse($term->Term_Begin)->addDays(13)->format('d F Y');
-        foreach ($students_to_email as $value) {
-            Mail::to($value->users->email)->send(new SendDefaultWaitlistEmail($term, $firstDayMonth, $lastDayMonth));
+
+        $chunkedStudents = $students_to_email->chunk(40);
+
+        foreach ($chunkedStudents as $emailchunkedStudent) {
+            $this->sendDefaultWaitlistEmailAddDelay($emailchunkedStudent, $term, $firstDayMonth, $lastDayMonth);
         }
+
+        // foreach ($students_to_email as $value) {
+        //     Mail::to($value->users->email)->send(new SendDefaultWaitlistEmail($term, $firstDayMonth, $lastDayMonth, $value->users->name, $value->courses->Description));
+        // }
         $data = $students_to_email;
         return response()->json([$data]);
+    }
+
+    public function sendDefaultWaitlistEmailAddDelay($emailchunkedStudent, $term, $firstDayMonth, $lastDayMonth)
+    {
+        $baseDelay = Carbon::now();
+
+        $getDelay = cache('_jobs.' . SendDefaultWaitlistEmailJob::class, $baseDelay);
+
+        $setDelay = Carbon::parse(
+            $getDelay
+        )->addSeconds(60);
+
+        // insert data to cache table
+        cache([
+            '_jobs.' . SendDefaultWaitlistEmailJob::class => $setDelay
+        ], 5);
+
+        $job = (new SendDefaultWaitlistEmailJob($emailchunkedStudent, $term, $firstDayMonth, $lastDayMonth))->delay($setDelay);
+        dispatch($job);
     }
 
     public function ajaxCheckIfWaitlisted(Request $request)
@@ -400,6 +441,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 1,
                     ]);
@@ -468,6 +511,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 2,
                     ]);
@@ -552,6 +597,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value_placement->form_counter,
                         'agreementBtn' => $value_placement->agreementBtn,
                         'flexibleBtn' => $value_placement->flexibleBtn,
+                        'flexibleDay' => $value_placement->flexibleDay,
+                        'flexibleTime' => $value_placement->flexibleTime,
                         'flexibleFormat' => $value_placement->flexibleFormat,
                         'PS' => 2,
                     ]);
@@ -604,6 +651,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                         'PS' => 3,
                     ]);
@@ -648,6 +697,8 @@ class WaitlistController extends Controller
                         'form_counter' => $value4->form_counter,
                         'agreementBtn' => $value4->agreementBtn,
                         'flexibleBtn' => $value4->flexibleBtn,
+                        'flexibleDay' => $value4->flexibleDay,
+                        'flexibleTime' => $value4->flexibleTime,
                         'flexibleFormat' => $value4->flexibleFormat,
                         'PS' => 4,
                     ]);

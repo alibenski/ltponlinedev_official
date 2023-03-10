@@ -154,6 +154,9 @@ class NoFormController extends Controller
         $org = $request->input('org');
         $agreementBtn = $request->input('agreementBtn');
         $flexibleBtn = $request->input('flexibleBtn');
+        $flexibleDay = $request->input('flexibleDay');
+        $flexibleTime = $request->input('flexibleTime');
+        $flexibleFormat = $request->input('flexibleFormat');
         // $contractDate = $request->input('contractDate');
         $std_comments = $request->input('regular_enrol_comment');
 
@@ -238,7 +241,10 @@ class NoFormController extends Controller
             // 'mgr_email' => 'required|email',
             'approval' => 'required',
             'org' => 'required',
-            'regular_enrol_comment' => 'required',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
+            // 'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
 
@@ -279,8 +285,10 @@ class NoFormController extends Controller
                 'eform_submit_count' => $eform_submit_count,
                 'form_counter' => $form_counter,
                 'agreementBtn' => $agreementBtn,
-                'flexibleFormat' => $request->flexibleFormat,
                 'flexibleBtn' => $flexibleBtn,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 // 'contractDate' => $contractDate,  
                 'std_comments' => $std_comments,
             ]);

@@ -71,8 +71,9 @@ class PlacementFormController extends Controller
 
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
+        $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
-        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details', 'languages', 'days'));
+        return view('placement_forms.student-edit-placement-form-view', compact('enrolment_details', 'languages', 'days', 'terms'));
     }
 
     public function studentUpdatePlacementForm(Request $request)
@@ -86,16 +87,22 @@ class PlacementFormController extends Controller
             'course_preference_comment' => 'required',
             'indexno' => 'required',
             'term_id' => 'required',
+            'deliveryMode' => 'required|',
             'enrolment_id' => 'required',
         ]);
 
         $this->validate(
             $request,
             [
-                'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
-                    $query->where('L', $request->L)
-                        ->where('INDEXID', $request->indexno)
-                        ->where('Term', $request->term_id)
+                // 'L' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
+                //     $query->where('L', $request->L)
+                //         ->where('INDEXID', $request->indexno)
+                //         ->where('Term', $request->term_id)
+                //         ->where('deleted_at', NULL);
+                // }),
+                'assigned_to_course' => Rule::unique('tblLTP_Placement_Forms')->where(function ($query) use ($request) {
+                    $query->where('id', $request->enrolment_id)
+                        ->where('assigned_to_course', '1')
                         ->where('deleted_at', NULL);
                 })
             ]
@@ -110,6 +117,10 @@ class PlacementFormController extends Controller
             'placement_schedule_id' => $request->placementLang,
             'timeInput' => implode('-', $request->timeInput),
             'dayInput' => implode('-', $request->dayInput),
+            'deliveryMode' => $request->deliveryMode,
+            'flexibleDay' => $request->flexibleDay,
+            'flexibleTime' => $request->flexibleTime,
+            'flexibleFormat' => $request->flexibleFormat,
             'course_preference_comment' => $request->course_preference_comment,
             'modified_by' => Auth::id(),
         ]);
@@ -118,10 +129,11 @@ class PlacementFormController extends Controller
             $placement_form_data->update(['std_comments' => $request->std_comments]);
         }
 
+        // deprecated flexibleBtn field from term 231 onwards
         if ($request->flexibleBtn == 'on') {
-            $placement_form_data->update(['flexibleBtn' => 1]);
+            $placement_form_data->update(['flexibleBtn' => NULL]);
         } else {
-            $placement_form_data->update(['flexibleBtn' => 0]);
+            $placement_form_data->update(['flexibleBtn' => NULL]);
         }
 
         return redirect()->route('previous-submitted')->with('success', 'Form # ' . $placement_form_data->eform_submit_count . ' successfully modified.');
@@ -325,6 +337,7 @@ class PlacementFormController extends Controller
             'agreementBtn' => 'required|',
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
             'course_preference_comment' => 'required|',
         ));
 
@@ -414,6 +427,7 @@ class PlacementFormController extends Controller
             'agreementBtn' => 'required|',
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
             'course_preference_comment' => 'required|',
         ));
 
@@ -566,6 +580,10 @@ class PlacementFormController extends Controller
         $this->validate($request, array(
             'dayInput' => 'required|',
             'timeInput' => 'required|',
+            'deliveryMode' => 'required|',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
             'course_preference_comment' => 'required|',
         ));
 
@@ -577,6 +595,10 @@ class PlacementFormController extends Controller
         $data = PlacementForm::findorFail($placement_form_id);
         $data->dayInput = $implodeDay;
         $data->timeInput = $implodeTime;
+        $data->deliveryMode = $request->deliveryMode;
+        $data->flexibleDay = $request->flexibleDay;
+        $data->flexibleTime = $request->flexibleTime;
+        $data->flexibleFormat = $request->flexibleFormat;
         $data->course_preference_comment = $request->course_preference_comment;
         $data->save();
 

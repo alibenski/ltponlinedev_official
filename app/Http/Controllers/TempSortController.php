@@ -110,6 +110,8 @@ class TempSortController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                     ]);
                     foreach ($arrSaveToPash as $data) {

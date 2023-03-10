@@ -22,7 +22,7 @@ class AdminMiddleware
             if (Auth::user() == null) {
                 return redirect('login')->with('expired', 'You have been logged out.');
             }
-            if (!Auth::user()->hasPermissionTo('Administer roles & permissions') && !Auth::user()->hasPermissionTo('Teacher administration')) {
+            if (!Auth::user()->hasPermissionTo('Administer roles & permissions') && !Auth::user()->hasPermissionTo('Teacher administration') && !Auth::user()->hasPermissionTo('M&C Administration (limited)')) {
                 //abort('401'); //redeirect to home with flash message instead of 401 error
                 return redirect('home')->with('interdire-msg', 'You are not authorized to access that page.');
             }

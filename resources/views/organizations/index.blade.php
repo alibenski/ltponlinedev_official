@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends(Auth::user()->can('M&C Administration (limited)') ? 'admin.no_sidebar_admin' : 'admin.admin')
 
 @section('customcss')
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">

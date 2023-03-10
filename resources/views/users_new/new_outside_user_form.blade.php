@@ -57,11 +57,7 @@
 @stop
 @section('content')
 @include('partials._messages')
-@if (Session::has('warning')) 
-    <div class="alert alert-warning alert-block text-center" role="alert">
-        <strong>Note: </strong> {{ Session::get('warning') }}
-    </div>
-@endif
+
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -71,27 +67,6 @@
                 <div class="card-body">
                     <form class="form-horizontal form-prevent-multi-submit" enctype="multipart/form-data" method="POST" action="{{ route('post-new-outside-user-form') }}">
                         {{ csrf_field() }}
-
-                        {{-- <div class="form-group{{ $errors->has('indexno') ? 'is-invalid' : '' }}">
-                            <label for="indexno" class="col-md-12 control-label">Index # <span class="small text-danger"></span></label>
-
-                            <div class="col-md-12">
-                                <input id="indexno" type="text" class="form-control" name="indexno" value="{{ old('indexno') }}" autofocus>
-
-                                @if ($errors->has('indexno'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('indexno') }}</strong>
-                                    </span>
-                                @endif
-                                <p class="small text-danger mt-1"><strong>Please delete trailing zeroes if you have an index number which is less than 8 digits e.g. 00012345 -> 12345</strong></p>
-                            </div>
-                        </div>
-
-                        <hr /> --}}
-                        
-                        {{-- <div class="form-group">
-                            <label for="gender" class="col-md-12 control-label"><span style="color: red" class="form-control-static"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</span></label>
-                        </div> --}}
                         
                         @include('users_new.registration_form_fields')
 

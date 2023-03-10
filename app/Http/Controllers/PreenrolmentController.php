@@ -36,21 +36,23 @@ class PreenrolmentController extends Controller
     {
         // get id(s) of form
         $enrolment = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc');
-
-        if (empty($enrolment->first())) {
+        // check if form exists
+        $enrolment_first = Preenrolment::where('Term', $term)->where('INDEXID', $indexid)->where('Te_Code', $tecode)->orderBy('id', 'asc')->first();
+        if (empty($enrolment_first)) {
             return view('errors.401_custom');
         }
 
         $enrolment_details = $enrolment->get();
         $enrolment_id = $enrolment->select('id')->get();
-
         $enrolment_id_array = [];
         foreach ($enrolment_id as $value) {
             $enrolment_id_array[] = $value->id;
         }
         $languages = DB::table('languages')->pluck("name", "code")->all();
+        // create $terms object variable to apply conditions for summer term
+        $terms = (object)array("Term_Code" => $enrolment_first->Term);
 
-        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array'));
+        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array', 'terms'));
     }
 
     public function studentUpdateEnrolmentForm(Request $request)
@@ -62,6 +64,9 @@ class PreenrolmentController extends Controller
             'schedule_id' => 'required',
             'indexno' => 'required',
             'enrolment_id' => 'required',
+            'flexibleDay' => 'required',
+            'flexibleTime' => 'required',
+            'flexibleFormat' => 'required',
         ]);
 
         $codeIndexId = $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno;
@@ -94,6 +99,9 @@ class PreenrolmentController extends Controller
                 'CodeIndexID' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id . '-' . $request->indexno,
                 'Code' => $request->course_id . '-' . $request->schedule_id . '-' . $request->term_id,
                 'flexibleBtn' => $flexibleBtn,
+                'flexibleDay' => $request->flexibleDay,
+                'flexibleTime' => $request->flexibleTime,
+                'flexibleFormat' => $request->flexibleFormat,
                 'modified_by' => Auth::id(),
             ]);
 
@@ -328,8 +336,8 @@ class PreenrolmentController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('Te_Code', $request->Te_Code)
-                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
                 ->get();
 
             $arr1 = [];
@@ -403,8 +411,8 @@ class PreenrolmentController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('Te_Code', $request->Te_Code)
-                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
                 ->get();
 
             $arr1 = [];
@@ -567,10 +575,10 @@ class PreenrolmentController extends Controller
             $input_1 = array_filter($input_1, 'strlen');
 
             foreach ($enrolment_to_be_copied as $data) {
-                $data->fill($input_1)->save();
-
                 $arr = $data->attributesToArray();
                 $clone_forms = ModifiedForms::create($arr);
+
+                $data->fill($input_1)->save();
             }
 
 

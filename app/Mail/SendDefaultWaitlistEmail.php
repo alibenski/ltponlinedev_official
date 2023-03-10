@@ -15,17 +15,21 @@ class SendDefaultWaitlistEmail extends Mailable
     public $term;
     public $firstDayMonth;
     public $lastDayMonth;
+    public $name;
+    public $course;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($term, $firstDayMonth, $lastDayMonth)
+    public function __construct($term, $firstDayMonth, $lastDayMonth, $name, $course)
     {
         $this->term = $term;
         $this->firstDayMonth = $firstDayMonth;
         $this->lastDayMonth = $lastDayMonth;
+        $this->name = $name;
+        $this->course = $course;
     }
 
     /**

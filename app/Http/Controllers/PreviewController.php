@@ -335,11 +335,11 @@ class PreviewController extends Controller
             $form = Repo::withTrashed()
                 ->where('Term', Session::get('Term'))
                 ->where('CodeIndexID', $value->CodeIndexID)
-                ->with(['enrolments' => function ($q1) {
-                    $q1->where('Term', Session::get('Term'));
+                ->with(['enrolments' => function ($q1) use ($value) {
+                    $q1->where('Term', Session::get('Term'))->where('L', $value->L);
                 }])
-                ->with(['placements' => function ($q2) {
-                    $q2->where('Term', Session::get('Term'));
+                ->with(['placements' => function ($q2) use ($value) {
+                    $q2->where('Term', Session::get('Term'))->where('L', $value->L);
                 }])
                 ->get();
             foreach ($form as $value) {
@@ -1206,6 +1206,8 @@ class PreviewController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleDay' => $value->flexibleDay,
+                    'flexibleTime' => $value->flexibleTime,
                     'flexibleFormat' => $value->flexibleFormat,
                     'is_self_pay_form' => $value->is_self_pay_form,
                     'PS' => 1,
@@ -1305,6 +1307,8 @@ class PreviewController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleDay' => $value->flexibleDay,
+                    'flexibleTime' => $value->flexibleTime,
                     'flexibleFormat' => $value->flexibleFormat,
                     'is_self_pay_form' => $value->is_self_pay_form,
                     'PS' => 2,
@@ -1431,6 +1435,8 @@ class PreviewController extends Controller
                     'form_counter' => $value_placement->form_counter,
                     'agreementBtn' => $value_placement->agreementBtn,
                     'flexibleBtn' => $value_placement->flexibleBtn,
+                    'flexibleDay' => $value_placement->flexibleDay,
+                    'flexibleTime' => $value_placement->flexibleTime,
                     'flexibleFormat' => $value_placement->flexibleFormat,
                     'is_self_pay_form' => $value_placement->is_self_pay_form,
                     'PS' => 2,
@@ -1513,6 +1519,8 @@ class PreviewController extends Controller
                     'form_counter' => $value->form_counter,
                     'agreementBtn' => $value->agreementBtn,
                     'flexibleBtn' => $value->flexibleBtn,
+                    'flexibleDay' => $value->flexibleDay,
+                    'flexibleTime' => $value->flexibleTime,
                     'flexibleFormat' => $value->flexibleFormat,
                     'is_self_pay_form' => $value->is_self_pay_form,
                     'PS' => 3,
@@ -1621,6 +1629,8 @@ class PreviewController extends Controller
                     'form_counter' => $value4->form_counter,
                     'agreementBtn' => $value4->agreementBtn,
                     'flexibleBtn' => $value4->flexibleBtn,
+                    'flexibleDay' => $value4->flexibleDay,
+                    'flexibleTime' => $value4->flexibleTime,
                     'flexibleFormat' => $value4->flexibleFormat,
                     'is_self_pay_form' => $value4->is_self_pay_form,
                     'PS' => 4,
@@ -1684,6 +1694,8 @@ class PreviewController extends Controller
                 'form_counter' => $value->form_counter,
                 'agreementBtn' => $value->agreementBtn,
                 'flexibleBtn' => $value->flexibleBtn,
+                'flexibleDay' => $value->flexibleDay,
+                'flexibleTime' => $value->flexibleTime,
                 'flexibleFormat' => $value->flexibleFormat,
                 'is_self_pay_form' => $value->is_self_pay_form,
                 'PS' => 5,
@@ -1734,6 +1746,8 @@ class PreviewController extends Controller
                 'form_counter' => $valuePlacement->form_counter,
                 'agreementBtn' => $valuePlacement->agreementBtn,
                 'flexibleBtn' => $valuePlacement->flexibleBtn,
+                'flexibleDay' => $valuePlacement->flexibleDay,
+                'flexibleTime' => $valuePlacement->flexibleTime,
                 'flexibleFormat' => $valuePlacement->flexibleFormat,
                 'is_self_pay_form' => $valuePlacement->is_self_pay_form,
                 'PS' => 5,
@@ -1859,6 +1873,8 @@ class PreviewController extends Controller
                                 'form_counter' => $value->form_counter,
                                 'agreementBtn' => $value->agreementBtn,
                                 'flexibleBtn' => $value->flexibleBtn,
+                                'flexibleDay' => $value->flexibleDay,
+                                'flexibleTime' => $value->flexibleTime,
                                 'flexibleFormat' => $value->flexibleFormat,
                                 'is_self_pay_form' => $value->is_self_pay_form,
                                 'PS' => $value->PS,
@@ -1936,6 +1952,8 @@ class PreviewController extends Controller
                         'form_counter' => $value->form_counter,
                         'agreementBtn' => $value->agreementBtn,
                         'flexibleBtn' => $value->flexibleBtn,
+                        'flexibleDay' => $value->flexibleDay,
+                        'flexibleTime' => $value->flexibleTime,
                         'flexibleFormat' => $value->flexibleFormat,
                         'is_self_pay_form' => $value->is_self_pay_form,
                         'PS' => $value->PS,
@@ -2458,6 +2476,8 @@ class PreviewController extends Controller
                             'form_counter' => $value->form_counter,
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
+                            'flexibleDay' => $value->flexibleDay,
+                            'flexibleTime' => $value->flexibleTime,
                             'flexibleFormat' => $value->flexibleFormat,
                             'is_self_pay_form' => $value->is_self_pay_form,
                             'PS' => 1,
@@ -2541,6 +2561,8 @@ class PreviewController extends Controller
                             'form_counter' => $value->form_counter,
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
+                            'flexibleDay' => $value->flexibleDay,
+                            'flexibleTime' => $value->flexibleTime,
                             'flexibleFormat' => $value->flexibleFormat,
                             'is_self_pay_form' => $value->is_self_pay_form,
                             'PS' => 2,
@@ -2640,6 +2662,8 @@ class PreviewController extends Controller
                             'form_counter' => $value_placement->form_counter,
                             'agreementBtn' => $value_placement->agreementBtn,
                             'flexibleBtn' => $value_placement->flexibleBtn,
+                            'flexibleDay' => $value_placement->flexibleDay,
+                            'flexibleTime' => $value_placement->flexibleTime,
                             'flexibleFormat' => $value_placement->flexibleFormat,
                             'is_self_pay_form' => $value_placement->is_self_pay_form,
                             'PS' => 2,
@@ -2707,6 +2731,8 @@ class PreviewController extends Controller
                             'form_counter' => $value->form_counter,
                             'agreementBtn' => $value->agreementBtn,
                             'flexibleBtn' => $value->flexibleBtn,
+                            'flexibleDay' => $value->flexibleDay,
+                            'flexibleTime' => $value->flexibleTime,
                             'flexibleFormat' => $value->flexibleFormat,
                             'is_self_pay_form' => $value->is_self_pay_form,
                             'PS' => 3,
@@ -2792,6 +2818,8 @@ class PreviewController extends Controller
                         'form_counter' => $value4->form_counter,
                         'agreementBtn' => $value4->agreementBtn,
                         'flexibleBtn' => $value4->flexibleBtn,
+                        'flexibleDay' => $value4->flexibleDay,
+                        'flexibleTime' => $value4->flexibleTime,
                         'flexibleFormat' => $value4->flexibleFormat,
                         'is_self_pay_form' => $value4->is_self_pay_form,
                         'PS' => 4,
@@ -2848,6 +2876,8 @@ class PreviewController extends Controller
                     'form_counter' => $value5->form_counter,
                     'agreementBtn' => $value5->agreementBtn,
                     'flexibleBtn' => $value5->flexibleBtn,
+                    'flexibleDay' => $value5->flexibleDay,
+                    'flexibleTime' => $value5->flexibleTime,
                     'flexibleFormat' => $value5->flexibleFormat,
                     'is_self_pay_form' => $value5->is_self_pay_form,
                     'PS' => 5,
@@ -2900,6 +2930,8 @@ class PreviewController extends Controller
                     'form_counter' => $valuePlacement5->form_counter,
                     'agreementBtn' => $valuePlacement5->agreementBtn,
                     'flexibleBtn' => $valuePlacement5->flexibleBtn,
+                    'flexibleDay' => $valuePlacement5->flexibleDay,
+                    'flexibleTime' => $valuePlacement5->flexibleTime,
                     'flexibleFormat' => $valuePlacement5->flexibleFormat,
                     'is_self_pay_form' => $valuePlacement5->is_self_pay_form,
                     'PS' => 5,

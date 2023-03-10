@@ -193,7 +193,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                                        <input type="text" id="dob" name="dob" class="form-control datetimepicker-input" data-target="#datetimepicker4" placeholder="@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->BIRTH }} @endif">
+                                        <input type="text" id="dob" name="dob" class="form-control datetimepicker-input" data-target="#datetimepicker4" placeholder="@if(empty($student->sddextr)) Update Needed - Use Calendar icon @else {{ $student->sddextr->BIRTH }} - Use Calendar icon to change @endif" readonly>
 
                                         <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -256,7 +256,8 @@
 <script>
     $(document).ready(function() {
         $('#datetimepicker4').datetimepicker({
-            format: 'YYYY-MM-DD'
+            format: 'YYYY-MM-DD',
+            ignoreReadonly: true
         });
     });
 </script>

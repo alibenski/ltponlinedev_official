@@ -18,9 +18,14 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Exam Date</th>
 	            <th>Availability Day(s)</th>
 	            <th>Availability Time(s)</th>
+				<th>Availability Delivery Mode(s)</th>
+				<th>Flexible Day?</th>
+				<th>Flexible Time?</th>
+				<th>Flexible Format?</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>            
-	            <th>Assigned to Course?</th>            
+	            <th>Assigned to Course?</th>    
+				<th>Admin Placement Form Comment (from Assign Course)</th>        
 	            <th>Overall Approval</th>
 	            <th>Time Stamp</th>
 	        </tr>
@@ -48,9 +53,48 @@ Total Count: {{ count($placement_forms) }}
 				</td>
 				<td>{{ $form->dayInput }}</td>
 				<td>{{ $form->timeInput }}</td>
+				<td>
+					@if(!is_null($form->deliveryMode))
+						@if($form->deliveryMode === 0) in-person
+						@elseif($form->deliveryMode ===1) online
+						@elseif($form->deliveryMode ===2) both in-person and online
+						@endif
+					@else
+					-
+					@endif
+				
+				</td>
+				<td>
+						@if(is_null($form->flexibleDay))
+							-
+						@elseif($form->flexibleDay === 1)
+                        	Yes
+                        @else
+							NOT FLEXIBLE
+                        @endif
+					</td>
+					<td>
+						@if(is_null($form->flexibleTime))
+							-
+						@elseif($form->flexibleTime === 1)
+							Yes
+                        @else
+							NOT FLEXIBLE
+                        @endif
+					</td>
+					<td>
+						@if(is_null($form->flexibleFormat))
+							-
+						@elseif($form->flexibleFormat === 1)
+                            Yes
+                        @else
+							NOT FLEXIBLE
+                        @endif
+					</td>
 				<td>{{ $form->std_comments }}</td>
 				<td>{{ $form->course_preference_comment }}</td>
 				<td>@if($form->assigned_to_course == 1) Yes @endif</td>
+				<td>{{ $form->admin_plform_comment }}</td>
 				<td>{{ $form->overall_approval }}</td>
 				<td>{{ $form->created_at }}</td>
 			</tr>
@@ -66,9 +110,14 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Exam Date</th>
 	            <th>Availability Day(s)</th>
 	            <th>Availability Time(s)</th>
+				<th>Availability Delivery Mode(s)</th>
+				<th>Flexible Day?</th>
+				<th>Flexible Time?</th>
+				<th>Flexible Format?</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>	
-	            <th>Assigned to Course?</th>             
+	            <th>Assigned to Course?</th>      
+				<th>Admin Placement Form Comment (from Assign Course)</th>       
 	            <th>Overall Approval</th>
 	            <th>Time Stamp</th>
 	        </tr>

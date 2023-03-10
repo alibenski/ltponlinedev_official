@@ -1,6 +1,7 @@
-@extends('admin.no_sidebar_admin')
+@extends('layouts.adminLTE3.index')
 
 @section('customcss')
+	<link rel="stylesheet" href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}">
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
@@ -37,8 +38,8 @@
 				<input type="text" name="name" value="{{ $student->name }}" class="form-control" readonly>
 			</div>
 
-			<div class="form-group col-sm-12">
-				<label for="profile">Profile:</label>
+			<div class="form-group">
+				<label class="col-sm-12" for="profile">Profile:</label>
 				@include('ajax-profile-select')
 			</div>
 			
@@ -66,9 +67,11 @@
 		        @foreach ($languages as $id => $name)
 		        <div class="col-sm-4">
 		            <div class="input-group"> 
-		              <span class="input-group-addon">       
-		                <input type="radio" name="L" value="{{ $id }}" autocomplete="off">                 
-		              </span>
+		            	<div class="input-group-prepend">
+                    		<div class="input-group-text"> 
+		                	<input type="radio" name="L" value="{{ $id }}" autocomplete="off" aria-label="Radio button for language text input">                 
+							</div>
+						</div>
 		                <label type="text" class="form-control">{{ $name }}</label>
 		            </div>
 		        </div>
@@ -104,7 +107,7 @@
 		          </div>
 		    </div>
 
-			<div class="form-group col-sm-12 file-section hidden">
+			<div class="form-group col-sm-12 file-section d-none">
                 <div class="alert alert-default alert-block">
                   <div class="small text-danger">
                     <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
@@ -124,6 +127,8 @@
 				  
                 </div>
             </div>
+
+			@include('form.partials.regular_form.flexibilityOptionsAdminForm') 
 			
 			<div class="form-group col-sm-12">
 			    <label class="control-label" for="created_at">Manually Set Time Stamp: </label>
@@ -226,11 +231,26 @@ $(document).ready(function() {
   }); 
   $("input[name='decision']").click(function(){
       if($('#decision1').is(':checked')) {
-        $('.file-section').removeClass('hidden');
+        $('.file-section').removeClass('d-none');
       } else if ($('#decision2').is(':checked')) {
-        $('.file-section').addClass('hidden');
+        $('.file-section').addClass('d-none');
 		$("input[name='contractFile']").removeAttr("required");
       }  
+    });
+
+  $("select[name='Term']").on("change", function () {              
+      let term = $(this).val();
+      if (term.substr(-1) === '8' ) {
+          $("input#flexibleDayYes").prop("checked", true);
+          $("input#flexibleDayNo").prop("disabled", true);
+		  $("div#summerTermText").removeClass("d-none");
+
+      } else {
+          $("input#flexibleDayYes").prop("checked", false);
+		  $("input#flexibleDayNo").prop("disabled", false);
+          $("input#flexibleDayNo").prop("checked", false);
+		  $("div#summerTermText").addClass("d-none");
+      }
     });
 </script>
 

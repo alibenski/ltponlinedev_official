@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     /**
      * Admin Routes
      */
+    Route::get('change-index-number-form', 'ChangeIndexNumberController@changeIndexNumberForm');
+
     Route::get('no-show-list', 'AdminController@noShowList')->name('no-show-list');
 
     Route::get('admin-export-ocha', 'AdminController@adminExportOcha')->name('admin-export-ocha');

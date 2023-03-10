@@ -46,12 +46,14 @@ class CourseSchedController extends Controller
         $terms = Term::orderBy('Term_Code', 'desc')->get();
 
         $format = DB::table('tblLTP_Course_Format')->pluck("format_name_en", "id")->all();
+        $format_category = DB::table('tblLTP_Course_New_Format_Categories')->pluck("format_name_en", "id")->all();
+        $format_mode = DB::table('tblLTP_Course_New_Format_Modes')->pluck("format_name_en", "id")->all();
         $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en", "id")->all();
         $price = DB::table('tblLTP_Course_Price')->pluck("price", "id")->all();
         $teachers = Teachers::where('In_Out', '1')->get();
         $rooms = Room::all();
 
-        return view('courses_schedules.create', compact('courses', 'languages', 'schedules', 'terms', 'format', 'duration', 'teachers', 'rooms', 'price'));
+        return view('courses_schedules.create', compact('courses', 'languages', 'schedules', 'terms', 'format', 'format_category', 'format_mode', 'duration', 'teachers', 'rooms', 'price'));
     }
 
     /**
@@ -69,8 +71,18 @@ class CourseSchedController extends Controller
             'Tch_ID' => 'required|array',
             'room_id' => 'required|array',
             'specialized_course' => 'required',
+            'duration_id' => 'required',
+            'price_id' => 'required',
+            'format_category_id' => 'required',
+            'format_mode_id' => 'required',
         ));
-        
+
+        $format_id = NULL;
+        if ($request->format_mode_id == 1) {
+            $format_id = 9;
+        } else {
+            $format_id = 6;
+        }
         $course_id = $request->course_id;
         $term_id = $request->term_id;
         $schedule_id = $request->schedule_id;
@@ -97,7 +109,7 @@ class CourseSchedController extends Controller
                 ));
             }
         }
-        
+
         //loop for storing Code value to database
         $ingredients = [];
         for ($i = 0; $i < count($schedule_id); $i++) {
@@ -111,8 +123,10 @@ class CourseSchedController extends Controller
                 'room_id' => $room_id[$i],
                 'cs_unique' => $course_id . '-' . $schedule_id[$i] . '-' . $term_id,
                 'Te_Hours' => $request->duration_id,
-                'Te_Description' => $request->format_id,
+                'Te_Description' => $format_id,
                 'Te_Price' => $request->price_id,
+                'course_new_format_categories' => $request->format_category_id,
+                'course_new_format_modes' => $request->format_mode_id,
                 'created_by' => Auth::user()->id,
                 'created_at' =>  \Carbon\Carbon::now(),
                 'updated_at' =>  \Carbon\Carbon::now(),
@@ -124,14 +138,14 @@ class CourseSchedController extends Controller
             // fetch and create classroom according to the newly created record(s)  
             $unique_key = $course_id . '-' . $schedule_id[$i] . '-' . $term_id;
             $new_record = CourseSchedule::where('cs_unique', $unique_key);
-            
+
             $record_name = $new_record->first()->course->Description;
-            $new_record->update(['name' => 'LTP - '.$record_name.' - '.$course_id]);
+            $new_record->update(['name' => 'LTP - ' . $record_name . ' - ' . $course_id]);
 
             $this->saveClassRoom($new_record->get());
         }
 
-        $request->session()->flash('success', 'Course + Schedule saved!'); 
+        $request->session()->flash('success', 'Course + Schedule saved!');
         return redirect()->back();
     }
 
@@ -241,16 +255,16 @@ class CourseSchedController extends Controller
     public function destroy(Request $request, $id)
     {
         $course_schedule = CourseSchedule::find($id);
-        
+
         $classrooms = Classroom::orderBy('id', 'desc')->where('cs_unique', $course_schedule->cs_unique)->get();
         foreach ($classrooms as $classroom) {
-            $classroom->Code = $classroom->Code.'_del_'.$classroom->id;
+            $classroom->Code = $classroom->Code . '_del_' . $classroom->id;
             $classroom->deleted_by = Auth::user()->id;
             $classroom->save();
             $classroom->delete();
         }
-        
-        $course_schedule->cs_unique = $course_schedule->cs_unique.'_del_'.$course_schedule->id;
+
+        $course_schedule->cs_unique = $course_schedule->cs_unique . '_del_' . $course_schedule->id;
         $course_schedule->deleted_by = Auth::user()->id;
         $course_schedule->save();
         $course_schedule->delete();

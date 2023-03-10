@@ -5,6 +5,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/submit.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    
 @stop
 @section('content')
 <div id="loader">
@@ -41,50 +42,7 @@
                 <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>
                 <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                                    
                 
-                <div class="form-group">
-                    <label for="" class="col-md-12 control-label">Name:</label>
-
-                    <div class="col-md-12 inputGroupContainer input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-user"></i></span>
-                        </div>
-                        <input  name="" class="form-control"  type="text" value="{{ Auth::user()->sddextr->FIRSTNAME }} {{ Auth::user()->sddextr->LASTNAME }}" readonly>                                    
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="org" class="col-md-12 control-label">Organization:</label>
-
-                    <div class="col-md-12 inputGroupContainer input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-globe"></i></span>
-                        </div>
-                            <input  name="fakeOrg" class="form-control"  type="text" value="{{ $user->sddextr->torgan['Org name'] }} - {{ $user->sddextr->torgan['Org Full Name'] }}@if (Auth::user()->sddextr->DEPT === 'MSU') @if (Auth::user()->sddextr->countryMission)- {{ Auth::user()->sddextr->countryMission->ABBRV_NAME }} @else - (country update needed) @endif @endif @if (Auth::user()->sddextr->DEPT === 'NGO')@if (Auth::user()->sddextr->ngo_name)- {{ Auth::user()->sddextr->ngo_name }} @else - (NGO name update needed) @endif @endif" readonly>
-                            <input  name="org" class="form-control"  type="hidden" value="{{ $user->sddextr->torgan['Org name'] }}" readonly>
-                            @if (!is_null($user->sddextr->countryMission))
-                            <input  name="countryMission" class="form-control"  type="hidden" value="{{ $user->sddextr->countryMission->id }}" readonly>
-                            @endif
-                            @if (!is_null($user->sddextr->ngo_name))
-                            <input  name="ngoName" class="form-control"  type="hidden" value="{{ $user->sddextr->ngo_name }}" readonly>
-                            @endif
-                    </div>
-                </div>
-
-                <div class="form-group" style="@if(is_null($repos_lang)) display: none @else  @endif ">
-                    <label for="name" class="col-md-12 control-label">Last/Current UN Language Course:</label>
-
-                    <div class="col-md-12 inputGroupContainer input-group">
-                      @if(is_null($repos_lang)) None
-                      @else
-                        @foreach( $repos_lang as $value )
-                          <div class="input-group-prepend">
-                              <span class="input-group-text"><i class="fa fa-graduation-cap"></i></span>
-                          </div>
-                          <input  name="" class="form-control"  type="text" value="@if(empty($value->Te_Code)) {{ $value->coursesOld->Description }} @else {{ $value->courses->Description}} @endif last @if(empty($value->terms->Term_Name) || is_null($value->terms->Term_Name))No record found @else {{ $value->terms->Term_Name }} (@if($value->Result == 'P') Passed @elseif($value->Result == 'F') Failed @elseif($value->Result == 'I') Incomplete @else -- @endif) @endif" readonly>                                       
-                        @endforeach
-                      @endif
-                    </div>
-                </div>
+                    @include('form.partials.studentDetailsSection')
 
                     <div class="form-group">
                         <label class="col-md-12 control-label">Select language:</label>
@@ -151,107 +109,11 @@
                     </div>
 
                   <div class="placement-enrol" style="display: none"> {{-- start of placement test enrolment part --}}
-                    <div class="form-group col-md-12">
-                      <div class="alert alert-danger col-md-12">
-                        <h4 class="text-danger"><strong><i class="fa fa-warning"></i> Important Note:</strong></h4>
-                        <p class="text-justify"><strong>If you have already passed the LPE or the highest level of your chosen language but have not taken classes during two terms, you are still required to fill in the form below. However the placement test might not be necessary depending on the information you provide. The language training secretariat will examine your request and make a decision.</strong></p>
-                      </div>
-                    </div>
+                    @include('form.partials.placement_form.importantNote')
 
-                    <div class="col-md-12">
-                      <div class="card">
-                        <div class="card-header bg-primary col-md-12"><strong>Placement test dates</strong></div>
-                        <div class="card-body">
-                          <div class="row col-md-12">
-                            <div class="alert alert-info alert-dismissible alert-placement-instruction">
-                              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                              <p class="text-justify">Please select a date (required) for your placement test from the options available. If you are unable to take the placement test on the given dates, then please write the reason in the comments box and indicate your availability.  Where possible, we will try to accommodate your wishes.  If it is not possible, you will need to apply again for the following term.</p> 
-                              <p class="text-justify"> If you think that the placement test is not necessary for you, for whatever reason, please explain why in the box below.</p> 
-                            </div>
-                          </div>
-                          
-                          <div class="otherQuestions2 row col-md-12">
-                            <div class="insert-container col-md-12">
-                                <div class="form-group">
-                                  <div class="place-here col-md-12">
-                                  <label for="scheduleChoices"></label>
-                                    <div class="scheduleChoices col-md-12">
-                                    {{-- insert jquery schedules here --}}
-                                    </div>
-                                  </div>
-                                </div>
-                              <div class="insert-msg"></div>
+                    @include('form.partials.placement_form.testDates')
 
-                              <div class="col-md-12 form-group">
-                                <label class="col-md-12 control-label">Comments: <i>(optional)</i></label>
-                                <div class="col-md-12 ">
-                                <textarea name="std_comment" class="form-control" maxlength="3500" placeholder="For queries or comments about the placement test e.g. time, place, date, constraints, etc."></textarea>
-                                </div>
-                              </div>
-
-                            </div>    
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-12 mt-4">
-                      <div class="card">
-                        <div class="card-header bg-primary col-md-12"><strong>Information about your course preference</strong></div>
-                        <div class="card-body">
-                          <div class="row">
-                            <div class="col-md-12 alert alert-danger">
-                            <p>Please indicate the time and the days you are available to attend the course. Check/tick all that apply.</p>
-                            </div>
-                          </div>
-                          <div class="row col-md-12">
-                            <div class="otherQuestions col-md-12">
-                              <div class="form-group">
-                                <label for="" class="control-label">Time:</label>
-                                <div class="col-md-12">
-                                      <div class="input-group col-md-12">                             
-                                        <input id="morning" name="timeInput[]" class="with-font" type="checkbox" value="morning">
-                                        <label for="morning" class="form-control-static">Morning (8 to 9.30 or 10 a.m.) </label>
-                                      </div>
-                                      
-                                      <div class="input-group col-md-12">
-                                        <input id="afternoon" name="timeInput[]" class="with-font" type="checkbox" value="afternoon">
-                                        <label for="afternoon" class="form-control-static">Afternoon (12.30 to 2 or 2.30 p.m.)</label>
-                                      </div>
-                                 </div>
-                              </div>
-                            </div>
-
-                            <div class="otherQuestions3 col-md-12">
-                              <div class="form-group">
-                                <label for="" class="control-label">Day:</label>
-                                <div class="col-md-12">
-                                  @foreach ($days as $id => $name)
-                                      <div class="input-group col-md-12">                             
-                                        <input id="{{ $name }}" name="dayInput[]" class="with-font" type="checkbox" value="{{ $id }}" 
-                                        @if (substr($terms->Term_Code, -1) == '8')
-                                        checked                                            
-                                        @endif
-                                        >
-                                        <label for="{{ $name }}" class="form-control-static">{{ $name }}</label>
-                                      </div>
-                                  @endforeach
-                                 </div>
-                              </div>
-                            </div>
-
-                            <div class="col-md-12 form-group">
-                              <label class="col-md-12 control-label text-danger">Comments: <i>(required)</i></label>
-                              <div class="col-md-12 pink-border">
-                              <small class="text-danger"><i class="fa fa-warning"></i> <strong>You are required to fill this comment box. Failure to do so will nullify your submission.</strong></small>
-                              <textarea name="course_preference_comment" class="form-control" maxlength="3500" placeholder="Please indicate if you are available for in-person or/and online courses, preferred course, schedule flexbility, constraints, passed LPE, etc." required="required"></textarea>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div> {{-- end card body --}}
-                      </div>
-                    </div>
+                    @include('form.partials.placement_form.coursePreference')
 
                   </div> {{-- end of placement test enrolment part --}}
 
@@ -265,73 +127,16 @@
 
                   <div class="regular-enrol" style="display: none"> {{-- start of hidden fields --}}
 
-                    <div class="form-group">
-                        <label for="course_id" class="col-md-12 control-label">Course selected: </label>
-                        <div class="col-md-12">
-                          <div class="dropdown">
-                            <select class="col-md-12 form-control course_select_no wx" style="width: 100%; display: none;" name="course_id" autocomplete="off">
-                                <option value="">--- Select Course ---</option>
-                            </select>
-                          </div>
-                        </div>
-                    </div>
+                    @include('form.partials.regular_form.courseSelect')
 
-                    <div class="form-group">
-                        <label for="schedule_id" class="col-md-12 control-label">Available for the following schedule(s): </label>
-                        <div class="col-md-12">
-                          <div class="dropdown">
-                            <select class="col-md-12 form-control schedule_select_no select2-multi" multiple="multiple" style="width: 100%; display: none;" name="schedule_id[]" autocomplete="off">
-                              <option value="">Fill Out Language and Course Options</option>
-                            </select>
-                          </div>
-                          <button type="button" class="multi-clear button btn btn-danger mt-2" style="margin-bottom: 5px;" aria-label="Programmatically clear Select2 options">Clear selected schedule</button>
-                        </div>
-                    </div>
+                    @include('form.partials.regular_form.availableCourseSchedule')
+
+                    @include('form.partials.regular_form.flexibilityOptions') 
                     
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
-                        <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleBtn" class="form-control-static">I am flexible and can accept another <b>schedule (days/times)</b> if the selected class is full. 
-                        </label>
-                      </div>
-                    </div> 
+                    @include('form.partials.regular_form.realTimeChoices') 
 
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
-                        <input id="flexibleFormat" name="flexibleFormat" class="with-font" type="checkbox" value="1">
-                        <label for="flexibleFormat" class="form-control-static">I am flexible about the delivery mode and <b>can accept either in-person or online</b> if my first choice of mode is not available. 
-                        </label>
-                      </div>
-                    </div>  
-
-                    <div class="form-group">
-                        <label class="col-md-12 control-label">Comments: <span class="small text-danger"><strong>Required field</strong></span></label>
-                        <div class="col-md-12">
-                          <span class="text-danger">Please indicate below if you are available for in-person or/and online courses and any other relevant information, for example: time constraints or a second preferred course, etc.</span>
-                          <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder="" required="required"></textarea>
-                          {{-- <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small> --}}
-                        </div>
-                    </div>
-
-                          <!-- SHOW CHOICES REAL TIME -->
-                    <div class="form-group col-md-12">
-                      <div class="card">
-                        <div class="row">        
-                            <div class="form-group">
-                              <label for="first" class="col-md-12 control-label" style="color: green;">Student availability 1:</label>
-                              <div class="col-md-12 form-control-static"><p id="first" name=""></p></div>
-                            </div>
-
-                            <div class="form-group">
-                              <label for="second" class="col-md-12 control-label" style="color: #337ab7;">Student availability 2:</label>
-                              <div class="col-md-12 form-control-static"><p id="second"  name=""></p></div>        
-                            </div>
-                        </div>    
-                      </div>  
-                    </div>
                   </div> {{-- end of hidden fields --}}  
-                  
-                          <!-- END OF SHOW CHOICES REAL TIME -->   
+                   
                   <div class="submission-part" style="display: none"> 
 
                     <div class="form-group col-md-12">
