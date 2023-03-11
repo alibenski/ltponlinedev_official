@@ -56,13 +56,22 @@ class Handler extends ExceptionHandler
     public function sendEmail(Throwable $exception)
     {
         try {
-            $e = FlattenException::create($exception);
+            // $e = FlattenException::create($exception);
 
-            $handler = new HtmlErrorRenderer();
+            // $handler = new HtmlErrorRenderer();
+            // $css = $handler->getStylesheet();
+            // $content = $handler->getBody($e);
 
-            $html = $handler->getBody($e);
+            $content['message'] = $exception->getMessage();
+            $content['file'] = $exception->getFile();
+            $content['line'] = $exception->getLine();
+            $content['trace'] = $exception->getTrace();
 
-            Mail::to('allyson.frias@un.org')->send(new ExceptionOccured($html));
+            $content['url'] = request()->url();
+            $content['body'] = request()->all();
+            $content['ip'] = request()->ip();
+
+            Mail::to('allyson.frias@un.org')->send(new ExceptionOccured($content));
         } catch (Throwable $ex) {
             dd($ex);
         }
