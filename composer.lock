@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3814ea017e6bac93266a5edb36b0759",
+    "content-hash": "93de01fbe74510b2d1c349ea5e013e33",
     "packages": [
         {
             "name": "anhskohbo/no-captcha",
@@ -236,16 +236,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.261.8",
+            "version": "3.261.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "9c38c82b7d3fb2b15957e71cae3957450e131ed8"
+                "reference": "d91e6f89a6c41e8df859b0d313150386cfee6f6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9c38c82b7d3fb2b15957e71cae3957450e131ed8",
-                "reference": "9c38c82b7d3fb2b15957e71cae3957450e131ed8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d91e6f89a6c41e8df859b0d313150386cfee6f6a",
+                "reference": "d91e6f89a6c41e8df859b0d313150386cfee6f6a",
                 "shasum": ""
             },
             "require": {
@@ -324,9 +324,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.8"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.9"
             },
-            "time": "2023-03-09T19:23:27+00:00"
+            "time": "2023-03-10T19:25:08+00:00"
         },
         {
             "name": "barryvdh/laravel-debugbar",
@@ -1381,16 +1381,16 @@
         },
         {
             "name": "jdavidbakr/mail-tracker",
-            "version": "4.0.11",
+            "version": "5.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jdavidbakr/mail-tracker.git",
-                "reference": "2a631b8b3e6fa1411966aa2a2c86b4be8e544ead"
+                "reference": "8802719db16a099d56ba7a3808267b7451fbbf28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jdavidbakr/mail-tracker/zipball/2a631b8b3e6fa1411966aa2a2c86b4be8e544ead",
-                "reference": "2a631b8b3e6fa1411966aa2a2c86b4be8e544ead",
+                "url": "https://api.github.com/repos/jdavidbakr/mail-tracker/zipball/8802719db16a099d56ba7a3808267b7451fbbf28",
+                "reference": "8802719db16a099d56ba7a3808267b7451fbbf28",
                 "shasum": ""
             },
             "require": {
@@ -1410,9 +1410,6 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                },
                 "laravel": {
                     "providers": [
                         "jdavidbakr\\MailTracker\\MailTrackerServiceProvider"
@@ -1444,9 +1441,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jdavidbakr/mail-tracker/issues",
-                "source": "https://github.com/jdavidbakr/mail-tracker/tree/4.0.11"
+                "source": "https://github.com/jdavidbakr/mail-tracker/tree/5.0.9"
             },
-            "time": "2020-12-24T23:27:30+00:00"
+            "time": "2022-02-23T13:37:42+00:00"
         },
         {
             "name": "laravel/framework",

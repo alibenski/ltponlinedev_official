@@ -71,7 +71,7 @@ class SendDefaultWaitlistEmailJob implements ShouldQueue
     {
         Mail::raw("SendDefaultWaitlistEmail Delivery Job Failure. Something is wrong with the code in App\Jobs\SendDefaultWaitlistEmailJob. Stop cron/queue:work, fix the code, do queue:restart, then do queue:work or restart CRON", function ($message) {
             $message->from('do_not_reply_ltp_online@unog.ch', 'CLM Language DO NOT REPLY');
-            $message->to('allyson.frias@un.org')->subject('Alert: Mail Delivery Failure on Send General Email Function');
+            $message->to('allyson.frias@un.org')->subject('Alert: Mail Delivery Failure on SendDefaultWaitlistEmail Function');
             $message->text('There was an error executing SendDefaultWaitlistEmail.php');
         });
     }
