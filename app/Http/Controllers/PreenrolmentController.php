@@ -1086,7 +1086,7 @@ class PreenrolmentController extends Controller
                     'actor_id' => Auth::user()->id,
                     'enrolment_id' => $enrolmentForm->id,
                     'filename' => $filename,
-                    'size' => $request->contractFile->getClientSize(),
+                    'size' => $request->contractFile->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_contract_file->save();
@@ -1105,7 +1105,7 @@ class PreenrolmentController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
@@ -1121,7 +1121,7 @@ class PreenrolmentController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_pay_file->save();

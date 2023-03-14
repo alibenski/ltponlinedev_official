@@ -124,7 +124,7 @@ class SelfPayController extends Controller
                 'actor_id' => Auth::user()->id,
                 $form_type => $data_id->id,
                 'filename' => $filename,
-                'size' => $request->identityfile2->getClientSize(),
+                'size' => $request->identityfile2->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_2_file->save();
@@ -141,7 +141,7 @@ class SelfPayController extends Controller
                 'actor_id' => Auth::user()->id,
                 $form_type => $data_id->id,
                 'filename' => $filename,
-                'size' => $request->contractFile->getClientSize(),
+                'size' => $request->contractFile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -158,7 +158,7 @@ class SelfPayController extends Controller
                 'actor_id' => Auth::user()->id,
                 $form_type => $data_id->id,
                 'filename' => $filename,
-                'size' => $request->addFile0->getClientSize(),
+                'size' => $request->addFile0->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_0->save();
@@ -175,7 +175,7 @@ class SelfPayController extends Controller
                 'actor_id' => Auth::user()->id,
                 $form_type => $data_id->id,
                 'filename' => $filename,
-                'size' => $request->addFile1->getClientSize(),
+                'size' => $request->addFile1->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_1->save();
@@ -192,7 +192,7 @@ class SelfPayController extends Controller
                 'actor_id' => Auth::user()->id,
                 $form_type => $data_id->id,
                 'filename' => $filename,
-                'size' => $request->addFile2->getClientSize(),
+                'size' => $request->addFile2->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_2->save();
@@ -271,7 +271,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -287,7 +287,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -363,7 +363,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -379,7 +379,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -470,7 +470,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -486,7 +486,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -572,7 +572,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -588,7 +588,7 @@ class SelfPayController extends Controller
                 // 'user_id' => get the id of form owner
                 // 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
         }
@@ -1041,7 +1041,7 @@ class SelfPayController extends Controller
                 'user_id' => Auth::user()->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
@@ -1057,7 +1057,7 @@ class SelfPayController extends Controller
                 'user_id' => Auth::user()->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_pay_file->save();
@@ -1154,7 +1154,7 @@ class SelfPayController extends Controller
                     'actor_id' => Auth::user()->id,
                     'enrolment_id' => $data_id->id,
                     'filename' => $filename,
-                    'size' => $request->identityfile2->getClientSize(),
+                    'size' => $request->identityfile2->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_identity_2_file->save();
@@ -1171,7 +1171,7 @@ class SelfPayController extends Controller
                     'actor_id' => Auth::user()->id,
                     'enrolment_id' => $data_id->id,
                     'filename' => $filename,
-                    'size' => $request->contractFile->getClientSize(),
+                    'size' => $request->contractFile->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_contract_file->save();
@@ -1188,7 +1188,7 @@ class SelfPayController extends Controller
                     'actor_id' => Auth::user()->id,
                     'enrolment_id' => $data_id->id,
                     'filename' => $filename,
-                    'size' => $request->addFile0->getClientSize(),
+                    'size' => $request->addFile0->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_add_file_0->save();
@@ -1205,7 +1205,7 @@ class SelfPayController extends Controller
                     'actor_id' => Auth::user()->id,
                     'enrolment_id' => $data_id->id,
                     'filename' => $filename,
-                    'size' => $request->addFile1->getClientSize(),
+                    'size' => $request->addFile1->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_add_file_1->save();
@@ -1222,7 +1222,7 @@ class SelfPayController extends Controller
                     'actor_id' => Auth::user()->id,
                     'enrolment_id' => $data_id->id,
                     'filename' => $filename,
-                    'size' => $request->addFile2->getClientSize(),
+                    'size' => $request->addFile2->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_add_file_2->save();

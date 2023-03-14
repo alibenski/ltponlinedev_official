@@ -487,7 +487,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->identityfile2->getClientSize(),
+                'size' => $request->identityfile2->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_2_file->save();
@@ -504,7 +504,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->contractFile->getClientSize(),
+                'size' => $request->contractFile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -521,7 +521,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->addFile0->getClientSize(),
+                'size' => $request->addFile0->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_0->save();
@@ -538,7 +538,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->addFile1->getClientSize(),
+                'size' => $request->addFile1->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_1->save();
@@ -555,7 +555,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->addFile2->getClientSize(),
+                'size' => $request->addFile2->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_2->save();
@@ -1466,7 +1466,7 @@ class PlacementFormController extends Controller
                     'actor_id' => Auth::user()->id,
                     'placement_id' => $enrolmentForm->id,
                     'filename' => $filename,
-                    'size' => $request->contractFile->getClientSize(),
+                    'size' => $request->contractFile->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_contract_file->save();
@@ -1485,7 +1485,7 @@ class PlacementFormController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
@@ -1501,7 +1501,7 @@ class PlacementFormController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_pay_file->save();
