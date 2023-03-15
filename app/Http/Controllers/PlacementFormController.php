@@ -682,6 +682,7 @@ class PlacementFormController extends Controller
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', Session::get('Term'))->first();
 
         if (!Session::has('Term')) {
             // count(): Parameter must be an array or an object that implements Countable
@@ -733,7 +734,7 @@ class PlacementFormController extends Controller
 
         // $allQueries = array_merge($queries, $currentQueries);
         $placement_forms = $placement_forms->withTrashed()->paginate(20)->appends($queries);
-        return view('placement_forms.index', compact('placement_forms', 'languages', 'org', 'terms'));
+        return view('placement_forms.index', compact('placement_forms', 'languages', 'org', 'terms', 'selectedTerm'));
     }
 
     /**

@@ -838,6 +838,7 @@ class PreenrolmentController extends Controller
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', Session::get('Term'))->first();
 
         if (!Session::has('Term')) {
             $enrolment_forms = null;
@@ -890,7 +891,7 @@ class PreenrolmentController extends Controller
         $enrolment_forms->select('INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form', 'selfpay_approval', 'deleted_at', 'updated_by_admin', 'modified_by', 'cancelled_by_admin')->groupBy('INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form', 'selfpay_approval', 'deleted_at', 'updated_by_admin', 'modified_by', 'cancelled_by_admin');
         // $allQueries = array_merge($queries, $currentQueries);
         $enrolment_forms = $enrolment_forms->withTrashed()->paginate(20)->appends($queries);
-        return view('preenrolment.index', compact('enrolment_forms', 'languages', 'org', 'terms'));
+        return view('preenrolment.index', compact('enrolment_forms', 'languages', 'org', 'terms', 'selectedTerm'));
     }
 
     /**

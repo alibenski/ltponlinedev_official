@@ -59,7 +59,7 @@ class SelfPayController extends Controller
     {
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
-        // $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', Session::get('Term'))->first();
 
         if (!Session::has('Term')) {
             $selfpayforms = null;
@@ -102,7 +102,7 @@ class SelfPayController extends Controller
         }
 
         $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
-        return view('selfpayforms.index', compact('selfpayforms', 'languages', 'org'));
+        return view('selfpayforms.index', compact('selfpayforms', 'languages', 'org', 'selectedTerm'));
     }
 
     public function storeBackIdContractAttachments($request, $index_id, $term_id, $language_id, $course_id, $data_id, $userId, $placement_form)
@@ -696,6 +696,7 @@ class SelfPayController extends Controller
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', Session::get('Term'))->first();
 
         if (!Session::has('Term')) {
             $selfpayforms = null;
@@ -739,7 +740,7 @@ class SelfPayController extends Controller
 
 
         $selfpayforms = $selfpayforms->paginate(20)->appends($queries);
-        return view('selfpayforms.index-placement-selfpay', compact('selfpayforms', 'languages', 'org', 'terms'));
+        return view('selfpayforms.index-placement-selfpay', compact('selfpayforms', 'languages', 'org', 'terms', 'selectedTerm'));
     }
 
     public function approvedPlacementSelfPay(Request $request)
