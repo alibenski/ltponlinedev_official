@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTimeInterface;
 
 class PreviewTempSort extends Model
 {
@@ -73,5 +74,15 @@ class PreviewTempSort extends Model
     public function preview()
     {
         return $this->hasOne('App\Preview', 'CodeIndexID', 'CodeIndexID');
+    }
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }
