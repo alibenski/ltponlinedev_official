@@ -2,13 +2,13 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
 use Illuminate\Session\TokenMismatchException;
 
 use Mail;
-use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
+use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use App\Mail\ExceptionOccured;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -34,12 +34,12 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return void
      * 
-     * @throws \Exception
+     * @throws \Throwable
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
             $this->sendEmail($exception); // sends an email
@@ -50,20 +50,29 @@ class Handler extends ExceptionHandler
     /**
      * Sends an email to the developer about the exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return void
      */
-    public function sendEmail(Exception $exception)
+    public function sendEmail(Throwable $exception)
     {
         try {
-            $e = FlattenException::create($exception);
+            // $e = FlattenException::create($exception);
 
-            $handler = new SymfonyExceptionHandler();
+            // $handler = new HtmlErrorRenderer();
+            // $css = $handler->getStylesheet();
+            // $content = $handler->getBody($e);
 
-            $html = $handler->getHtml($e);
+            $content['message'] = $exception->getMessage();
+            $content['file'] = $exception->getFile();
+            $content['line'] = $exception->getLine();
+            $content['trace'] = $exception->getTrace();
 
-            Mail::to('allyson.frias@un.org')->send(new ExceptionOccured($html));
-        } catch (Exception $ex) {
+            $content['url'] = request()->url();
+            $content['body'] = request()->all();
+            $content['ip'] = request()->ip();
+
+            Mail::to('allyson.frias@un.org')->send(new ExceptionOccured($content));
+        } catch (Throwable $ex) {
             dd($ex);
         }
     }
@@ -72,12 +81,12 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         if ($exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException) {
 

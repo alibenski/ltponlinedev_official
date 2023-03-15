@@ -15,7 +15,7 @@ class SendBroadcastJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $unique_email_address; 
+    private $unique_email_address;
 
     /**
      * The number of times the job may be attempted.
@@ -33,7 +33,7 @@ class SendBroadcastJob implements ShouldQueue
      */
     public function __construct($unique_email_address)
     {
-        $this->unique_email_address = $unique_email_address; 
+        $this->unique_email_address = $unique_email_address;
     }
 
     /**
@@ -47,7 +47,7 @@ class SendBroadcastJob implements ShouldQueue
         foreach ($this->unique_email_address as $sddextr_email_address) {
             try {
                 Mail::to($sddextr_email_address)->send(new sendBroadcastEnrolmentIsOpen($sddextr_email_address));
-            }  catch ( \Exception $e) {
+            } catch (\Exception $e) {
                 $emailError[] = $sddextr_email_address;
             }
             $sddextr_email_address = null;
@@ -63,10 +63,10 @@ class SendBroadcastJob implements ShouldQueue
      */
     public function failed()
     {
-        Mail::raw("Broadcast Mail Delivery Job Failure. Something is wrong with the code in App\Jobs\sendBroadcastJob. Stop cron/queue:work, fix the code, do queue:restart, then do queue:work or restart CRON", function($message) {
+        Mail::raw("Broadcast Mail Delivery Job Failure. Something is wrong with the code in App\Jobs\sendBroadcastJob. There was an error executing sendBroadcastJob.php. Stop cron/queue:work, fix the code, do queue:restart, then do queue:work or restart CRON", function ($message) {
             $message->from('do_not_reply_ltp_online@unog.ch', 'CLM Language DO NOT REPLY');
             $message->to('allyson.frias@un.org')->subject('Alert: Mail Delivery Failure on Broadcast');
-            $message->text('There was an error executing sendBroadcastJob.php');
+            // $message->text('There was an error executing sendBroadcastJob.php');
         });
     }
 }

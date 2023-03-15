@@ -103,7 +103,7 @@ class LateRegisterController extends Controller
             //Create new record in db table
             $attachment_contract_file = new FileNewUser([
                 'filename' => $filename,
-                'size' => $request->contractfile->getClientSize(),
+                'size' => $request->contractfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -118,7 +118,7 @@ class LateRegisterController extends Controller
             //Create new record in db table
             $attachment_contract_file2 = new FileNewUser([
                 'filename' => $filename2,
-                'size' => $request->contractfile2->getClientSize(),
+                'size' => $request->contractfile2->getSize(),
                 'path' => $filestore2,
             ]);
             $attachment_contract_file2->save();

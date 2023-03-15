@@ -43,36 +43,39 @@ class ApprovalReminder extends Command
      * @return mixed
      */
     public function handle()
-    {       
+    {
         // check if today is between enrolment date begin and approval limit date
         $now_date = Carbon::now();
-        $now_year = Carbon::now()->year; 
+        $now_year = Carbon::now()->year;
         // get the correct enrolment term object
         $enrolment_term = Term::whereYear('Enrol_Date_Begin', $now_year)
-                        ->orderBy('Term_Code', 'desc')
-                        ->where('Enrol_Date_Begin', '<=', $now_date)
-                        ->where('Approval_Date_Limit_HR', '>=', $now_date)
-                        ->get()->min();
-            if ($enrolment_term) {
-                Log::info("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term->Term_Code);
+            ->orderBy('Term_Code', 'desc')
+            ->where('Enrol_Date_Begin', '<=', $now_date)
+            ->where('Approval_Date_Limit_HR', '>=', $now_date)
+            ->get()->min();
+        if ($enrolment_term) {
+            Log::info("ApprovalReminder.php excuted in Enrolment Term : " . $enrolment_term->Term_Code);
 
-                // execute method function to send reminder emails found in the controller from construct()
-                $this->email->sendReminderEmails(); 
-                $this->placement_email->sendReminderEmailsPlacement(); 
+            // execute method function to send reminder emails found in the controller from construct()
+            $this->email->sendReminderEmails();
+            $this->placement_email->sendReminderEmailsPlacement();
 
-                // notify admin by email
-                Mail::raw("ApprovalReminder.php executed in Enrolment Term : ".$enrolment_term, function($message) use ($enrolment_term) {
+            // notify admin by email
+            Mail::raw("ApprovalReminder.php executed in Enrolment Term : " . $enrolment_term, function ($message) use ($enrolment_term) {
                 $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
-                $message->to('allyson.frias@un.org')->subject("ApprovalReminder.php excuted in Enrolment Term : ".$enrolment_term->Term_Code);
-                });
-            } else {
-                Log::info("Enrolment Term ".$enrolment_term." is false in ApprovalReminder.php");
+                $message->to('allyson.frias@un.org')->subject("ApprovalReminder.php excuted in Enrolment Term : " . $enrolment_term->Term_Code);
+            });
 
-                // notify admin by email
-                Mail::raw("Enrolment Term variable is false in ApprovalReminder.php", function($message) {
+            return 1;
+        } else {
+            Log::info("Enrolment Term " . $enrolment_term . " is false in ApprovalReminder.php");
+
+            // notify admin by email
+            Mail::raw("Enrolment Term variable is false in ApprovalReminder.php", function ($message) {
                 $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
                 $message->to('allyson.frias@un.org')->subject("Enrolment Term variable is false in ApprovalReminder.php");
-                });
-            }
+            });
+        }
+        return 0;
     }
 }

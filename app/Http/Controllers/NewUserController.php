@@ -166,46 +166,46 @@ class NewUserController extends Controller
      */
     public function postNewNewUser(Request $request)
     {
-        //validate the data
-        $this->validate($request, array(
-            'gender' => 'required|string|',
-            'title' => 'required|',
-            'profile' => 'required|',
-            'nameLast' => 'required|string|max:255',
-            'nameFirst' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
-            'org' => 'required|string|max:255',
-            'contact_num' => 'required|max:255',
-            // 'cat' => 'required|',
-            // 'student_cat' => 'required|',
-            'dob' => 'required',
-            'g-recaptcha-response' => 'required|captcha',
-        ));
+        // //validate the data
+        // $this->validate($request, array(
+        //     'gender' => 'required|string|',
+        //     'title' => 'required|',
+        //     'profile' => 'required|',
+        //     'nameLast' => 'required|string|max:255',
+        //     'nameFirst' => 'required|string|max:255',
+        //     'email' => 'required|string|email|max:255|unique:tblLTP_New_Users,email',
+        //     'org' => 'required|string|max:255',
+        //     'contact_num' => 'required|max:255',
+        //     // 'cat' => 'required|',
+        //     // 'student_cat' => 'required|',
+        //     'dob' => 'required',
+        //     'g-recaptcha-response' => 'required|captcha',
+        // ));
 
-        //store in database
-        $newUser = new NewUser;
-        $newUser->indexno_new = $request->indexno;
-        $newUser->gender = $request->gender;
-        $newUser->title = $request->title;
-        $newUser->profile = $request->profile;
-        $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
-        $newUser->nameLast = strtoupper($request->nameLast);
-        $newUser->nameFirst = $request->nameFirst;
-        $newUser->email = $request->email;
-        $newUser->org = $request->org;
-        $newUser->contact_num = $request->contact_num;
-        $newUser->dob = $request->dob;
-        // $newUser->cat = $request->cat;
-        // $newUser->student_cat = $request->student_cat;
-        $newUser->save();
-        // send email notification to Secretariat to approve his login credentials to the system and sddextr record
-        Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . strtoupper($request->nameLast), function ($message) {
-            $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
-            $message->to('clm_language@un.org')->subject('Notification: New UN User Request');
-        });
-        // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
+        // //store in database
+        // $newUser = new NewUser;
+        // $newUser->indexno_new = $request->indexno;
+        // $newUser->gender = $request->gender;
+        // $newUser->title = $request->title;
+        // $newUser->profile = $request->profile;
+        // $newUser->name = $request->nameFirst . ' ' . strtoupper($request->nameLast);
+        // $newUser->nameLast = strtoupper($request->nameLast);
+        // $newUser->nameFirst = $request->nameFirst;
+        // $newUser->email = $request->email;
+        // $newUser->org = $request->org;
+        // $newUser->contact_num = $request->contact_num;
+        // $newUser->dob = $request->dob;
+        // // $newUser->cat = $request->cat;
+        // // $newUser->student_cat = $request->student_cat;
+        // $newUser->save();
+        // // send email notification to Secretariat to approve his login credentials to the system and sddextr record
+        // Mail::raw("New UN user request for: " . $request->nameFirst . ' ' . strtoupper($request->nameLast), function ($message) {
+        //     $message->from('clm_onlineregistration@unog.ch', 'CLM Online Registration Administrator');
+        //     $message->to('clm_language@un.org')->subject('Notification: New UN User Request');
+        // });
+        // // Mail::to($query_sddextr_record->EMAIL)->send(new NewUserNotification($sddextr_email_address));
 
-        return redirect()->route('new_user_msg');
+        // return redirect()->route('new_user_msg');
     }
 
     public function getNewOutsideUser()
@@ -320,7 +320,7 @@ class NewUserController extends Controller
             // 'student_cat' => 'required|',
             'dob' => 'required',
             'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'g-recaptcha-response' => 'required|captcha',
+            // 'g-recaptcha-response' => 'required|captcha',
         ));
 
         //validate 2nd attachment for Spouse profile
@@ -352,7 +352,7 @@ class NewUserController extends Controller
             //Create new record in db table
             $attachment_contract_file = new FileNewUser([
                 'filename' => $filename,
-                'size' => $request->contractfile->getClientSize(),
+                'size' => $request->contractfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -367,7 +367,7 @@ class NewUserController extends Controller
             //Create new record in db table
             $attachment_contract_file2 = new FileNewUser([
                 'filename' => $filename2,
-                'size' => $request->contractfile2->getClientSize(),
+                'size' => $request->contractfile2->getSize(),
                 'path' => $filestore2,
             ]);
             $attachment_contract_file2->save();
@@ -610,7 +610,7 @@ class NewUserController extends Controller
             //UPDATE record in db table
             $attachment_contract_file->update([
                 'filename' => $filename,
-                'size' => $request->contractfile->getClientSize(),
+                'size' => $request->contractfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -629,7 +629,7 @@ class NewUserController extends Controller
                 //UPDATE record in db table
                 $attachment_contract_file2->update([
                     'filename' => $filename2,
-                    'size' => $request->contractfile2->getClientSize(),
+                    'size' => $request->contractfile2->getSize(),
                     'path' => $filestore2,
                 ]);
                 $attachment_contract_file2->save();
@@ -641,7 +641,7 @@ class NewUserController extends Controller
                 //Create record in db table
                 $attachment_contract_file2 = new FileNewUser([
                     'filename' => $filename2,
-                    'size' => $request->contractfile2->getClientSize(),
+                    'size' => $request->contractfile2->getSize(),
                     'path' => $filestore2,
                 ]);
                 $attachment_contract_file2->save();

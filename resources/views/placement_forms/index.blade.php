@@ -245,7 +245,12 @@
 				<td>
 				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
-				<td>{{ $form->created_at}}</td>
+				<td>
+					{{ $form->created_at}} <br />
+					@if ($form->created_at > $selectedTerm->Enrol_Date_End)
+						<span class="badge badge-danger">Late Enrolment</span>
+					@endif				
+				</td>
 				<td>
 					@if ($form->deleted_at && !is_null($form->cancelled_by_admin))
 	            		{{ $form->cancelledBy->name }}

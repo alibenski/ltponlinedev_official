@@ -438,7 +438,7 @@ class UserController extends Controller
             //Create new record in db table
             $attachment_contract_file = new FileNewUser([
                 'filename' => $filename,
-                'size' => $request->contractfile->getClientSize(),
+                'size' => $request->contractfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -453,7 +453,7 @@ class UserController extends Controller
             //Create new record in db table
             $attachment_contract_file2 = new FileNewUser([
                 'filename' => $filename2,
-                'size' => $request->contractfile2->getClientSize(),
+                'size' => $request->contractfile2->getSize(),
                 'path' => $filestore2,
             ]);
             $attachment_contract_file2->save();
@@ -965,7 +965,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
@@ -982,7 +982,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_pay_file->save();
@@ -1061,7 +1061,7 @@ class UserController extends Controller
                 'actor_id' => Auth::user()->id,
                 'enrolment_id' => $new_enrolment->id,
                 'filename' => $filename,
-                'size' => $request->contractFile->getClientSize(),
+                'size' => $request->contractFile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -1238,7 +1238,7 @@ class UserController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $new_enrolment->id,
                 'filename' => $filename,
-                'size' => $request->contractFile->getClientSize(),
+                'size' => $request->contractFile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();

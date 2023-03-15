@@ -125,7 +125,12 @@
                 <td>{{ $form->L }}</td>
 				<td>@if(empty($form->filesId->path)) None @else <a href="{{ Storage::url($form->filesId->path) }}" target="_blank"><i class="fas fa-file fa-2x" aria-hidden="true"></i></a> @endif</td>
 				<td>@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="far fa-file fa-2x" aria-hidden="true"></i></a> @endif </td>
-				<td>{{ $form->created_at}}</td>
+				<td>
+                    {{ $form->created_at}}
+                    @if ($form->created_at > $selectedTerm->Enrol_Date_End)
+						<span class="badge badge-danger">Late Enrolment</span>
+					@endif
+                </td>
 			</tr>
 			@endforeach
 	    </tbody>

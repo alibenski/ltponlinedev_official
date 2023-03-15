@@ -192,7 +192,12 @@
 						<input type="hidden" name="tecode" value="{{$form->Te_Code}}">
 						<input type="hidden" name="_token" value="{{ Session::token() }}">
 					</td>
-					<td>{{ $form->created_at}}</td>
+					<td>
+						{{ $form->created_at}} <br />
+						@if ($form->created_at > $selectedTerm->Enrol_Date_End)
+							<span class="badge badge-danger">Late Enrolment</span>
+						@endif
+					</td>
 					<td>
 						@if ($form->deleted_at && !is_null($form->cancelled_by_admin))
 		            		{{ $form->cancelledBy->name }}
