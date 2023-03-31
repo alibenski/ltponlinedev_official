@@ -244,7 +244,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <p style="text-align: justify">We will use Microsoft Teams as the teleconferencing tool for your virtual course sessions taking place at the time indicated.  Your teacher will email you further details about how to join these sessions before the course begins.</p>
+                                    <p style="text-align: justify">We will use Microsoft Teams as the teleconferencing tool for your virtual course sessions taking place at the time indicated.  Your teacher will email you further details about how to join these classes at least 24 hours before the course begins.</p>
                                     
                                     <h4><strong><u>Important information for IN-PERSON courses</u></strong></h4>
                                     <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/Bocage_Plan.pdf">Map of Palais des Nations, Annex Bocage (location of classrooms)</a> <br /> - <a href="https://learning.unog.ch/node/1446">Grounds pass and/or parking badge for vehicles</a></p>

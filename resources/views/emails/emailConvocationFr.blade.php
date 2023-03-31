@@ -38,7 +38,7 @@
 
     <ul>
         <li style="text-align: justify">Certains cours nécessitent l’achat de livres. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>
-        <li style="text-align: justify">Votre professeur vous enverra un courriel contenant des instructions supplémentaires et le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage en ligne CLM Moodle.</li>
+        <li style="text-align: justify">Au plus tard 24 heures avant votre premier cours, votre professeur vous enverra un courriel contenant des instructions supplémentaires et le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage en ligne CLM Moodle.</li>
     </ul>
     <h4><strong><u>Informations importantes pour les cours EN LIGNE</u></strong></h4>
     <p style="text-align: justify">Veuillez prendre connaissance du matériel requis :</p>
