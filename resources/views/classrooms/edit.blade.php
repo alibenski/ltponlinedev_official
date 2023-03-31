@@ -157,7 +157,7 @@
 				        <div class="col-sm-2">
 					        @foreach ($schedule as $id => $name)
 					            <div class="checkbox">
-					                <label class=@if ($id == $classroom->schedule_id) "mark" @endif>
+					                <label class=@if ($id == $classroom->schedule_id) "mark" @endif @if ($id == $classroom->schedule_id) style="background-color: aqua; font-weight: 700;" @endif>
 					                    <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id" multiple="multiple" value="{{ $id }}" @if ($id == $classroom->schedule_id) @else disabled="true" @endif /> {{ $name }} 
 					                </label>
 					            </div>

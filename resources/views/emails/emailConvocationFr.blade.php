@@ -51,7 +51,7 @@
     </table>
     <p style="text-align: justify">Nous utiliserons Microsoft Teams comme outil de téléconférence. Les sessions auront lieu au moment indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début des cours.</p>
     
-    <h4><strong><u>Informations importantes pour les cours IN-PERSON</u></strong></h4>
+    <h4><strong><u>Informations importantes pour les cours EN PRÉSENTIEL</u></strong></h4>
     <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/Bocage_Plan.pdf">Plan du Palais des Nations, Annexe Bocage (localisation des salles de cours)</a> <br /> - <a href="https://learning.unog.ch/fr/node/1446">Carte d'accès au terrain et/ou badge de stationnement pour les véhicules</a></p>
 
     <h4><strong><u>Vous ne pouvez pas être présent(e)s la première semaine du trimestre ? </u></strong></h4>
