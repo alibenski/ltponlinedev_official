@@ -8,137 +8,102 @@
     </style>
 @stop
 @section('content')
-<div class="container">
-  <div class="row">
-  <div class="col-md-3">
-      <div class="card">
-          <div class="card-header bg-info text-center"><strong>Information/Content/Format of UN Language Courses</strong></div>
-          <div class="card-body">
-              <ul  class="list-group">
-                  <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a>
-                  <a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese Info</a>
-                  <a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English Info</a>
-                  <a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French Info</a>
-                  <a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian Info</a>
-                  <a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish Info</a>
-              </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">Enrolment Form for: 
+              <strong>
+                @if(empty($next_term))
+                Enrolment Period Closed
+                @else 
+                {{ $next_term->Term_Name.' - '.$next_term->Comments.' Term' }}
+                @endif
+              </strong>
+            </div>
+            <div class="card-body">
+              <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">
+                  {{ csrf_field() }}
+
+                  <!-- MAKE A DECISION SECTION -->
+                  <div class="d-flex form-group">
+                      <label class="col-md-3 control-label"><strong>Enrolment Type:</strong></label>
+
+                        <div class="col-md-5">
+                                  <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
+                                  <label for="decision1" class="form-control-static">I am paying for my course / I am initially paying then my organization will reimburse</label>
+                        </div>
+
+                        <div class="col-md-4">
+                                  <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
+                                  <label for="decision2" class="form-control-static">My organization is paying for my course</label>
+                        </div>
+                  </div>
+
+                  <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
+                    <p>Before continuing, please follow the instructions:</p>
+                    <ol>
+                      <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank">HERE</a></li>
+                      <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
+                      <li>Prepare a copy of either one of the following documents <strong>which covers the whole duration of the term:</strong>
+                        <ul>
+                          <li>UN agency badge, or contract, or “carte de légitimation” (both front and back sides)</li>
+                          <li><u>For spouses</u>:
+                            <ul> 
+                              <li>copy of applicant UN agency badge, or copy of “carte de légitimation” (both front and back sides)</li> 
+                              OR
+                              <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ol>
+                    <p>After following the instructions, please fill in the fields below and click the "Next" button to continue.</p>
+                    {{-- end of id="secretMsg1"  --}}
+                  </div>
+
+
+                  <div id="secretMsg2" class="col-md-12 alert alert-info" style="display: none">
+                    <p class='text-justify'>You confirmed that you work for a UN organization which is paying for your enrolment. Please fill in the fields below. You can directly search for your organization or scroll through the box. When done, click the "Next" button to continue.</p>
+                    {{-- end of id="secretMsg2"  --}}
+                  </div>
+                  
+                  <div id="profileSelect" class="form-group" style="display: none">
+                    <label for="profile" class="col-md-2 control-label">Profile:</label>
+
+                    @include('ajax-profile-select')
+                  
+                  </div>
+
+                  <div id="orgSelect" class="form-group" style="display: none"> 
+                      <label for="organization" class="col-md-2 control-label">Organization:</label>
+                    <div class="col-md-12">
+                      <div class="dropdown">
+                        <select id="input" name="" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
+                          @if(!empty($org))
+                            @foreach($org as $value)
+                              <option></option>
+                              {{-- <option value="{{ $key }}" {{ (Auth::user()->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option> --}}
+                              <option value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
+                            @endforeach
+                          @endif
+                        </select>
+                      </div>
+                      <p class="small text-danger"><strong>You can search for your organization directly or scroll through the box / drop-down menu.</strong></p>
+
+                      <div id="countrySectionMain"></div>
+                      <div id="ngoSectionMain"></div>
+
+                    </div>
+                  </div>
+
+                  <div class="pull-right col-md-2">
+                    <a class="btn next-link btn-default btn-block button-prevent-multi-submit">Next</a>
+                  </div>
+              </form>
+            </div>
           </div>
       </div>
-    </div> 
-    <div class="col-md-9">
-      <div class="card">
-          <div class="card-header bg-info text-white">Enrolment Form for: 
-            <strong>
-              @if(empty($next_term))
-              Enrolment Period Closed
-              @else 
-              {{ $next_term->Term_Name.' - '.$next_term->Comments.' Term' }}
-              @endif
-            </strong>
-          </div>
-          <div class="card-body">
-            <form method="POST" action="{{ route('whatform') }}" class="form-horizontal form-prevent-multi-submit">
-                {{ csrf_field() }}
-                <div class="form-group col-md-12">
-                  <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
-                  <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
-                  <h5>STEP 1: </h5> 
-                  <p> Read the content, format, and other information from the latest available courses in each language. 
-                    <ul  class="nav nav-fill">
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish Info</a></li>
-                    </ul>
-                  </p>
-                    
-                  <p>View their respective schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank"><strong> HERE</strong></a> before proceeding below. </p>                  
-                </div>
-
-                <!-- MAKE A DECISION SECTION -->
-                <div class="form-group col-md-12">
-                  <h5>STEP 2: </h5>Choose your Enrolment Type.
-                </div>
-                <div class="d-flex form-group">
-                    <label class="col-md-3 control-label"><strong>Enrolment Type:</strong></label>
-
-                      <div class="col-md-5">
-                                <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
-                                <label for="decision1" class="form-control-static">I am paying for my course / I am initially paying then my organization will reimburse</label>
-                      </div>
-
-                      <div class="col-md-4">
-                                <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-                                <label for="decision2" class="form-control-static">My organization is paying for my course</label>
-                      </div>
-                </div>
-
-                <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
-                  <p>Before continuing, please follow the instructions:</p>
-                  <ol>
-                    <li>Choose from the latest courses available and their schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank">HERE</a></li>
-                    <li>Prepare a copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
-                    <li>Prepare a copy of either one of the following documents <strong>which covers the whole duration of the term:</strong>
-                      <ul>
-                        <li>UN agency badge, or contract, or “carte de légitimation” (both front and back sides)</li>
-                        <li><u>For spouses</u>:
-                          <ul> 
-                            <li>copy of applicant UN agency badge, or copy of “carte de légitimation” (both front and back sides)</li> 
-                            OR
-                            <li>copy of proof of marriage + spouse UN staff badge / UN mission badge or “carte de légitimation” (both front and back sides)</li> 
-                          </ul>
-                        </li>
-                      </ul>
-                    </li>
-                  </ol>
-                  <p>After following the instructions, please fill in the fields below and click the "Next" button to continue.</p>
-                  {{-- end of id="secretMsg1"  --}}
-                </div>
-
-
-                <div id="secretMsg2" class="col-md-12 alert alert-info" style="display: none">
-                  <p class='text-justify'>You confirmed that you work for a UN organization which is paying for your enrolment. Please fill in the fields below. You can directly search for your organization or scroll through the box. When done, click the "Next" button to continue.</p>
-                  {{-- end of id="secretMsg2"  --}}
-                </div>
-                
-                <div id="profileSelect" class="form-group" style="display: none">
-                  <label for="profile" class="col-md-2 control-label">Profile:</label>
-
-                  @include('ajax-profile-select')
-                
-                </div>
-
-                <div id="orgSelect" class="form-group" style="display: none"> 
-                    <label for="organization" class="col-md-2 control-label">Organization:</label>
-                  <div class="col-md-12">
-                    <div class="dropdown">
-                      <select id="input" name="" class="col-md-8 form-control select2-basic-single" style="width: 100%;" required="required">
-                        @if(!empty($org))
-                          @foreach($org as $value)
-                            <option></option>
-                            {{-- <option value="{{ $key }}" {{ (Auth::user()->sddextr->DEPT == $key) ? 'selected="selected"' : '' }}>{{ $value }}</option> --}}
-                            <option value="{{ $value['Org name'] }}">{{ $value['Org name'] }} - {{ $value['Org Full Name'] }}</option>
-                          @endforeach
-                        @endif
-                      </select>
-                    </div>
-                    <p class="small text-danger"><strong>You can search for your organization directly or scroll through the box / drop-down menu.</strong></p>
-
-                    <div id="countrySectionMain"></div>
-                    <div id="ngoSectionMain"></div>
-
-                  </div>
-                </div>
-
-                <div class="pull-right col-md-2">
-                  <a class="btn next-link btn-default btn-block button-prevent-multi-submit">Next</a>
-                </div>
-            </form>
-          </div>
-        </div>
-    </div>
     </div>
   </div>
 </div>

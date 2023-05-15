@@ -437,6 +437,7 @@ Route::middleware(['auth'])->group(function () {
         //home page routes
         Route::get('/home', 'HomeController@index')->name('home');
         Route::get('/home-how-to-check-status', 'HomeController@homeHowToCheckStatus')->name('home-how-to-check-status');
+        Route::get('/read-me-first', ['as' => 'read-me-first', 'uses' => 'HomeController@readMeFirst']);
         Route::get('/whatorg', ['as' => 'whatorg', 'uses' => 'HomeController@whatorg']);
 
         // late registration routes

@@ -337,12 +337,14 @@ $(document).ready(function() {
 							// { "data": "courseschedules.prices.price_usd" }, 
 							{ "data": "courseschedules.courseduration.duration_name_en" }, 
 							{ "data": function ( row, type, val, meta ) {
+								if (row.organizations != null) {
 									if (row.is_self_pay_form == '1') {
 										return "SP & SO UN system";
 									} 
 									if (row.organizations.sales_order == '1') {
 										return "SP & SO UN system";
 									} 
+								}
 								return row.DEPT;
 							}
 							
@@ -359,19 +361,25 @@ $(document).ready(function() {
 							},   
 							// { "data": "organizations.sales_order" },  
 							{ "data": function ( row, type, val, meta ) {
-									if (row.organizations.sales_order != '1') {
-										return "0";
-									} 
-								return row.organizations.sales_order;
+								if (row.organizations != null) {
+										if (row.organizations.sales_order != '1') {
+											return "0";
+										} 
+									return row.organizations.sales_order;
+								}
+								return "--";
 								}
 							
 							}, 
 							// { "data": "organizations.MOU" }, 
 							{ "data": function ( row, type, val, meta ) {
-									if (row.organizations.MOU != '1') {
-											return "0";
-									} 
-								return row.organizations.MOU;
+								if (row.organizations != null) {
+										if (row.organizations.MOU != '1') {
+												return "0";
+										} 
+									return row.organizations.MOU;
+								}
+								return "--";
 								}
 							
 							},
