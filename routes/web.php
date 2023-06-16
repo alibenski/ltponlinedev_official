@@ -261,6 +261,10 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm']);
     Route::post('user/enrol-student-to-placement-insert', ['as' => 'enrol-student-to-placement-insert', 'uses' => 'UserController@enrolStudentToPlacementInsert']);
 
+    // import existing student from SDDEXTR to Users
+    Route::get('user/import-existing-from-sddextr-form', ['as' => 'import-existing-from-sddextr-form', 'uses' => 'UserController@importExistingFromSDDEXTRForm']);
+    Route::post('user/import-existing-from-sddextr', ['as' => 'import-existing-from-sddextr', 'uses' => 'UserController@importExistingFromSDDEXTR']);
+
     // update contract expiry field
     Route::put('/user/user-update-contract', ['as' => 'user-update-contract', 'uses' => 'UserController@userUpdateContract']);
     // adminLTEv3 views

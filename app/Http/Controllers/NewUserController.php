@@ -115,7 +115,7 @@ class NewUserController extends Controller
             return redirect('login');
         }
 
-        // if staff exists in sddextr table, redirect to login page
+        // query if staff exists in sddextr table
         $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
 
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
