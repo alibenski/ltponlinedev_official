@@ -520,6 +520,7 @@ class NewUserController extends Controller
             ));
             $this->validate($request, array(
                 'indexno' => 'unique:SDDEXTR,INDEXNO_old',
+                'indexno' => 'unique:SDDEXTR,INDEXNO',
                 'email' => 'unique:SDDEXTR,EMAIL',
             ));
 

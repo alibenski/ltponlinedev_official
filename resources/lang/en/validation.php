@@ -130,6 +130,9 @@ return [
     */
 
     'custom' => [
+        'indexno' => [
+            'unique' => 'Index number already exists. Please check the Users table or the old database.',
+        ],
         'assigned_to_course' => [
             'unique' => 'Cannot modify. This form has already been processed by administration.',
         ],
