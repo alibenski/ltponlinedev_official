@@ -197,6 +197,24 @@ $(document).ready(function() {
     	placeholder: "Select Filter",
     });
 
+	$("select#year option").each(function() {
+		var $thisOption = $(this);
+		var valueToCompare = 2019;
+
+		if($thisOption.val() < valueToCompare) {
+			$thisOption.attr("disabled", "disabled");
+		}
+	});
+
+	$("select#term option").each(function() {
+		var $thisOption = $(this);
+		var valueToCompare = 191;
+
+		if($thisOption.val() < valueToCompare) {
+			$thisOption.attr("disabled", "disabled");
+		}
+	});
+
 	var form = $("#reportForm");
 
 	form.validate({
