@@ -50,8 +50,8 @@ class TestController extends Controller
         }
         $within_two_terms = array_unique($within_two_terms);
 
-        $students_waitlisted = Repo::where('Term', $prev_term)->whereHas('classrooms', function ($query) {
-            $query->whereNull('Tch_ID')
+        $students_waitlisted = Repo::where('Term', 229)->whereHas('classrooms', function ($query) {
+            $query->where('sectionNo', 2)->whereNull('Tch_ID')
                 ->orWhere('Tch_ID', '=', 'TBD');
         })
             ->get();
@@ -61,8 +61,19 @@ class TestController extends Controller
             $waitlisted[] = $value3->INDEXID;
         }
         $waitlisted = array_unique($waitlisted);
+        $students_waitlisted_234 = Repo::where('Term', 234)->whereHas('classrooms', function ($query) {
+            $query->where('sectionNo', 2)->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $waitlisted_234 = [];
+        foreach ($students_waitlisted_234 as $key3 => $value3) {
+            $waitlisted_234[] = $value3->INDEXID;
+        }
+        $waitlisted_234 = array_unique($waitlisted_234);
 
-        dd($arr1, $arr2, $students_not_in_class, $unique_students_not_in_class, $within_two_terms, $waitlisted);
+        dd($students_waitlisted, $waitlisted, $students_waitlisted_234, $waitlisted_234, $arr1, $arr2, $students_not_in_class, $unique_students_not_in_class, $within_two_terms);
 
         $pash_records = Repo::where('Term', $term)
             ->whereHas('classrooms', function ($q) {
