@@ -60,6 +60,25 @@
       </div>
 	</div>
 	
+	<div class="col-lg-3 col-xs-6">
+		<input type="hidden" name="Te_Code" value="{{$x->first()->Te_Code_New}}" />
+		<div id="" class="small-box bg-teal" data-teacher="0">
+        <div class="inner">
+        <h3 class="count-noclass-{{$x->first()->Te_Code_New}}">--</h3>
+        <h4>{{ $x->first()->course->Description }}</h4>
+        <p>Total No Class Students</p>
+                
+        </div>
+        <div class="icon">
+          <i class="ion ion-alert-circled"></i>
+        </div>
+        
+        {{-- <a href="{{ route('waitListOneList', $x->first()->Te_Code_New) }}" target="_blank" class="small-box-footer">
+              More info  <i class="fa fa-arrow-circle-right"></i>
+            </a> --}}
+
+      </div>
+	</div>
 </div>
 @endforeach
 @endforeach
@@ -185,7 +204,32 @@
 				console.log("error");
 			})
 			.always(function() {
-				console.log("complete");
+				console.log("complete waitlist count");
+			});
+			
+			$.ajax({
+				url: '{{ route('noClassStudentCount') }}',
+				type: 'GET',
+				data: {arrTeCode: arrTeCode, _token: token},
+			})
+			.done(function(data) {
+				console.log(data);
+				if (data.status == "fail") {
+					alert(data.message);
+				}
+				$.each(data, function(x, y) {
+					$("input[name='Te_Code']").each(function() {
+						if ($(this).val() == x) {
+							$('h3.count-noclass-'+x).html(y+' No Class')
+						}
+					});
+				});
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete no class count");
 			});
 		}
 			

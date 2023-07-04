@@ -51,7 +51,8 @@ class TestController extends Controller
         $within_two_terms = array_unique($within_two_terms);
 
         $students_waitlisted = Repo::where('Term', 229)->whereHas('classrooms', function ($query) {
-            $query->where('sectionNo', 2)->whereNull('Tch_ID')
+            $query->where('sectionNo', 1) // position of where clause needs to be here to take effect
+                ->whereNull('Tch_ID')
                 ->orWhere('Tch_ID', '=', 'TBD');
         })
             ->get();
@@ -61,9 +62,10 @@ class TestController extends Controller
             $waitlisted[] = $value3->INDEXID;
         }
         $waitlisted = array_unique($waitlisted);
-        $students_waitlisted_234 = Repo::where('Term', 234)->whereHas('classrooms', function ($query) {
-            $query->where('sectionNo', 2)->whereNull('Tch_ID')
-                ->orWhere('Tch_ID', '=', 'TBD');
+        $students_waitlisted_234 = Repo::where('Term', 234)->whereHas('classrooms', function ($query1) {
+            $query1->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD')
+                ->where('sectionNo', '>=', 2); // position of where clause needs to be here to take effect
         })
             ->get();
         // put inside array

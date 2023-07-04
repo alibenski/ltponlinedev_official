@@ -190,7 +190,8 @@ class WaitlistController extends Controller
                     ->whereIn('Te_Code', $request->arrTeCode)
                     ->whereHas('classrooms', function ($query) {
                         $query->whereNull('Tch_ID')
-                            ->orWhere('Tch_ID', '=', 'TBD');
+                            ->orWhere('Tch_ID', '=', 'TBD')
+                            ->where('sectionNo', '>=', 2);
                     })
                     ->with('classrooms')
                     ->pluck('Te_Code')
@@ -216,7 +217,8 @@ class WaitlistController extends Controller
                 ->where('Te_Code', $Te_Code)
                 ->whereHas('classrooms', function ($query) {
                     $query->whereNull('Tch_ID')
-                        ->orWhere('Tch_ID', '=', 'TBD');
+                        ->orWhere('Tch_ID', '=', 'TBD')
+                        ->where('sectionNo', '>=', 2);
                 })
                 ->with('classrooms')
                 ->with(['enrolments' => function ($q1) use ($term) {
@@ -233,6 +235,34 @@ class WaitlistController extends Controller
 
             $courseName = Course::where('Te_Code_New', $Te_Code)->whereNotNull('Te_Code_New')->first();
             return view('waitlist.waitListOneList', compact('courseName', 'form_info'));
+        }
+    }
+
+    public function noClassStudentCount(Request $request)
+    {
+        if (Session::has('Term')) {
+            if (!is_null($request->arrTeCode)) {
+                $term = Session::get('Term');
+                $noClassStudents = Repo::where('Term', $term)
+                    ->whereIn('Te_Code', $request->arrTeCode)
+                    ->whereHas('classrooms', function ($query) {
+                        $query->where('sectionNo', 1) // position of where clause needs to be here to take effect
+                            ->whereNull('Tch_ID')
+                            ->orWhere('Tch_ID', '=', 'TBD');
+                    })
+                    ->with('classrooms')
+                    ->pluck('Te_Code')
+                    ->toArray();
+
+                $data = array_count_values($noClassStudents);
+                return response()->json($data);
+            }
+
+            $data = [
+                "status" => "fail",
+                "message" => "Error getting total waitlisted student count."
+            ];
+            return response()->json($data);
         }
     }
 
