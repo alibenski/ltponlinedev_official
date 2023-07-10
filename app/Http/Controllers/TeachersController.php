@@ -185,6 +185,71 @@ class TeachersController extends Controller
         return view('teachers.teacher_enrolment_preview', compact('enrolment_forms', 'languages', 'org', 'terms', 'count'));
     }
 
+    public function teacherEnrolmentPreviewTableView(Request $request)
+    {
+        if (!Session::has('Term')) {
+            $enrolment_forms = null;
+            return view('teachers.teacher_enrolment_preview', compact('enrolment_forms'));
+        }
+
+        $term = Session::get('Term');
+        $Te_Code = $request->Te_Code;
+
+        return view('teachers.teacher_enrolment_preview_table_view', compact('Te_Code', 'term'));
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Request $request
+     * @return json $data
+     * @throws conditon
+     **/
+    public function teacherEnrolmentPreviewTable(Request $request)
+    {
+        $term = Session::get('Term');
+
+        $q = Preenrolment::with('courses')->with('modifyUser')->with('schedule')->with(['users' => function ($q0) {
+            $q0->with('sddextr');
+        }])->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $q2 = PlacementForm::with('courses')->with('modifyUser')->with('schedule')->with(['users' => function ($q1) {
+            $q1->with('sddextr');
+        }])->where('Term', $term)->whereNotNull('Te_Code')->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $merge = collect($q)->merge($q2);
+
+        $enrolment_forms = $merge->unique(function ($item) {
+            return $item['INDEXID'] . $item['Te_Code'];
+        })
+            ->sortBy('created_at');
+
+        $queries = [];
+
+        $columns = [
+            'Te_Code',
+        ];
+
+
+        foreach ($columns as $column) {
+            if (\Request::filled($column)) {
+                $enrolment_forms = $enrolment_forms->where($column, \Request::input($column));
+                $queries[$column] = \Request::input($column);
+            }
+        }
+        if (Session::has('Term')) {
+            $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term'));
+            $queries['Term'] = Session::get('Term');
+        }
+
+        $array = [];
+        foreach ($enrolment_forms as $form) {
+            $array[] = $form;
+        }
+        $data = $array;
+        return response()->json(['data' => $data]);
+    }
+
     /**
      * Display a listing of the resource.
      *

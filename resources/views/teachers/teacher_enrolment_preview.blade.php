@@ -32,6 +32,9 @@
 					@if ($loop->first) {{-- only get the first item of the loop --}}
 					<div class="">
 						<h2>{{ $item->courses->Description }}</h2>
+						@hasrole('Admin')
+						<p><a href="{{ route('teacher-enrolment-preview-table-view',['Te_Code' => $item->Te_Code, 'Term' => Session::get('Term')]) }}" target="_blank" class="btn btn-primary"><i class="fa fa-table"></i> Extract Table</a></p>
+						@endhasrole
 					</div>
 					@endif
 				@endforeach

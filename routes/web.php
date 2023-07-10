@@ -181,6 +181,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::put('teacher-nothing-to-modify', ['as' => 'teacher-nothing-to-modify', 'uses' => 'TeachersController@teacherNothingToModify']);
     Route::put('teacher-verify-and-not-assign', ['as' => 'teacher-verify-and-not-assign', 'uses' => 'TeachersController@teacherVerifyAndNotAssign']);
     Route::get('teacher-enrolment-preview', ['as' => 'teacher-enrolment-preview', 'uses' => 'TeachersController@teacherEnrolmentPreview']);
+    Route::get('teacher-enrolment-preview-table-view', ['as' => 'teacher-enrolment-preview-table-view', 'uses' => 'TeachersController@teacherEnrolmentPreviewTableView']);
+    Route::get('teacher-enrolment-preview-table', ['as' => 'teacher-enrolment-preview-table', 'uses' => 'TeachersController@teacherEnrolmentPreviewTable']);
     Route::delete('teacher-delete-form', ['as' => 'teacher-delete-form', 'uses' => 'TeachersController@teacherDeleteForm']);
 
     Route::resource('writing-tips', 'WritingTipController');
