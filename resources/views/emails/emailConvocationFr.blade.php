@@ -1,7 +1,7 @@
 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
     <p>Cher / Chère {{ $staff_name }},</p>
     <p style="text-align: justify">
-        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
+        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
     </p>
     
     <p>
@@ -37,8 +37,8 @@
     </p>
 
     <ul>
-        <li style="text-align: justify">Certains cours nécessitent l’achat de livres. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>
-        <li style="text-align: justify">Au plus tard 24 heures avant votre premier cours, votre professeur vous enverra un courriel contenant des instructions supplémentaires et le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage en ligne CLM Moodle.</li>
+        <li style="text-align: justify">Certains cours nécessitent l’achat de matériel. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>
+        <li style="text-align: justify">Au plus tard 24 heures avant votre premier cours, votre professeur(e) vous enverra un courriel contenant des instructions supplémentaires et le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage en ligne CLM Moodle.</li>
     </ul>
     <h4><strong><u>Informations importantes pour les cours EN LIGNE</u></strong></h4>
     <p style="text-align: justify">Veuillez prendre connaissance du matériel requis :</p>
@@ -54,8 +54,8 @@
     <h4><strong><u>Informations importantes pour les cours EN PRÉSENTIEL</u></strong></h4>
     <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/Bocage_Plan.pdf">Plan du Palais des Nations, Annexe Bocage (localisation des salles de cours)</a> <br /> - <a href="https://learning.unog.ch/fr/node/1446">Carte d'accès au terrain et/ou badge de stationnement pour les véhicules</a></p>
 
-    <h4><strong><u>Vous ne pouvez pas être présent(e)s la première semaine du trimestre ? </u></strong></h4>
-    <p style="text-align: justify">Veuillez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
+    <h4><strong><u>Vous ne pouvez pas être présent(e)s le premier jour du cours ? </u></strong></h4>
+    <p style="text-align: justify">Veuillez en informer à l’avance votre professeur(e) par email. Les participant(e)s absent(e)s le premier jour du cours peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
 
     <h4><strong><u>Vous devez annuler votre inscription ? </u></strong></h4>
     <p style="text-align: justify">Vous devez le faire avant le {{ $cancel_date_limit_string }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. 
@@ -118,7 +118,7 @@
     </ol> --}}
     <br /> 
     <p style="text-align: justify">
-       Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage pour le prochain trimestre.
+       Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage.
     </p>
     <br>
     
