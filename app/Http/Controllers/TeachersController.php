@@ -243,11 +243,97 @@ class TeachersController extends Controller
         }
 
         $array = [];
+        $indexnosArray = [];
+        $eformSubmitCountArray = [];
+        $languageArray = [];
         foreach ($enrolment_forms as $form) {
             $array[] = $form;
+            $indexnosArray[] = $form->INDEXID;
+            $eformSubmitCountArray[] = $form->eform_submit_count;
+            $languageArray[] = $form->L;
         }
         $data = $array;
-        return response()->json(['data' => $data]);
+        $priority = $this->getStudentPriorityStatus($term, $indexnosArray, $eformSubmitCountArray, $languageArray);
+
+        return response()->json(['data' => $data, 'ps' => $priority]);
+    }
+
+    public function getStudentPriorityStatus($term, $indexnosArray, $eformSubmitCountArray, $languageArray)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query students in class
+        $students_in_class = Repo::whereIn('INDEXID', $indexnosArray)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+
+        $q = Preenrolment::whereIn('INDEXID', $indexnosArray)->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $arr2 = [];
+        foreach ($q as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+
+        // query waitlisted students
+        $students_waitlisted = Repo::whereIn('INDEXID', $indexnosArray)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $waitlisted = [];
+        foreach ($students_waitlisted as $key3 => $value3) {
+            $waitlisted[] = $value3->INDEXID;
+        }
+        $waitlisted = array_unique($waitlisted);
+
+
+        $prev_prev_term = Term::where('Term_Code', $prev_term)->first()->Term_Prev;
+
+        $students_within_two_terms = Repo::whereIn('INDEXID', $unique_students_not_in_class)->where('Term', $prev_prev_term)->get();
+        // put inside array
+        $within_two_terms = [];
+        foreach ($students_within_two_terms as $key4 => $value4) {
+            $within_two_terms[] = $value4->INDEXID;
+        }
+        $within_two_terms = array_unique($within_two_terms);
+
+
+        // count how many schedules were originally chosen
+        $check_modified_forms = ModifiedForms::whereIn('INDEXID', $indexnosArray)->whereIn('eform_submit_count', $eformSubmitCountArray)->where('Term', $term)->where('L', $languageArray)->where('overall_approval', '1')->get();
+
+        $count_schedule_in_modified_table = [];
+        foreach ($check_modified_forms as $key7 => $value7) {
+            $count_schedule_in_modified_table[] = $value7->INDEXID;
+        }
+
+        $count_schedule_in_modified_table = array_count_values($count_schedule_in_modified_table);
+
+        $qry = Preenrolment::whereIn('INDEXID', $indexnosArray)->whereIn('eform_submit_count', $eformSubmitCountArray)->where('Term', $term)->where('L', $languageArray)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+
+        $count_schedule = [];
+        foreach ($qry as $key6 => $value6) {
+            $count_schedule[] = $value6->INDEXID;
+        }
+
+        $count_schedule = array_count_values($count_schedule);
+
+        $priority = [$arr1, $unique_students_not_in_class, $waitlisted, $within_two_terms, $count_schedule, $count_schedule_in_modified_table];
+        return $priority;
     }
 
     /**

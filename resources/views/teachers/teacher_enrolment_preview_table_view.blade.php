@@ -126,6 +126,7 @@ $(document).ready(function() {
 	    	"buttons": [
 			        'copy', 'csv', 'excel', 'pdf'
 			    ],
+			"pageLength": 200,
 	    	"scrollX": true,
 	    	"responsive": false,
 	    	"orderCellsTop": true,
@@ -148,7 +149,7 @@ $(document).ready(function() {
 					{ 	"data": null,
 						"className": "priority_status",
 		                "defaultContent": "" },
-	        		{ "data": "INDEXID" }, 
+	        		{ "data": "INDEXID", "className": "index_id" }, 
 	        		{ "data": "users.name" }, 
 	        		{ "data": "users.email" }, 
 	        		{ "data": "users.sddextr.PHONE" }, 
@@ -174,6 +175,10 @@ $(document).ready(function() {
 				        ],
 			"createdRow": function( row, data, dataIndex ) {
 						$(row).find("td.record_id").attr('id', data['id']);
+						$(row).find("td.index_id").append("<input type='hidden' name='indexno' value='"+data['INDEXID']+"'/ >");
+						$(row).find("td.priority_status").append("<div class='student-priority-status-here-"+data['INDEXID']+"'></div>");
+						$(row).find("td.priority_status").append("<div class='student-waitlisted-here-"+data['INDEXID']+"'></div>");
+						$(row).find("td.priority_status").append("<div class='student-within-two-terms-here-"+data['INDEXID']+"'></div>");
 
 						if ( "updated_by_admin" in data === true ) {
 							if (data['updated_by_admin'] === null) {
@@ -282,8 +287,68 @@ $(document).ready(function() {
 	    })
 	}
 
+	function priorityStatus(data) {
+		console.log(data.ps[0]);
+		$.each(data.ps[0], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-priority-status-here-'+y).text('Re-enrolment');
+				}
+			});
+		});
+		// console.log(data[1]);
+		$.each(data.ps[1], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-priority-status-here-'+y).text('Not in a class');
+				}
+			});
+		});
+		// console.log(data[2]);
+		$.each(data.ps[2], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-waitlisted-here-'+y).text('Waitlisted');
+				}
+			});
+		});
+		// console.log(data[3]);
+		$.each(data.ps[3], function(x, y) {
+			$("input[name='indexno']").each(function() {
+				if ($(this).val() == y) {
+					$('div.student-within-two-terms-here-'+y).text('Within 2 Terms');
+				}
+			});
+		});
+		// console.log(data[4]);
+		// $.each(data[4], function(x, y) {
+		// 	$("input[name='indexno']").each(function() {
+		// 		if ($(this).val() == x) {
+		// 			$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
+		// 		}
+		// 	});
+		// });
+
+		// $.each(data[5], function(x, y) {
+		// 	$("input[name='indexno']").each(function() {
+		// 		if ($(this).val() == x) {
+		// 			$('div.student-count-schedule-'+x).html('<p><span class="label label-default"> '+y+' schedule(s) originally chosen</span></p>');
+		// 		}
+		// 	});
+		// });
+	}
+
 	$.when.apply($.ajax(), promises).then(function() {
         $(".preloader2").fadeOut(600);
+    }).then(function() {
+        $.ajax({
+			url: '{{ route('teacher-enrolment-preview-table') }}',
+			type: 'GET',
+			dataType: 'json',
+			data: {Te_Code:Te_Code, _token:token},
+		}).then(function(data) {
+			priorityStatus(data);
+		})
     }); 
 
 });
