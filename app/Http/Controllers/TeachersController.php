@@ -247,10 +247,173 @@ class TeachersController extends Controller
         $eformSubmitCountArray = [];
         $languageArray = [];
         foreach ($enrolment_forms as $form) {
-            $array[] = $form;
+            $assign_status = null;
+            $assigned_by = null;
+            $assigned_course = null;
+            $assigned_schedule = null;
+
+            if ($form->updated_by_admin === 1) {
+                $assign_status = 'YES';
+                $assigned_by = $form->modifyUser->name;
+                $assigned_course = $form->courses->Description;
+                $assigned_schedule = $form->schedule->name;
+            }
+            if ($form->updated_by_admin === 0) {
+                $assign_status = 'Verified and Not Assigned';
+                $assigned_by = $form->modifyUser->name;
+            }
+            if ($form->updated_by_admin === null) {
+                $assign_status = 'Not Assigned';
+            }
+            $phone = 'None';
+            if ($form->users->sddextr->PHONE) {
+                $phone = $form->users->sddextr->PHONE;
+            }
+
+            $dayInput = null;
+            if (!is_null($form->dayInput)) {
+                $dayInput = $form->dayInput;
+            }
+
+            $timeInput = null;
+            if (!is_null($form->timeInput)) {
+                $timeInput = $form->timeInput;
+            }
+
+            $deliveryMode = null;
+            if (!is_null($form->deliveryMode)) {
+                if ($form->deliveryMode === 0) {
+                    $deliveryMode = 'in-person';
+                } elseif ($form->deliveryMode === 1) {
+                    $deliveryMode = 'online';
+                } elseif ($form->deliveryMode === 2) {
+                    $deliveryMode = 'both in-person and online';
+                }
+            }
+
+            $flexibleDay = null;
+            if (!is_null($form->flexibleDay))
+                if ($form->flexibleDay === 1) {
+                    $flexibleDay = 'YES';
+                }
+            if ($form->flexibleDay === 0) {
+                $flexibleDay = 'NOT FLEXIBLE';
+            }
+
+            $flexibleTime = null;
+            if (!is_null($form->flexibleTime)) {
+                if ($form->flexibleTime === 1) {
+                    $flexibleTime = 'YES';
+                }
+                if ($form->flexibleTime === 0) {
+                    $flexibleTime = 'NOT FLEXIBLE';
+                }
+            }
+
+            $flexibleFormat = null;
+            if (!is_null($form->flexibleFormat)) {
+                if ($form->flexibleFormat === 1) {
+                    $flexibleFormat = 'YES';
+                }
+                if ($form->flexibleFormat === 0) {
+                    $flexibleFormat = 'NOT FLEXIBLE';
+                }
+            }
+
+            $hr_approval = null;
+            if (is_null($form->is_self_pay_form)) {
+                if (in_array($form->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
+                    $hr_approval = 'N/A - Non-paying organization';
+                } else {
+                    if (is_null($form->approval) && is_null($form->approval_hr)) {
+                        $hr_approval = 'Pending Approval';
+                    }
+                    if ($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr))) {
+                        $hr_approval = 'N/A - Disapproved by Manager';
+                    }
+                    if ($form->approval == 1 && is_null($form->approval_hr)) {
+                        $hr_approval = 'Pending Approval';
+                    }
+                    if ($form->approval == 1 && $form->approval_hr == 1) {
+                        $hr_approval = 'Approved';
+                    }
+                    if ($form->approval == 1 && $form->approval_hr == 0) {
+                        $hr_approval = 'Disapproved';
+                    }
+                }
+            } else {
+                $hr_approval = 'N/A - Self-Payment';
+            }
+
+            $payment_status = null;
+            if (is_null($form->is_self_pay_form)) {
+                $payment_status = 'N/A';
+            } else {
+                if ($form->selfpay_approval === 1) {
+                    $payment_status = 'Approved';
+                }
+                if ($form->selfpay_approval === 2) {
+                    $payment_status = 'Pending Valid Document';
+                }
+                if ($form->selfpay_approval === 0) {
+                    $payment_status = 'Disapproved';
+                }
+                if ($form->selfpay_approval === null) {
+                    $payment_status = 'Waiting for Admin';
+                }
+            }
+
+            $student_comment = null;
+            $placement_form = null;
+            if ($form->placement_schedule_id) {
+                $student_comment = $form->std_comments . $form->course_preference_comment;
+                $placement_form = 'Placement Form';
+            } else {
+                if ($form->std_comments) {
+                    $student_comment = $form->std_comments;
+                }
+            }
+
+            $re_enrolment = $this->checkIfReEnrolment($term, $form->INDEXID, $form);
+            $not_in_a_class = $this->checkNotInClass($term, $form->INDEXID, $form);
+            $waitlisted = $this->checkIfWaitlisted($term, $form->INDEXID, $form);
+            $within_2_terms = $this->checkIfWithin2Terms($term, $form->INDEXID, $form);
+
             $indexnosArray[] = $form->INDEXID;
             $eformSubmitCountArray[] = $form->eform_submit_count;
             $languageArray[] = $form->L;
+
+            $array[] =  (object) [
+                'assign_status' => $assign_status,
+                'assigned_by' => $assigned_by,
+                'assigned_course' => $assigned_course,
+                'assigned_schedule' => $assigned_schedule,
+                're_enrolment' => $re_enrolment,
+                'placement_form' => $placement_form,
+                'not_in_a_class' => $not_in_a_class,
+                'waitlisted' => $waitlisted,
+                'within_2_terms' => $within_2_terms,
+                'INDEXID' => $form->INDEXID,
+                'name' => $form->users->name,
+                'email' => $form->users->email,
+                'PHONE' => $phone,
+                'courses_Description' => $form->courses->Description,
+                'dayInput' => $dayInput,
+                'timeInput' => $timeInput,
+                'deliveryMode' => $deliveryMode,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
+                'DEPT' => $form->DEPT,
+                'cancelled_by_student' => $form->cancelled_by_student,
+                'hr_approval' => $hr_approval,
+                'payment_status' => $payment_status,
+                'student_comment' => $student_comment,
+                'admin_eform_comment' => $form->admin_eform_comment,
+                'admin_plform_comment' => $form->admin_plform_comment,
+                'created_at' => $form->created_at,
+                'deleted_at' => $form->deleted_at,
+            ];
         }
         $data = $array;
         $priority = $this->getStudentPriorityStatus($term, $indexnosArray, $eformSubmitCountArray, $languageArray);
@@ -258,6 +421,143 @@ class TeachersController extends Controller
         return response()->json(['data' => $data, 'ps' => $priority]);
     }
 
+    public function checkIfReEnrolment($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query students in class
+        $students_in_class = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1); // contains index of re-enrolled students
+
+        $re_enrolment = null;
+        foreach ($arr1 as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $re_enrolment = 'Re-enrolment';
+            }
+        }
+
+        return $re_enrolment;
+    }
+    public function checkNotInClass($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query students in class
+        $students_in_class = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+
+        $q = Preenrolment::where('INDEXID', $index)->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $arr2 = [];
+        foreach ($q as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+        $not_in_a_class = null;
+        foreach ($unique_students_not_in_class as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $not_in_a_class = 'Not in a class';
+            }
+        }
+
+        return $not_in_a_class;
+    }
+    public function checkIfWaitlisted($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query waitlisted students
+        $students_waitlisted = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $waitlisted = [];
+        foreach ($students_waitlisted as $key3 => $value3) {
+            $waitlisted[] = $value3->INDEXID;
+        }
+        $waitlisted = array_unique($waitlisted);
+
+        $waitlisted_estudyante = null;
+        foreach ($waitlisted as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $waitlisted_estudyante = 'Waitlisted';
+            }
+        }
+
+        return $waitlisted_estudyante;
+    }
+    public function checkIfWithin2Terms($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+        // query students in class
+        $students_in_class = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+
+        $q = Preenrolment::where('INDEXID', $index)->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $arr2 = [];
+        foreach ($q as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+        $prev_prev_term = Term::where('Term_Code', $prev_term)->first()->Term_Prev;
+
+        $students_within_two_terms = Repo::whereIn('INDEXID', $unique_students_not_in_class)->where('Term', $prev_prev_term)->get();
+        // put inside array
+        $within_two_terms = [];
+        foreach ($students_within_two_terms as $key4 => $value4) {
+            $within_two_terms[] = $value4->INDEXID;
+        }
+        $within_two_terms = array_unique($within_two_terms);
+
+        $within_2_terms = null;
+        foreach ($within_two_terms as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $within_2_terms = 'Within 2 terms';
+            }
+        }
+
+        return $within_2_terms;
+    }
     public function getStudentPriorityStatus($term, $indexnosArray, $eformSubmitCountArray, $languageArray)
     {
         $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;

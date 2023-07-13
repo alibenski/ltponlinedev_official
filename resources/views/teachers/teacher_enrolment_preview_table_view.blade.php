@@ -2,7 +2,7 @@
 
 @section('customcss')
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
+<link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.5/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/datatables.min.css" rel="stylesheet"/>
 @stop
 
 @section('content')
@@ -15,8 +15,13 @@
             <tr>
                 <th>Validated/Assigned Course?</th>
                 <th>Validated/Assigned by</th>
-                <th>Assigned Course / Schedule</th>
-                <th>Priority Status</th>
+                <th>Assigned Course</th>
+                <th>Assigned Schedule</th>
+                <th>Re-Enrolment?</th>
+                <th>Placement Form?</th>
+                <th>Not in a class?</th>
+                <th>Waitlisted?</th>
+                <th>Within 2 terms?</th>
                 <th>Index Number</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -44,8 +49,13 @@
             <tr>
                 <th>Validated/Assigned Course?</th>
                 <th>Validated/Assigned by</th>
-                <th>Assigned Course / Schedule</th>
-                <th>Priority Status</th>
+                <th>Assigned Course</th>
+                <th>Assigned Schedule</th>
+                <th>Re-Enrolment?</th>
+                <th>Placement Form?</th>
+                <th>Not in a class?</th>
+                <th>Waitlisted?</th>
+                <th>Within 2 terms?</th>
                 <th>Index Number</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -75,9 +85,9 @@
 
 @section('java_script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-1.13.5/b-2.4.1/b-colvis-2.4.1/b-html5-2.4.1/datatables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/sum().js"></script>
 
 <script>
@@ -96,9 +106,6 @@ $(document).ready(function() {
 	.then(function(data) {
 		console.log(data)
 		assignToEventsColumns(data);
-		// console.log(data.data)
-		// var data = jQuery.parseJSON(data.data);
-		// console.log(data)
 	})
 	.fail(function(data) {
 		console.log(data);
@@ -121,11 +128,11 @@ $(document).ready(function() {
 		    } );
 
 	    var table = $('#sampol').DataTable({
-	    	// "deferRender": true,
+	    	"deferRender": false,
 	    	"dom": 'B<"clear">lfrtip',
 	    	"buttons": [
-			        'copy', 'csv', 'excel', 'pdf'
-			    ],
+					'copy', 'csv', 'excel', 'pdf'
+				],
 			"pageLength": 200,
 	    	"scrollX": true,
 	    	"responsive": false,
@@ -134,40 +141,101 @@ $(document).ready(function() {
 	    	"pagingType": "full_numbers",
 	        "bAutoWidth": false,
 	        "aaData": data.data,
+			"order": [[28, 'asc']],
 	        "columns": [
 			        {
-		                "data": null,
+		                "data": "assign_status",
 		                "className": "record_id updated_by_admin",
-		                "defaultContent": ""
 		            },
-					{ 	"data": null,
+					{ 	
+						"data": "assigned_by",
 						"className": "modifyUser",
-		                "defaultContent": "" }, 
-					{ 	"data": null,
+					}, 
+					{ 	
+						"data": "assigned_course",
 						"className": "assigned_course",
-		                "defaultContent": "" },
-					{ 	"data": null,
-						"className": "priority_status",
-		                "defaultContent": "" },
-	        		{ "data": "INDEXID", "className": "index_id" }, 
-	        		{ "data": "users.name" }, 
-	        		{ "data": "users.email" }, 
-	        		{ "data": "users.sddextr.PHONE" }, 
-	        		{ "data": "courses.Description"}, 
-	        		{ "data": null,
+		                
+					},
+					{ 	
+						"data": "assigned_schedule",
+						"className": "assigned_schedule",
+		                
+					},
+					{ 	
+						"data": "re_enrolment",
+						"className": "re_enrolment",
+					},
+					{ 	
+						"data": "placement_form",
+						"className": "placement_form",
+					},
+					{ 	
+						"data": "not_in_a_class",
+						"className": "not_in_a_class",
+					},
+					{ 	
+						"data": "waitlisted",
+						"className": "waitlisted",
+					},
+					{ 	
+						"data": "within_2_terms",
+						"className": "within_2_terms",
+					},
+	        		{ 
+						"data": "INDEXID", 
+						"className": "index_id" 
+					}, 
+	        		{ "data": "name" }, 
+	        		{ "data": "email" }, 
+	        		{ 
+						"data": "PHONE" ,
+						"className": "PHONE",
+					}, 
+	        		{ "data": "courses_Description"}, 
+	        		{ 
+						"data": null,
 						"defaultContent": 'wishlist schedule'
 					}, 
-	        		{ "data": null, "className": "dayInput", "defaultContent": "" }, 
-	        		{ "data": null, "className": "timeInput", "defaultContent": "" }, 
-	        		{ "data": null, "className": "deliveryMode", "defaultContent": "" }, 
-	        		{ "data": null, "className": "flexibleDay", "defaultContent": "NOT FLEXIBLE" }, 
-	        		{ "data": null, "className": "flexibleTime", "defaultContent": "NOT FLEXIBLE" }, 
-	        		{ "data": null, "className": "flexibleFormat", "defaultContent": "NOT FLEXIBLE" }, 
+	        		{ 
+						"data": "dayInput", 
+						"className": "dayInput", 
+					}, 
+	        		{ 
+						"data": "timeInput", 
+						"className": "timeInput", 
+					}, 
+	        		{ 
+						"data": "deliveryMode", 
+						"className": "deliveryMode", 
+					}, 
+	        		{ 
+						"data": "flexibleDay", 
+						"className": "flexibleDay",  
+					}, 
+	        		{ 
+						"data": "flexibleTime", 
+						"className": "flexibleTime",  
+					}, 
+	        		{ 
+						"data": "flexibleFormat", 
+						"className": "flexibleFormat",  
+					}, 
 	        		{ "data": "DEPT" },  
-	        		{ "data": "cancelled_by_student", "className": "cancelled_by_student" }, 
-	        		{ "data": "is_self_pay_form", "className": "is_self_pay_form_1" }, 
-	        		{ "data": "is_self_pay_form", "className": "is_self_pay_form_2" }, 
-	        		{ "data": null, "className": "student_comment", "defaultContent": ""}, 
+	        		{ 
+						"data": "cancelled_by_student", 
+						"className": "cancelled_by_student" }, 
+	        		{ 
+						"data": "hr_approval", 
+						"className": "hr_approval" 
+					}, 
+	        		{ 
+						"data": "payment_status", 
+						"className": "payment_status" 
+					}, 
+	        		{ 
+						"data": "student_comment", 
+						"className": "student_comment", 
+					}, 
 	        		{ "data": "admin_eform_comment" },
 	        		{ "data": "admin_plform_comment" },
 	        		{ "data": "created_at" },
@@ -179,110 +247,6 @@ $(document).ready(function() {
 						$(row).find("td.priority_status").append("<div class='student-priority-status-here-"+data['INDEXID']+"'></div>");
 						$(row).find("td.priority_status").append("<div class='student-waitlisted-here-"+data['INDEXID']+"'></div>");
 						$(row).find("td.priority_status").append("<div class='student-within-two-terms-here-"+data['INDEXID']+"'></div>");
-
-						if ( "updated_by_admin" in data === true ) {
-							if (data['updated_by_admin'] === null) {
-								$(row).find("td.updated_by_admin").text("Not Assigned");
-							} 
-							if (data['updated_by_admin'] === 1) {
-								$(row).find("td.updated_by_admin").text("Yes");
-								$(row).find("td.modifyUser").text(data['modify_user']['name']);
-								$(row).find("td.assigned_course").html("<p>"+data['courses']['Description']+"</p><p>"+data['schedule']['name']+"</p>");
-							} 
-							if (data['updated_by_admin'] === 0) {
-								$(row).find("td.updated_by_admin").text("Verified and Not Assigned");
-								$(row).find("td.modifyUser").text(data['modify_user']['name']);
-							}
-					    }
-
-					    if ( "dayInput" in data === true ) {
-					      $(row).find("td.dayInput").text(data['dayInput']);
-					    }
-					    if ( "timeInput" in data === true ) {
-					      $(row).find("td.timeInput").text(data['timeInput']);
-					    }
-					    if ( "deliveryMode" in data === true ) {
-							if (data['deliveryMode'] === 0) {
-								$(row).find("td.deliveryMode").text("in-person");
-							}
-							if (data['deliveryMode']  === 1) {
-								$(row).find("td.deliveryMode").text("online");
-							}
-							if (data['deliveryMode']  === 2) {
-								$(row).find("td.deliveryMode").text("both in-person and online");
-							} 
-					    }
-					    if ( "flexibleDay" in data === true ) {
-							if (data['flexibleDay']  === 1) {
-								$(row).find("td.flexibleDay").text("YES");
-							}
-					    }
-					    if ( "flexibleTime" in data === true ) {
-					      if (data['flexibleTime']  === 1) {
-								$(row).find("td.flexibleTime").text("YES");
-						    }
-					    }
-					    if ( "flexibleFormat" in data === true ) {
-					      if (data['flexibleFormat']  === 1) {
-								$(row).find("td.flexibleFormat").text("YES");
-							}	
-					    }
-						if ( "is_self_pay_form" in data === true ) {
-							if (data['is_self_pay_form']  === 1) {
-								$(row).find("td.is_self_pay_form_1").text("N/A - Self-Payment");
-							}
-
-							if (data['is_self_pay_form']  === null) {
-								if ( $.inArray(data['DEPT'],['UNOG', 'JIU','DDA','OIOS','DPKO']) != -1) {
-									$(row).find("td.is_self_pay_form_1").text("N/A - Non-paying organization");
-									
-								} else {
-									if(data['approval'] == null && data['approval_hr'] == null){ 
-										$(row).find("td.is_self_pay_form_1").text("Pending Approval");
-									}
-									
-									if(data['approval'] == 0 && data['approval_hr'] == null || data['approval_hr'] !== null) {
-										$(row).find("td.is_self_pay_form_1").text("N/A - Disapproved by Manager");
-									}
-									
-									if(data['approval'] == 1 && data['approval_hr'] == null){
-										$(row).find("td.is_self_pay_form_1").text("Pending Approval");
-									}
-
-									if(data['approval'] == 1 && data['approval_hr'] == 1){
-										$(row).find("td.is_self_pay_form_1").text("Approved");
-									}
-
-									if(data['approval'] == 1 && data['approval_hr'] == 0){
-										$(row).find("td.is_self_pay_form_1").text("Disapproved");
-									}
-									
-								}
-							}
-					    }
-						if ( "is_self_pay_form" in data === true ) {
-							if (data['is_self_pay_form']  != null) {
-								if (data['selfpay_approval']  === 1) {
-									$(row).find("td.is_self_pay_form_2").text("Approved");
-								}
-								if (data['selfpay_approval']  === 2) {
-									$(row).find("td.is_self_pay_form_2").text("Pending Valid Document");
-								}
-								if (data['selfpay_approval']  === 0) {
-									$(row).find("td.is_self_pay_form_2").text("Disapproved");
-								} 
-								if (data['selfpay_approval']  === null) {
-									$(row).find("td.is_self_pay_form_2").text("Waiting for Admin");
-								}
-							}
-					    }
-						if ( "placement_schedule_id" in data === true) {
-							$(row).find("td.priority_status").text("placement form");
-
-							$(row).find("td.student_comment").html("<p>"+data['std_comments']+"</p><p>"+data['course_preference_comment']+"</p>");
-						} else {
-							$(row).find("td.student_comment").html("<p>"+data['std_comments']+"</p>");
-						}
 			}
 	    })
 	}
@@ -347,7 +311,7 @@ $(document).ready(function() {
 			dataType: 'json',
 			data: {Te_Code:Te_Code, _token:token},
 		}).then(function(data) {
-			priorityStatus(data);
+			// priorityStatus(data);
 		})
     }); 
 
