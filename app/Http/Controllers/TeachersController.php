@@ -379,6 +379,8 @@ class TeachersController extends Controller
             $waitlisted = $this->checkIfWaitlisted($term, $form->INDEXID, $form);
             $within_2_terms = $this->checkIfWithin2Terms($term, $form->INDEXID, $form);
 
+            $wishlist_schedule = $this->checkIfWishlistSchedule($term, $form->INDEXID, $form);
+
             $indexnosArray[] = $form->INDEXID;
             $eformSubmitCountArray[] = $form->eform_submit_count;
             $languageArray[] = $form->L;
@@ -393,6 +395,7 @@ class TeachersController extends Controller
                 'not_in_a_class' => $not_in_a_class,
                 'waitlisted' => $waitlisted,
                 'within_2_terms' => $within_2_terms,
+                'wishlist_schedule' => $wishlist_schedule,
                 'INDEXID' => $form->INDEXID,
                 'name' => $form->users->name,
                 'email' => $form->users->email,
@@ -419,6 +422,78 @@ class TeachersController extends Controller
         $priority = $this->getStudentPriorityStatus($term, $indexnosArray, $eformSubmitCountArray, $languageArray);
 
         return response()->json(['data' => $data, 'ps' => $priority]);
+    }
+
+    public function checkIfWishlistSchedule($term, $index, $form)
+    {
+        $current_user = $index;
+        $term_code = $term;
+
+        $user = User::where('indexno', $current_user)->first();
+        $user = $user->name;
+
+        // check the original wishlist of student in placement forms table
+        $check_placement_forms = PlacementForm::where('INDEXID', $current_user)
+            ->where('Te_Code', $form->Te_Code)
+            ->where('Term', $term_code)->count();
+
+        if ($check_placement_forms > 0) {
+            // query submitted forms based from Modified Forms table
+            $schedules = PlacementForm::withTrashed()
+                ->where('Te_Code', $form->Te_Code)
+                ->where('INDEXID', $current_user)
+                ->where('eform_submit_count', $form->eform_submit_count)
+                ->where('Term', $term_code)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval', 'assigned_to_course']);
+
+
+
+            $wishlist_schedule = [];
+            foreach ($schedules as $sched_value) {
+                $wishlist_schedule[] = $sched_value->schedule->name;
+            }
+
+            return $wishlist_schedule;
+        }
+
+        // check the original wishlist of student in modified forms table first 
+        $check_modified_forms = ModifiedForms::where('INDEXID', $current_user)->where('Te_Code', $form->Te_Code)->where('Term', $term_code)->count();
+
+        if ($check_modified_forms > 0) {
+            // query submitted forms based from Modified Forms table
+            $schedules = ModifiedForms::withTrashed()
+                // ->where('Te_Code', $form->Te_Code)
+                ->where('INDEXID', $current_user)
+                ->where('eform_submit_count', $form->eform_submit_count)
+                ->where('Term', $term_code)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval']);
+
+
+
+            $wishlist_schedule = [];
+            foreach ($schedules as $sched_value) {
+                $wishlist_schedule[] = $sched_value->schedule->name;
+            }
+
+            return $wishlist_schedule;
+        }
+
+        // query submitted forms based from tblLTP_Enrolment table
+        $schedules = Preenrolment::withTrashed()
+            ->where('Te_Code', $form->Te_Code)
+            ->where('INDEXID', $current_user)
+            ->where('eform_submit_count', $form->eform_submit_count)
+            ->where('Term', $term_code)
+            ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval']);
+
+
+
+        $wishlist_schedule = [];
+        foreach ($schedules as $sched_value) {
+            $wishlist_schedule[] = $sched_value->schedule->name;
+        }
+
+        return $wishlist_schedule;
     }
 
     public function checkIfReEnrolment($term, $index, $form)

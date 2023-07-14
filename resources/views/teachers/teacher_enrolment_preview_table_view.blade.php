@@ -193,8 +193,8 @@ $(document).ready(function() {
 					}, 
 	        		{ "data": "courses_Description"}, 
 	        		{ 
-						"data": null,
-						"defaultContent": 'wishlist schedule'
+						"data": "wishlist_schedule",
+						"className": 'wishlist_schedule'
 					}, 
 	        		{ 
 						"data": "dayInput", 
