@@ -385,6 +385,11 @@ class TeachersController extends Controller
             $eformSubmitCountArray[] = $form->eform_submit_count;
             $languageArray[] = $form->L;
 
+            $deleted_at = null;
+            if (!is_null($form->deleted_at)) {
+                $deleted_at = $form->deleted_at->format('Y-m-d H:i:s');
+            }
+
             $array[] =  (object) [
                 'assign_status' => $assign_status,
                 'assigned_by' => $assigned_by,
@@ -414,8 +419,8 @@ class TeachersController extends Controller
                 'student_comment' => $student_comment,
                 'admin_eform_comment' => $form->admin_eform_comment,
                 'admin_plform_comment' => $form->admin_plform_comment,
-                'created_at' => $form->created_at,
-                'deleted_at' => $form->deleted_at,
+                'created_at' => $form->created_at->format('Y-m-d H:i:s'),
+                'deleted_at' => $deleted_at,
             ];
         }
         $data = $array;

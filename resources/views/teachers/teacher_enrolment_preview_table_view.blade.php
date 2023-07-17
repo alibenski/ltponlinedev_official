@@ -131,7 +131,19 @@ $(document).ready(function() {
 	    	"deferRender": false,
 	    	"dom": 'B<"clear">lfrtip',
 	    	"buttons": [
-					'copy', 'csv', 'excel', 'pdf'
+					'copy', 'csv', 'pdf', 
+					{
+					extend: 'excelHtml5',
+					title: 'Preview Extract' ,
+					orientation: 'landscape',
+					customizeData: function(data) {
+						for(var i = 0; i < data.body.length; i++) {
+							for(var j = 0; j < data.body[i].length; j++) {
+								data.body[i][j] = '\u200C' + data.body[i][j];
+								}
+							}
+						}
+					}
 				],
 			"pageLength": 200,
 	    	"scrollX": true,
