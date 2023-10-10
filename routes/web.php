@@ -346,6 +346,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::put('/preenrolment/update-fields/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'update-enrolment-fields', 'uses' => 'PreenrolmentController@updateEnrolmentFields']);
     Route::get('/preenrolment/nothing-to-modify/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'nothing-to-modify', 'uses' => 'PreenrolmentController@nothingToModify'])->where('tecode', '(.*)');
 
+    Route::post('check-if-pash-record-exists', ['as' => 'check-if-pash-record-exists', 'uses' => 'PreenrolmentController@checkIfPashRecordExists']);
+
     Route::get('send-reminder-emails', 'PreenrolmentController@sendReminderEmails')->name('send-reminder-emails');
     // Enrolment form cancellation route for administrators
     Route::delete('/delete/user/{staff}/course/{tecode}/term/{term}/{form}', ['as' => 'enrolment.destroy', 'uses' => 'PreenrolmentController@destroy'])->where('tecode', '(.*)');

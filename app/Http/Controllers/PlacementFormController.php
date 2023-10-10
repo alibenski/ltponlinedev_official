@@ -1518,6 +1518,9 @@ class PlacementFormController extends Controller
             $formToBeConverted->attachment_pay = $attachment_pay_file->id;
             $formToBeConverted->save();
         }
+
+        $isSelfPayValue = 1;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
     }
 
     public function convertToRegularForm($request, $enrolmentID)
@@ -1532,6 +1535,36 @@ class PlacementFormController extends Controller
             $formToBeConverted->attachment_id = null;
             $formToBeConverted->attachment_pay = null;
             $formToBeConverted->save();
+        }
+
+        $isSelfPayValue = 0;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
+    }
+
+    public function updatePASHRecord(Request $request, $enrolmentID, $isSelfPayValue)
+    {
+        $placementForm = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('id', $enrolmentID->first()->id)
+            ->first();
+
+        // compare Index ID, Term, Language in PASH
+        // if exists, get the record(s) and show to user via ajax
+        // get user input via ajax
+        // continue the update appropriately
+
+        $pashRecord = Repo::where('CodeIndexID', $placementForm->CodeIndexID)->get();
+
+        if (!$pashRecord->isEmpty()) {
+            // set is_self_pay_form field/flag
+            foreach ($pashRecord as $record) {
+                if ($isSelfPayValue == 1) {
+                    $record->is_self_pay_form = 1;
+                } else {
+                    $record->is_self_pay_form = null;
+                }
+                $record->save();
+            }
         }
     }
 }

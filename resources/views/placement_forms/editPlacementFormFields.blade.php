@@ -260,6 +260,26 @@
     placeholder: "--- No Change ---",
     });
 
+    var token = $("input[name='_token']").val();
+    var language = "{{ $enrolment_details->L }}";
+    var INDEXID = "{{ $enrolment_details->INDEXID }}";
+    var Term = "{{ $enrolment_details->Term }}";
+    $.ajax({
+            url: "{{ route('check-if-pash-record-exists') }}",
+            type: 'POST',
+            data: { Term:Term, INDEXID:INDEXID, language:language, _token:token},
+        })
+        .done(function(data) {
+            console.log(data)
+            alert(data[0]["id"]);
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            // console.log("complete");
+        });
+
     $('input.radio-full-select-dropdown').click( function(){
         var radioFullSelect = $(this).val();
         var token = $("input[name='_token']").val();

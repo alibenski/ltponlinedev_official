@@ -958,6 +958,21 @@ class PreenrolmentController extends Controller
         return view('preenrolment.edit', compact('enrolment_details', 'enrolment_schedules', 'languages', 'org'));
     }
 
+    public function checkIfPashRecordExists(Request $request)
+    {
+        // compare Index ID, Term, Language in PASH
+        // if exists, get the record(s) and show to user via ajax
+        // get user input via ajax
+        // continue the update appropriately
+
+        $pashRecord = Repo::where('L', $request->language)->where('INDEXID', $request->INDEXID)->where('Term', $request->Term)->get();
+
+        // if more than 1 record, flag so modal appears
+
+        $data = $pashRecord;
+        return response()->json($data);
+    }
+
     public function nothingToModify(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {
         $enrolment_to_be_copied = Preenrolment::orderBy('id', 'asc')
@@ -1138,6 +1153,9 @@ class PreenrolmentController extends Controller
             $formToBeConverted->attachment_pay = $attachment_pay_file->id;
             $formToBeConverted->save();
         }
+
+        $isSelfPayValue = 1;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
     }
 
     public function convertToRegularForm($request, $enrolmentID)
@@ -1152,6 +1170,31 @@ class PreenrolmentController extends Controller
             $formToBeConverted->attachment_id = null;
             $formToBeConverted->attachment_pay = null;
             $formToBeConverted->save();
+        }
+
+        $isSelfPayValue = 0;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
+    }
+
+    public function updatePASHRecord(Request $request, $enrolmentID, $isSelfPayValue)
+    {
+        $enrolmentForm = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('id', $enrolmentID->first()->id)
+            ->first();
+
+        $pashRecord = Repo::where('CodeIndexID', $enrolmentForm->CodeIndexID)->get();
+
+        if (!$pashRecord->isEmpty()) {
+            // set is_self_pay_form field/flag
+            foreach ($pashRecord as $record) {
+                if ($isSelfPayValue == 1) {
+                    $record->is_self_pay_form = 1;
+                } else {
+                    $record->is_self_pay_form = null;
+                }
+                $record->save();
+            }
         }
     }
 
