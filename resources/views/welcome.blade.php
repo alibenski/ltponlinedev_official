@@ -50,7 +50,7 @@
                                 <div class="col-md m-3">
                                     <div class="card-body btn-welcome-img b1">
                                     <p>
-                                    You are a new UNOG-CLM Language Training Programme participant. Check the <a href="https://view.genial.ly/651fb230e26333001192a348" target="_blank"><strong>eligibility guide</strong></a> then click “join” to create an account and enrol on the language courses.
+                                    You are a new UNOG-CLM Language Training Programme participant. Check the <a href="https://view.genial.ly/651fb230e26333001192a348" target="_blank"><strong>ELIGIBILITY GUIDE</strong></a> then click “join” to create an account and enrol on the language courses.
                                     </p>
                                     <p class="lead btn-bottom">
                                     {{-- <a href="/newuser/create" class="btn btn-lg btn-primary">Join</a> --}}
