@@ -1168,7 +1168,7 @@ class PreenrolmentController extends Controller
             ->where('id', $enrolmentID->first()->id)
             ->first();
 
-        $pashRecord = Repo::where('CodeIndexID', $enrolmentForm->CodeIndexID)->get();
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
 
         if (!$pashRecord->isEmpty()) {
             // set is_self_pay_form field/flag
@@ -1185,8 +1185,6 @@ class PreenrolmentController extends Controller
 
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {
-        // dd(array_filter($request->all()), $indexno, $term, $tecode, $eform_submit_count);
-
         $enrolment_to_be_copied = Preenrolment::withTrashed()
             ->orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
