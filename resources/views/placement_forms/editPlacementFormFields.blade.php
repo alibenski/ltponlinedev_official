@@ -228,6 +228,8 @@
                     </h4>
                 </div>
 
+                <div id="modalCheckPashSection" class="form-group"></div>
+
                 <div class="form-group">
                 	<button type="submit" class="btn btn-success btn-space pull-right"><i class="fa fa-save"></i> Save</button>
 	                <input type="hidden" name="Term" value="{{ $enrolment_details->Term }}">
@@ -271,13 +273,18 @@
         })
         .done(function(data) {
             console.log(data)
-            alert(data[0]["id"]);
-        })
+            $("#modalCheckPashSection").html("");
+            $("#modalCheckPashSection").html(data.options);
+
+            $('#modalCheckPash').modal({
+                keyboard: false,
+                backdrop: 'static'});
+            })
         .fail(function() {
             console.log("error");
         })
         .always(function() {
-            // console.log("complete");
+            console.log("check-if-pash-record-exists complete");
         });
 
     $('input.radio-full-select-dropdown').click( function(){

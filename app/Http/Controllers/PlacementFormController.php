@@ -1342,6 +1342,7 @@ class PlacementFormController extends Controller
 
     public function updatePlacementFields(Request $request, $id)
     {
+        dd($request->all());
         $enrolment_to_be_copied = PlacementForm::withTrashed()
             ->orderBy('id', 'asc')
             ->where('id', $id)
