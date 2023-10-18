@@ -1342,7 +1342,6 @@ class PlacementFormController extends Controller
 
     public function updatePlacementFields(Request $request, $id)
     {
-        dd($request->all());
         $enrolment_to_be_copied = PlacementForm::withTrashed()
             ->orderBy('id', 'asc')
             ->where('id', $id)
@@ -1549,12 +1548,7 @@ class PlacementFormController extends Controller
             ->where('id', $enrolmentID->first()->id)
             ->first();
 
-        // compare Index ID, Term, Language in PASH
-        // if exists, get the record(s) and show to user via ajax
-        // get user input via ajax
-        // continue the update appropriately
-
-        $pashRecord = Repo::where('CodeIndexID', $placementForm->CodeIndexID)->get();
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
 
         if (!$pashRecord->isEmpty()) {
             // set is_self_pay_form field/flag
