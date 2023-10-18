@@ -228,6 +228,8 @@
                     </h4>
                 </div>
 
+                <div id="modalCheckPashSection" class="form-group"></div>
+
                 <div class="form-group">
                 	<button type="submit" class="btn btn-success btn-space pull-right"><i class="fa fa-save"></i> Save</button>
 	                <input type="hidden" name="Term" value="{{ $enrolment_details->Term }}">
@@ -259,6 +261,31 @@
     $('.select2-basic-single').select2({
     placeholder: "--- No Change ---",
     });
+
+    var token = $("input[name='_token']").val();
+    var language = "{{ $enrolment_details->L }}";
+    var INDEXID = "{{ $enrolment_details->INDEXID }}";
+    var Term = "{{ $enrolment_details->Term }}";
+    $.ajax({
+            url: "{{ route('check-if-pash-record-exists') }}",
+            type: 'POST',
+            data: { Term:Term, INDEXID:INDEXID, language:language, _token:token},
+        })
+        .done(function(data) {
+            console.log(data)
+            $("#modalCheckPashSection").html("");
+            $("#modalCheckPashSection").html(data.options);
+
+            $('#modalCheckPash').modal({
+                keyboard: false,
+                backdrop: 'static'});
+            })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("check-if-pash-record-exists complete");
+        });
 
     $('input.radio-full-select-dropdown').click( function(){
         var radioFullSelect = $(this).val();

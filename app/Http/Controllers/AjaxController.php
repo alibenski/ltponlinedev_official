@@ -25,6 +25,30 @@ use DB;
 
 class AjaxController extends Controller
 {
+    public function checkIfPashRecordExists(Request $request)
+    {
+        // compare Index ID, Term, Language in PASH
+        // if exists, get the record(s) and show to user via ajax
+        // get user input via ajax
+        // continue the update appropriately
+
+        $pashRecord = Repo::where('L', $request->language)->where('INDEXID', $request->INDEXID)->where('Term', $request->Term);
+
+        $record_count = $pashRecord->count();
+        // if more than 1 record, flag so modal appears
+        if ($record_count > 0) {
+            $records = $pashRecord->with('courses')->get();
+
+            $array[] =  (object) [
+                'record_count' => $record_count,
+                'records' => $records,
+            ];
+
+            $data = view('form.modalCheckPash', compact('records'))->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
     function ajaxSelectCountry(Request $request)
     {
         if ($request->ajax()) {
