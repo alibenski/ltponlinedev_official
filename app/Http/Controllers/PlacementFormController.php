@@ -1370,6 +1370,7 @@ class PlacementFormController extends Controller
         if ($request->radioChangeOrgInForm) {
             // change organization
             $this->changeSelectedField($enrolment_to_be_copied, $input);
+            $this->changePASHSelectedField($request, $input);
             $request->session()->flash('msg-change-org', 'Organization field has been updated.');
         }
 
@@ -1429,6 +1430,16 @@ class PlacementFormController extends Controller
                 $new_data->overall_approval = $input['approval_hr'];
             }
             $new_data->fill($input)->save();
+        }
+    }
+
+    public function changePASHSelectedField($request, $input)
+    {
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+        if (!$pashRecord->isEmpty()) {
+            foreach ($pashRecord as $record) {
+                $record->fill($input)->save();
+            }
         }
     }
 

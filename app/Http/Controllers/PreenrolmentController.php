@@ -1183,6 +1183,16 @@ class PreenrolmentController extends Controller
         }
     }
 
+    public function changePASHSelectedField($request, $input)
+    {
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+        if (!$pashRecord->isEmpty()) {
+            foreach ($pashRecord as $record) {
+                $record->fill($input)->save();
+            }
+        }
+    }
+
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {
         $enrolment_to_be_copied = Preenrolment::withTrashed()
@@ -1231,6 +1241,7 @@ class PreenrolmentController extends Controller
         if ($request->radioChangeOrgInForm) {
             // change organization
             $this->changeOrgInForm($request, $enrolment_to_be_copied, $input);
+            $this->changePASHSelectedField($request, $input);
             $request->session()->flash('msg-change-org', 'Organization field has been updated.');
         }
 
