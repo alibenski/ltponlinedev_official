@@ -21,6 +21,7 @@
    }
 
    function callbackCatch(error){
+      console.log(error)
       console.error('Error:', error)
    }
    </script>
