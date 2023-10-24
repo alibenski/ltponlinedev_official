@@ -31,7 +31,7 @@
    ]) !!}
   </head>
   <body>
-    <form action="{{ route('post-captcha') }}" method="POST">
+    <form action="{{ route('post-captcha') }}" method="POST" id="contactForm">
         {{ csrf_field() }}
       <div id="html_element"></div>
       <br>
