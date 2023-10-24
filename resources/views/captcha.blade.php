@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>reCAPTCHA demo: Explicit render after an onload callback</title>
+    @include('partials._head')
     <script type="text/javascript">
       var onloadCallback = function() {
         grecaptcha.render('html_element', {
