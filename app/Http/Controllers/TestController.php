@@ -12,6 +12,20 @@ use Session;
 
 class TestController extends Controller
 {
+    public function captcha()
+    {
+        return view('captcha');
+    }
+
+    public function postCaptcha(Request $request)
+    {
+        $this->validate($request, array(
+            'g-recaptcha-response' => 'required|captcha',
+        ));
+
+        return "success";
+    }
+
     public function testQuery($term = "214")
     {
         $prev_term = Term::where('Term_Code', 234)->first()->Term_Prev;

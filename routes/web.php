@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 // test routes for test queries
 Route::get('testQuery', 'TestController@testQuery')->name('testQuery');
+Route::get('captcha', 'TestController@captcha')->name('captcha');
+Route::post('post-captcha', 'TestController@postCaptcha')->name('post-captcha');
 
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
