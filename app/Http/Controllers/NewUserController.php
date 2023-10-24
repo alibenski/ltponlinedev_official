@@ -228,7 +228,6 @@ class NewUserController extends Controller
 
     public function postNewOutsideUser(Request $request)
     {
-        dd($request->all());
         //validate the data
         $this->validate($request, array(
             'email' => 'required|email',
