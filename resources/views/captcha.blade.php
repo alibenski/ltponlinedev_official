@@ -2,13 +2,33 @@
   <head>
     <title>reCAPTCHA demo: Explicit render after an onload callback</title>
     @include('partials._head')
-    <script type="text/javascript">
-      var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-          'sitekey' : '6LcewFQUAAAAAG149ethHDXTtrslT39aTAUpojoY'
-        });
-      };
-    </script>
+    <!-- Include script -->
+   <script type="text/javascript">
+   function callbackThen(response) {
+
+     // read Promise object
+     response.json().then(function(data) {
+       console.log(data);
+       if(data.success && data.score >= 0.6) {
+          console.log('valid recaptcha');
+       } else {
+          document.getElementById('contactForm').addEventListener('submit', function(event) {
+             event.preventDefault();
+             alert('recaptcha error');
+          });
+       }
+     });
+   }
+
+   function callbackCatch(error){
+      console.error('Error:', error)
+   }
+   </script>
+
+   {!! htmlScriptTagJsApi([
+      'callback_then' => 'callbackThen',
+      'callback_catch' => 'callbackCatch',
+   ]) !!}
   </head>
   <body>
     <form action="{{ route('post-captcha') }}" method="POST">
@@ -17,8 +37,5 @@
       <br>
       <input type="submit" value="Submit">
     </form>
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
-    </script>
   </body>
 </html>
