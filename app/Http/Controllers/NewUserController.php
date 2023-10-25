@@ -103,7 +103,7 @@ class NewUserController extends Controller
         $this->validate($request, array(
             'indexno' => 'required|integer',
             'email' => 'required|email',
-            // 'g-recaptcha-response' => 'required|captcha',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         // check if staff exists in Auth table
@@ -231,7 +231,7 @@ class NewUserController extends Controller
         //validate the data
         $this->validate($request, array(
             'email' => 'required|email',
-            // 'g-recaptcha-response' => 'required|captcha',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         // check if staff exists in Auth table
