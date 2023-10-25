@@ -19,9 +19,8 @@ class TestController extends Controller
 
     public function postCaptcha(Request $request)
     {
-        dd($request->all());
         $this->validate($request, array(
-            // 'g-recaptcha-response' => 'required|captcha',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         return "success";
