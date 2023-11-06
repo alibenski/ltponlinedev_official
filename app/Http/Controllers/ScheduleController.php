@@ -101,6 +101,9 @@ class ScheduleController extends Controller
             if ($request->begin_day[$i] == 'Friday') {
                 $schedule->day_5 = 6;
             }
+            if ($request->begin_day[$i] == 'Saturday') {
+                $schedule->day_6 = 7;
+            }
         }
 
         $schedule->standard_format = $request->standard_format;
@@ -156,6 +159,9 @@ class ScheduleController extends Controller
                 }
                 if ($request->begin_day[$i] == 'Friday') {
                     $schedule->day_5 = 6;
+                }
+                if ($request->begin_day[$i] == 'Saturday') {
+                    $schedule->day_6 = 7;
                 }
             }
         } else {
@@ -250,6 +256,7 @@ class ScheduleController extends Controller
         $schedule->day_3 = null;
         $schedule->day_4 = null;
         $schedule->day_5 = null;
+        $schedule->day_6 = null;
 
         $countDays = count($request->begin_day);
         for ($i = 0; $i < $countDays; $i++) {
@@ -267,6 +274,9 @@ class ScheduleController extends Controller
             }
             if ($request->begin_day[$i] == 'Friday') {
                 $schedule->day_5 = 6;
+            }
+            if ($request->begin_day[$i] == 'Saturday') {
+                $schedule->day_6 = 7;
             }
         }
 
@@ -309,6 +319,7 @@ class ScheduleController extends Controller
         $schedule->day_3 = null;
         $schedule->day_4 = null;
         $schedule->day_5 = null;
+        $schedule->day_6 = null;
 
         if ($request->begin_day) {
             $countDays = count($request->begin_day);
@@ -327,6 +338,9 @@ class ScheduleController extends Controller
                 }
                 if ($request->begin_day[$i] == 'Friday') {
                     $schedule->day_5 = 6;
+                }
+                if ($request->begin_day[$i] == 'Saturday') {
+                    $schedule->day_6 = 7;
                 }
             }
         } else {
