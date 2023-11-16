@@ -58,3 +58,15 @@
   </div>
 @endif
 
+@if (!empty($scheduleDays->day_6))
+  <label>Saturday Room:</label>
+  <div class="form-group room_div_{{ $scheduleDays->id }}">
+    <select id="room_id_select_{{ $scheduleDays->id }}" class="col-md-8 form-control select2-multi" name="Te_Sat_Room" multiple="multiple" autocomplete="off"  style="width: 100%">
+        <option value="">--- Select Room ---</option>
+        @foreach ($rooms as $valueRoom)
+            <option value="{{$valueRoom->id}}">{{$valueRoom->Rl_Room}} </option>
+        @endforeach
+    </select>
+  </div>
+@endif
+

@@ -331,6 +331,13 @@ class AjaxController extends Controller
             $deleteDayParam->Te_Fri_ETime = null;
             $deleteDayParam->save();
         }
+        if ($dayID == '7') {
+            $deleteDayParam->Te_Sat = null;
+            $deleteDayParam->Te_Sat_Room = null;
+            $deleteDayParam->Te_Sat_BTime = null;
+            $deleteDayParam->Te_Sat_ETime = null;
+            $deleteDayParam->save();
+        }
 
         return response()->json($deleteDayParam);
     }

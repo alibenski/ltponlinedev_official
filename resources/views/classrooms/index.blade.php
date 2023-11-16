@@ -159,6 +159,9 @@
                                             @if($item->Te_Fri_Room)
                                             <span class="label label-primary">Fri</span> {{$item->roomsFri->Rl_Room}}
                                             @endif
+                                            @if($item->Te_Sat_Room)
+                                            <span class="label label-primary">Sat</span> {{$item->roomsSat->Rl_Room}}
+                                            @endif
                                         </p>
                                     @endforeach
                                 @endif

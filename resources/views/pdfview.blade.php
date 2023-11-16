@@ -88,6 +88,14 @@
               <p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
               </td>
               @endif
+
+              @if(!empty($classroom->Te_Sat_Room))
+              <td class="item6" style="margin: 5px; padding: 10px;">
+              <p>Saturday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+              <p>Saturday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_BTime ))}}</strong></p>
+              <p>Saturday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_ETime)) }}</strong></p>
+              </td>
+              @endif
             </tr>
           </tbody>
         </table>
