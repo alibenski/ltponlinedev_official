@@ -313,6 +313,10 @@ class ClassroomController extends Controller
                     'Te_Fri_Room' => $request->Te_Fri_Room[$i],
                     'Te_Fri_BTime' => $request->Te_Fri_BTime[$i],
                     'Te_Fri_ETime' => $request->Te_Fri_ETime[$i],
+                    'Te_Sat' => $request->Te_Sat,
+                    'Te_Sat_Room' => $request->Te_Sat_Room[$i],
+                    'Te_Sat_BTime' => $request->Te_Sat_BTime[$i],
+                    'Te_Sat_ETime' => $request->Te_Sat_ETime[$i],
                 ]);
                 foreach ($ingredients as $data) {
                     $data->save();
@@ -475,6 +479,11 @@ class ClassroomController extends Controller
         $classroom->Te_Fri_ETime = null;
         $classroom->Te_Fri_Room = null;
 
+        $classroom->Te_Sat = null;
+        $classroom->Te_Sat_BTime = null;
+        $classroom->Te_Sat_ETime = null;
+        $classroom->Te_Sat_Room = null;
+
         $schedule_fields = Schedule::find($request->schedule_id);
         if (isset($schedule_fields->day_1)) {
             $classroom->Te_Mon = 2;
@@ -505,6 +514,12 @@ class ClassroomController extends Controller
             $classroom->Te_Fri_BTime = $schedule_fields->begin_time;
             $classroom->Te_Fri_ETime = $schedule_fields->end_time;
             $classroom->Te_Fri_Room = $request->Te_Fri_Room;
+        }
+        if (isset($schedule_fields->day_6)) {
+            $classroom->Te_Sat = 7;
+            $classroom->Te_Sat_BTime = $schedule_fields->begin_time;
+            $classroom->Te_Sat_ETime = $schedule_fields->end_time;
+            $classroom->Te_Sat_Room = $request->Te_Sat_Room;
         }
         $classroom->save();
         $result = [$request, $classroom];
@@ -562,6 +577,11 @@ class ClassroomController extends Controller
         $classroom->Te_Fri_ETime = null;
         $classroom->Te_Fri_Room = null;
 
+        $classroom->Te_Sat = null;
+        $classroom->Te_Sat_BTime = null;
+        $classroom->Te_Sat_ETime = null;
+        $classroom->Te_Sat_Room = null;
+
         $schedule_fields = Schedule::find($request->schedule_id);
         if (isset($schedule_fields->day_1)) {
             $classroom->Te_Mon = 2;
@@ -592,6 +612,12 @@ class ClassroomController extends Controller
             $classroom->Te_Fri_BTime = $schedule_fields->begin_time;
             $classroom->Te_Fri_ETime = $schedule_fields->end_time;
             $classroom->Te_Fri_Room = $request->Te_Fri_Room;
+        }
+        if (isset($schedule_fields->day_6)) {
+            $classroom->Te_Sat = 7;
+            $classroom->Te_Sat_BTime = $schedule_fields->begin_time;
+            $classroom->Te_Sat_ETime = $schedule_fields->end_time;
+            $classroom->Te_Sat_Room = $request->Te_Sat_Room;
         }
 
         $classroom->save();
@@ -661,6 +687,11 @@ class ClassroomController extends Controller
         $classroom->Te_Fri_ETime = null;
         $classroom->Te_Fri_Room = null;
 
+        $classroom->Te_Sat = null;
+        $classroom->Te_Sat_BTime = null;
+        $classroom->Te_Sat_ETime = null;
+        $classroom->Te_Sat_Room = null;
+
         $schedule_fields = Schedule::find($request->schedule_id);
         if (isset($schedule_fields->day_1)) {
             $classroom->Te_Mon = 2;
@@ -691,6 +722,12 @@ class ClassroomController extends Controller
             $classroom->Te_Fri_BTime = $schedule_fields->begin_time;
             $classroom->Te_Fri_ETime = $schedule_fields->end_time;
             $classroom->Te_Fri_Room = $request->Te_Fri_Room;
+        }
+        if (isset($schedule_fields->day_6)) {
+            $classroom->Te_Sat = 7;
+            $classroom->Te_Sat_BTime = $schedule_fields->begin_time;
+            $classroom->Te_Sat_ETime = $schedule_fields->end_time;
+            $classroom->Te_Sat_Room = $request->Te_Sat_Room;
         }
         $classroom->save();
 
@@ -759,6 +796,11 @@ class ClassroomController extends Controller
         $classroom->Te_Fri_ETime = null;
         $classroom->Te_Fri_Room = null;
 
+        $classroom->Te_Sat = null;
+        $classroom->Te_Sat_BTime = null;
+        $classroom->Te_Sat_ETime = null;
+        $classroom->Te_Sat_Room = null;
+
         $schedule_fields = Schedule::find($request->schedule_id);
         if (isset($schedule_fields->day_1)) {
             $classroom->Te_Mon = 2;
@@ -789,6 +831,12 @@ class ClassroomController extends Controller
             $classroom->Te_Fri_BTime = $schedule_fields->begin_time;
             $classroom->Te_Fri_ETime = $schedule_fields->end_time;
             $classroom->Te_Fri_Room = $request->Te_Fri_Room;
+        }
+        if (isset($schedule_fields->day_6)) {
+            $classroom->Te_Sat = 7;
+            $classroom->Te_Sat_BTime = $schedule_fields->begin_time;
+            $classroom->Te_Sat_ETime = $schedule_fields->end_time;
+            $classroom->Te_Sat_Room = $request->Te_Sat_Room;
         }
         $classroom->save();
         $result = [$request, $classroom];

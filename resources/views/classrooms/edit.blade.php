@@ -103,6 +103,14 @@
 					<hr>
 					</div>
 					@endif
+					@if(!empty($classroom->Te_Sat_Room))
+					<div class="col-sm-6">
+					<p>Saturday Room: <strong>{{ $classroom->roomSat->Rl_Room }}</strong></p>
+					<p>Saturday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_BTime ))}}</strong></p>
+					<p>Saturday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_ETime)) }}</strong></p>
+					<hr>
+					</div>
+					@endif
 	        </div>
 	    </div>
     </div>
