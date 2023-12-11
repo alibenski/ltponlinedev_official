@@ -232,8 +232,11 @@
                                     </p>
                                     
                                     <ul>
+                                        <li style="text-align: justify"><strong>NEW:</strong> An <strong>orientation week</strong>, held one week before the start of the course, will enable you to familiarize yourself with the course learning tools, including the language learning platform, and meet your teacher and group.
+                                        <br />
+                                        During the orientation week, your teacher will email you with further instructions about what is expected from you before the course formally begins, the link to your course material, and autonomous activities on the CLM Language Learning Platform. 
+                                        </li>
                                         <li style="text-align: justify">Some courses require materials. Please check the <a href="https://learning.unog.ch/node/1443">list of materials</a> necessary to purchase before your course starts.</li>
-                                        <li style="text-align: justify">Your teacher will email you with further instructions and the link to your course material and autonomous activities on the CLM Moodle e-learning platform.</li>
                                     </ul>
                                     <h4><strong><u>Important information for ONLINE courses</u></strong></h4>
                                     <p style="text-align: justify">Please note the equipment you will need: </p>
@@ -244,13 +247,13 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <p style="text-align: justify">We will use Microsoft Teams as the teleconferencing tool for your virtual course sessions taking place at the time indicated.  Your teacher will email you further details about how to join these classes at least 24 hours before the course begins.</p>
+                                    <p style="text-align: justify">We will use Microsoft Teams as the teleconferencing tool for your virtual course sessions taking place at the time indicated.  Your teacher will email you further details about how to join these classes during the orientation week.</p>
                                     
                                     <h4><strong><u>Important information for IN-PERSON courses</u></strong></h4>
                                     <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/Bocage_Plan.pdf">Map of Palais des Nations, Annex Bocage (location of classrooms)</a> <br /> - <a href="https://learning.unog.ch/node/1446">Grounds pass and/or parking badge for vehicles</a></p>
 
-                                    <h4><strong><u>Unable to attend the first day of the course? </u></strong></h4>
-                                    <p style="text-align: justify">Please email your teacher before the course starts. Participants who do not attend class during the first day may be disenrolled from the course and their seat given to participants on a waiting list.</p>
+                                    <h4><strong><u>Unable to attend the first week of the course? </u></strong></h4>
+                                    <p style="text-align: justify">Please email your teacher before the course starts. Participants who do not attend class during the first week may be disenrolled from the course and their seat given to participants on a waiting list.</p>
 
                                     <h4><strong><u>You need to cancel your enrolment? </u></strong></h4>
                                     <p style="text-align: justify">You need to do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be reimbursed after this date. 

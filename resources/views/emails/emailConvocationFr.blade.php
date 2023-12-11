@@ -37,8 +37,11 @@
     </p>
 
     <ul>
+        <li style="text-align: justify"><strong>NOUVEAU :</strong> Une <strong>semaine d'orientation</strong>, organisée une semaine avant le début des cours, vous permettra de vous familiariser avec vos outils d'apprentissage, y compris la plateforme d'apprentissage des langues, et de rencontrer votre professeur et votre groupe.
+        <br />
+        Pendant la semaine d'orientation, votre professeur vous enverra par e-mail avec des instructions supplémentaires sur les tâches à accomplir avant le début officiel des cours, le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage des langues de CLM. 
+        </li>
         <li style="text-align: justify">Certains cours nécessitent l’achat de matériel. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>
-        <li style="text-align: justify">Au plus tard 24 heures avant votre premier cours, votre professeur(e) vous enverra un courriel contenant des instructions supplémentaires et le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage en ligne CLM Moodle.</li>
     </ul>
     <h4><strong><u>Informations importantes pour les cours EN LIGNE</u></strong></h4>
     <p style="text-align: justify">Veuillez prendre connaissance du matériel requis :</p>
@@ -49,13 +52,13 @@
             </td>
         </tr>
     </table>
-    <p style="text-align: justify">Nous utiliserons Microsoft Teams comme outil de téléconférence. Les sessions auront lieu au moment indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début des cours.</p>
+    <p style="text-align: justify">Nous utiliserons Microsoft Teams comme outil de téléconférence. Les sessions auront lieu au moment indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session pendant la semaine d’orientation.</p>
     
     <h4><strong><u>Informations importantes pour les cours EN PRÉSENTIEL</u></strong></h4>
     <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/Bocage_Plan.pdf">Plan du Palais des Nations, Annexe Bocage (localisation des salles de cours)</a> <br /> - <a href="https://learning.unog.ch/fr/node/1446">Carte d'accès au terrain et/ou badge de stationnement pour les véhicules</a></p>
 
-    <h4><strong><u>Vous ne pouvez pas être présent(e)s le premier jour du cours ? </u></strong></h4>
-    <p style="text-align: justify">Veuillez en informer à l’avance votre professeur(e) par email. Les participant(e)s absent(e)s le premier jour du cours peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
+    <h4><strong><u>Vous ne pouvez pas être présent(e)s la première semaine de cours ? </u></strong></h4>
+    <p style="text-align: justify">Veuillez en informer à l’avance votre professeur(e) par email. Les participant(e)s absent(e)s la première semaine de cours peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
 
     <h4><strong><u>Vous devez annuler votre inscription ? </u></strong></h4>
     <p style="text-align: justify">Vous devez le faire avant le {{ $cancel_date_limit_string }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. 
