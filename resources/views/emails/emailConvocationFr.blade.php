@@ -38,9 +38,12 @@
 
     <ul>
         <li style="text-align: justify"><strong>NOUVEAU :</strong> Une <strong>semaine d'orientation</strong>, organisée une semaine avant le début des cours, vous permettra de vous familiariser avec vos outils d'apprentissage, y compris la plateforme d'apprentissage des langues, et de rencontrer votre professeur et votre groupe.
+        </li>    
         <br />
+        <li style="text-align: justify">
         Pendant la semaine d'orientation, votre professeur vous enverra par e-mail avec des instructions supplémentaires sur les tâches à accomplir avant le début officiel des cours, le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage des langues de CLM. 
         </li>
+        <br />
         <li style="text-align: justify">Certains cours nécessitent l’achat de matériel. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>
     </ul>
     <h4><strong><u>Informations importantes pour les cours EN LIGNE</u></strong></h4>

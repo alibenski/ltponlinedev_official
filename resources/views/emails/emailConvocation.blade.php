@@ -233,9 +233,12 @@
                                     
                                     <ul>
                                         <li style="text-align: justify"><strong>NEW:</strong> An <strong>orientation week</strong>, held one week before the start of the course, will enable you to familiarize yourself with the course learning tools, including the language learning platform, and meet your teacher and group.
+                                        </li>    
                                         <br />
+                                        <li style="text-align: justify">
                                         During the orientation week, your teacher will email you with further instructions about what is expected from you before the course formally begins, the link to your course material, and autonomous activities on the CLM Language Learning Platform. 
                                         </li>
+                                        <br />
                                         <li style="text-align: justify">Some courses require materials. Please check the <a href="https://learning.unog.ch/node/1443">list of materials</a> necessary to purchase before your course starts.</li>
                                     </ul>
                                     <h4><strong><u>Important information for ONLINE courses</u></strong></h4>
