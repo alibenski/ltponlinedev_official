@@ -71,7 +71,7 @@
 
 						@if(!empty($classroom->Te_Sat_Room))
 
-						<p>Saturday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+						<p>Saturday Room: <strong>{{ $classroom->roomsSat->Rl_Room }}</strong></p>
 						<p>Saturday: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_BTime ))}}</strong> - <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_ETime)) }}</strong></p>
 
 						@endif

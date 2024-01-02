@@ -193,7 +193,7 @@ class CourseSchedController extends Controller
                 $new_class->Te_Fri_ETime = $schedule_fields->end_time;
                 $new_class->Te_Fri_Room = $value->room_id;
             }
-            if (isset($schedule_fields->day_5)) {
+            if (isset($schedule_fields->day_6)) {
                 $new_class->Te_Sat = 7;
                 $new_class->Te_Sat_BTime = $schedule_fields->begin_time;
                 $new_class->Te_Sat_ETime = $schedule_fields->end_time;

@@ -34,7 +34,7 @@
             {{-- <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
             @endif
             @if(!empty($classroom->Te_Sat_Room))
-            <p>Salle du vendredi : <strong>{{ $classroom->roomsSat->Rl_Room }}</strong></p>
+            <p>Salle du samedi : <strong>{{ $classroom->roomsSat->Rl_Room }}</strong></p>
             {{-- <p>horaire samedi : <strong>{{ date('H:i', strtotime($classroom->Te_Sat_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Sat_ETime)) }}</strong></p> --}}
             @endif
         @endforeach

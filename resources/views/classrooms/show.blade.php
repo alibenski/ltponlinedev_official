@@ -32,7 +32,7 @@
 				<p>Friday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Fri_ETime)) }}</strong></p>
 				@endif
 				@if(!empty($classroom->Te_Sat_Room))
-				<p>Saturday Room: <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
+				<p>Saturday Room: <strong>{{ $classroom->roomsSat->Rl_Room }}</strong></p>
 				<p>Saturday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_BTime ))}}</strong></p>
 				<p>Saturday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_ETime)) }}</strong></p>
 				@endif

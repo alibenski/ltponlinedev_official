@@ -121,7 +121,7 @@
 						<p>Saturday Room: 
                             <strong>
                                 @if ($classroom->roomsSat)
-                                {{ $classroom->roomsFri->Rl_Room }}
+                                {{ $classroom->roomsSat->Rl_Room }}
                                 @else
                                 {{ $classroom->Te_Sat_Room }}
                                 @endif
