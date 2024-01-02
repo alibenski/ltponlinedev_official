@@ -2144,6 +2144,10 @@ class PreviewController extends Controller
                         'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                         'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                         'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                        'Te_Sat' => 7,
+                        'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                        'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                        'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
                     ]);
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -3049,6 +3053,10 @@ class PreviewController extends Controller
                     'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                     'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                     'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                    'Te_Sat' => 7,
+                    'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                    'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                    'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
                 ]);
                 $ingredients->save();
 

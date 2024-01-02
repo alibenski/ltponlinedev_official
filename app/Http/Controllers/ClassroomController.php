@@ -89,7 +89,8 @@ class ClassroomController extends Controller
                     $value->Te_Tue_Room,
                     $value->Te_Wed_Room,
                     $value->Te_Thu_Room,
-                    $value->Te_Fri_Room
+                    $value->Te_Fri_Room,
+                    $value->Te_Sat_Room,
                 );
             }
             $arrayRooms = array_unique($arrayRooms);
@@ -126,7 +127,8 @@ class ClassroomController extends Controller
                     $value->Te_Tue_Room,
                     $value->Te_Wed_Room,
                     $value->Te_Thu_Room,
-                    $value->Te_Fri_Room
+                    $value->Te_Fri_Room,
+                    $value->Te_Sat_Room,
                 );
 
                 $day1 = $value->scheduler->day_1;
@@ -170,7 +172,9 @@ class ClassroomController extends Controller
                     'roomTue' => $value->Te_Tue_Room,
                     'roomWed' => $value->Te_Wed_Room,
                     'roomThu' => $value->Te_Thu_Room,
-                    'roomFri' => $value->Te_Fri_Room
+                    'roomFri' => $value->Te_Fri_Room,
+                    'roomSat' => $value->Te_Sat_Room,
+
                 ];
 
                 if ($value->teachers) {

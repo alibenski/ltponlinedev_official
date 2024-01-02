@@ -228,6 +228,10 @@
                                           <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }} </strong></p>
                                           {{-- <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
+                                          @if(!empty($classroom->Te_Sat_Room))
+                                          <p>Friday Room: <strong>{{ $classroom->roomsSat->Rl_Room }} </strong></p>
+                                          {{-- <p>Saturday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Sat_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Sat_ETime)) }}</strong></p> --}}
+                                          @endif
                                         @endforeach
                                     </p>
                                     

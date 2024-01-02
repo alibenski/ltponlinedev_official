@@ -512,7 +512,7 @@
     					                    <div class="col-sm-12">
     					                        <div class="checkbox"> 
     					                            <label>
-    					                                <input type="checkbox" name="Te_Sat" value="6" /> Saturday
+    					                                <input type="checkbox" name="Te_Sat" value="7" /> Saturday
     					                                <br>
     					                            </label>
             										<div class="content-hide content-params">
@@ -757,7 +757,7 @@ $(document).ready(function() {
                         if (!data.options.Te_Fri_BTime) {
                             $('.friday').addClass('hidden');
                         }
-                        if (!data.options.Te_Fri_BTime) {
+                        if (!data.options.Te_Sat_BTime) {
                             $('.saturday').addClass('hidden');
                         }
             })
