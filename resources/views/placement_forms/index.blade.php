@@ -156,11 +156,19 @@
 
                 </td>
                 <td>
-					@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+					@if($form->updated_by_admin === NULL) <span class="label label-danger margin-label">Not Assigned </span>
 					@else
-					  @if ($form->modified_by)
-					    <span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span>
-					  @endif
+						
+						@if ( $form->updated_by_admin === 1 ) 
+						<span class="label label-success margin-label"> Verified and Assigned
+						@elseif ( $form->updated_by_admin === 0 ) 
+						<span class="label label-warning margin-label"> Verified but Not Assigned
+						@endif
+
+						@if ($form->modified_by)
+						by {{$form->modifyUser->name }} 
+						@endif
+						</span>
 					@endif
 				</td>
 				<td>

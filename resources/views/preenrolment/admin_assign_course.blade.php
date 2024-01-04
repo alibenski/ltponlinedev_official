@@ -224,9 +224,15 @@
 	                
 					@if(is_null($element->updated_by_admin)) 
                 	@else
-						@if ($element->modifyUser)
-			            <div class="callout callout-info">
-							Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
+						<div class="callout callout-info">
+							<p class="text-secondary"><strong>Status:</strong> 
+								@if ( $element->updated_by_admin == 1 ) Verified and Assigned
+								@elseif( $element->updated_by_admin == 0 ) Verified but Not Assigned
+								@else Not Assigned
+								@endif
+								</p>
+							@if ($element->modifyUser)
+								Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
 						</div>
 						
 						<div class="well">
