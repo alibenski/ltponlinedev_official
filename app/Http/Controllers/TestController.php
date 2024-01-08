@@ -29,7 +29,8 @@ class TestController extends Controller
 
     public function testQuery()
     {
-        $qry = Attendance::where('pash_id', 130337)->get();
+        $qry = Attendance::where('pash_id', 130337)->with('pashRecord')->get();
+        $qryFirst = Attendance::where('pash_id', 130337)->with('pashRecord')->first();
 
         // if no attendance has been entered yet, then 0 value
         if ($qry->isEmpty()) {
@@ -49,37 +50,115 @@ class TestController extends Controller
         $sumA = [];
         $info = [];
         $collector = [];
-        foreach ($array_attributes as $x => $y) {
-            $info['pash_id'] = $y['pash_id'];
+        if ($qryFirst->pashRecord->Term < 240) {
+            foreach ($array_attributes as $x => $y) {
+                $info['pash_id'] = $y['pash_id'];
 
-            foreach ($y as $k => $v) {
-                if ($v == 'P') {
-                    $sumP[] = 'P';
+                foreach ($y as $k => $v) {
+                    if (substr($k, 0, 4) != "Wk1_") {
+                        if ($v == 'P') {
+                            $sumP[] = 'P';
+                        }
+                    }
+                    if (substr($k, 0, 4) != "Wk1_") {
+                        if ($v == 'E') {
+                            $sumE[] = 'E';
+                        }
+                    }
+                    if (substr($k, 0, 4) != "Wk1_") {
+                        if ($v == 'A') {
+                            $sumA[] = 'A';
+                        }
+                    }
                 }
 
-                if ($v == 'E') {
-                    $sumE[] = 'E';
-                }
+                $info['P'] = count($sumP);
+                $info['E'] = count($sumE);
+                $info['A'] = count($sumA);
 
-                if ($v == 'A') {
-                    $sumA[] = 'A';
-                }
+                $collector[] = $info;
+                // clear contents of array for the next loop
+                $sumP = [];
+                $sumE = [];
+                $sumA = [];
             }
+        } else {
+            foreach ($array_attributes as $x => $y) {
+                $info['pash_id'] = $y['pash_id'];
 
-            $info['P'] = count($sumP);
-            $info['E'] = count($sumE);
-            $info['A'] = count($sumA);
+                foreach ($y as $k => $v) {
+                    if ($v == 'P') {
+                        $sumP[] = 'P';
+                    }
+                    if ($v == 'E') {
+                        $sumE[] = 'E';
+                    }
+                    if ($v == 'A') {
+                        $sumA[] = 'A';
+                    }
+                }
 
-            $collector[] = $info;
-            // clear contents of array for the next loop
-            $sumP = [];
-            $sumE = [];
-            $sumA = [];
+                $info['P'] = count($sumP);
+                $info['E'] = count($sumE);
+                $info['A'] = count($sumA);
+
+                $collector[] = $info;
+                // clear contents of array for the next loop
+                $sumP = [];
+                $sumE = [];
+                $sumA = [];
+            }
         }
+
+        // $array_attributes2 = [];
+        // foreach ($qry as $key2 => $value2) {
+        //     $arr2 = $value2;
+        //     $array_attributes2[] = $arr2->getAttributes();
+        // }
+
+        // $sumP2 = [];
+        // $sumE = [];
+        // $sumA = [];
+        // $info2 = [];
+        // $collector2 = [];
+        // $counter = [];
+        // foreach ($array_attributes2 as $x2 => $y2) {
+        //     $info2['pash_id'] = $y2['pash_id'];
+
+        //     foreach ($y2 as $k2 => $v2) {
+        //         if ($k2 == 'Wk1_1') {
+        //             if ($v2 != null) {
+        //                 $counter[] = 1;
+        //             }
+        //         }
+        //         if ($k2 == 'Wk1_2') {
+        //             if ($v2 != null) {
+        //                 $counter[] = 1;
+        //             }
+        //         }
+        //         if ($k2 == 'Wk1_3') {
+        //             if ($v2 != null) {
+        //                 $counter[] = 1;
+        //             }
+        //         }
+        //         if ($k2 == 'Wk1_4') {
+        //             if ($v2 != null) {
+        //                 $counter[] = 1;
+        //             }
+        //         }
+        //         if ($k2 == 'Wk1_5') {
+        //             if ($v2 != null) {
+        //                 $counter[] = 1;
+        //             }
+        //         }
+        //     }
+
+        //     $info2[] = count($counter);
+        // }
 
         $data = $collector;
 
-        return $array_attributes;
+        return $data;
     }
     // public function testQuery($term = "214")
     // {
