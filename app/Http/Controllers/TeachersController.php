@@ -1260,6 +1260,7 @@ class TeachersController extends Controller
     {
         if ($request->ajax()) {
             $qry = Attendance::whereIn('pash_id', $request->id)->get();
+            $qryFirst = Attendance::where('pash_id', $request->id)->with('pashRecord')->first();
 
             // if no attendance has been entered yet, then 0 value
             if ($qry->isEmpty()) {
@@ -1279,32 +1280,67 @@ class TeachersController extends Controller
             $sumA = [];
             $info = [];
             $collector = [];
-            foreach ($array_attributes as $x => $y) {
-                $info['pash_id'] = $y['pash_id'];
+            // exclude Wk1_ from sum if term > 240
+            if ($qryFirst->pashRecord->Term > 240) {
+                foreach ($array_attributes as $x => $y) {
+                    $info['pash_id'] = $y['pash_id'];
 
-                foreach ($y as $k => $v) {
-                    if ($v == 'P') {
-                        $sumP[] = 'P';
+                    foreach ($y as $k => $v) {
+                        if (substr($k, 0, 4) != "Wk1_") {
+                            if ($v == 'P') {
+                                $sumP[] = 'P';
+                            }
+                        }
+                        if (substr($k, 0, 4) != "Wk1_") {
+                            if ($v == 'E') {
+                                $sumE[] = 'E';
+                            }
+                        }
+                        if (substr($k, 0, 4) != "Wk1_") {
+                            if ($v == 'A') {
+                                $sumA[] = 'A';
+                            }
+                        }
                     }
 
-                    if ($v == 'E') {
-                        $sumE[] = 'E';
-                    }
+                    $info['P'] = count($sumP);
+                    $info['E'] = count($sumE);
+                    $info['A'] = count($sumA);
 
-                    if ($v == 'A') {
-                        $sumA[] = 'A';
-                    }
+                    $collector[] = $info;
+                    // clear contents of array for the next loop
+                    $sumP = [];
+                    $sumE = [];
+                    $sumA = [];
                 }
+            } else {
+                foreach ($array_attributes as $x => $y) {
+                    $info['pash_id'] = $y['pash_id'];
 
-                $info['P'] = count($sumP);
-                $info['E'] = count($sumE);
-                $info['A'] = count($sumA);
+                    foreach ($y as $k => $v) {
+                        if ($v == 'P') {
+                            $sumP[] = 'P';
+                        }
 
-                $collector[] = $info;
-                // clear contents of array for the next loop
-                $sumP = [];
-                $sumE = [];
-                $sumA = [];
+                        if ($v == 'E') {
+                            $sumE[] = 'E';
+                        }
+
+                        if ($v == 'A') {
+                            $sumA[] = 'A';
+                        }
+                    }
+
+                    $info['P'] = count($sumP);
+                    $info['E'] = count($sumE);
+                    $info['A'] = count($sumA);
+
+                    $collector[] = $info;
+                    // clear contents of array for the next loop
+                    $sumP = [];
+                    $sumE = [];
+                    $sumA = [];
+                }
             }
 
             $data = $collector;
