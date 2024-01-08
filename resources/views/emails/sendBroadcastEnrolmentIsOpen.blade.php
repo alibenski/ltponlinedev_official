@@ -331,7 +331,7 @@
                             </tr>
                             <tr>
                                 <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                                    <!-- Button : BEGIN 
+                                    <!-- Button : BEGIN -->
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                                         <tr>
                                             <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
@@ -341,7 +341,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    Button : END -->
+                                    <!-- Button : END -->
                                 </td>
                             </tr>
                             {{-- <tr>
