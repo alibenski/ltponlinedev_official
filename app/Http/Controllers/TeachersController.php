@@ -1260,8 +1260,12 @@ class TeachersController extends Controller
     {
         if ($request->ajax()) {
             $qry = Attendance::whereIn('pash_id', $request->id)->get();
-            $qryFirst = Attendance::where('pash_id', $request->id)->with('pashRecord')->first();
-
+            // get the term from relationship with Repo
+            foreach ($qry as $record) {
+                if ($record->pashRecord) {
+                    $term = $record->pashRecord->Term;
+                }
+            }
             // if no attendance has been entered yet, then 0 value
             if ($qry->isEmpty()) {
 
@@ -1281,7 +1285,7 @@ class TeachersController extends Controller
             $info = [];
             $collector = [];
             // exclude Wk1_ from sum if term > 240
-            if ($qryFirst->pashRecord->Term > 240) {
+            if ($term > 240) {
                 foreach ($array_attributes as $x => $y) {
                     $info['pash_id'] = $y['pash_id'];
 
