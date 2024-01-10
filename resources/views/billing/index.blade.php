@@ -79,6 +79,9 @@
 				<th>First Name</th>
 				<th>Email</th>
 				<th>RESULT</th>
+				<th>Days Present</th>
+				<th>Days Excused</th>
+				<th>Days Absent</th>
 				<th>Cancel Date</th>
 			</tr>
 		</thead>
@@ -96,6 +99,9 @@
 				<th>First Name</th>
 				<th>Email</th>
 				<th>RESULT</th>
+				<th>Days Present</th>
+				<th>Days Excused</th>
+				<th>Days Absent</th>
 				<th>Cancel Date</th>
 			</tr>
 		</tfoot>
@@ -187,6 +193,33 @@ $(document).ready(function() {
 	        		{ "data": "users.nameFirst" }, 
 	        		{ "data": "users.email" }, 
 	        		{ "data": "Result", "className": "result" },
+					{ "data": function ( row, type, val, meta ) {
+							if (row.attendances != null) {
+								return row.attendances.availability[0].P;
+							} else {
+
+								return 'No Attendance Set';
+							}
+						} 
+					},
+					{ "data": function ( row, type, val, meta ) {
+							if (row.attendances != null) {
+								return row.attendances.availability[0].E;
+							} else {
+
+								return 'No Attendance Set';
+							}
+						} 
+					},
+					{ "data": function ( row, type, val, meta ) {
+							if (row.attendances != null) {
+								return row.attendances.availability[0].A;
+							} else {
+
+								return 'No Attendance Set';
+							}
+						} 
+					},
 	        		{ "data": "deleted_at" }
 				        ],
 			"createdRow": function( row, data, dataIndex ) {

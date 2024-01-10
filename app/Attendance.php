@@ -28,7 +28,12 @@ class Attendance extends Model
     public function getAvailabilityAttribute()
     {
         $qry = Attendance::where('pash_id', $this->pash_id)->get();
-        $qryFirst = Attendance::where('pash_id', $this->pash_id)->with('pashRecord')->first();
+        // get the term from relationship with Repo
+        foreach ($qry as $record) {
+            if ($record->pashRecord) {
+                $term = $record->pashRecord->Term;
+            }
+        }
 
         // if no attendance has been entered yet, then 0 value
         if ($qry->isEmpty()) {
@@ -49,7 +54,7 @@ class Attendance extends Model
         $info = [];
         $collector = [];
         // exclude Wk1_ from sum if term > 240
-        if ($qryFirst->pashRecord->Term > 240) {
+        if ($term > 240) {
             foreach ($array_attributes as $x => $y) {
                 $info['pash_id'] = $y['pash_id'];
 
