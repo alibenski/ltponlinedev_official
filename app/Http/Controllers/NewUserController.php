@@ -320,7 +320,7 @@ class NewUserController extends Controller
             // 'student_cat' => 'required|',
             'dob' => 'required',
             'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            // 'g-recaptcha-response' => 'required|captcha',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         //validate 2nd attachment for Spouse profile
