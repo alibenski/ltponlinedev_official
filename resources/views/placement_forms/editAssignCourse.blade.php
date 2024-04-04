@@ -271,9 +271,9 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label">Admin Comments: (optional) </label>
+					<label class="control-label">Admin Comments: <span class="text-danger">(Required for Verify and Not Assign)</span> </label>
 
-					<textarea id="textarea-{{$placement_form->eform_submit_count}}" name="admin_plform_comment" class="form-control" maxlength="3500" @if(is_null($placement_form->admin_plform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$placement_form->admin_plform_comment}}" @endif></textarea>
+					<textarea id="textarea-{{$placement_form->eform_submit_count}}" name="admin_plform_comment" class="form-control" maxlength="3500" @if(is_null($placement_form->admin_plform_comment)) placeholder="Reason for Verify and Not Assign, write important information to note about this student, enrolment form, etc." @else placeholder="{{$placement_form->admin_plform_comment}}" @endif></textarea>
 					
 				</div>
 
@@ -283,8 +283,24 @@
 				{{-- <a href="{{ route('placement-form.index') }}" class="btn btn-danger" ><span class="glyphicon glyphicon-arrow-left"></span>  Back</a> --}}
 				<div class="col-sm-5 col-sm-offset-4">
 					<button type="submit" class="btn btn-success button-prevent-multi-submit" style="margin: 2px 2px" name="submit-approval" value="1" disabled=""><span class="glyphicon glyphicon-check"></span> Assign </button>	
-					<button type="submit" class="btn btn-warning button-prevent-multi-submit" style="margin: 2px 2px" name="submit-approval" value="0"><span class="glyphicon glyphicon-remove"></span>  Verify and Not Assign </button>
+					<button type="submit" class="modal-not-assign-btn btn btn-warning button-prevent-multi-submit" style="margin: 2px 2px" name="submit-approval" value="0" disabled><span class="glyphicon glyphicon-remove"></span>  Verify and Not Assign </button>
 				</div>
+
+				<script type="text/javascript">
+					var button = $("button.modal-not-assign-btn");
+					$("textarea[name='admin_plform_comment']").on('input keyup',function(e){
+						console.log(e.target.value)
+						if(e.target.value === ''){
+							// Textarea has no value
+							button.prop('disabled', true);
+							console.log("no value")
+						} else {
+							// Textarea has a value
+							button.prop("disabled", false);
+						}
+					});
+				</script>
+
 				{{-- <button type="submit" class="btn btn-warning" name="submit-approval" value="2"><span class="glyphicon glyphicon-stop"></span>  Pending</button> --}}
 			</div>
 			<input type="hidden" name="_token" value="{{ Session::token() }}">

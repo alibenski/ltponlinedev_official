@@ -25,7 +25,7 @@
                       </ul>
                     </li>
                 </ul>
-                <p>You are eligible to use this enrolment form if you are a member of:</p>
+                <!-- <p>You are eligible to use this enrolment form if you are a member of:</p>
                 <ul>
                     <li>Staff of permanent missions, including observer missions
                     <li>Staff of service organizations in the Palais des Nations</li></li>
@@ -37,7 +37,7 @@
                     <li>Spouses of international civil servants</li>
                     <li>UN Secretariat retirees</li>
                     <li>Interns (only considered if their internship covers the term. Interns have no priority over the categories above)</li>
-                </ul>
+                </ul> -->
                 <p>Read more about <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>eligibility</strong> HERE</a>. Thank you for your cooperation.</p>
             </div>
             <div class="modal-footer">

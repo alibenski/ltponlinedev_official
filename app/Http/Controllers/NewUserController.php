@@ -115,7 +115,7 @@ class NewUserController extends Controller
             return redirect('login');
         }
 
-        // if staff exists in sddextr table, redirect to login page
+        // query if staff exists in sddextr table
         $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
 
         // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
@@ -320,7 +320,7 @@ class NewUserController extends Controller
             // 'student_cat' => 'required|',
             'dob' => 'required',
             'contractfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            // 'g-recaptcha-response' => 'required|captcha',
+            'g-recaptcha-response' => 'required|captcha',
         ));
 
         //validate 2nd attachment for Spouse profile
@@ -520,6 +520,7 @@ class NewUserController extends Controller
             ));
             $this->validate($request, array(
                 'indexno' => 'unique:SDDEXTR,INDEXNO_old',
+                'indexno' => 'unique:SDDEXTR,INDEXNO',
                 'email' => 'unique:SDDEXTR,EMAIL',
             ));
 

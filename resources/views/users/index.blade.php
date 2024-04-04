@@ -34,6 +34,7 @@
         <a href="{{ route('users.create') }}" class="btn btn-success">Add Single User</a>
         <a href="{{ route('late-user-management') }}" class="btn btn-danger">Manage Late User Accounts</a>
         @if (Auth::id() === 701)
+        <a href="{{ route('import-existing-from-sddextr-form') }}" class="btn btn-default">Import Existing from SDDEXTR</a>
         <a href="{{ route('import-user') }}" class="btn btn-primary">Bulk Import New Users</a>
         <a href="{{ route('import-existing-user') }}" class="btn btn-warning">Bulk Import Existing Users</a>  
         @endif

@@ -15,6 +15,7 @@ use App\Repo;
 use App\Observers\PashObserver;
 use App\Preenrolment;
 use App\PlacementForm;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap(); // The paginator now uses the Tailwind CSS framework for its default styling. In order to keep using Bootstrap, you should add the following method call 
         User::observe(UserObserver::class);
         SDDEXTR::observe(UserObserver::class);
         Repo::observe(PashObserver::class);

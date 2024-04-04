@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 // test routes for test queries
 Route::get('testQuery', 'TestController@testQuery')->name('testQuery');
+Route::get('captcha', 'TestController@captcha')->name('captcha');
+Route::post('post-captcha', 'TestController@postCaptcha')->name('post-captcha');
 
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
@@ -181,6 +183,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::put('teacher-nothing-to-modify', ['as' => 'teacher-nothing-to-modify', 'uses' => 'TeachersController@teacherNothingToModify']);
     Route::put('teacher-verify-and-not-assign', ['as' => 'teacher-verify-and-not-assign', 'uses' => 'TeachersController@teacherVerifyAndNotAssign']);
     Route::get('teacher-enrolment-preview', ['as' => 'teacher-enrolment-preview', 'uses' => 'TeachersController@teacherEnrolmentPreview']);
+    Route::get('teacher-enrolment-preview-table-view', ['as' => 'teacher-enrolment-preview-table-view', 'uses' => 'TeachersController@teacherEnrolmentPreviewTableView']);
+    Route::get('teacher-enrolment-preview-table', ['as' => 'teacher-enrolment-preview-table', 'uses' => 'TeachersController@teacherEnrolmentPreviewTable']);
     Route::delete('teacher-delete-form', ['as' => 'teacher-delete-form', 'uses' => 'TeachersController@teacherDeleteForm']);
 
     Route::resource('writing-tips', 'WritingTipController');
@@ -261,6 +265,10 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm']);
     Route::post('user/enrol-student-to-placement-insert', ['as' => 'enrol-student-to-placement-insert', 'uses' => 'UserController@enrolStudentToPlacementInsert']);
 
+    // import existing student from SDDEXTR to Users
+    Route::get('user/import-existing-from-sddextr-form', ['as' => 'import-existing-from-sddextr-form', 'uses' => 'UserController@importExistingFromSDDEXTRForm']);
+    Route::post('user/import-existing-from-sddextr', ['as' => 'import-existing-from-sddextr', 'uses' => 'UserController@importExistingFromSDDEXTR']);
+
     // update contract expiry field
     Route::put('/user/user-update-contract', ['as' => 'user-update-contract', 'uses' => 'UserController@userUpdateContract']);
     // adminLTEv3 views
@@ -299,6 +307,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     // Waitlist routes
     Route::get('waitListOneListCount', 'WaitlistController@waitListOneListCount')->name('waitListOneListCount');
+    Route::get('noClassStudentCount', 'WaitlistController@noClassStudentCount')->name('noClassStudentCount');
     Route::get('waitListOneList/{te_code}', ['as' => 'waitListOneList', 'uses' => 'WaitlistController@waitListOneList']);
     Route::get('ajax-check-if-waitlisted', ['as' => 'ajax-check-if-waitlisted', 'uses' => 'WaitlistController@ajaxCheckIfWaitlisted']);
     Route::get('waitlist-modal-form', ['as' => 'waitlist-modal-form', 'uses' => 'WaitlistController@waitlistModalForm']);
@@ -338,6 +347,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('/preenrolment/edit-fields/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'edit-enrolment-fields', 'uses' => 'PreenrolmentController@editEnrolmentFields'])->where('tecode', '(.*)');
     Route::put('/preenrolment/update-fields/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'update-enrolment-fields', 'uses' => 'PreenrolmentController@updateEnrolmentFields']);
     Route::get('/preenrolment/nothing-to-modify/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'nothing-to-modify', 'uses' => 'PreenrolmentController@nothingToModify'])->where('tecode', '(.*)');
+
+    Route::post('check-if-pash-record-exists', ['as' => 'check-if-pash-record-exists', 'uses' => 'AjaxController@checkIfPashRecordExists']);
 
     Route::get('send-reminder-emails', 'PreenrolmentController@sendReminderEmails')->name('send-reminder-emails');
     // Enrolment form cancellation route for administrators
@@ -437,6 +448,7 @@ Route::middleware(['auth'])->group(function () {
         //home page routes
         Route::get('/home', 'HomeController@index')->name('home');
         Route::get('/home-how-to-check-status', 'HomeController@homeHowToCheckStatus')->name('home-how-to-check-status');
+        Route::get('/read-me-first', ['as' => 'read-me-first', 'uses' => 'HomeController@readMeFirst']);
         Route::get('/whatorg', ['as' => 'whatorg', 'uses' => 'HomeController@whatorg']);
 
         // late registration routes

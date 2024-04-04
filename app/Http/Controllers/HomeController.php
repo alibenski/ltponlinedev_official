@@ -147,6 +147,22 @@ class HomeController extends Controller
         return view('form.history', compact('historical_data', 'currentTermCode'));
     }
 
+    public function readMeFirst()
+    {
+        //get current year and date
+        $now_date = Carbon::now()->toDateString();
+        $now_year = Carbon::now()->year;
+        // actual current term
+        $terms = Term::orderBy('Term_Code', 'desc')->whereDate('Term_End', '>=', $now_date)->get()->min();
+        // actual enrolment term
+        $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
+
+        $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
+        // ->pluck('Org name','Org name', 'Org Full Name');
+
+        return view('form.readMeFirst', compact('terms', 'next_term', 'org'));
+    }
+
     public function whatorg()
     {
         //get current year and date

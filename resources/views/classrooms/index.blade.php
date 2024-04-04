@@ -159,6 +159,9 @@
                                             @if($item->Te_Fri_Room)
                                             <span class="label label-primary">Fri</span> {{$item->roomsFri->Rl_Room}}
                                             @endif
+                                            @if($item->Te_Sat_Room)
+                                            <span class="label label-primary">Sat</span> {{$item->roomsSat->Rl_Room}}
+                                            @endif
                                         </p>
                                     @endforeach
                                 @endif
@@ -504,6 +507,54 @@
                                                 </div>
                                             </div>
     			                    	</div>
+
+    			                        <div class="form-group saturday col-sm-12">
+    					                    <div class="col-sm-12">
+    					                        <div class="checkbox"> 
+    					                            <label>
+    					                                <input type="checkbox" name="Te_Sat" value="7" /> Saturday
+    					                                <br>
+    					                            </label>
+            										<div class="content-hide content-params">
+            											<div class="btn-space col-sm-12">
+            					                            <label class="control-label col-sm-4" for="Te_Sat_Room">Room:</label>
+            					                            <div class="col-sm-8">
+            					                                <select class="form-control " name="Te_Sat_Room[]" autocomplete="off" style="width: 100%;">
+            					                                    <option></option>
+                                                                    @foreach ($rooms as $room)
+            					                                    <option value="{{ $room->id}}"> {{ $room->Rl_Room }} ({{ $room->Rl_Location }})</option>
+            					                                    @endforeach
+            					                                </select>
+            					                                <p class="errorRoom text-center alert alert-danger hidden"></p>
+            					                            </div>
+            					                        </div>
+            					                        <div class="btn-space col-sm-12">
+            					                            <label class="control-label col-sm-4" for="Te_Sat_BTime">Begin Time:</label>
+            					                            <div class="col-sm-8">
+            					                                <select class="form-control " name="Te_Sat_BTime[]" autocomplete="off" style="width: 100%;">
+            					                                    <option></option>
+                                                                    @foreach ($btimes as $id => $val)
+                                                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
+                                                                    @endforeach
+            					                                </select>
+            					                            </div>
+            					                        </div>
+            					                        <div class="btn-space col-sm-12">
+            					                            <label class="control-label col-sm-4" for="Te_Sat_ETime">End Time:</label>
+            					                            <div class="col-sm-8">
+            					                                <select class="form-control " name="Te_Sat_ETime[]" autocomplete="off" style="width: 100%;">
+            					                                    <option></option>
+                                                                    @foreach ($etimes as $id => $val)
+                                                                    <option value="{{ $id}}"> {{ date('h:i:sa', strtotime($val)) }}</option>
+                                                                    @endforeach
+            					                                </select>
+            					                            </div>
+            											</div>
+            										</div>
+                                                </div>
+                                            </div>
+    			                    	</div>
+
     			                    </div> 
     							</div> 
                             </div>
@@ -680,6 +731,7 @@ $(document).ready(function() {
             $('.wednesday').removeClass('hidden');
             $('.thursday').removeClass('hidden');
             $('.friday').removeClass('hidden');
+            $('.saturday').removeClass('hidden');
 
             $.ajax({
                 url: '{{ route('get-section-param-ajax') }}',
@@ -704,6 +756,9 @@ $(document).ready(function() {
                         }
                         if (!data.options.Te_Fri_BTime) {
                             $('.friday').addClass('hidden');
+                        }
+                        if (!data.options.Te_Sat_BTime) {
+                            $('.saturday').addClass('hidden');
                         }
             })
             .fail(function() {
@@ -763,6 +818,13 @@ $(document).ready(function() {
                              return this.value; }).get();
             var Te_Fri_ETime = $("select[name='Te_Fri_ETime[]']").map(function(){
                              return this.value; }).get();
+            
+            var Te_Sat_Room = $("select[name='Te_Sat_Room[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Sat_BTime = $("select[name='Te_Sat_BTime[]']").map(function(){
+                             return this.value; }).get();
+            var Te_Sat_ETime = $("select[name='Te_Sat_ETime[]']").map(function(){
+                             return this.value; }).get();
                     
 
 
@@ -802,6 +864,10 @@ $(document).ready(function() {
                     'Te_Fri_Room[]' : Te_Fri_Room,
                     'Te_Fri_BTime[]' : Te_Fri_BTime,
                     'Te_Fri_ETime[]' : Te_Fri_ETime,
+                    'Te_Sat' : $("input[name='Te_Sat']").val(),
+                    'Te_Sat_Room[]' : Te_Sat_Room,
+                    'Te_Sat_BTime[]' : Te_Sat_BTime,
+                    'Te_Sat_ETime[]' : Te_Sat_ETime,
                     
                 },
                 success: function(data) {

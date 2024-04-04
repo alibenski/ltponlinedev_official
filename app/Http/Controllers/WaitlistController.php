@@ -190,7 +190,8 @@ class WaitlistController extends Controller
                     ->whereIn('Te_Code', $request->arrTeCode)
                     ->whereHas('classrooms', function ($query) {
                         $query->whereNull('Tch_ID')
-                            ->orWhere('Tch_ID', '=', 'TBD');
+                            ->orWhere('Tch_ID', '=', 'TBD')
+                            ->where('sectionNo', '>=', 2);
                     })
                     ->with('classrooms')
                     ->pluck('Te_Code')
@@ -216,7 +217,8 @@ class WaitlistController extends Controller
                 ->where('Te_Code', $Te_Code)
                 ->whereHas('classrooms', function ($query) {
                     $query->whereNull('Tch_ID')
-                        ->orWhere('Tch_ID', '=', 'TBD');
+                        ->orWhere('Tch_ID', '=', 'TBD')
+                        ->where('sectionNo', '>=', 2);
                 })
                 ->with('classrooms')
                 ->with(['enrolments' => function ($q1) use ($term) {
@@ -233,6 +235,34 @@ class WaitlistController extends Controller
 
             $courseName = Course::where('Te_Code_New', $Te_Code)->whereNotNull('Te_Code_New')->first();
             return view('waitlist.waitListOneList', compact('courseName', 'form_info'));
+        }
+    }
+
+    public function noClassStudentCount(Request $request)
+    {
+        if (Session::has('Term')) {
+            if (!is_null($request->arrTeCode)) {
+                $term = Session::get('Term');
+                $noClassStudents = Repo::where('Term', $term)
+                    ->whereIn('Te_Code', $request->arrTeCode)
+                    ->whereHas('classrooms', function ($query) {
+                        $query->where('sectionNo', 1) // position of where clause needs to be here to take effect
+                            ->whereNull('Tch_ID')
+                            ->orWhere('Tch_ID', '=', 'TBD');
+                    })
+                    ->with('classrooms')
+                    ->pluck('Te_Code')
+                    ->toArray();
+
+                $data = array_count_values($noClassStudents);
+                return response()->json($data);
+            }
+
+            $data = [
+                "status" => "fail",
+                "message" => "Error getting total waitlisted student count."
+            ];
+            return response()->json($data);
         }
     }
 
@@ -805,6 +835,10 @@ class WaitlistController extends Controller
                 'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                 'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                 'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                'Te_Sat' => 7,
+                'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
             ]);
             $ingredients->save();
 
@@ -1017,75 +1051,16 @@ class WaitlistController extends Controller
                         'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                         'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                         'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                        'Te_Sat' => 7,
+                        'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                        'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                        'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
                     ]);
                     foreach ($ingredients as $data) {
                         $data->save();
                     }
                 }
             }
-            // if (!empty($existingSection)) {
-            //     $sectionNo = $existingSection[0]['sectionNo'] + 1;
-            //     $sectionNo2 = $existingSection[0]['sectionNo'] + 1;
-            //     $arr[] = $sectionNo;
-            //     // var_dump($sectionNo);
-
-            //     for ($i2=1; $i2 < $counter; $i2++) { 
-            //         $ingredients[] = new  Classroom([
-            //             'Code' => $arrGetCode[$i].'-'.$sectionNo++,
-            //             'Te_Term' => $arrGetDetails[$i]->Te_Term,
-            //             'cs_unique' => $arrGetDetails[$i]->cs_unique,
-            //             'L' => $arrGetDetails[$i]->L, 
-            //             'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
-            //             'schedule_id' => $arrGetDetails[$i]->schedule_id,
-            //             'sectionNo' => $sectionNo2++,
-            //             'Te_Mon' => 2,
-            //             'Te_Mon_Room' => $existingSection[0]['Te_Mon_Room'],
-            //             'Te_Mon_BTime' => $existingSection[0]['Te_Mon_BTime'],
-            //             'Te_Mon_ETime' => $existingSection[0]['Te_Mon_ETime'],
-            //             'Te_Tue' => 3,
-            //             'Te_Tue_Room' => $existingSection[0]['Te_Tue_Room'],
-            //             'Te_Tue_BTime' => $existingSection[0]['Te_Tue_BTime'],
-            //             'Te_Tue_ETime' => $existingSection[0]['Te_Tue_ETime'],
-            //             'Te_Wed' => 4,
-            //             'Te_Wed_Room' => $existingSection[0]['Te_Wed_Room'],
-            //             'Te_Wed_BTime' => $existingSection[0]['Te_Wed_BTime'],
-            //             'Te_Wed_ETime' => $existingSection[0]['Te_Wed_ETime'],
-            //             'Te_Thu' => 5,
-            //             'Te_Thu_Room' => $existingSection[0]['Te_Thu_Room'],
-            //             'Te_Thu_BTime' => $existingSection[0]['Te_Thu_BTime'],
-            //             'Te_Thu_ETime' => $existingSection[0]['Te_Thu_ETime'],
-            //             'Te_Fri' => 6,
-            //             'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
-            //             'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
-            //             'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
-            //             ]);
-            //         foreach ($ingredients as $data) {
-            //                     $data->save();
-            //         }
-            //     }
-            // } 
-            // /**
-            //  * debug and refactor else state so that it gets the attributes from schedules table
-            //  */
-            // else {
-            //     $sectionNo = 1;
-            //     $sectionNo2 = 1;
-            //     for ($i2=0; $i2 < $counter; $i2++) { 
-            //         $ingredients[] = new  Classroom([
-            //             'Code' => $arrGetCode[$i].'-'.$sectionNo++,
-            //             'Te_Term' => $arrGetDetails[$i]->Te_Term,
-            //             'cs_unique' => $arrGetDetails[$i]->cs_unique,
-            //             'L' => $arrGetDetails[$i]->L, 
-            //             'Te_Code_New' => $arrGetDetails[$i]->Te_Code_New, 
-            //             'schedule_id' => $arrGetDetails[$i]->schedule_id,
-            //             'sectionNo' => $sectionNo2++,
-            //             ]);
-            //         foreach ($ingredients as $data) {
-            //                     $data->save();
-            //         }
-            //     }
-            // }
-            // var_dump('section value starts at: '.$sectionNo);
         }
 
         dd($num_classes);

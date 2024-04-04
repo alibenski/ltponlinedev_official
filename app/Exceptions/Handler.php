@@ -17,7 +17,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [];
 
@@ -27,9 +27,17 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontFlash = [
+        'current_password',
         'password',
         'password_confirmation',
     ];
+
+    public function register()
+    {
+        $this->reportable(function (Throwable $e) {
+            //
+        });
+    }
 
     /**
      * Report or log an exception.

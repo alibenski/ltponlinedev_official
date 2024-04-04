@@ -77,10 +77,14 @@
 				@foreach($enrolment_forms as $form)
 				<tr @if($form->deleted_at) style="background-color: #eed5d2;" @else @endif>
 					<td>
-						@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+						@if(is_null($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
 		                @else
-		                  @if ($form->modified_by)
-		                    <span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span>
+		                  @if ($form->updated_by_admin === 1)
+		                    <p><span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span></p>
+		                    {{-- <p><span class="label label-success margin-label">{{ $form->courses->Description }}  </span></p> --}}
+		                    {{-- <p><span class="label label-success margin-label">{{$form->schedule->name }} </span></p> --}}
+						  @elseif($form->updated_by_admin === 0)
+						    <p><span class="label label-warning margin-label">Verified and Not Assigned by {{$form->modifyUser->name }} </span></p>
 		                  @endif
 		                @endif
 					</td>

@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-md-3">
       <div class="card">
-          <div class="card-header bg-info text-center"><strong>Information/Content/Format of UN Language Courses</strong></div>
+          <div class="card-header bg-info text-center"><strong>Course offer and other information</strong></div>
           <div class="card-body">
               <ul  class="list-group">
                   <a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a>
@@ -42,27 +42,29 @@
                 <input type="hidden" name="url" value="{{ $url }}">
                 <div class="form-group col-md-12">
                   <p>Hello <strong>{{ Auth::user()->name }},</strong></p>
-                  <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. Please refer to the information found <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a> to read the FAQs regarding enrolment eligibility.</p>
-                  <h5>STEP 1: </h5> 
-                  <p> Read the content, format, and other information from the latest available courses in each language. 
-                    <ul  class="nav nav-fill">
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-arabic" target="_blank" class=" text-center arab-txt">Arabic Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-chinese" target="_blank" class=" text-center chi-txt">Chinese Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-english" target="_blank" class=" text-center eng-txt">English Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-french" target="_blank" class=" text-center fr-txt">French Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-russian" target="_blank" class=" text-center ru-txt">Russian Info</a></li>
-                      <li class="nav-item"><a href="https://learning.unog.ch/language-course-spanish" target="_blank" class=" text-center sp-txt">Spanish Info</a></li>
-                    </ul>
+                  <p class="text-justify">Welcome to the <strong>UNOG-CLM Language Training Programme (LTP) Online Enrolment Platform</strong>. 
                   </p>
-                    
-                  <p>View their respective schedules <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/ClassSchedule_en_fr.pdf" target="_blank"><strong> HERE</strong></a> before proceeding below. </p>                  
+                    <p>
+                      Before you start your enrolment, please check:
+                        <ul>
+                            <li>your eligibility <a href="https://learning.unog.ch/node/1301#position1" target="_blank"><strong>HERE</strong></a>
+                            </li>
+                            <li>the course offer, formats, and requirements <a href="https://learning.unog.ch/language-index" target="_blank"><strong>HERE</strong></a> or on the left block
+                            </li>
+                            <li>the information circular <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LanguageCourses_en.pdf" target="_blank"><strong>HERE</strong></a>
+                            </li>
+                        </ul>    
+                    </p>                        
+                    <br />
+                    <p>
+                    <input id="ReadMeCheckBox" type="checkbox" />
+                    I have read and understood the above information and can proceed with my enrolment.     
+                    </p>       
                 </div>
-
+              
+              <div id="enrolmentTypeSection" class="invisible">
                 <!-- MAKE A DECISION SECTION -->
-                <div class="form-group col-md-12">
-                  <h5>STEP 2: </h5>Choose your Enrolment Type.
-                </div>
-                <div class="d-flex form-group">
+                <div  class="d-flex form-group">
                     <label class="col-md-3 control-label">Enrolment Type:</label>
 
                       <div class="col-md-5">
@@ -136,6 +138,7 @@
                 <div class="pull-right col-md-2">
                   <a class="btn next-link btn-default btn-block button-prevent-multi-submit">Next</a>
                 </div>
+              </div>
             </form>
           </div>
         </div>
@@ -196,6 +199,14 @@
 
     $("input[name='decision']").prop('checked', false);
   });
+
+  $("input#ReadMeCheckBox").on("click", function () {
+        if ($(this).is(':checked', true)) {
+            $("div#enrolmentTypeSection").removeClass("invisible");
+        } else {
+            $("div#enrolmentTypeSection").addClass("invisible");
+        }
+    })
 </script>
 
 <script>

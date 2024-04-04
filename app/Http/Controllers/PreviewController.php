@@ -25,6 +25,7 @@ use App\Schedule;
 use App\Teachers;
 use App\Term;
 use App\Torgan;
+use App\Traits\ManipulateTermDate;
 use App\User;
 use App\Waitlist;
 use Carbon\Carbon;
@@ -619,6 +620,8 @@ class PreviewController extends Controller
         return view('preview-waitlisted', compact('convocation_waitlist', 'languages'));
     }
 
+    use ManipulateTermDate;
+
     /**
      * sends convocation emails
      * @return \Illuminate\Http\Response reroute to admin dashboard
@@ -674,8 +677,8 @@ class PreviewController extends Controller
             // get term values
             $term = $value->Term;
             // get term values and convert to strings
-            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            $term_en = $this->manipulateTermDateEn($term);
+            $term_fr = $this->manipulateTermDateFr($term);
 
             $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
             $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
@@ -735,8 +738,8 @@ class PreviewController extends Controller
             // get term values
             $term = $select_student->Term;
             // get term values and convert to strings
-            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            $term_en = $this->manipulateTermDateEn($term);
+            $term_fr = $this->manipulateTermDateFr($term);
 
             $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
             $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
@@ -2141,6 +2144,10 @@ class PreviewController extends Controller
                         'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                         'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                         'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                        'Te_Sat' => 7,
+                        'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                        'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                        'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
                     ]);
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -3046,6 +3053,10 @@ class PreviewController extends Controller
                     'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                     'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                     'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                    'Te_Sat' => 7,
+                    'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                    'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                    'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
                 ]);
                 $ingredients->save();
 

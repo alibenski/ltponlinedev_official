@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Attendance;
 use App\Classroom;
 use App\CourseSchedule;
 use App\NewUser;
@@ -335,7 +336,7 @@ class AdminController extends Controller
         if ($request->ajax()) {
             $term = Term::orderBy('Term_Code', 'desc')->where('Term_Code', $request->term)->first();
             // query all students enrolled to current term excluding waitlisted
-            $query_students_current_term = Repo::select('INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT', 'Result', 'is_self_pay_form', 'Written', 'Oral', 'Overall_Grade')->where('Term', $term->Term_Code)
+            $query_students_current_term = Repo::select('id', 'INDEXID', 'Term', 'CodeClass', 'Code', 'Te_Code', 'L', 'DEPT', 'Result', 'is_self_pay_form', 'Written', 'Oral', 'Overall_Grade')->where('Term', $term->Term_Code)
                 ->whereHas('classrooms', function ($q) {
                     $q->select('CodeClass', 'Code', 'Tch_ID')->whereNotNull('Tch_ID')->where('Tch_ID', '!=', 'TBD');
                 })
@@ -349,6 +350,7 @@ class AdminController extends Controller
                 ->with('languages')
                 ->with('courses')
                 ->with('classrooms.teachers')
+                ->with('attendances')
                 ->get();
 
             $data = $query_students_current_term;
