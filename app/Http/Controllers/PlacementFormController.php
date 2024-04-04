@@ -1396,6 +1396,7 @@ class PlacementFormController extends Controller
 
         if ($request->radioUndoDeleteStatus) {
             foreach ($enrolment_to_be_copied as $enrolmentToBeRestore) {
+                $enrolmentToBeRestore->cancelled_by_student = null;
                 $enrolmentToBeRestore->restore();
                 $request->session()->flash('msg-restore-form', 'Form has been restored.');
             }
