@@ -64,7 +64,7 @@
     <h4><strong><u>Informations importantes pour les cours EN PRÉSENTIEL</u></strong></h4>
     <p style="text-align: justify">En raison de la crise de liquidité, l'Annexe Bocage est temporairement fermée. Les cours de langue en présentiel se tiendront dans le bâtiment H, à partir du lundi 29 avril 2024.</p>
 
-    <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LTP%20Location.pdf">Plan du Palais des Nations (localisation des salles de cours)</a> <br /> - <a href="https://learning.unog.ch/fr/node/1446">Carte d'accès au terrain et/ou badge de stationnement pour les véhicules</a></p>
+    <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LTP%20Location.pdf">Plan du Palais des Nations, Bâtiment H (localisation des salles de cours)</a> <br /> - <a href="https://learning.unog.ch/fr/node/1446">Carte d'accès au terrain et/ou badge de stationnement pour les véhicules</a></p>
 
     <h4><strong><u>Vous ne pouvez pas être présent(e)s la première semaine de cours ? </u></strong></h4>
     <p style="text-align: justify">Veuillez en informer à l’avance votre professeur(e) par email. Les participant(e)s absent(e)s la première semaine de cours peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
