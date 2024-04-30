@@ -361,6 +361,9 @@ class PreviewController extends Controller
         foreach ($student as $key => $value) {
             $checkStudent = Repo::where('INDEXID', $value->INDEXID)
                 ->where('Term', Session::get('Term'))
+                ->with(['classrooms' => function ($qry) {
+                    $qry->with('scheduler')->with('course');
+                }])
                 ->orderBy('created_at', 'asc')
                 ->get();
 

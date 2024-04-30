@@ -155,10 +155,18 @@
                         @foreach ($studentWithMoreClasses as $item)
                             @foreach ($item as $key => $value)
                                 @if ($key==$form->INDEXID)
-                                    <i class="fa fa-exclamation-triangle text-danger"></i> <span class="text-danger">more than 1 class</span><br />
+                                <i class="fa fa-exclamation-triangle text-danger"></i> <span class="text-danger">More than 1 class</span><br />
+                                    
+                                  <button data-toggle="collapse" data-target="#demo-{{$key}}" class="btn btn-default btn-sm"><i class="fa fa-info-circle text-danger"></i> <span class="text-danger">View Classes</span></button>
+                                    <div id="demo-{{$key}}" class="collapse">
+                                      @foreach ($value as $info)
+                                      {{$info->classrooms->course->Description}} : {{$info->classrooms->scheduler->name}} <br />
+                                      @endforeach
+                                    </div>
                                 @endif
                             @endforeach
                         @endforeach
+                  <br />
                   @if(empty($form->users->profile)) No Profile 
                   @else  
                   <span class="label label-default">
