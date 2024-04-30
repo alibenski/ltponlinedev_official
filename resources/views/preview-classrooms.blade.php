@@ -160,7 +160,7 @@
                                   <button data-toggle="collapse" data-target="#demo-{{$key}}" class="btn btn-default btn-sm"><i class="fa fa-info-circle text-danger"></i> <span class="text-danger">View Classes</span></button>
                                     <div id="demo-{{$key}}" class="collapse">
                                       @foreach ($value as $info)
-                                      {{$info->classrooms->course->Description}} : {{$info->classrooms->scheduler->name}} <br />
+                                      <strong>{{$info->classrooms->course->Description}}</strong> : {{$info->classrooms->scheduler->name}} <br />
                                       @endforeach
                                     </div>
                                 @endif
