@@ -331,7 +331,9 @@ class PreviewController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-
+        $studentWithMoreClassesArray = $this->checkIfStudentAnotherClass($student);
+        $studentWithMoreClasses = collect($studentWithMoreClassesArray);
+        // dd($studentWithMoreClasses);
         foreach ($student as $value) {
             $form = Repo::withTrashed()
                 ->where('Term', Session::get('Term'))
@@ -350,7 +352,25 @@ class PreviewController extends Controller
         $form_info = collect($form_info_arr);
         // ->sortBy('id');
 
-        return view('preview-classrooms', compact('arr', 'classrooms', 'form_info', 'classroom_3'));
+        return view('preview-classrooms', compact('arr', 'classrooms', 'form_info', 'classroom_3', 'studentWithMoreClasses'));
+    }
+
+    public function checkIfStudentAnotherClass($student)
+    {
+        $array = [];
+        foreach ($student as $key => $value) {
+            $checkStudent = Repo::where('INDEXID', $value->INDEXID)
+                ->where('Term', Session::get('Term'))
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            if (count($checkStudent) > 1) {
+                $array[] = array(
+                    $value->INDEXID => $checkStudent
+                );
+            }
+        }
+        return $array;
     }
 
     public function ajaxSelectTeacher(Request $request)
