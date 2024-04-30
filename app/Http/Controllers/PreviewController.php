@@ -333,7 +333,7 @@ class PreviewController extends Controller
 
         $studentWithMoreClassesArray = $this->checkIfStudentAnotherClass($student);
         $studentWithMoreClasses = collect($studentWithMoreClassesArray);
-        // dd($studentWithMoreClasses);
+
         foreach ($student as $value) {
             $form = Repo::withTrashed()
                 ->where('Term', Session::get('Term'))
