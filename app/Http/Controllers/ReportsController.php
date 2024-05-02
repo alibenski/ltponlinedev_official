@@ -1047,4 +1047,21 @@ class ReportsController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
+    public function reportByOrgAdminView()
+    {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
+        $languages = DB::table('languages')->pluck("name", "code")->all();
+
+        $years = array_unique($this->getYears($queryTerm));
+
+        return view('reports.reportByOrgAdminView', compact('languages', 'terms', 'years'));
+    }
+
+    public function reportByOrg(Request $request)
+    {
+        // dd($request->all());
+        return view('reports.reportByOrg');
+    }
 }
