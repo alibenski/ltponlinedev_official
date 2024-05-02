@@ -36,6 +36,9 @@ class SystemController extends Controller
         $term = Term::where('Term_Code', Session::get('Term'))->first();
         $texts = Text::get();
         $onGoingTermObj = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        if (is_null($onGoingTermObj)) {
+            return view('errors.no_term_set_error');
+        }
         $onGoingTerm = Term::where('Term_Code', $onGoingTermObj->Term_Code)->first();
 
         return view('system.system-index', compact('terms', 'term', 'texts', 'onGoingTerm'));
