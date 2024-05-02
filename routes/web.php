@@ -607,6 +607,9 @@ Route::put('/approvalhr/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' 
 Route::put('/approval/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata', 'uses' => 'ApprovalController@updatePlacementFormData']);
 Route::put('/approvalhr/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata2hr', 'uses' => 'ApprovalController@updatePlacementFormData2hr']);
 
+// route for public page reports per organization
+Route::get('/clm-reports/{org}/{term}', ['as' => 'clm', 'uses' => 'ReportsController@getForm2hr']);
+
 //public pages
 Route::get('eform', function () {
     return view('confirmation_page_unog');
