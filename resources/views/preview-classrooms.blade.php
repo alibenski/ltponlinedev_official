@@ -110,7 +110,7 @@
       <h4><strong>{{ $classroom_3->course->Description}} Students</strong></h4>
 
       <button style="margin-bottom: 10px" class="btn btn-primary delete_all">Move Selected</button>
-      
+
       <table class="table table-bordered table-striped">
           <thead>
               <tr>
@@ -152,7 +152,21 @@
                 </td>
                 <td>
                   <h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} @endif <small>[{{$form->INDEXID}}] </small></h4> 
-                  
+                        @foreach ($studentWithMoreClasses as $item)
+                            @foreach ($item as $key => $value)
+                                @if ($key==$form->INDEXID)
+                                <i class="fa fa-exclamation-triangle text-danger"></i> <span class="text-danger">More than 1 class</span><br />
+                                    
+                                  <button data-toggle="collapse" data-target="#demo-{{$key}}" class="btn btn-default btn-sm"><i class="fa fa-info-circle text-danger"></i> <span class="text-danger">View Classes</span></button>
+                                    <div id="demo-{{$key}}" class="collapse">
+                                      @foreach ($value as $info)
+                                      <strong>{{$info->classrooms->course->Description}}</strong> : {{$info->classrooms->scheduler->name}} <br />
+                                      @endforeach
+                                    </div>
+                                @endif
+                            @endforeach
+                        @endforeach
+                  <br />
                   @if(empty($form->users->profile)) No Profile 
                   @else  
                   <span class="label label-default">
