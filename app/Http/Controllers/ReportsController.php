@@ -1052,16 +1052,50 @@ class ReportsController extends Controller
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
-        $languages = DB::table('languages')->pluck("name", "code")->all();
-
         $years = array_unique($this->getYears($queryTerm));
+        $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name', 'OrgCode']);
 
-        return view('reports.reportByOrgAdminView', compact('languages', 'terms', 'years'));
+        return view('reports.reportByOrgAdminView', compact('terms', 'years', 'orgs'));
     }
 
-    public function reportByOrg(Request $request)
+    public function reportByOrgAdmin(Request $request)
     {
-        // dd($request->all());
-        return view('reports.reportByOrg');
+        if ($request->ajax()) {
+            $columns = [
+                'DEPT'
+            ];
+            $arr = [];
+            if ($request->Term) {
+                $term = $request->Term;
+                $recordsMerged = $this->queryAllStudentsMerged($term, $columns, $request);
+                foreach ($recordsMerged as $v) {
+                    foreach ($v as $value) {
+                        $arr[] = $value;
+                    }
+                }
+                $data = $arr;
+            }
+
+            if ($request->year) {
+                $arrayCollection = $this->queryAllStudentsByYear($request, $columns);
+                foreach ($arrayCollection as $dataValue) {
+                    foreach ($dataValue as $v) {
+                        foreach ($v as $value) {
+                            $arr[] = $value;
+                        }
+                    }
+                }
+                $data = $arr;
+            }
+
+            return response()->json(['data' => $data]);
+        }
+    }
+
+    public function reportByOrg(Request $request, $org, $term)
+    {
+        // $request->merge(['DEPT' => $org, 'Term' => $term]);
+        // $this->reportByOrgAdmin($request);
+        return view('reports.reportByOrg', compact('term', 'org'));
     }
 }

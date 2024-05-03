@@ -1,10 +1,8 @@
-@extends('admin.admin')
+@extends('layouts.adminLTE3.index')
 
 @section('customcss')
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-    {{-- <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> --}}
-    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/> --}}
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
 
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -17,14 +15,14 @@
 
 @section('content')
 
-<h2 class="text-center"><i class="fa fa-users"></i> All Students LTP Data/Info <i class="fa fa-users"></i></h2>
-		<div class="box box-default">
-			<div class="box-body">
+<h2 class="text-center"><i class="fa fa-building"></i> Admin View: Report by Organization <i class="fa fa-building"></i></h2>
+		<div class="card card-default">
+			<div class="card-body">
 			<form id="reportForm" method="get" action="" class="col-sm-12">
 				<div class="col-sm-12">
 					<div class="row">
 						<div class="col-md-12">
-							<div class="alert alert-info">
+							<div class="alert alert-secondary">
 								<p class="text-justify"><i class="fa fa-info-circle"></i> Information about the data below: <br />
 								<ul>
 									<li>Includes students who cancelled late after deadline</li>
@@ -36,81 +34,74 @@
 						</div>
 					</div>
 
-					<label for="decision" class="col-sm-12 control-label">Year or Term? (required)</label>
-					<div class="form-group col-sm-8">
-						<div class="input-group"> 
-					      <span class="input-group-addon">       
-					        <input type="radio" name="decision" value="1" class="decision validateMe">                 
-					      </span>
-					        <label type="text" class="form-control">
-					        	Year
-					      </label>
+                    <section id="filter">
+                        <div class="card card-default">
+                            <div class="card-header with-border">
+                                <h4><strong>View Students by Organization</strong></h4>
+                            </div>
+                            <div class="card-body ">
+                                <form id="reportForm" method="get" action="" class="col-sm-6">
+                                <div class="row">
+                                        <div class="form-group col-sm-12">
+                                        <label for="organization" class="col-sm-12 control-label">Organization Select: (required)</label>
+                                        <div class="form-group col-sm-12">
+                                            <div class="dropdown">
+                                            <select id="organization" name="organization" class="col-sm-12 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
+                                                @foreach($orgs as $org)
+                                                    <option value=""></option>
+                                                    <option value="{{$org['Org name']}}">{{$org['Org name']}} - {{ $org['Org Full Name'] }}</option>
+                                                @endforeach
+                                            </select>
+                                            </div>
+                                        </div>
+                                        </div>
 
-					      <span class="input-group-addon">       
-					        <input type="radio" name="decision" value="0" class="decision validateMe">                 
-					      </span>
-					        <label type="text" class="form-control">
-					        	Term
-					      </label>
-					    </div>
-					</div>
+                                        <div class="col-sm-12">
+                                            <label for="decision" class="control-label col-sm-12">Year or Term? (required)</label>
+
+                                            <div class="form-check form-check-inline col-sm-5 mx-2">
+                                                    <input type="radio" name="decision" value="1" class="form-check-input decision validateMe">                 
+                                                    <label type="text" class="form-check-label">Year</label>
+                                            </div>
+
+                                            <div class="form-check form-check-inline col-sm-5 mx-2">
+                                                    <input type="radio" name="decision" value="0" class="form-check-input decision validateMe">                 
+                                                    <label type="text" class="form-check-label">Term</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-5 filter-by-year form-group invisible">
+                                        <label for="year" class="col-sm-12 control-label">Year Select:</label>
+                                        <div class="form-group col-sm-12">
+                                            <div class="dropdown">
+                                            <select id="year" name="year" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+                                                @foreach($years as $value)
+                                                    <option></option>
+                                                    <option value="{{$value}}">{{$value}}</option>
+                                                @endforeach
+                                            </select>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="col-sm-5 filter-by-term form-group invisible">
+                                        <label for="term" class="col-sm-12 control-label">Term Select:</label>
+                                        <div class="form-group col-sm-12">
+                                            <div class="dropdown">
+                                            <select id="term" name="term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
+                                                @foreach($terms as $term)
+                                                    <option></option>
+                                                    <option value="{{$term->Term_Code}}">{{$term->Term_Code}} - {{$term->Comments}} - {{$term->Term_Name}}</option>
+                                                @endforeach
+                                            </select>
+                                            </div>
+                                        </div>
+                                        </div>
+                                </div> {{-- end filter div --}}
+                            </div>
+                        </div>
+                    </section>
 				</div>
-
-				<div class="filter-by-year form-group hidden">
-			      <label for="year" class="col-sm-12 control-label">Year Select:</label>
-			      <div class="form-group col-sm-12">
-			        <div class="dropdown">
-			          <select id="year" name="year" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
-			            @foreach($years as $value)
-			                <option></option>
-			                <option value="{{$value}}">{{$value}}</option>
-			            @endforeach
-			          </select>
-			        </div>
-			      </div>
-			    </div>
-
-			    <div class="filter-by-term form-group hidden">		
-			      <label for="term" class="col-sm-12 control-label">Term Select:</label>
-			      <div class="form-group col-sm-12">
-			        <div class="dropdown">
-			          <select id="term" name="term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
-			            @foreach($terms as $term)
-			                <option></option>
-			                <option value="{{$term->Term_Code}}">{{$term->Term_Code}} - {{$term->Comments}} - {{$term->Term_Name}}</option>
-			            @endforeach
-			          </select>
-			        </div>
-			      </div>
-			    </div>
-
-				<div class="col-sm-12">
-					<label for="decision" class="col-sm-12 control-label">Choose language? (optional)</label>
-					<div class="form-group col-sm-8">
-						<div class="input-group"> 
-					      <span class="input-group-addon">       
-					        <input type="checkbox" name="all-languages-toggle" class="all-languages-toggle">   
-					      </span>
-					        <label type="text" class="form-control">
-					        	Yes
-					      </label>
-					    </div>
-					</div>
-				</div>
-
-				<div class="filter-by-language form-group hidden">
-			      <label for="language" class="col-sm-12 control-label">Language Select:</label>
-			      <div class="form-group col-sm-12">
-			        <div class="dropdown">
-			          <select id="language" name="language" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
-			            @foreach($languages as $id => $name)
-			                <option></option>
-			                <option value="{{ $id }}">{{$name}}</option>
-			            @endforeach
-			          </select>
-			        </div>
-			      </div>
-			    </div>
 
 				<div class="row col-sm-12">
 					<input type="submit" class="btn btn-success submit-filter" value="Submit">		
@@ -119,7 +110,7 @@
 			</div>
 		</div>
 
-<div class="reports-section hidden">
+<div class="reports-section invisible">
 	<div class="box box-success">
 		<div class="overlay">
 			<i class="fa fa-refresh fa-spin"></i>
@@ -219,7 +210,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		if (form.valid()) {
 			getAllStudents();
-			$(".reports-section").removeClass('hidden');
+			$(".reports-section").removeClass('invisible');
 		}	else {
 			console.log('no')	    	
 		}
@@ -228,15 +219,15 @@ $(document).ready(function() {
 	$('input.decision').on('click', function(event) {
 		let decision = event.target.value;
 		if (decision === '1') {
-			$('.filter-by-year').removeClass('hidden');
-			$('.filter-by-term').addClass('hidden');
+			$('.filter-by-year').removeClass('invisible');
+			$('.filter-by-term').addClass('invisible');
 			$('select[name="year"]').addClass('validateMe');
 			$('select[name="term"]').prop('selectedIndex',-1);
 			$('select[name="term"]').select2({placeholder: "Select Term"});
 		}
 		if (decision === '0') {
-			$('.filter-by-term').removeClass('hidden');
-			$('.filter-by-year').addClass('hidden');
+			$('.filter-by-term').removeClass('invisible');
+			$('.filter-by-year').addClass('invisible');
 			$('select[name="term"]').addClass('validateMe');
 			$('select[name="year"]').prop('selectedIndex',-1);
 			$('select[name="year"]').select2({placeholder: "Select Year"});
@@ -244,19 +235,9 @@ $(document).ready(function() {
 
 	});
 
-	$('input.all-languages-toggle').on('click', function() {
-		$('.filter-by-language').toggleClass('hidden');
-
-		if (!$(this).is(':checked')) {
-			$('select[name="language"]').prop('selectedIndex',-1);
-			$('select[name="language"]').select2({placeholder: "Select Language"});
-			console.log('reset')
-		}
-	});
-
 	$("select").on('change', function() {
 		$('#sampol').DataTable().clear().draw();
-		$(".reports-section").addClass('hidden');
+		$(".reports-section").addClass('invisible');
 		$(".overlay").removeAttr('style');
 	});
 
@@ -264,16 +245,16 @@ $(document).ready(function() {
 		
 			const year = $('select[name="year"]').children("option:selected").val();
 	    	const Term = $('select[name="term"]').children("option:selected").val();
-	    	const L = $('select[name="language"]').children("option:selected").val();
+	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
 			
 			let promises = [];	
 
 			promises.push(
 				$.ajax({
-					url: "{{ route('reports-all-students-per-year-or-term') }}",
+					url: "{{ route('report-by-org-admin') }}",
 					type: 'GET',
 					dataType: 'json',
-					data: {year: year, Term: Term, L: L},
+					data: {year: year, Term: Term, DEPT: DEPT},
 				})
 				.then(function(data) {
 					console.log(data)
