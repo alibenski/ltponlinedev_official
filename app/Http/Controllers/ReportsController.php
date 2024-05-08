@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Classroom;
+use App\Mail\EmailReportByOrg;
 use App\Repo;
 use App\Term;
 use App\Torgan;
 use Carbon\Carbon;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
 use League\CommonMark\Util\ArrayCollection;
 
 class ReportsController extends Controller
@@ -1092,10 +1096,32 @@ class ReportsController extends Controller
         }
     }
 
+    public function sendEmailReportByOrg(Request $request)
+    {
+
+        // validate function payload   
+        $term = $request->Term;
+        $org = $request->DEPT;
+
+        // validate if organization has focal points
+        // if no, return error message to admin that there are no focal points
+        // if yes, email the focal points from database table
+
+        Mail::to('allyson.frias@un.org')
+            ->send(new EmailReportByOrg($term, $org));
+
+        return view('emails.emailReportByOrg', compact('term', 'org'));
+    }
+
     public function reportByOrg(Request $request, $org, $term)
     {
-        // $request->merge(['DEPT' => $org, 'Term' => $term]);
-        // $this->reportByOrgAdmin($request);
-        return view('reports.reportByOrg', compact('term', 'org'));
+        try {
+            $org = Crypt::decrypt($org);
+            $term = Crypt::decrypt($term);
+
+            return view('reports.reportByOrg', compact('term', 'org'));
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
     }
 }

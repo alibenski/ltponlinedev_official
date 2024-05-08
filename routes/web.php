@@ -113,7 +113,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('get-ltp-stats-graph-view-by-language', ['as' => 'get-ltp-stats-graph-view-by-language', 'uses' => 'ReportsController@getLtpStatsGraphViewByLanguage']);
 
     Route::get('reports/report-by-org-admin-view', 'ReportsController@reportByOrgAdminView')->name('reports/report-by-org-admin-view');
-    Route::get('report-by-org-admin', 'ReportsController@reportByOrgAdmin')->name('report-by-org-admin');
+    Route::get('send-email-report-by-org', 'ReportsController@sendEmailReportByOrg')->name('send-email-report-by-org');
 
     Route::get('cancelled-term-language', ['as' => 'cancelled-term-language', 'uses' => 'ReportsController@cancelledTermLanguage']);
     Route::get('courses-term-language', ['as' => 'courses-term-language', 'uses' => 'ReportsController@coursesTermLanguage']);
@@ -611,7 +611,8 @@ Route::put('/approval/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'ap
 Route::put('/approvalhr/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata2hr', 'uses' => 'ApprovalController@updatePlacementFormData2hr']);
 
 // route for public page reports per organization
-Route::get('/report-by-org/{org}/{term}', ['as' => 'clm', 'uses' => 'ReportsController@reportByOrg']);
+Route::get('/report-by-org/{org}/{term}', ['as' => 'report-by-org', 'uses' => 'ReportsController@reportByOrg']);
+Route::get('report-by-org-admin', 'ReportsController@reportByOrgAdmin')->name('report-by-org-admin');
 
 //public pages
 Route::get('eform', function () {

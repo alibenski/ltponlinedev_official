@@ -107,6 +107,16 @@
 					<input type="submit" class="btn btn-success submit-filter" value="Submit">		
 				</div>
 			</form>
+
+			<form id="sendEmailForm" class="invisible">
+				<input id="selectedTerm" value="" />
+				<input id="selectedOrg" value="" />
+				<div class="row col-sm-12">
+					
+					<button type="button" class="btn btn-outline-secondary send-email-btn"><i class="fas fa-paper-plane"></i> Send Email </button>
+
+				</div>
+			</form>
 			</div>
 		</div>
 
@@ -209,8 +219,10 @@ $(document).ready(function() {
 	$('input.submit-filter').on('click', function(e) {
 		e.preventDefault();
 		if (form.valid()) {
+			showFieldValues();
 			getAllStudents();
 			$(".reports-section").removeClass('invisible');
+			$("#sendEmailForm").removeClass('invisible');
 		}	else {
 			console.log('no')	    	
 		}
@@ -240,6 +252,38 @@ $(document).ready(function() {
 		$(".reports-section").addClass('invisible');
 		$(".overlay").removeAttr('style');
 	});
+
+	$('button.send-email-btn').on('click', function(e) {
+		e.preventDefault();
+
+			const year = $('select[name="year"]').children("option:selected").val();
+	    	const Term = $('select[name="term"]').children("option:selected").val();
+	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
+			
+			$.ajax({
+				url: "{{ route('send-email-report-by-org') }}",
+				type: 'GET',
+				dataType: 'json',
+				data: {year: year, Term: Term, DEPT: DEPT},
+			})
+			.then(function(data) {
+				console.log(data)
+				
+				$(".overlay").removeAttr('style');
+			})
+			.fail(function(data) {
+				console.log(data);
+				})
+	});
+
+	function showFieldValues() {
+			const year = $('select[name="year"]').children("option:selected").val();
+	    	const Term = $('select[name="term"]').children("option:selected").val();
+	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
+
+			$('input#selectedTerm').val(Term);
+			$('input#selectedOrg').val(DEPT);
+	}
 
 	function getAllStudents() {
 		

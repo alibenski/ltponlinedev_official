@@ -15,6 +15,12 @@
 
 @section('content')
 
+<div class="alert alert-info">
+	<h5 class="text-bold">Report generated using the following parameters:</h5>
+	Organization <input value="{{ $org }}" name="DEPT" readonly/>
+	Term Code <input value="{{ $term }}" name="Term" readonly/>
+</div>
+
 <div class="reports-section">
 	<div class="box box-success">
 		<div class="overlay">
@@ -72,8 +78,6 @@
 	</div>
 </div>
 
-<input value="{{ $org }}" name="DEPT" />
-<input value="{{ $term }}" name="Term" />
 @stop
 
 @section('scripts_code')
