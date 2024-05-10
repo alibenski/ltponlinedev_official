@@ -611,7 +611,7 @@ Route::put('/approval/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'ap
 Route::put('/approvalhr/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata2hr', 'uses' => 'ApprovalController@updatePlacementFormData2hr']);
 
 // route for public page reports per organization
-Route::get('/report-by-org/{org}/{term}', ['as' => 'report-by-org', 'uses' => 'ReportsController@reportByOrg']);
+Route::get('/report-by-org/{param}/{org}/{term}/{year}', ['as' => 'report-by-org', 'uses' => 'ReportsController@reportByOrg']);
 Route::get('report-by-org-admin', 'ReportsController@reportByOrgAdmin')->name('report-by-org-admin');
 
 //public pages

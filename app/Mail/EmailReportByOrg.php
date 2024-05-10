@@ -11,8 +11,10 @@ class EmailReportByOrg extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $term;
+    public $param;
     public $org;
+    public $term;
+    public $year;
 
 
     /**
@@ -20,10 +22,18 @@ class EmailReportByOrg extends Mailable
      *
      * @return void
      */
-    public function __construct($term, $org)
+    public function __construct($param, $org, $term, $year)
     {
-        $this->term = $term;
+        $this->param = $param;
         $this->org = $org;
+        if ($param == 'year') {
+            $this->year = $year;
+            $this->term = 0;
+        }
+        if ($param == 'Term') {
+            $this->term = $term;
+            $this->year = 0;
+        }
     }
 
     /**

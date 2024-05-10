@@ -18,7 +18,11 @@
 <div class="alert alert-info">
 	<h5 class="text-bold">Report generated using the following parameters:</h5>
 	Organization <input value="{{ $org }}" name="DEPT" readonly/>
+	@if ($param == 'year')
+	Year <input value="{{ $year }}" name="year" readonly/>
+	@elseif( $param == 'Term')
 	Term Code <input value="{{ $term }}" name="Term" readonly/>
+	@endif
 </div>
 
 <div class="reports-section">
@@ -96,7 +100,7 @@ $(document).ready(function() {
 	    
 	function getAllStudents() {
             
-			const year = $('select[name="year"]').children("option:selected").val();
+			const year = $('input[name="year"]').val();
 	    	const Term = $('input[name="Term"]').val();
 	    	const DEPT = $('input[name="DEPT"]').val();
 			

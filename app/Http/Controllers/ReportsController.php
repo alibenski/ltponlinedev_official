@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classroom;
+use App\FocalPoints;
 use App\Mail\EmailReportByOrg;
 use App\Repo;
 use App\Term;
@@ -1098,28 +1099,58 @@ class ReportsController extends Controller
 
     public function sendEmailReportByOrg(Request $request)
     {
-
-        // validate function payload   
         $term = $request->Term;
+        $year = $request->year;
         $org = $request->DEPT;
 
         // validate if organization has focal points
+        $torgan = Torgan::where('Org name', $org)->first();
+        // $learning_partner = $torgan->has_learning_partner;
+        $learning_partner = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']);
+
+
         // if no, return error message to admin that there are no focal points
+        if ($learning_partner->isEmpty()) {
+            $data = 0;
+            return response()->json(['data' => $data]);
+        }
         // if yes, email the focal points from database table
+        //use map function to iterate through the collection and store value of email to var $org_email
+        //subjects each value to a callback function
+        $org_email = $learning_partner->map(function ($val, $key) {
+            return $val->email;
+        });
+        //make collection to array
+        $org_email_arr = $org_email->toArray();
+        //send email to array of email addresses $org_email_arr
 
-        Mail::to('allyson.frias@un.org')
-            ->send(new EmailReportByOrg($term, $org));
+        // link expires after 2 years? confirm with secretariat
 
-        return view('emails.emailReportByOrg', compact('term', 'org'));
+        // control if year or term will be passed to the emailer class
+        if ($request->year) {
+            $param = 'year';
+            Mail::to($org_email_arr)
+                ->send(new EmailReportByOrg($param, $org, $term, $year));
+        } else {
+            $param = 'Term';
+            Mail::to($org_email_arr)
+                ->send(new EmailReportByOrg($param, $org, $term, $year));
+        }
+
+        $data = 1;
+
+        return response()->json(['data' => $data]);
     }
 
-    public function reportByOrg(Request $request, $org, $term)
+    public function reportByOrg(Request $request, $param, $org, $term, $year)
     {
         try {
+            $param = Crypt::decrypt($param);
             $org = Crypt::decrypt($org);
             $term = Crypt::decrypt($term);
+            $year = Crypt::decrypt($year);
 
-            return view('reports.reportByOrg', compact('term', 'org'));
+            return view('reports.reportByOrg', compact('param', 'org', 'term', 'year'));
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
