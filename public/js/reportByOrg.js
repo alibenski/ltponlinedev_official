@@ -34,45 +34,13 @@ function assignToEventsColumns(data) {
                 { "data": "Term" }, 
                 { "data": "languages.name" }, 
                 { "data": "courses.Description" }, 
-                // { "data": "classrooms.teachers.Tch_Name",
-                // 		"defaultContent": "" }, 
                 { "data": "courseschedules.prices.price_usd" }, 
                 { "data": "courseschedules.courseduration.duration_name_en" }, 
                 { "data": "DEPT" },  
-                // { "data": "is_self_pay_form" },  
-                // { "data": "organizations.MOU" },  
-                // { "data": "organizations.sales_order" },  
-                // { "data": function ( row, type, val, meta ) {
-                // 		if (row.hasOwnProperty('enrolments')) {
-                // 			if (row.enrolments.length > 0) {
-                // 				return row.enrolments[0].profile;
-                // 			}
-                // 		} else if (row.hasOwnProperty('placements')) {
-                // 			if (row.placements.length > 0) {
-                // 				return row.placements[0].profile;
-                // 			}
-                // 		}
-                // 	return "No Profile Set";
-                // 	}
-                // },
                 { "data": "users.indexno" }, 
                 { "data": "users.nameLast" }, 
                 { "data": "users.nameFirst" }, 
-                // { "data": function ( row, type, val, meta ) {
-                // 		if (row.users.sddextr.SEX == 'M' || row.users.sddextr.SEX == 'm') {
-                // 				return "Male";
-                // 		} else if (row.users.sddextr.SEX == 'F' || row.users.sddextr.SEX == 'f') {
-                // 				return "Female";
-                // 		} else if (row.users.sddextr.SEX == 'O' || row.users.sddextr.SEX == 'o') {
-                // 				return "Other";
-                // 			}
-                // 		return row.users.sddextr.SEX;
-                // 	}
-                
-                // }, 
                 { "data": "Result", "className": "result" },
-                // { "data": "cancelled_but_not_billed" },
-                // { "data": "exclude_from_billing" },
                 { "data": function ( row, type, val, meta ) {
                         if (row.attendances != null) {
                             return row.attendances.availability[0].P;
