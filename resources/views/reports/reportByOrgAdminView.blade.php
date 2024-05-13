@@ -141,20 +141,24 @@
 						<th>Term</th>
 						<th>Language</th>
 						<th>Description</th>
-						<th>Teacher</th>
-						{{-- <th>Price USD</th> --}}
+						{{-- <th>Teacher</th> --}}
+						<th>Price USD</th>
 						<th>Duration</th>
 						<th>Organization</th>
-						<th>SelfPayment</th>
+						{{-- <th>SelfPayment</th>
 						<th>MOU</th>
 						<th>Sales Orders</th>
-						<th>Profile</th>
+						<th>Profile</th> --}}
 						<th>Index No.</th>
-						<th>Name</th>
-						<th>Gender</th>
+						<th>Last Name</th>
+						<th>First Name</th>
+						{{-- <th>Gender</th> --}}
 						<th>RESULT</th>
-						<th>Cancelled Not Billed</th>
-						<th>Excluded From Billing</th>
+						<th>Days Present</th>
+						<th>Days Excused</th>
+						<th>Days Absent</th>
+						{{-- <th>Cancelled Not Billed</th>
+						<th>Excluded From Billing</th> --}}
 						<th>Cancel Date</th>
 					</tr>
 				</thead>
@@ -163,20 +167,24 @@
 						<th>Term</th>
 						<th>Language</th>
 						<th>Description</th>
-						<th>Teacher</th>
-						{{-- <th>Price USD</th> --}}
+						{{-- <th>Teacher</th> --}}
+						<th>Price USD</th>
 						<th>Duration</th>
 						<th>Organization</th>
-						<th>SelfPayment</th>
+						{{-- <th>SelfPayment</th>
 						<th>MOU</th>
 						<th>Sales Orders</th>
-						<th>Profile</th>
+						<th>Profile</th> --}}
 						<th>Index No.</th>
-						<th>Name</th>
-						<th>Gender</th>
+						<th>Last Name</th>
+						<th>First Name</th>
+						{{-- <th>Gender</th> --}}
 						<th>RESULT</th>
-						<th>Cancelled Not Billed</th>
-						<th>Excluded From Billing</th>
+						<th>Days Present</th>
+						<th>Days Excused</th>
+						<th>Days Absent</th>
+						{{-- <th>Cancelled Not Billed</th>
+						<th>Excluded From Billing</th> --}}
 						<th>Cancel Date</th>
 					</tr>
 				</tfoot>
