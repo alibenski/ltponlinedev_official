@@ -4,7 +4,8 @@
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css"/>
-
+	<!-- Tempus Dominus Styles -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css" crossorigin="anonymous">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <style>
     	table { table-layout:fixed; }
@@ -60,8 +61,8 @@
 												<label for="decision" class="control-label col-sm-12">Year or Term? (required)</label>
 
 												<div class="form-check form-check-inline col-sm-5 mx-2">
-														<input type="radio" name="decision" value="1" class="form-check-input decision validateMe">                 
-														<label type="text" class="form-check-label">Year</label>
+														<input type="radio" name="decision" value="1" class="form-check-input decision validateMe" disabled>                 
+														<label type="text" class="form-check-label">Year (disabled)</label>
 												</div>
 
 												<div class="form-check form-check-inline col-sm-5 mx-2">
@@ -116,14 +117,38 @@
 					<h5 class="text-bold">Send generated report to focal points with these parameters:</h5>
 				</div>
 				<div class="card-body bg-light">
-					Term: <input id="selectedTerm" value="" readonly/>
-					Year: <input id="selectedYear" value="" readonly/>
-					Organization: <input id="selectedOrg" value="" readonly/>
-					<div class="row col-sm-12">
-						
-						<button type="button" class="btn btn-outline-secondary send-email-btn"><i class="fas fa-paper-plane"></i> Send Email </button>
-						
+					<div class="col-sm-6">
+						<div class="form-group">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="">Deadline Date: <span class="text-danger">(required)</span></label>
+									<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+										<input type="text" id="contract-date" name="contract_date" class="form-control datetimepicker-input" data-target="#datetimepicker4" />
+
+										<div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+											<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
+					<div class="col-sm-6">
+						<div class="col-sm-12">
+							Term: <input id="selectedTerm" value="" readonly/>
+							Year: <input id="selectedYear" value="" readonly/>
+							Organization: <input id="selectedOrg" value="" readonly/>
+						</div>
+					</div>
+
+					<div class="col-sm-6 mt-3">
+						<div class="col-sm-12">
+							
+							<button type="button" class="btn btn-outline-secondary send-email-btn"><i class="fas fa-paper-plane"></i> Send Email </button>
+							
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</form>
@@ -188,10 +213,41 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/sum().js"></script>
 <script type="text/javascript" src="{{ asset('js/reportByOrg.js') }}"></script>
+<!-- Popperjs -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<!-- Tempus Dominus JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js" crossorigin="anonymous"></script>
 
 <script>
-$(document).ready(function() {
-	$('.select2-basic-single').select2({
+	const picker = new tempusDominus
+    .TempusDominus(document.getElementById('datetimepicker4'),
+	{
+		display: {
+			icons: {
+				type: 'icons',
+				time: 'fas fa-clock',
+				date: 'fas fa-calendar',
+				up: 'fas fa-arrow-up',
+				down: 'fas fa-arrow-down',
+				previous: 'fas fa-chevron-left',
+				next: 'fas fa-chevron-right',
+				today: 'fas fa-calendar-check',
+				clear: 'fas fa-trash',
+				close: 'fas fa-xmark'
+			},
+			components: {
+				clock: false,
+			}
+		},
+		localization: {
+			format: 'dd MMMM yyyy',
+		},
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+		$('.select2-basic-single').select2({
     	placeholder: "Select Filter",
     });
 
@@ -259,6 +315,7 @@ $(document).ready(function() {
 	$('button.send-email-btn').on('click', function(e) {
 		e.preventDefault();
 
+			const deadline = $('input[name="contract_date"]').val();
 			const year = $('select[name="year"]').children("option:selected").val();
 	    	const Term = $('select[name="term"]').children("option:selected").val();
 	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
@@ -267,7 +324,7 @@ $(document).ready(function() {
 				url: "{{ route('send-email-report-by-org') }}",
 				type: 'GET',
 				dataType: 'json',
-				data: {year: year, Term: Term, DEPT: DEPT},
+				data: {year: year, Term: Term, DEPT: DEPT, deadline: deadline},
 			})
 			.then(function(data) {
 				console.log(data)

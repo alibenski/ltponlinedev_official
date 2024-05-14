@@ -15,6 +15,10 @@ class EmailReportByOrg extends Mailable
     public $org;
     public $term;
     public $year;
+    public $term_name_string;
+    public $term_year_string;
+    public $cancel_date_limit_string;
+    public $deadline;
 
 
     /**
@@ -22,7 +26,7 @@ class EmailReportByOrg extends Mailable
      *
      * @return void
      */
-    public function __construct($param, $org, $term, $year)
+    public function __construct($param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline)
     {
         $this->param = $param;
         $this->org = $org;
@@ -34,6 +38,11 @@ class EmailReportByOrg extends Mailable
             $this->term = $term;
             $this->year = 0;
         }
+
+        $this->term_name_string = $term_name_string;
+        $this->term_year_string = $term_year_string;
+        $this->cancel_date_limit_string = $cancel_date_limit_string;
+        $this->deadline = $deadline;
     }
 
     /**
@@ -43,10 +52,10 @@ class EmailReportByOrg extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.emailReportByOrg')
+        return $this->view('emails.emailReportByOrgByTerm')
             ->from('clm_language@unog.ch', 'CLM Language')
-            ->bcc('clm_language@un.org')
+            ->cc('clm_language@un.org')
             ->priority(1)
-            ->subject('CLM Report for: ' . $this->org . ' Students');
+            ->subject('Final check for billing - Language courses ' . $this->term_name_string . ' term ' . $this->term_year_string . ' - Deadline ' . $this->deadline . ' - ' . $this->org);
     }
 }

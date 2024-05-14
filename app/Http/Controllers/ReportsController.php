@@ -1333,6 +1333,7 @@ class ReportsController extends Controller
         $term = $request->Term;
         $year = $request->year;
         $org = $request->DEPT;
+        $deadline = $request->deadline;
 
         // validate if organization has focal points
         $torgan = Torgan::where('Org name', $org)->first();
@@ -1353,19 +1354,54 @@ class ReportsController extends Controller
         });
         //make collection to array
         $org_email_arr = $org_email->toArray();
+
         //send email to array of email addresses $org_email_arr
-
         // link expires after 2 years? confirm with secretariat
-
         // control if year or term will be passed to the emailer class
         if ($request->year) {
+            // $term_extrapolated =
+            //     $term_qry_first = Term::where('Term_Code', $term_extrapolated)->first();
+
+            $term_name_string = $term_qry_first->Comments;
+
+
+            $queryCancelDateLimit = $term_qry_first->Cancel_Date_Limit;
+            $cancel_date_limit = new Carbon($queryCancelDateLimit);
+            $cancel_date_limit->subDay();
+
+            // cancel limit date convert to string
+            $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+            $queryTermBegin = $term_qry_first->Term_Begin;
+            $term_begin_date = new Carbon($queryTermBegin);
+            $term_begin_date->subDay();
+
+            $term_year_string = date('Y', strtotime($term_begin_date));
+
             $param = 'year';
             Mail::to($org_email_arr)
-                ->send(new EmailReportByOrg($param, $org, $term, $year));
+                ->send(new EmailReportByOrg($param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
         } else {
+            $term_qry_first = Term::where('Term_Code', $term)->first();
+
+            $term_name_string = $term_qry_first->Comments;
+
+            $queryCancelDateLimit = $term_qry_first->Cancel_Date_Limit;
+            $cancel_date_limit = new Carbon($queryCancelDateLimit);
+            $cancel_date_limit->subDay();
+
+            // cancel limit date convert to string
+            $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+            $queryTermBegin = $term_qry_first->Term_Begin;
+            $term_begin_date = new Carbon($queryTermBegin);
+            $term_begin_date->subDay();
+
+            $term_year_string = date('Y', strtotime($term_begin_date));
+
             $param = 'Term';
             Mail::to($org_email_arr)
-                ->send(new EmailReportByOrg($param, $org, $term, $year));
+                ->send(new EmailReportByOrg($param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
         }
 
         $data = 1;
