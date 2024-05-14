@@ -19,7 +19,7 @@
     
                             <p>For information, the deadline for cancellation was the <b>{{ $cancel_date_limit_string }}</b>. Cancellations after the deadline are charged to your organization.</p>
     
-                            <p>Please ensure to review the list and let us know any inconsistencies by replying to Clm_language@un.org by <b>{{$deadline}}</b>. 
+                            <p>Please ensure to review the list and let us know any inconsistencies by replying to clm_language@un.org by <b>{{$deadline}}</b>. 
                             Kindly be advised that if no response is received by the above deadline, the list will be considered correct and we will proceed with the billing accordingly. </p>
     
                             <p>Thank you in advance for your answer.</p>
