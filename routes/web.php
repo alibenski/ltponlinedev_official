@@ -112,6 +112,11 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('reports/ltp-stats-graph-view-by-language', 'ReportsController@ltpStatsGraphViewByLanguage')->name('reports/ltp-stats-graph-view-by-language');
     Route::get('get-ltp-stats-graph-view-by-language', ['as' => 'get-ltp-stats-graph-view-by-language', 'uses' => 'ReportsController@getLtpStatsGraphViewByLanguage']);
 
+    Route::get('reports/report-by-org-admin-view', 'ReportsController@reportByOrgAdminView')->name('reports/report-by-org-admin-view');
+    Route::get('reports/report-by-org-email-view', 'ReportsController@reportByOrgEmailView')->name('reports/report-by-org-email-view');
+    Route::get('reports/report-by-org-email-ajax', 'ReportsController@reportByOrgEmailAjax')->name('reports/report-by-org-email-ajax');
+    Route::get('send-email-report-by-org', 'ReportsController@sendEmailReportByOrg')->name('send-email-report-by-org');
+
     Route::get('cancelled-term-language', ['as' => 'cancelled-term-language', 'uses' => 'ReportsController@cancelledTermLanguage']);
     Route::get('courses-term-language', ['as' => 'courses-term-language', 'uses' => 'ReportsController@coursesTermLanguage']);
     Route::get('classes-term-language', ['as' => 'classes-term-language', 'uses' => 'ReportsController@classesTermLanguage']);
@@ -606,6 +611,10 @@ Route::put('/approval/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' =>
 Route::put('/approvalhr/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform2hr', 'uses' => 'ApprovalController@updateForm2hr'])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 Route::put('/approval/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata', 'uses' => 'ApprovalController@updatePlacementFormData']);
 Route::put('/approvalhr/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata2hr', 'uses' => 'ApprovalController@updatePlacementFormData2hr']);
+
+// route for public page reports per organization
+Route::get('/report-by-org/{param}/{org}/{term}/{year}', ['as' => 'report-by-org', 'uses' => 'ReportsController@reportByOrg']);
+Route::get('report-by-org-admin', 'ReportsController@reportByOrgAdmin')->name('report-by-org-admin');
 
 //public pages
 Route::get('eform', function () {
