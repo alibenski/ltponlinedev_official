@@ -16,7 +16,7 @@
 
 @section('content')
 
-<h2 class="text-center"><i class="fa fa-building"></i> Admin View: Report by Organization <i class="fa fa-building"></i></h2>
+<h2 class="text-center"><i class="far fa-envelope"></i> Send via Email Report by Organization </h2>
 		<div class="card card-default">
 			<div class="card-body">
 				<form id="reportForm" method="get" action="" class="col-sm-12">
@@ -26,9 +26,9 @@
 								<div class="alert alert-secondary">
 									<p class="text-justify"><i class="fa fa-info-circle"></i> Information about the data below: <br />
 									<ul>
+										<li>This admin interface is used to send an email to the organization focal points with a secured link showing the respective table.</li>
+										<li>The information in the report table is mainly for billing purposes.</li>
 										<li>Includes students who cancelled late after deadline</li>
-										<li>Late cancellations can be filtered with Cancelled Not Billed column</li>
-										<li>Late cancellations can be filtered with Excluded From Billing column</li>
 									</ul>
 									</p>
 								</div>
@@ -37,9 +37,9 @@
 
 						<section id="filter">
 							<div class="card card-default">
-								<div class="card-header with-border">
+								{{-- <div class="card-header with-border">
 									<h4><strong>View Students by Organization</strong></h4>
-								</div>
+								</div> --}}
 								<div class="card-body bg-light">
 									<form id="reportForm" method="get" action="" class="col-sm-6">
 									<div class="row">
@@ -99,14 +99,16 @@
 											</div>
 											</div>
 									</div> {{-- end filter div --}}
+
+									<div class="row col-sm-12 align-self-center mx-auto">
+										<input type="submit" class="btn btn-outline-success submit-filter" value="Submit">		
+									</div>
+
 								</div>
 							</div>
 						</section>
 					</div>
 
-					<div class="row col-sm-12">
-						<input type="submit" class="btn btn-success submit-filter" value="Submit">		
-					</div>
 				</form>
 			</div>
 		</div>
@@ -121,9 +123,9 @@
 						<div class="form-group">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="">Deadline Date: <span class="text-danger">(required)</span></label>
+									<label for="">Deadline Date: </label>
 									<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-										<input type="text" id="contract-date" name="contract_date" class="form-control datetimepicker-input" data-target="#datetimepicker4" />
+										<input type="text" id="contract-date" name="contract_date" class="form-control datetimepicker-input validateMe" data-target="#datetimepicker4" />
 
 										<div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
 											<div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -144,7 +146,7 @@
 					<div class="col-sm-6 mt-3">
 						<div class="col-sm-12">
 							
-							<button type="button" class="btn btn-outline-secondary send-email-btn"><i class="fas fa-paper-plane"></i> Send Email </button>
+							<button type="submit" class="btn btn-outline-secondary send-email-btn button-prevent-multi-submit"><i class="fas fa-paper-plane"></i> Send Email </button>
 							
 						</div>
 					</div>
@@ -242,6 +244,9 @@
 		localization: {
 			format: 'dd MMMM yyyy',
 		},
+		restrictions: {
+			minDate: new Date(),
+		},
 	});
 </script>
 
@@ -267,7 +272,7 @@
 			error.insertBefore(element.offsetParent("div.input-group"));
 		},
 		errorElement: 'div'
-			});
+	});
 
 	$.validator.addClassRules("validateMe", {
 			required: true
@@ -314,18 +319,45 @@
 
 	$('button.send-email-btn').on('click', function(e) {
 		e.preventDefault();
+		
+		if ($(this).hasClass('disabled')) {
+			event.preventDefault();
+			return false;
+		}
 
+		$(this).addClass('disabled');
+		
+		const sendEmailForm = $("#sendEmailForm");
+
+		sendEmailForm.validate({
+			rules: {
+				'validateMe': {
+					required: true
+				},
+			},
+			errorPlacement: function (error, element) {
+				console.log(element)
+				error.insertBefore(element.offsetParent("div.input-group"));
+			},
+			errorElement: 'div'
+		});
+
+		if (sendEmailForm.valid()) {
 			const deadline = $('input[name="contract_date"]').val();
 			const year = $('select[name="year"]').children("option:selected").val();
 	    	const Term = $('select[name="term"]').children("option:selected").val();
 	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
 			
-			$.ajax({
-				url: "{{ route('send-email-report-by-org') }}",
-				type: 'GET',
-				dataType: 'json',
-				data: {year: year, Term: Term, DEPT: DEPT, deadline: deadline},
-			})
+			function doAjax(year, Term, DEPT, deadline) {  
+				return $.ajax({
+					url: "{{ route('send-email-report-by-org') }}",
+					type: 'GET',
+					dataType: 'json',
+					data: {year: year, Term: Term, DEPT: DEPT, deadline: deadline},
+				})
+			}
+			
+			$.when(doAjax(year, Term, DEPT, deadline))
 			.then(function(data) {
 				console.log(data)
 				if (data["data"] == 0) {
@@ -334,13 +366,20 @@
 				if (data["data"] == 1) {
 					alert("Email sent to focal point(s).");
 				}
-				
 				$(".overlay").removeAttr('style');
+				$('button.send-email-btn').removeClass('disabled');
 			})
 			.fail(function(data) {
 				console.log(data);
+				
 				alert("Something went wrong!");
+				
+				$('button.send-email-btn').removeClass('disabled');
 				})
+		}	else {
+			console.log('no, send email form not validated')	
+			$('button.send-email-btn').removeClass('disabled');    	
+		}
 	});
 
 	function showFieldValues() {
