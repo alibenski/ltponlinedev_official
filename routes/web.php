@@ -113,6 +113,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('get-ltp-stats-graph-view-by-language', ['as' => 'get-ltp-stats-graph-view-by-language', 'uses' => 'ReportsController@getLtpStatsGraphViewByLanguage']);
 
     Route::get('reports/report-by-org-admin-view', 'ReportsController@reportByOrgAdminView')->name('reports/report-by-org-admin-view');
+    Route::get('reports/report-by-org-email-view', 'ReportsController@reportByOrgEmailView')->name('reports/report-by-org-email-view');
+    Route::get('reports/report-by-org-email-ajax', 'ReportsController@reportByOrgEmailAjax')->name('reports/report-by-org-email-ajax');
     Route::get('send-email-report-by-org', 'ReportsController@sendEmailReportByOrg')->name('send-email-report-by-org');
 
     Route::get('cancelled-term-language', ['as' => 'cancelled-term-language', 'uses' => 'ReportsController@cancelledTermLanguage']);

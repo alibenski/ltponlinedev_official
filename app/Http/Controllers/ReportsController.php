@@ -1414,6 +1414,52 @@ class ReportsController extends Controller
         return response()->json(['data' => $data]);
     }
 
+    public function reportByOrgEmailAjax(Request $request)
+    {
+        $term = $request->Term;
+        $year = $request->year;
+        $org = $request->DEPT;
+        $deadline = $request->deadline;
+
+        $url = route('reports/report-by-org-email-view', ['DEPT' => $org, 'Term' => $term, 'year' => $year, 'deadline' => $deadline]);
+
+        $data = $url;
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function reportByOrgEmailView(Request $request)
+    {
+        $term = $request->Term;
+        $year = $request->year;
+        $org = $request->DEPT;
+        $deadline = $request->deadline;
+
+        $term_qry_first = Term::where('Term_Code', $term)->first();
+
+        $term_name_string = $term_qry_first->Comments;
+
+        $queryCancelDateLimit = $term_qry_first->Cancel_Date_Limit;
+        $cancel_date_limit = new Carbon($queryCancelDateLimit);
+        $cancel_date_limit->subDay();
+
+        // cancel limit date convert to string
+        $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+        $queryTermBegin = $term_qry_first->Term_Begin;
+        $term_begin_date = new Carbon($queryTermBegin);
+        $term_begin_date->subDay();
+
+        $term_year_string = date('Y', strtotime($term_begin_date));
+
+        $param = 'Term';
+
+        $url = URL::temporarySignedRoute('report-by-org', now()->addYears(2), [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+        // $url = route('report-by-org', [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+
+        return view('emails.emailReportByOrgByTerm', compact('url', 'param', 'org', 'term', 'year', 'term_name_string', 'term_year_string', 'cancel_date_limit_string', 'deadline'));
+    }
+
     public function reportByOrg(Request $request, $param, $org, $term, $year)
     {
         try {

@@ -143,11 +143,11 @@
 						</div>
 					</div>
 
-					<div class="col-sm-6 mt-3">
-						<div class="col-sm-12">
-							
+					<div class="row col-sm-6 mt-3">
+						<div id="viewButton">
+						</div>
+						<div class="row col-sm-12">
 							<button type="submit" class="btn btn-outline-secondary send-email-btn button-prevent-multi-submit"><i class="fas fa-paper-plane"></i> Send Email </button>
-							
 						</div>
 					</div>
 
@@ -224,6 +224,7 @@
 	const picker = new tempusDominus
     .TempusDominus(document.getElementById('datetimepicker4'),
 	{
+		useCurrent: false,
 		display: {
 			icons: {
 				type: 'icons',
@@ -315,6 +316,8 @@
 		$(".reports-section").addClass('invisible');
 		$("form#sendEmailForm").addClass('invisible');
 		$(".overlay").removeAttr('style');
+		$('input[name="contract_date"]').val("");
+		$("#viewButton").html("");
 	});
 
 	$('button.send-email-btn').on('click', function(e) {
@@ -379,6 +382,32 @@
 		}	else {
 			console.log('no, send email form not validated')	
 			$('button.send-email-btn').removeClass('disabled');    	
+		}
+	});
+
+	$("input[name='contract_date']").on('change', function () {
+		if ($(this).val()) {
+			const deadline = $('input[name="contract_date"]').val();
+			const year = $('select[name="year"]').children("option:selected").val();
+	    	const Term = $('select[name="term"]').children("option:selected").val();
+	    	const DEPT = $('select[name="organization"]').children("option:selected").val();
+
+			$.ajax({
+					url: "{{ route('reports/report-by-org-email-ajax') }}",
+					type: 'GET',
+					dataType: 'json',
+					data: {year: year, Term: Term, DEPT: DEPT, deadline: deadline},
+				})
+			.then(function(data) {
+				console.log(data)
+				if (data["data"]) {
+					$("#viewButton").html("");
+					$("#viewButton").append(' <a href="'+data["data"]+'" target="_blank" class="btn btn-outline-info"> View </a> ');
+				}  
+			})
+		}
+		else {
+			return false;
 		}
 	});
 
