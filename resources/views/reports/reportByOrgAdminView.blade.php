@@ -400,9 +400,12 @@
 				})
 			.then(function(data) {
 				console.log(data)
-				if (data["data"]) {
+				if (data["data"] == 0) {
+					alert("No view button because the organization has no focal point.");
+				}
+				else {
 					$("#viewButton").html("");
-					$("#viewButton").append(' <a href="'+data["data"]+'" target="_blank" class="btn btn-outline-info"> View </a> ');
+					$("#viewButton").append(' <a href="'+data["data"]+'" target="_blank" class="btn btn-outline-info"> View Email </a> ');
 				}  
 			})
 		}

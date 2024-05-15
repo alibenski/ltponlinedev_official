@@ -1421,6 +1421,16 @@ class ReportsController extends Controller
         $org = $request->DEPT;
         $deadline = $request->deadline;
 
+        // validate if organization has focal points
+        $torgan = Torgan::where('Org name', $org)->first();
+        // $learning_partner = $torgan->has_learning_partner;
+        $learning_partner = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']);
+        // if no, return error message to admin that there are no focal points
+        if ($learning_partner->isEmpty()) {
+            $data = 0;
+            return response()->json(['data' => $data]);
+        }
+
         $url = route('reports/report-by-org-email-view', ['DEPT' => $org, 'Term' => $term, 'year' => $year, 'deadline' => $deadline]);
 
         $data = $url;
