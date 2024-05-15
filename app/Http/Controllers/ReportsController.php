@@ -1402,7 +1402,7 @@ class ReportsController extends Controller
 
             $param = 'Term';
 
-            $url = URL::temporarySignedRoute('report-by-org', now()->addMinutes(10), [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+            $url = URL::temporarySignedRoute('report-by-org', now()->addYears(2), [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
             // $url = route('report-by-org', [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
 
             Mail::to($org_email_arr)
@@ -1418,8 +1418,7 @@ class ReportsController extends Controller
     {
         try {
             if (!$request->hasValidSignature()) {
-                // abort(401);
-                return "no valid signature";
+                return "The link has expired! There is no valid signature in the link.";
             }
             $param = Crypt::decrypt($param);
             $org = Crypt::decrypt($org);
