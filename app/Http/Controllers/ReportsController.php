@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use League\CommonMark\Util\ArrayCollection;
 
 class ReportsController extends Controller
@@ -1380,7 +1381,7 @@ class ReportsController extends Controller
 
             $param = 'year';
             Mail::to($org_email_arr)
-                ->send(new EmailReportByOrg($param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
+                ->send(new EmailReportByOrg($url, $param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
         } else {
             $term_qry_first = Term::where('Term_Code', $term)->first();
 
@@ -1400,8 +1401,12 @@ class ReportsController extends Controller
             $term_year_string = date('Y', strtotime($term_begin_date));
 
             $param = 'Term';
+
+            $url = URL::temporarySignedRoute('report-by-org', now()->addMinutes(10), [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+            // $url = route('report-by-org', [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+
             Mail::to($org_email_arr)
-                ->send(new EmailReportByOrg($param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
+                ->send(new EmailReportByOrg($url, $param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
         }
 
         $data = 1;
@@ -1412,6 +1417,10 @@ class ReportsController extends Controller
     public function reportByOrg(Request $request, $param, $org, $term, $year)
     {
         try {
+            if (!$request->hasValidSignature()) {
+                // abort(401);
+                return "no valid signature";
+            }
             $param = Crypt::decrypt($param);
             $org = Crypt::decrypt($org);
             $term = Crypt::decrypt($term);
