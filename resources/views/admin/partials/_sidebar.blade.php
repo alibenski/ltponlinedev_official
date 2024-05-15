@@ -47,6 +47,7 @@
               </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="{{ route('reports/report-by-org-admin-view') }}" {{ Request::is('admin/reports/report-by-org-admin-view') ? "style=color:white" : ""}}>Send Email Report by Organization</a></li>
             <li><a href="{{ route('reports/custom-billing-view') }}" {{ Request::is('admin/reports/custom-billing-view') ? "style=color:white" : ""}}>Custom Billing Report</a></li>
             <li><a href="{{ route('reports') }}" {{ Request::is('admin/reports') ? "style=color:white" : ""}}>View Students by Organization</a></li>
             <li><a href="{{ route('reports/ltp-stats-view-students-per-term') }}" {{ Request::is('admin/reports/ltp-stats-view-students-per-term') ? "style=color:white" : ""}}>Count Students per Term</a></li>
