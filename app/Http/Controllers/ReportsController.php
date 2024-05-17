@@ -1140,6 +1140,8 @@ class ReportsController extends Controller
                         ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->whereNull('exclude_from_billing')
+                ->whereNull('is_self_pay_form')
                 ->with(['courses' => function ($qcourse1) {
                     $qcourse1->select('Te_Code_New', 'Description');
                 }])
@@ -1160,7 +1162,7 @@ class ReportsController extends Controller
                 // ->with('enrolments')
                 ->whereHas('enrolments', function ($query11) use ($term) {
                     $query11->where('Term', $term)
-                        // ->where('is_self_pay_form', '1')
+                        ->whereNull('is_self_pay_form')
                         ->whereNotNull('CodeIndexID');
                 })
                 ->with('classrooms.teachers')
@@ -1188,6 +1190,8 @@ class ReportsController extends Controller
                         ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->whereNull('exclude_from_billing')
+                ->whereNull('is_self_pay_form')
                 ->with(['courses' => function ($qcourse0) {
                     $qcourse0->select('Te_Code_New', 'Description');
                 }])
@@ -1208,7 +1212,7 @@ class ReportsController extends Controller
                 }])
                 ->whereHas('placements', function ($query00) use ($term) {
                     $query00->where('Term', $term)
-                        // ->where('is_self_pay_form', '1')
+                        ->whereNull('is_self_pay_form')
                         ->whereNotNull('CodeIndexID');
                 })
                 ->with('classrooms.teachers')
@@ -1242,6 +1246,8 @@ class ReportsController extends Controller
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->where('deleted_at', '>', $termCancelDeadline)
                 // ->whereNull('cancelled_but_not_billed')
+                ->whereNull('exclude_from_billing')
+                ->whereNull('is_self_pay_form')
                 ->with(['courses' => function ($qcourse2) {
                     $qcourse2->select('Te_Code_New', 'Description');
                 }])
@@ -1262,7 +1268,7 @@ class ReportsController extends Controller
                 }])
                 ->whereHas('enrolments', function ($query22) use ($term) {
                     $query22->where('Term', $term)
-                        // ->where('is_self_pay_form', '1')
+                        ->whereNull('is_self_pay_form')
                         ->whereNotNull('CodeIndexID');
                 })
                 ->with('classrooms.teachers')
@@ -1292,6 +1298,8 @@ class ReportsController extends Controller
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->where('deleted_at', '>', $termCancelDeadline)
                 // ->whereNull('cancelled_but_not_billed')
+                ->whereNull('exclude_from_billing')
+                ->whereNull('is_self_pay_form')
                 ->with(['courses' => function ($qcourse3) {
                     $qcourse3->select('Te_Code_New', 'Description');
                 }])
@@ -1312,7 +1320,7 @@ class ReportsController extends Controller
                 }])
                 ->whereHas('placements', function ($query33) use ($term) {
                     $query33->where('Term', $term)
-                        // ->where('is_self_pay_form', '1')
+                        ->whereNull('is_self_pay_form')
                         ->whereNotNull('CodeIndexID');
                 })
                 ->with('classrooms.teachers')
