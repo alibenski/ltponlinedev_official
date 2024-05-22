@@ -38,6 +38,6 @@ class MailtoStudentSelfpay extends Mailable
             ->from('clm_language@unog.ch', 'CLM Language')
             ->bcc('clm_language@un.org')
             ->priority(1)
-            ->subject('Notification: CLM Language Secretariat has received and is currently processing your Enrolment to Language Course: ' . $this->request->course_show . ' for ' . $this->term_season_en . ' ' . $this->term_year);
+            ->subject('Notification: Your enrolment to ' . $this->request->course_show . ' for ' . $this->term_season_en . ' ' . $this->term_year . ' has been received and is under consideration');
     }
 }
