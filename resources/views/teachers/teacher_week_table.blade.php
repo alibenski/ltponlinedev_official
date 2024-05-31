@@ -111,16 +111,6 @@
                 <input type="hidden" name="_token" value="{{ Session::token() }}">
             </form>
           </td>
-          <td>
-            <form method="GET" action="{{ route('teacher-manage-attendances') }}">
-                <button type="button" for="Saturday" class="btn btn-info btn-sm btn-log hidden">Log Attendance</button>
-                <input type="hidden" for="{{ $wk }}" name="wk" class="wkCounter" value="{{ $wk }}">
-                <input type="hidden" name="day" value="Saturday">
-                <input type="hidden" name="time" value="{{ date('h:i a', strtotime($day_time->Te_Sat_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Sat_ETime)) }}">
-                <input type="hidden" name="Code" value="{{ $day_time->Code }}">
-                <input type="hidden" name="_token" value="{{ Session::token() }}">
-            </form>
-          </td>
         </tr>
         @endif
 
