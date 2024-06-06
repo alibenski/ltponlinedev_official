@@ -1247,6 +1247,7 @@ class ReportsController extends Controller
                 ->where('deleted_at', '>', $termCancelDeadline)
                 // ->whereNull('cancelled_but_not_billed')
                 ->whereNull('exclude_from_billing')
+                ->whereNull('cancelled_but_not_billed')
                 ->whereNull('is_self_pay_form')
                 ->with(['courses' => function ($qcourse2) {
                     $qcourse2->select('Te_Code_New', 'Description');
@@ -1299,6 +1300,7 @@ class ReportsController extends Controller
                 ->where('deleted_at', '>', $termCancelDeadline)
                 // ->whereNull('cancelled_but_not_billed')
                 ->whereNull('exclude_from_billing')
+                ->whereNull('cancelled_but_not_billed')
                 ->whereNull('is_self_pay_form')
                 ->with(['courses' => function ($qcourse3) {
                     $qcourse3->select('Te_Code_New', 'Description');
