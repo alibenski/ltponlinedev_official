@@ -39,8 +39,7 @@
                 " readonly>  
                 </div>
 
-                <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>
-                <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                                    
+                <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>                                   
                 
                     @include('form.partials.studentDetailsSection')
 
