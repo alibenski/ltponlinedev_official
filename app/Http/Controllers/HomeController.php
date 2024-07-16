@@ -10,6 +10,7 @@ use App\Language;
 use App\Mail\MailaboutCancel;
 use App\Mail\MailaboutPlacementCancel;
 use App\Mail\cancelConvocation;
+use App\Models\Profile;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Preview;
@@ -173,10 +174,12 @@ class HomeController extends Controller
         // actual enrolment term
         $next_term = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
+        $profiles = Profile::get();
+
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         // ->pluck('Org name','Org name', 'Org Full Name');
 
-        return view('form.whatorg', compact('terms', 'next_term', 'org'));
+        return view('form.whatorg', compact('terms', 'next_term', 'profiles', 'org'));
     }
 
     public function whatform(Request $request, MsuUpdateField $msuUpdateField, NgoUpdateField $ngoUpdateField)
