@@ -89,7 +89,7 @@
                           @endif
                         </select>
                       </div>
-                      <p class="small text-danger"><strong>You can search for your organization directly or scroll through the box / drop-down menu.</strong></p>
+                      <p class="small text-danger">You can search for your organization directly or scroll through the box / drop-down menu. <br /><strong>For a spouse profile, please select the organization of your employed spouse.</strong></p>
 
                       <div id="countrySectionMain"></div>
                       <div id="ngoSectionMain"></div>
