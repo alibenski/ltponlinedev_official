@@ -25,6 +25,7 @@ Total Count: {{ count($placement_forms) }}
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>            
 	            <th>Assigned to Course?</th>    
+	            <th>Course</th>    
 				<th>Admin Placement Form Comment (from Assign Course)</th>        
 	            <th>Overall Approval</th>
 	            <th>Time Stamp</th>
@@ -94,6 +95,18 @@ Total Count: {{ count($placement_forms) }}
 				<td>{{ $form->std_comments }}</td>
 				<td>{{ $form->course_preference_comment }}</td>
 				<td>@if($form->assigned_to_course == 1) Yes @endif</td>
+				<td>
+					@if(is_null($form->updated_by_admin)) Not Assigned
+					@else
+					  @if ($form->modified_by)
+					  	@if ($form->assigned_to_course === 1)
+					    {{$form->courses->Description}}
+						@elseif($form->assigned_to_course === 0)
+						
+						@endif
+					  @endif
+					@endif
+				</td>
 				<td>{{ $form->admin_plform_comment }}</td>
 				<td>{{ $form->overall_approval }}</td>
 				<td>{{ $form->created_at }}</td>
@@ -116,7 +129,8 @@ Total Count: {{ count($placement_forms) }}
 				<th>Flexible Format?</th>
 	            <th>Comments Placement Exam</th>	            
 	            <th>Comments Course Preference</th>	
-	            <th>Assigned to Course?</th>      
+	            <th>Assigned to Course?</th>
+				<th>Course</th>   
 				<th>Admin Placement Form Comment (from Assign Course)</th>       
 	            <th>Overall Approval</th>
 	            <th>Time Stamp</th>
