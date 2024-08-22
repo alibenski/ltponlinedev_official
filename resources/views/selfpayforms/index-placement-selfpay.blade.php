@@ -108,7 +108,7 @@
                     @if (is_null($form->users->contract_date))
                     <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->L }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" data-username="{{ $form->users->name }}" type="button" class="show-modal btn btn-space btn-default  button-prevent-multi-submit confirm" title="Enter Contract Expiry"><i class="far fa-calendar"></i> Enter Contract Date</button>
                     @else
-                    {{ $form->users->contract_date }}
+                    <h5><span class="badge @if ($form->users->contract_date < $form->terms->Term_End) badge-danger  @endif">{{ $form->users->contract_date }}</span></h5>
                     <br />
                     <button id="confirmBtn{{ $form->INDEXID }}-{{ $form->L }}-{{ $form->Term }}" data-id="{{ $form->users->id }}" data-email="{{ $form->users->email }}" data-username="{{ $form->users->name }}" type="button" class="show-modal btn btn-space btn-dark button-prevent-multi-submit confirm" title="Edit Contract Expiry"><i class="far fa-edit"></i> Edit</button>
                     @endif
