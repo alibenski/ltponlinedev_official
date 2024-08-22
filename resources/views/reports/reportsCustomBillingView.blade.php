@@ -141,6 +141,7 @@
 						<th>Sales Orders</th>
 						<th>MOU</th>
 						<th>Profile</th>
+						<th>Index No.</th>
 						<th>Name</th>
 						<th>Gender</th>
 						{{-- <th>RESULT</th> --}}
@@ -164,6 +165,7 @@
 						<th>Sales Orders</th>
 						<th>MOU</th>
 						<th>Profile</th>
+						<th>Index No.</th>
 						<th>Name</th>
 						<th>Gender</th>
 						{{-- <th>RESULT</th> --}}
@@ -194,6 +196,24 @@ $(document).ready(function() {
 	$('.select2-basic-single').select2({
     	placeholder: "Select Filter",
     });
+
+	$("select#year option").each(function() {
+		var $thisOption = $(this);
+		var valueToCompare = 2019;
+
+		if($thisOption.val() < valueToCompare) {
+			$thisOption.attr("disabled", "disabled");
+		}
+	});
+
+	$("select#term option").each(function() {
+		var $thisOption = $(this);
+		var valueToCompare = 191;
+
+		if($thisOption.val() < valueToCompare) {
+			$thisOption.attr("disabled", "disabled");
+		}
+	});
 
 	var form = $("#reportForm");
 
@@ -335,12 +355,14 @@ $(document).ready(function() {
 							// { "data": "courseschedules.prices.price_usd" }, 
 							{ "data": "courseschedules.courseduration.duration_name_en" }, 
 							{ "data": function ( row, type, val, meta ) {
+								if (row.organizations != null) {
 									if (row.is_self_pay_form == '1') {
 										return "SP & SO UN system";
 									} 
 									if (row.organizations.sales_order == '1') {
 										return "SP & SO UN system";
 									} 
+								}
 								return row.DEPT;
 							}
 							
@@ -357,19 +379,25 @@ $(document).ready(function() {
 							},   
 							// { "data": "organizations.sales_order" },  
 							{ "data": function ( row, type, val, meta ) {
-									if (row.organizations.sales_order != '1') {
-										return "0";
-									} 
-								return row.organizations.sales_order;
+								if (row.organizations != null) {
+										if (row.organizations.sales_order != '1') {
+											return "0";
+										} 
+									return row.organizations.sales_order;
+								}
+								return "--";
 								}
 							
 							}, 
 							// { "data": "organizations.MOU" }, 
 							{ "data": function ( row, type, val, meta ) {
-									if (row.organizations.MOU != '1') {
-											return "0";
-									} 
-								return row.organizations.MOU;
+								if (row.organizations != null) {
+										if (row.organizations.MOU != '1') {
+												return "0";
+										} 
+									return row.organizations.MOU;
+								}
+								return "--";
 								}
 							
 							},
@@ -386,6 +414,7 @@ $(document).ready(function() {
 								return "No Profile Set";
 								}
 							},
+							{ "data": "users.indexno" }, 
 							{ "data": "users.name" }, 
 							{ "data": function ( row, type, val, meta ) {
 									if (row.users.sddextr.SEX == 'M' || row.users.sddextr.SEX == 'm') {

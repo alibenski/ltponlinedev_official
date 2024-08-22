@@ -10,12 +10,19 @@
                     </label> --}}
                     <div class="form-group">
                         <label for="text-label-day">Day: </label>
-                        <div class="form-check form-check-inline">                           
-                            <input id="flexibleDayYes" name="flexibleDay" class="with-font form-check-input" type="radio" value="1">
+                        <div class="form-check form-check-inline">        
+
+                            @if (substr($terms->Term_Code, -1) == '8') 
+                            <input id="flexibleDayYes" name="flexibleDay" class="with-font form-check-input"  value="1" type="checkbox" checked disabled>
+                            <input name="flexibleDay" class="with-font form-check-input" value="1" type="hidden">
+                            @else
+                            <input id="flexibleDayYes" name="flexibleDay" class="with-font form-check-input"  value="1" type="radio">
+                            @endif
+
                             <label for="flexibleDayYes" class="form-check-label">YES</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input id="flexibleDayNo" name="flexibleDay" class="with-font form-check-input" type="radio" value="0">
+                            <input id="flexibleDayNo" name="flexibleDay" class="with-font form-check-input" type="radio" value="0" @if (substr($terms->Term_Code, -1) == '8') disabled @endif>
                             <label for="flexibleDayNo" class="form-check-label">NO</label>
                         </div>
                     </div>
@@ -47,6 +54,10 @@
                 </div>
             </div> 
 
+            <div id="summerTermText" class="form-group @if (substr($terms->Term_Code, -1) != '8') d-none @endif">
+                <p class="text-danger">For summer term, Flexible Day field is checked by default - Monday to Friday</p>
+            </div>
+
             {{-- <div class="form-group col-md-12">
                 <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
                 <input id="flexibleFormat" name="flexibleFormat" class="with-font" type="checkbox" value="1">
@@ -56,10 +67,10 @@
             </div>   --}}
 
             <div class="form-group">
-                <label class="col-md-12 control-label">Comments: <span class="small text-danger"><strong>Required field</strong></span></label>
+                <label class="col-md-12 control-label">Comments: </label>
                 <div class="col-md-12">
                     <span class="text-danger">Please indicate below any other relevant information, for example, a second preferred course</span>
-                    <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder="" required="required"></textarea>
+                    <textarea name="regular_enrol_comment" class="form-control border border-danger" maxlength="3500" placeholder=""></textarea>
                     {{-- <small class="text-danger">Please indicate any relevant information above; for example: what course (if any) you would like to take if the course you selected is full, and any time constraints.</small> --}}
                 </div>
             </div>

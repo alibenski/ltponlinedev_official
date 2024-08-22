@@ -98,6 +98,9 @@
 									@if(!empty($repos_lang->classroomsOld->Te_Fri_Room))
 									<strong>Friday {{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Fri_BTime))}}-{{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Fri_ETime)) }}</strong><br />
 									@endif
+									@if(!empty($repos_lang->classroomsOld->Te_Sat_Room))
+									<strong>Saturday {{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Sat_BTime))}}-{{ date('h:i a', strtotime($repos_lang->classroomsOld->Te_Sat_ETime)) }}</strong><br />
+									@endif
 								</strong>					
 								</p>  
 								<p>
@@ -163,6 +166,9 @@
 		                    @endif
 		                    @if(!empty($element->classrooms->Te_Fri_Room))
 		                    <p>Friday Room: <strong>{{ $element->classrooms->roomsFri->Rl_Room }}</strong></p>
+		                    @endif
+		                    @if(!empty($element->classrooms->Te_Sat_Room))
+		                    <p>Saturday Room: <strong>{{ $element->classrooms->roomsSat->Rl_Room }}</strong></p>
 		                    @endif
 
 		                  <p>

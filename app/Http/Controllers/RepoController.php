@@ -241,7 +241,7 @@ class RepoController extends Controller
             'flexibleDay' => 'required',
             'flexibleTime' => 'required',
             'flexibleFormat' => 'required',
-            'regular_enrol_comment' => 'required',
+            // 'regular_enrol_comment' => 'required',
             'agreementBtn' => 'required|',
         ));
 

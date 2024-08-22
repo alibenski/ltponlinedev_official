@@ -16,7 +16,7 @@
 		<li role="presentation" class="nav-item mr-3 pr-1"><a class="btn btn-outline-primary nav-link {{ Request::is('history') ? "active" : ""}}" href="/history">History</a></li>
 
 		<li role="presentation" class="nav-item justify-content-end">@if(is_null($term)) @else 
-			@if($term->Enrol_Date_Begin <= \Carbon\Carbon::now() && \Carbon\Carbon::now() <= $term->Enrol_Date_End) <a class="btn btn-outline-success nav-link {{ Request::is('whatorg') ? "active" : ""}}"  href="/whatorg "><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a></li>  
+			@if($term->Enrol_Date_Begin <= \Carbon\Carbon::now() && \Carbon\Carbon::now() <= $term->Enrol_Date_End) <a class="btn btn-outline-success nav-link {{ Request::is('read-me-first') ? "active" : ""}}"  href="/read-me-first "><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Register/Enrol Here</strong></a></li>  
 			@else 
 			<a href="#" class="btn btn-outline-danger"><strong><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Enrolment Closed</strong></a>
 			@endif

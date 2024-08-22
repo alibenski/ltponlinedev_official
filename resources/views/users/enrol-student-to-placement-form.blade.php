@@ -1,6 +1,7 @@
-@extends('admin.no_sidebar_admin')
+@extends('layouts.adminLTE3.index')
 
 @section('customcss')
+  <link rel="stylesheet" href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}">
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
@@ -37,25 +38,26 @@
 				<input type="text" name="name" value="{{ $student->name }}" class="form-control" readonly>
 			</div>
 
-			<div class="form-group col-sm-12">
-				<label for="profile">Profile:</label>
+			<div class="form-group">
+				<label class="col-sm-12" for="profile">Profile:</label>
 				@include('ajax-profile-select')
 			</div>
 			
 			<div class="form-group col-sm-12">
 				<label for="DEPT">Organization</label>
-				<select name="DEPT" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
-				@foreach($orgs as $org)
-				  <option></option>
+				  <select name="DEPT" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
+            <option></option>
+				    @foreach($orgs as $org)
 		          <option value="{{ $org['Org name'] }}">{{ $org['Org name'] }} - {{ $org['Org Full Name'] }}</option>
 		        @endforeach
-		        </select>
+		      </select>
 			</div>
+
 			<div class="form-group col-sm-12">
 				<label for="Term">Term</label>
 				<select name="Term" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
-				@foreach($terms as $term)
 				  <option></option>
+				@foreach($terms_select as $term)
 		          <option value="{{ $term->Term_Code}}">{{ $term->Comments }} - {{ $term->Term_Name }}</option>
 		        @endforeach
 		        </select>
@@ -66,9 +68,11 @@
 		        @foreach ($languages as $id => $name)
 		        <div class="col-sm-4">
 		            <div class="input-group"> 
-		              <span class="input-group-addon">       
-		                <input type="radio" name="L" value="{{ $id }}" autocomplete="off">                 
-		              </span>
+		              <div class="input-group-prepend">
+                    <div class="input-group-text">    
+		                  <input type="radio" name="L" value="{{ $id }}" autocomplete="off" aria-label="Radio button for language text input">
+                    </div>              
+		              </div>
 		                <label type="text" class="form-control">{{ $name }}</label>
 		            </div>
 		        </div>
@@ -84,7 +88,7 @@
             	</div>
 			</div>
 			
-			<div class="time-section hidden"> {{-- start of hidden fields --}}
+			<div class="time-section d-none"> {{-- start of hidden fields --}}
 				<div class="form-group col-sm-12">
 					<label for="placement_time">Time of Test</label>
 					<select name="placement_time" class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1" aria-hidden="true" autocomplete="off">
@@ -111,7 +115,7 @@
 		          </div>
 		    </div>
 
-			<div class="form-group col-sm-12 file-section hidden">
+			<div class="form-group col-sm-12 file-section d-none">
                 <div class="alert alert-default alert-block">
                   <div class="small text-danger">
                     <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
@@ -132,6 +136,8 @@
                 </div>
             </div>
 			
+      @include('form.partials.placement_form.coursePreferenceAdminForm')
+
 			<div class="form-group col-sm-12">
 			    <label class="control-label" for="created_at">Manually Set Time Stamp: </label>
 
@@ -210,10 +216,10 @@ $(document).ready(function() {
     $(".scheduleChoices").remove();
       if ($(this).val() == 'F') {
         $(".place-here").hide().append('<label for="scheduleChoices">The French placement test is Online:</label>').fadeIn('fast');
-        $(".time-section").addClass('hidden');
+        $(".time-section").addClass('d-none');
       } else {
         $(".place-here").hide().append('<label for="scheduleChoices">Available Placement Test Date(s):</label>').fadeIn('fast');
-        // $(".time-section").removeClass('hidden');
+        // $(".time-section").removeClass('d-none');
       }
 
       $(".place-here").hide().append('<div class="scheduleChoices col-md-12"></div>').fadeIn('fast');
@@ -243,9 +249,9 @@ $(document).ready(function() {
 
                   console.log('is online:' + val.is_online)
                   if (val.is_online == 1) {
-                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space">Online from '+ dateString +' to ' + dateStringEnd + '</label></div>').fadeIn();
+                    $(".scheduleChoices").append('<div class="input-group"><div class="input-group-prepend"><div class="input-group-text"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" value="'+val.id+'" ></div></div><label for="placementLang'+val.language_id+'-'+val.id+'" class="form-control label-place-sched form-control-static">Online from '+ dateString +' to ' + dateStringEnd + '</label></div>').fadeIn();
                   } else {
-                    $(".scheduleChoices").append('<div class="input-group"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" class="with-font" value="'+val.id+'" ><label for="placementLang'+val.language_id+'-'+val.id+'" class="label-place-sched form-control-static btn-space"> '+ dateString +'</label></div>').fadeIn();
+                    $(".scheduleChoices").append('<div class="input-group"><div class="input-group-prepend"><div class="input-group-text"><input id="placementLang'+val.language_id+'-'+val.id+'" name="placementLang" type="radio" value="'+val.id+'" ></div></div><label for="placementLang'+val.language_id+'-'+val.id+'" class="form-control label-place-sched form-control-static"> '+ dateString +'</label></div>').fadeIn();
                   }
               }); // end of $.each
               // if no schedule, tell student there is none
@@ -267,11 +273,27 @@ $(document).ready(function() {
  
   $("input[name='decision']").click(function(){
       if($('#decision1').is(':checked')) {
-        $('.file-section').removeClass('hidden');
+        $('.file-section').removeClass('d-none');
       } else if ($('#decision2').is(':checked')) {
-        $('.file-section').addClass('hidden');
+        $('.file-section').addClass('d-none');
         $("input[name='contractFile']").removeAttr("required");
       }  
+    });
+
+  $("select[name='Term']").on("change", function () {              
+      let term = $(this).val();
+      if (term.substr(-1) === '8' ) {
+          $("input#flexibleDayYesPlacement").prop("checked", true);
+          $("input#flexibleDayNoPlacement").prop("disabled", true);
+          $("div#dayInputSection").addClass("d-none");
+          $("div#anyDaySection").removeClass("d-none");
+          $("input[name='dayInput[]']").prop("checked", true);
+      } else {
+          $("input#flexibleDayYesPlacement").prop("checked", false);
+          $("input#flexibleDayNoPlacement").prop("disabled", false);
+          $("div#anyDaySection").addClass("d-none");
+          $("input[name='dayInput[]']").prop("checked", false);
+      }
     });
 </script>
 

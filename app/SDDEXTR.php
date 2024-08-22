@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTimeInterface;
 
 class SDDEXTR extends Model
 {
@@ -56,7 +57,18 @@ class SDDEXTR extends Model
     {
         return $this->hasOne('App\Torgan', 'Org name', 'DEPT');
     }
-    public function countryMission() {
-        return $this->belongsTo('App\Country', 'country_mission'); 
+    public function countryMission()
+    {
+        return $this->belongsTo('App\Country', 'country_mission');
+    }
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }

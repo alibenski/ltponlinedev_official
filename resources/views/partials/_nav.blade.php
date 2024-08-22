@@ -31,7 +31,9 @@
                             @hasrole('Teacher')
                                 <a href="{{ route('teacher-dashboard') }}" class="dropdown-item"><i class="fa fa-btn fa-pied-piper-alt btn-space" aria-hidden="true"></i>Teacher Admin Page</a>
                             @endhasrole
-                        
+                            @hasrole('M&C Role')
+                                <a href="{{ route('organizations.index') }}" class="dropdown-item"><i class="fa fa-btn fa-table btn-space" aria-hidden="true"></i>Focal Points Table</a>
+                            @endhasrole
                         
                             <a href="{{ route('students.edit', Auth::user()->id)}}" class="dropdown-item"><i class="fa fa-btn fa-edit btn-space" aria-hidden="true"></i>Edit Profile</a>
                         

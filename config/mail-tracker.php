@@ -1,20 +1,20 @@
-<?php 
+<?php
 
 return [
     /**
      * To disable the pixel injection, set this to false.
      */
-    'inject-pixel'=>false,
+    'inject-pixel' => false,
 
     /**
      * To disable injecting tracking links, set this to false.
      */
-    'track-links'=>false,
+    'track-links' => false,
 
     /**
      * Optionally expire old emails, set to 0 to keep forever.
      */
-    'expire-days'=>0,
+    'expire-days' => 0,
 
     /**
      * Where should the pingback URL route be?
@@ -25,15 +25,25 @@ return [
     ],
 
     /**
+     * If we get a link click without a URL, where should we send it to?
+     */
+    'redirect-missing-links-to' => '/',
+
+    /**
      * Where should the admin route be?
      */
     'admin-route' => [
-        'prefix' => 'admin/email-manager',
-        'middleware' => ['web','isAdmin'],
+        'enabled' => true, // Should the admin routes be enabled?
+        'prefix' => 'email-manager',
+        'middleware' => [
+            'web',
+            'isAdmin',
+            // 'can:see-sent-emails'
+        ],
     ],
 
     /**
-     * Admin Tamplate
+     * Admin Template
      * example
      * 'name' => 'layouts.app' for Default emailTraking use 'emailTrakingViews::layouts.app'
      * 'section' => 'content' for Default emailTraking use 'content'
@@ -47,7 +57,7 @@ return [
     /**
      * Number of emails per page in the admin view
      */
-    'emails-per-page'=>30,
+    'emails-per-page' => 30,
 
     /**
      * Date Format
@@ -65,8 +75,17 @@ return [
     'sns-topic' => null,
 
     /**
-     * Determines whether or not the body of the email is logged in the sent_emails table
+     * Determines whether the body of the email is logged in the sent_emails table
      */
-    'log-content' => true
+    'log-content' => true,
 
+    /**
+     * What queue should we dispatch our tracking jobs to?  Null will use the default queue.
+     */
+    'tracker-queue' => null,
+
+    /**
+     * Size limit for content length stored in database
+     */
+    'content-max-size' => 65535,
 ];

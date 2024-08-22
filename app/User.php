@@ -11,6 +11,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Traits\FullTextSearch;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTimeInterface;
 
 class User extends Authenticatable
 {
@@ -18,6 +19,17 @@ class User extends Authenticatable
     use HasRoles;
     use FullTextSearch;
     use SoftDeletes;
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 
     public function history()
     {

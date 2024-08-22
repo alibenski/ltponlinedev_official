@@ -1,7 +1,7 @@
 <td style="padding: 15px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">    
     <p>Cher / Chère {{ $staff_name }},</p>
     <p style="text-align: justify">
-        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue pour le trimestre prochain du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
+        Nous avons le plaisir de vous informer que vous êtes inscrit(e) avec succès à un cours de langue du <strong>{{ $term_fr }}</strong>. Voici ci-dessous les informations relatives à votre cours :
     </p>
     
     <p>
@@ -33,12 +33,22 @@
             <p>Salle du vendredi : <strong>{{ $classroom->roomsFri->Rl_Room }}</strong></p>
             {{-- <p>horaire vendredi : <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
             @endif
+            @if(!empty($classroom->Te_Sat_Room))
+            <p>Salle du samedi : <strong>{{ $classroom->roomsSat->Rl_Room }}</strong></p>
+            {{-- <p>horaire samedi : <strong>{{ date('H:i', strtotime($classroom->Te_Sat_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Sat_ETime)) }}</strong></p> --}}
+            @endif
         @endforeach
     </p>
 
     <ul>
-        <li style="text-align: justify">Certains cours nécessitent l’achat de livres. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>
-        <li style="text-align: justify">Votre professeur vous enverra un courriel contenant des instructions supplémentaires et le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage en ligne CLM Moodle.</li>
+        <li style="text-align: justify">Une <strong>semaine d'orientation</strong>, organisée une semaine avant le début des cours, vous permettra de vous familiariser avec vos outils d'apprentissage, y compris la plateforme d'apprentissage des langues, et de rencontrer votre professeur et votre groupe.
+        </li>    
+        <br />
+        <li style="text-align: justify">
+        Pendant la semaine d'orientation, votre professeur vous enverra par e-mail des instructions supplémentaires sur la session de bienvenue (en ligne) de 45 minutes, le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage des langues de CLM. 
+        </li>
+        <br />
+        <li style="text-align: justify">Certains cours nécessitent l’achat de matériel. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>
     </ul>
     <h4><strong><u>Informations importantes pour les cours EN LIGNE</u></strong></h4>
     <p style="text-align: justify">Veuillez prendre connaissance du matériel requis :</p>
@@ -49,13 +59,15 @@
             </td>
         </tr>
     </table>
-    <p style="text-align: justify">Nous utiliserons Microsoft Teams comme outil de téléconférence. Les sessions auront lieu au moment indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session avant le début des cours.</p>
+    <p style="text-align: justify">Nous utiliserons Microsoft Teams comme outil de téléconférence. Les sessions auront lieu au moment indiqué ci-dessus. Les professeurs vous enverront de plus amples informations sur la manière de participer à votre session pendant la semaine d’orientation.</p>
     
-    <h4><strong><u>Informations importantes pour les cours IN-PERSON</u></strong></h4>
-    <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/Bocage_Plan.pdf">Plan du Palais des Nations, Annexe Bocage (localisation des salles de cours)</a> <br /> - <a href="https://learning.unog.ch/fr/node/1446">Carte d'accès au terrain et/ou badge de stationnement pour les véhicules</a></p>
+    <h4><strong><u>Informations importantes pour les cours EN PRÉSENTIEL</u></strong></h4>
+    <p style="text-align: justify">En raison de la crise de liquidité, l'Annexe Bocage est temporairement fermée. Les cours de langue en présentiel se tiendront dans le bâtiment H, à partir du lundi 29 avril 2024.</p>
 
-    <h4><strong><u>Vous ne pouvez pas être présent(e)s la première semaine du trimestre ? </u></strong></h4>
-    <p style="text-align: justify">Veuillez en informer à l’avance votre professeur par email. Les participant(e)s absent(e)s la première semaine du trimestre peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
+    <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LTP%20Location.pdf">Plan du Palais des Nations, Bâtiment H (localisation des salles de cours)</a> <br /> - <a href="https://learning.unog.ch/fr/node/1446">Carte d'accès au terrain et/ou badge de stationnement pour les véhicules</a></p>
+
+    <h4><strong><u>Vous ne pouvez pas être présent(e)s la première semaine de cours ? </u></strong></h4>
+    <p style="text-align: justify">Veuillez en informer à l’avance votre professeur(e) par email. Les participant(e)s absent(e)s la première semaine de cours peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
 
     <h4><strong><u>Vous devez annuler votre inscription ? </u></strong></h4>
     <p style="text-align: justify">Vous devez le faire avant le {{ $cancel_date_limit_string }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. 
@@ -118,7 +130,7 @@
     </ol> --}}
     <br /> 
     <p style="text-align: justify">
-       Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage pour le prochain trimestre.
+       Le Programme de formation linguistique vous souhaite une expérience riche en apprentissage.
     </p>
     <br>
     

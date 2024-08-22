@@ -156,11 +156,19 @@
 
                 </td>
                 <td>
-					@if(empty($form->updated_by_admin)) <span class="label label-danger margin-label">Not Assigned </span>
+					@if($form->updated_by_admin === NULL) <span class="label label-danger margin-label">Not Assigned </span>
 					@else
-					  @if ($form->modified_by)
-					    <span class="label label-success margin-label">Yes by {{$form->modifyUser->name }} </span>
-					  @endif
+						
+						@if ( $form->updated_by_admin === 1 ) 
+						<span class="label label-success margin-label"> Verified and Assigned
+						@elseif ( $form->updated_by_admin === 0 ) 
+						<span class="label label-warning margin-label"> Verified but Not Assigned
+						@endif
+
+						@if ($form->modified_by)
+						by {{$form->modifyUser->name }} 
+						@endif
+						</span>
 					@endif
 				</td>
 				<td>
@@ -245,7 +253,12 @@
 				<td>
 				@if(empty($form->filesPay->path)) None @else <a href="{{ Storage::url($form->filesPay->path) }}" target="_blank"><i class="fa fa-file-o fa-2x" aria-hidden="true"></i></a> @endif
 				</td>
-				<td>{{ $form->created_at}}</td>
+				<td>
+					{{ $form->created_at}} <br />
+					@if ($form->created_at > $selectedTerm->Enrol_Date_End)
+						<span class="badge badge-danger">Late Enrolment</span>
+					@endif				
+				</td>
 				<td>
 					@if ($form->deleted_at && !is_null($form->cancelled_by_admin))
 	            		{{ $form->cancelledBy->name }}

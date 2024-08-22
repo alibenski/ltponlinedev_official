@@ -196,7 +196,7 @@
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;"></h1>
                                     <p>Dear {{ $staff_name }}, </p>
                                     <p style="text-align: justify">
-                                        We would like to inform you that you are successfully enrolled in a language course for the coming term from <strong>{{ $term_en }}</strong>. Your course details are:
+                                        We would like to inform you that you are successfully enrolled in a language course from <strong>{{ $term_en }}</strong>. Your course details are:
                                     </p>
                                     
                                     <p>
@@ -228,12 +228,22 @@
                                           <p>Friday Room: <strong>{{ $classroom->roomsFri->Rl_Room }} </strong></p>
                                           {{-- <p>Friday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Fri_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Fri_ETime)) }}</strong></p> --}}
                                           @endif
+                                          @if(!empty($classroom->Te_Sat_Room))
+                                          <p>Saturday Room: <strong>{{ $classroom->roomsSat->Rl_Room }} </strong></p>
+                                          {{-- <p>Saturday Time: <strong>{{ date('H:i', strtotime($classroom->Te_Sat_BTime ))}} - {{ date('H:i', strtotime($classroom->Te_Sat_ETime)) }}</strong></p> --}}
+                                          @endif
                                         @endforeach
                                     </p>
                                     
                                     <ul>
-                                        <li style="text-align: justify">Some courses require course books. Please check the <a href="https://learning.unog.ch/node/1443">list of materials</a> necessary to purchase before your course starts.</li>
-                                        <li style="text-align: justify">Your teacher will email you with further instructions and the link to your course material and autonomous activities on the CLM Moodle e-learning platform.</li>
+                                        <li style="text-align: justify">An <strong>orientation week</strong>, held one week before the start of the course, will enable you to familiarize yourself with the course learning tools, including the language learning platform, and meet your teacher and group.
+                                        </li>    
+                                        <br />
+                                        <li style="text-align: justify">
+                                        During the orientation week, your teacher will email you with further instructions about the 45-minute Meet & Greet online session, the link to your course material, and autonomous activities on the CLM Language Learning Platform. 
+                                        </li>
+                                        <br />
+                                        <li style="text-align: justify">Some courses require materials. Please check the <a href="https://learning.unog.ch/node/1443">list of materials</a> necessary to purchase before your course starts.</li>
                                     </ul>
                                     <h4><strong><u>Important information for ONLINE courses</u></strong></h4>
                                     <p style="text-align: justify">Please note the equipment you will need: </p>
@@ -244,13 +254,15 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <p style="text-align: justify">We will use Microsoft Teams as the teleconferencing tool for your virtual course sessions taking place at the time indicated.  Your teacher will email you further details about how to join these sessions before the course begins.</p>
+                                    <p style="text-align: justify">We will use Microsoft Teams as the teleconferencing tool for your virtual course sessions taking place at the time indicated.  Your teacher will email you further details about how to join these classes during the orientation week.</p>
                                     
                                     <h4><strong><u>Important information for IN-PERSON courses</u></strong></h4>
-                                    <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/Bocage_Plan.pdf">Map of Palais des Nations, Annex Bocage (location of classrooms)</a> <br /> - <a href="https://learning.unog.ch/node/1446">Grounds pass and/or parking badge for vehicles</a></p>
+                                    <p style="text-align: justify">Due to the liquidity crisis, Annexe Bocage is temporarily closed. In-person language classes will be held in the H Building, from Monday 29 April 2024.</p>
 
-                                    <h4><strong><u>Unable to attend the first week of the term? </u></strong></h4>
-                                    <p style="text-align: justify">Please email your teacher before the term starts. Participants who do not attend class during the first week may be disenrolled from the course and their seat given to participants on a waiting list.</p>
+                                    <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LTP%20Location.pdf">Map of Palais des Nations, H Building (location of classrooms)</a> <br /> - <a href="https://learning.unog.ch/node/1446">Grounds pass and/or parking badge for vehicles</a></p>
+
+                                    <h4><strong><u>Unable to attend the first week of the course? </u></strong></h4>
+                                    <p style="text-align: justify">Please email your teacher before the course starts. Participants who do not attend class during the first week may be disenrolled from the course and their seat given to participants on a waiting list.</p>
 
                                     <h4><strong><u>You need to cancel your enrolment? </u></strong></h4>
                                     <p style="text-align: justify">You need to do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be reimbursed after this date. 
@@ -312,7 +324,7 @@
                                     </ol> --}}
                                     <br /> 
                                     <p style="text-align: justify">
-                                        The Language Training Programme wishes you a rich learning experience next term.
+                                        The Language Training Programme wishes you a rich learning experience.
                                     </p>
                                     <br>
                                     

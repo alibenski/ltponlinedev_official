@@ -25,6 +25,7 @@ use App\Schedule;
 use App\Teachers;
 use App\Term;
 use App\Torgan;
+use App\Traits\ManipulateTermDate;
 use App\User;
 use App\Waitlist;
 use Carbon\Carbon;
@@ -330,16 +331,18 @@ class PreviewController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
+        $studentWithMoreClassesArray = $this->checkIfStudentAnotherClass($student);
+        $studentWithMoreClasses = collect($studentWithMoreClassesArray);
 
         foreach ($student as $value) {
             $form = Repo::withTrashed()
                 ->where('Term', Session::get('Term'))
                 ->where('CodeIndexID', $value->CodeIndexID)
-                ->with(['enrolments' => function ($q1) {
-                    $q1->where('Term', Session::get('Term'));
+                ->with(['enrolments' => function ($q1) use ($value) {
+                    $q1->where('Term', Session::get('Term'))->where('L', $value->L);
                 }])
-                ->with(['placements' => function ($q2) {
-                    $q2->where('Term', Session::get('Term'));
+                ->with(['placements' => function ($q2) use ($value) {
+                    $q2->where('Term', Session::get('Term'))->where('L', $value->L);
                 }])
                 ->get();
             foreach ($form as $value) {
@@ -349,7 +352,28 @@ class PreviewController extends Controller
         $form_info = collect($form_info_arr);
         // ->sortBy('id');
 
-        return view('preview-classrooms', compact('arr', 'classrooms', 'form_info', 'classroom_3'));
+        return view('preview-classrooms', compact('arr', 'classrooms', 'form_info', 'classroom_3', 'studentWithMoreClasses'));
+    }
+
+    public function checkIfStudentAnotherClass($student)
+    {
+        $array = [];
+        foreach ($student as $key => $value) {
+            $checkStudent = Repo::where('INDEXID', $value->INDEXID)
+                ->where('Term', Session::get('Term'))
+                ->with(['classrooms' => function ($qry) {
+                    $qry->with('scheduler')->with('course');
+                }])
+                ->orderBy('created_at', 'asc')
+                ->get();
+
+            if (count($checkStudent) > 1) {
+                $array[] = array(
+                    $value->INDEXID => $checkStudent
+                );
+            }
+        }
+        return $array;
     }
 
     public function ajaxSelectTeacher(Request $request)
@@ -619,6 +643,8 @@ class PreviewController extends Controller
         return view('preview-waitlisted', compact('convocation_waitlist', 'languages'));
     }
 
+    use ManipulateTermDate;
+
     /**
      * sends convocation emails
      * @return \Illuminate\Http\Response reroute to admin dashboard
@@ -674,8 +700,8 @@ class PreviewController extends Controller
             // get term values
             $term = $value->Term;
             // get term values and convert to strings
-            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            $term_en = $this->manipulateTermDateEn($term);
+            $term_fr = $this->manipulateTermDateFr($term);
 
             $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
             $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
@@ -735,8 +761,8 @@ class PreviewController extends Controller
             // get term values
             $term = $select_student->Term;
             // get term values and convert to strings
-            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            $term_en = $this->manipulateTermDateEn($term);
+            $term_fr = $this->manipulateTermDateFr($term);
 
             $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
             $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
@@ -2141,6 +2167,10 @@ class PreviewController extends Controller
                         'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                         'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                         'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                        'Te_Sat' => 7,
+                        'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                        'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                        'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
                     ]);
                     foreach ($ingredients as $data) {
                         $data->save();
@@ -3046,6 +3076,10 @@ class PreviewController extends Controller
                     'Te_Fri_Room' => $existingSection[0]['Te_Fri_Room'],
                     'Te_Fri_BTime' => $existingSection[0]['Te_Fri_BTime'],
                     'Te_Fri_ETime' => $existingSection[0]['Te_Fri_ETime'],
+                    'Te_Sat' => 7,
+                    'Te_Sat_Room' => $existingSection[0]['Te_Sat_Room'],
+                    'Te_Sat_BTime' => $existingSection[0]['Te_Sat_BTime'],
+                    'Te_Sat_ETime' => $existingSection[0]['Te_Sat_ETime'],
                 ]);
                 $ingredients->save();
 

@@ -35,6 +35,9 @@
 					<th>Written</th>
 					<th>Oral</th>
 					<th>Overall Result</th>
+					<th>Days Present</th>
+					<th>Days Excused</th>
+					<th>Days Absent</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -53,6 +56,9 @@
 					<th>Written</th>
 					<th>Oral</th>
 					<th>Overall Grade</th>
+					<th>Days Present</th>
+					<th>Days Excused</th>
+					<th>Days Absent</th>
 				</tr>
 			</tfoot>
 		</table>
@@ -128,7 +134,31 @@
 						{ "data": "Result" },
 						{ "data": "Written" },
 						{ "data": "Oral" },
-						{ "data": "Overall_Grade" }
+						{ "data": "Overall_Grade" },
+						{ "data": function ( row, type, val, meta ) {
+								if (row.attendances != null) {
+									return row.attendances.availability[0].P;
+								} else {
+
+									return 'No Attendance Set';
+								}
+							} },
+						{ "data": function ( row, type, val, meta ) {
+								if (row.attendances != null) {
+									return row.attendances.availability[0].E;
+								} else {
+
+									return 'No Attendance Set';
+								}
+							} },
+						{ "data": function ( row, type, val, meta ) {
+								if (row.attendances != null) {
+									return row.attendances.availability[0].A;
+								} else {
+
+									return 'No Attendance Set';
+								}
+							} }
 							],
 			})
 		}

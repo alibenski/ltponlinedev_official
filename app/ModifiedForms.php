@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTimeInterface;
 
 class ModifiedForms extends Model
 {
@@ -53,5 +54,16 @@ class ModifiedForms extends Model
     public function adminComment()
     {
         return $this->hasMany('App\AdminComment', 'CodeIndexID', 'CodeIndexID');
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }

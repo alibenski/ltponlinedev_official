@@ -49,8 +49,10 @@ class PreenrolmentController extends Controller
             $enrolment_id_array[] = $value->id;
         }
         $languages = DB::table('languages')->pluck("name", "code")->all();
+        // create $terms object variable to apply conditions for summer term
+        $terms = (object)array("Term_Code" => $enrolment_first->Term);
 
-        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array'));
+        return view('preenrolment.student-edit-enrolment-form-view', compact('enrolment_details', 'languages', 'enrolment_id_array', 'terms'));
     }
 
     public function studentUpdateEnrolmentForm(Request $request)
@@ -409,8 +411,8 @@ class PreenrolmentController extends Controller
                 ->where('L', $language)
                 ->where('Term', $next_term)
                 ->where('Te_Code', $request->Te_Code)
-                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
-                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'updatedOn')
+                ->select('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
+                ->groupBy('INDEXID', 'L', 'Term', 'Te_Code', 'eform_submit_count', 'flexibleBtn', 'flexibleDay', 'flexibleTime', 'flexibleFormat', 'modified_by', 'updated_by_admin', 'admin_eform_comment', 'std_comments', 'teacher_comments', 'updatedOn')
                 ->get();
 
             $arr1 = [];
@@ -836,6 +838,7 @@ class PreenrolmentController extends Controller
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', Session::get('Term'))->first();
 
         if (!Session::has('Term')) {
             $enrolment_forms = null;
@@ -888,7 +891,7 @@ class PreenrolmentController extends Controller
         $enrolment_forms->select('INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form', 'selfpay_approval', 'deleted_at', 'updated_by_admin', 'modified_by', 'cancelled_by_admin')->groupBy('INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'cancelled_by_student', 'approval', 'approval_hr', 'form_counter', 'eform_submit_count', 'attachment_id', 'attachment_pay', 'created_at', 'std_comments', 'is_self_pay_form', 'selfpay_approval', 'deleted_at', 'updated_by_admin', 'modified_by', 'cancelled_by_admin');
         // $allQueries = array_merge($queries, $currentQueries);
         $enrolment_forms = $enrolment_forms->withTrashed()->paginate(20)->appends($queries);
-        return view('preenrolment.index', compact('enrolment_forms', 'languages', 'org', 'terms'));
+        return view('preenrolment.index', compact('enrolment_forms', 'languages', 'org', 'terms', 'selectedTerm'));
     }
 
     /**
@@ -1084,7 +1087,7 @@ class PreenrolmentController extends Controller
                     'actor_id' => Auth::user()->id,
                     'enrolment_id' => $enrolmentForm->id,
                     'filename' => $filename,
-                    'size' => $request->contractFile->getClientSize(),
+                    'size' => $request->contractFile->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_contract_file->save();
@@ -1103,7 +1106,7 @@ class PreenrolmentController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
@@ -1119,7 +1122,7 @@ class PreenrolmentController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_pay_file->save();
@@ -1135,6 +1138,9 @@ class PreenrolmentController extends Controller
             $formToBeConverted->attachment_pay = $attachment_pay_file->id;
             $formToBeConverted->save();
         }
+
+        $isSelfPayValue = 1;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
     }
 
     public function convertToRegularForm($request, $enrolmentID)
@@ -1150,12 +1156,45 @@ class PreenrolmentController extends Controller
             $formToBeConverted->attachment_pay = null;
             $formToBeConverted->save();
         }
+
+        $isSelfPayValue = 0;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
+    }
+
+    public function updatePASHRecord(Request $request, $enrolmentID, $isSelfPayValue)
+    {
+        $enrolmentForm = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('id', $enrolmentID->first()->id)
+            ->first();
+
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+
+        if (!$pashRecord->isEmpty()) {
+            // set is_self_pay_form field/flag
+            foreach ($pashRecord as $record) {
+                if ($isSelfPayValue == 1) {
+                    $record->is_self_pay_form = 1;
+                } else {
+                    $record->is_self_pay_form = null;
+                }
+                $record->save();
+            }
+        }
+    }
+
+    public function changePASHSelectedField($request, $input)
+    {
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+        if (!$pashRecord->isEmpty()) {
+            foreach ($pashRecord as $record) {
+                $record->fill($input)->save();
+            }
+        }
     }
 
     public function updateEnrolmentFields(Request $request, $indexno, $term, $tecode, $eform_submit_count)
     {
-        // dd(array_filter($request->all()), $indexno, $term, $tecode, $eform_submit_count);
-
         $enrolment_to_be_copied = Preenrolment::withTrashed()
             ->orderBy('id', 'asc')
             ->where('Te_Code', $tecode)
@@ -1202,6 +1241,7 @@ class PreenrolmentController extends Controller
         if ($request->radioChangeOrgInForm) {
             // change organization
             $this->changeOrgInForm($request, $enrolment_to_be_copied, $input);
+            $this->changePASHSelectedField($request, $input);
             $request->session()->flash('msg-change-org', 'Organization field has been updated.');
         }
 
@@ -1228,6 +1268,7 @@ class PreenrolmentController extends Controller
 
         if ($request->radioUndoDeleteStatus) {
             foreach ($enrolment_to_be_copied as $enrolmentToBeRestore) {
+                $enrolmentToBeRestore->cancelled_by_student = null;
                 $enrolmentToBeRestore->restore();
                 $request->session()->flash('msg-restore-form', 'Form has been restored.');
             }

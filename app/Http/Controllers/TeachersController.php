@@ -185,6 +185,537 @@ class TeachersController extends Controller
         return view('teachers.teacher_enrolment_preview', compact('enrolment_forms', 'languages', 'org', 'terms', 'count'));
     }
 
+    public function teacherEnrolmentPreviewTableView(Request $request)
+    {
+        if (!Session::has('Term')) {
+            $enrolment_forms = null;
+            return view('teachers.teacher_enrolment_preview', compact('enrolment_forms'));
+        }
+
+        $term = Session::get('Term');
+        $Te_Code = $request->Te_Code;
+
+        return view('teachers.teacher_enrolment_preview_table_view', compact('Te_Code', 'term'));
+    }
+
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param Request $request
+     * @return json $data
+     * @throws conditon
+     **/
+    public function teacherEnrolmentPreviewTable(Request $request)
+    {
+        $term = Session::get('Term');
+
+        $q = Preenrolment::with('courses')->with('modifyUser')->with('schedule')->with(['users' => function ($q0) {
+            $q0->with('sddextr');
+        }])->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $q2 = PlacementForm::with('courses')->with('modifyUser')->with('schedule')->with(['users' => function ($q1) {
+            $q1->with('sddextr');
+        }])->where('Term', $term)->whereNotNull('Te_Code')->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $merge = collect($q)->merge($q2);
+
+        $enrolment_forms = $merge->unique(function ($item) {
+            return $item['INDEXID'] . $item['Te_Code'];
+        })
+            ->sortBy('created_at');
+
+        $queries = [];
+
+        $columns = [
+            'Te_Code',
+        ];
+
+
+        foreach ($columns as $column) {
+            if (\Request::filled($column)) {
+                $enrolment_forms = $enrolment_forms->where($column, \Request::input($column));
+                $queries[$column] = \Request::input($column);
+            }
+        }
+        if (Session::has('Term')) {
+            $enrolment_forms = $enrolment_forms->where('Term', Session::get('Term'));
+            $queries['Term'] = Session::get('Term');
+        }
+
+        $array = [];
+        $indexnosArray = [];
+        $eformSubmitCountArray = [];
+        $languageArray = [];
+        foreach ($enrolment_forms as $form) {
+            $assign_status = null;
+            $assigned_by = null;
+            $assigned_course = null;
+            $assigned_schedule = null;
+
+            if ($form->updated_by_admin === 1) {
+                $assign_status = 'YES';
+                $assigned_by = $form->modifyUser->name;
+                $assigned_course = $form->courses->Description;
+                $assigned_schedule = $form->schedule->name;
+            }
+            if ($form->updated_by_admin === 0) {
+                $assign_status = 'Verified and Not Assigned';
+                $assigned_by = $form->modifyUser->name;
+            }
+            if ($form->updated_by_admin === null) {
+                $assign_status = 'Not Assigned';
+            }
+            $phone = 'None';
+            if ($form->users->sddextr->PHONE) {
+                $phone = $form->users->sddextr->PHONE;
+            }
+
+            $dayInput = null;
+            if (!is_null($form->dayInput)) {
+                $dayInput = $form->dayInput;
+            }
+
+            $timeInput = null;
+            if (!is_null($form->timeInput)) {
+                $timeInput = $form->timeInput;
+            }
+
+            $deliveryMode = null;
+            if (!is_null($form->deliveryMode)) {
+                if ($form->deliveryMode === 0) {
+                    $deliveryMode = 'in-person';
+                } elseif ($form->deliveryMode === 1) {
+                    $deliveryMode = 'online';
+                } elseif ($form->deliveryMode === 2) {
+                    $deliveryMode = 'both in-person and online';
+                }
+            }
+
+            $flexibleDay = null;
+            if (!is_null($form->flexibleDay))
+                if ($form->flexibleDay === 1) {
+                    $flexibleDay = 'YES';
+                }
+            if ($form->flexibleDay === 0) {
+                $flexibleDay = 'NOT FLEXIBLE';
+            }
+
+            $flexibleTime = null;
+            if (!is_null($form->flexibleTime)) {
+                if ($form->flexibleTime === 1) {
+                    $flexibleTime = 'YES';
+                }
+                if ($form->flexibleTime === 0) {
+                    $flexibleTime = 'NOT FLEXIBLE';
+                }
+            }
+
+            $flexibleFormat = null;
+            if (!is_null($form->flexibleFormat)) {
+                if ($form->flexibleFormat === 1) {
+                    $flexibleFormat = 'YES';
+                }
+                if ($form->flexibleFormat === 0) {
+                    $flexibleFormat = 'NOT FLEXIBLE';
+                }
+            }
+
+            $hr_approval = null;
+            if (is_null($form->is_self_pay_form)) {
+                if (in_array($form->DEPT, ['UNOG', 'JIU', 'DDA', 'OIOS', 'DPKO'])) {
+                    $hr_approval = 'N/A - Non-paying organization';
+                } else {
+                    if (is_null($form->approval) && is_null($form->approval_hr)) {
+                        $hr_approval = 'Pending Approval';
+                    }
+                    if ($form->approval == 0 && (is_null($form->approval_hr) || isset($form->approval_hr))) {
+                        $hr_approval = 'N/A - Disapproved by Manager';
+                    }
+                    if ($form->approval == 1 && is_null($form->approval_hr)) {
+                        $hr_approval = 'Pending Approval';
+                    }
+                    if ($form->approval == 1 && $form->approval_hr == 1) {
+                        $hr_approval = 'Approved';
+                    }
+                    if ($form->approval == 1 && $form->approval_hr == 0) {
+                        $hr_approval = 'Disapproved';
+                    }
+                }
+            } else {
+                $hr_approval = 'N/A - Self-Payment';
+            }
+
+            $payment_status = null;
+            if (is_null($form->is_self_pay_form)) {
+                $payment_status = 'N/A';
+            } else {
+                if ($form->selfpay_approval === 1) {
+                    $payment_status = 'Approved';
+                }
+                if ($form->selfpay_approval === 2) {
+                    $payment_status = 'Pending Valid Document';
+                }
+                if ($form->selfpay_approval === 0) {
+                    $payment_status = 'Disapproved';
+                }
+                if ($form->selfpay_approval === null) {
+                    $payment_status = 'Waiting for Admin';
+                }
+            }
+
+            $student_comment = null;
+            $placement_form = null;
+            if ($form->placement_schedule_id) {
+                $student_comment = $form->std_comments . $form->course_preference_comment;
+                $placement_form = 'Placement Form';
+            } else {
+                if ($form->std_comments) {
+                    $student_comment = $form->std_comments;
+                }
+            }
+
+            $re_enrolment = $this->checkIfReEnrolment($term, $form->INDEXID, $form);
+            $not_in_a_class = $this->checkNotInClass($term, $form->INDEXID, $form);
+            $waitlisted = $this->checkIfWaitlisted($term, $form->INDEXID, $form);
+            $within_2_terms = $this->checkIfWithin2Terms($term, $form->INDEXID, $form);
+
+            $wishlist_schedule = $this->checkIfWishlistSchedule($term, $form->INDEXID, $form);
+
+            $indexnosArray[] = $form->INDEXID;
+            $eformSubmitCountArray[] = $form->eform_submit_count;
+            $languageArray[] = $form->L;
+
+            $deleted_at = null;
+            if (!is_null($form->deleted_at)) {
+                $deleted_at = $form->deleted_at->format('Y-m-d H:i:s');
+            }
+
+            $array[] =  (object) [
+                'assign_status' => $assign_status,
+                'assigned_by' => $assigned_by,
+                'assigned_course' => $assigned_course,
+                'assigned_schedule' => $assigned_schedule,
+                're_enrolment' => $re_enrolment,
+                'placement_form' => $placement_form,
+                'not_in_a_class' => $not_in_a_class,
+                'waitlisted' => $waitlisted,
+                'within_2_terms' => $within_2_terms,
+                'wishlist_schedule' => $wishlist_schedule,
+                'INDEXID' => $form->INDEXID,
+                'name' => $form->users->name,
+                'email' => $form->users->email,
+                'PHONE' => $phone,
+                'courses_Description' => $form->courses->Description,
+                'dayInput' => $dayInput,
+                'timeInput' => $timeInput,
+                'deliveryMode' => $deliveryMode,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
+                'DEPT' => $form->DEPT,
+                'cancelled_by_student' => $form->cancelled_by_student,
+                'hr_approval' => $hr_approval,
+                'payment_status' => $payment_status,
+                'student_comment' => $student_comment,
+                'admin_eform_comment' => $form->admin_eform_comment,
+                'admin_plform_comment' => $form->admin_plform_comment,
+                'created_at' => $form->created_at->format('Y-m-d H:i:s'),
+                'deleted_at' => $deleted_at,
+            ];
+        }
+        $data = $array;
+        $priority = $this->getStudentPriorityStatus($term, $indexnosArray, $eformSubmitCountArray, $languageArray);
+
+        return response()->json(['data' => $data, 'ps' => $priority]);
+    }
+
+    public function checkIfWishlistSchedule($term, $index, $form)
+    {
+        $current_user = $index;
+        $term_code = $term;
+
+        $user = User::where('indexno', $current_user)->first();
+        $user = $user->name;
+
+        // check the original wishlist of student in placement forms table
+        $check_placement_forms = PlacementForm::where('INDEXID', $current_user)
+            ->where('Te_Code', $form->Te_Code)
+            ->where('Term', $term_code)->count();
+
+        if ($check_placement_forms > 0) {
+            // query submitted forms based from Modified Forms table
+            $schedules = PlacementForm::withTrashed()
+                ->where('Te_Code', $form->Te_Code)
+                ->where('INDEXID', $current_user)
+                ->where('eform_submit_count', $form->eform_submit_count)
+                ->where('Term', $term_code)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval', 'assigned_to_course']);
+
+
+
+            $wishlist_schedule = [];
+            foreach ($schedules as $sched_value) {
+                $wishlist_schedule[] = $sched_value->schedule->name;
+            }
+
+            return $wishlist_schedule;
+        }
+
+        // check the original wishlist of student in modified forms table first 
+        $check_modified_forms = ModifiedForms::where('INDEXID', $current_user)->where('Te_Code', $form->Te_Code)->where('Term', $term_code)->count();
+
+        if ($check_modified_forms > 0) {
+            // query submitted forms based from Modified Forms table
+            $schedules = ModifiedForms::withTrashed()
+                // ->where('Te_Code', $form->Te_Code)
+                ->where('INDEXID', $current_user)
+                ->where('eform_submit_count', $form->eform_submit_count)
+                ->where('Term', $term_code)
+                ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval']);
+
+
+
+            $wishlist_schedule = [];
+            foreach ($schedules as $sched_value) {
+                $wishlist_schedule[] = $sched_value->schedule->name;
+            }
+
+            return $wishlist_schedule;
+        }
+
+        // query submitted forms based from tblLTP_Enrolment table
+        $schedules = Preenrolment::withTrashed()
+            ->where('Te_Code', $form->Te_Code)
+            ->where('INDEXID', $current_user)
+            ->where('eform_submit_count', $form->eform_submit_count)
+            ->where('Term', $term_code)
+            ->get(['schedule_id', 'mgr_email', 'approval', 'approval_hr', 'is_self_pay_form', 'DEPT', 'deleted_at', 'INDEXID', 'Term', 'Te_Code', 'selfpay_approval']);
+
+
+
+        $wishlist_schedule = [];
+        foreach ($schedules as $sched_value) {
+            $wishlist_schedule[] = $sched_value->schedule->name;
+        }
+
+        return $wishlist_schedule;
+    }
+
+    public function checkIfReEnrolment($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query students in class
+        $students_in_class = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1); // contains index of re-enrolled students
+
+        $re_enrolment = null;
+        foreach ($arr1 as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $re_enrolment = 'Re-enrolment';
+            }
+        }
+
+        return $re_enrolment;
+    }
+    public function checkNotInClass($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query students in class
+        $students_in_class = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+
+        $q = Preenrolment::where('INDEXID', $index)->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $arr2 = [];
+        foreach ($q as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+        $not_in_a_class = null;
+        foreach ($unique_students_not_in_class as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $not_in_a_class = 'Not in a class';
+            }
+        }
+
+        return $not_in_a_class;
+    }
+    public function checkIfWaitlisted($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query waitlisted students
+        $students_waitlisted = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $waitlisted = [];
+        foreach ($students_waitlisted as $key3 => $value3) {
+            $waitlisted[] = $value3->INDEXID;
+        }
+        $waitlisted = array_unique($waitlisted);
+
+        $waitlisted_estudyante = null;
+        foreach ($waitlisted as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $waitlisted_estudyante = 'Waitlisted';
+            }
+        }
+
+        return $waitlisted_estudyante;
+    }
+    public function checkIfWithin2Terms($term, $index, $form)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+        // query students in class
+        $students_in_class = Repo::where('INDEXID', $index)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+
+        $q = Preenrolment::where('INDEXID', $index)->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $arr2 = [];
+        foreach ($q as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+        $prev_prev_term = Term::where('Term_Code', $prev_term)->first()->Term_Prev;
+
+        $students_within_two_terms = Repo::whereIn('INDEXID', $unique_students_not_in_class)->where('Term', $prev_prev_term)->get();
+        // put inside array
+        $within_two_terms = [];
+        foreach ($students_within_two_terms as $key4 => $value4) {
+            $within_two_terms[] = $value4->INDEXID;
+        }
+        $within_two_terms = array_unique($within_two_terms);
+
+        $within_2_terms = null;
+        foreach ($within_two_terms as $indexno) {
+            if ($indexno = $form->INDEXID) {
+                $within_2_terms = 'Within 2 terms';
+            }
+        }
+
+        return $within_2_terms;
+    }
+    public function getStudentPriorityStatus($term, $indexnosArray, $eformSubmitCountArray, $languageArray)
+    {
+        $prev_term = Term::where('Term_Code', $term)->first()->Term_Prev;
+
+        // query students in class
+        $students_in_class = Repo::whereIn('INDEXID', $indexnosArray)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNotNull('Tch_ID')
+                ->where('Tch_ID', '!=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $arr1 = [];
+        foreach ($students_in_class as $key1 => $value1) {
+            $arr1[] = $value1->INDEXID;
+        }
+        $arr1 = array_unique($arr1);
+
+
+        $q = Preenrolment::whereIn('INDEXID', $indexnosArray)->where('Term', $term)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+        $arr2 = [];
+        foreach ($q as $key2 => $value2) {
+            $arr2[] = $value2->INDEXID;
+        }
+        $arr2 = array_unique($arr2);
+
+        // Compares array1 against one or more other arrays and returns the values in array1 that are not present in any of the other arrays
+        $students_not_in_class = array_diff($arr2, $arr1); // get all enrolment_forms not included in students_in_class
+        $unique_students_not_in_class = array_unique($students_not_in_class);
+
+
+        // query waitlisted students
+        $students_waitlisted = Repo::whereIn('INDEXID', $indexnosArray)->where('Term', $prev_term)->whereHas('classrooms', function ($query) {
+            $query->whereNull('Tch_ID')
+                ->orWhere('Tch_ID', '=', 'TBD');
+        })
+            ->get();
+        // put inside array
+        $waitlisted = [];
+        foreach ($students_waitlisted as $key3 => $value3) {
+            $waitlisted[] = $value3->INDEXID;
+        }
+        $waitlisted = array_unique($waitlisted);
+
+
+        $prev_prev_term = Term::where('Term_Code', $prev_term)->first()->Term_Prev;
+
+        $students_within_two_terms = Repo::whereIn('INDEXID', $unique_students_not_in_class)->where('Term', $prev_prev_term)->get();
+        // put inside array
+        $within_two_terms = [];
+        foreach ($students_within_two_terms as $key4 => $value4) {
+            $within_two_terms[] = $value4->INDEXID;
+        }
+        $within_two_terms = array_unique($within_two_terms);
+
+
+        // count how many schedules were originally chosen
+        $check_modified_forms = ModifiedForms::whereIn('INDEXID', $indexnosArray)->whereIn('eform_submit_count', $eformSubmitCountArray)->where('Term', $term)->where('L', $languageArray)->where('overall_approval', '1')->get();
+
+        $count_schedule_in_modified_table = [];
+        foreach ($check_modified_forms as $key7 => $value7) {
+            $count_schedule_in_modified_table[] = $value7->INDEXID;
+        }
+
+        $count_schedule_in_modified_table = array_count_values($count_schedule_in_modified_table);
+
+        $qry = Preenrolment::whereIn('INDEXID', $indexnosArray)->whereIn('eform_submit_count', $eformSubmitCountArray)->where('Term', $term)->where('L', $languageArray)->where('overall_approval', '1')->orderBy('created_at', 'asc')->get();
+
+        $count_schedule = [];
+        foreach ($qry as $key6 => $value6) {
+            $count_schedule[] = $value6->INDEXID;
+        }
+
+        $count_schedule = array_count_values($count_schedule);
+
+        $priority = [$arr1, $unique_students_not_in_class, $waitlisted, $within_two_terms, $count_schedule, $count_schedule_in_modified_table];
+        return $priority;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -729,7 +1260,12 @@ class TeachersController extends Controller
     {
         if ($request->ajax()) {
             $qry = Attendance::whereIn('pash_id', $request->id)->get();
-
+            // get the term from relationship with Repo
+            foreach ($qry as $record) {
+                if ($record->pashRecord) {
+                    $term = $record->pashRecord->Term;
+                }
+            }
             // if no attendance has been entered yet, then 0 value
             if ($qry->isEmpty()) {
 
@@ -748,32 +1284,67 @@ class TeachersController extends Controller
             $sumA = [];
             $info = [];
             $collector = [];
-            foreach ($array_attributes as $x => $y) {
-                $info['pash_id'] = $y['pash_id'];
+            // exclude Wk1_ from sum if term > 240
+            if ($term > 240) {
+                foreach ($array_attributes as $x => $y) {
+                    $info['pash_id'] = $y['pash_id'];
 
-                foreach ($y as $k => $v) {
-                    if ($v == 'P') {
-                        $sumP[] = 'P';
+                    foreach ($y as $k => $v) {
+                        if (substr($k, 0, 4) != "Wk1_") {
+                            if ($v == 'P') {
+                                $sumP[] = 'P';
+                            }
+                        }
+                        if (substr($k, 0, 4) != "Wk1_") {
+                            if ($v == 'E') {
+                                $sumE[] = 'E';
+                            }
+                        }
+                        if (substr($k, 0, 4) != "Wk1_") {
+                            if ($v == 'A') {
+                                $sumA[] = 'A';
+                            }
+                        }
                     }
 
-                    if ($v == 'E') {
-                        $sumE[] = 'E';
-                    }
+                    $info['P'] = count($sumP);
+                    $info['E'] = count($sumE);
+                    $info['A'] = count($sumA);
 
-                    if ($v == 'A') {
-                        $sumA[] = 'A';
-                    }
+                    $collector[] = $info;
+                    // clear contents of array for the next loop
+                    $sumP = [];
+                    $sumE = [];
+                    $sumA = [];
                 }
+            } else {
+                foreach ($array_attributes as $x => $y) {
+                    $info['pash_id'] = $y['pash_id'];
 
-                $info['P'] = count($sumP);
-                $info['E'] = count($sumE);
-                $info['A'] = count($sumA);
+                    foreach ($y as $k => $v) {
+                        if ($v == 'P') {
+                            $sumP[] = 'P';
+                        }
 
-                $collector[] = $info;
-                // clear contents of array for the next loop
-                $sumP = [];
-                $sumE = [];
-                $sumA = [];
+                        if ($v == 'E') {
+                            $sumE[] = 'E';
+                        }
+
+                        if ($v == 'A') {
+                            $sumA[] = 'A';
+                        }
+                    }
+
+                    $info['P'] = count($sumP);
+                    $info['E'] = count($sumE);
+                    $info['A'] = count($sumA);
+
+                    $collector[] = $info;
+                    // clear contents of array for the next loop
+                    $sumP = [];
+                    $sumE = [];
+                    $sumA = [];
+                }
             }
 
             $data = $collector;

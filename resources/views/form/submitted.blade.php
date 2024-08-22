@@ -72,6 +72,9 @@
                     @if(!empty($element->classrooms->Te_Fri_Room))
                     <p>Friday Room: <strong>{{ $element->classrooms->roomsFri->Rl_Room }}</strong></p>
                     @endif
+                    @if(!empty($element->classrooms->Te_Sat_Room))
+                    <p>Saturday Room: <strong>{{ $element->classrooms->roomsSat->Rl_Room }}</strong></p>
+                    @endif
 
                   <p>
                     @if($element->classrooms->Tch_ID == 'TBD')

@@ -64,6 +64,7 @@ class BillingController extends Controller
                 ->whereHas('enrolments', function ($query11) use ($term) {
                     $query11->where('Term', $term)->whereNull('is_self_pay_form');
                 })
+                ->with('attendances')
                 ->get();
 
             $pashFromPlacement = new Repo;
@@ -89,6 +90,7 @@ class BillingController extends Controller
                 ->whereHas('placements', function ($query00) use ($term) {
                     $query00->where('Term', $term)->whereNull('is_self_pay_form');
                 })
+                ->with('attendances')
                 ->get();
 
 

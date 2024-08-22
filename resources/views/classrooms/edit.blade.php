@@ -103,6 +103,14 @@
 					<hr>
 					</div>
 					@endif
+					@if(!empty($classroom->Te_Sat_Room))
+					<div class="col-sm-6">
+					<p>Saturday Room: <strong>{{ $classroom->roomSat->Rl_Room }}</strong></p>
+					<p>Saturday Begin Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_BTime ))}}</strong></p>
+					<p>Saturday End Time: <strong>{{ date('h:i a', strtotime($classroom->Te_Sat_ETime)) }}</strong></p>
+					<hr>
+					</div>
+					@endif
 	        </div>
 	    </div>
     </div>
@@ -157,7 +165,7 @@
 				        <div class="col-sm-2">
 					        @foreach ($schedule as $id => $name)
 					            <div class="checkbox">
-					                <label class=@if ($id == $classroom->schedule_id) "mark" @endif>
+					                <label class=@if ($id == $classroom->schedule_id) "mark" @endif @if ($id == $classroom->schedule_id) style="background-color: aqua; font-weight: 700;" @endif>
 					                    <input id="box_value_{{ $id }}" type="checkbox" name="schedule_id" multiple="multiple" value="{{ $id }}" @if ($id == $classroom->schedule_id) @else disabled="true" @endif /> {{ $name }} 
 					                </label>
 					            </div>

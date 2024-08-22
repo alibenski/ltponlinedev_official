@@ -487,7 +487,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->identityfile2->getClientSize(),
+                'size' => $request->identityfile2->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_2_file->save();
@@ -504,7 +504,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->contractFile->getClientSize(),
+                'size' => $request->contractFile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -521,7 +521,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->addFile0->getClientSize(),
+                'size' => $request->addFile0->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_0->save();
@@ -538,7 +538,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->addFile1->getClientSize(),
+                'size' => $request->addFile1->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_1->save();
@@ -555,7 +555,7 @@ class PlacementFormController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $placement_form_id,
                 'filename' => $filename,
-                'size' => $request->addFile2->getClientSize(),
+                'size' => $request->addFile2->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_add_file_2->save();
@@ -682,6 +682,7 @@ class PlacementFormController extends Controller
         $languages = DB::table('languages')->pluck("name", "code")->all();
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $selectedTerm = Term::orderBy('Term_Code', 'desc')->where('Term_Code', Session::get('Term'))->first();
 
         if (!Session::has('Term')) {
             // count(): Parameter must be an array or an object that implements Countable
@@ -733,7 +734,7 @@ class PlacementFormController extends Controller
 
         // $allQueries = array_merge($queries, $currentQueries);
         $placement_forms = $placement_forms->withTrashed()->paginate(20)->appends($queries);
-        return view('placement_forms.index', compact('placement_forms', 'languages', 'org', 'terms'));
+        return view('placement_forms.index', compact('placement_forms', 'languages', 'org', 'terms', 'selectedTerm'));
     }
 
     /**
@@ -1369,6 +1370,7 @@ class PlacementFormController extends Controller
         if ($request->radioChangeOrgInForm) {
             // change organization
             $this->changeSelectedField($enrolment_to_be_copied, $input);
+            $this->changePASHSelectedField($request, $input);
             $request->session()->flash('msg-change-org', 'Organization field has been updated.');
         }
 
@@ -1394,6 +1396,7 @@ class PlacementFormController extends Controller
 
         if ($request->radioUndoDeleteStatus) {
             foreach ($enrolment_to_be_copied as $enrolmentToBeRestore) {
+                $enrolmentToBeRestore->cancelled_by_student = null;
                 $enrolmentToBeRestore->restore();
                 $request->session()->flash('msg-restore-form', 'Form has been restored.');
             }
@@ -1428,6 +1431,16 @@ class PlacementFormController extends Controller
                 $new_data->overall_approval = $input['approval_hr'];
             }
             $new_data->fill($input)->save();
+        }
+    }
+
+    public function changePASHSelectedField($request, $input)
+    {
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+        if (!$pashRecord->isEmpty()) {
+            foreach ($pashRecord as $record) {
+                $record->fill($input)->save();
+            }
         }
     }
 
@@ -1466,7 +1479,7 @@ class PlacementFormController extends Controller
                     'actor_id' => Auth::user()->id,
                     'placement_id' => $enrolmentForm->id,
                     'filename' => $filename,
-                    'size' => $request->contractFile->getClientSize(),
+                    'size' => $request->contractFile->getSize(),
                     'path' => $filestore,
                 ]);
                 $attachment_contract_file->save();
@@ -1485,7 +1498,7 @@ class PlacementFormController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
@@ -1501,7 +1514,7 @@ class PlacementFormController extends Controller
                 'user_id' => $enrolmentInfo->users->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_pay_file->save();
@@ -1517,6 +1530,9 @@ class PlacementFormController extends Controller
             $formToBeConverted->attachment_pay = $attachment_pay_file->id;
             $formToBeConverted->save();
         }
+
+        $isSelfPayValue = 1;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
     }
 
     public function convertToRegularForm($request, $enrolmentID)
@@ -1531,6 +1547,31 @@ class PlacementFormController extends Controller
             $formToBeConverted->attachment_id = null;
             $formToBeConverted->attachment_pay = null;
             $formToBeConverted->save();
+        }
+
+        $isSelfPayValue = 0;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
+    }
+
+    public function updatePASHRecord(Request $request, $enrolmentID, $isSelfPayValue)
+    {
+        $placementForm = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('id', $enrolmentID->first()->id)
+            ->first();
+
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+
+        if (!$pashRecord->isEmpty()) {
+            // set is_self_pay_form field/flag
+            foreach ($pashRecord as $record) {
+                if ($isSelfPayValue == 1) {
+                    $record->is_self_pay_form = 1;
+                } else {
+                    $record->is_self_pay_form = null;
+                }
+                $record->save();
+            }
         }
     }
 }

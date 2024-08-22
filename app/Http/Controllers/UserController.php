@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\ContractFile;
+use App\Day;
 use App\File;
 use App\Language;
 use App\ModifiedForms;
 use App\NewUser;
 use App\FileNewUser;
+use App\Mail\SendAuthMail;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -31,6 +33,52 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    function importExistingFromSDDEXTRForm()
+    {
+        return view('users_new.new_user');
+    }
+
+    function importExistingFromSDDEXTR(Request $request)
+    {
+        //validate the data
+        $this->validate($request, array(
+            'indexno' => 'required|integer',
+            'email' => 'required|email',
+        ));
+
+        // check if staff exists in Auth table
+        $query_auth_record = User::where('indexno', $request->indexno)->orWhere('email', $request->email)->first();
+
+        // if staff exists in auth table, redirect to login page
+        if ($query_auth_record) {
+            $request->session()->flash('warning', 'Index ID (' . $query_auth_record->indexno . ') and email address (' . $query_auth_record->email . ') already exists.');
+            return redirect()->route('users.index');
+        }
+
+        // query if staff exists in sddextr table
+        $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
+
+        // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
+        if ($query_sddextr_record) {
+            $user = User::create([
+                'indexno' => $query_sddextr_record->INDEXNO,
+                'email' => strtolower(trim($query_sddextr_record->EMAIL)),
+                'nameFirst' => $query_sddextr_record->FIRSTNAME,
+                'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
+                'password' => Hash::make('Welcome2CLM'),
+                'must_change_password' => 1,
+                'approved_account' => 1,
+            ]);
+            $sddextr_email_address = trim($query_sddextr_record->EMAIL);
+            // send credential email to user using email from sddextr 
+            Mail::to(trim($query_sddextr_record->EMAIL))->send(new SendAuthMail($sddextr_email_address));
+
+            $request->session()->flash('warning', 'Login Credentials sent to: ' . $query_sddextr_record->EMAIL);
+            return redirect()->route('users.index');
+        }
+    }
+
     public function userUpdateContract(Request $request)
     {
         $user = User::where('id', $request->id)->first();
@@ -437,7 +485,7 @@ class UserController extends Controller
             //Create new record in db table
             $attachment_contract_file = new FileNewUser([
                 'filename' => $filename,
-                'size' => $request->contractfile->getClientSize(),
+                'size' => $request->contractfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -452,7 +500,7 @@ class UserController extends Controller
             //Create new record in db table
             $attachment_contract_file2 = new FileNewUser([
                 'filename' => $filename2,
-                'size' => $request->contractfile2->getClientSize(),
+                'size' => $request->contractfile2->getSize(),
                 'path' => $filestore2,
             ]);
             $attachment_contract_file2->save();
@@ -862,6 +910,9 @@ class UserController extends Controller
     {
         $code_index_id = $request->Te_Code . '-' . $request->schedule_id . '-' . $request->Term . '-' . $request->INDEXID;
         $request->request->add(['CodeIndexID' => $code_index_id]);
+        $flexibleDay = $request->input('flexibleDay');
+        $flexibleTime = $request->input('flexibleTime');
+        $flexibleFormat = $request->input('flexibleFormat');
 
         $this->validate($request, [
             'CodeIndexID' => 'unique:tblLTP_Enrolment,CodeIndexID,NULL,id,deleted_at,NULL|',  // do not include soft deleted records 
@@ -922,6 +973,9 @@ class UserController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => 1,
                 'flexibleBtn' => null,
+                'flexibleDay' => $flexibleDay,
+                'flexibleTime' => $flexibleTime,
+                'flexibleFormat' => $flexibleFormat,
                 'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
@@ -958,7 +1012,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->identityfile->getClientSize(),
+                'size' => $request->identityfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
@@ -975,7 +1029,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'actor_id' => Auth::user()->id,
                 'filename' => $filename,
-                'size' => $request->payfile->getClientSize(),
+                'size' => $request->payfile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_pay_file->save();
@@ -1054,7 +1108,7 @@ class UserController extends Controller
                 'actor_id' => Auth::user()->id,
                 'enrolment_id' => $new_enrolment->id,
                 'filename' => $filename,
-                'size' => $request->contractFile->getClientSize(),
+                'size' => $request->contractFile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
@@ -1064,13 +1118,15 @@ class UserController extends Controller
     public function enrolStudentToPlacementForm(Request $request, $id)
     {
         $student = User::find($id);
-        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $terms_select = Term::orderBy('Term_Code', 'desc')->get();
         $languages = Language::pluck("name", "code")->all();
         $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
         $times = Time::all();
+        $days = Day::pluck("Week_Day_Name", "Week_Day_Name")->except('Sunday', 'Saturday')->all();
+        $terms = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
         // dd($request, $id);
-        return view('users.enrol-student-to-placement-form', compact('languages', 'terms', 'student', 'orgs', 'times'));
+        return view('users.enrol-student-to-placement-form', compact('languages', 'terms_select', 'student', 'orgs', 'times', 'days', 'terms'));
     }
 
     public function enrolStudentToPlacementInsert(Request $request)
@@ -1115,6 +1171,11 @@ class UserController extends Controller
             ]);
         }
 
+        $dayInput = $request->dayInput;
+        $timeInput = $request->timeInput;
+        $implodeDay = implode('-', $dayInput);
+        $implodeTime = implode('-', $timeInput);
+
         if (is_null($request->decision)) {
             // control the number of submitted enrolment forms
             $qryEformCount = PlacementForm::withTrashed()
@@ -1156,6 +1217,12 @@ class UserController extends Controller
                 'form_counter' => $form_counter,
                 'agreementBtn' => 1,
                 'flexibleBtn' => null,
+                'dayInput' => $implodeDay,
+                'timeInput' => $implodeTime,
+                'deliveryMode' => $request->deliveryMode,
+                'flexibleDay' => $request->flexibleDay,
+                'flexibleTime' => $request->flexibleTime,
+                'flexibleFormat' => $request->flexibleFormat,
                 'overall_approval' => 1,
                 'Comments' => $request->Comments,
                 // 'contractDate' => $contractDate,
@@ -1218,7 +1285,7 @@ class UserController extends Controller
                 'actor_id' => Auth::user()->id,
                 'placement_id' => $new_enrolment->id,
                 'filename' => $filename,
-                'size' => $request->contractFile->getClientSize(),
+                'size' => $request->contractFile->getSize(),
                 'path' => $filestore,
             ]);
             $attachment_contract_file->save();
