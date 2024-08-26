@@ -73,7 +73,7 @@
                 @else
                     
                 @endif
-                
+
                 <!-- NO DECISION SECTION -->
                 <div class="0 box">
                    
@@ -142,13 +142,9 @@
                     
                   <div class="submission-part" style="display: none">
                     
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer alert col-md-12">
-                        <p class="small text-danger"><strong>Required field</strong></p>
-                        <input id="approval" name="approval" class="with-font" type="radio" value="1" required="required">
-                        <label for="approval" class="form-control-static">By ticking this button, I confirm that my supervisor has approved my enrolment in the course. </label>
-                      </div>
-                    </div>
+                    {{-- disclaimer for approval --}}
+                    @include('form.partials.disclaimerCheckBox') 
+                    {{-- end of line: disclaimer for approval --}}
                 
                     <div class="form-group col-md-12">
                       <div class="disclaimer alert col-md-12">
