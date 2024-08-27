@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\AdditionalFile;
 use App\Classroom;
+use App\ContractFile;
 use App\Course;
 use App\Day;
+use App\File;
 use App\FocalPoints;
+use App\Identity2File;
 use App\Language;
 use App\Mail\MailtoApprover;
 use App\Mail\MailtoApproverHR;
@@ -15,6 +19,7 @@ use App\SDDEXTR;
 use App\Schedule;
 use App\Term;
 use App\Torgan;
+use App\Traits\ValidateAndStoreAttachments;
 use App\User;
 use Carbon\Carbon;
 use DB;
@@ -22,11 +27,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Session;
 
 class RepoController extends Controller
 {
+    use ValidateAndStoreAttachments;
+
     /**
      * Create a new controller instance.
      *
@@ -215,6 +223,10 @@ class RepoController extends Controller
             $form_counter = $lastValueCollection->form_counter + 1;
         }
 
+        $this->validateAttachments($request);
+
+        $this->storeFrontIDattachment($request);
+
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
@@ -298,6 +310,8 @@ class RepoController extends Controller
                 }
             }
         }
+
+        $this->storeOtherAttachments($ingredients, $request);
 
         //execute Mail class before redirect
 

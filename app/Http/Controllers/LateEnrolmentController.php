@@ -26,9 +26,12 @@ use App\Torgan;
 use App\User;
 use App\Services\User\MsuUpdateField;
 use App\Services\User\NgoUpdateField;
+use App\Traits\ValidateAndStoreAttachments;
 
 class LateEnrolmentController extends Controller
 {
+    use ValidateAndStoreAttachments;
+
     protected function generateRandomURL(Request $request)
     {
         if ($request->ajax()) {
@@ -262,6 +265,10 @@ class LateEnrolmentController extends Controller
             $form_counter = $lastValueCollection->form_counter + 1;
         }
 
+        $this->validateAttachments($request);
+
+        $this->storeFrontIDattachment($request);
+
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
@@ -343,6 +350,8 @@ class LateEnrolmentController extends Controller
                 // }
             }
         }
+
+        $this->storeOtherAttachments($ingredients, $request);
 
         //execute Mail class before redirect
 

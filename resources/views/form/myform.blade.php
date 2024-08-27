@@ -24,7 +24,7 @@
             </strong>
           </div>
           <div class="card-body">
-            <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
