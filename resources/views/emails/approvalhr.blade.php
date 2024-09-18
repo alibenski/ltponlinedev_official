@@ -254,7 +254,7 @@
                                      </li>
                                      @endforeach
                                      </ol>
-                                     <p>Les choix d’horaires ci-dessus ont été initialement approuvés par le ou la superviseur(e).</strong></p>
+                                     {{-- <p>Les choix d’horaires ci-dessus ont été initialement approuvés par le ou la superviseur(e).</p> --}}
                                      <p>Veuillez cliquer sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
                                 </td>
                             </tr>

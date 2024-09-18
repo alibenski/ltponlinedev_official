@@ -229,7 +229,7 @@
                                      <p> {{ $staff_name }} voudrait passer un test de placement pour suivre un  cours de langue dispensé par le CFM en <strong>{{ $input_course->languages->name_fr }}</strong><strong> du {{ $term_fr }}</strong></p>
                                      <p>Le test de placement aura lieu au moment <strong> @if ($input_course->placementSchedule->is_online == 1) du {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} au {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }} en ligne. @else le {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
-                                    <p>Veuillez noter que la demande pour le test de placement a été initialement approuvée par le ou la superviseur.e du membre du personnel.</p>
+                                    {{-- <p>Veuillez noter que la demande pour le test de placement a été initialement approuvée par le ou la superviseur.e du membre du personnel.</p> --}}
                                      <p>Veuillez cliquez s'il vous plaît sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
                                 </td>
                             </tr>
