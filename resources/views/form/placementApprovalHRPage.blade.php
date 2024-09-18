@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="" class="col-md-12 control-label">Staff Member Name:</label>
+                    <label for="" class="col-md-12 control-label">Student Name:</label>
 
                     <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="col-md-12 control-label">Staff Member's Email Address:</label>
+                    <label for="email" class="col-md-12 control-label">Student Email Address:</label>
                     
                     <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
