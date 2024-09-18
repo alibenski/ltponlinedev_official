@@ -22,8 +22,19 @@
                 @foreach($input_course as $course)
                   <input  name="schedule_id[]" type="hidden" value="{{$course->schedule->name}}" readonly>
                 @endforeach
+
                 <div class="form-group">
-                    <label for="" class="col-md-12 control-label">Staff Member Name:</label>
+                    <label for="" class="col-md-12 control-label">Profile:</label>
+
+                    <div class="col-md-12 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input  name="profile" class="form-control"  type="text" value="{{$input_staff->users->profile}}" readonly>                                    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-md-12 control-label">Student Name:</label>
 
                     <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
@@ -33,7 +44,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="col-md-12 control-label">Staff Member's Email Address:</label>
+                    <label for="email" class="col-md-12 control-label">Student Email Address:</label>
                     
                     <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
@@ -61,7 +72,7 @@
                         <th>Course</th>
                         <th>Language</th>
                         <th>Schedule</th>
-                        <th>Manager's Approval</th>
+                        {{-- <th>Manager's Approval</th> --}}
                         
                       </thead>
 
@@ -78,13 +89,13 @@
                               {{ $course->schedule->name }}
                               @endif
                             </td>
-                            <td>
+                            {{-- <td>
                               @if($course->approval == 1)
                               <h5><span class="text-success">Yes</span></h5>
                               @else
                               <h5><span class="text-danger">No</span></h5>
                               @endif
-                            </td>
+                            </td> --}}
                           </tr>
                         @endforeach
 
