@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Staff Member, {{ $staff_name }} , would like to enrol in a CLM language course and needs your approval.
+            {{ $staff_name }} would like to enrol in a CLM language course and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -194,7 +194,7 @@
                                     
                                      <p> Dear CLM Learning Partner, </p>
                                      <p> {{ $staff_name }} would like to enrol on a CLM language course: <strong> {{ $input_course->courses->Description }} ({{ $term_en }} {{ $term_season_en }})</strong></p>
-                                     <p> The staff member chose the following options for class schedule(s):</p>
+                                     <p> The student chose the following options for class schedule(s):</p>
                                      <ol>
                                      @foreach($formItems as $form)   
                                      <li><strong>{{ $form->schedule->name }}</strong> 
@@ -239,7 +239,7 @@
                                     
                                      <p> Chère ou cher Partenaire de formation, </p>
                                      <p> {{ $staff_name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant : <strong> {{ $input_course->courses->FDescription }} ({{ $term_fr }} {{ $term_season_fr }}) </strong></p>
-                                     <p> Le membre du personnel a indiqué comme options possibles les horaires suivants :</p>
+                                     <p> L'étudiant(e) a indiqué comme options possibles les horaires suivants :</p>
                                      <ol>
                                      @foreach($formItems as $form)   
                                      <li><strong>{{ $form->schedule->name }}</strong> 

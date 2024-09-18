@@ -127,7 +127,7 @@
                   <label class="col-md-12 control-label">Comment/Reason: <i>(optional)</i></label>
                   <div class="col-md-12 ">
                   <textarea name="hr_comment" class="form-control" maxlength="3500"></textarea>
-                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the staff member.</strong></p>
+                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the student.</strong></p>
                   </div>
                 </div>
 

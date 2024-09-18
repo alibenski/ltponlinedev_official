@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            FYI - Staff Member, {{ $staff_member_name }} , has cancelled a CLM language course.
+            FYI - {{ $staff_member_name }} has cancelled a CLM language course.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear CLM Learning Partner, </p>
-                                     <p> You are receiving this message to notify you that the staff member, <strong>{{ $staff_member_name }}</strong>, has <strong>cancelled</strong> their enrolment for CLM language course: <strong>{{ $display_language->courses->EDescription }}</strong></p>
+                                     <p> You are receiving this message to notify you that student, <strong>{{ $staff_member_name }}</strong>, has <strong>cancelled</strong> their enrolment for CLM language course: <strong>{{ $display_language->courses->EDescription }}</strong></p>
                                      <p>Cancelled Schedule(s):</p>
                                      @foreach($forms as $value)
                                      <ul>
@@ -207,7 +207,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Chère ou cher partenaire de formation, </p>
-                                     <p> Vous recevez ce message pour vous informer que le membre du personnel, <strong>{{ $staff_member_name }}</strong>, a <strong>annulé</strong> son inscription au cours de language du CFM suivant : <strong>{{ $display_language->courses->FDescription }}</strong></p>
+                                     <p> Vous recevez ce message pour vous informer que l'étudiant(e), <strong>{{ $staff_member_name }}</strong>, a <strong>annulé</strong> son inscription au cours de language du CFM suivant : <strong>{{ $display_language->courses->FDescription }}</strong></p>
                                      <p>Horaires annulés : </p>
                                      @foreach($forms as $value)
                                      <ul>
