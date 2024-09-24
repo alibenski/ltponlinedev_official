@@ -8,7 +8,14 @@
                 <div class="card-header">Validate & Register with Umoja Information</div>
 
                 <div class="card-body">
-                    <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('newuser.store') }}">
+
+                    @hasrole('Admin')
+                        <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('import-existing-from-sddextr') }}">
+                            <strong>Import Existing Student from Old Database</strong>
+                    @else
+                        <form class="form-horizontal form-prevent-multi-submit" method="POST" action="{{ route('newuser.store') }}">
+                    @endhasrole
+
                         {{ csrf_field() }}
 
                         <div class="form-group row {{ $errors->has('indexno') ? 'is-invalid' : '' }}">
@@ -41,6 +48,8 @@
                             </div>
                         </div>
 
+                        @hasrole('Admin')
+                        @else
                         <div class="form-group{{ $errors->has('g-recaptcha-response') ? 'is-invalid' : '' }}">
                             <label class="col-md-12 control-label">Captcha</label>
                             <div class="col-md-12">
@@ -54,7 +63,8 @@
                                 @endif
                             </div>
                         </div>
-
+                        @endhasrole
+                        
                         <div class="form-group">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary button-prevent-multi-submit">

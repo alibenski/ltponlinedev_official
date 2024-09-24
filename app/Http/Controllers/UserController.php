@@ -9,6 +9,7 @@ use App\Language;
 use App\ModifiedForms;
 use App\NewUser;
 use App\FileNewUser;
+use App\Mail\SendAuthMail;
 use App\PlacementForm;
 use App\Preenrolment;
 use App\Repo;
@@ -32,6 +33,52 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    function importExistingFromSDDEXTRForm()
+    {
+        return view('users_new.new_user');
+    }
+
+    function importExistingFromSDDEXTR(Request $request)
+    {
+        //validate the data
+        $this->validate($request, array(
+            'indexno' => 'required|integer',
+            'email' => 'required|email',
+        ));
+
+        // check if staff exists in Auth table
+        $query_auth_record = User::where('indexno', $request->indexno)->orWhere('email', $request->email)->first();
+
+        // if staff exists in auth table, redirect to login page
+        if ($query_auth_record) {
+            $request->session()->flash('warning', 'Index ID (' . $query_auth_record->indexno . ') and email address (' . $query_auth_record->email . ') already exists.');
+            return redirect()->route('users.index');
+        }
+
+        // query if staff exists in sddextr table
+        $query_sddextr_record = SDDEXTR::where('INDEXNO', $request->indexno)->orWhere('EMAIL', $request->email)->first();
+
+        // if staff does not exist in auth table but index or email exists in sddextr, create auth record and send credentials
+        if ($query_sddextr_record) {
+            $user = User::create([
+                'indexno' => $query_sddextr_record->INDEXNO,
+                'email' => strtolower(trim($query_sddextr_record->EMAIL)),
+                'nameFirst' => $query_sddextr_record->FIRSTNAME,
+                'nameLast' => strtoupper($query_sddextr_record->LASTNAME),
+                'name' => $query_sddextr_record->FIRSTNAME . ' ' . strtoupper($query_sddextr_record->LASTNAME),
+                'password' => Hash::make('Welcome2CLM'),
+                'must_change_password' => 1,
+                'approved_account' => 1,
+            ]);
+            $sddextr_email_address = trim($query_sddextr_record->EMAIL);
+            // send credential email to user using email from sddextr 
+            Mail::to(trim($query_sddextr_record->EMAIL))->send(new SendAuthMail($sddextr_email_address));
+
+            $request->session()->flash('warning', 'Login Credentials sent to: ' . $query_sddextr_record->EMAIL);
+            return redirect()->route('users.index');
+        }
+    }
+
     public function userUpdateContract(Request $request)
     {
         $user = User::where('id', $request->id)->first();

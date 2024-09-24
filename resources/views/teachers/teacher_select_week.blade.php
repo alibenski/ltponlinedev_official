@@ -24,18 +24,102 @@
 
   <div class="row">
     <div class="col-md-12">
-      <button id="Wk1" class="btn btn-space btn-default btn-wk">Week 1: {{ date('d-M-Y', strtotime($term->Term_Begin)) }}</button>
-      <button id="Wk2" class="btn btn-space btn-default btn-wk">Week 2: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(1))) }}</button>
-      <button id="Wk3" class="btn btn-space btn-default btn-wk">Week 3: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(2)))}}</button>
-      <button id="Wk4" class="btn btn-space btn-default btn-wk">Week 4: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(3)))}}</button>
-      <button id="Wk5" class="btn btn-space btn-default btn-wk">Week 5: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(4)))}}</button>
-      <button id="Wk6" class="btn btn-space btn-default btn-wk">Week 6: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(5)))}}</button>
-      <button id="Wk7" class="btn btn-space btn-default btn-wk">Week 7: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(6)))}}</button>
-      <button id="Wk8" class="btn btn-space btn-default btn-wk">Week 8: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(7)))}}</button>
-      <button id="Wk9" class="btn btn-space btn-default btn-wk">Week 9: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(8)))}}</button>
-      <button id="Wk10" class="btn btn-space btn-default btn-wk">Week 10: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(9)))}}</button>
-      <button id="Wk11" class="btn btn-space btn-default btn-wk">Week 11: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(10)))}}</button>
-      <button id="Wk12" class="btn btn-space btn-default btn-wk">Week 12: {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(11)))}}</button>
+      <button id="Wk1" class="btn btn-space btn-default btn-wk">
+      @if ($term->Term_Code >= '241' )
+          Orientation Week:
+      @else
+          Week 1:
+      @endif  
+         {{ date('d-M-Y', strtotime($term->Term_Begin)) }}
+      </button>
+      <button id="Wk2" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 1:
+        @else
+        Week 2: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(1))) }}
+      </button>
+      <button id="Wk3" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 2:
+        @else
+        Week 3: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(2)))}}
+      </button>
+      <button id="Wk4" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 3:
+        @else
+        Week 4: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(3)))}}
+      </button>
+      <button id="Wk5" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 4:
+        @else
+        Week 5: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(4)))}}
+      </button>
+      <button id="Wk6" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 5:
+        @else
+        Week 6: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(5)))}}
+      </button>
+      <button id="Wk7" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 6:
+        @else
+        Week 7: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(6)))}}
+      </button>
+      <button id="Wk8" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 7:
+        @else
+        Week 8: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(7)))}}
+      </button>
+      <button id="Wk9" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 8:
+        @else
+        Week 9: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(8)))}}
+      </button>
+      <button id="Wk10" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 9:
+        @else
+        Week 10: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(9)))}}
+      </button>
+      <button id="Wk11" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 10:
+        @else
+        Week 11: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(10)))}}
+      </button>
+      <button id="Wk12" class="btn btn-space btn-default btn-wk">
+        @if ($term->Term_Code >= '241' )
+          Week 11:
+        @else
+        Week 12: 
+        @endif
+        {{ date('d-M-Y', strtotime(\Carbon\Carbon::parse($term->Term_Begin)->addWeeks(11)))}}
+      </button>
     </div>
   </div>
   

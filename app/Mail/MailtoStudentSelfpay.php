@@ -22,9 +22,9 @@ class MailtoStudentSelfpay extends Mailable
      */
     public function __construct($request, $term_season_en, $term_year)
     {
-        $this->request = $request; 
-        $this->term_season_en = $term_season_en; 
-        $this->term_year = $term_year; 
+        $this->request = $request;
+        $this->term_season_en = $term_season_en;
+        $this->term_year = $term_year;
     }
 
     /**
@@ -35,9 +35,9 @@ class MailtoStudentSelfpay extends Mailable
     public function build()
     {
         return $this->view('emails.notifyStudentSelfpay')
-                    ->from('clm_language@unog.ch', 'CLM Language')
-                    ->bcc('clm_language@un.org')
-                    ->priority(1)
-                    ->subject('Notification: CLM Language Secretariat Decision Made on Your Enrolment to Language Course: ' .$this->request->course_show.' for '.$this->term_season_en.' '.$this->term_year);
+            ->from('clm_language@unog.ch', 'CLM Language')
+            ->bcc('clm_language@un.org')
+            ->priority(1)
+            ->subject('Notification: Your enrolment to ' . $this->request->course_show . ' for ' . $this->term_season_en . ' ' . $this->term_year . ' has been received and is under consideration');
     }
 }

@@ -19,7 +19,7 @@
                                  <strong> {{ $course }} </strong>
                             </p>
                             <p style="text-align: justify">
-                                You will be notified as soon as a place becomes available at your level within the first two weeks of the term, {{ $firstDayMonth }} - {{ $lastDayMonth }}.
+                                You will be notified as soon as a place becomes available at your level within the first two weeks of the term.
                             </p>
                             <p style="text-align: justify">
                             For more information regarding the waiting list please visit our website at <a href="https://learning.unog.ch/node/1301#position6" target="_blank">https://learning.unog.ch/node/1301#position6</a>

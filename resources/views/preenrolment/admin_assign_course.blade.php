@@ -208,10 +208,12 @@
 					</p>
 
 	                <div class="form-group">
-						<label class="control-label">Admin Comments: </label>
+						<label class="control-label">Admin Comments: <span class="text-danger">(Required for Verify and Not Assign)</span></label>
 
-						<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control course-no-change" maxlength="3500" @if(is_null($element->admin_eform_comment)) placeholder="Place important information to note about this student, enrolment form, etc." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
+						<textarea id="textarea-{{$element->eform_submit_count}}" name="admin_eform_comment" class="form-control course-no-change" maxlength="3500" @if(is_null($element->admin_eform_comment)) placeholder="Reason for Verify and Not Assigned status, place important information to note about this student, enrolment form, etc." @else placeholder="{{$element->admin_eform_comment}}" @endif></textarea>
 						<br />
+						<label class="control-label">Teacher Comments: <span class="text-danger"></span></label>
+
 						<textarea id="textarea-{{$element->eform_submit_count}}" name="teacher_comments" class="form-control course-no-change" maxlength="3500" readonly @if(is_null($element->teacher_comments)) placeholder="This is a read-only field. No comments from student's teacher." @else placeholder="{{$element->teacher_comments}}"@endif></textarea>
 						
 					</div>
@@ -220,13 +222,34 @@
 	                	<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-accept-btn btn btn-success btn-space"><span><i class="fa fa-thumbs-up"></i></span> Accept  </button>	
 	                </span>
 
-					<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-not-assign-btn btn btn-warning btn-space"><span><i class="fa fa-thumbs-down"></i></span> Verify and Not Assign </button>	                	 	
+					<button id="{{$element->eform_submit_count}}" data-indexid="{{$element->INDEXID}}" data-tecode="{{$element->Te_Code}}" data-term="{{$element->Term}}" type="button" class="modal-not-assign-btn btn btn-warning btn-space" disabled><span><i class="fa fa-thumbs-down"></i></span> Verify and Not Assign </button>	                	 	
 	                
+					<script type="text/javascript">
+					var button = $("button.modal-not-assign-btn");
+					$("textarea[name='admin_eform_comment']").on('input keyup',function(e){
+						console.log(e.target.value)
+						if(e.target.value === ''){
+							// Textarea has no value
+							button.prop('disabled', true);
+							console.log("no value")
+						} else {
+							// Textarea has a value
+							button.prop("disabled", false);
+						}
+					});
+					</script>
+
 					@if(is_null($element->updated_by_admin)) 
                 	@else
-						@if ($element->modifyUser)
-			            <div class="callout callout-info">
-							Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
+						<div class="callout callout-info">
+							<p class="text-secondary"><strong>Status:</strong> 
+								@if ( $element->updated_by_admin == 1 ) Verified and Assigned
+								@elseif( $element->updated_by_admin == 0 ) Verified but Not Assigned
+								@else Not Assigned
+								@endif
+								</p>
+							@if ($element->modifyUser)
+								Last update by:  {{ $element->modifyUser->name }} on {{ $element->updatedOn }} 
 						</div>
 						
 						<div class="well">

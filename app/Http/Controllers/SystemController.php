@@ -17,6 +17,7 @@ use App\Repo;
 use App\Teachers;
 use App\Term;
 use App\Text;
+use App\Traits\ManipulateTermDate;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,12 +28,17 @@ use Illuminate\Support\Facades\Validator;
 
 class SystemController extends Controller
 {
+    use ManipulateTermDate;
+
     public function systemIndex(Request $request)
     {
         $terms = Term::orderBy('Term_Code', 'desc')->get();
         $term = Term::where('Term_Code', Session::get('Term'))->first();
         $texts = Text::get();
         $onGoingTermObj = \App\Helpers\GlobalFunction::instance()->currentTermObject();
+        if (is_null($onGoingTermObj)) {
+            return view('errors.no_term_set_error');
+        }
         $onGoingTerm = Term::where('Term_Code', $onGoingTermObj->Term_Code)->first();
 
         return view('system.system-index', compact('terms', 'term', 'texts', 'onGoingTerm'));
@@ -76,9 +82,8 @@ class SystemController extends Controller
 
             // get term values
             $term = $value->Term;
-            // get term values and convert to strings
-            $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-            $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+            $term_en = $this->manipulateTermDateEn($term);
+            $term_fr = $this->manipulateTermDateFr($term);
 
             $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
             $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;

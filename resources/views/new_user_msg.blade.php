@@ -7,7 +7,7 @@
 	<img src="ziggy/img/Logo2016_transparent.png" alt="clm_logo">
 </div>
 <div>
-	<h2 class="alert">Thank you for registering to the CLM Language Training Programme</h2>
+	<h2 class="alert">Thank you for creating your profile with the <br />CLM Language Training Programme</h2>
 </div>
 <div class="card">
 	<div class="card-body">

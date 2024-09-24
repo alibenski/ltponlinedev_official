@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Classroom;
+use App\FocalPoints;
+use App\Mail\EmailReportByOrg;
 use App\Repo;
 use App\Term;
 use App\Torgan;
 use Carbon\Carbon;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use League\CommonMark\Util\ArrayCollection;
 
 class ReportsController extends Controller
@@ -1046,5 +1052,448 @@ class ReportsController extends Controller
         $data = $obj;
 
         return response()->json(['data' => $data]);
+    }
+
+    public function reportByOrgAdminView()
+    {
+        $terms = Term::orderBy('Term_Code', 'desc')->get();
+        $queryTerm = Term::orderBy('Term_Code', 'desc')->get(['Term_Code', 'Term_Begin']);
+        $years = array_unique($this->getYears($queryTerm));
+        $orgs = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name', 'OrgCode']);
+
+        return view('reports.reportByOrgAdminView', compact('terms', 'years', 'orgs'));
+    }
+
+    public function reportByOrgAdmin(Request $request)
+    {
+        if ($request->ajax()) {
+            $columns = [
+                'DEPT'
+            ];
+            $arr = [];
+            if ($request->Term) {
+                $term = $request->Term;
+                $recordsMerged = $this->queryStudentsByOrgByTermMerged($term, $columns, $request);
+                foreach ($recordsMerged as $v) {
+                    foreach ($v as $value) {
+                        $arr[] = $value;
+                    }
+                }
+                $data = $arr;
+            }
+
+            if ($request->year) {
+                $arrayCollection = $this->queryStudentsByOrgByYear($request, $columns);
+                foreach ($arrayCollection as $dataValue) {
+                    foreach ($dataValue as $v) {
+                        foreach ($v as $value) {
+                            $arr[] = $value;
+                        }
+                    }
+                }
+                $data = $arr;
+            }
+
+            return response()->json(['data' => $data]);
+        }
+    }
+
+    public function queryStudentsByOrgByYear($request, $columns)
+    {
+        $terms = Term::orderBy('Term_Code', 'asc')
+            ->select('Term_Code', 'Term_Begin')
+            ->get();
+
+        $termCode = [];
+        foreach ($terms as $key => $value) {
+            $parseYear = Carbon::parse($value->Term_Begin)->year;
+            if ($parseYear == $request->year) {
+                $termCode[] = $value->Term_Code;
+            }
+        }
+
+        $arrayCollection = new \AppendIterator();
+        foreach ($termCode as $term) {
+            // 
+            $recordsMerged = $this->queryStudentsByOrgByTermMerged($term, $columns, $request);
+            // 
+            $arrayCollection->append($recordsMerged);
+        }
+
+        yield $arrayCollection;
+    }
+
+    public function queryStudentsByOrgByTermMerged($term, $columns, $request)
+    {
+        $records = new Repo;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $records = $records->where($column, $request->input($column));
+            }
+            $records = $records
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'Written', 'Oral', 'Overall_Grade', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                ->with(['users' => function ($quser1) {
+                    $quser1->with(['sddextr' => function ($qsdd11) {
+                        $qsdd11->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst');
+                }])
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->whereNull('exclude_from_billing')
+                ->whereNull('is_self_pay_form')
+                ->with(['courses' => function ($qcourse1) {
+                    $qcourse1->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang1) {
+                    $qlang1->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q1) {
+                    $q1->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query1) {
+                    $query1->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                ->with(['enrolments' => function ($q11) use ($term) {
+                    $q11->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                // ->with('enrolments')
+                ->whereHas('enrolments', function ($query11) use ($term) {
+                    $query11->where('Term', $term)
+                        ->whereNull('is_self_pay_form')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                ->with('attendances')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
+
+        $records = $records->get();
+
+        $pashFromPlacement = new Repo;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $pashFromPlacement = $pashFromPlacement->where($column, $request->input($column));
+            }
+            $pashFromPlacement = $pashFromPlacement
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                ->with(['users' => function ($quser0) {
+                    $quser0->with(['sddextr' => function ($qsdd00) {
+                        $qsdd00->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst');
+                }])
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->whereNull('exclude_from_billing')
+                ->whereNull('is_self_pay_form')
+                ->with(['courses' => function ($qcourse0) {
+                    $qcourse0->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang0) {
+                    $qlang0->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q0) {
+                    $q0->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query0) {
+                    $query0->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                // ->with('placements')
+                ->with(['placements' => function ($q00) use ($term) {
+                    $q00->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                ->whereHas('placements', function ($query00) use ($term) {
+                    $query00->where('Term', $term)
+                        ->whereNull('is_self_pay_form')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                ->with('attendances')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
+
+        $pashFromPlacement = $pashFromPlacement->get();
+
+
+        // MUST INCLUDE QUERY WHERE deleted_at > cancellation deadline
+        $termCancelDeadline = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+        $cancelledEnrolmentRecords = new Repo;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->where($column, $request->input($column));
+            }
+            $cancelledEnrolmentRecords = $cancelledEnrolmentRecords
+                ->onlyTrashed()
+                ->with(['users' => function ($quser2) {
+                    $quser2->with(['sddextr' => function ($qsdd22) {
+                        $qsdd22->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst');
+                }])
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->where('deleted_at', '>', $termCancelDeadline)
+                // ->whereNull('cancelled_but_not_billed')
+                ->whereNull('exclude_from_billing')
+                ->whereNull('cancelled_but_not_billed')
+                ->whereNull('is_self_pay_form')
+                ->with(['courses' => function ($qcourse2) {
+                    $qcourse2->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang2) {
+                    $qlang2->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q2) {
+                    $q2->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query2) {
+                    $query2->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                // ->with('enrolments')
+                ->with(['enrolments' => function ($q22) use ($term) {
+                    $q22->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                ->whereHas('enrolments', function ($query22) use ($term) {
+                    $query22->where('Term', $term)
+                        ->whereNull('is_self_pay_form')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
+
+        $cancelledEnrolmentRecords = $cancelledEnrolmentRecords->get();
+
+        $cancelledPlacementRecords = new Repo;
+        foreach ($columns as $column) {
+            if ($request->filled($column)) {
+                $cancelledPlacementRecords = $cancelledPlacementRecords->where($column, $request->input($column));
+            }
+            $cancelledPlacementRecords = $cancelledPlacementRecords
+                ->onlyTrashed()
+                ->with(['users' => function ($quser3) {
+                    $quser3->with(['sddextr' => function ($qsdd33) {
+                        $qsdd33->select('INDEXNO', 'SEX');
+                    }])
+                        ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst');
+                }])
+                ->where('Term', $term)
+                ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
+                // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
+                ->where('deleted_at', '>', $termCancelDeadline)
+                // ->whereNull('cancelled_but_not_billed')
+                ->whereNull('exclude_from_billing')
+                ->whereNull('cancelled_but_not_billed')
+                ->whereNull('is_self_pay_form')
+                ->with(['courses' => function ($qcourse3) {
+                    $qcourse3->select('Te_Code_New', 'Description');
+                }])
+                ->with(['languages' => function ($qlang3) {
+                    $qlang3->select('code', 'name', 'name_fr');
+                }])
+                ->with(['courseschedules' => function ($q3) {
+                    $q3->with('prices')->with('courseduration');
+                }])
+                ->with('classrooms')
+                ->whereHas('classrooms', function ($query3) {
+                    $query3->whereNotNull('Tch_ID')
+                        ->where('Tch_ID', '!=', 'TBD');
+                })
+                // ->with('placements')
+                ->with(['placements' => function ($query33) use ($term) {
+                    $query33->where('Term', $term)->whereNotNull('CodeIndexID')->select('INDEXID', 'id', 'profile');
+                }])
+                ->whereHas('placements', function ($query33) use ($term) {
+                    $query33->where('Term', $term)
+                        ->whereNull('is_self_pay_form')
+                        ->whereNotNull('CodeIndexID');
+                })
+                ->with('classrooms.teachers')
+                ->with('organizations')
+                // ->with('classrooms.courseSchedule.courseduration')
+                // ->with('classrooms.courseSchedule.prices')
+            ;
+        }
+
+        $cancelledPlacementRecords = $cancelledPlacementRecords->get();
+
+        $recordsMerged = $records->merge($pashFromPlacement)->merge($pashFromPlacement)->merge($cancelledEnrolmentRecords)->merge($cancelledPlacementRecords);
+
+        yield $recordsMerged;
+    }
+
+    public function sendEmailReportByOrg(Request $request)
+    {
+        $term = $request->Term;
+        $year = $request->year;
+        $org = $request->DEPT;
+        $deadline = $request->deadline;
+
+        // validate if organization has focal points
+        $torgan = Torgan::where('Org name', $org)->first();
+        // $learning_partner = $torgan->has_learning_partner;
+        $learning_partner = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']);
+
+
+        // if no, return error message to admin that there are no focal points
+        if ($learning_partner->isEmpty()) {
+            $data = 0;
+            return response()->json(['data' => $data]);
+        }
+        // if yes, email the focal points from database table
+        //use map function to iterate through the collection and store value of email to var $org_email
+        //subjects each value to a callback function
+        $org_email = $learning_partner->map(function ($val, $key) {
+            return $val->email;
+        });
+        //make collection to array
+        $org_email_arr = $org_email->toArray();
+
+        //send email to array of email addresses $org_email_arr
+        // link expires after 2 years? confirm with secretariat
+        // control if year or term will be passed to the emailer class
+        if ($request->year) {
+            // $term_extrapolated =
+            //     $term_qry_first = Term::where('Term_Code', $term_extrapolated)->first();
+
+            $term_name_string = $term_qry_first->Comments;
+
+
+            $queryCancelDateLimit = $term_qry_first->Cancel_Date_Limit;
+            $cancel_date_limit = new Carbon($queryCancelDateLimit);
+            $cancel_date_limit->subDay();
+
+            // cancel limit date convert to string
+            $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+            $queryTermBegin = $term_qry_first->Term_Begin;
+            $term_begin_date = new Carbon($queryTermBegin);
+            $term_begin_date->subDay();
+
+            $term_year_string = date('Y', strtotime($term_begin_date));
+
+            $param = 'year';
+            Mail::to($org_email_arr)
+                ->send(new EmailReportByOrg($url, $param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
+        } else {
+            $term_qry_first = Term::where('Term_Code', $term)->first();
+
+            $term_name_string = $term_qry_first->Comments;
+
+            $queryCancelDateLimit = $term_qry_first->Cancel_Date_Limit;
+            $cancel_date_limit = new Carbon($queryCancelDateLimit);
+            $cancel_date_limit->subDay();
+
+            // cancel limit date convert to string
+            $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+            $queryTermBegin = $term_qry_first->Term_Begin;
+            $term_begin_date = new Carbon($queryTermBegin);
+            $term_begin_date->subDay();
+
+            $term_year_string = date('Y', strtotime($term_begin_date));
+
+            $param = 'Term';
+
+            $url = URL::temporarySignedRoute('report-by-org', now()->addYears(2), [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+            // $url = route('report-by-org', [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+
+            Mail::to($org_email_arr)
+                ->send(new EmailReportByOrg($url, $param, $org, $term, $year, $term_name_string, $term_year_string, $cancel_date_limit_string, $deadline));
+        }
+
+        $data = 1;
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function reportByOrgEmailAjax(Request $request)
+    {
+        $term = $request->Term;
+        $year = $request->year;
+        $org = $request->DEPT;
+        $deadline = $request->deadline;
+
+        // validate if organization has focal points
+        $torgan = Torgan::where('Org name', $org)->first();
+        // $learning_partner = $torgan->has_learning_partner;
+        $learning_partner = FocalPoints::where('org_id', $torgan->OrgCode)->get(['email']);
+        // if no, return error message to admin that there are no focal points
+        if ($learning_partner->isEmpty()) {
+            $data = 0;
+            return response()->json(['data' => $data]);
+        }
+
+        $url = route('reports/report-by-org-email-view', ['DEPT' => $org, 'Term' => $term, 'year' => $year, 'deadline' => $deadline]);
+
+        $data = $url;
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function reportByOrgEmailView(Request $request)
+    {
+        $term = $request->Term;
+        $year = $request->year;
+        $org = $request->DEPT;
+        $deadline = $request->deadline;
+
+        $term_qry_first = Term::where('Term_Code', $term)->first();
+
+        $term_name_string = $term_qry_first->Comments;
+
+        $queryCancelDateLimit = $term_qry_first->Cancel_Date_Limit;
+        $cancel_date_limit = new Carbon($queryCancelDateLimit);
+        $cancel_date_limit->subDay();
+
+        // cancel limit date convert to string
+        $cancel_date_limit_string = date('d F Y', strtotime($cancel_date_limit));
+
+        $queryTermBegin = $term_qry_first->Term_Begin;
+        $term_begin_date = new Carbon($queryTermBegin);
+        $term_begin_date->subDay();
+
+        $term_year_string = date('Y', strtotime($term_begin_date));
+
+        $param = 'Term';
+
+        $url = URL::temporarySignedRoute('report-by-org', now()->addYears(2), [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+        // $url = route('report-by-org', [Crypt::encrypt($param), Crypt::encrypt($org), Crypt::encrypt($term), Crypt::encrypt($year)]);
+
+        return view('emails.emailReportByOrgByTerm', compact('url', 'param', 'org', 'term', 'year', 'term_name_string', 'term_year_string', 'cancel_date_limit_string', 'deadline'));
+    }
+
+    public function reportByOrg(Request $request, $param, $org, $term, $year)
+    {
+        try {
+            if (!$request->hasValidSignature()) {
+                return "The link has expired! There is no valid signature in the link.";
+            }
+            $param = Crypt::decrypt($param);
+            $org = Crypt::decrypt($org);
+            $term = Crypt::decrypt($term);
+            $year = Crypt::decrypt($year);
+
+            return view('reports.reportByOrg', compact('param', 'org', 'term', 'year'));
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
     }
 }

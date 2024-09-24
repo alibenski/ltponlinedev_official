@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 // test routes for test queries
 Route::get('testQuery', 'TestController@testQuery')->name('testQuery');
+Route::get('captcha', 'TestController@captcha')->name('captcha');
+Route::post('post-captcha', 'TestController@postCaptcha')->name('post-captcha');
 
 Route::get('send-email-approval-hr', 'WaitlistController@sendEmailApprovalHR')->name('send-email-approval-hr');
 Route::get('test-query', 'WaitlistController@testQuery')->name('test-query');
@@ -110,6 +112,11 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('reports/ltp-stats-graph-view-by-language', 'ReportsController@ltpStatsGraphViewByLanguage')->name('reports/ltp-stats-graph-view-by-language');
     Route::get('get-ltp-stats-graph-view-by-language', ['as' => 'get-ltp-stats-graph-view-by-language', 'uses' => 'ReportsController@getLtpStatsGraphViewByLanguage']);
 
+    Route::get('reports/report-by-org-admin-view', 'ReportsController@reportByOrgAdminView')->name('reports/report-by-org-admin-view');
+    Route::get('reports/report-by-org-email-view', 'ReportsController@reportByOrgEmailView')->name('reports/report-by-org-email-view');
+    Route::get('reports/report-by-org-email-ajax', 'ReportsController@reportByOrgEmailAjax')->name('reports/report-by-org-email-ajax');
+    Route::get('send-email-report-by-org', 'ReportsController@sendEmailReportByOrg')->name('send-email-report-by-org');
+
     Route::get('cancelled-term-language', ['as' => 'cancelled-term-language', 'uses' => 'ReportsController@cancelledTermLanguage']);
     Route::get('courses-term-language', ['as' => 'courses-term-language', 'uses' => 'ReportsController@coursesTermLanguage']);
     Route::get('classes-term-language', ['as' => 'classes-term-language', 'uses' => 'ReportsController@classesTermLanguage']);
@@ -181,6 +188,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::put('teacher-nothing-to-modify', ['as' => 'teacher-nothing-to-modify', 'uses' => 'TeachersController@teacherNothingToModify']);
     Route::put('teacher-verify-and-not-assign', ['as' => 'teacher-verify-and-not-assign', 'uses' => 'TeachersController@teacherVerifyAndNotAssign']);
     Route::get('teacher-enrolment-preview', ['as' => 'teacher-enrolment-preview', 'uses' => 'TeachersController@teacherEnrolmentPreview']);
+    Route::get('teacher-enrolment-preview-table-view', ['as' => 'teacher-enrolment-preview-table-view', 'uses' => 'TeachersController@teacherEnrolmentPreviewTableView']);
+    Route::get('teacher-enrolment-preview-table', ['as' => 'teacher-enrolment-preview-table', 'uses' => 'TeachersController@teacherEnrolmentPreviewTable']);
     Route::delete('teacher-delete-form', ['as' => 'teacher-delete-form', 'uses' => 'TeachersController@teacherDeleteForm']);
 
     Route::resource('writing-tips', 'WritingTipController');
@@ -261,6 +270,10 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('user/{id}/enrol-student-to-placement-form', ['as' => 'enrol-student-to-placement-form', 'uses' => 'UserController@enrolStudentToPlacementForm']);
     Route::post('user/enrol-student-to-placement-insert', ['as' => 'enrol-student-to-placement-insert', 'uses' => 'UserController@enrolStudentToPlacementInsert']);
 
+    // import existing student from SDDEXTR to Users
+    Route::get('user/import-existing-from-sddextr-form', ['as' => 'import-existing-from-sddextr-form', 'uses' => 'UserController@importExistingFromSDDEXTRForm']);
+    Route::post('user/import-existing-from-sddextr', ['as' => 'import-existing-from-sddextr', 'uses' => 'UserController@importExistingFromSDDEXTR']);
+
     // update contract expiry field
     Route::put('/user/user-update-contract', ['as' => 'user-update-contract', 'uses' => 'UserController@userUpdateContract']);
     // adminLTEv3 views
@@ -299,6 +312,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
 
     // Waitlist routes
     Route::get('waitListOneListCount', 'WaitlistController@waitListOneListCount')->name('waitListOneListCount');
+    Route::get('noClassStudentCount', 'WaitlistController@noClassStudentCount')->name('noClassStudentCount');
     Route::get('waitListOneList/{te_code}', ['as' => 'waitListOneList', 'uses' => 'WaitlistController@waitListOneList']);
     Route::get('ajax-check-if-waitlisted', ['as' => 'ajax-check-if-waitlisted', 'uses' => 'WaitlistController@ajaxCheckIfWaitlisted']);
     Route::get('waitlist-modal-form', ['as' => 'waitlist-modal-form', 'uses' => 'WaitlistController@waitlistModalForm']);
@@ -338,6 +352,8 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('/preenrolment/edit-fields/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'edit-enrolment-fields', 'uses' => 'PreenrolmentController@editEnrolmentFields'])->where('tecode', '(.*)');
     Route::put('/preenrolment/update-fields/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'update-enrolment-fields', 'uses' => 'PreenrolmentController@updateEnrolmentFields']);
     Route::get('/preenrolment/nothing-to-modify/indexno/{indexno}/term/{term}/{tecode}/{form}', ['as' => 'nothing-to-modify', 'uses' => 'PreenrolmentController@nothingToModify'])->where('tecode', '(.*)');
+
+    Route::post('check-if-pash-record-exists', ['as' => 'check-if-pash-record-exists', 'uses' => 'AjaxController@checkIfPashRecordExists']);
 
     Route::get('send-reminder-emails', 'PreenrolmentController@sendReminderEmails')->name('send-reminder-emails');
     // Enrolment form cancellation route for administrators
@@ -595,6 +611,10 @@ Route::put('/approval/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' =>
 Route::put('/approvalhr/user/{staff}/course/{tecode}/{formcount}/{term}', ['as' => 'approval.updateform2hr', 'uses' => 'ApprovalController@updateForm2hr'])->where('tecode', '(.*)'); // where clause accepts routes with slashes
 Route::put('/approval/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata', 'uses' => 'ApprovalController@updatePlacementFormData']);
 Route::put('/approvalhr/user/{staff}/lang/{lang}/{formcount}/{term}', ['as' => 'approval.updateplacementformdata2hr', 'uses' => 'ApprovalController@updatePlacementFormData2hr']);
+
+// route for public page reports per organization
+Route::get('/report-by-org/{param}/{org}/{term}/{year}', ['as' => 'report-by-org', 'uses' => 'ReportsController@reportByOrg']);
+Route::get('report-by-org-admin', 'ReportsController@reportByOrgAdmin')->name('report-by-org-admin');
 
 //public pages
 Route::get('eform', function () {

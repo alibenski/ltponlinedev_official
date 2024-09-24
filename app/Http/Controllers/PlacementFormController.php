@@ -1370,6 +1370,7 @@ class PlacementFormController extends Controller
         if ($request->radioChangeOrgInForm) {
             // change organization
             $this->changeSelectedField($enrolment_to_be_copied, $input);
+            $this->changePASHSelectedField($request, $input);
             $request->session()->flash('msg-change-org', 'Organization field has been updated.');
         }
 
@@ -1395,6 +1396,7 @@ class PlacementFormController extends Controller
 
         if ($request->radioUndoDeleteStatus) {
             foreach ($enrolment_to_be_copied as $enrolmentToBeRestore) {
+                $enrolmentToBeRestore->cancelled_by_student = null;
                 $enrolmentToBeRestore->restore();
                 $request->session()->flash('msg-restore-form', 'Form has been restored.');
             }
@@ -1429,6 +1431,16 @@ class PlacementFormController extends Controller
                 $new_data->overall_approval = $input['approval_hr'];
             }
             $new_data->fill($input)->save();
+        }
+    }
+
+    public function changePASHSelectedField($request, $input)
+    {
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+        if (!$pashRecord->isEmpty()) {
+            foreach ($pashRecord as $record) {
+                $record->fill($input)->save();
+            }
         }
     }
 
@@ -1518,6 +1530,9 @@ class PlacementFormController extends Controller
             $formToBeConverted->attachment_pay = $attachment_pay_file->id;
             $formToBeConverted->save();
         }
+
+        $isSelfPayValue = 1;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
     }
 
     public function convertToRegularForm($request, $enrolmentID)
@@ -1532,6 +1547,31 @@ class PlacementFormController extends Controller
             $formToBeConverted->attachment_id = null;
             $formToBeConverted->attachment_pay = null;
             $formToBeConverted->save();
+        }
+
+        $isSelfPayValue = 0;
+        $this->updatePASHRecord($request, $enrolmentID, $isSelfPayValue);
+    }
+
+    public function updatePASHRecord(Request $request, $enrolmentID, $isSelfPayValue)
+    {
+        $placementForm = PlacementForm::withTrashed()
+            ->orderBy('id', 'asc')
+            ->where('id', $enrolmentID->first()->id)
+            ->first();
+
+        $pashRecord = Repo::where('id', $request->CheckBoxPashRecord)->get();
+
+        if (!$pashRecord->isEmpty()) {
+            // set is_self_pay_form field/flag
+            foreach ($pashRecord as $record) {
+                if ($isSelfPayValue == 1) {
+                    $record->is_self_pay_form = 1;
+                } else {
+                    $record->is_self_pay_form = null;
+                }
+                $record->save();
+            }
         }
     }
 }

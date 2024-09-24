@@ -33,11 +33,12 @@
                                   <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
                                   <label for="decision1" class="form-control-static">I am paying for my course / I am initially paying then my organization will reimburse</label>
                         </div>
-
-                        <div class="col-md-4">
-                                  <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
-                                  <label for="decision2" class="form-control-static">My organization is paying for my course</label>
-                        </div>
+                        @if (Auth::user()->sddextr->torgan['Org name'] != "UNHCR")
+                          <div class="col-md-4">
+                                    <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
+                                    <label for="decision2" class="form-control-static">My organization is paying for my course</label>
+                          </div>
+                        @endif
                   </div>
 
                   <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
@@ -219,6 +220,10 @@
     }
     if($("#inputOrg").val() === "NGO") {
       $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+    }
+    if($("#inputOrg").val() === "UNHCR" && $('#decision2').is(':checked')) {
+      alert("UNHCR staff members must choose to pay for their course. Please click on the other radio button. This page will refresh.");
+      location.reload();
     }
   })
 </script>

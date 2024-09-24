@@ -1,6 +1,7 @@
 <div class="table-responsive filtered-table">
   <div class="preloader2"><p>Please wait... Fetching data from the database...</p></div>
   <h4><strong>Students of @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $course->schedules->name }}</strong></h4>
+  <h5 class="text-info">Note: From Winter 2024 (241) term, the total attendance does not add values of Orientation Week (Wk1). </h5>
   <table class="table table-bordered table-striped">
       <thead>
           <tr>
