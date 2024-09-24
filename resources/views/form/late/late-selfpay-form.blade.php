@@ -39,8 +39,7 @@
                 " readonly>  
                 </div>
 
-                <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>
-                <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                                    
+                <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->indexno }}" readonly>                                   
                 
                     @include('form.partials.studentDetailsSection')
 
@@ -64,10 +63,17 @@
                             <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
                           </div>
                         
-                          @include('file_attachment_field.id-file-attachment')
+                          @if ($terms->Term_End > $user->contract_date)
+                            @include('file_attachment_field.id-file-attachment')
 
-                          @include('file_attachment_field.contract-file-attachment')
-                          
+                            @include('file_attachment_field.contract-file-attachment')
+                          @else
+                            <br />
+                            <div class="small text-success col-md-offset-3">
+                              <strong>Contract date ({{ $user->contract_date }}) still valid. </strong>
+                            </div> 
+                          @endif
+
                           @include('file_attachment_field.payment-file-attachment')
 
                           @include('file_attachment_field.multiple-file-attachment')

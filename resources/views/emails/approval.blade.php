@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Staff Member, {{ $staff->name }}, would like to enrol in a CLM language course and needs your approval.
+            {{ $staff->name }} would like to enrol in a CLM language course and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -193,8 +193,8 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear Manager, </p>
-                                     <p> The staff member, {{ $staff->name }}, would like to enrol in the following CLM language course: {{ $input_course->courses->Description }}</p>
-                                     <p> The staff member chose the following options for class schedule(s):</p>
+                                     <p> {{ $staff->name }} would like to enrol in the following CLM language course: {{ $input_course->courses->Description }}</p>
+                                     <p> The student chose the following options for class schedule(s):</p>
                                      <ol>
                                      @foreach($input_schedules as $schedules)   
                                      <li>{{ $schedules->schedule->name }}</li>
@@ -223,8 +223,8 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
                                      <p> Chère ou cher superviseur, </p>
-                                     <p> Le membre du personnel, {{ $staff->name }}, voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant {{ $input_course->courses->Description }}</p>
-                                     <p> Le fonctionnaire a indiqué comme options possibles les horaires suivants :</p>
+                                     <p> {{ $staff->name }} voudrait s’inscrire au cours de langue du Centre de formation et de multilinguisme suivant {{ $input_course->courses->Description }}</p>
+                                     <p> L'étudiant(e) a indiqué comme options possibles les horaires suivants :</p>
                                      <ol>
                                      @foreach($input_schedules as $schedules)   
                                      <li>{{ $schedules->schedule->name }}</li>

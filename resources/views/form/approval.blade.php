@@ -22,7 +22,7 @@
                   <input  name="schedule_id[]" type="hidden" value="{{$course->schedule->name}}" readonly>
                 @endforeach
                 <div class="form-group">
-                    <label for="" class="col-md-3 control-label">Staff Member Name:</label>
+                    <label for="" class="col-md-3 control-label">Student Name:</label>
 
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="col-md-3 control-label">Staff Member's Email Address:</label>
+                    <label for="email" class="col-md-3 control-label">Student Email Address:</label>
                     
                     <div class="col-md-8 inputGroupContainer">
                         <div class="input-group">
@@ -126,7 +126,7 @@
                   <label class="col-md-3 control-label">Comment/Reason: <i>(optional)</i></label>
                   <div class="col-md-8 ">
                   <textarea name="mgr_comment" class="form-control" maxlength="3500"></textarea>
-                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the staff member.</strong></p>
+                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the student.</strong></p>
                   </div>
                 </div>
 

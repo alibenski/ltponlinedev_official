@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Staff Member, {{ $staff_name }} , would like to take a placement test on a CLM language and needs your approval.
+            {{ $staff_name }} would like to take a placement test on a CLM language and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -193,11 +193,11 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear CLM Learning Partner, </p>
-                                     <p> The staff member, {{ $staff_name }}, would like to take a placement test for a/an <strong>{{ $input_course->languages->name }}</strong> language course at CLM  and attend classes <strong> from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
+                                     <p> {{ $staff_name }} would like to take a placement test for a/an <strong>{{ $input_course->languages->name }}</strong> language course at CLM  and attend classes <strong> from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
 
                                      <p>The placement test will be <strong> @if ($input_course->placementSchedule->is_online == 1) online from {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else on {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
-                                    <p>The request above was made by the staff member and has been provisionally approved by their supervisor.</p>
+                                    {{-- <p>The request above was made by the staff member and has been provisionally approved by their supervisor.</p> --}}
                                      <p>Please click on the button below to access the validation page.</p>
                                 </td>
                             </tr>
@@ -226,10 +226,10 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Chère ou cher Partenaire de formation, </p>
-                                     <p> Le membre du personnel, {{ $staff_name }}, voudrait passer un test de placement pour suivre un  cours de langue dispensé par le CFM en <strong>{{ $input_course->languages->name_fr }}</strong><strong> du {{ $term_fr }}</strong></p>
+                                     <p> {{ $staff_name }} voudrait passer un test de placement pour suivre un  cours de langue dispensé par le CFM en <strong>{{ $input_course->languages->name_fr }}</strong><strong> du {{ $term_fr }}</strong></p>
                                      <p>Le test de placement aura lieu au moment <strong> @if ($input_course->placementSchedule->is_online == 1) du {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} au {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }} en ligne. @else le {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif </strong>
                                     </p>
-                                    <p>Veuillez noter que la demande pour le test de placement a été initialement approuvée par le ou la superviseur.e du membre du personnel.</p>
+                                    {{-- <p>Veuillez noter que la demande pour le test de placement a été initialement approuvée par le ou la superviseur.e du membre du personnel.</p> --}}
                                      <p>Veuillez cliquez s'il vous plaît sur le bouton ci-dessus pour avoir accès à la page de validation.</p>
                                 </td>
                             </tr>

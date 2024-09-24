@@ -1,4 +1,15 @@
 <div class="form-group">
+    <label for="profile" class="col-md-12 control-label">Profile:</label>
+
+    <div class="col-md-12 inputGroupContainer input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-star"></i></span>
+        </div>    
+        <input  name="profile" class="form-control"  type="text" value="{{ Auth::user()->profile }}" readonly>                                
+    </div>
+</div>
+
+<div class="form-group">
     <label for="" class="col-md-12 control-label">Name:</label>
 
     <div class="col-md-12 inputGroupContainer input-group">

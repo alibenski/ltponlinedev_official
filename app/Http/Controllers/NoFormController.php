@@ -16,6 +16,7 @@ use App\SDDEXTR;
 use App\Schedule;
 use App\Term;
 use App\Torgan;
+use App\Traits\ValidateAndStoreAttachments;
 use App\User;
 use Carbon\Carbon;
 use DB;
@@ -28,6 +29,7 @@ use Session;
 
 class NoFormController extends Controller
 {
+    use ValidateAndStoreAttachments;
     /**
      * Create a new controller instance.
      *
@@ -218,6 +220,10 @@ class NoFormController extends Controller
             $form_counter = $lastValueCollection->form_counter + 1;
         }
 
+        $this->validateAttachments($request);
+
+        $this->storeFrontIDattachment($request);
+
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
@@ -301,6 +307,8 @@ class NoFormController extends Controller
                 }
             }
         }
+
+        $this->storeOtherAttachments($ingredients, $request);
 
         //execute Mail class before redirect         
         // $mgr_email = $request->mgr_email;

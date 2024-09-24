@@ -90,7 +90,7 @@
                           @endif
                         </select>
                       </div>
-                      <p class="small text-danger"><strong>You can search for your organization directly or scroll through the box / drop-down menu.</strong></p>
+                      <p class="small text-danger">You can search for your organization directly or scroll through the box / drop-down menu. <br /><strong>For a spouse profile, please select the organization of your employed spouse.</strong></p>
 
                       <div id="countrySectionMain"></div>
                       <div id="ngoSectionMain"></div>
@@ -191,7 +191,11 @@
           placeholder: "Select Profile",
           });
       } else if ($('#decision2').is(':checked')) {
-        $('#profile option:gt(2)').attr('disabled', 'disabled'); 
+        // $('#profile option:gt(2)').attr('disabled', 'disabled'); 
+        // $('#profile option').eq(3).attr('disabled', 'disabled'); 
+        // $('#profile option').eq(4).attr('disabled', 'disabled'); 
+        $('#profile option').eq(7).attr('disabled', 'disabled'); 
+        // $('#profile option').slice(8).attr('disabled', 'disabled'); 
         $('.select-profile-single').select2({
           placeholder: "Select Profile",
           });
