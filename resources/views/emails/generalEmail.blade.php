@@ -185,7 +185,7 @@
                                     {!!$text->text!!}
                                 </td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td style="padding: 0 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <!-- Button : BEGIN -->
                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
@@ -199,7 +199,7 @@
                                     </table>
                                     <!-- Button : END -->
                                 </td>
-                            </tr>
+                            </tr> --}}
                         </table>
                     </td>
                 </tr>
