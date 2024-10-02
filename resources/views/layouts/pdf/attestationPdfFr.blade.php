@@ -35,7 +35,7 @@
         <p>
         <span class="MsoNormal" style="text-align:justify;"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;</span></span><br>
         <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Centre de formation et de multilinguisme</span></span><br>
-        <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Annexe Bocage</span></span><br>
+        <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">bâtiment H, 5ème étage</span></span><br>
         <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Office des Nations Unies à Genève</span></span><br>
         <span class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">Palais des Nations</span></span>
         <span class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">CH-1211 Genève 10 - Suisse</span></span>

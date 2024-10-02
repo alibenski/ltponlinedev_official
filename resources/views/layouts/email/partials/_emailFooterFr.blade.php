@@ -6,7 +6,7 @@
                     <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>
 
                     Le secrétariat du Programme de formation linguistique<br>
-                    Annexe Bocage II<br>
+                    ONUG - bâtiment H, 5ème étage<br>
                     Heures d’ouverture: 9:30-12:30 du lundi au vendredi<br>
                     Téléphone : +41 22 917 44 09<br>
                     <a href="https://learning.unog.ch/">https://learning.unog.ch/</a>

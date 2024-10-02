@@ -35,7 +35,7 @@
         <p>
         <span class="MsoNormal" style="text-align:justify;"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">&nbsp;</span></span><br>
         <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Centre for Learning and Multilingualism</span></span><br>
-        <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">Annex Bocage</span></span><br>
+        <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">H Building, 5th Floor</span></span><br>
         <span class="MsoNormal"><span style="font-size:11px;font-family:Arial,sans-serif;">United Nations Office at Geneva</span></span><br>
         <span class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">Palais des Nations</span></span>
         <span class="MsoNormal"><span lang="EN-GB" style="font-size:11px;font-family:Arial,sans-serif;">CH-1211 Geneva 10 - Switzerland</span></span>

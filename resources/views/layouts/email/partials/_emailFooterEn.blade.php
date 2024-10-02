@@ -6,7 +6,7 @@
                     <webversion style="color: #222222; text-decoration: underline; font-weight: bold;"></webversion>
 
                     The Language Training Programme Secretariat<br>
-                    Annex Bocage 2<br>
+                    UNOG - H Building, 5th Floor<br>
                     Opening hours: 9:30 a.m. to 12:30 p.m. from Monday to Friday<br>
                     Telephone: +41 22 917 44 09<br>
                     <a href="https://learning.unog.ch/">https://learning.unog.ch/</a>
