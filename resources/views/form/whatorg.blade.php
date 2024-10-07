@@ -194,7 +194,7 @@
         // $('#profile option:gt(2)').attr('disabled', 'disabled'); 
         // $('#profile option').eq(3).attr('disabled', 'disabled'); 
         // $('#profile option').eq(4).attr('disabled', 'disabled'); 
-        $('#profile option').eq(7).attr('disabled', 'disabled'); 
+        // $('#profile option').eq(7).attr('disabled', 'disabled'); 
         // $('#profile option').slice(8).attr('disabled', 'disabled'); 
         $('.select-profile-single').select2({
           placeholder: "Select Profile",
