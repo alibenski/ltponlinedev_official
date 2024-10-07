@@ -142,7 +142,7 @@
                             </div>
                             <div class="form-check">
                                 <input id="both" name="deliveryMode" class="with-font form-check-input" type="radio" value="2">
-                                <label for="both" class="form-check-label">available for both modes</label>
+                                <label for="both" class="form-check-label">fully in-person or fully online (hybrid mode is not offered)</label>
                             </div>
                             <input id="flexibleFormatYesPlacement" name="flexibleFormat" type="hidden" value="0">
                         </div>
