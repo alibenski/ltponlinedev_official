@@ -60,16 +60,16 @@ $('select[id="profile"]').on('change', function () {
   //   var token = $('meta[name=csrf-token]').attr('content');
   //   orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
   // }
-  if (dProfile === 'RET') { // retired UN staff
-    $("select[id='input'] option[value='RET']").prop('selected', true);
-    $("select[id='input'] option").not(':selected').prop('disabled', true);
-    $('.select2-basic-single').val('RET').trigger('change');
-    console.log($('select[id="input"]').val());
-    var dOrg = $('select[id="input"]').val();
-    var dDecision = $('input[name="decision"]:checked').val();
-    var token = $('meta[name=csrf-token]').attr('content');
-    orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
-  }
+  // if (dProfile === 'RET') { // retired UN staff
+  //   $("select[id='input'] option[value='RET']").prop('selected', true);
+  //   $("select[id='input'] option").not(':selected').prop('disabled', true);
+  //   $('.select2-basic-single').val('RET').trigger('change');
+  //   console.log($('select[id="input"]').val());
+  //   var dOrg = $('select[id="input"]').val();
+  //   var dDecision = $('input[name="decision"]:checked').val();
+  //   var token = $('meta[name=csrf-token]').attr('content');
+  //   orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
+  // }
   if (dProfile === 'SERV') { // staff from service orgs in Palais
     $("select[id='input'] option[value='SERV']").prop('selected', true);
     $("select[id='input'] option").not(':selected').prop('disabled', true);
