@@ -10,9 +10,9 @@
             <div class="modal-body">
                 <p>This enrolment form is on a fee-paying basis. Please have the following ready:</p>
                 <ul>
-                    <li>The course and schedule selected</li>
+                    <li>Preferred language, type of course and availability</li>
                     <li>Copy of proof of payment (<a href="https://learning.unog.ch/node/1301#position5" target="_blank">how to pay</a>)</li>
-                    <li>Prepare a copy of either one of the following documents <strong>which covers the whole duration of the term:</strong>
+                    <li>Copy of either one of the following documents <strong>which covers the whole duration of the term:</strong>
                       <ul>
                         <li>UN agency badge, or contract, or “carte de légitimation” (both front and back sides)</li>
                         <li><u>For spouses</u>:
