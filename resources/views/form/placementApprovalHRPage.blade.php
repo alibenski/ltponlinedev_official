@@ -21,7 +21,17 @@
                 <input  name="form_counter" type="hidden" value="{{$input_staff->eform_submit_count}}" readonly>
 
                 <div class="form-group">
-                    <label for="" class="col-md-12 control-label">Staff Member Name:</label>
+                    <label for="" class="col-md-12 control-label">Profile:</label>
+
+                    <div class="col-md-12 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input  name="profile" class="form-control"  type="text" value="{{$input_staff->users->profile}}" readonly>                                    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-md-12 control-label">Student Name:</label>
 
                     <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
@@ -31,7 +41,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email" class="col-md-12 control-label">Staff Member's Email Address:</label>
+                    <label for="email" class="col-md-12 control-label">Student Email Address:</label>
                     
                     <div class="col-md-12 inputGroupContainer">
                         <div class="input-group">
@@ -57,20 +67,20 @@
                       <thead>
                         <th>Language Course</th>
                         <th>Date Duration of Classes</th>
-                        <th>Manager's Approval</th>
+                        {{-- <th>Manager's Approval</th> --}}
                       </thead>
 
                       <tbody>                       
                           <tr>
                             <th>{{ $input_staff->languages->name }}</th>
                             <td>{{ $next_term_name }}</td>
-                            <td>
+                            {{-- <td>
                               @if($input_staff->approval == 1)
                               <h5><span class="label label-success">Yes</span></h5>
                               @else
                               <h5><span class="label label-danger">No</span></h5>
                               @endif
-                            </td>
+                            </td> --}}
                           </tr>
                       </tbody>
                     </table>
@@ -100,7 +110,7 @@
                   <label class="col-md-12 control-label">Comment/Reason: <i>(optional)</i></label>
                   <div class="col-md-12 ">
                   <textarea name="hr_comment" class="form-control" maxlength="3500"></textarea>
-                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the staff member.</strong></p>
+                  <p class="small text-danger"><strong>Please note that for transparency, the text written above will be included in the email notification sent to the student.</strong></p>
                   </div>
                 </div>
 

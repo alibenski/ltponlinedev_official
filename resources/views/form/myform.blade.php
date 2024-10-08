@@ -24,7 +24,7 @@
             </strong>
           </div>
           <div class="card-body">
-            <form method="POST" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('myform.store') }}" class="form-horizontal form-prevent-multi-submit">
                 {{ csrf_field() }}
                 <div class="form-group col-md-10 col-md-offset-2">
                 <input  name="CodeIndexID" type="hidden" value="" readonly>
@@ -37,10 +37,43 @@
                 " readonly>  
                 </div>
 
-                <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>              
-                <input  name="profile" class="form-control"  type="hidden" value="{{ Auth::user()->profile }}" readonly>                              
+                <input  name="index_id" class="form-control"  type="hidden" value="{{ Auth::user()->sddextr->INDEXNO }}" readonly>                                        
 
                 @include('form.partials.studentDetailsSection')
+
+                @if (Auth::user()->profile == "SPOUSE")
+                  @if ($terms->Term_End > $user->contract_date)
+                  <div class="form-group">
+                      <div class="alert alert-default alert-block">
+                        <div class="small text-danger col-md-offset-3">
+                          <strong>Note: accepts pdf, doc, and docx files only. File size must less than 8MB.</strong>
+                        </div>
+                          @include('file_attachment_field.id-file-attachment')
+
+                          @include('file_attachment_field.contract-file-attachment')
+
+                          @include('file_attachment_field.multiple-file-attachment')
+                  @else
+                          <br />
+                          <div class="small text-success col-md-offset-3">
+                            <strong>Contract date ({{ $user->contract_date }}) still valid. </strong>
+                          </div>
+                  @endif
+                        {{-- hide this section, put logic in disclaimerCheckBox, make consentBtn == 1 --}}
+                        <div class="form-group col-md-12">
+                              <div class="disclaimer-consent alert alert-default alert-block col-md-10 col-md-offset-1">
+                                <p class="small text-danger"><strong>Required field</strong></p>
+                                <input id="consentBtn" name="consentBtn" class="with-font" type="radio" value="1" required="required">
+                                <label for="consentBtn" class="form-control-static">@if($user->profile != 'SPOUSE') By ticking this button, I confirm that my supervisor has approved my enrolment in the course. Or, if I don’t have any supervisor, I acknowledge that I will be able to attend the course. @else By ticking this option, I confirm I am  the spouse of a UN staff member. @endif
+                                </label>
+                              </div>
+                        </div>  
+
+                      </div>
+                  </div>
+                @else
+                    
+                @endif
 
                 <!-- NO DECISION SECTION -->
                 <div class="0 box">
@@ -110,14 +143,10 @@
                     
                   <div class="submission-part" style="display: none">
                     
-                    <div class="form-group col-md-12">
-                      <div class="disclaimer alert col-md-12">
-                        <p class="small text-danger"><strong>Required field</strong></p>
-                        <input id="approval" name="approval" class="with-font" type="radio" value="1" required="required">
-                        <label for="approval" class="form-control-static">By ticking this button, I confirm that my supervisor has approved my enrolment in the course. </label>
-                      </div>
-                    </div>
-                
+                    {{-- disclaimer for approval --}}
+                    @include('form.partials.disclaimerCheckBox') 
+                    {{-- end of line: disclaimer for approval --}}
+
                     <div class="form-group col-md-12">
                       <div class="disclaimer alert col-md-12">
                         <p class="small text-danger"><strong>Required field</strong></p>

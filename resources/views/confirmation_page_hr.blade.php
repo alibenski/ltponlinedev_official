@@ -43,7 +43,7 @@
                         <p class="lead">You are brought to this page either because... <br>
                             <ol>
                                 <h3>
-                                    <p><i class="fa fa-star"></i> You are <strong>the HR Learning Partner of UNOG CLM</strong> and have made a decision to approve or disapprove an enrolment course of your staff member </p>
+                                    <p><i class="fa fa-star"></i> You are <strong>the HR Learning Partner of UNOG CLM</strong> and have made a decision to approve or disapprove an enrolment course of a student under your organization</p>
                                 </h3>
                                 <br />
                                 <h3>

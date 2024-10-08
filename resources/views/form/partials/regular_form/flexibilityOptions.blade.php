@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header bg-info text-white"><strong>Student flexibility</strong></div>
         <div class="card-body">
-            If the selected class is full or cancelled, I am flexible and can accept another: <span class="small text-danger"><strong>Required fields</strong></span>
+            I am flexible and can accept another: <span class="small text-danger"><strong>Required fields</strong></span>
             <div class="form-group col-md-12">
                 <div class="disclaimer-flexible alert alert-default alert-block col-md-12">
                     {{-- <input id="flexibleBtn" name="flexibleBtn" class="with-font" type="checkbox" value="1">
@@ -40,7 +40,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="text-label-mode">Delivery Mode (in-person or online): </label>
+                        <label for="text-label-mode">Delivery Mode (fully in-person or fully online): </label>
                         <div class="form-check form-check-inline">                           
                             <input id="flexibleFormatYes" name="flexibleFormat" class="with-font form-check-input" type="radio" value="1">
                             <label for="flexibleFormatYes" class="form-check-label">YES</label>

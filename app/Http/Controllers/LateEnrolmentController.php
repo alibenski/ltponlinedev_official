@@ -26,9 +26,12 @@ use App\Torgan;
 use App\User;
 use App\Services\User\MsuUpdateField;
 use App\Services\User\NgoUpdateField;
+use App\Traits\ValidateAndStoreAttachments;
 
 class LateEnrolmentController extends Controller
 {
+    use ValidateAndStoreAttachments;
+
     protected function generateRandomURL(Request $request)
     {
         if ($request->ajax()) {
@@ -262,6 +265,10 @@ class LateEnrolmentController extends Controller
             $form_counter = $lastValueCollection->form_counter + 1;
         }
 
+        $this->validateAttachments($request);
+
+        $this->storeFrontIDattachment($request);
+
         // check if placement test form
         // if so, call method from PlacementFormController
         if ($request->placementDecisionB === '0') {
@@ -343,6 +350,8 @@ class LateEnrolmentController extends Controller
                 // }
             }
         }
+
+        $this->storeOtherAttachments($ingredients, $request);
 
         //execute Mail class before redirect
 
@@ -593,12 +602,14 @@ class LateEnrolmentController extends Controller
             'payfile' => 'required|mimes:pdf,doc,docx|max:8000',
         ));
 
-        // separated for optional validation in the future
-        $this->validate($request, array(
-            'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
-            'identityfile2' => 'required|mimes:pdf,doc,docx|max:8000',
-            'contractFile' => 'required|mimes:pdf,doc,docx|max:8000',
-        ));
+        if ($request->has('contractFile')) {
+            // separated for optional validation in the future
+            $this->validate($request, array(
+                'identityfile' => 'required|mimes:pdf,doc,docx|max:8000',
+                'identityfile2' => 'required|mimes:pdf,doc,docx|max:8000',
+                'contractFile' => 'required|mimes:pdf,doc,docx|max:8000',
+            ));
+        }
 
         if ($request->placementDecisionB === '0') {
             $this->validate($request, array(
@@ -649,7 +660,10 @@ class LateEnrolmentController extends Controller
                 'path' => $filestore,
             ]);
             $attachment_identity_file->save();
+        } else {
+            $attachment_identity_file = (object) ['id' => null];
         }
+
         if ($request->hasFile('payfile')) {
             $request->file('payfile');
             $time = date("d-m-Y") . "-" . time();

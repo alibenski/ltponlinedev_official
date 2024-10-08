@@ -148,7 +148,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            Staff Member, {{ $staff->name }}, would like to take a placement test on a CLM language and needs your approval.
+            {{ $staff->name }} would like to take a placement test on a CLM language and needs your approval.
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1>
                                      <p> Dear Manager, </p>
-                                     <p> The staff member, {{ $staff->name }}, would like to take a placement test for a language class at CLM in <strong>{{ $input_course->languages->name }}</strong> to attend classes <strong>from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
+                                     <p> {{ $staff->name }} would like to take a placement test for a language class at CLM in <strong>{{ $input_course->languages->name }}</strong> to attend classes <strong>from {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} to {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
                                     <p>The placement test will be @if ($input_course->L == 'F') from {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} to {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else on {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif
                                     </p>
 
@@ -219,7 +219,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1>
                                      <p> Chère ou cher superviseur, </p>
-                                     <p> Le membre du personnel, {{ $staff->name }}, voudrait présenter un test de placement pour suivre un  cours de langue dispensé par le CFM en  <strong>{{ $input_course->languages->name }}</strong> <strong> du {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} au {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
+                                     <p> {{ $staff->name }} voudrait présenter un test de placement pour suivre un  cours de langue dispensé par le CFM en  <strong>{{ $input_course->languages->name }}</strong> <strong> du {{ date('d M Y', strtotime($input_course->terms->Term_Begin)) }} au {{ date('d M Y', strtotime($input_course->terms->Term_End)) }}</strong></p>
                                     <p>Le test de placement aura lieu @if ($input_course->L == 'F') du {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }} au {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam_end)) }}. @else le {{ date('d M Y', strtotime($input_course->placementSchedule->date_of_plexam)) }}. @endif
                                     </p>
 
