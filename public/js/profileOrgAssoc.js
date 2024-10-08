@@ -24,26 +24,26 @@ $('select[id="profile"]').on('change', function () {
     var token = $('meta[name=csrf-token]').attr('content');
     orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
   }
-  if (dProfile === 'SPOUSE') { // spouse
-    $("select[name='org'] option[value='999']").prop('selected', true);
-    $("select[name='org'] option").not(':selected').prop('disabled', true);
-    $('.select2-basic-single').val('999').trigger('change');
-    console.log($('select[name="org"]').val());
-    var dOrg = $('select[name="org"]').val();
-    var dDecision = $('input[name="decision"]:checked').val();
-    var token = $('meta[name=csrf-token]').attr('content');
-    orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
-  }
-  if (dProfile === 'RET') { // retired UN staff
-    $("select[name='org'] option[value='RET']").prop('selected', true);
-    $("select[name='org'] option").not(':selected').prop('disabled', true);
-    $('.select2-basic-single').val('RET').trigger('change');
-    console.log($('select[name="org"]').val());
-    var dOrg = $('select[name="org"]').val();
-    var dDecision = $('input[name="decision"]:checked').val();
-    var token = $('meta[name=csrf-token]').attr('content');
-    orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
-  }
+  // if (dProfile === 'SPOUSE') { // spouse
+  //   $("select[name='org'] option[value='999']").prop('selected', true);
+  //   $("select[name='org'] option").not(':selected').prop('disabled', true);
+  //   $('.select2-basic-single').val('999').trigger('change');
+  //   console.log($('select[name="org"]').val());
+  //   var dOrg = $('select[name="org"]').val();
+  //   var dDecision = $('input[name="decision"]:checked').val();
+  //   var token = $('meta[name=csrf-token]').attr('content');
+  //   orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
+  // }
+  // if (dProfile === 'RET') { // retired UN staff
+  //   $("select[name='org'] option[value='RET']").prop('selected', true);
+  //   $("select[name='org'] option").not(':selected').prop('disabled', true);
+  //   $('.select2-basic-single').val('RET').trigger('change');
+  //   console.log($('select[name="org"]').val());
+  //   var dOrg = $('select[name="org"]').val();
+  //   var dDecision = $('input[name="decision"]:checked').val();
+  //   var token = $('meta[name=csrf-token]').attr('content');
+  //   orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
+  // }
   if (dProfile === 'SERV') { // staff from service orgs in Palais
     $("select[name='org'] option[value='SERV']").prop('selected', true);
     $("select[name='org'] option").not(':selected').prop('disabled', true);

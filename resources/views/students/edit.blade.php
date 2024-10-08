@@ -305,23 +305,24 @@ $(document).ready(function () {
                 console.log($('#selectInput').val());
 
                 // disable MSU, NGO, etc options from Org select dropdown
-                $("select[name='organization'] option[value='MSU']").prop('disabled', true);
-                $("select[name='organization'] option[value='999']").prop('disabled', true);
-                $("select[name='organization'] option[value='RET']").prop('disabled', true);
-                $("select[name='organization'] option[value='SERV']").prop('disabled', true);
-                $("select[name='organization'] option[value='NGO']").prop('disabled', true);
-                $("select[name='organization'] option[value='PRESS']").prop('disabled', true);
+                // $("select[name='organization'] option[value='MSU']").prop('disabled', true);
+                // $("select[name='organization'] option[value='999']").prop('disabled', true);
+                // $("select[name='organization'] option[value='RET']").prop('disabled', true);
+                // $("select[name='organization'] option[value='SERV']").prop('disabled', true);
+                // $("select[name='organization'] option[value='NGO']").prop('disabled', true);
+                // $("select[name='organization'] option[value='PRESS']").prop('disabled', true);
                 $("select[name='organization']").attr("required", true);
 
                     $("select[name='organization']").on("change", function () {
                         let choice = $("select[name='organization']").val();
+                        console.log(choice)
 
                         if (choice == "MSU") {
                             getCountry();
 
-                            $("select[name='profile'] option[value='MSU']").prop('selected', true);
-                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
-                            $('select[name="profile"]').val('MSU').trigger('change');
+                            // $("select[name='profile'] option[value='MSU']").prop('selected', true);
+                            // $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            // $('select[name="profile"]').val('MSU').trigger('change');
                         } else {
                             $("#countrySection").html("");
                         }
@@ -329,36 +330,36 @@ $(document).ready(function () {
                         if (choice == "NGO") {
                             $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
 
-                            $("select[name='profile'] option[value='NGO']").prop('selected', true);
-                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
-                            $('select[name="profile"]').val('NGO').trigger('change');
+                            // $("select[name='profile'] option[value='NGO']").prop('selected', true);
+                            // $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                            // $('select[name="profile"]').val('NGO').trigger('change');
                         } else {
                             $("#ngoSection").html("");
                         }
                         
-                        if (choice == "999") {
-                            $("select[name='profile'] option[value='SPOUSE']").prop('selected', true);
-                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
-                            $('select[name="profile"]').val('SPOUSE').trigger('change');
-                        } 
+                        // if (choice == "999") {
+                        //     $("select[name='profile'] option[value='SPOUSE']").prop('selected', true);
+                        //     $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                        //     $('select[name="profile"]').val('SPOUSE').trigger('change');
+                        // } 
 
-                        if (choice == "RET") {
-                            $("select[name='profile'] option[value='RET']").prop('selected', true);
-                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
-                            $('select[name="profile"]').val('RET').trigger('change');
-                        } 
+                        // if (choice == "RET") {
+                        //     $("select[name='profile'] option[value='RET']").prop('selected', true);
+                        //     $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                        //     $('select[name="profile"]').val('RET').trigger('change');
+                        // } 
 
-                        if (choice == "SERV") {
-                            $("select[name='profile'] option[value='SERV']").prop('selected', true);
-                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
-                            $('select[name="profile"]').val('SERV').trigger('change');
-                        } 
+                        // if (choice == "SERV") {
+                        //     $("select[name='profile'] option[value='SERV']").prop('selected', true);
+                        //     $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                        //     $('select[name="profile"]').val('SERV').trigger('change');
+                        // } 
 
-                        if (choice == "PRESS") {
-                            $("select[name='profile'] option[value='PRESS']").prop('selected', true);
-                            $("select[name='profile'] option").not(':selected').prop('disabled', true);
-                            $('select[name="profile"]').val('PRESS').trigger('change');
-                        } 
+                        // if (choice == "PRESS") {
+                        //     $("select[name='profile'] option[value='PRESS']").prop('selected', true);
+                        //     $("select[name='profile'] option").not(':selected').prop('disabled', true);
+                        //     $('select[name="profile"]').val('PRESS').trigger('change');
+                        // } 
 
                     });
                 });        

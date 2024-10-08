@@ -36,7 +36,7 @@ $('select[id="profile"]').on('change', function () {
         let dProfile = $(this).val();
         console.log('Profile selected: ' + dProfile);
 
-        const arrayProfile1 = ["STF", "INT", "CON", "WAE", "JPO"];
+        const arrayProfile1 = ["STF", "INT", "CON", "WAE", "JPO", "SPOUSE", "RET"];
         let dCheckProfile = $.inArray(dProfile, arrayProfile1);
         
         if (dCheckProfile != -1 ) {
@@ -59,12 +59,12 @@ $('select[id="profile"]').on('change', function () {
                     $('#orgSelect').html(data);
                     $(document).find('.select2-basic-single').select2();
                     // disable MSU, NGO, etc options from Org select dropdown
-                    $("select[name='organization'] option[value='MSU']").prop('disabled', true);
-                    $("select[name='organization'] option[value='999']").prop('disabled', true);
-                    $("select[name='organization'] option[value='RET']").prop('disabled', true);
-                    $("select[name='organization'] option[value='SERV']").prop('disabled', true);
-                    $("select[name='organization'] option[value='NGO']").prop('disabled', true);
-                    $("select[name='organization'] option[value='PRESS']").prop('disabled', true);
+                    // $("select[name='organization'] option[value='MSU']").prop('disabled', true);
+                    // $("select[name='organization'] option[value='999']").prop('disabled', true);
+                    // $("select[name='organization'] option[value='RET']").prop('disabled', true);
+                    // $("select[name='organization'] option[value='SERV']").prop('disabled', true);
+                    // $("select[name='organization'] option[value='NGO']").prop('disabled', true);
+                    // $("select[name='organization'] option[value='PRESS']").prop('disabled', true);
                     // make organization select required    
                     $("select[name='organization']").attr("required", true);
                 });
@@ -98,40 +98,40 @@ $('select[id="profile"]').on('change', function () {
                     
                     }
 
-                    if (dProfile === 'SPOUSE') { // spouse
-                    $("input[name='decision']").prop("checked", false);
-                    $("select[name='organization'] option[value='999']").prop('selected', true);
-                    $("select[name='organization'] option").not(':selected').prop('disabled', true);
-                    $("select[name='organization']").val('999').trigger('change');
-                    console.log('Org selected: ' + $('select[name="organization"]').val());
+                    // if (dProfile === 'SPOUSE') { // spouse
+                    // $("input[name='decision']").prop("checked", false);
+                    // $("select[name='organization'] option[value='999']").prop('selected', true);
+                    // $("select[name='organization'] option").not(':selected').prop('disabled', true);
+                    // $("select[name='organization']").val('999').trigger('change');
+                    // console.log('Org selected: ' + $('select[name="organization"]').val());
                 
                     
-                    $("#countrySection").html("");
-                    $("#ngoSection").html("");
-                    alert("Organization will be automatically chosen for this profile.");
-                    // console.log($('select[name="org"]').val());
-                    // var dOrg = $('select[name="org"]').val();
-                    // var dDecision = $('input[name="decision"]:checked').val();
-                    // var token = $('meta[name=csrf-token]').attr('content');
-                    // orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
-                    }
-                    if (dProfile === 'RET') { // retired UN staff
-                    $("input[name='decision']").prop("checked", false);
-                    $("select[name='organization'] option[value='RET']").prop('selected', true);
-                    $("select[name='organization'] option").not(':selected').prop('disabled', true);
-                    $("select[name='organization']").val('RET').trigger('change');
-                    console.log('Org selected: ' + $('select[name="organization"]').val());
+                    // $("#countrySection").html("");
+                    // $("#ngoSection").html("");
+                    // alert("Organization will be automatically chosen for this profile.");
+                    // // console.log($('select[name="org"]').val());
+                    // // var dOrg = $('select[name="org"]').val();
+                    // // var dDecision = $('input[name="decision"]:checked').val();
+                    // // var token = $('meta[name=csrf-token]').attr('content');
+                    // // orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
+                    // }
+                    // if (dProfile === 'RET') { // retired UN staff
+                    // $("input[name='decision']").prop("checked", false);
+                    // $("select[name='organization'] option[value='RET']").prop('selected', true);
+                    // $("select[name='organization'] option").not(':selected').prop('disabled', true);
+                    // $("select[name='organization']").val('RET').trigger('change');
+                    // console.log('Org selected: ' + $('select[name="organization"]').val());
                 
                     
-                    $("#countrySection").html("");
-                    $("#ngoSection").html("");
-                    alert("Organization will be automatically chosen for this profile.");
-                    // console.log($('select[name="org"]').val());
-                    // var dOrg = $('select[name="org"]').val();
-                    // var dDecision = $('input[name="decision"]:checked').val();
-                    // var token = $('meta[name=csrf-token]').attr('content');
-                    // orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
-                    }
+                    // $("#countrySection").html("");
+                    // $("#ngoSection").html("");
+                    // alert("Organization will be automatically chosen for this profile.");
+                    // // console.log($('select[name="org"]').val());
+                    // // var dOrg = $('select[name="org"]').val();
+                    // // var dDecision = $('input[name="decision"]:checked').val();
+                    // // var token = $('meta[name=csrf-token]').attr('content');
+                    // // orgCompare(dProfile, dOrg, dDecision, token); // execute orgCompare function
+                    // }
                     if (dProfile === 'SERV') { // staff from service orgs in Palais
                     $("input[name='decision']").prop("checked", false);
                     $("select[name='organization'] option[value='SERV']").prop('selected', true);
