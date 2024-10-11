@@ -585,13 +585,7 @@
 						            </div>
 						        </div>
 
-						        <div class="form-group">
-						            <label for="org" class="col-md-4 control-label">Organization:</label>
-
-						            <div class="col-md-8 form-control-static">
-						                <p>@if(empty($student->sddextr)) Update Needed @else {{ $student->sddextr->torgan['Org name'] }} - {{ $student->sddextr->torgan['Org Full Name'] }} @endif</p>
-						            </div>
-						        </div>
+						        @include('users.partials.show-user-organization-field')
 
 						        <div class="form-group">
 						            <label for="contactNo" class="col-md-4 control-label">Contact Number:</label>
