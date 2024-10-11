@@ -67,6 +67,27 @@ $('select[id="profile"]').on('change', function () {
                     // $("select[name='organization'] option[value='PRESS']").prop('disabled', true);
                     // make organization select required    
                     $("select[name='organization']").attr("required", true);
+
+                    $("select[name='organization']").on("change", function () {
+                        let choice = $("select[name='organization']").val();
+                        console.log(choice)
+
+                        if (choice == "MSU") {
+                            getCountry();
+
+                        } else {
+                            $("#countrySection").html("");
+                        }
+
+                        if (choice == "NGO") {
+                            $("#ngoSection").html("<div class='col-md-12'><div class='form-group row'><label for='ngoName' class='col-md-12 control-label text-danger'>NGO Name: <span style='color: red'><i class='fa fa-asterisk' aria-hidden='true'></i> required field</span> </label><div class='col-md-12'><input id='ngoName' type='text' class='form-control' name='ngoName' placeholder='Enter NGO agency name' required></div></div></div>");
+
+                        } else {
+                            $("#ngoSection").html("");
+                        }
+
+                    });
+
                 });
 
             }            
