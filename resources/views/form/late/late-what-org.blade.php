@@ -71,11 +71,12 @@
                                 <input id="decision1" name="decision" class="with-font dyes" type="radio" value="1" required="required">
                                 <label for="decision1" class="form-control-static">I am paying for my course / I am initially paying then my organization will reimburse</label>
                       </div>
-
+                      @if (empty(Auth::user()->sddextr->torgan['Org name']) || Auth::user()->sddextr->torgan['Org name'] != "UNHCR")
                       <div class="col-md-4">
                                 <input id="decision2" name="decision" class="with-font dno" type="radio" value="0" required="required">
                                 <label for="decision2" class="form-control-static">My organization is paying for my course</label>
                       </div>
+                      @endif
                 </div>
 
                 <div id="secretMsg1" class="col-md-12 alert alert-info" style="display: none">
