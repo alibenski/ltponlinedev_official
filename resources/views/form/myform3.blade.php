@@ -82,7 +82,7 @@
                                 <div class="disclaimer-consent alert alert-default alert-block col-md-10 col-md-offset-1">
                                   <p class="small text-danger"><strong>Required field</strong></p>
                                   <input id="consentBtn" name="consentBtn" class="with-font" type="radio" value="1" required="required">
-                                  <label for="consentBtn" class="form-control-static">@if($user->sddextr->torgan['Org name'] != '999') By ticking this button, I confirm that my supervisor has approved my enrolment in the course. Or, if I don’t have any supervisor, I acknowledge that I will be able to attend the course. @else By ticking this option, I confirm I am  the spouse of a UN staff member. @endif
+                                  <label for="consentBtn" class="form-control-static">@if($user->profile != 'SPOUSE') By ticking this button, I confirm that my supervisor has approved my enrolment in the course. Or, if I don’t have any supervisor, I acknowledge that I will be able to attend the course. @else By ticking this option, I confirm I am  the spouse of a UN staff member. @endif
                                   </label>
                                 </div>
                           </div>  
