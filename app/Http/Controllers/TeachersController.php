@@ -155,7 +155,11 @@ class TeachersController extends Controller
         $queries = [];
 
         $columns = [
-            'L', 'DEPT', 'Te_Code', 'is_self_pay_form', 'overall_approval',
+            'L',
+            'DEPT',
+            'Te_Code',
+            'is_self_pay_form',
+            'overall_approval',
         ];
 
 
@@ -1136,9 +1140,7 @@ class TeachersController extends Controller
      * @param  \App\Teachers  $teachers
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Teachers $teachers)
-    {
-    }
+    public function update(Request $request, Teachers $teachers) {}
 
     public function ajaxTeacherUpdate(Request $request)
     {

@@ -12,7 +12,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <h3><strong>Log Student Attendance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $day }}: {{ $time }} ({{ $week }})</strong></h3>
+    <h3><strong>Log Student Attendance for @if(empty($course->courses->Description)) {{ $course->Te_Code }} @else {{ $course->courses->Description}} @endif - {{ $day }}: {{ $time }}</strong></h3>
   </div>
 </div>
 

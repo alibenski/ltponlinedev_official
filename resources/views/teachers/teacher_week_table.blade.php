@@ -14,7 +14,7 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>{{ $wk }}</td>
+          <td class="td-week">{{ $wk }}</td>
           <td>Monday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Mon_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Mon_ETime)) }}</td>
           <td>
@@ -35,7 +35,7 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>{{ $wk }}</td>
+          <td class="td-week">{{ $wk }}</td>
           <td>Tuesday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Tue_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Tue_ETime)) }}</td>
           <td>
@@ -56,7 +56,7 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>{{ $wk }}</td>
+          <td class="td-week">{{ $wk }}</td>
           <td>Wednesday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Wed_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Wed_ETime)) }}</td>
           <td>
@@ -77,7 +77,7 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>{{ $wk }}</td>
+          <td class="td-week">{{ $wk }}</td>
           <td>Thursday</td>
             <td>{{ date('h:i a', strtotime($day_time->Te_Thu_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Thu_ETime)) }}</td>
             <td>
@@ -98,7 +98,7 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>{{ $wk }} </td>
+          <td class="td-week">{{ $wk }}</td>
           <td>Friday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Fri_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Fri_ETime)) }}</td>
           <td>
@@ -119,7 +119,7 @@
           <td>
             <div class="counter"></div>
           </td>
-          <td>{{ $wk }} </td>
+          <td class="td-week">{{ $wk }}</td>
           <td>Saturday</td>
           <td>{{ date('h:i a', strtotime($day_time->Te_Sat_BTime)) }} - {{ date('h:i a', strtotime($day_time->Te_Sat_ETime)) }}</td>
           <td>
@@ -141,6 +141,8 @@
 <script src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
 <script>
 $(document).ready(function () {
+    let weekText = $("button.btn-wk.btn-success").text();
+    $("td.td-week").text(weekText);
     var counter = 0;
     $('.counter').each(function() {
         counter++;

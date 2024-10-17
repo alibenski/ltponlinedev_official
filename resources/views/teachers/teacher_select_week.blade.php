@@ -150,6 +150,14 @@
     var CodeClass = $("input[name='CodeClass']").val();
     var token = $("input[name='_token']").val();
 
+    $("button.btn-wk").removeClass('btn-success');
+    $("button.btn-wk").addClass('btn-default');
+    
+    if (Wk == $(this).prop('id')) {
+      $(this).addClass('btn-success');
+      $(this).removeClass('btn-default');
+    } 
+    
     // $("button[id='manageAttendanceBtn'][value='"+Code+"']").addClass('btn-success');
     // $("button[id='manageAttendanceBtn'][value='"+Code+"']").removeClass('btn-default');
     // $("button").not("button[id='manageAttendanceBtn'][value='"+Code+"']").addClass('btn-default');
