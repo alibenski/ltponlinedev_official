@@ -192,29 +192,40 @@
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
-                                    <p>Hello, </p>
-                                    <p>Welcome to the UNOG-CLM LTP Online Enrolment Platform. CLM has developed this online registration tool with the objective to update and make the registration process smoother. All the registration steps will be done online, removing the paperwork and the physical signatures.</p>
-                                    <p>You can already access the platform and check your profile; however, you will only be able to enrol in courses once registration is open.</p>
+                                    <p>Dear Applicant, </p>
+                                    <p>We are pleased to inform you that your request to join the UNOG-CLM LTP Online Enrolment Platform has been approved.</p>
+                                    
                                     <p>Your credentials are: 
                                         <ul>
                                             <li>Email Address: {{$sddextr_email_address}}</li>
-                                            <li>Password: Welcome2CLM <br> (If you intend to copy and paste the password, be sure you do not copy the white space at the end).</li>
+                                            <li>Password: Welcome2CLM <br> <i>Please note: If you intend to copy and paste the password, ensure you do not include any trailing spaces.</i></li>
                                         </ul>
                                     </p>
-                                    <p>For security reasons, you will be asked to change the password the first time you access the platform.</p>
-                                    <p>All the information for registration will be available on the website (https://learning.unog.ch) when the it opens. </p>
+                                    <p>For security purposes, you will be prompted to change your password upon your first login.</p>
+                                    <p><b>To enrol in a course</b>, please log in using the above credentials and complete the enrolment form.</p>
+                                    <p>When creating your enrolment, you will be asked if you are a complete beginner. If you select “I am not a complete beginner,” you will be prompted to the placement test option. Placement tests are conducted online after the enrolment period. You will receive an email with instructions at that time.</p>
+                                    <p>All necessary registration information is available on our website at <a href="https://learning.unog.ch/language-index">https://learning.unog.ch/language-index.</a></p>
+                                    <p>Welcome aboard!</p>
+                                    <p>Best regards, <br /> 
+                                        The UNOG CLM Language Training Programme
+                                    </p>
                                     <hr>
-                                    <p>Bonjour, </p>
-                                    <p>Bienvenue sur la plateforme d'inscription en ligne de ONUG-CFM. Nous avons développé ce système d'inscription en ligne qui a l'objectif étant d'actualiser et de simplifier le processus d'inscription. Chaque étape de ce nouveau processus sera réalisée en ligne, permettant ainsi la suppression des formalités administratives et de la signature manuscrite.</p>
-                                    <p>Vous pouvez d'ores et déjà accéder à la plateforme et vérifier votre profile ; toutefois, vous ne pourrez vous inscrire qu'une fois la période d'inscription ouverte.</p>
+                                    <p>Chère candidate ou cher candidat, </p>
+                                    <p>Nous avons le plaisir de vous informer que votre demande d’inscription sur la plateforme d’inscription en ligne de l’ONUG-CFM a été approuvée.</p>
                                     <p>Vos identifiants sont :  
                                         <ul>
                                             <li>Adresse électronique : {{$sddextr_email_address}}</li>
-                                            <li>Mot de passe : Welcome2CLM <br> (Si vous copiez collez le mot de passe, soyez certain(e) de ne pas copier un espace comme dernier caractère).</li>
+                                            <li>Mot de passe : Welcome2CLM <br> <i>Veuillez noter : Si vous copiez et collez le mot de passe, assurez-vous de ne pas inclure d’espaces supplémentaires.</i></li>
                                         </ul>
                                     </p>
-                                    <p>Pour des raisons de sécurité, il vous sera demandé de changer de mot de passe lors de votre premier accès à la plateforme.</p>
-                                    <p>Toutes les informations utiles à votre inscription seront disponibles sur le site Internet (https://learning.unog.ch) dès l'ouverture de la période d'inscription.</p>
+                                    <p>Pour des raisons de sécurité, vous serez invité(e) à changer votre mot de passe lors de votre première connexion.</p>
+                                    <p><b>Pour vous inscrire à un cours,</b> veuillez vous connecter avec les identifiants ci-dessus et compléter le formulaire d’inscription.</p>
+                                    <p>Lors de votre inscription, il vous sera demandé si vous êtes débutant complet. Si vous sélectionnez “I am not a complete beginner (Je ne suis pas débutant complet)”, vous serez dirigé(e) vers l’option de test de placement. Les tests de placement sont effectués en ligne après la période d’inscription. Vous recevrez un e-mail avec les instructions à ce moment-là.</p>
+                                    <p>Toutes les informations nécessaires à l’inscription sont disponibles sur notre site web : <a href="https://learning.unog.ch/language-index">https://learning.unog.ch/language-index.</a></p>
+                                    <p>Bienvenue à bord !</p>
+                                    <p>Cordialement,<br /> 
+                                        Le programme de formation linguistique de l’ONUG-CFM
+                                    </p>
                                 </td>
                             </tr>
                             <tr>
