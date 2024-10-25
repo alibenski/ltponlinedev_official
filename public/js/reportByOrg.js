@@ -40,6 +40,7 @@ function assignToEventsColumns(data) {
                 { "data": "users.indexno" }, 
                 { "data": "users.nameLast" }, 
                 { "data": "users.nameFirst" }, 
+                { "data": "users.email" }, 
                 { "data": "Result", "className": "result" },
                 { "data": function ( row, type, val, meta ) {
                         if (row.attendances != null) {

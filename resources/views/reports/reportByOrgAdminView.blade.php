@@ -174,6 +174,7 @@
 						<th>Index No.</th>
 						<th>Last Name</th>
 						<th>First Name</th>
+						<th>Email</th>
 						<th>RESULT</th>
 						<th>Days Present</th>
 						<th>Days Excused</th>
@@ -192,6 +193,7 @@
 						<th>Index No.</th>
 						<th>Last Name</th>
 						<th>First Name</th>
+						<th>Email</th>
 						<th>RESULT</th>
 						<th>Days Present</th>
 						<th>Days Excused</th>
