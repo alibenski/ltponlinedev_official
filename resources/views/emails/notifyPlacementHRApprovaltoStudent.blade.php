@@ -193,7 +193,7 @@
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">CLM Online Enrolment</h1> --}}
                                      <p> Dear {{ $staff_name }}, </p>
-                                     <p> Your  <strong>placement test</strong> request for CLM language, <strong>{{ $input_course->languages->name }}</strong>, has been <strong>@if( $input_course->approval_hr == 1)  approved @else  rejected @endif </strong> by your HR Staff and Development Section for the following reason:</p>
+                                     <p> Your  <strong>placement test</strong> request for CLM language, <strong>{{ $input_course->languages->name }}</strong>, has been <strong>@if( $input_course->approval_hr == 1)  approved @else  rejected @endif </strong> by your internal training section for the following reason:</p>
 
                                       <p><strong>                                  
                                         @if( empty($request->hr_comment))
@@ -205,14 +205,14 @@
                                       </p>
                                       @if( $input_course->approval_hr == 1)  <p>Your request will be processed by the Language Training secretariat, and you will receive further information about your registration.</p> @else @endif
                                       
-                                      <p><strong>NOTE: </strong>Please contact your organization's HR/Staff Development Office for any questions regarding the decision above.</p>
+                                      <p><strong>NOTE: </strong>Please contact your organization's training section for any questions regarding the decision above.</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                                     {{-- <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Inscription en ligne du CFM</h1> --}}
                                      <p> Cher/Chère {{ $staff_name }}, </p>
-                                     <p> Votre demande de <strong>test de placement </strong> par le CFM, pour la langue <strong>{{ $input_course->languages->name_fr }}</strong>, a été  <strong>@if( $input_course->approval_hr == 1)  approuvé @else  désapprouvé @endif </strong> par votre partenaire de formation pour la raison suivante :</p>
+                                     <p> Votre demande de <strong>test de placement </strong> par le CFM, pour la langue <strong>{{ $input_course->languages->name_fr }}</strong>, a été  <strong>@if( $input_course->approval_hr == 1)  approuvé @else  désapprouvé @endif </strong> par votre section de formation  pour la raison suivante :</p>
 
                                       <p><strong>                                     
                                         @if( empty($request->hr_comment))
@@ -224,7 +224,7 @@
                                       </p>
                                       @if( $input_course->approval_hr == 1)  <p>Votre demande d’inscription sera traitée par le secrétariat du Programme de formation linguistique et vous recevrez un email avec toutes l’information nécessaire afin de continuer l’inscription.</p> @else @endif
                                       
-                                      <p><strong>NOTE: </strong>Pour toute question relative à la décision ci-dessus, veuillez contacter directement les ressources humaines ou le bureau du développement du personnelde votre organisation.</p>
+                                      <p><strong>NOTE: </strong>Pour toute question relative à la décision ci-dessus, veuillez contacter directement la section de formation de votre organisation.</p>
                                 </td>
                             </tr>
                             <tr>
