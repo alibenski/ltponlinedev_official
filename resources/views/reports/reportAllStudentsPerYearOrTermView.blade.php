@@ -334,8 +334,20 @@ $(document).ready(function() {
 							{ "data": "courseschedules.courseduration.duration_name_en" }, 
 							{ "data": "DEPT" },  
 							{ "data": "is_self_pay_form" },  
-							{ "data": "organizations.MOU" },  
-							{ "data": "organizations.sales_order" },  
+							{ "data": function ( row, type, val, meta ) {
+									if (row.organizations == null) {
+											return "";
+									} 
+								return row.organizations.MOU;
+								}
+							},  
+							{ "data": function ( row, type, val, meta ) {
+									if (row.organizations == null) {
+											return "";
+									} 
+								return row.organizations.sales_order;
+								}
+							}, 
 							{ "data": function ( row, type, val, meta ) {
 									if (row.hasOwnProperty('enrolments')) {
 										if (row.enrolments.length > 0) {
