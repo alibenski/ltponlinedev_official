@@ -363,6 +363,12 @@ $(document).ready(function() {
 										return "SP & SO UN system";
 									} 
 								}
+								if (row.DEPT == '999') {
+									return "SP & SO UN system";
+								} 
+								if (row.DEPT == 'RET') {
+									return "SP & SO UN system";
+								} 
 								return row.DEPT;
 							}
 							
