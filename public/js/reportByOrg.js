@@ -37,6 +37,7 @@ function assignToEventsColumns(data) {
                 { "data": "courseschedules.prices.price_usd" }, 
                 { "data": "courseschedules.courseduration.duration_name_en" }, 
                 { "data": "DEPT" },  
+                { "data": "users.profile" }, 
                 { "data": "users.indexno" }, 
                 { "data": "users.nameLast" }, 
                 { "data": "users.nameFirst" }, 
