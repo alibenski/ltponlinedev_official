@@ -41,6 +41,7 @@
 						<th>Price USD</th>
 						<th>Duration</th>
 						<th>Organization</th>
+						<th>Profile</th>
 						<th>Index No.</th>
 						<th>Last Name</th>
 						<th>First Name</th>
@@ -60,6 +61,7 @@
 						<th>Price USD</th>
 						<th>Duration</th>
 						<th>Organization</th>
+						<th>Profile</th>
 						<th>Index No.</th>
 						<th>Last Name</th>
 						<th>First Name</th>
