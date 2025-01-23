@@ -257,7 +257,7 @@
                                     <p style="text-align: justify">We will use Microsoft Teams as the teleconferencing tool for your virtual course sessions taking place at the time indicated.  Your teacher will email you further details about how to join these classes during the orientation week.</p>
                                     
                                     <h4><strong><u>Important information for IN-PERSON courses</u></strong></h4>
-                                    <p style="text-align: justify">Due to the liquidity crisis, Annexe Bocage is temporarily closed. In-person language classes will be held in the H Building, from Monday 29 April 2024.</p>
+                                    <p style="text-align: justify">In-person language classes will be held in the H Building.</p>
 
                                     <p style="text-align: justify">- <a href="https://learning.unog.ch/sites/default/files/ContainerEn/LTP/Admin/LTP%20Location.pdf">Map of Palais des Nations, H Building (location of classrooms)</a> <br /> - <a href="https://learning.unog.ch/node/1446">Grounds pass and/or parking badge for vehicles</a></p>
 

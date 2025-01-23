@@ -1138,7 +1138,7 @@ class ReportsController extends Controller
                     $quser1->with(['sddextr' => function ($qsdd11) {
                         $qsdd11->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst', 'email');
+                        ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->whereNull('exclude_from_billing')
@@ -1188,7 +1188,7 @@ class ReportsController extends Controller
                     $quser0->with(['sddextr' => function ($qsdd00) {
                         $qsdd00->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name', 'nameLast', 'nameFirst', 'email');
+                        ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->whereNull('exclude_from_billing')
