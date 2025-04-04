@@ -132,8 +132,8 @@ class TextController extends Controller
                 // get term values
                 $term = Session::get('Term');
                 // get term values and convert to strings
-                $term_en = Term::where('Term_Code', $term)->first()->Term_Name;
-                $term_fr = Term::where('Term_Code', $term)->first()->Term_Name_Fr;
+                $term_en = $this->manipulateTermDateEn($term);
+                $term_fr = $this->manipulateTermDateFr($term);
 
                 $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
                 $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
