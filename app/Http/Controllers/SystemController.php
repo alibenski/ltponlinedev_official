@@ -58,10 +58,13 @@ class SystemController extends Controller
                 ->where('Tch_ID', '!=', 'TBD');
         })->get()->take(1);
 
-
+        if ($convocation->isEmpty()) {
+            session()->flash('error', 'Convocation email NOT sent to CLM Language SMB because no students have been assigned to classrooms. Run the batch first.');
+            return back();
+        }
         $convocation_diff3 = $convocation->diff($convocation_waitlist); // send email convocation to this collection
 
-        $convocation_diff3 = $convocation_diff3->where('convocation_email_sent', null);
+        // $convocation_diff3 = $convocation_diff3->where('convocation_email_sent', null);
         // $convocation_diff3 = $convocation_diff3->where('INDEXID', '17942');
 
         foreach ($convocation_diff3 as $value) {
