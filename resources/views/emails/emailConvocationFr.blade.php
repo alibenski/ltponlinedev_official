@@ -45,7 +45,7 @@
         </li>    
         <br />
         <li style="text-align: justify">
-        Pendant la semaine d'orientation, votre professeur vous enverra par e-mail des instructions supplémentaires sur la session de bienvenue (en ligne) de 45 minutes, le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage des langues de CLM. 
+        Pendant la semaine d'orientation, votre professeur vous enverra par e-mail des instructions supplémentaires sur la session de bienvenue (en ligne) de 45 minutes, le lien vers votre matériel de cours et vos activités en autonomie sur la plateforme d'apprentissage des langues. 
         </li>
         <br />
         <li style="text-align: justify">Certains cours nécessitent l’achat de matériel. Veuillez consulter <a href="https://learning.unog.ch/fr/node/1443">la liste du matériel </a> nécessaire avant le début de votre cours.</li>

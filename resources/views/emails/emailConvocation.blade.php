@@ -240,7 +240,7 @@
                                         </li>    
                                         <br />
                                         <li style="text-align: justify">
-                                        During the orientation week, your teacher will email you with further instructions about the 45-minute Meet & Greet online session, the link to your course material, and autonomous activities on the CLM Language Learning Platform. 
+                                        During the orientation week, your teacher will email you with further instructions about the 45-minute Meet & Greet online session, the link to your course material, and autonomous activities on the language learning platform. 
                                         </li>
                                         <br />
                                         <li style="text-align: justify">Some courses require materials. Please check the <a href="https://learning.unog.ch/node/1443">list of materials</a> necessary to purchase before your course starts.</li>
