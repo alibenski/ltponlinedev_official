@@ -24,6 +24,7 @@
                 <th>Within 2 terms?</th>
                 <th>Index Number</th>
                 <th>Name</th>
+                <th>Profile</th>
                 <th>Email</th>
                 <th>Contact No.</th>
                 <th>Course</th>
@@ -58,6 +59,7 @@
                 <th>Within 2 terms?</th>
                 <th>Index Number</th>
                 <th>Name</th>
+				<th>Profile</th>
                 <th>Email</th>
                 <th>Contact No.</th>
                 <th>Course</th>
@@ -198,6 +200,7 @@ $(document).ready(function() {
 						"className": "index_id" 
 					}, 
 	        		{ "data": "name" }, 
+	        		{ "data": "profile" }, 
 	        		{ "data": "email" }, 
 	        		{ 
 						"data": "PHONE" ,

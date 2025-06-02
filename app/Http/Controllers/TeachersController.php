@@ -407,6 +407,7 @@ class TeachersController extends Controller
                 'wishlist_schedule' => $wishlist_schedule,
                 'INDEXID' => $form->INDEXID,
                 'name' => $form->users->name,
+                'profile' => $form->users->profile,
                 'email' => $form->users->email,
                 'PHONE' => $phone,
                 'courses_Description' => $form->courses->Description,
