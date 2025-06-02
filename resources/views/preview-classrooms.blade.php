@@ -168,7 +168,7 @@
                         @endforeach
                   <br />
                   @if(empty($form->users->profile)) No Profile 
-                  @else  
+                  @else   
                   <span class="label label-default">
                       @if($form->users->profile == "STF") Staff Member @endif
                       @if($form->users->profile == "INT") Intern @endif
@@ -183,7 +183,11 @@
                       @if($form->users->profile == "PRESS") Staff of UN Press Corps @endif
                   </span>
                   @endif
-                        
+                  <br />
+                  @if(empty($form->users->sddextr->DEPT)) No Organization 
+                  @else 
+                    <strong>{{ $form->users->sddextr->DEPT }}</strong>
+                  @endif 
                   <p>@if($form->deleted_at) <span class="label label-danger">Cancelled</span> @else @endif</p>
 
                   @if ($form->enrolments)
