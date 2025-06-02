@@ -108,7 +108,29 @@
 		                @endif
 					</td>
 					<td>
-						<h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} <small>[{{ $form->INDEXID }}]</small> @endif</h4>
+						<h4>@if(empty($form->users->name)) None @else {{ $form->users->name }} 
+							<small>
+								[{{ $form->INDEXID }}]
+								<br />
+								@if(empty($form->users->profile)) <span class="text-danger"><b>No Profile</b></span>
+								@else   
+								<span class="label label-default">
+									@if($form->users->profile == "STF") Staff Member @endif
+									@if($form->users->profile == "INT") Intern @endif
+									@if($form->users->profile == "CON") Consultant @endif
+									@if($form->users->profile == "WAE") When Actually Employed @endif
+									@if($form->users->profile == "JPO") JPO @endif
+									@if($form->users->profile == "MSU") Staff of Permanent Mission @endif
+									@if($form->users->profile == "SPOUSE") Spouse of Staff from UN or Mission @endif
+									@if($form->users->profile == "RET") Retired UN Staff Member @endif
+									@if($form->users->profile == "SERV") Staff of Service Organizations in the Palais @endif
+									@if($form->users->profile == "NGO") Staff of UN-accredited NGO's @endif
+									@if($form->users->profile == "PRESS") Staff of UN Press Corps @endif
+								</span>
+								@endif
+							</small> 
+							@endif
+						</h4>
 							@if($form->placement_schedule_id)
 								<p><span class="label label-warning margin-label">Placement Form</span></p>
 							@endif
