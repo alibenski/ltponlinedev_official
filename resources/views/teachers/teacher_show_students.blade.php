@@ -131,8 +131,8 @@ $(document).ready(function () {
     })
     .fail(function(data) {
         console.log("error on loading attendance summary: " + data);
-        alert("An error occured. Click OK to reload.");
-        window.location.reload();
+        alert("An error occured. Empty array: " + data + " The term might not be set. Click OK to be redirected. ");
+        window.location.href = "/admin/teacher-dashboard";
     })
     .always(function() {
         console.log("load complete attendance summary");

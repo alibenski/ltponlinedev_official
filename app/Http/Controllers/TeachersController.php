@@ -1287,67 +1287,74 @@ class TeachersController extends Controller
             $sumA = [];
             $info = [];
             $collector = [];
-            // exclude Wk1_ from sum if term > 240
-            if ($term > 240) {
-                foreach ($array_attributes as $x => $y) {
-                    $info['pash_id'] = $y['pash_id'];
+            unset($term);
+            try {
+                // exclude Wk1_ from sum if term > 240
+                if ($term > 240) {
+                    foreach ($array_attributes as $x => $y) {
+                        $info['pash_id'] = $y['pash_id'];
 
-                    foreach ($y as $k => $v) {
-                        if (substr($k, 0, 4) != "Wk1_") {
+                        foreach ($y as $k => $v) {
+                            if (substr($k, 0, 4) != "Wk1_") {
+                                if ($v == 'P') {
+                                    $sumP[] = 'P';
+                                }
+                            }
+                            if (substr($k, 0, 4) != "Wk1_") {
+                                if ($v == 'E') {
+                                    $sumE[] = 'E';
+                                }
+                            }
+                            if (substr($k, 0, 4) != "Wk1_") {
+                                if ($v == 'A') {
+                                    $sumA[] = 'A';
+                                }
+                            }
+                        }
+
+                        $info['P'] = count($sumP);
+                        $info['E'] = count($sumE);
+                        $info['A'] = count($sumA);
+
+                        $collector[] = $info;
+                        // clear contents of array for the next loop
+                        $sumP = [];
+                        $sumE = [];
+                        $sumA = [];
+                    }
+                } else {
+                    foreach ($array_attributes as $x => $y) {
+                        $info['pash_id'] = $y['pash_id'];
+
+                        foreach ($y as $k => $v) {
                             if ($v == 'P') {
                                 $sumP[] = 'P';
                             }
-                        }
-                        if (substr($k, 0, 4) != "Wk1_") {
+
                             if ($v == 'E') {
                                 $sumE[] = 'E';
                             }
-                        }
-                        if (substr($k, 0, 4) != "Wk1_") {
+
                             if ($v == 'A') {
                                 $sumA[] = 'A';
                             }
                         }
+
+                        $info['P'] = count($sumP);
+                        $info['E'] = count($sumE);
+                        $info['A'] = count($sumA);
+
+                        $collector[] = $info;
+                        // clear contents of array for the next loop
+                        $sumP = [];
+                        $sumE = [];
+                        $sumA = [];
                     }
-
-                    $info['P'] = count($sumP);
-                    $info['E'] = count($sumE);
-                    $info['A'] = count($sumA);
-
-                    $collector[] = $info;
-                    // clear contents of array for the next loop
-                    $sumP = [];
-                    $sumE = [];
-                    $sumA = [];
                 }
-            } else {
-                foreach ($array_attributes as $x => $y) {
-                    $info['pash_id'] = $y['pash_id'];
-
-                    foreach ($y as $k => $v) {
-                        if ($v == 'P') {
-                            $sumP[] = 'P';
-                        }
-
-                        if ($v == 'E') {
-                            $sumE[] = 'E';
-                        }
-
-                        if ($v == 'A') {
-                            $sumA[] = 'A';
-                        }
-                    }
-
-                    $info['P'] = count($sumP);
-                    $info['E'] = count($sumE);
-                    $info['A'] = count($sumA);
-
-                    $collector[] = $info;
-                    // clear contents of array for the next loop
-                    $sumP = [];
-                    $sumE = [];
-                    $sumA = [];
-                }
+            } catch (\Throwable $th) {
+                //throw $th;
+                echo 'Caught exception: ',  $th->getMessage(), "\n";
+                return response()->json();
             }
 
             $data = $collector;
