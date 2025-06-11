@@ -1287,7 +1287,6 @@ class TeachersController extends Controller
             $sumA = [];
             $info = [];
             $collector = [];
-            unset($term);
             try {
                 // exclude Wk1_ from sum if term > 240
                 if ($term > 240) {
