@@ -16,20 +16,19 @@
 
 @section('content')
 
-<h2 class="text-center"><i class="far fa-envelope"></i> Send via Email Report by Organization </h2>
+<h2 class="text-center"><i class="far fa-eye"></i>  View Results of Students by Organization </h2>
 		<div class="card card-default">
 			<div class="card-body">
 				<form id="reportForm" method="get" action="" class="col-sm-12">
 					<div class="col-sm-12">
 						<div class="row">
 							<div class="col-md-12">
-								<div class="alert alert-secondary">
+								<div class="alert alert-warning">
 									<p class="text-justify"><i class="fa fa-info-circle"></i> Information about the data below: <br />
 									<ul>
-										<li>This admin interface is used to send an email to the organization focal points with a secured link showing the respective table.</li>
-										<li>The information in the report table is mainly for billing purposes.</li>
+										<li>This admin interface is used to generate a report showing the results of students of a specific organization.</li>
 										<li>The table includes students who cancelled late after deadline.</li>
-										<li>The information does NOT include self-paying students.</li>
+										<li>The information includes self-paying students.</li>
 									</ul>
 									</p>
 								</div>
@@ -38,14 +37,11 @@
 
 						<section id="filter">
 							<div class="card card-default">
-								{{-- <div class="card-header with-border">
-									<h4><strong>View Students by Organization</strong></h4>
-								</div> --}}
 								<div class="card-body bg-light">
 									<form id="reportForm" method="get" action="" class="col-sm-6">
 									<div class="row">
 											<div class="form-group col-sm-12">
-											<label for="organization" class="col-sm-12 control-label">Organization Select: (required)</label>
+											<label for="organization" class="col-sm-12 control-label">Select Organization: (required)</label>
 											<div class="form-group col-sm-12">
 												<div class="dropdown">
 												<select id="organization" name="organization" class="col-sm-12 form-control select2-basic-single" style="width: 100%;" required="required" autocomplete="off">
@@ -59,12 +55,7 @@
 											</div>
 
 											<div class="col-sm-12">
-												<label for="decision" class="control-label col-sm-12">Year or Term? (required)</label>
-
-												<div class="form-check form-check-inline col-sm-5 mx-2">
-														<input type="radio" name="decision" value="1" class="form-check-input decision validateMe" disabled>                 
-														<label type="text" class="form-check-label">Year (disabled)</label>
-												</div>
+												<label for="decision" class="control-label col-sm-12">Select Term: (required)</label>
 
 												<div class="form-check form-check-inline col-sm-5 mx-2">
 														<input type="radio" name="decision" value="0" class="form-check-input decision validateMe">                 
@@ -72,22 +63,8 @@
 												</div>
 											</div>
 
-											<div class="col-sm-5 filter-by-year form-group invisible">
-											<label for="year" class="col-sm-12 control-label">Year Select:</label>
-											<div class="form-group col-sm-12">
-												<div class="dropdown">
-												<select id="year" name="year" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
-													@foreach($years as $value)
-														<option></option>
-														<option value="{{$value}}">{{$value}}</option>
-													@endforeach
-												</select>
-												</div>
-											</div>
-											</div>
-
 											<div class="col-sm-5 filter-by-term form-group invisible">
-											<label for="term" class="col-sm-12 control-label">Term Select:</label>
+											<label for="term" class="col-sm-12 control-label"></label>
 											<div class="form-group col-sm-12">
 												<div class="dropdown">
 												<select id="term" name="term" class="col-sm-8 form-control select2-basic-single" style="width: 100%;" autocomplete="off">
@@ -113,48 +90,6 @@
 				</form>
 			</div>
 		</div>
-
-		<form id="sendEmailForm" class="invisible my-5 my-5">
-			<div class="card card-default">
-				<div class="card-header bg-secondary">
-					<h5 class="text-bold">Send generated report to focal points with these parameters:</h5>
-				</div>
-				<div class="card-body bg-light">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label for="">Deadline Date: </label>
-									<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-										<input type="text" id="contract-date" name="contract_date" class="form-control datetimepicker-input validateMe" data-target="#datetimepicker4" />
-
-										<div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
-											<div class="input-group-text"><i class="fa fa-calendar"></i></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="col-sm-12">
-							Term: <input id="selectedTerm" value="" readonly/>
-							Year: <input id="selectedYear" value="" readonly/>
-							Organization: <input id="selectedOrg" value="" readonly/>
-						</div>
-					</div>
-
-					<div class="row col-sm-6 mt-3">
-						<div id="viewButton">
-						</div>
-						<div class="row col-sm-12">
-							<button type="submit" class="btn btn-outline-secondary send-email-btn button-prevent-multi-submit"><i class="fas fa-paper-plane"></i> Send Email </button>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</form>
 
 <div class="reports-section invisible">
 	<div class="box box-success">
@@ -439,7 +374,7 @@
 
 			promises.push(
 				$.ajax({
-					url: "{{ route('report-by-org-admin') }}",
+					url: "{{ route('result-by-org-admin') }}",
 					type: 'GET',
 					dataType: 'json',
 					data: {year: year, Term: Term, DEPT: DEPT},

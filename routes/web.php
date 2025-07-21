@@ -117,6 +117,9 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('reports/report-by-org-email-ajax', 'ReportsController@reportByOrgEmailAjax')->name('reports/report-by-org-email-ajax');
     Route::get('send-email-report-by-org', 'ReportsController@sendEmailReportByOrg')->name('send-email-report-by-org');
 
+    Route::get('reports/result-by-org-admin-view', 'ReportsController@resultByOrgAdminView')->name('reports/result-by-org-admin-view');
+    Route::get('result-by-org-admin', 'ReportsController@resultByOrgAdmin')->name('result-by-org-admin');
+
     Route::get('cancelled-term-language', ['as' => 'cancelled-term-language', 'uses' => 'ReportsController@cancelledTermLanguage']);
     Route::get('courses-term-language', ['as' => 'courses-term-language', 'uses' => 'ReportsController@coursesTermLanguage']);
     Route::get('classes-term-language', ['as' => 'classes-term-language', 'uses' => 'ReportsController@classesTermLanguage']);
