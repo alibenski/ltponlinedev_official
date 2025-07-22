@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use PDF;
 use Session;
+use Illuminate\Support\Facades\Log;
 
 class PreviewController extends Controller
 {
@@ -573,9 +574,10 @@ class PreviewController extends Controller
         $schedule = $record->schedules->name;
         $std_email = $record->users->email;
 
-        $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
-        $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
-        $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+        $term_obj = Term::where('Term_Code', $term)->first();
+        $term_season_en = $term_obj->Comments;
+        $term_season_fr = $term_obj->Comments_fr;
+        $term_date_time = $term_obj->Term_Begin;
         $term_year = new Carbon($term_date_time);
         $term_year = $term_year->year;
         $seasonYear = $term_season_en . ' ' . $term_year;
@@ -681,21 +683,35 @@ class PreviewController extends Controller
         $convocation_diff3 = $convocation_diff3->where('convocation_email_sent', null);
         // $convocation_diff3 = $convocation_diff3->where('INDEXID', '17942');
 
-        foreach ($convocation_diff3 as $value) {
+        $this->sendConvocationEmailLoop($convocation_diff3);
+
+        session()->flash('success', 'Convocation email sent to ' . count($convocation_diff3) . ' students ');
+        return back();
+    }
+
+    public function sendConvocationEmailLoop($values)
+    {
+        foreach ($values as $value) {
 
             $course_name = Course::where('Te_Code_New', $value->Te_Code)->first();
-            $course_name_en = $course_name->EDescription;
-            $course_name_fr = $course_name->FDescription;
+            $course_name_en = $course_name ? $course_name->EDescription : '';
+            $course_name_fr = $course_name ? $course_name->FDescription : '';
 
-            $schedule = $value->schedules->name;
+            $schedule = $value->schedules ? $value->schedules->name : null;
             // $room = $value->CodeClass; 
             // get schedule and room details from classroom table
             $classrooms = Classroom::where('Code', $value->CodeClass)->get();
 
 
             $teacher_id = $value->classrooms->Tch_ID;
-            $teacher = Teachers::where('Tch_ID', $teacher_id)->first()->Tch_Name;
-            $teacher_email = Teachers::where('Tch_ID', $teacher_id)->first()->email;
+            $teacherObj = null;
+            $teacher = null;
+            $teacher_email = null;
+            if (!empty($teacher_id)) {
+                $teacherObj = Teachers::where('Tch_ID', $teacher_id)->first();
+                $teacher = optional($teacherObj)->Tch_Name;
+                $teacher_email = optional($teacherObj)->email;
+            }
 
             // get term values
             $term = $value->Term;
@@ -703,15 +719,16 @@ class PreviewController extends Controller
             $term_en = $this->manipulateTermDateEn($term);
             $term_fr = $this->manipulateTermDateFr($term);
 
-            $term_season_en = Term::where('Term_Code', $term)->first()->Comments;
-            $term_season_fr = Term::where('Term_Code', $term)->first()->Comments_fr;
+            $term_obj = Term::where('Term_Code', $term)->first();
+            $term_season_en = $term_obj->Comments;
+            $term_season_fr = $term_obj->Comments_fr;
 
-            $term_date_time = Term::where('Term_Code', $term)->first()->Term_Begin;
+            $term_date_time = $term_obj->Term_Begin;
             $term_year = new Carbon($term_date_time);
             $term_year = $term_year->year;
 
             // get cancel date limit
-            $queryCancelDateLimit = Term::where('Term_Code', $term)->first()->Cancel_Date_Limit;
+            $queryCancelDateLimit = $term_obj->Cancel_Date_Limit;
             $cancel_date_limit = new Carbon($queryCancelDateLimit);
             $cancel_date_limit->subDay();
 
@@ -726,18 +743,70 @@ class PreviewController extends Controller
             $termCancelMonthFr = __('months.' . $termCancelMonth, [], 'fr');
             $cancel_date_limit_string_fr = $termCancelDate . ' ' . $termCancelMonthFr . ' ' . $termCancelYear;
 
-            $staff_name = $value->users->name;
-            $staff_email = $value->users->email;
+            $staff_name = optional($value->users)->name;
+            $staff_email = optional($value->users)->email;
 
-            Mail::to($staff_email)->send(new sendConvocation($staff_name, $course_name_en, $course_name_fr, $classrooms, $teacher, $teacher_email, $term_en, $term_fr, $schedule, $term_season_en, $term_season_fr, $term_year, $cancel_date_limit_string, $cancel_date_limit_string_fr));
-
-            $convocation_email_sent = Repo::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
-                'convocation_email_sent' => 1,
-            ]);
+            if (
+                is_null($staff_email) ||
+                is_null($staff_name) ||
+                is_null($course_name_en) ||
+                is_null($course_name_fr) ||
+                is_null($classrooms) ||
+                is_null($teacher) ||
+                is_null($teacher_email) ||
+                is_null($term_en) ||
+                is_null($term_fr) ||
+                is_null($schedule) ||
+                is_null($term_season_en) ||
+                is_null($term_season_fr) ||
+                is_null($term_year) ||
+                is_null($cancel_date_limit_string) ||
+                is_null($cancel_date_limit_string_fr)
+            ) {
+                // convocation_email_not_sent
+                Repo::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
+                    'convocation_email_sent' => NULL,
+                ]);
+                Mail::raw("Failed to send convocation email to $staff_email", function ($message) use ($staff_email) {
+                    $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
+                    $message->to('allyson.frias@un.org')->subject("Failed to send convocation email: " . $staff_email);
+                });
+            } else {
+                try {
+                    Mail::to($staff_email)->send(
+                        new sendConvocation(
+                            $staff_name,
+                            $course_name_en,
+                            $course_name_fr,
+                            $classrooms,
+                            $teacher,
+                            $teacher_email,
+                            $term_en,
+                            $term_fr,
+                            $schedule,
+                            $term_season_en,
+                            $term_season_fr,
+                            $term_year,
+                            $cancel_date_limit_string,
+                            $cancel_date_limit_string_fr
+                        )
+                    );
+                    // update convocation_email_sent to 1
+                    // to indicate that the email has been sent 
+                    $convocation_email_sent = Repo::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
+                        'convocation_email_sent' => 1,
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Failed to send convocation email to ' . $staff_email . ': ' . $e->getMessage());
+                }
+            }
         }
+    }
 
-        session()->flash('success', 'Convocation email sent to ' . count($convocation_diff3) . ' students ');
-        return back();
+    public function resendConvocation()
+    {
+        $convocation_resend = Repo::where('Term', Session::get('Term'))->whereNotNull('convocation_email_sent')->get();
+        $this->sendConvocationEmailLoop($convocation_resend);
     }
 
     public function sendIndividualConvocation(Request $request)
