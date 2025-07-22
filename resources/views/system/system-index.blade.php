@@ -54,6 +54,7 @@
 								@if (!is_null($term))
 									<a href="{{ route('view-convocation-email-text') }}" class="btn btn-info btn-space"><i class="fa fa-eye"></i> View Convocation Email Text</a>
 									<a href="{{ route('send-convo-to-language-smb') }}" class="btn btn-success btn-space"><i class="fa fa-envelope"></i> Send to CLM Language SMB</a>
+									<a href="{{route('resend-convocation')}}" class="resend-convocation send-emails btn btn-warning"><i class="fa fa-envelope-o"></i> Resend Convocation Email to students of  {{ $term->Comments }} {{ date('Y', strtotime($term->Term_Begin)) }}  [ {{ $term->Term_Code }} ]</a>
 								@endif
 						</div>
 	

@@ -234,6 +234,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::post('ajax-select-classroom', ['as' => 'ajax-select-classroom', 'uses' => 'PreviewController@ajaxSelectClassroom']);
     Route::post('send-individual-convocation', ['as' => 'send-individual-convocation', 'uses' => 'PreviewController@sendIndividualConvocation']);
     Route::get('send-convocation', 'PreviewController@sendConvocation')->name('send-convocation');
+    Route::get('resend-convocation', 'PreviewController@resendConvocation')->name('resend-convocation');
     Route::get('preview-waitlisted', 'PreviewController@previewWaitlisted')->name('preview-waitlisted');
     Route::get('cancelled-convocation-view', 'PreviewController@cancelledConvocaitonView')->name('cancelled-convocation-view');
     Route::put('undelete-pash/{id}', ['as' => 'undelete-pash', 'uses' => 'PreviewController@unDeletePash']);

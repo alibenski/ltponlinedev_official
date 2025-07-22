@@ -803,11 +803,13 @@ class PreviewController extends Controller
             }
         }
 
-        // send array of email addresses to admin if failed to send convocation email 
-        Mail::raw("Failed to send convocation email to the following email addresses: " . implode(', ', $fail_array), function ($message) {
-            $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
-            $message->to('allyson.frias@un.org')->subject("Failed to send convocation emails");
-        });
+        if (!empty($fail_array)) {
+            // send array of email addresses to admin if failed to send convocation email 
+            Mail::raw("Failed to send convocation email to the following email addresses: " . implode(', ', $fail_array), function ($message) {
+                $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
+                $message->to('allyson.frias@un.org')->subject("Failed to send convocation emails");
+            });
+        }
 
         $success_count = count($success_array);
         $fail_count = count($fail_array);
@@ -823,7 +825,9 @@ class PreviewController extends Controller
     public function resendConvocation()
     {
         $convocation_resend = Repo::where('Term', Session::get('Term'))->whereNotNull('convocation_email_sent')->get();
-        $this->sendConvocationEmailLoop($convocation_resend);
+        $sendConvocationEmailLoop = $this->sendConvocationEmailLoop($convocation_resend);
+        session()->flash('warning', 'Convocation email sent to ' . $sendConvocationEmailLoop->getData()->success_count . ' student(s) and failed to send to ' . $sendConvocationEmailLoop->getData()->fail_count . ' student(s). Please check the log file for more details.');
+        return back();
     }
 
     public function sendIndividualConvocation(Request $request)
