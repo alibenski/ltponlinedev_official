@@ -683,14 +683,17 @@ class PreviewController extends Controller
         $convocation_diff3 = $convocation_diff3->where('convocation_email_sent', null);
         // $convocation_diff3 = $convocation_diff3->where('INDEXID', '17942');
 
-        $this->sendConvocationEmailLoop($convocation_diff3);
+        $sendConvocationEmailLoop = $this->sendConvocationEmailLoop($convocation_diff3);
 
-        session()->flash('success', 'Convocation email sent to ' . count($convocation_diff3) . ' students ');
+        session()->flash('success', 'Convocation email sent to ' . $sendConvocationEmailLoop->getData()->success_count . ' student(s) and failed to send to ' . $sendConvocationEmailLoop->getData()->fail_count . ' student(s). Please check the log file for more details.');
         return back();
     }
 
     public function sendConvocationEmailLoop($values)
     {
+        $success_array = [];
+        $fail_array = [];
+
         foreach ($values as $value) {
 
             $course_name = Course::where('Te_Code_New', $value->Te_Code)->first();
@@ -767,10 +770,7 @@ class PreviewController extends Controller
                 Repo::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
                     'convocation_email_sent' => NULL,
                 ]);
-                Mail::raw("Failed to send convocation email to $staff_email", function ($message) use ($staff_email) {
-                    $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
-                    $message->to('allyson.frias@un.org')->subject("Failed to send convocation email: " . $staff_email);
-                });
+                $fail_array[] = $staff_email;
             } else {
                 try {
                     Mail::to($staff_email)->send(
@@ -791,6 +791,7 @@ class PreviewController extends Controller
                             $cancel_date_limit_string_fr
                         )
                     );
+                    $success_array[] = $staff_email;
                     // update convocation_email_sent to 1
                     // to indicate that the email has been sent 
                     $convocation_email_sent = Repo::where('CodeIndexIDClass', $value->CodeIndexIDClass)->update([
@@ -801,6 +802,22 @@ class PreviewController extends Controller
                 }
             }
         }
+
+        // send array of email addresses to admin if failed to send convocation email 
+        Mail::raw("Failed to send convocation email to the following email addresses: " . implode(', ', $fail_array), function ($message) {
+            $message->from('clm_language@unog.ch', 'CLM Language Web Admin');
+            $message->to('allyson.frias@un.org')->subject("Failed to send convocation emails");
+        });
+
+        $success_count = count($success_array);
+        $fail_count = count($fail_array);
+
+        return response()->json([
+            'success_count' => $success_count,
+            'fail_count' => $fail_count,
+            'success_emails' => $success_array,
+            'fail_emails' => $fail_array
+        ]);
     }
 
     public function resendConvocation()
