@@ -1262,6 +1262,7 @@ class TeachersController extends Controller
     public function ajaxShowOverallAttendance(Request $request)
     {
         if ($request->ajax()) {
+            $term = Session::get('Term');
             $qry = Attendance::whereIn('pash_id', $request->id)->get();
             // get the term from relationship with Repo
             foreach ($qry as $record) {

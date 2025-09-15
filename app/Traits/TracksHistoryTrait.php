@@ -71,7 +71,7 @@ trait TracksHistoryTrait
         }
 
         return [
-            'body' => "Updated {$field} from {$origAttribute} to ${value}",
+            'body' => "Updated {$field} from {$origAttribute} to {$value}",
         ];
     }
 
