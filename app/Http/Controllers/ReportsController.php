@@ -84,7 +84,7 @@ class ReportsController extends Controller
                     $quser1->with(['sddextr' => function ($qsdd11) {
                         $qsdd11->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->with(['courses' => function ($qcourse1) {
@@ -137,7 +137,7 @@ class ReportsController extends Controller
                     $quser0->with(['sddextr' => function ($qsdd00) {
                         $qsdd00->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->with(['courses' => function ($qcourse0) {
@@ -186,7 +186,7 @@ class ReportsController extends Controller
                     $quser2->with(['sddextr' => function ($qsdd22) {
                         $qsdd22->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 ->where('Term', $term)
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
@@ -242,7 +242,7 @@ class ReportsController extends Controller
                     $quser3->with(['sddextr' => function ($qsdd33) {
                         $qsdd33->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 ->where('Term', $term)
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
@@ -367,7 +367,7 @@ class ReportsController extends Controller
                     $quser1->with(['sddextr' => function ($qsdd11) {
                         $qsdd11->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->with(['courses' => function ($qcourse1) {
@@ -414,7 +414,7 @@ class ReportsController extends Controller
                     $quser0->with(['sddextr' => function ($qsdd00) {
                         $qsdd00->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 // ->whereNotIn('DEPT', ['UNOG','JIU','DDA','OIOS','DPKO'])
                 ->with(['courses' => function ($qcourse0) {
@@ -463,7 +463,7 @@ class ReportsController extends Controller
                     $quser2->with(['sddextr' => function ($qsdd22) {
                         $qsdd22->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 ->where('Term', $term)
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
@@ -513,7 +513,7 @@ class ReportsController extends Controller
                     $quser3->with(['sddextr' => function ($qsdd33) {
                         $qsdd33->select('INDEXNO', 'SEX');
                     }])
-                        ->select('indexno', 'id', 'name');
+                        ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
                 ->where('Term', $term)
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)

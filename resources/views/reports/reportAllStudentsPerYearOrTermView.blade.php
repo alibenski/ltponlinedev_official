@@ -142,6 +142,9 @@
 						<th>Profile</th>
 						<th>Index No.</th>
 						<th>Name</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Email</th>
 						<th>Gender</th>
 						<th>RESULT</th>
 						<th>Cancelled Not Billed</th>
@@ -164,6 +167,9 @@
 						<th>Profile</th>
 						<th>Index No.</th>
 						<th>Name</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Email</th>
 						<th>Gender</th>
 						<th>RESULT</th>
 						<th>Cancelled Not Billed</th>
@@ -363,6 +369,9 @@ $(document).ready(function() {
 							},
 							{ "data": "users.indexno" }, 
 							{ "data": "users.name" }, 
+							{ "data": "users.nameFirst" }, 
+							{ "data": "users.nameLast" }, 
+							{ "data": "users.email" }, 
 							{ "data": function ( row, type, val, meta ) {
 									if (row.users.sddextr.SEX == 'M' || row.users.sddextr.SEX == 'm') {
 											return "Male";
