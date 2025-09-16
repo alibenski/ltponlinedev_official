@@ -43,7 +43,7 @@
         </p>
       </td>
       <td class="text-center">
-        <img width="150px" src="data:image/jpg;base64,{{ base64_encode(file_get_contents( asset('img/Logo_UN.jpg'))) }}" alt="Logo_UN">
+        <img width="150px" src="{{ asset('img/Logo_UN.jpg') }}" alt="Logo_UN">
       </td>
       <td style="width:200.65pt;border:solid white 1.0pt;padding:0cm 6.0pt 0cm 6.0pt;" valign="top" width="284">
         <p class="MsoNormal" style="line-height:7.2pt;"><span lang="EN-GB">&nbsp;</span></p>
@@ -68,7 +68,7 @@
   <tbody>
     <div style="border:none;border-bottom:none windowtext 1.5pt;padding:0cm 0cm 1.0pt 0cm;">
       <div align="right">
-        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(asset('img/CLMStamp.png'))) }}" >
+        <img src="{{ asset('img/CLMStamp.png') }}" >
       </div>
       <p class="MsoNormal" style="border:none;padding:0cm;text-align: right;"><span lang="FR" style="font-size:13px;font-family:Arial,sans-serif;">Le secrétariat du Programme de formation linguistique</span>
       <br />Centre de formation et de multilinguisme
