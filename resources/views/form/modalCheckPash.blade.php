@@ -13,10 +13,10 @@
                 <div class="input-group">
                     
                     @foreach ($records as $item)
-                        <input id="CheckBoxPashRecord" name="CheckBoxPashRecord" class="with-font" type="radio" value={{ $item->id }} >
+                        <input id="CheckBoxPashRecord" name="CheckBoxPashRecord" class="" type="radio" value={{ $item->id }} >
                         <label for="CheckBoxPashRecord" class="">
-                            {{ $item->courses->Description }}
-                        </label>
+                            <span style="margin-left:5px;">{{ $item->courses->Description }}</span>
+                        </label><br /><hr />
                     @endforeach
                         
                 </div>
