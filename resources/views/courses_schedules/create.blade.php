@@ -178,11 +178,11 @@
                             @endforeach
                       </td>
                       <td>
-                            @foreach ($price as $id => $name)
+                            @foreach ($prices as $price)
 
                                 <div class="form-check">
                                   <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="price_id" value="{{ $id }}" required="" />  {{ $name }} CHF
+                                    <input class="form-check-input" type="radio" name="price_id" value="{{ $price->id }}" required="" />  {{ $price->price }} CHF ({{ $price->price_usd }} USD)
                                   </label>
                                 </div>
 

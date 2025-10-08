@@ -49,11 +49,11 @@ class CourseSchedController extends Controller
         $format_category = DB::table('tblLTP_Course_New_Format_Categories')->pluck("format_name_en", "id")->all();
         $format_mode = DB::table('tblLTP_Course_New_Format_Modes')->pluck("format_name_en", "id")->all();
         $duration = DB::table('tblLTP_Course_Duration')->pluck("duration_name_en", "id")->all();
-        $price = DB::table('tblLTP_Course_Price')->pluck("price", "id")->all();
+        $prices = DB::table('tblLTP_Course_Price')->select("price", "id", "price_usd")->get();
         $teachers = Teachers::where('In_Out', '1')->get();
         $rooms = Room::all();
 
-        return view('courses_schedules.create', compact('courses', 'languages', 'schedules', 'terms', 'format', 'format_category', 'format_mode', 'duration', 'teachers', 'rooms', 'price'));
+        return view('courses_schedules.create', compact('courses', 'languages', 'schedules', 'terms', 'format', 'format_category', 'format_mode', 'duration', 'teachers', 'rooms', 'prices'));
     }
 
     /**
