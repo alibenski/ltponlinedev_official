@@ -19,9 +19,9 @@
 			<a href="{{ route('course-schedule.create') }}" class="btn btn-block btn-primary btn-h1-spacing"><i class="fa fa-plus"></i> Create</a>
 		</div>
 
-		<div class="col-md-4" style="margin:  1em 0">
+		<!-- <div class="col-md-4" style="margin:  1em 0">
 			<a href="{{ route('admin-excel-schedule') }}" class="btn btn-block btn-success btn-h1-spacing"><i class="fa fa-calendar"></i> Generate Schedule Table</a>
-		</div>
+		</div> -->
 
 	</div>
 </div>
