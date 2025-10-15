@@ -265,7 +265,7 @@
                                     <p style="text-align: justify">Please email your teacher before the course starts. Participants who do not attend class during the first week may be disenrolled from the course and their seat given to participants on a waiting list.</p>
 
                                     <h4><strong><u>You need to cancel your enrolment? </u></strong></h4>
-                                    <p style="text-align: justify">You need to do so before {{ $cancel_date_limit_string }} 11:59 p.m. No course fees will be reimbursed after this date. 
+                                    <p style="text-align: justify">You need to do so before <span style="color: red"><b> {{ $cancel_date_limit_string }} 11:59 p.m. </b></span> No course fees will be reimbursed after this date. 
                                         <ul>
                                             <li style="text-align: justify">
                                                 To cancel, please <a href="https://ltponlinedev.unog.ch/previous-submitted">click here</a>. You then need to select the appropriate term and click the red button “Cancel Enrolment” (<a href="https://learning.unog.ch/node/1301#position7">more info</a>).

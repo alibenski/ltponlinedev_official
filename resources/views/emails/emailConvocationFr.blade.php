@@ -70,7 +70,7 @@
     <p style="text-align: justify">Veuillez en informer à l’avance votre professeur(e) par email. Les participant(e)s absent(e)s la première semaine de cours peuvent se voir désinscrit(e)s du cours et leur place donnée aux participant(e)s de la liste d’attente.</p>
 
     <h4><strong><u>Vous devez annuler votre inscription ? </u></strong></h4>
-    <p style="text-align: justify">Vous devez le faire avant le {{ $cancel_date_limit_string }} à 23h59. Aucun frais de cours ne sera remboursé après cette date. 
+    <p style="text-align: justify">Vous devez le faire avant <span style="color: red"><b> le {{ $cancel_date_limit_string_fr }} à 23h59.</b></span> Aucun frais de cours ne sera remboursé après cette date. 
         <ul>
             <li style="text-align: justify">
                 Pour annuler, <a href="https://ltponlinedev.unog.ch/previous-submitted">cliquez ICI</a>, sélectionnez le trimestre approprié, puis cliquez sur le bouton rouge « Cancel Enrolment » (<a href="https://learning.unog.ch/fr/node/1301#position7">plus d’informations</a>).
