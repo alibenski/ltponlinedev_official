@@ -132,8 +132,8 @@
 						<th>Term</th>
 						<th>Language</th>
 						<th>Description</th>
+						<th>Course Code</th>
 						<th>Teacher</th>
-						{{-- <th>Price USD</th> --}}
 						<th>Duration</th>
 						<th>Organization</th>
 						<th>SelfPayment</th>
@@ -157,8 +157,8 @@
 						<th>Term</th>
 						<th>Language</th>
 						<th>Description</th>
+						<th>Course Code</th>
 						<th>Teacher</th>
-						{{-- <th>Price USD</th> --}}
 						<th>Duration</th>
 						<th>Organization</th>
 						<th>SelfPayment</th>
@@ -334,6 +334,7 @@ $(document).ready(function() {
 							{ "data": "Term" }, 
 							{ "data": "languages.name" }, 
 							{ "data": "courses.Description" }, 
+							{ "data": "classrooms.Code" }, 
 							{ "data": "classrooms.teachers.Tch_Name",
 		        					"defaultContent": "" }, 
 							// { "data": "courseschedules.prices.price_usd" }, 
