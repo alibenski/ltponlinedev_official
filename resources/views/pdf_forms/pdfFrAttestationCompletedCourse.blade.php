@@ -37,7 +37,7 @@
     <tr>
       <td></td>
       <td>
-        <p class="MsoNormal" style="text-align:center;"><span lang="FR" style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $userName }}</span></p>
+        <div class="MsoNormal" style="text-align:center;"><span lang="FR" style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $userName }}</span></div>
         <br>
       </td>
     </tr>
@@ -50,7 +50,7 @@
       <td>
         @if ($result == 'P')
 
-          <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
+          <div class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           s’est acquitté(e) des frais de cours de {{$price}} CHF et a réussi le cours mentionné ci-dessous :
           @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', 'GST', '']))
@@ -58,11 +58,11 @@
           @else
           a réussi le cours mentionné ci-dessous :
           @endif
-          </span></p>
+          </span></div>
 
         @else
 
-          <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
+          <div class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           s’est acquitté(e) des frais de cours de {{$price}} CHF et a suivi le cours mentionné ci-dessous :
           @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', 'GST', '']))
@@ -70,7 +70,7 @@
           @else
           a suivi le cours mentionné ci-dessous :
           @endif
-          </span></p>
+          </span></div>
 
         @endif
       </td>

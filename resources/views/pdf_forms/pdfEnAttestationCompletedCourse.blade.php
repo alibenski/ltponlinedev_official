@@ -36,7 +36,7 @@
     <tr>
       <td></td>
       <td>
-        <p class="MsoNormal" style="text-align:center;"><span lang="EN" style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;"><b>{{ $userName }}</b></span></p>
+        <div class="MsoNormal" style="text-align:center;"><span lang="EN" style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;"><b>{{ $userName }}</b></span></div>
         <br>
       </td>
     </tr>
@@ -49,7 +49,7 @@
       <td>
         @if ($result == 'P')
 
-          <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
+          <div class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           has paid {{$price}} CHF for and has successfully completed the following course:
           @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', 'GST', '']))
@@ -57,11 +57,11 @@
           @else
           has successfully completed the following course:
           @endif
-          </span></p>
+          </span></div>
 
         @else 
 
-          <p class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
+          <div class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif;">
           @if ($term >= 191 && $selfPay == 1) 
           has paid {{$price}} CHF for and has attended the following course:
           @elseif($term < 191 && !in_array($cat, ['STF', 'OCHA', 'UNA', 'WMO', 'GST', '']))
@@ -69,7 +69,7 @@
           @else
           has attended the following course:
           @endif
-          </span></p>
+          </span></div>
         
         @endif
       </td>
