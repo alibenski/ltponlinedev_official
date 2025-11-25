@@ -72,7 +72,6 @@
           </span></p>
         
         @endif
-        <br>
       </td>
     </tr>
   </tbody>
