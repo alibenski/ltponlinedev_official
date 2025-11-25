@@ -82,14 +82,14 @@
     <tr>
       
       <td class="text-center">
-        <span class="MsoNormal" style="text-align:center; font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $courseEn }}*</span>
+        <div class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $courseEn }}*</span></div>
       </td>
       
     </tr>
     <tr>
 
       <td class="text-center">
-        <span class="MsoNormal" style="text-align:center; font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $termSeasonEn }} {{ $termYear }} ({{ $termNameEn }})</span>
+        <div class="MsoNormal" style="text-align:center;"><span style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $termSeasonEn }} {{ $termYear }} ({{ $termNameEn }})</span></div>
       </td>
 
     </tr>
