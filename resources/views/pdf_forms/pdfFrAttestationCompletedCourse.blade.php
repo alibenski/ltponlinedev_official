@@ -83,14 +83,14 @@
     <tr>
       
       <td class="text-center">
-        <p style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $courseFr }}*</p>
+        <span style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $courseFr }}*</span>
       </td>
       
     </tr>
     <tr>
 
       <td class="text-center">
-        <p style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $termSeasonFr }} {{ $termYear }} (du {{ $termNameFr }})</p>
+        <span style="font-family:Century Gothic,sans-serif; font-weight: 800; font-size: 15;">{{ $termSeasonFr }} {{ $termYear }} (du {{ $termNameFr }})</span>
       </td>
 
     </tr>
