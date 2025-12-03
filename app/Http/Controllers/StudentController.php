@@ -9,6 +9,7 @@ use App\FocalPoints;
 use App\Language;
 use App\Mail\updateEmail;
 use App\Preenrolment;
+use App\Models\Profile;
 use App\Repo;
 use App\SDDEXTR;
 use App\Teachers;
@@ -95,8 +96,9 @@ class StudentController extends Controller
     {
         $student = User::find($id);
         $org = Torgan::orderBy('Org name', 'asc')->get(['Org name', 'Org Full Name']);
+        $profiles = Profile::get();
 
-        return view('students.edit', compact('student', 'org'));
+        return view('students.edit', compact('student', 'org', 'profiles'));
     }
 
     /**

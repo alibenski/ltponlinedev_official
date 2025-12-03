@@ -15,6 +15,7 @@
                 {{-- <option value="MSU">staff of a permanent mission</option> --}}
                 <option value="SPOUSE">spouse of UN staff members or spouse of staff of permanent missions</option>
                 <option value="RET">retired UN staff member</option>
+                <option value="FSTF">former staff member [non-retired]</option>
                 {{-- <option value="SERV">employee of service providers in the Palais des Nations</option>
                 <option value="NGO">staff of UN-accredited NGO's</option>
                 <option value="PRESS">staff of UN-accredited press corps</option> --}}
