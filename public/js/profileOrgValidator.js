@@ -36,7 +36,7 @@ $('select[id="profile"]').on('change', function () {
         let dProfile = $(this).val();
         console.log('Profile selected: ' + dProfile);
 
-        const arrayProfile1 = ["STF", "INT", "CON", "WAE", "JPO", "SPOUSE", "RET"];
+        const arrayProfile1 = ["STF", "INT", "CON", "WAE", "JPO", "SPOUSE", "RET", "FSTF"];
         let dCheckProfile = $.inArray(dProfile, arrayProfile1);
         
         if (dCheckProfile != -1 ) {
