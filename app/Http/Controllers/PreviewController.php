@@ -1882,6 +1882,51 @@ class PreviewController extends Controller
         return redirect()->back();
     }
 
+    public function insertPriority6(Request $request)
+    {
+        $this->getAllIndexIdProfileFromPreviewTempSort();
+        $this->checkIfProfileIsIntern();
+        $this->updatePriorityoFInternProfiles($request);
+        
+        return redirect()->back();
+    }
+        
+    /**
+     * Get all INDEXID and profile from PreviewTempSort table
+     */
+    public function getAllIndexIdProfileFromPreviewTempSort()
+    {
+        $all_indexids_profiles = PreviewTempSort::select('INDEXID', 'profile')->groupBy('INDEXID', 'profile')->get();
+        return $all_indexids_profiles;
+    }
+
+    /**
+     * Check if profile contains 'int' for intern profiles
+     */
+    public function checkIfProfileIsIntern()
+    {
+        $all_indexids_profiles = $this->getAllIndexIdProfileFromPreviewTempSort();
+        $intern_profiles = [];
+        foreach ($all_indexids_profiles as $value) {
+            if (str_contains(strtolower($value->profile), 'int')) {
+                $intern_profiles[] = $value->INDEXID;
+
+            }
+        }
+        return $intern_profiles;
+    }
+
+    public function updatePriorityoFInternProfiles(Request $request)
+    {
+        $intern_profiles = $this->checkIfProfileIsIntern();
+        foreach ($intern_profiles as $indexid) {
+            PreviewTempSort::where('INDEXID', $indexid)->update(['PS' => 6]);
+        }
+        
+        $message = $request->session()->flash('success', 'Update Priority of Intern Profiles Complete! ' . count($intern_profiles) . ' Intern Profiles Updated to Priority 6');
+        return $message;
+    }
+
     /**
      * Order Codes by count per code
      */

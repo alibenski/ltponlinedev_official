@@ -140,6 +140,25 @@
         </form>
       </div>
 
+      <div class="col-md-4">
+        <form method="POST" action="{{ route('insert-priority-6') }}" class="form-prevent-multi-submit">
+          {{ csrf_field() }}
+          <div class="form-group col-sm-12 add-margin">
+            <select class="col-sm-8 form-control select2-filter" name="Term" autocomplete="off" required="required" style="width: 90%">
+                <option value="">--- Select Term ---</option>
+                @foreach ($terms as $value)
+                    <option value="{{$value->Term_Code}}">{{$value->Term_Code}} {{$value->Comments}} - {{$value->Term_Name}}</option>
+                @endforeach
+            </select>
+          </div>
+    
+          <div class="form-group col-sm-12 add-margin">           
+                <button type="submit" class="btn btn-success button-prevent-multi-submit execute-batch">Insert Priority 6</button>
+            <input type="hidden" name="_token" value="{{ Session::token() }}">
+          </div>
+        </form>
+      </div>
+
     </div>
     
     <div class="row" style="border: solid 1px skyblue; margin-bottom: 75px">

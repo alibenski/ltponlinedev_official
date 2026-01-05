@@ -215,6 +215,9 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::any('insert-priority-3', ['as' => 'insert-priority-3', 'uses' => 'PreviewController@insertPriority3']);
     Route::any('insert-priority-4', ['as' => 'insert-priority-4', 'uses' => 'PreviewController@insertPriority4']);
     Route::any('insert-priority-5', ['as' => 'insert-priority-5', 'uses' => 'PreviewController@insertPriority5']);
+    
+    Route::any('insert-priority-6', ['as' => 'insert-priority-6', 'uses' => 'PreviewController@insertPriority6']);
+
 
     Route::any('order-codes', ['as' => 'order-codes', 'uses' => 'PreviewController@orderCodes']);
     Route::any('assign-course-sched-to-student', ['as' => 'assign-course-sched-to-student', 'uses' => 'PreviewController@assignCourseScheduleToStudent']);

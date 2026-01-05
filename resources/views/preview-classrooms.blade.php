@@ -235,6 +235,9 @@
                     @if ($form->PS == 5)
                       Late Enrolment
                     @endif
+                    @if ($form->PS == 6)
+                      Intern Profile
+                    @endif
                   </strong>
                    [ {{$form->PS}} ] 
                   <input name="INDEXID" type="hidden" value="{{ $form->INDEXID }}">
