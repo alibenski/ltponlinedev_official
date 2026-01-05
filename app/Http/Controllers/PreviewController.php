@@ -2140,23 +2140,32 @@ class PreviewController extends Controller
     public function checkDuplicatesInPreview(Request $request)
     {
         $duplicates = DB::table('tblLTP_preview')
-            ->select('CodeIndexID', (DB::raw('COUNT(CodeIndexID)')))
-            ->groupBy('CodeIndexID')
+            ->select('CodeClass','CodeIndexID', (DB::raw('COUNT(CodeIndexID)')))
+            ->groupBy('CodeClass','CodeIndexID')
             ->having(DB::raw('COUNT(CodeIndexID)'), '>', '1')
             ->get();
-        dd($duplicates);
 
-        // try {
-        //     DB::table('users')->insert($userData);  
-        // } catch(\Illuminate\Database\QueryException $e){
-        //     $errorCode = $e->errorInfo[1];
-        //     if($errorCode == '1062'){
-        //         dd('Duplicate Entry');
-        //     }
-        // }
+        if ($duplicates->isEmpty()) {
+            $request->session()->flash('success', 'No Duplicates Found!');
+            return redirect()->back();
+        }
 
-        $request->session()->flash('success', 'Duplicates - Complete!');
-        return redirect()->back();
+        $arrayDuplicates = [];
+        foreach ($duplicates as $value) {
+            $arrayDuplicates[] = $value->CodeIndexID;
+        }
+
+        $arrayIndexIDs = [];
+        foreach ($arrayDuplicates as $string) {
+            $arrayIndexIDs[] = substr($string, strrpos($string, '-') + 1);
+        }
+
+        $arrayUsers = [];
+        foreach ($arrayIndexIDs as $userIndex) {
+            $arrayUsers[] = User::select('id', 'name')->where('indexno', $userIndex)->get();
+        }
+
+        return view('system.check_duplicates', compact('duplicates', 'arrayUsers'));
     }
 
     public function checkUndefinedOffset(Request $request)
