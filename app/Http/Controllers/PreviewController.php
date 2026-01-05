@@ -2205,15 +2205,27 @@ class PreviewController extends Controller
             $counter = $num_classes[$i];
             $existingSection = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get()->toArray();
             $existingSectionGet = Classroom::where('cs_unique', $arrGetCode[$i])->orderBy('sectionNo', 'desc')->get();
-            echo $existingSectionGet;
-            echo '<br>';
+            // echo $existingSectionGet;
+            // echo '<br>';
             $arrExistingSection[] = $existingSection;
-
+            
             if (empty($existingSection)) {
-                $emptyArraySection[] = $i;
+                $emptyArraySection[] = [$i, $arrGetCode[$i]];
             }
         }
-        dd($arrExistingSection, $emptyArraySection);
+        
+        if (empty($emptyArraySection)) {
+            $request->session()->flash('success', 'No Undefined Offset Found!');
+            return redirect()->back();
+        }
+
+        $arrayStudents = [];
+        // find the student assigned to the code with undefined offset
+        foreach ($emptyArraySection as $value) {
+            $arrayStudents[] = Preview::where('Code', $value[1])->with('users')->get();
+            }
+        
+        return view('system.check_undefined_offset', compact('emptyArraySection', 'arrayStudents'));
     }
 
     /*

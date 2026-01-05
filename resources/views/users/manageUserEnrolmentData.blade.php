@@ -145,8 +145,11 @@
 		                <p>
 		                  @foreach ($student_convoked as $element)
 		                  <h3><strong>@if(!empty($element->courses->Description)){{ $element->courses->Description }}@endif</strong> <a href="{{ route('view-classrooms-per-section', [$element->CodeClass]) }}" target="_blank"><i class="fa fa-external-link"></i></a></h3>
-		                  
+		                  @if(empty($element->classrooms))
+						  <h2 class="text-danger"><strong>Student assigned to a class with Course+Schedule Code, {{ $element->Code }}, which may have been deleted</strong></h2>
+						  @endif
 		                  <p>Schedule: <strong>@if(!empty($element->schedules->name)){{$element->schedules->name}}@endif</strong></p>  
+						  @if(!empty($element->classrooms))
 						  <p>
 							MS Teams Class Name: <strong>{{ $element->Term }}-{{substr($element->courses->Description, 0, 2)}} {{substr($element->courses->Description, strpos($element->courses->Description, ": ") + 1)}}@if ( !is_null($element->classrooms->Tch_ID))-{{substr($element->classrooms->teachers->Tch_Firstname, 0, 1)}}. {{$element->classrooms->teachers->Tch_Lastname}}-@elseif ( $element->classrooms->Tch_ID == 'TBD')-TBD-@else-N/A-@endif{{substr($element->schedules->name, 0, 3)}}@if (($pos = strrpos($element->schedules->name, "&")) !== FALSE)&{{str_replace(' ','',substr($element->schedules->name, $pos + 1, 4))}} @endif 
 								@if(\Carbon\Carbon::parse($element->schedules->begin_time) < \Carbon\Carbon::parse('1899-12-30 12:00:00'))Morning @else Lunch @endif //
@@ -180,6 +183,7 @@
 		                    Teacher: <strong>{{ $element->classrooms->teachers->Tch_Name }} </strong>
 		                    @endif
 		                  </p>
+						  @endif
 						  <p>
 							Result: <strong>@if($element->Result == 'P') Passed @elseif($element->Result == 'F') Failed @elseif($element->Result == 'I') Incomplete @else -- @endif</strong>
 						  </p>
@@ -192,6 +196,7 @@
 						  <p>
 							Overall Grade: <strong>@if (!is_null($element->Overall_Grade)) {{ $element->Overall_Grade }} @endif</strong>
 						  </p>
+						  @if(!empty($element->classrooms))
 		                  <br> 
 		                  	@if($element->classrooms->Tch_ID == 'TBD')
 		                  	@elseif(empty($element->classrooms->Tch_ID))
@@ -244,6 +249,7 @@
 							</div>
 
 		                    @endif
+						   @endif
 		                  @endforeach
 		                </p>
 		              </div>
