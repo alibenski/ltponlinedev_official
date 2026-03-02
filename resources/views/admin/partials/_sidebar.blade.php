@@ -138,6 +138,7 @@
           </a>
           <ul class="treeview-menu">
           <li><a href="{{ route('organizations.index')}}">View All</a></li>
+          <li><a href="{{ route('country-mission.index')}}">View Country Mission Offices</a></li>
             {{-- <li><a href="#">Create</a></li> --}}
           </ul>
         </li>        
