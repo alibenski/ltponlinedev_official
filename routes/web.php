@@ -352,6 +352,7 @@ Route::group(['middleware' => ['auth', 'isAdmin', 'first-time-login'], 'prefix' 
     Route::get('check-existing-tecode', ['as' => 'check-existing-tecode', 'uses' => 'CourseController@checkExistingTeCode']);
 
     Route::resource('organizations', 'OrgController');
+    Route::resource('country-mission', 'CountryMissionController');
     Route::resource('placement-schedule', 'PlacementScheduleController');
 
     // Enrolment forms controller
