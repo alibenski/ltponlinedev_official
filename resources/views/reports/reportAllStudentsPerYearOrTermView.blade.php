@@ -341,9 +341,11 @@ $(document).ready(function() {
 							{ "data": "courseschedules.courseduration.duration_name_en" }, 
 							{ "data": function ( row, type, val, meta ) {
 									if (row.DEPT == 'MSU') {
-											return  row.DEPT + " - " + row.users.sddextr.country_mission.ABBRV_NAME;
+										if (row.users.sddextr.country_mission== null) { return row.DEPT + " - country undefined"; }
+											else { return  row.DEPT + " - " + row.users.sddextr.country_mission.ABBRV_NAME; }
 									} 
 									else if (row.DEPT == 'NGO') {
+										if (row.users.sddextr.ngo_name == null) { return row.DEPT + " - NGO name undefined"; }
 											return  row.DEPT + " - " + row.users.sddextr.ngo_name;
 									} else {
 									return row.DEPT;
