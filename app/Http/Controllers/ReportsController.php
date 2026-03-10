@@ -82,7 +82,8 @@ class ReportsController extends Controller
                 })
                 ->with(['users' => function ($quser1) {
                     $quser1->with(['sddextr' => function ($qsdd11) {
-                        $qsdd11->select('INDEXNO', 'SEX');
+                        $qsdd11->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -135,7 +136,8 @@ class ReportsController extends Controller
                 })
                 ->with(['users' => function ($quser0) {
                     $quser0->with(['sddextr' => function ($qsdd00) {
-                        $qsdd00->select('INDEXNO', 'SEX');
+                        $qsdd00->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -184,7 +186,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser2) {
                     $quser2->with(['sddextr' => function ($qsdd22) {
-                        $qsdd22->select('INDEXNO', 'SEX');
+                        $qsdd22->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -240,7 +243,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser3) {
                     $quser3->with(['sddextr' => function ($qsdd33) {
-                        $qsdd33->select('INDEXNO', 'SEX');
+                        $qsdd33->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -365,7 +369,8 @@ class ReportsController extends Controller
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'Written', 'Oral', 'Overall_Grade', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
                 ->with(['users' => function ($quser1) {
                     $quser1->with(['sddextr' => function ($qsdd11) {
-                        $qsdd11->select('INDEXNO', 'SEX');
+                        $qsdd11->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -412,7 +417,8 @@ class ReportsController extends Controller
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
                 ->with(['users' => function ($quser0) {
                     $quser0->with(['sddextr' => function ($qsdd00) {
-                        $qsdd00->select('INDEXNO', 'SEX');
+                        $qsdd00->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -461,7 +467,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser2) {
                     $quser2->with(['sddextr' => function ($qsdd22) {
-                        $qsdd22->select('INDEXNO', 'SEX');
+                        $qsdd22->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -511,7 +518,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser3) {
                     $quser3->with(['sddextr' => function ($qsdd33) {
-                        $qsdd33->select('INDEXNO', 'SEX');
+                        $qsdd33->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'name', 'nameFirst', 'nameLast', 'email');
                 }])
@@ -1099,7 +1107,8 @@ class ReportsController extends Controller
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'Written', 'Oral', 'Overall_Grade', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
                 ->with(['users' => function ($quser1) {
                     $quser1->with(['sddextr' => function ($qsdd11) {
-                        $qsdd11->select('INDEXNO', 'SEX');
+                        $qsdd11->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
@@ -1137,7 +1146,8 @@ class ReportsController extends Controller
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
                 ->with(['users' => function ($quser0) {
                     $quser0->with(['sddextr' => function ($qsdd00) {
-                        $qsdd00->select('INDEXNO', 'SEX');
+                        $qsdd00->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
@@ -1177,7 +1187,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser2) {
                     $quser2->with(['sddextr' => function ($qsdd22) {
-                        $qsdd22->select('INDEXNO', 'SEX');
+                        $qsdd22->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
@@ -1216,7 +1227,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser3) {
                     $quser3->with(['sddextr' => function ($qsdd33) {
-                        $qsdd33->select('INDEXNO', 'SEX');
+                        $qsdd33->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
@@ -1332,7 +1344,8 @@ class ReportsController extends Controller
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'Written', 'Oral', 'Overall_Grade', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
                 ->with(['users' => function ($quser1) {
                     $quser1->with(['sddextr' => function ($qsdd11) {
-                        $qsdd11->select('INDEXNO', 'SEX');
+                        $qsdd11->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
@@ -1382,7 +1395,8 @@ class ReportsController extends Controller
                 ->select('id', 'Term', 'DEPT', 'is_self_pay_form', 'Result', 'cancelled_but_not_billed', 'exclude_from_billing', 'deleted_at', 'INDEXID', 'INDEXID_old', 'Te_Code', 'Te_Code_old', 'Code', 'CodeClass', 'CodeIndexID', 'CodeIndexIDClass', 'CodeIndexID_old', 'L',)
                 ->with(['users' => function ($quser0) {
                     $quser0->with(['sddextr' => function ($qsdd00) {
-                        $qsdd00->select('INDEXNO', 'SEX');
+                        $qsdd00->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
@@ -1434,7 +1448,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser2) {
                     $quser2->with(['sddextr' => function ($qsdd22) {
-                        $qsdd22->select('INDEXNO', 'SEX');
+                        $qsdd22->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])
@@ -1487,7 +1502,8 @@ class ReportsController extends Controller
                 ->onlyTrashed()
                 ->with(['users' => function ($quser3) {
                     $quser3->with(['sddextr' => function ($qsdd33) {
-                        $qsdd33->select('INDEXNO', 'SEX');
+                        $qsdd33->with('countryMission')
+                        ->select('INDEXNO', 'SEX', 'country_mission','ngo_name');
                     }])
                         ->select('indexno', 'id', 'profile', 'name', 'nameLast', 'nameFirst', 'email');
                 }])

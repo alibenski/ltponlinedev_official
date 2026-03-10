@@ -339,7 +339,16 @@ $(document).ready(function() {
 		        					"defaultContent": "" }, 
 							// { "data": "courseschedules.prices.price_usd" }, 
 							{ "data": "courseschedules.courseduration.duration_name_en" }, 
-							{ "data": "DEPT" },  
+							{ "data": function ( row, type, val, meta ) {
+									if (row.DEPT == 'MSU') {
+											return  row.DEPT + " - " + row.users.sddextr.country_mission.ABBRV_NAME;
+									} 
+									else if (row.DEPT == 'NGO') {
+											return  row.DEPT + " - " + row.users.sddextr.ngo_name;
+									} else {
+									return row.DEPT;
+								} }
+							},  
 							{ "data": "is_self_pay_form" },  
 							{ "data": function ( row, type, val, meta ) {
 									if (row.organizations == null) {
