@@ -33,14 +33,14 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header"><i class="fa fa-tachometer"></i> ADMIN OPERATIONS</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="{{ Request::is('admin/users') ? "active" : ""}}"><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>User Administration</span></a></li>
+        <li class="{{ Request::is('admin/users') ? 'active' : '' }}"><a href="{{ route('users.index') }}"><i class="fa fa-users"></i> <span>User Administration</span></a></li>
         
         @hasrole('Admin')
-        <li class="{{ Request::is(route('system-index')) ? "active" : ""}}"><a href="{{ route('system-index') }}"><i class="fa fa-cogs"></i> <span>System Operations</span></a></li>
+        <li class="{{ Request::is(route('system-index')) ? 'active' : '' }}"><a href="{{ route('system-index') }}"><i class="fa fa-cogs"></i> <span>System Operations</span></a></li>
         @endhasrole
         
         @hasrole('Admin')
-        <li class="treeview {{ Request::is('admin/reports*') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/reports*') ? 'active' : ''}}">
           <a href="#"><i class="fa fa-line-chart"></i> <span>Reports</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -58,7 +58,7 @@
         @endhasrole
 
         @hasrole('Admin')
-        <li class="treeview {{ Request::is('admin/billing-*') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/billing-*') ? 'active' : ''}}">
           <a href="#"><i class="fa fa-money"></i> <span>Billing</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -72,7 +72,7 @@
         </li> 
         @endhasrole
 
-        <li class="treeview {{ Request::is('admin/reports/ltp-stats-graph*') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/reports/ltp-stats-graph*') ? 'active' : ''}}">
           <a href="#"><i class="fa fa-bar-chart"></i> <span>Statistics</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -84,7 +84,7 @@
           </ul>
         </li>
 
-        {{-- <li class="treeview {{ Request::is('admin/preenrolment') ? "active" : ""}}">
+        {{-- <li class="treeview {{ Request::is('admin/preenrolment') ? 'active' : ''}}">
           <a href="#"><i class="fa fa-file-o"></i> <span>Enrolment Forms</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -95,7 +95,7 @@
           </ul>
         </li>  
 
-        <li class="treeview {{ Request::is('admin/placement-form') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/placement-form') ? 'active' : ''}}">
           <a href="#"><i class="fa fa-file"></i> <span>Placement Test Forms</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -106,7 +106,7 @@
           </ul>
         </li>  
 
-        <li class="treeview {{ Request::is('admin/selfpayform*') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/selfpayform*') ? 'active' : ''}}">
           <a href="#"><i class="fa fa-euro"></i> <span>Validate Payment</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -118,19 +118,19 @@
           </ul>
         </li>  --}}
 
-        <li class="{{ Request::is('admin/terms*') ? "active" : ""}}"><a href="{{ route('terms.index') }}"><i class="fa fa-snowflake-o"></i> <span>Terms</span></a></li>
-        <li class="{{ Request::is('admin/courses*') ? "active" : ""}}"><a href="{{ route('courses.index') }}"><i class="fa fa-book"></i> <span>Course Catalogue</span></a></li>
-        <li class="{{ Request::is('admin/schedules*') ? "active" : ""}}"><a href="{{ route('schedules.index') }}"><i class="fa fa-clock-o"></i> <span>Schedule (Day & Time)</span></a></li>
-        <li class="{{ Request::is('admin/course-schedule*') ? "active" : ""}}"><a href="{{ route('course-schedule.index') }}"><i class="fa fa-calendar-o"></i> <span>Course + Schedule</span></a></li>
-        <li class="{{ Request::is('admin/placement-schedule*') ? "active" : ""}}"><a href="{{ route('placement-schedule.index') }}"><i class="fa fa-calendar"></i> <span>Placement Test Schedule</span></a></li>
-        <li class="{{ Request::is('admin/classrooms*') ? "active" : ""}}"><a href="{{ route('classrooms.index') }}"><i class="fa fa-pencil-square-o"></i> <span>Classes</span></a></li>
-        <li class="{{ Request::is('admin/rooms*') ? "active" : ""}}"><a href="{{ route('rooms.index') }}"><i class="fa fa-building-o"></i> <span>Rooms</span></a></li>
-        <li class="{{ Request::is('admin/teachers*') ? "active" : ""}}"><a href="{{ route('teachers.index') }}"><i class="fa fa-pied-piper-alt"></i> <span>Teachers</span></a></li>
+        <li class="{{ Request::is('admin/terms*') ? 'active' : ''}}"><a href="{{ route('terms.index') }}"><i class="fa fa-snowflake-o"></i> <span>Terms</span></a></li>
+        <li class="{{ Request::is('admin/courses*') ? 'active' : ''}}"><a href="{{ route('courses.index') }}"><i class="fa fa-book"></i> <span>Course Catalogue</span></a></li>
+        <li class="{{ Request::is('admin/schedules*') ? 'active' : ''}}"><a href="{{ route('schedules.index') }}"><i class="fa fa-clock-o"></i> <span>Schedule (Day & Time)</span></a></li>
+        <li class="{{ Request::is('admin/course-schedule*') ? 'active' : ''}}"><a href="{{ route('course-schedule.index') }}"><i class="fa fa-calendar-o"></i> <span>Course + Schedule</span></a></li>
+        <li class="{{ Request::is('admin/placement-schedule*') ? 'active' : ''}}"><a href="{{ route('placement-schedule.index') }}"><i class="fa fa-calendar"></i> <span>Placement Test Schedule</span></a></li>
+        <li class="{{ Request::is('admin/classrooms*') ? 'active' : ''}}"><a href="{{ route('classrooms.index') }}"><i class="fa fa-pencil-square-o"></i> <span>Classes</span></a></li>
+        <li class="{{ Request::is('admin/rooms*') ? 'active' : ''}}"><a href="{{ route('rooms.index') }}"><i class="fa fa-building-o"></i> <span>Rooms</span></a></li>
+        <li class="{{ Request::is('admin/teachers*') ? 'active' : ''}}"><a href="{{ route('teachers.index') }}"><i class="fa fa-pied-piper-alt"></i> <span>Teachers</span></a></li>
         @hasrole('Teacher FP')
         <li><a href="{{ route('teacher-dashboard') }}" target="_blank"><i class="fa fa-pied-piper"></i> <span>Teacher Dashboard</span></a></li>
         @endhasrole
 
-        <li class="treeview {{ Request::is('admin/organizations') ? "active" : ""}}">
+        <li class="treeview {{ Request::is('admin/organizations') ? 'active' : ''}}">
           <a href="#"><i class="fa fa-globe"></i> <span>Organizations</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
@@ -153,7 +153,7 @@
             <li><a href="#">Create</a></li>
           </ul>
         </li> --}}
-        <li class="{{ Request::is('admin/email-manager*') ? "active" : ""}}"><a href="{{ route('mailTracker_Index') }}" target="_blank"><i class="fa fa-envelope"></i> <span>Emails</span></a></li>
+        <li class="{{ Request::is('admin/email-manager*') ? 'active' : ''}}"><a href="{{ route('mailTracker_Index') }}" target="_blank"><i class="fa fa-envelope"></i> <span>Emails</span></a></li>
         <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-btn fa-sign-out btn-space" aria-hidden="true"></i>
               <span>Logout</span>
             </a>

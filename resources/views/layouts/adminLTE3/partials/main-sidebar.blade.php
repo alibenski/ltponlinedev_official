@@ -45,13 +45,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('admin/users') ? "active" : ""}}">
+                <a href="{{ route('users.index') }}" class="nav-link {{ Request::is('admin/users') ? 'active' : ''}}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User Administration</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('system-index') }}" class="nav-link {{ Request::is(route('system-index')) ? "active" : ""}}">
+                <a href="{{ route('system-index') }}" class="nav-link {{ Request::is(route('system-index')) ? 'active' : ''}}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>System Operations</p>
                 </a>
