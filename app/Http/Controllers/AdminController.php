@@ -687,9 +687,49 @@ class AdminController extends Controller
 
         $term_for_timer = \App\Helpers\GlobalFunction::instance()->currentEnrolTermObject();
 
-        return view('admin.index', compact('all_unassigned_enrolment_form', 'countNonAssignedPlacement', 'arr3_count', 'terms', 'cancelled_convocations', 'new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting', 'merge', 'term_for_timer'));
+        $enrolment_placement_count = $this->enrolmentTable( Session::get('Term') );
+
+        $total_enrolment = $enrolment_placement_count->sum('enrolment');
+        $total_placement = $enrolment_placement_count->sum('placement');
+        $total_total     = $total_enrolment + $total_placement;
+        
+        return view('admin.index', compact('all_unassigned_enrolment_form', 'countNonAssignedPlacement', 'arr3_count', 'terms', 'cancelled_convocations', 'new_user_count', 'enrolment_forms', 'placement_forms', 'selfpay_enrolment_forms', 'selfpay_placement_forms', 'selfpay_enrolment_forms_validated', 'selfpay_enrolment_forms_pending', 'selfpay_enrolment_forms_disapproved', 'selfpay_enrolment_forms_waiting', 'selfpay_placement_forms_validated', 'selfpay_placement_forms_pending', 'selfpay_placement_forms_disapproved', 'selfpay_placement_forms_waiting', 'merge', 'term_for_timer', 'enrolment_placement_count', 'total_enrolment', 'total_placement', 'total_total'));
     }
 
+    public function enrolmentTable($term)
+    {
+        $enrolments = Preenrolment::where('Term', $term)->get()->groupBy('L')->map(function ($item, $key) {
+            return [
+                'language' => $key,
+                'count' => $item->count(),
+            ];
+        })->values();
+        $placements = PlacementForm::where('Term', $term)->get()->groupBy('L')->map(function ($item, $key) {
+            return [
+                'language' => $key,
+                'count' => $item->count(),
+            ];
+        })->values();
+
+        $placementsByLang = collect($placements)->keyBy('language');
+        $enrolmentsByLang = collect($enrolments)->keyBy('language');
+
+        $languages = $enrolmentsByLang->keys()->merge($placementsByLang->keys())->unique();
+
+        $data = $languages->map(function ($lang) use ($enrolmentsByLang, $placementsByLang) {
+            $enrolment = $enrolmentsByLang[$lang]['count'] ?? 0;
+            $placement = $placementsByLang[$lang]['count'] ?? 0;
+
+            return [
+                'language'  => $lang,
+                'enrolment' => $enrolment,
+                'placement' => $placement,
+                'total'     => $enrolment + $placement,
+            ];
+        })->values();
+
+        return $data;
+    }
 
     public function importUser()
     {

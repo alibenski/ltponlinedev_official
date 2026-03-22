@@ -191,6 +191,51 @@
 		</div>	
 	</div>
 
+@if(Session::has('Term'))
+
+@php
+$total_enrol = 0;
+$total_test = 0;
+@endphp
+<div>
+	<h4 class="text-center"><strong>Enrolment and Placement Forms Count per Language (includes approved and pending only)</strong></h4>
+<table class="table table-striped table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Language</th>
+                            <th>Enrolment</th>
+                            <th>Placement Test</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+@foreach($enrolment_placement_count as $row)
+@php
+$total = $row['enrolment'] + $row['placement'];
+$total_enrol += $row['enrolment'];
+$total_test += $row['placement'];
+@endphp
+
+<tr>
+<td class="text-left">{{ $row['language'] }}</td>
+<td>{{ $row['enrolment'] }}</td>
+<td>{{ $row['placement'] }}</td>
+<td><strong>{{ $total }}</strong></td>
+</tr>
+@endforeach
+</tbody>
+<tfoot>
+<tr>
+    <th class="text-left">Total</th>
+    <th>{{ $total_enrolment }}</th>
+    <th>{{ $total_placement }}</th>
+    <th>{{ $total_total }}</th>
+</tr>
+</tfoot>
+</table>
+</div>
+@endif
 
 <div class="admin-index-container-2">
 	<div class="admin-index-items-2 students-not-in-class hidden">
