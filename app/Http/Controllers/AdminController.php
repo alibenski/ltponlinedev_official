@@ -698,18 +698,15 @@ class AdminController extends Controller
 
     public function enrolmentTable($term)
     {
-        $enrolments = Preenrolment::where('Term', $term)->get()->groupBy('L')
-            ->map(function ($items, $language) {
-                $unique = $items->unique(function ($item) {
-                    return $item->Te_Code . '-' . $item->INDEXID . '-' . $item->Term  . '-' . $item->created_at;
-                    // 'selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at'
-                });
-
-                return [
-                    'language' => $language,
-                    'count'    => $unique->count(),
-                ];
-            })->values();
+        // SQL COUNT DISTINCT on INDEXID, Te_Code, Term, created_at to avoid counting multiple forms submitted by same student for same course
+        $enrolments = Preenrolment::where('Term', $term)
+            ->select(
+                'L as language',
+                DB::raw('COUNT(DISTINCT CONCAT(Te_Code, "-", INDEXID, "-", Term, "-", created_at)) as count')
+            )
+            ->groupBy('L')
+            ->get();
+            
         $placements = PlacementForm::where('Term', $term)->get()->groupBy('L')->map(function ($item, $key) {
             return [
                 'language' => $key,
