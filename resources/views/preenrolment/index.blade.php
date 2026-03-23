@@ -57,7 +57,7 @@
 		        <tr>
 		        	<th>Validated/Assigned Course?</th>
 		            <th>Name</th>
-		            {{-- <th>Term</th> --}}
+		            <th>Profile</th>
 		            <th>Course</th>
 		            <th>Schedule</th>
 		            <th>Organization</th>
@@ -91,7 +91,7 @@
 					<td>
 					@if(empty($form->users->name)) None @else <a href="/admin/user/{{ $form->users->id }}/manage-user-enrolment-data" target="_blank" title="click name to see profile"> {{ $form->users->name }} </a> @endif
 					</td>
-					{{-- <td>{{ $form->Term }}</td> --}}
+					<td>{{ $form->users->profile ?? 'N/A' }}</td>
 					<td>{{ $form->courses->Description }}</td>
 					{{-- <td>{{ $form->schedule->name }}</td> --}}
 					<td>

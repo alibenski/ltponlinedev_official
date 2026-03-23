@@ -78,6 +78,7 @@
 	        	<th>Operation</th>
 	        	<th>Validated/Assigned Course?</th>
 	            <th>Name</th>
+	            <th>Profile</th>
 	            <th>Language</th>
 	            <th>HR Approval</th>
 	            <th>Payment Status</th>
@@ -174,6 +175,7 @@
 				<td>
 				@if(empty($form->users->name)) None @else <a href="/admin/user/{{ $form->users->id }}/manage-user-enrolment-data" target="_blank" title="click name to see profile"> {{ $form->users->name }} </a> @endif
 				</td>
+				<td>{{ $form->users->profile ?? 'N/A' }}</td>
 				<td>{{ $form->L }}</td>
 				<td>
 					@if(is_null($form->is_self_pay_form))
