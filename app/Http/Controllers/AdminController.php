@@ -701,7 +701,8 @@ class AdminController extends Controller
         $enrolments = Preenrolment::where('Term', $term)->get()->groupBy('L')
             ->map(function ($items, $language) {
                 $unique = $items->unique(function ($item) {
-                    return $item->Te_Code . '-' . $item->INDEXID . '-' . $item->Term;
+                    return $item->Te_Code . '-' . $item->INDEXID . '-' . $item->Term  . '-' . $item->created_at;
+                    // 'selfpay_approval', 'INDEXID', 'Term', 'DEPT', 'L', 'Te_Code', 'attachment_id', 'attachment_pay', 'created_at'
                 });
 
                 return [
