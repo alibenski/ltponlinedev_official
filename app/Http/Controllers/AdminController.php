@@ -698,12 +698,17 @@ class AdminController extends Controller
 
     public function enrolmentTable($term)
     {
-        $enrolments = Preenrolment::where('Term', $term)->get()->groupBy('L')->map(function ($item, $key) {
-            return [
-                'language' => $key,
-                'count' => $item->count(),
-            ];
-        })->values();
+        $enrolments = Preenrolment::where('Term', $term)->get()->groupBy('L')
+            ->map(function ($items, $language) {
+                $unique = $items->unique(function ($item) {
+                    return $item->Te_Code . '-' . $item->INDEXID . '-' . $item->Term;
+                });
+
+                return [
+                    'language' => $language,
+                    'count'    => $unique->count(),
+                ];
+            })->values();
         $placements = PlacementForm::where('Term', $term)->get()->groupBy('L')->map(function ($item, $key) {
             return [
                 'language' => $key,
